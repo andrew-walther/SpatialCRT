@@ -1,0 +1,281 @@
+---
+title: "Untitled"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+library(sp)
+library(spdep)
+library(sf)
+library(MASS)
+library(mnormt)
+library(ggplot2)
+library(sf)
+library(dplyr)
+library(tidyr)  # For pivot_longer()
+
+# Function to create neighbors
+create_neighbors <- function(grid_size) {
+  # Create a grid
+  grid <- expand.grid(x = 1:grid_size, y = 1:grid_size)
+  
+  # Create polygons for each grid cell
+  polygons <- lapply(1:nrow(grid), function(i) {
+    coords <- rbind(
+      c(grid$x[i] - 0.5, grid$y[i] - 0.5),
+      c(grid$x[i] + 0.5, grid$y[i] - 0.5),
+      c(grid$x[i] + 0.5, grid$y[i] + 0.5),
+      c(grid$x[i] - 0.5, grid$y[i] + 0.5),
+      c(grid$x[i] - 0.5, grid$y[i] - 0.5)
+    )
+    Polygons(list(Polygon(coords)), ID = as.character(i))
+  })
+  
+  # Create SpatialPolygons and convert to sf
+  sp_polygons <- SpatialPolygons(polygons)
+  grid_sf <- st_as_sf(sp_polygons)
+  
+  # Create neighbors
+  nb1 <- poly2nb(grid_sf)  # First-order neighbors
+  nb2 <- NULL
+  
+  # Determine if second-order neighbors are needed
+  if (grid_size >= 3) {
+    nb2 <- nblag(nb1, 2)  # Compute second-order neighbors
+  }
+  
+  list(nb1 = nb1, nb2 = nb2)
+}
+```
+
+```{r}
+# Set grid size
+cnt <- 2  # Change to the size you want (e.g., 2x2 grid, 3x3, etc.)
+neighbors <- create_neighbors(cnt)
+nb1 <- neighbors$nb1
+nb2 <- neighbors$nb2
+
+# Initialize simulation settings
+n <- length(nb1)  # Number of cells based on first-order neighbors
+N_rep <- 500  # Number of replications for simulation
+sim.sigma.vec <- c(sqrt(0.01), sqrt(0.05), sqrt(0.1), sqrt(0.2))  # Noise levels
+beta0.vec <- c(-0.5, 0, 0.5)  # Intercepts
+beta1.vec <- c(0.5, 1)  # Slopes
+rho <- 0.1  # Spatial autocorrelation
+I.tot <- diag(n)  # Identity matrix for covariance structure
+set.cnt <- 0  # To track the simulation number
+
+# Create a neighborhood list for nb1
+nb1_listw <- nb2listw(nb1, style = "W")  # Creating a listw object for nb1 using "W" style
+```
+
+```{r}
+# Safeguard against dimension mismatch
+# Convert nb1_listw to a matrix using listw2mat
+W_matrix <- tryCatch(
+  {
+    # Convert listw object to matrix
+    W_matrix <- listw2mat(nb1_listw)
+    
+    # Ensure W_matrix is square and matches the number of cells (n)
+    if (nrow(W_matrix) != n || ncol(W_matrix) != n) {
+      stop("Weight matrix dimensions do not match the number of neighbors.")
+    }
+    
+    W_matrix
+  },
+  error = function(e) {
+    stop("Error creating weight matrix: ", e$message)
+  }
+)
+
+# Debugging: Print the dimensions of W_matrix
+print(dim(W_matrix))  # Should be n x n
+```
+
+```{r}
+# Simulation loop
+for (sim.sigma in sim.sigma.vec) {
+  for (beta0 in beta0.vec) {
+    for (beta1 in beta1.vec) {
+      set.cnt <- set.cnt + 1  # Increment the set counter
+      
+      # Covariance matrix
+      covar.mat <- tryCatch(
+        {
+          # Create covariance matrix
+          covar.mat <- (sim.sigma ^ 2) * ginv(I.tot - rho * W_matrix)
+          
+          # Ensure covar.mat is square and matches the dimensions of I.tot
+          if (nrow(covar.mat) != n || ncol(covar.mat) != n) {
+            stop("Covariance matrix has incorrect dimensions.")
+          }
+          
+          covar.mat
+        },
+        error = function(e) {
+          stop("Error creating covariance matrix: ", e$message)
+        }
+      )
+      
+      # Debugging: Print covariance matrix dimensions
+      print(dim(covar.mat))  # Should be n x n
+
+      y.data <- x.data <- matrix(0, n, N_rep)  # Matrices for covariates and responses
+      
+      # Simulate data for each replication
+      for (i in 1:N_rep) {
+        covariate <- rnorm(n = n, mean = 0, sd = 1)  # Random covariate
+        epsilon <- rmnorm(n = 1, mean = rep(0, n), varcov = covar.mat)  # Error term
+        response <- beta0 + beta1 * covariate + epsilon  # Response variable
+        
+        x.data[, i] <- covariate
+        y.data[, i] <- response
+      }
+      
+      # Set column names for simulation data
+      colnames(x.data) <- paste0("sim_x", c(1:N_rep))
+      colnames(y.data) <- paste0("sim_y", c(1:N_rep))
+      
+      # Combine simulation data
+      sim_data <- cbind(x.data, y.data)  # Combine simulated data
+      
+      # Write the simulated data to a CSV file
+      write.csv(sim_data, paste0("sim_data_", cnt, "x", cnt, "_set", set.cnt, ".csv"), row.names = FALSE)
+    }
+  }
+}
+```
+
+```{r}
+# Mixture function (reused from the original provided code)
+Mixture <- function(X.in, Y.in, Sp.mat.ori, max.iter = 30){
+  X_0 <- X.in * pi / sqrt(3)  # Omega_0
+  d <- as.numeric(Y.in <= 0)  # Delta
+  X.in <- as.matrix(X.in); Y.in <- as.matrix(Y.in)
+  W <- as.matrix(Sp.mat.ori); n1 <- sum(d == 0)
+  X.pos <- X.in[d == 0, ,drop = F]; Y.pos <- Y.in[d == 0, , drop = F]
+  I.pos <- diag(1, sum(d == 0)); W.pos <- W[d == 0, d == 0]
+  
+  # Obtain initial values using spatial regression
+  spreg.1 <- spatialreg::spautolm(Y.in ~ as.matrix(X.in[, -1]), listw = mat2listw(W), family = "CAR", method = "eigen")
+  rho.0 <- spreg.1$lambda
+  Beta.0 <- as.matrix(spreg.1$fit$coefficients)
+  sigma.0 <- sqrt(spreg.1$fit$s2)
+  
+  # Newton-Raphson for estimating equations
+  Beta.old <- Beta.0; sigma.old <- sigma.0; rho.old <- rho.0; iter <- 0
+  repeat {
+    iter <- iter + 1
+    
+    # Equation (2.7)
+    Q1 <- function(x){
+      B <- as.matrix(x)
+      theta <- plogis(as.numeric(-X_0 %*% B / sigma.old))
+      Q1 <- sigma.old^(-1) * t(X_0) %*% (theta - d) +
+        sigma.old^(-2) * t(X.pos) %*% (I.pos - rho.old * W.pos) %*% (Y.pos - X.pos %*% B)
+      as.numeric(Q1)
+    }
+    Beta.new <- as.matrix(multiroot(Q1, start = Beta.old, atol = 1e-4)$root)
+    
+    # Solve (2.8)
+    sigma.new <- as.vector(sqrt(t(Y.pos - X.pos %*% Beta.new) %*% (I.pos - rho.old * W.pos) %*% 
+                                  (Y.pos - X.pos %*% Beta.new) / n1))
+    
+    # Equation (2.9)
+    Q3 <- function(x) {
+      sum(eigen(W.pos)$values / (1 - x * eigen(W.pos)$values)) -
+        sigma.new ^ (-2) * t(Y.pos - X.pos %*% Beta.new) %*% W.pos %*% (Y.pos - X.pos %*% Beta.new)
+    }
+    rho.new <- uniroot.all(Q3, c(1 / min(eigen(W.pos)$values), 1 / max(eigen(W.pos)$values)))
+    
+    # Update and convergence check
+    diff.val <- max(abs(Beta.old - Beta.new), abs(sigma.old - sigma.new), abs(rho.old - rho.new))
+    if (diff.val < 1e-4 || iter >= max.iter) break
+    
+    Beta.old <- Beta.new
+    sigma.old <- sigma.new
+    rho.old <- rho.new
+  }
+  c(Beta.new, sigma.new, rho.new)
+}
+```
+
+```{r}
+### Simulation Grid Plots ###
+# Specify the number of simulation sets
+num_sets <- 24  # Change this to the actual number of sets you have
+
+# Loop through each dataset
+for (set in 1:num_sets) {
+  # Construct the filename for each set
+  filename <- paste0("sim_data_2x2_set", set, ".csv")
+  
+  # Check if the file exists
+  if (file.exists(filename)) {
+    # Read the simulated data
+    sim_data <- read.csv(filename)
+
+    # Create a basic spatial grid
+    grid_size <- cnt  # 2x2 grid
+    grid <- expand.grid(x = 1:grid_size, y = 1:grid_size)
+
+    # Combine the grid and simulated data
+    grid_data <- cbind(grid, sim_data)
+
+    # Convert to a long format for ggplot
+    long_data <- grid_data %>%
+      pivot_longer(cols = starts_with("sim_y"), 
+                   names_to = "Simulation", 
+                   values_to = "Response")
+
+    # Plot the response variable for the current simulation set
+    p <- ggplot(long_data, aes(x = x, y = y, fill = Response)) +
+      geom_tile() +
+      scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                           midpoint = mean(long_data$Response, na.rm = TRUE), 
+                           limit = c(min(long_data$Response), max(long_data$Response)), 
+                           name="Response") +
+      labs(title = paste("Response Variable Simulation (Set", set, ")"),
+           x = "X Coordinate",
+           y = "Y Coordinate") +
+      theme_minimal() +
+      theme(legend.position = "right")
+
+    # Print the plot
+    print(p)
+    
+  } else {
+    warning(paste("File", filename, "does not exist. Skipping..."))
+  }
+}
+```
+
+```{r, warning=FALSE, message=FALSE}
+### Simulation Means & SDs ###
+# Print out the estimates for each simulation set
+for (set in 1:num_sets) {
+  # Construct the filename for each set
+  filename <- paste0("sim_data_2x2_set", set, ".csv")
+  
+  # Check if the file exists
+  if (file.exists(filename)) {
+    # Read the simulated data
+    sim_data <- read.csv(filename)
+    
+    # Calculate and print estimates
+    # Here we can calculate mean and standard deviation for each simulated response
+    estimates <- sim_data %>%
+      select(starts_with("sim_y")) %>%
+      summarise(across(everything(), list(mean = mean, sd = sd), na.rm = TRUE))
+    
+    print(paste("Estimates for Simulation Set", set))
+    print(estimates)
+    
+  } else {
+    warning(paste("File", filename, "does not exist. Skipping..."))
+  }
+}
+```

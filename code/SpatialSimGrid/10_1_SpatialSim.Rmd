@@ -1,0 +1,210 @@
+---
+title: "10_1_SpatialSim"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+# Load necessary libraries
+library(sp)
+library(spdep)
+library(raster)
+library(sf)
+library(MASS)
+library(mnormt)
+library(rootSolve)
+
+# Function to create neighbors
+create_neighbors <- function(grid_size) {
+  # Create a grid
+  grid <- expand.grid(x = 1:grid_size, y = 1:grid_size)
+  
+  # Create polygons for each grid cell
+  polygons <- lapply(1:nrow(grid), function(i) {
+    coords <- rbind(
+      c(grid$x[i] - 0.5, grid$y[i] - 0.5),
+      c(grid$x[i] + 0.5, grid$y[i] - 0.5),
+      c(grid$x[i] + 0.5, grid$y[i] + 0.5),
+      c(grid$x[i] - 0.5, grid$y[i] + 0.5),
+      c(grid$x[i] - 0.5, grid$y[i] - 0.5)
+    )
+    Polygons(list(Polygon(coords)), ID = as.character(i))
+  })
+  
+  # Create SpatialPolygons and convert to sf
+  sp_polygons <- SpatialPolygons(polygons)
+  grid_sf <- st_as_sf(sp_polygons)
+  
+  # Create neighbors
+  nb1 <- poly2nb(grid_sf)  # First-order neighbors
+  nb2 <- NULL
+  
+  # Determine if second-order neighbors are needed
+  if (grid_size >= 3) {
+    nb2 <- nblag(nb1, 2)  # Compute second-order neighbors
+  }
+  
+  list(nb1 = nb1, nb2 = nb2)
+}
+
+# Set grid size
+cnt <- 2  # Change to 2 for a 2x2 grid
+neighbors <- create_neighbors(cnt)
+nb1 <- neighbors$nb1
+nb2 <- neighbors$nb2
+
+# Initialize simulation settings
+n <- length(nb1)  # Number of cells based on first-order neighbors
+N_rep <- 500  # Number of replications for simulation
+sim.sigma.vec <- c(sqrt(0.01), sqrt(0.05), sqrt(0.1), sqrt(0.2))  # Noise levels
+beta0.vec <- c(-0.5, 0, 0.5)  # Intercepts
+beta1.vec <- c(0.5, 1)  # Slopes
+rho <- 0.1  # Spatial autocorrelation
+I.tot <- diag(n)  # Identity matrix for covariance structure
+set.cnt <- 0  # To track the simulation number
+
+# Create a neighborhood list for nb1
+nb1_listw <- nb2listw(nb1, style = "W")  # Creating a listw object for nb1 using "W" style
+
+# Simulation loop
+for (sim.sigma in sim.sigma.vec) {
+  for (beta0 in beta0.vec) {
+    for (beta1 in beta1.vec) {
+      set.cnt <- set.cnt + 1  # Increment the set counter
+      
+      # Print the dimensions for debugging
+      cat("Simulating with sigma:", sim.sigma, "beta0:", beta0, "beta1:", beta1, "\n")
+      
+      # Covariance matrix
+      covar.mat <- tryCatch(
+        {
+          # Extract weights from the listw object
+          W_matrix <- nb1_listw$weights  # Extract weights from the listw object
+          
+          # Convert weights to a numeric matrix
+          W_matrix <- as.matrix(sapply(W_matrix, function(x) { if (length(x) > 0) x else 0 }))
+          
+          # Ensure W_matrix has the correct dimensions
+          W_matrix <- matrix(W_matrix, nrow = n, ncol = n, byrow = TRUE)
+          
+          # Print dimensions for debugging
+          print(dim(W_matrix))
+          
+          # Create covariance matrix
+          covar.mat <- (sim.sigma ^ 2) * ginv(I.tot - rho * W_matrix)
+          
+          # Print dimensions for debugging
+          print(dim(covar.mat))
+          
+          covar.mat
+        },
+        error = function(e) {
+          stop("Error creating covariance matrix: ", e$message)
+        }
+      )
+      
+      # Check if covariance matrix is valid
+      if (is.null(covar.mat) || !is.matrix(covar.mat)) {
+        stop("Covariance matrix is not valid.")
+      }
+      
+      y.data <- x.data <- matrix(0, n, N_rep)  # Matrices for covariates and responses
+      
+      # Simulate data for each replication
+      for (i in 1:N_rep) {
+        covariate <- rnorm(n = n, mean = 0, sd = 1)  # Random covariate
+        epsilon <- rmnorm(n = 1, mean = rep(0, n), varcov = covar.mat)  # Error term
+        response <- beta0 + beta1 * covariate + epsilon  # Response variable
+        
+        x.data[, i] <- covariate
+        y.data[, i] <- response
+      }
+      
+      # Set column names for simulation data
+      colnames(x.data) <- paste0("sim_x", c(1:N_rep))
+      colnames(y.data) <- paste0("sim_y", c(1:N_rep))
+      
+      # Combine simulation data with grid data
+      sim_data <- cbind(x.data, y.data)  # Combine simulated data
+      
+      # Write the simulated data to a CSV file
+      write.csv(sim_data, paste0("sim_data_", cnt, "x", cnt, "_set", set.cnt, ".csv"), row.names = FALSE)
+    }
+  }
+}
+
+# Mixture estimating equations function
+Mixture <- function(X.in, Y.in, Sp.mat.ori, max.iter = 30) {
+  X_0 <- X.in * pi / sqrt(3)  # Omega_0
+  d <- as.numeric(Y.in <= 0)  # Delta
+  X.in <- as.matrix(X.in); Y.in <- as.matrix(Y.in)
+  W <- as.matrix(Sp.mat.ori); n1 <- sum(d == 0)
+  X.pos <- X.in[d == 0, , drop = FALSE]; Y.pos <- Y.in[d == 0, drop = FALSE]
+  I.pos <- diag(1, sum(d == 0)); W.pos <- W[d == 0, d == 0]
+  
+  # Obtain initial values
+  spreg.1 <- spatialreg::spautolm(Y.in ~ as.matrix(X.in[, -1]), listw = mat2listw(W), family = "CAR", method = "eigen")
+  rho.0 <- spreg.1$lambda; Beta.0 <- as.matrix(spreg.1$fit$coefficients)
+  sigma.0 <- sqrt(spreg.1$fit$s2)
+  
+  # Newton-Raphson for estimating equations
+  Beta.old <- Beta.0; sigma.old <- sigma.0; rho.old <- rho.0; iter <- 0
+  repeat {
+    iter <- iter + 1
+    
+    # Equation (2.7)
+    Q1 <- function(x) {
+      B <- as.matrix(x)
+      theta <- plogis(as.numeric(-X_0 %*% B / sigma.old))
+      Q1 <- sigma.old^(-1) * t(X_0) %*% (theta - d) +
+        sigma.old^(-2) * t(X.pos) %*% (I.pos - rho.old * W.pos) %*% (Y.pos - X.pos %*% B)
+      as.numeric(Q1)
+    }
+    Beta.new <- as.matrix(multiroot(Q1, start = Beta.old, atol = 1e-4)$root)
+    
+    # Solve (2.8)
+    sigma.new <- as.vector(sqrt(t(Y.pos - X.pos %*% Beta.new) %*% (I.pos - rho.old * W.pos) %*%
+                                   (Y.pos - X.pos %*% Beta.new) / n1))
+    
+    # Equation (2.9)
+    Q3 <- function(x) {
+      Q3 <- sum(eigen(W.pos)$values / (1 - x * eigen(W.pos)$values)) -
+        sigma.new^(-2) * t(Y.pos - X.pos %*% Beta.new) %*% W.pos %*% (Y.pos - X.pos %*% Beta.new)
+      as.numeric(Q3)
+    }
+    VQ3 <- Vectorize(Q3)
+    rho.new.test <- uniroot.all(f = VQ3, c(1 / min(eigen(W.pos)$values), 1 / max(eigen(W.pos)$values)))
+    rho.new.pos <- rho.new.test[rho.new.test > 0]
+    rho.new <- rho.new.pos[which.min(abs(rho.new.pos - rho.old))]
+    if (length(rho.new) == 0) {
+      rho.new <- rho.old
+    }
+    
+    # Update values
+    Beta.old <- Beta.new
+    sigma.old <- sigma.new
+    rho.old <- rho.new
+    
+    # Check for convergence
+    if (iter > max.iter) break
+  }
+  
+  # Covariance matrix of estimates
+  V.beta <- ginv(t(X.pos) %*% (I.tot - rho.new * W.pos) %*% X.pos) * (sigma.new^2)
+  
+  # Return results
+  list(rho = rho.new, beta = Beta.new, sigma = sigma.new, V = V.beta, iter = iter)
+}
+
+# Example call to Mixture function (using simulated data)
+# Prepare your simulated X.in, Y.in, and Sp.mat.ori as required before calling
+# X.in <- x.data
+# Y.in <- y.data
+# Sp.mat.ori <- W_matrix  # Replace with your actual spatial weight matrix
+# result <- Mixture(X.in, Y.in, Sp.mat.ori)
+
+
+```
+
+

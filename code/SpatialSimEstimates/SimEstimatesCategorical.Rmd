@@ -1,0 +1,421 @@
+---
+title: "Spatial Sim Estimates Categorical"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Preliminaries
+
+```{r, message=FALSE, warning=FALSE}
+# set seed
+set.seed(2024) # ensures reproducibility
+
+# load packages
+library(tidyverse)
+library(ggplot2)
+library(sf) # simple features-store/manipulate spatial data
+library(reshape2)
+library(gridExtra)
+
+### Set Constants ###
+# parameters for simulation
+N <- 500  # Number of iterations
+points_per_iteration <- 2000  # Number of points per dataset (to place on 1000x100 cell grid)
+grid_size <- 1000 # Set dimension of grid for simulated data
+
+# Define constants (intercept & slope) for outcome computation (true values)
+alpha <- 0.2
+beta <- 1
+psi1 <- 0.8 # categorical spillover (distance <= 50)
+psi2 <- 0.6 # categorical spillover (distance <= 100)
+psi3 <- 0.4 # categorical spillover (distance <= 150)
+psi4 <- 0.2 # categorical spillover (distance <= 200)
+
+# max distance (between intervention & spillover boundaries) (max(d_i))
+max_distance <- sqrt((133-333)^2 + (866-666)^2)
+```
+
+### Setup Intervention & Spillover Polygons
+
+```{r}
+### Create intervention & spillover polygons ###
+# Define the intervention zone polygon (333,333) to (666,666)
+intervention_zone <- st_polygon(list(matrix(c(333, 333,
+                                              666, 333,
+                                              666, 666,
+                                              333, 666,
+                                              333, 333), 
+                                            ncol = 2, byrow = TRUE)))
+
+# Define the spillover zone polygon (133,133) to (866,866)
+spillover_zone <- st_polygon(list(matrix(c(133, 133,
+                                           866, 133,
+                                           866, 866,
+                                           133, 866,
+                                           133, 133), 
+                                         ncol = 2, byrow = TRUE)))
+
+# Create sf objects for both polygons (simple feature) (CRS=NA is unit-based instead of map-based)
+intervention_sf <- st_sfc(intervention_zone, crs = NA_crs_)
+spillover_sf <- st_sfc(spillover_zone, crs = NA_crs_)
+```
+
+### Simulate Datasets
+
+```{r}
+# initialize object to store all N=500 datasets
+simulated_datasets <- vector("list", N)
+
+# initialize objects to store parameter estimates
+alpha_estimates <- numeric(N) # baseline response
+alpha_estimates_SE <- numeric(N)
+beta_estimates <- numeric(N) # intervention effect
+beta_estimates_SE <- numeric(N)
+psi1_estimates <- numeric(N) # spillover effect 1
+psi1_estimates_SE <- numeric(N)
+psi2_estimates <- numeric(N) # spillover effect 2
+psi2_estimates_SE <- numeric(N)
+psi3_estimates <- numeric(N) # spillover effect 3
+psi3_estimates_SE <- numeric(N)
+psi4_estimates <- numeric(N) # spillover effect 4
+psi4_estimates_SE <- numeric(N)
+
+# Loop over N to generate datasets/compute response/obtain parameter estimates
+for(i in 1:N){
+  ### Data Simulation ###
+  # Simulate random points on the grid with integer coordinates
+  points <- tibble(x = sample(1:grid_size, points_per_iteration, replace = TRUE),
+                   y = sample(1:grid_size, points_per_iteration, replace = TRUE))
+  
+  # Convert points to sf objects
+  points_sf <- st_as_sf(points, coords = c("x", "y"), crs = NA_crs_)
+  
+  # Calculate distance from each point to the intervention zone boundary
+  distances <- st_distance(points_sf, intervention_sf)
+  points$intervention_distance <- as.vector(distances)
+  intervention_distance <- points$intervention_distance # for use in spillover formulas
+  
+  # Assign zones based on their location (intervention/spillover/control)
+  points$intervention_zone <- ifelse(st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # intervention
+  points$spillover_zone <- ifelse(
+    st_within(points_sf, spillover_sf, 
+              sparse = FALSE) & !st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # spillover
+  
+  # Add zone label ("Intervention", "Spillover", "Control")
+  points$zone <- ifelse(points$intervention_zone == 1, "Intervention",
+                        ifelse(points$spillover_zone == 1, "Spillover", "Control"))
+  
+  # Assign categorical spillover effects based on distance
+  points$psi1 <- ifelse(points$intervention_distance <= 50 & 
+                          points$spillover_zone == 1, 1, 0)
+  points$psi2 <- ifelse(points$intervention_distance > 50 & points$intervention_distance <= 100 & 
+                          points$spillover_zone == 1, 1, 0)
+  points$psi3 <- ifelse(points$intervention_distance > 100 & points$intervention_distance <= 150 & 
+                          points$spillover_zone == 1, 1, 0)
+  points$psi4 <- ifelse(points$intervention_distance > 150 & points$intervention_distance <= 200 & 
+                          points$spillover_zone == 1, 1, 0)
+
+  ### Compute Response w/ Linear Spillover ###
+  # Generate random noise (epsilon) from a normal distribution (we can tweak this error term)
+  epsilon <- rnorm(points_per_iteration, mean = 0, sd = 1)
+  
+  # Compute response for outcome w/ categorical spillover (spillover gets 0.8/0.6/0.4/0.2)
+  points$response_categorical <- alpha + (beta*points$intervention_zone) +
+     (psi1*points$psi1) + (psi2*points$psi2) + (psi3*points$psi3) + (psi4*points$psi4) + epsilon
+  
+  ### Estimate Parameter Values via modeling ###
+  # Fit the linear regression model to estimate alpha, beta, and psi(1-4)
+  model <- lm(response_categorical ~ intervention_zone + psi1 + psi2 + psi3 + psi4, data = points)
+
+  # Store the estimates
+  alpha_estimates[i] <- coef(model)[1]     # Intercept (alpha)
+  beta_estimates[i] <- coef(model)[2]      # Coefficient for intervention_zone (beta)
+  psi1_estimates[i] <- coef(model)[3]      # Coefficient for psi1 (spillover <= 50)
+  psi2_estimates[i] <- coef(model)[4]      # Coefficient for psi2 (50 < distance <= 100)
+  psi3_estimates[i] <- coef(model)[5]      # Coefficient for psi3 (100 < distance <= 150)
+  psi4_estimates[i] <- coef(model)[6]      # Coefficient for psi4 (150 < distance <= 200)
+  
+  
+  # Store the standard errors
+  alpha_estimates_SE[i] <- summary(model)$coefficients[1, 2]
+  beta_estimates_SE[i] <- summary(model)$coefficients[2, 2]
+  psi1_estimates_SE[i] <- summary(model)$coefficients[3, 2]
+  psi2_estimates_SE[i] <- summary(model)$coefficients[4, 2]
+  psi3_estimates_SE[i] <- summary(model)$coefficients[5, 2]
+  psi4_estimates_SE[i] <- summary(model)$coefficients[6, 2]
+  
+  ### Save Dataset ###
+  # Store the dataset for this iteration in the list (ith simulated point locations)
+  simulated_datasets[[i]] <- points
+}
+```
+
+### Parameter Estimates
+
+```{r}
+### Table of all parameter estimates ###
+estimates_table <- tibble(
+  alpha_mean = alpha_estimates,
+  alpha_SE = alpha_estimates_SE,
+  beta_mean = beta_estimates,
+  beta_SE = beta_estimates_SE,
+  psi1_mean = psi1_estimates,
+  psi1_SE = psi1_estimates_SE,
+  psi2_mean = psi1_estimates,
+  psi2_SE = psi1_estimates_SE,
+  psi3_mean = psi1_estimates,
+  psi3_SE = psi1_estimates_SE,
+  psi4_mean = psi1_estimates,
+  psi4_SE = psi1_estimates_SE
+)
+#print(estimates_table)
+
+### Compute Final Parameter Estimates & SEs ###
+# Compute the Means of the Estimates
+alpha_mean <- mean(alpha_estimates, na.rm = TRUE)
+beta_mean <- mean(beta_estimates, na.rm = TRUE)
+psi1_mean <- mean(psi1_estimates, na.rm = TRUE)
+psi2_mean <- mean(psi2_estimates, na.rm = TRUE)
+psi3_mean <- mean(psi3_estimates, na.rm = TRUE)
+psi4_mean <- mean(psi4_estimates, na.rm = TRUE)
+
+# Compute the SE of Means for Each Parameter (for multiple estimates)
+alpha_SE_avg <- sqrt(mean(alpha_estimates_SE^2))
+beta_SE_avg <- sqrt(mean(beta_estimates_SE^2))
+psi1_SE_avg <- sqrt(mean(psi1_estimates_SE^2))
+psi2_SE_avg <- sqrt(mean(psi2_estimates_SE^2))
+psi3_SE_avg <- sqrt(mean(psi3_estimates_SE^2))
+psi4_SE_avg <- sqrt(mean(psi4_estimates_SE^2))
+
+# Store the results in a table
+results_summary <- tibble(
+  Parameter = c("Alpha_hat", "Beta_hat", "Psi1_hat", "Psi2_hat", "Psi3_hat", "Psi4_hat"),
+  Mean = c(alpha_mean, beta_mean, psi1_mean, psi2_mean, psi3_mean, psi4_mean),
+  SE = c(alpha_SE_avg, beta_SE_avg, psi1_SE_avg, psi2_SE_avg, psi3_SE_avg, psi4_SE_avg)
+)
+
+# Print the summary table
+print(results_summary)
+```
+
+### Plots of Parameter Estimates
+
+```{r}
+### Alpha Plot ###
+# Create a tibble to hold the alpha estimates and their standard errors for each dataset
+alpha_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  alpha = alpha_estimates,  # mean alpha estimates for each dataset
+  alpha_SE = alpha_estimates_SE  # standard error of alpha estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+alpha_plot_data <- alpha_plot_data %>%
+  mutate(
+    lower_ci = alpha - 1.96 * alpha_SE,
+    upper_ci = alpha + 1.96 * alpha_SE
+  )
+
+# Create the plot
+alpha_plot <- ggplot(alpha_plot_data, aes(x = dataset_id, y = alpha)) +
+  geom_point(color = "blue") +  # Add points for alpha estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = alpha_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
+  labs(
+    title = "Alpha Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Alpha Estimate"
+  ) +
+  theme_classic() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+
+### Beta Plot ###
+# Create a tibble to hold the estimates and their standard errors for each dataset
+beta_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  beta = beta_estimates,  # mean beta estimates for each dataset
+  beta_SE = beta_estimates_SE  # standard error of beta estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+beta_plot_data <- beta_plot_data %>%
+  mutate(
+    lower_ci = beta - 1.96 * beta_SE,
+    upper_ci = beta + 1.96 * beta_SE
+  )
+
+# Create the beta plot
+beta_plot <- ggplot(beta_plot_data, aes(x = dataset_id, y = beta)) +
+  geom_point(color = "red") +  # Add points for beta estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = beta_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
+  labs(
+    title = "Beta Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Beta Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+
+### Psi1 Plot ###
+# Create a tibble for psi estimates and their standard errors
+psi1_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  psi1 = psi1_estimates,  # mean psi estimates for each dataset
+  psi1_SE = psi1_estimates_SE  # standard error of psi estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+psi1_plot_data <- psi1_plot_data %>%
+  mutate(
+    lower_ci = psi1 - 1.96 * psi1_SE,
+    upper_ci = psi1 + 1.96 * psi1_SE
+  )
+
+# Create the psi plot
+psi1_plot <- ggplot(psi1_plot_data, aes(x = dataset_id, y = psi1)) +
+  geom_point(color = "purple") +  # Add points for psi estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = psi1_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
+  labs(
+    title = "Psi1 Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Psi1 Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+
+### Psi2 Plot ###
+# Create a tibble for psi estimates and their standard errors
+psi2_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  psi2 = psi2_estimates,  # mean psi estimates for each dataset
+  psi2_SE = psi2_estimates_SE  # standard error of psi estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+psi2_plot_data <- psi2_plot_data %>%
+  mutate(
+    lower_ci = psi2 - 1.96 * psi2_SE,
+    upper_ci = psi2 + 1.96 * psi2_SE
+  )
+
+# Create the psi plot
+psi2_plot <- ggplot(psi2_plot_data, aes(x = dataset_id, y = psi2)) +
+  geom_point(color = "orange") +  # Add points for psi estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = psi2_mean, linetype = "dashed", color = "orange") +  # Add horizontal line at psi mean
+  labs(
+    title = "Psi2 Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Psi2 Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+
+### psi3 Plot ###
+# Create a tibble for psi estimates and their standard errors
+psi3_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  psi3 = psi3_estimates,  # mean psi estimates for each dataset
+  psi3_SE = psi3_estimates_SE  # standard error of psi estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+psi3_plot_data <- psi3_plot_data %>%
+  mutate(
+    lower_ci = psi3 - 1.96 * psi3_SE,
+    upper_ci = psi3 + 1.96 * psi3_SE
+  )
+
+# Create the psi plot
+psi3_plot <- ggplot(psi3_plot_data, aes(x = dataset_id, y = psi3)) +
+  geom_point(color = "green") +  # Add points for psi estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = psi3_mean, linetype = "dashed", color = "green") +  # Add horizontal line at psi mean
+  labs(
+    title = "Psi3 Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Psi3 Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+
+### Psi4 Plot ###
+# Create a tibble for psi estimates and their standard errors
+psi4_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  psi4 = psi4_estimates,  # mean psi estimates for each dataset
+  psi4_SE = psi4_estimates_SE  # standard error of psi estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+psi4_plot_data <- psi4_plot_data %>%
+  mutate(
+    lower_ci = psi4 - 1.96 * psi4_SE,
+    upper_ci = psi4 + 1.96 * psi4_SE
+  )
+
+# Create the psi plot
+psi4_plot <- ggplot(psi4_plot_data, aes(x = dataset_id, y = psi4)) +
+  geom_point(color = "pink") +  # Add points for psi estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = psi4_mean, linetype = "dashed", color = "pink") +  # Add horizontal line at psi mean
+  labs(
+    title = "Psi4 Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Psi4 Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+# Print the plots
+print(alpha_plot)
+print(beta_plot)
+print(psi1_plot)
+print(psi2_plot)
+print(psi3_plot)
+print(psi4_plot)
+
+# Combine all plots into a single layout
+combined_plot <- grid.arrange(
+  alpha_plot,       # Plot for Alpha
+  beta_plot,        # Plot for Beta
+  ncol = 2,         # Arrange plots in 2 columns
+  nrow = 1          # Arrange plots in 2 rows
+)
+
+# plots for all psi estimates
+combined_plot <- grid.arrange(
+  psi1_plot,         # Plot for Psi
+  psi2_plot,         # Plot for Psi
+  psi3_plot,         # Plot for Psi
+  psi4_plot,         # Plot for Psi
+  ncol = 2,         # Arrange plots in 2 columns
+  nrow = 2          # Arrange plots in 2 rows
+)
+```

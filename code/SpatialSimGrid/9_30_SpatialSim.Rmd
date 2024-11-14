@@ -1,0 +1,243 @@
+---
+title: "9/30 Simulation 10 by 10"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r, message=FALSE, warning=FALSE}
+### Data generation for simulation in 10x10 grids ###
+# load packages
+library(raster) # geographic data analysis and modeling, raster grids
+library(sf) # spatial objects
+library(spdep) # neighborhood structures & spatial dependencies
+library(MASS) # g-inverse, stat functions
+library(mnormt) # MVN distribution functions
+```
+
+```{r}
+### generate data ###
+# X by X raster grid
+cnt <- 2
+r <- raster(xmn = 0, xmx = cnt, ymn = 0, ymx = cnt, nrow = cnt, ncol = cnt)
+
+# assign values to every raster cell
+r$value <- 1:ncell(r)
+
+# convert raster to polygons
+r.sp <- rasterToPolygons(r)
+
+# obtain center coordinates of each polygon
+r.center <- coordinates(r.sp)
+
+# convert raster to df (add x & y coordinates)
+r.data <- as.data.frame(r)
+r.data <- data.frame(r.data,x = r.center[,1],y = r.center[,2])
+
+# convert polygons to simple feature object & set attribute-geometry relationship "constant"
+r.sf <- st_as_sf(r.sp)
+st_agr(r.sf) = "constant"
+```
+
+- section creates a X by X spatial grid with `raster` package, converts it to polygons, and extracts the coordinates of the center of each cell. data is then stored in the data frame.
+
+- `sf` package is used for handling spatial objects. The spatial feature object `r.sf` is created from the polygons.
+
+```{r}
+### neighborhood structure ###
+# spatial neighborhood structure
+nb <- nblag(poly2nb(r.sf), 2)
+
+# created identity matrix & neighborhood weight matrices
+nb0 <- diag(nrow(r.sf)) # identity matrix
+nb1 <- nb2mat(nb[[1]], style="B") # 1st order neighborhood
+
+# Conditional handling of second-order neighbors
+if (cnt >= 3) {
+  nb <- nblag(poly2nb(r.sf), 2)  # Expand to second-order neighbors for cnt >= 3
+  nb2 <- nb2mat(nb[[2]], style = "B", zero.policy = TRUE)  # Second-order neighborhood matrix
+  print(nb2)
+} else {
+  print(nb1)
+}
+```
+
+- `poly2nb` defines neighbors based on the adjacency of polygons. `nblag` generates neighbor lists for up to two lags (1st and 2nd order)
+
+- `nb2mat` function creates weight matrices (`nb1` and `nb2`) for the neighborhood structure, used in the simulation to model spatial dependence.
+
+- `nb0` is an identity matrix used for base calculations.
+
+```{r}
+### Simulation Setting ###
+# parameters
+n <- nrow(r.data) # number of observations
+N_rep <- 500 # simulation repetitions
+sim.sigma.vec <- c(sqrt(0.01), sqrt(0.05), sqrt(0.1), sqrt(0.2)) # list of simulation variances
+beta0.vec <- c(-0.5, 0, 0.5) #  list of intercepts
+beta1.vec <- c(0.5, 1) # list of slopes
+rho <- 0.1 # spatial autocorrelation parameter
+omega <- nb1 # 1st order neighborhood matrix as spatial weight
+I.tot <- diag(n) # ID matrix (I)
+
+# simulation iteration counter (start at 0)
+set.cnt <- 0
+
+# for loops: outer loops of parameter combos (variance/intercept/slope)
+for(sim.sigma in sim.sigma.vec) {
+  for(beta0 in beta0.vec) {
+    for(beta1 in beta1.vec) {
+      # increment simulation counter (+1)
+      set.cnt <- set.cnt + 1 
+      # spatial dependence covariance matrix
+      covar.mat <- (sim.sigma ^ 2) * ginv(I.tot - rho * omega)
+      # matrices to store covariates (x) & responses (y)
+      y.data <- x.data <- matrix(0, n, N_rep)
+      
+      # loop over every simulation repetition
+      for(i in 1:N_rep){
+        covariate <- rnorm(n = n, mean = 0, sd = 1) # random covariates (length n)
+        epsilon <- rmnorm(n = 1, mean = rep(0, n), varcov = covar.mat) # Spatially correlated error term
+        response <- beta0 + beta1 * covariate + epsilon # simulated response (outcome value)
+        
+        x.data[,i] <- covariate # save covariate
+        y.data[,i] <- response # save response
+      }
+      
+      # # call mixture function on one of sim datasets
+      # X.in <- x.data[,1]  # Covariates from first simulation
+      # Y.in <- y.data[,1]  # Response from first simulation
+      # W <- nb2mat(nb[[1]], style = "B")  # Neighborhood matrix
+      # 
+      # mixture_results <- Mixture(X.in, Y.in, W)
+      # 
+      # # Print or store results
+      # print(mixture_results)
+      
+      # assign column names to x,y data; combine into dataframe
+      colnames(x.data) <- paste0("sim_x", c(1:N_rep))
+      colnames(y.data) <- paste0("sim_y", c(1:N_rep))
+      sim_data <- cbind(r.data, x.data, y.data)
+      
+      # save simulation data to csv file
+      write.csv(sim_data,paste0("sim_data", set.cnt, ".csv"), row.names = F) 
+    } 
+  } 
+}
+```
+
+- run simulation for generating spatial data with multiple repetitions (500) and parameter combos (variance/intercept/slope)
+
+- for each repetition, a random covariate is generated, and the response variable is calculated based on a linear model with spatially correlated errors (epsilon)
+
+- save data in a CSV file with unique IDs for each set of parameters (variance/intercept/slope)
+
+```{r}
+## Mixture estimating equations
+Mixture <- function(X.in, Y.in, Sp.mat.ori, max.iter = 30){
+  X_0 <- X.in * pi / sqrt(3) # Omega_0
+  X.in <- as.matrix(X.in) # convert to matrix
+  Y.in <- as.matrix(Y.in) # convert to matrix
+  W <- as.matrix(Sp.mat.ori) # spatial weights matrix
+  
+  # obtain initial values w/ spatial autoregressive model
+  spreg.1 <- spatialreg::spautolm(Y.in ~ as.matrix(X.in[, -1]) , listw = mat2listw(W), family = "CAR", method="eigen")
+  rho.0 <- spreg.1$lambda
+  Beta.0 <- as.matrix(spreg.1$fit$coefficients)
+  sigma.0 <- sqrt(spreg.1$fit$s2)
+  
+  # Newton-Raphson iteration for estimating equations
+  Beta.old <- Beta.0
+  sigma.old <- sigma.0
+  rho.old <- rho.0
+  iter <- 0
+  
+  repeat{
+    iter <- iter + 1
+    
+    # Equation (2.7) for updating Beta (no zero-inflation)
+    Q1 <- function(x) {
+      B <- as.matrix(x)
+      Q1 <- sigma.old^(-2) * t(X.in) %*% (Y.in - X.in %*% B)
+      as.numeric(Q1)
+    }
+    
+    # Update Beta using multiroot
+    Beta.new <- as.matrix(multiroot(Q1, start = Beta.old, atol = 1e-4)$root)
+    
+    # Equation (2.8) - updating sigma
+    sigma.new <- as.vector(sqrt(t(Y.in - X.in %*% Beta.new) %*% (Y.in - X.in %*% Beta.new) / n))
+    
+    # Equation (2.9) - updating rho
+    Q3 <- function(x) {
+      Q3 <- sum(eigen(W)$values / (1 - x * eigen(W)$values)) -
+        sigma.new^(-2) * t(Y.in - X.in %*% Beta.new) %*% W %*% (Y.in - X.in %*% Beta.new)
+      as.numeric(Q3)
+    }
+    
+    VQ3 <- Vectorize(Q3)
+    rho.new.test <- uniroot.all(f = VQ3, c(1 / min(eigen(W)$values), 1 / max(eigen(W)$values)))
+    rho.new.pos <- rho.new.test[rho.new.test > 0]
+    rho.new <- rho.new.pos[which.min(abs(rho.new.pos - rho.old))]
+    if (length(rho.new) == 0) rho.new <- 0
+    
+    # Update values for next iteration
+    Beta.old <- Beta.new
+    sigma.old <- sigma.new
+    rho.old <- rho.new
+    
+    if (iter >= max.iter) break
+  }
+  
+  # Sandwich estimator
+  Sigma.beta.mod <- (sigma.new^2) * ginv(t(X.in) %*% X.in)
+  AV <- diag(Sigma.beta.mod)
+  
+  list(coef = Beta.new, 
+       sd = sqrt(AV), 
+       sigma = sigma.new, 
+       rho = rho.new, 
+       iter = iter, 
+       covbetahat = Sigma.beta.mod)
+}
+```
+
+- mixture estimating equation function: estimates SAR model parameters (beta/sigma/rho) with N-R iterative method
+
+- iteratively updates parameters and uses the sandwich estimator to compute the standard errors of the coefficient estimates
+
+```{r}
+# # Example to call the Mixture function on one set of simulated data
+# # Assume you have generated x.data and y.data (covariates and responses) as shown earlier
+# 
+# # Select one simulated dataset (e.g., the first repetition)
+# X.in <- x.data[, 1]  # Covariate from the first simulation
+# Y.in <- y.data[, 1]  # Response from the first simulation
+# 
+# # W is the spatial weight matrix (neighborhood structure)
+# W <- nb2mat(nb[[1]], style = "B")  # First order neighbor matrix
+# 
+# # Call the Mixture function
+# mixture_results <- Mixture(X.in, Y.in, W, max.iter = 30)
+# 
+# # Print the results
+# print(mixture_results)
+```
+
+```{r}
+# Example call to Mixture() using simulated data
+# Select the first replication of covariates and responses
+X.in <- x.data[, 1] # Covariate from the first simulation
+Y.in <- y.data[, 1] # Response from the first simulation
+
+# Call the Mixture function using the neighborhood matrix nb1 or nb2 (if available)
+if (cnt >= 3) {
+  mixture_results <- Mixture(X.in, Y.in, nb2, max.iter = 30)
+} else {
+  mixture_results <- Mixture(X.in, Y.in, nb1, max.iter = 30)
+}
+
+# Display the results from the Mixture function
+print(mixture_results)
+```
+
