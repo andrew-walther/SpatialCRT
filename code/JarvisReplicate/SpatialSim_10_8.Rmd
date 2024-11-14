@@ -1,0 +1,524 @@
+---
+title: "SpatialSim_10_8"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Preliminaries
+
+```{r, message=FALSE, warning=FALSE}
+# load packages
+library(tidyverse)
+library(ggplot2)
+library(sf) # simple features - store & manipulate spatial data
+library(reshape2)
+library(gridExtra)
+
+# set seed
+set.seed(2024)
+```
+
+### Setup Intervention & Spillover Polygons
+
+```{r}
+### Create intervention & spillover polygons ###
+# Define the intervention zone polygon (333,333) to (666,666)
+intervention_zone <- st_polygon(list(matrix(c(333, 333,
+                                              666, 333,
+                                              666, 666,
+                                              333, 666,
+                                              333, 333), 
+                                            ncol = 2, byrow = TRUE)))
+
+# Define the spillover zone polygon (133,133) to (866,866)
+spillover_zone <- st_polygon(list(matrix(c(133, 133,
+                                           866, 133,
+                                           866, 866,
+                                           133, 866,
+                                           133, 133), 
+                                         ncol = 2, byrow = TRUE)))
+
+# Create sf objects for both polygons (simple feature collection of geometries) (CRS=NA is unit-based instead of map-based)
+intervention_sf <- st_sfc(intervention_zone, crs = NA_crs_)
+spillover_sf <- st_sfc(spillover_zone, crs = NA_crs_)
+```
+
+```{r}
+### Plot polygons to check ###
+# Create simple data frames for both polygons
+intervention_zone_df <- st_as_sf(data.frame(geometry = intervention_sf, zone = "Intervention"))
+spillover_zone_df <- st_as_sf(data.frame(geometry = spillover_sf, zone = "Spillover"))
+
+# Combine both data frames into one for plotting
+zones_df <- rbind(intervention_zone_df, spillover_zone_df)
+
+# Plot using ggplot2
+ggplot() +
+  # Plot spillover zone in blue
+  geom_sf(data = spillover_zone_df, fill = "blue", alpha = 0.3, color = "black", size = 1) +
+  # Plot intervention zone in red
+  geom_sf(data = intervention_zone_df, fill = "red", alpha = 0.6, color = "black", size = 1) +
+  # Set limits to match the grid size
+  coord_sf(xlim = c(0, 1000), ylim = c(0, 1000), expand = FALSE) +
+  # set plot theme
+  theme_minimal() +
+  # assign title/x/y labels
+  labs(title = "Intervention and Spillover Zones w/o simulated data", x = "X Coordinate", y = "Y Coordinate")
+```
+
+### Simulate Data
+
+```{r, warning=FALSE}
+### Simulate coordinates for Cells (location) ###
+# Create a 1000x1000 grid
+grid_size <- 1000
+
+# Simulate 2000 random points on the grid with integer coordinates
+points <- tibble(x = sample(1:grid_size, 2000, replace = TRUE), 
+                 y = sample(1:grid_size, 2000, replace = TRUE))
+
+# Convert points to sf (simple features) objects
+points_sf <- st_as_sf(points, coords = c("x", "y"), crs = NA_crs_)
+
+# Compute the distance from each point to the intervention zone & add to points df
+distances <- st_distance(points_sf, intervention_sf)
+points$intervention_distance <- as.vector(distances)
+
+# Add indicators for if point is inside the intervention zone (1 if inside, 0 if not)
+points$intervention_zone <- ifelse(st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0)
+
+# Add indicators for if point is inside the spillover zone (outside intervention zone)
+points$spillover_zone <- ifelse(
+  st_within(points_sf, spillover_sf, sparse = FALSE) & !st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0)
+
+# Add column "zone" as intervention/spillover/outside for each point
+points$zone <- ifelse(points$intervention_zone == 1, "Intervention",
+                      ifelse(points$spillover_zone == 1, "Spillover", "Outside"))
+```
+
+```{r}
+### Plot points on top of grid colored by zone ###
+# Convert the points into an sf object using the coordinates (x, y)
+points_sf <- st_as_sf(points, coords = c("x", "y"), crs = NA_crs_)
+
+# Plot the polygons and the points
+ggplot() +
+  # Plot the spillover zone in blue
+  geom_sf(data = spillover_sf, fill = "blue", alpha = 0.2, color = "black", size = 1) +
+  # Plot the intervention zone in red
+  geom_sf(data = intervention_sf, fill = "red", alpha = 0.5, color = "black", size = 1) +
+  # Plot the points, color them based on the zone
+  geom_sf(data = points_sf, aes(color = zone), size = 1, alpha = 0.7) +
+  # set colors for each zone
+  scale_color_manual(values = c("Intervention" = "red", "Spillover" = "blue", "Outside" = "grey")) +
+  # set plot coordinates
+  coord_sf(xlim = c(0, 1000), ylim = c(0, 1000), expand = FALSE) +
+  # set plot theme
+  theme_minimal() +
+  # set plot labels
+  labs(title = "Simulated data colored by intervention/spillover/outside", x = "X Coordinate", y = "Y Coordinate") +
+  theme(legend.title = element_blank())  # Remove legend title
+```
+
+### Compute Response w/ Various Spillover Methods
+
+```{r}
+### Set Constants ###
+# Define constants for outcome computation
+alpha <- 0.2
+beta <- 1
+
+# max distance
+max_distance <- sqrt((133-333)^2 + (866-666)^2)
+```
+
+```{r}
+### Compute Response (no spillover) ###
+# Calculate distances between each point and the intervention zone
+intervention_distance <- points$intervention_distance
+
+# Compute the outcome value: outcome = alpha + beta * x_i
+points$outcome_none <- alpha + beta * points$intervention_zone
+```
+
+```{r}
+### Compute Binary Spillover effect ###
+# maximum spillover effect
+spillover_binary_max <- 0.8
+
+# compute binary spillover outcomes
+spillover_binary <- spillover_binary_max * points$spillover_zone
+points$outcome_binary <- points$outcome_none + spillover_binary
+```
+
+```{r}
+### Compute Linear Spillover effect ###
+# maximum spillover effect
+spillover_linear_max <- 1.0
+
+# Compute linear_spillover for points in the spillover zone
+linear_spillover <- ifelse(points$spillover_zone == 1, spillover_linear_max*(1-intervention_distance/max_distance), 0) # Linear decay
+points$outcome_linear <- points$outcome_none + linear_spillover # add linear spillover adjusted outcome
+```
+
+```{r}
+### Compute Categorical Spillover Effect ###
+# Buffer width is based on dividing the distance between spillover and intervention zones by 4
+total_buffer_width <- 866 - 666  # The distance from the intervention zone to spillover boundary
+buffer_width <- total_buffer_width / 4  # Divide the total width into 4 segments
+
+# Create buffer zones from the intervention zone outward
+segment_1 <- st_difference(st_buffer(intervention_sf, buffer_width), intervention_sf)
+segment_2 <- st_difference(st_buffer(intervention_sf, buffer_width * 2), st_buffer(intervention_sf, buffer_width))
+segment_3 <- st_difference(st_buffer(intervention_sf, buffer_width * 3), st_buffer(intervention_sf, buffer_width * 2))
+segment_4 <- st_difference(st_buffer(intervention_sf, total_buffer_width), st_buffer(intervention_sf, buffer_width * 3))
+
+
+# Loop through each segment and assign the appropriate spillover effect
+categorical_spillover <- rep(0, nrow(points))
+categorical_spillover[st_intersects(points_sf, segment_4, sparse = FALSE)] <- 0.2
+categorical_spillover[st_intersects(points_sf, segment_3, sparse = FALSE)] <- 0.4
+categorical_spillover[st_intersects(points_sf, segment_2, sparse = FALSE)] <- 0.6
+categorical_spillover[st_intersects(points_sf, segment_1, sparse = FALSE)] <- 0.8
+
+# add effect of 0.25 to any point in spillover zone that hasn't been assigned effect (corners that are left out)
+spillover_effect_points <- st_intersects(points_sf, spillover_sf, sparse = FALSE)  # Identify points in spillover zone
+no_effect_points <- is.na(categorical_spillover) | categorical_spillover == 0  # Identify points without an effect
+categorical_spillover[spillover_effect_points & no_effect_points] <- 0.2
+
+# Now calculate the overall outcome with the spillover effect
+points$outcome_categorical <- points$outcome_none + categorical_spillover
+
+# Plot categorical spillover zones (corners included with outermost zone)
+# ggplot() +
+#   geom_sf(data = spillover_sf, fill = "blue", alpha = 0.2) +  # Spillover zone in light blue
+#   geom_sf(data = intervention_sf, fill = "red", alpha = 0.5) +  # Intervention zone in red
+#   geom_sf(data = segment_1, fill = "yellow", alpha = 0.3) +  # First buffer zone
+#   geom_sf(data = segment_2, fill = "green", alpha = 0.3) +   # Second buffer zone
+#   geom_sf(data = segment_3, fill = "orange", alpha = 0.3) +  # Third buffer zone
+#   geom_sf(data = segment_4, fill = "purple", alpha = 0.3) +  # Fourth buffer zone
+#   theme_minimal() +
+#   ggtitle("Concentric Buffer Zones to Spillover Zone Corners") +
+#   coord_sf(xlim = c(0, 1000), ylim = c(0, 1000))
+```
+
+```{r}
+### Compute Exponential Spillover effect ###
+# constants
+spillover_exponential_max <- 1.0 # maximum spillover effect
+k <- 5  # Decay rate
+
+# Compute exponential_spillover for points in the spillover zone
+exponential_spillover <- ifelse(points$spillover_zone == 1,
+                                # exponential decay
+                                spillover_exponential_max*exp(-k*(intervention_distance/max_distance)), 0)
+
+# Compute the outcome with the exponential_spillover effect
+points$outcome_exponential <- points$outcome_none + exponential_spillover
+```
+
+```{r}
+### Compute Gaussian Spillover effect ###
+sigma <- max_distance / 3  # The standard deviation for the Gaussian decay, scaled to the distance
+
+# Compute gaussian_spillover for points in the spillover zone
+gaussian_spillover <- ifelse(points$spillover_zone == 1,
+                                    # Gaussian decay
+                                    exp(-(intervention_distance^2) / (2*sigma^2)), 0)
+
+# Compute the outcome with the gaussian_spillover effect
+points$outcome_gaussian <- points$outcome_none + gaussian_spillover
+```
+
+```{r}
+### Compute IDW Spillover effect ###
+epsilon <- 0.001  # Small constant to prevent division by zero
+
+# Compute IDW_spillover for points in the spillover zone
+idw_spillover <- ifelse(points$spillover_zone == 1,
+                        # IDW decay: 1 / (distance_to_intervention + epsilon)
+                        1 / (intervention_distance + epsilon), 0)
+
+# Normalize IDW_spillover to ensure it goes to 0 at the spillover boundary
+idw_spillover <- ifelse(intervention_distance <= max_distance,
+                        idw_spillover * (max_distance - intervention_distance) / max_distance, 0)
+
+# adjust for boundary cases >1.0
+idw_spillover <- ifelse(idw_spillover >= 1.0, 1.0, idw_spillover)
+
+# Compute the outcome with the idw_spillover effect
+points$outcome_idw <- points$outcome_none + idw_spillover
+```
+
+```{r}
+### Print preview of data ###
+head(points)
+```
+
+```{r}
+### Mean Values of each Spillover Method ###
+# breakdown further by intervention/spillover/other
+mean(points$outcome_none) 
+
+mean(points$outcome_binary)
+
+mean(points$outcome_linear)
+
+mean(points$outcome_categorical)
+
+mean(points$outcome_exponential)
+
+mean(points$outcome_gaussian)
+
+mean(points$outcome_idw)
+```
+
+### Plot response w/ each spillover effect over distance from intervention zone boundary
+
+```{r, warning=FALSE, message=FALSE}
+### Spillover Method Formulas ###
+# Define distance range from 0 to 250
+distance <- seq(0, 250, length.out = 500)
+
+# Define spillover effects as functions of distance
+# binary
+binary_spillover <- ifelse(distance >= 0 & distance <= 200, 0.8, 0)
+
+# linear
+linear_spillover <- pmax(1 - (distance / 200), 0)
+
+# categorical
+categorical_spillover <- ifelse(distance <= 50, 0.8,
+                                 ifelse(distance <= 100, 0.6,
+                                        ifelse(distance <= 150, 0.4, 
+                                               ifelse(distance <= 200, 0.2, 0))))
+
+# exponential
+exponential_spillover <- 1.0 * exp(-5 * (distance / 250))
+
+# gaussian
+gaussian_spillover <- exp(-(distance^2) / (2 * ((200/3)^2)))
+
+# IDW
+idw_spillover <- 1 / (distance + 0.001) * (1 - distance / 250)
+
+### Plot ###
+# Create a data frame for plotting
+plot_data <- data.frame(
+  distance = distance,
+  binary_spillover = binary_spillover,
+  linear_spillover = linear_spillover,
+  categorical_spillover = categorical_spillover,
+  exponential_spillover = exponential_spillover,
+  gaussian_spillover = gaussian_spillover,
+  idw_spillover = idw_spillover
+)
+
+# Reshape the data for ggplot
+plot_data_long <- melt(plot_data, id.vars = "distance", variable.name = "spillover_method", value.name = "spillover_effect")
+
+# Create the line plot
+ggplot(plot_data_long, aes(x = distance, y = spillover_effect, color = spillover_method)) +
+  geom_line(size = 1) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.1)) +
+  labs(
+    title = "Spillover Effect by Distance from Intervention Zone Boundary",
+    x = "Distance from Intervention Zone Boundary",
+    y = "Spillover Effect Proportion",
+    color = "Spillover Method"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+### Plot Simulated Data for each of 6 spillover methods
+
+```{r}
+### No Spillover ###
+spillover_method <- points$outcome_none
+
+plot_none <- ggplot() +
+  # Plot intervention zone boundary
+  geom_sf(data = intervention_sf, fill = NA, alpha = 0.5) +
+  # Plot spillover zone boundary
+  geom_sf(data = spillover_sf, fill = NA, alpha = 0.3) +
+  # Plot points
+  geom_point(data = points, 
+             aes(x = x, y = y, 
+                 color = ifelse(intervention_zone == 1, "red", "blue"),  # Color points based on zone
+                 alpha = spillover_method),  # Adjust opacity based on response
+             show.legend = FALSE) +  # Hide legend for points
+  # Add labels
+  labs(title = "Simulated Data with No Spillover Effect", x = "X Coordinate", y = "Y Coordinate") +
+  # Set theme
+  theme_minimal() +
+  # Adjust color scale (maintain transparency)
+  scale_color_identity() +  # Use specified colors directly
+  scale_alpha(range = c(0.1, 0.5))  # Set alpha scale for transparency
+
+# print plot
+plot_none
+```
+
+```{r}
+### Binary Spillover ###
+spillover_method <- points$outcome_binary
+
+plot_binary <- ggplot() +
+  # Plot intervention zone boundary
+  geom_sf(data = intervention_sf, fill = NA, alpha = 0.5) +
+  # Plot spillover zone boundary
+  geom_sf(data = spillover_sf, fill = NA, alpha = 0.3) +
+  # Plot points
+  geom_point(data = points, 
+             aes(x = x, y = y, 
+                 color = ifelse(intervention_zone == 1, "red", "blue"),  # Color points based on zones
+                 alpha = spillover_method),  # Adjust opacity based on response
+             show.legend = FALSE) +  # Hide legend for points
+  # Add labels
+  labs(title = "Simulated Data with Binary Spillover Effect", x = "X Coordinate", y = "Y Coordinate") +
+  # Set theme
+  theme_minimal() +
+  # Adjust color scale (maintain transparency)
+  scale_color_identity() +  # Use specified colors directly
+  scale_alpha(range = c(0.1, 0.5))  # Set alpha scale for transparency
+
+# print plot
+plot_binary
+```
+
+```{r}
+### Linear Spillover ###
+spillover_method <- points$outcome_linear
+
+plot_linear <- ggplot() +
+  # Plot intervention zone boundary
+  geom_sf(data = intervention_sf, fill = NA, alpha = 0.5) +
+  # Plot spillover zone boundary
+  geom_sf(data = spillover_sf, fill = NA, alpha = 0.3) +
+  # Plot points
+  geom_point(data = points, 
+             aes(x = x, y = y, 
+                 color = ifelse(intervention_zone == 1, "red", "blue"),  # Color points based on zones
+                 alpha = spillover_method),  # Adjust opacity based on response
+             show.legend = FALSE) +  # Hide legend for points
+  # Add labels
+  labs(title = "Simulated Data with Linear Spillover Effect", x = "X Coordinate", y = "Y Coordinate") +
+  # Set theme
+  theme_minimal() +
+  # Adjust color scale (maintain transparency)
+  scale_color_identity() +  # Use specified colors directly
+  scale_alpha(range = c(0.1, 0.5))  # Set alpha scale for transparency
+
+# print plot
+plot_linear
+```
+
+```{r}
+### Categorical Spillover ###
+spillover_method <- points$outcome_categorical
+
+plot_categorical <- ggplot() +
+  # Plot intervention zone boundary
+  geom_sf(data = intervention_sf, fill = NA, alpha = 0.5) +
+  # Plot spillover zone boundary
+  geom_sf(data = spillover_sf, fill = NA, alpha = 0.3) +
+  # Plot points
+  geom_point(data = points, 
+             aes(x = x, y = y, 
+                 color = ifelse(intervention_zone == 1, "red", "blue"),  # Color points based on zones
+                 alpha = spillover_method),  # Adjust opacity based on response
+             show.legend = FALSE) +  # Hide legend for points
+  # Add labels
+  labs(title = "Simulated Data with Categorical Spillover Effect", x = "X Coordinate", y = "Y Coordinate") +
+  # Set theme
+  theme_minimal() +
+  # Adjust color scale (maintain transparency)
+  scale_color_identity() +  # Use specified colors directly
+  scale_alpha(range = c(0.1, 0.5))  # Set alpha scale for transparency
+
+# print plot
+plot_categorical
+```
+
+```{r}
+### Exponential Spillover ###
+spillover_method <- points$outcome_exponential
+
+plot_exponential <- ggplot() +
+  # Plot intervention zone boundary
+  geom_sf(data = intervention_sf, fill = NA, alpha = 0.5) +
+  # Plot spillover zone boundary
+  geom_sf(data = spillover_sf, fill = NA, alpha = 0.3) +
+  # Plot points
+  geom_point(data = points, 
+             aes(x = x, y = y, 
+                 color = ifelse(intervention_zone == 1, "red", "blue"),  # Color points based on zones
+                 alpha = spillover_method),  # Adjust opacity based on response
+             show.legend = FALSE) +  # Hide legend for points
+  # Add labels
+  labs(title = "Simulated Data with Exponential Spillover Effect", x = "X Coordinate", y = "Y Coordinate") +
+  # Set theme
+  theme_minimal() +
+  # Adjust color scale (maintain transparency)
+  scale_color_identity() +  # Use specified colors directly
+  scale_alpha(range = c(0.1, 0.5))  # Set alpha scale for transparency
+
+# print plot
+plot_exponential
+```
+
+```{r}
+### Gaussian Spillover ###
+spillover_method <- points$outcome_gaussian
+
+plot_gaussian <- ggplot() +
+  # Plot intervention zone boundary
+  geom_sf(data = intervention_sf, fill = NA, alpha = 0.5) +
+  # Plot spillover zone boundary
+  geom_sf(data = spillover_sf, fill = NA, alpha = 0.3) +
+  # Plot points
+  geom_point(data = points, 
+             aes(x = x, y = y, 
+                 color = ifelse(intervention_zone == 1, "red", "blue"),  # Color points based on zones
+                 alpha = spillover_method),  # Adjust opacity based on response
+             show.legend = FALSE) +  # Hide legend for points
+  # Add labels
+  labs(title = "Simulated Data with Gaussian Spillover Effect", x = "X Coordinate", y = "Y Coordinate") +
+  # Set theme
+  theme_minimal() +
+  # Adjust color scale (maintain transparency)
+  scale_color_identity() +  # Use specified colors directly
+  scale_alpha(range = c(0.1, 0.5))  # Set alpha scale for transparency
+
+# print plot
+plot_gaussian
+```
+
+```{r}
+### IDW Spillover ###
+spillover_method <- points$outcome_idw
+
+plot_idw <- ggplot() +
+  # Plot intervention zone boundary
+  geom_sf(data = intervention_sf, fill = NA, alpha = 0.5) +
+  # Plot spillover zone boundary
+  geom_sf(data = spillover_sf, fill = NA, alpha = 0.3) +
+  # Plot points
+  geom_point(data = points, 
+             aes(x = x, y = y, 
+                 color = ifelse(intervention_zone == 1, "red", "blue"),  # Color points based on zones
+                 alpha = spillover_method),  # Adjust opacity based on response
+             show.legend = FALSE) +  # Hide legend for points
+  # Add labels
+  labs(title = "Simulated Data with IDW Spillover Effect", x = "X Coordinate", y = "Y Coordinate") +
+  # Set theme
+  theme_minimal() +
+  # Adjust color scale (maintain transparency)
+  scale_color_identity() +  # Use specified colors directly
+  scale_alpha(range = c(0.1, 0.5))  # Set alpha scale for transparency
+
+# print plot
+plot_idw
+```
