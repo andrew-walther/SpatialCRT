@@ -273,6 +273,7 @@ combined_plot <- grid.arrange(
   nrow = 2          # Arrange plots in 2 rows
 )
 ```
+
 ```{r, eval=FALSE}
 # # create objects for points from each zone w/ their responses
 # control_vals <- points$response_binary[points$zone == "Control"]
