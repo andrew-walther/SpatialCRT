@@ -426,7 +426,7 @@ alpha_plot_data <- alpha_plot_data %>%
 alpha_plot <- ggplot(alpha_plot_data, aes(x = dataset_id, y = alpha)) +
   geom_point(color = "blue") +  # Add points for alpha estimates
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
-  geom_hline(yintercept = alpha_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
+  geom_hline(yintercept = alpha_ind_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
   labs(
     title = "Alpha Estimates with 95% CIs",
     x = "Dataset",
@@ -458,7 +458,7 @@ beta_plot_data <- beta_plot_data %>%
 beta_plot <- ggplot(beta_plot_data, aes(x = dataset_id, y = beta)) +
   geom_point(color = "red") +  # Add points for beta estimates
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
-  geom_hline(yintercept = beta_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
+  geom_hline(yintercept = beta_ind_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
   labs(
     title = "Beta Estimates with 95% CIs",
     x = "Dataset",
@@ -490,7 +490,7 @@ psi_plot_data <- psi_plot_data %>%
 psi_plot <- ggplot(psi_plot_data, aes(x = dataset_id, y = psi)) +
   geom_point(color = "purple") +  # Add points for psi estimates
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
-  geom_hline(yintercept = psi_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
+  geom_hline(yintercept = psi_ind_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
   labs(
     title = "Psi Estimates with 95% CIs",
     x = "Dataset",
@@ -573,7 +573,7 @@ alpha_plot_data <- alpha_plot_data %>%
 alpha_plot <- ggplot(alpha_plot_data, aes(x = dataset_id, y = alpha)) +
   geom_point(color = "blue") +  # Add points for alpha estimates
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
-  geom_hline(yintercept = alpha_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
+  geom_hline(yintercept = alpha_dist_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
   labs(
     title = "Alpha Estimates with 95% CIs",
     x = "Dataset",
@@ -605,7 +605,7 @@ beta_plot_data <- beta_plot_data %>%
 beta_plot <- ggplot(beta_plot_data, aes(x = dataset_id, y = beta)) +
   geom_point(color = "red") +  # Add points for beta estimates
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
-  geom_hline(yintercept = beta_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
+  geom_hline(yintercept = beta_dist_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
   labs(
     title = "Beta Estimates with 95% CIs",
     x = "Dataset",
@@ -637,7 +637,7 @@ psi_plot_data <- psi_plot_data %>%
 psi_plot <- ggplot(psi_plot_data, aes(x = dataset_id, y = psi)) +
   geom_point(color = "purple") +  # Add points for psi estimates
   geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
-  geom_hline(yintercept = psi_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
+  geom_hline(yintercept = psi_dist_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
   labs(
     title = "Psi Estimates with 95% CIs",
     x = "Dataset",
