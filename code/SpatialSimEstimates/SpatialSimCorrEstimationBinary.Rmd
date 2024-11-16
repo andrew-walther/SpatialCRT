@@ -1,0 +1,700 @@
+---
+title: "Spatial Sim Estimates Binary"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Preliminaries
+
+```{r, message=FALSE, warning=FALSE}
+# set seed
+set.seed(2024) # ensures reproducibility
+
+# load packages
+library(tidyverse)
+library(ggplot2)
+library(sf) # simple features-store/manipulate spatial data
+library(reshape2)
+library(gridExtra)
+library(spdep)
+library(spatialreg)
+library(tictoc) # measure function elapsed time
+
+### Set Constants ###
+# parameters for simulation
+N <- 500  # Number of iterations
+points_per_iteration <- 2000  # Number of points per dataset (to place on 1000x100 cell grid)
+grid_size <- 1000 # Set dimension of grid for simulated data
+
+# Define constants (intercept & slope) for outcome computation (true values)
+alpha <- 0.2
+beta <- 1
+psi <- 0.8 # maximum spillover effect (binary)
+rho <- 0.5 # spatial correlation parameter
+
+# max distance (between intervention & spillover boundaries) (max(d_i))
+max_distance <- sqrt((133-333)^2 + (866-666)^2)
+```
+
+### Setup Intervention & Spillover Polygons
+
+```{r}
+### Create intervention & spillover polygons ###
+# Define the intervention zone polygon (333,333) to (666,666)
+intervention_zone <- st_polygon(list(matrix(c(333, 333, 666, 333, 666, 666, 333, 666, 333, 333), ncol = 2, byrow = TRUE)))
+
+# Define the spillover zone polygon (133,133) to (866,866)
+spillover_zone <- st_polygon(list(matrix(c(133, 133, 866, 133, 866, 866, 133, 866, 133, 133), ncol = 2, byrow = TRUE)))
+
+# Create sf objects for both polygons (simple feature) (CRS=NA is unit-based instead of map-based)
+intervention_sf <- st_sfc(intervention_zone, crs = NA_crs_)
+spillover_sf <- st_sfc(spillover_zone, crs = NA_crs_)
+```
+
+### Simulate Datasets
+
+```{r}
+# initialize object to store all N=500 datasets
+simulated_datasets <- vector("list", N)
+
+### initialize objects to store parameter estimates##
+# No spatial correlation estimates
+alpha_estimates <- numeric(N) # baseline response
+alpha_estimates_SE <- numeric(N)
+beta_estimates <- numeric(N) # intervention effect
+beta_estimates_SE <- numeric(N)
+psi_estimates <- numeric(N) # spillover effect
+psi_estimates_SE <- numeric(N)
+
+# indicator based spatial correlation
+alpha_estimates_ind <- numeric(N) # baseline response
+alpha_estimates_SE_ind <- numeric(N)
+beta_estimates_ind <- numeric(N) # intervention effect
+beta_estimates_SE_ind <- numeric(N)
+psi_estimates_ind <- numeric(N) # spillover effect
+psi_estimates_SE_ind <- numeric(N)
+rho_estimates_ind <- numeric(N) # spatial correlation
+rho_estimates_SE_ind <- numeric(N)
+
+# distance based spatial correlation
+alpha_estimates_dist <- numeric(N) # baseline response
+alpha_estimates_SE_dist <- numeric(N)
+beta_estimates_dist <- numeric(N) # intervention effect
+beta_estimates_SE_dist <- numeric(N)
+psi_estimates_dist <- numeric(N) # spillover effect
+psi_estimates_SE_dist <- numeric(N)
+rho_estimates_dist <- numeric(N) # spatial correlation
+rho_estimates_SE_dist <- numeric(N)
+```
+
+```{r}
+### Loop over N to generate datasets/compute response/obtain parameter estimates ###
+for(i in 1:N){
+  tic() # start timer for each iteration
+  ### 1) Data Simulation ###
+  # Simulate random points on the grid with integer coordinates
+  points <- tibble(x = sample(1:grid_size, points_per_iteration, replace = TRUE),
+                   y = sample(1:grid_size, points_per_iteration, replace = TRUE))
+  
+  # Convert points to sf objects
+  points_sf <- st_as_sf(points, coords = c("x", "y"), crs = NA_crs_)
+  ####################################################################################################
+  # 2) Calculate distance from each point to the intervention zone boundary
+  distances <- st_distance(points_sf, intervention_sf)
+  points$intervention_distance <- as.vector(distances)
+  intervention_distance <- points$intervention_distance # for use in spillover formulas
+  
+  # Assign zones based on their location (intervention/spillover/control)
+  points$intervention_zone <- ifelse(st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # intervention
+  points$spillover_zone <- ifelse(
+    st_within(points_sf, spillover_sf, 
+              sparse = FALSE) & !st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # spillover
+  
+  # Add zone label ("Intervention", "Spillover", "Control")
+  points$zone <- ifelse(points$intervention_zone == 1, "Intervention",
+                        ifelse(points$spillover_zone == 1, "Spillover", "Control"))
+  ####################################################################################################
+  ### 3A) Compute Response w/ Binary Spillover ###
+  # Generate random noise (epsilon) from normal distribution
+  epsilon <- rnorm(points_per_iteration, mean = 0, sd = 1)
+  
+  # Compute response w/ binary spillover (spillover gets 80% of intervention effect, need to incorporate spatial correlation?)
+  points$response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) # initialize general response
+  points$response_binary <- points$response + epsilon # add random error component
+  ####################################################################################################
+  ### 3B) Compute response w/ binary spillover (Indicator spatial correlation) ###
+  # Create spatial weights matrix
+  coordinates <- as.matrix(points[, c("x", "y")])
+  dlist <- dnearneigh(coordinates, d1 = 0, d2 = 100, longlat = FALSE)
+  W <- nb2listw(dlist, style = "W")
+  # Compute the spatially correlated response using indicator-based weights
+  Wy <- lag.listw(W, points$response)
+  points$response_binary_IndCorr <- points$response + rho * Wy + epsilon # use "response" from (3A)
+  ####################################################################################################
+  ### 3C) Compute response w/ binary spillover (Distance-based spatial correlation) ###
+  # Calculate the distance matrix
+  coordinates <- as.matrix(points[, c("x", "y")])
+  distance_matrix <- as.matrix(dist(coordinates))
+  # linear decay for distance-based weights
+  Max_Neighbor_Dist <- 100 # Define the maximum distance for neighbors
+  W_matrix <- ifelse(distance_matrix <= Max_Neighbor_Dist & distance_matrix > 0, 1 / distance_matrix, 0) # inverse distance decay weights
+  W_matrix <- W_matrix / rowSums(W_matrix, na.rm = TRUE) # normalize weights
+  W_matrix[is.na(W_matrix)] <- 0 # set potential NaNs to 0
+  W <- mat2listw(W_matrix, style = "W", row.names = rownames(points)) # convert weights matrix to listw object
+  # Compute spatially correlated response using the distance-based weights
+  Wy <- lag.listw(W, points$response)
+  points$response_binary_DistCorr <- points$response + rho * Wy + epsilon
+  ####################################################################################################
+  ### 4A) Estimate Parameter Values via modeling ###
+  model <- lm(response_binary ~ intervention_zone + spillover_zone, data = points)
+
+  # Store the estimates (no spatial correlation matrix)
+  alpha_estimates[i] <- coef(model)[1]  # Intercept (alpha)
+  beta_estimates[i] <- coef(model)[2]   # Coefficient for intervention_zone (beta)
+  psi_estimates[i] <- coef(model)[3]    # Coefficient for linear spillover effect (psi)
+  
+  # Store the standard errors
+  alpha_estimates_SE[i] <- summary(model)$coefficients[1, 2]
+  beta_estimates_SE[i] <- summary(model)$coefficients[2, 2]
+  psi_estimates_SE[i] <- summary(model)$coefficients[3, 2]
+  ####################################################################################################
+  ### 4B) Neighbor indicator weight matrix  ###
+  # Determine neighbors up to 100 distance units (coords/min dist/max dist -> output IDs of points that are neighbors)
+  coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
+  dlist <- dnearneigh(coordinates, d1 = 0, d2 = 100, longlat = FALSE) # d1 = min neighbor dist, d2 = max neighbor dist
+  W_ind <- nb2listw(dlist, style = "W") # spatial weights matrix -> for spatial lag model (neighboring points influence effect)
+  
+  # Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
+  model_ind <- lagsarlm(response_binary ~ intervention_zone + spillover_zone, data = points, listw = W_ind)
+
+  # Store the estimates (indicator based correlation matrix)
+  alpha_estimates_ind[i] <- coef(model_ind)[1] # Intercept (alpha)
+  beta_estimates_ind[i] <- coef(model_ind)[2] # Coefficient for intervention_zone (beta)
+  psi_estimates_ind[i] <- coef(model_ind)[3] # Coefficient for linear spillover effect (psi)
+  rho_estimates_ind[i] <- model_ind$rho # spatial lag parameter
+  
+  # Store the standard errors
+  alpha_estimates_SE_ind[i] <- summary(model_ind)$Coef[1, 2]
+  beta_estimates_SE_ind[i] <- summary(model_ind)$Coef[2, 2]
+  psi_estimates_SE_ind[i] <- summary(model_ind)$Coef[3, 2]
+  rho_estimates_SE_ind[i] <- summary(model_ind)$rho.se
+  ####################################################################################################  
+  ### 4C) Distance-based weight matrix ###
+  # Apply a decay function to create distance-based weights
+  coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
+  distance_matrix <- as.matrix(dist(coordinates))
+  Max_Neighbor_Dist <- 100 
+  W_matrix <- ifelse(distance_matrix <= Max_Neighbor_Dist & distance_matrix > 0, 1 / distance_matrix, 0) # linear decay w/ increasing distance
+  # Normalize the weights by RowSums to ensure they sum to 1
+  W_matrix <- W_matrix / rowSums(W_matrix, na.rm = TRUE) 
+  # Convert the weights matrix into a listw object
+  W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(coordinates))
+
+  # Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
+  model_dist <- lagsarlm(response_binary_IndCorr ~ intervention_zone + spillover_zone, data = points, listw = W_dist)
+
+  # Store the estimates (distance based correlation matrix)
+  alpha_estimates_dist[i] <- coef(model_dist)[1] # Intercept (alpha)
+  beta_estimates_dist[i] <- coef(model_dist)[2] # Coefficient for intervention_zone (beta)
+  psi_estimates_dist[i] <- coef(model_dist)[3] # Coefficient for linear spillover effect (psi)
+  rho_estimates_dist[i] <- model_dist$rho # spatial lag parameter
+  
+  # Store the standard errors
+  alpha_estimates_SE_dist[i] <- summary(model_dist)$Coef[1, 2]
+  beta_estimates_SE_dist[i] <- summary(model_dist)$Coef[2, 2]
+  psi_estimates_SE_dist[i] <- summary(model_dist)$Coef[3, 2]
+  rho_estimates_SE_dist[i] <- summary(model_dist)$rho.se
+  ####################################################################################################
+  # 5) Store the dataset for this iteration in the list (ith simulated point locations)
+  simulated_datasets[[i]] <- points
+  # Print the elapsed time for each iteration
+  toc(log = TRUE) # End timer for each iteration & and print the elapsed time
+  cat(sprintf("Iteration %d: %s seconds\n", i, attr(tic("last"), "toc")["elapsed"]))
+}
+```
+
+### Parameter Estimates 
+
+```{r}
+### 1) Table of all parameter estimates ###
+estimates_table <- tibble(
+  alpha = alpha_estimates, alpha_SE = alpha_estimates_SE, # no spatial correlation
+  beta = beta_estimates, beta_SE = beta_estimates_SE,
+  psi = psi_estimates, psi_SE = psi_estimates_SE,
+  alpha_ind = alpha_estimates_ind, alpha_SE_ind = alpha_estimates_SE_ind, # indicator spatial correlation
+  beta_ind = beta_estimates_ind, beta_SE_ind = beta_estimates_SE_ind,
+  psi_ind = psi_estimates_ind, psi_SE_ind = psi_estimates_SE_ind,
+  rho_ind = rho_estimates_ind, rho_SE_ind = rho_estimates_SE_ind,
+  alpha_dist = alpha_estimates_dist, alpha_SE_dist = alpha_estimates_SE_dist, # distance spatial correlation
+  beta_dist = beta_estimates_dist, beta_SE_dist = beta_estimates_SE_dist,
+  psi_dist = psi_estimates_dist, psi_SE_dist = psi_estimates_SE_dist,
+  rho_dist = rho_estimates_dist, rho_SE_dist = rho_estimates_SE_dist,
+)
+#print(estimates_table)
+####################################################################################################
+### Compute Final Parameter Estimates & SEs ###
+## 2A) No spatial correlation ###
+alpha_mean <- mean(alpha_estimates, na.rm = TRUE) # estimate means
+beta_mean <- mean(beta_estimates, na.rm = TRUE)
+psi_mean <- mean(psi_estimates, na.rm = TRUE)
+alpha_SE_avg <- sqrt(mean(alpha_estimates_SE^2)) # estimate SE means
+beta_SE_avg <- sqrt(mean(beta_estimates_SE^2))
+psi_SE_avg <- sqrt(mean(psi_estimates_SE^2))
+
+## 2B) Neighbor-based spatial correlation ###
+alpha_ind_mean <- mean(alpha_estimates_ind, na.rm = TRUE) # estimate means
+beta_ind_mean <- mean(beta_estimates_ind, na.rm = TRUE)
+psi_ind_mean <- mean(psi_estimates_ind, na.rm = TRUE)
+rho_ind_mean <- mean(rho_estimates_ind, na.rm = TRUE)
+alpha_ind_SE_avg <- sqrt(mean(alpha_estimates_SE_ind^2)) # estimate SE means
+beta_ind_SE_avg <- sqrt(mean(beta_estimates_SE_ind^2))
+psi_ind_SE_avg <- sqrt(mean(psi_estimates_SE_ind^2))
+rho_ind_SE_avg <- sqrt(mean(rho_estimates_SE_ind^2))
+
+## 2C) Distance-based spatial correlation ###
+alpha_dist_mean <- mean(alpha_estimates_dist, na.rm = TRUE) # estimate means
+beta_dist_mean <- mean(beta_estimates_dist, na.rm = TRUE)
+psi_dist_mean <- mean(psi_estimates_dist, na.rm = TRUE)
+rho_dist_mean <- mean(rho_estimates_dist, na.rm = TRUE)
+alpha_dist_SE_avg <- sqrt(mean(alpha_estimates_SE_dist^2)) # estimate SE means
+beta_dist_SE_avg <- sqrt(mean(beta_estimates_SE_dist^2))
+psi_dist_SE_avg <- sqrt(mean(psi_estimates_SE_dist^2))
+rho_dist_SE_avg <- sqrt(mean(rho_estimates_SE_dist^2))
+####################################################################################################
+# 3) Store the results in a table
+results_summary <- tibble(
+  Parameter = c("Alpha", "Beta", "Psi", 
+                "Alpha_ind", "Beta_ind", "Psi_ind", "Rho_ind", 
+                "Alpha_dist", "Beta_dist", "Psi_dist", "Rho_dist"),
+  Mean = c(alpha_mean, beta_mean, psi_mean, 
+           alpha_ind_mean, beta_ind_mean, psi_ind_mean, rho_ind_mean, 
+           alpha_dist_mean, beta_dist_mean, psi_dist_mean, rho_dist_mean),
+  Bias = c(alpha_mean-alpha, beta_mean-beta, psi_mean-psi,
+           alpha_ind_mean-alpha, beta_ind_mean-beta, psi_ind_mean-psi, rho_ind_mean-rho,
+           alpha_dist_mean-alpha, beta_dist_mean-beta, psi_dist_mean-psi, rho_dist_mean-rho),
+  SE = c(alpha_SE_avg, beta_SE_avg, psi_SE_avg, 
+         alpha_ind_SE_avg, beta_ind_SE_avg, psi_ind_SE_avg, rho_ind_SE_avg,
+         alpha_dist_SE_avg, beta_dist_SE_avg, psi_dist_SE_avg, rho_dist_SE_avg)
+  ) %>% mutate(across(where(is.numeric), ~ round(., 5))) # Round to 5 decimal places
+
+# Print the summary table
+print(results_summary)
+```
+
+- Simulated response: does not include spatial correlation! -> updated simulated responses to include both indicator & distance based spatial correlation matrices!
+
+- No spatial weight matrix: most accurate estimation of parameter values vs. true values
+
+- Indicator spatial weight matrix: poor accuracy in estimation of parameter values vs. true values. Likely due to lack of spatial correlation in the simulated response data.
+
+- Distance spatial weight matrix: poor accuracy in estimation of parameter values vs. true values. Likely due to lack of spatial correlation in the simulated response data.
+
+### Plots of Parameter Estimates
+
+```{r}
+### Plots of Individual Estimates and their 95% Confidence Intervals ###
+### 1) Alpha Plot ###
+# Create a tibble to hold the alpha estimates and their standard errors for each dataset
+alpha_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  alpha = alpha_estimates,  # mean alpha estimates for each dataset
+  alpha_SE = alpha_estimates_SE  # standard error of alpha estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+alpha_plot_data <- alpha_plot_data %>%
+  mutate(
+    lower_ci = alpha - 1.96 * alpha_SE,
+    upper_ci = alpha + 1.96 * alpha_SE
+  )
+
+# Create the plot
+alpha_plot <- ggplot(alpha_plot_data, aes(x = dataset_id, y = alpha)) +
+  geom_point(color = "blue") +  # Add points for alpha estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = alpha_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
+  labs(
+    title = "Alpha Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Alpha Estimate"
+  ) +
+  theme_classic() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### 2) Beta Plot ###
+# Create a tibble to hold the estimates and their standard errors for each dataset
+beta_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  beta = beta_estimates,  # mean beta estimates for each dataset
+  beta_SE = beta_estimates_SE  # standard error of beta estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+beta_plot_data <- beta_plot_data %>%
+  mutate(
+    lower_ci = beta - 1.96 * beta_SE,
+    upper_ci = beta + 1.96 * beta_SE
+  )
+
+# Create the beta plot
+beta_plot <- ggplot(beta_plot_data, aes(x = dataset_id, y = beta)) +
+  geom_point(color = "red") +  # Add points for beta estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = beta_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
+  labs(
+    title = "Beta Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Beta Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### 3) Psi Plot ###
+# Create a tibble for psi estimates and their standard errors
+psi_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  psi = psi_estimates,  # mean psi estimates for each dataset
+  psi_SE = psi_estimates_SE  # standard error of psi estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+psi_plot_data <- psi_plot_data %>%
+  mutate(
+    lower_ci = psi - 1.96 * psi_SE,
+    upper_ci = psi + 1.96 * psi_SE
+  )
+
+# Create the psi plot
+psi_plot <- ggplot(psi_plot_data, aes(x = dataset_id, y = psi)) +
+  geom_point(color = "purple") +  # Add points for psi estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = psi_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
+  labs(
+    title = "Psi Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Psi Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+# Print the plots
+print(alpha_plot)
+print(beta_plot)
+print(psi_plot)
+
+# Combine all plots into a single layout
+combined_plot <- grid.arrange(
+  alpha_plot,       # Plot for Alpha
+  beta_plot,        # Plot for Beta
+  psi_plot,         # Plot for Psi
+  ncol = 2,         # Arrange plots in 2 columns
+  nrow = 2          # Arrange plots in 2 rows
+)
+```
+
+```{r}
+### Plots of Estimates and their 95% Confidence Intervals (Indicator Spatial Weights) ###
+### Alpha Plot ###
+# Create a tibble to hold the alpha estimates and their standard errors for each dataset
+alpha_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  alpha = alpha_estimates_ind,  # mean alpha estimates for each dataset
+  alpha_SE = alpha_estimates_SE_ind  # standard error of alpha estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+alpha_plot_data <- alpha_plot_data %>%
+  mutate(
+    lower_ci = alpha - 1.96 * alpha_SE,
+    upper_ci = alpha + 1.96 * alpha_SE
+  )
+
+# Create the plot
+alpha_plot <- ggplot(alpha_plot_data, aes(x = dataset_id, y = alpha)) +
+  geom_point(color = "blue") +  # Add points for alpha estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = alpha_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
+  labs(
+    title = "Alpha Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Alpha Estimate"
+  ) +
+  theme_classic() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### Beta Plot ###
+# Create a tibble to hold the estimates and their standard errors for each dataset
+beta_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  beta = beta_estimates_ind,  # mean beta estimates for each dataset
+  beta_SE = beta_estimates_SE_ind  # standard error of beta estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+beta_plot_data <- beta_plot_data %>%
+  mutate(
+    lower_ci = beta - 1.96 * beta_SE,
+    upper_ci = beta + 1.96 * beta_SE
+  )
+
+# Create the beta plot
+beta_plot <- ggplot(beta_plot_data, aes(x = dataset_id, y = beta)) +
+  geom_point(color = "red") +  # Add points for beta estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = beta_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
+  labs(
+    title = "Beta Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Beta Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### Psi Plot ###
+# Create a tibble for psi estimates and their standard errors
+psi_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  psi = psi_estimates_ind,  # mean psi estimates for each dataset
+  psi_SE = psi_estimates_SE_ind  # standard error of psi estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+psi_plot_data <- psi_plot_data %>%
+  mutate(
+    lower_ci = psi - 1.96 * psi_SE,
+    upper_ci = psi + 1.96 * psi_SE
+  )
+
+# Create the psi plot
+psi_plot <- ggplot(psi_plot_data, aes(x = dataset_id, y = psi)) +
+  geom_point(color = "purple") +  # Add points for psi estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = psi_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
+  labs(
+    title = "Psi Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Psi Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### Rho Plot ###
+# Create a tibble for rho estimates and their standard errors
+rho_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  rho = rho_estimates_ind,  # mean rho estimates for each dataset
+  rho_SE = rho_estimates_SE_ind  # standard error of rho estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+rho_plot_data <- rho_plot_data %>%
+  mutate(
+    lower_ci = rho - 1.96 * rho_SE,
+    upper_ci = rho + 1.96 * rho_SE
+  )
+
+# Create the rho plot
+rho_plot <- ggplot(rho_plot_data, aes(x = dataset_id, y = rho)) +
+  geom_point(color = "purple") +  # Add points for rho estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = rho_ind_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at rho mean
+  labs(
+    title = "Rho Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Rho Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+# Print the plots
+print(alpha_plot)
+print(beta_plot)
+print(psi_plot)
+print(rho_plot)
+
+# Combine all plots into a single layout
+combined_plot <- grid.arrange(
+  alpha_plot,       # Plot for Alpha
+  beta_plot,        # Plot for Beta
+  psi_plot,         # Plot for Psi
+  rho_plot,         # Plot for Rho
+  ncol = 2,         # Arrange plots in 2 columns
+  nrow = 2          # Arrange plots in 2 rows
+)
+```
+
+```{r}
+### Plots of Estimates and their 95% Confidence Intervals (Distance-based Spatial Weights) ###
+### Alpha Plot ###
+# Create a tibble to hold the alpha estimates and their standard errors for each dataset
+alpha_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  alpha = alpha_estimates_dist,  # mean alpha estimates for each dataset
+  alpha_SE = alpha_estimates_SE_dist  # standard error of alpha estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+alpha_plot_data <- alpha_plot_data %>%
+  mutate(
+    lower_ci = alpha - 1.96 * alpha_SE,
+    upper_ci = alpha + 1.96 * alpha_SE
+  )
+
+# Create the plot
+alpha_plot <- ggplot(alpha_plot_data, aes(x = dataset_id, y = alpha)) +
+  geom_point(color = "blue") +  # Add points for alpha estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = alpha_mean, linetype = "dashed", color = "blue") +  # Add horizontal line at alpha mean
+  labs(
+    title = "Alpha Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Alpha Estimate"
+  ) +
+  theme_classic() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### Beta Plot ###
+# Create a tibble to hold the estimates and their standard errors for each dataset
+beta_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  beta = beta_estimates_dist,  # mean beta estimates for each dataset
+  beta_SE = beta_estimates_SE_dist  # standard error of beta estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+beta_plot_data <- beta_plot_data %>%
+  mutate(
+    lower_ci = beta - 1.96 * beta_SE,
+    upper_ci = beta + 1.96 * beta_SE
+  )
+
+# Create the beta plot
+beta_plot <- ggplot(beta_plot_data, aes(x = dataset_id, y = beta)) +
+  geom_point(color = "red") +  # Add points for beta estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = beta_mean, linetype = "dashed", color = "red") +  # Add horizontal line at beta mean
+  labs(
+    title = "Beta Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Beta Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### Psi Plot ###
+# Create a tibble for psi estimates and their standard errors
+psi_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  psi = psi_estimates_dist,  # mean psi estimates for each dataset
+  psi_SE = psi_estimates_SE_dist  # standard error of psi estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+psi_plot_data <- psi_plot_data %>%
+  mutate(
+    lower_ci = psi - 1.96 * psi_SE,
+    upper_ci = psi + 1.96 * psi_SE
+  )
+
+# Create the psi plot
+psi_plot <- ggplot(psi_plot_data, aes(x = dataset_id, y = psi)) +
+  geom_point(color = "purple") +  # Add points for psi estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = psi_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at psi mean
+  labs(
+    title = "Psi Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Psi Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+### Rho Plot ###
+# Create a tibble for rho estimates and their standard errors
+rho_plot_data <- tibble(
+  dataset_id = 1:N,  # dataset identifier (1 to N)
+  rho = rho_estimates_dist,  # mean rho estimates for each dataset
+  rho_SE = rho_estimates_SE_dist  # standard error of rho estimates
+)
+
+# Compute the 95% confidence intervals (1.96 * SE for the error bars)
+rho_plot_data <- rho_plot_data %>%
+  mutate(
+    lower_ci = rho - 1.96 * rho_SE,
+    upper_ci = rho + 1.96 * rho_SE
+  )
+
+# Create the rho plot
+rho_plot <- ggplot(rho_plot_data, aes(x = dataset_id, y = rho)) +
+  geom_point(color = "purple") +  # Add points for rho estimates
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.2) +  # Add error bars for 95% CI
+  geom_hline(yintercept = rho_dist_mean, linetype = "dashed", color = "purple") +  # Add horizontal line at rho mean
+  labs(
+    title = "Rho Estimates with 95% CIs",
+    x = "Dataset",
+    y = "Rho Estimate"
+  ) +
+  theme_minimal() +  # Clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotate x-axis labels for readability
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+####################################################################################################
+# Print the plots
+print(alpha_plot)
+print(beta_plot)
+print(psi_plot)
+print(rho_plot)
+
+# Combine all plots into a single layout
+combined_plot <- grid.arrange(
+  alpha_plot,       # Plot for Alpha
+  beta_plot,        # Plot for Beta
+  psi_plot,         # Plot for Psi
+  rho_plot,         # Plot for Rho
+  ncol = 2,         # Arrange plots in 2 columns
+  nrow = 2          # Arrange plots in 2 rows
+)
+```
