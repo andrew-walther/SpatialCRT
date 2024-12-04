@@ -1,0 +1,326 @@
+---
+title: "SpatialSimCorr_Simple"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+A simple (one-shot (or few)) estimation method of spatial effects
+
+### Preliminaries
+
+```{r, message=FALSE, warning=FALSE}
+# set seed
+set.seed(2024) # ensures reproducibility
+
+# load packages
+library(tidyverse)
+library(ggplot2)
+library(sf) # simple features-store/manipulate spatial data
+library(reshape2)
+library(gridExtra)
+library(spdep)
+library(spatialreg)
+library(tictoc) # measure function elapsed time
+
+### Set Constants ###
+# parameters for simulation
+points_per_iteration <- 2000  # Number of points per dataset (to place on 1000x100 cell grid)
+grid_size <- 1000 # Set dimension of grid for simulated data
+NeighborDist <- 100 # set maximum distance for two points to be considered "neighbors"
+
+# Define response model constants (true values)
+alpha <- 0.2
+beta <- 1
+psi <- 0.8 # maximum spillover effect (binary)
+rho <- 0.01 # spatial correlation parameter t
+sd <- 1
+
+# max distance (between intervention & spillover boundaries) (max(d_i))
+max_distance <- sqrt((133-333)^2 + (866-666)^2) # ~282.84 units
+```
+
+### Setup Intervention & Spillover Polygons
+
+```{r}
+### Create intervention & spillover polygons ###
+# Define the intervention zone polygon (333,333) to (666,666)
+intervention_zone <- st_polygon(list(matrix(c(333, 333, 666, 333, 666, 666, 333, 666, 333, 333), ncol = 2, byrow = TRUE)))
+
+# Define the spillover zone polygon (133,133) to (866,866)
+spillover_zone <- st_polygon(list(matrix(c(133, 133, 866, 133, 866, 866, 133, 866, 133, 133), ncol = 2, byrow = TRUE)))
+
+# Create sf objects for both polygons (simple feature) (CRS=NA is unit-based instead of map-based)
+intervention_sf <- st_sfc(intervention_zone, crs = NA_crs_)
+spillover_sf <- st_sfc(spillover_zone, crs = NA_crs_)
+```
+
+```{r}
+### 1) Data Simulation ###
+# Simulate random points on the grid with integer coordinates
+points <- tibble(x = sample(1:grid_size, points_per_iteration, replace = TRUE),
+                 y = sample(1:grid_size, points_per_iteration, replace = TRUE))
+
+# Convert points to sf objects
+points_sf <- st_as_sf(points, coords = c("x", "y"), crs = NA_crs_)
+####################################################################################################
+# 2) Calculate distance from each point to the intervention zone boundary
+distances <- st_distance(points_sf, intervention_sf)
+points$intervention_distance <- as.vector(distances)
+intervention_distance <- points$intervention_distance # for use in spillover formulas
+
+# Assign zones based on their location (intervention/spillover/control)
+points$intervention_zone <- ifelse(st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # intervention
+points$spillover_zone <- ifelse(
+  st_within(points_sf, spillover_sf, 
+            sparse = FALSE) & !st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # spillover
+  
+# Add zone label ("Intervention", "Spillover", "Control")
+points$zone <- ifelse(points$intervention_zone == 1, "Intervention",
+                      ifelse(points$spillover_zone == 1, "Spillover", "Control"))
+```
+
+```{r}
+####################################################################################################
+### 3A) Compute Response w/ Binary Spillover ###
+# Generate random noise (epsilon) from normal distribution
+epsilon <- rnorm(points_per_iteration, mean = 0, sd = 1)
+  
+# Compute response w/ binary spillover (spillover gets 80% of intervention effect, need to incorporate spatial correlation?)
+## Linear response w/o error or spatial correlation ###
+points$response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) # initialize general response
+points$response_binary <- points$response + epsilon # add random error component
+####################################################################################################
+### 4A) Estimate Parameter Values via modeling ###
+model <- lm(response_binary ~ intervention_zone + spillover_zone, data = points)
+
+# Store the estimates (no spatial correlation matrix)
+alpha_estimates <- coef(model)[1]  # Intercept (alpha)
+beta_estimates <- coef(model)[2]   # Coefficient for intervention_zone (beta)
+psi_estimates <- coef(model)[3]    # Coefficient for linear spillover effect (psi)
+
+# Store the standard errors
+alpha_estimates_SE <- summary(model)$coefficients[1, 2]
+beta_estimates_SE <- summary(model)$coefficients[2, 2]
+psi_estimates_SE <- summary(model)$coefficients[3, 2]
+```
+
+```{r}
+# ####################################################################################################
+# ### 3B) Compute response w/ binary spillover (Indicator spatial correlation) ###
+# # Create spatial weights matrix
+# coordinates <- as.matrix(points[, c("x", "y")])
+# dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE)
+# W_ind <- nb2listw(dlist, style = "W")
+# # Compute the spatially correlated response using indicator-based weights
+# points$response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) # initialize general response
+# Wy_ind <- lag.listw(W_ind, points$response) # matrix multiplication and turn into list (Wy) (neighborhood info)
+# points$response_binary_IndCorr <- points$response + rho * Wy_ind + epsilon # use "response" from (3A) (spatially independent response + spatial dependent adjustment)
+# ####################################################################################################
+# ### 4B) Neighbor indicator weight matrix  ###
+# # Determine neighbors up to 100 distance units (coords/min dist/max dist -> output IDs of points that are neighbors)
+# coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
+# dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # d1 = min neighbor dist, d2 = max neighbor dist
+# W_ind <- nb2listw(dlist, style = "W") # spatial weights matrix -> for spatial lag model (neighboring points influence effect)
+# 
+# # Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
+# model_ind <- lagsarlm(response_binary ~ intervention_zone + spillover_zone, data = points, listw = W_ind) # lag SAR lm
+# 
+# # Store the estimates (indicator based correlation matrix)
+# alpha_estimates_ind <- coef(model_ind)[1] # Intercept (alpha)
+# beta_estimates_ind <- coef(model_ind)[2] # Coefficient for intervention_zone (beta)
+# psi_estimates_ind <- coef(model_ind)[3] # Coefficient for linear spillover effect (psi)
+# rho_estimates_ind <- model_ind$rho # spatial lag parameter
+# 
+# # Store the standard errors
+# alpha_estimates_SE_ind <- summary(model_ind)$Coef[1, 2]
+# beta_estimates_SE_ind <- summary(model_ind)$Coef[2, 2]
+# psi_estimates_SE_ind <- summary(model_ind)$Coef[3, 2]
+# rho_estimates_SE_ind <- summary(model_ind)$rho.se
+```
+
+```{r}
+### Update to "simultaneously" estimate response of neighbors w/ spatial lag term ###
+# instead of spat. independent response -> adjusted w/ spatial lag term (sequential)
+####################################################################################################
+### 3B) Compute response w/ binary spillover (Indicator spatial correlation) ###
+# Create spatial weights matrix
+coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of all points
+dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # list of "neighbors" for each point (0,NeighborDist)
+W_ind <- nb2listw(dlist, style = "W") # convert to listw format (indicator-based weights)
+W <- as(as_dgRMatrix_listw(W_ind), "matrix") # convert to dense matrix
+
+# create identity matrix
+I <- diag(points_per_iteration)
+
+# Generate linear response (X beta + epsilon)
+epsilon <- rnorm(points_per_iteration, mean = 0, sd = 1)  # Random noise
+linear_response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) + epsilon # initialize general response
+
+# Solve for y using the closed-form expression
+A <- I - rho * W  # (I - rho * W)
+response <- solve(A, linear_response)  # (I - rho W)^(-1) * (linear_response)
+points$response_binary_IndCorr <- response # simultaneous response
+
+# Compute the spatially correlated response using indicator-based weights
+Wy_ind <- lag.listw(W_ind, linear_response) # matrix multiplication and turn into list (Wy) (neighborhood info)
+points$response_binary_IndCorr_NotSimul <- linear_response + rho * Wy_ind + epsilon # spatially ind. response + spatial dep. adjustment)
+####################################################################################################
+### 4B) Neighbor indicator weight matrix  ###
+# Determine neighbors up to 100 distance units (coords/min dist/max dist -> output IDs of points that are neighbors)
+coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
+dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # d1 = min neighbor dist, d2 = max neighbor dist
+W_ind <- nb2listw(dlist, style = "W") # spatial weights matrix -> for spatial lag model (neighboring points influence effect)
+
+# Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
+model_ind <- lagsarlm(response_binary_IndCorr ~ intervention_zone + spillover_zone, data = points, listw = W_ind) # lag SAR lm
+
+# Store the estimates (indicator based correlation matrix)
+alpha_estimates_ind <- coef(model_ind)[1] # Intercept (alpha)
+beta_estimates_ind <- coef(model_ind)[2] # Coefficient for intervention_zone (beta)
+psi_estimates_ind <- coef(model_ind)[3] # Coefficient for linear spillover effect (psi)
+rho_estimates_ind <- model_ind$rho # spatial lag parameter
+
+# Store the standard errors
+alpha_estimates_SE_ind <- summary(model_ind)$Coef[1, 2]
+beta_estimates_SE_ind <- summary(model_ind)$Coef[2, 2]
+psi_estimates_SE_ind <- summary(model_ind)$Coef[3, 2]
+rho_estimates_SE_ind <- summary(model_ind)$rho.se
+```
+
+```{r}
+####################################################################################################
+### 3C) Compute response w/ binary spillover (Distance-based spatial correlation) ###
+# Calculate the distance matrix
+coordinates <- as.matrix(points[, c("x", "y")])
+distance_matrix <- as.matrix(dist(coordinates))
+# linear decay for distance-based weights
+W_matrix <- ifelse(distance_matrix <= NeighborDist & distance_matrix > 0, 1 / distance_matrix, 0) # inverse distance decay weights
+W_matrix <- W_matrix / rowSums(W_matrix, na.rm = TRUE) # normalize weights
+W_matrix[is.na(W_matrix)] <- 0 # set potential NaNs to 0
+W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(points)) # convert weights matrix to listw object
+# Compute spatially correlated response using the distance-based weights
+Wy_dist <- lag.listw(W_dist, points$response)
+points$response_binary_DistCorr <- points$response + rho * Wy_dist + epsilon
+####################################################################################################  
+### 4C) Distance-based weight matrix ###
+# Apply a decay function to create distance-based weights
+coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
+distance_matrix <- as.matrix(dist(coordinates))
+W_matrix <- ifelse(distance_matrix <= NeighborDist & distance_matrix > 0, 1 / distance_matrix, 0) # linear decay w/ inc. distance
+# Normalize the weights by RowSums to ensure they sum to 1
+W_matrix <- W_matrix / rowSums(W_matrix, na.rm = TRUE) 
+# Convert the weights matrix into a listw object
+W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(coordinates))
+
+# Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
+model_dist <- lagsarlm(response_binary_DistCorr ~ intervention_zone + spillover_zone, data = points, listw = W_dist)
+
+# Store the estimates (distance based correlation matrix)
+alpha_estimates_dist <- coef(model_dist)[1] # Intercept (alpha)
+beta_estimates_dist <- coef(model_dist)[2] # Coefficient for intervention_zone (beta)
+psi_estimates_dist <- coef(model_dist)[3] # Coefficient for linear spillover effect (psi)
+rho_estimates_dist <- model_dist$rho # spatial lag parameter
+
+# Store the standard errors
+alpha_estimates_SE_dist <- summary(model_dist)$Coef[1, 2]
+beta_estimates_SE_dist <- summary(model_dist)$Coef[2, 2]
+psi_estimates_SE_dist <- summary(model_dist)$Coef[3, 2]
+rho_estimates_SE_dist <- summary(model_dist)$rho.se
+####################################################################################################
+```
+
+```{r}
+# 5) Store the results in a table
+results_summary <- tibble(
+  Parameter = c("Alpha", "Beta", "Psi", 
+                "Alpha_ind", "Beta_ind", "Psi_ind", "Rho_ind", 
+                "Alpha_dist", "Beta_dist", "Psi_dist", "Rho_dist"),
+  Mean = c(alpha_estimates, beta_estimates, psi_estimates, 
+           alpha_estimates_ind, beta_estimates_ind, psi_estimates_ind, rho_estimates_ind, 
+           alpha_estimates_dist, beta_estimates_dist, psi_estimates_dist, rho_estimates_dist),
+  Bias = c(alpha_estimates-alpha, beta_estimates-beta, psi_estimates-psi,
+           alpha_estimates_ind-alpha, beta_estimates_ind-beta, psi_estimates_ind-psi, rho_estimates_ind-rho,
+           alpha_estimates_dist-alpha, beta_estimates_dist-beta, psi_estimates_dist-psi, rho_estimates_dist-rho),
+  SE = c(alpha_estimates_SE, beta_estimates_SE, psi_estimates_SE, 
+         alpha_estimates_SE_ind, beta_estimates_SE_ind, psi_estimates_SE_ind, rho_estimates_SE_ind,
+         alpha_estimates_SE_dist, beta_estimates_SE_dist, psi_estimates_SE_ind, rho_estimates_SE_dist)
+  ) %>% mutate(across(where(is.numeric), ~ round(., 5))) # Round to 5 decimal places
+
+# Print the summary table
+print(results_summary)
+```
+
+### Other Investigations
+
+```{r}
+# Shortest distances between points on grid (non-zero) & distances under "NeighborDist"
+# Load the parallel package
+library(parallel)
+
+# Define the function to compute all nonzero distances for a chunk of rows
+compute_distances_info <- function(rows, distance_matrix) {
+  # Try to extract the upper triangular values for the given rows
+  tryCatch({
+    chunk_values <- unlist(
+      lapply(rows, function(i) distance_matrix[i, (i + 1):ncol(distance_matrix)])
+    )
+    
+    # Filter strictly positive values
+    positive_values <- chunk_values[chunk_values > 0]
+    
+    # Count values strictly smaller than 100 (distances less than 100 out of 499,500)
+    count_smaller_than_100 <- sum(positive_values < 100)
+    
+    # Return both the nonzero distances and the count of distances < 100 as a list
+    return(list(positive_values = positive_values, count_smaller_than_100 = count_smaller_than_100))
+  }, error = function(e) {
+    # In case of error, return NULL or an empty list
+    return(NULL)
+  })
+}
+
+# Set up the number of cores
+num_cores <- detectCores() - 1  # Leave one core free for system processes
+
+# Split the rows into chunks
+n <- nrow(distance_matrix)
+chunk_size <- ceiling(n / num_cores)
+row_chunks <- split(1:n, ceiling(seq_along(1:n) / chunk_size))
+
+# Use mclapply to compute the nonzero distances and count in parallel
+results <- mclapply(
+  row_chunks,
+  compute_distances_info,
+  distance_matrix = distance_matrix,
+  mc.cores = num_cores
+)
+
+# Filter out any NULL results (in case of failed chunks)
+valid_results <- results[!sapply(results, is.null)]
+
+# Combine results from all valid chunks
+all_positive_values <- unlist(lapply(valid_results, function(res) res$positive_values))
+total_count_smaller_than_100 <- sum(sapply(valid_results, function(res) res$count_smaller_than_100))
+
+# Sort the nonzero distances and extract the 100 smallest
+smallest_100_distances <- sort(all_positive_values)[1:100]
+
+# Print the results
+cat("Total number of distances smaller than 100:", total_count_smaller_than_100, "\n")
+cat("The 100 smallest nonzero distances:\n")
+print(smallest_100_distances)
+cat("Proportion of distances smaller than 100 units (from upper tri.):", total_count_smaller_than_100/499500, "\n")
+```
+
+```{r}
+# What does "dlist" contain?
+# shows how many links (to other neighbors within NeighborDist) a point has -> points 531/1461/1939 have 91 links
+summary(dlist)
+
+# neighbors of point 1 (or others)
+view(as.matrix(dlist)[1,])
+
+# dnearneigh() function doesn't count point as it's own neighbor (dist=0) and dist must be in (0,NeighborDist)
+```
+
