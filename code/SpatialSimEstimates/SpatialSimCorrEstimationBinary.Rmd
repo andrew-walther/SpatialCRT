@@ -23,10 +23,10 @@ library(tictoc) # measure function elapsed time
 
 ### Set Constants ###
 # parameters for simulation
-N <- 100  # Number of iterations
+N <- 250  # Number of iterations
 points_per_iteration <- 2000  # Number of points per dataset (to place on 1000x100 cell grid)
 grid_size <- 1000 # Set dimension of grid for simulated data
-NeighborDist <- 100 # set maximum distance for two points to be considered "neighbors"
+NeighborDist <- 100 # set maximum distance for two points to be considered "neighbors" (shrink???)
 
 # Define response model constants (true values)
 alpha <- 0.2
@@ -93,7 +93,7 @@ rho_estimates_SE_dist <- numeric(N)
 ```{r}
 ### Loop over N to generate datasets/compute response/obtain parameter estimates ###
 for(i in 1:N){
-  tic() # start timer for each iteration
+  start_time <- Sys.time() # start timer for each iteration
   ### 1) Data Simulation ###
   # Simulate random points on the grid with integer coordinates
   points <- tibble(x = sample(1:grid_size, points_per_iteration, replace = TRUE),
@@ -123,16 +123,28 @@ for(i in 1:N){
   
   # Compute response w/ binary spillover (spillover gets 80% of intervention effect, need to incorporate spatial correlation?)
   points$response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) # initialize general response
-  points$response_binary <- points$response + epsilon # add random error component
+  points$response_binary <- points$response + epsilon # add random error component (response_binary)
   ####################################################################################################
   ### 3B) Compute response w/ binary spillover (Indicator spatial correlation) ###
   # Create spatial weights matrix
   coordinates <- as.matrix(points[, c("x", "y")])
-  dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE)
+  dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # list of "neighbors" for each point (0, NeighborDist)
   W_ind <- nb2listw(dlist, style = "W")
-  # Compute the spatially correlated response using indicator-based weights
-  Wy_ind <- lag.listw(W_ind, points$response) # matrix multiplication and turn into list (Wy) (neighborhood info)
-  points$response_binary_IndCorr <- points$response + rho * Wy_ind + epsilon # use "response" from (3A) (spatially independent response + spatial dependent adjustment)
+  W.ind.dense <- as(as_dgRMatrix_listw(W_ind), "matrix") # convert to dense matrix
+  
+  I <- diag(points_per_iteration) # create identity matrix
+  
+  # generate linear response (from 3A)
+  linear_response <- points$response_binary
+  
+  # solve for y using closed-form expression
+  A.ind <- I - rho * W.ind.dense # (I - rho*W)
+  response.ind <- solve(A.ind, linear_response) # (I - rho W)^(-1) * (linear_response)
+  points$response_binary_IndCorr <- response.ind # simultaneous response (response_binary_IndCorr) (1)
+  
+  # # Compute the spatially correlated response using indicator-based weights
+  # Wy_ind <- lag.listw(W_ind, linear_response) # matrix multiplication and turn into list (Wy) (neighborhood info)
+  # points$response_binary_IndCorr_NotSimul <- linear_response + rho * Wy_ind + epsilon # spatial ind. response + spatial dep. adjust)
   ####################################################################################################
   ### 3C) Compute response w/ binary spillover (Distance-based spatial correlation) ###
   # Calculate the distance matrix
@@ -143,9 +155,21 @@ for(i in 1:N){
   W_matrix <- W_matrix / rowSums(W_matrix, na.rm = TRUE) # normalize weights
   W_matrix[is.na(W_matrix)] <- 0 # set potential NaNs to 0
   W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(points)) # convert weights matrix to listw object
-  # Compute spatially correlated response using the distance-based weights
-  Wy_dist <- lag.listw(W_dist, points$response)
-  points$response_binary_DistCorr <- points$response + rho * Wy_dist + epsilon
+  W.dist.dense <- as(as_dgRMatrix_listw(W_dist), "matrix")
+  
+  I <- diag(points_per_iteration) # create identity matrix
+  
+  # generate linear response (from 3A)
+  linear_response <- points$response_binary
+  
+  # solve for y using closed-form expression
+  A.dist <- I - rho * W.dist.dense # (I - rho*W)
+  response.dist <- solve(A.dist, linear_response) # (I - rho W)^(-1) * (linear_response)
+  points$response_binary_DistCorr <- response.dist # simultaneous response (response_binary_DistCorr) (1)
+  
+  # # Compute spatially correlated response using the distance-based weights
+  # Wy_dist <- lag.listw(W_dist, linear_response)
+  # points$response_binary_DistCorr_NotSimul <- linear_response + rho * Wy_dist + epsilon
   ####################################################################################################
   ### 4A) Estimate Parameter Values via modeling ###
   model <- lm(response_binary ~ intervention_zone + spillover_zone, data = points)
@@ -191,7 +215,7 @@ for(i in 1:N){
   # Convert the weights matrix into a listw object
   W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(coordinates))
 
-  # Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
+  # Fit a Spatial Lag Model (SLM) w/ intervention & spillover effects, & spatial weights matrix (adapt for distance vs. indicator)
   model_dist <- lagsarlm(response_binary_DistCorr ~ intervention_zone + spillover_zone, data = points, listw = W_dist)
 
   # Store the estimates (distance based correlation matrix)
@@ -208,9 +232,10 @@ for(i in 1:N){
   ####################################################################################################
   # 5) Store the dataset for this iteration in the list (ith simulated point locations)
   simulated_datasets[[i]] <- points
-  # Print the elapsed time for each iteration
-  toc(log = TRUE) # End timer for each iteration & and print the elapsed time
-  cat(sprintf("Iteration %d: %s seconds\n", i, attr(tic("last"), "toc")["elapsed"]))
+  # measure elapsed time for iteration
+  elapsed_time <- Sys.time() - start_time
+  # print elapsed time for iteration
+  cat(sprintf("Iteration %d: %.2f seconds elapsed\n", i, as.numeric(elapsed_time, units = "secs")))
 }
 ```
 
