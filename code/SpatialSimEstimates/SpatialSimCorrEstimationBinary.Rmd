@@ -26,7 +26,7 @@ library(tictoc) # measure function elapsed time
 N <- 250  # Number of iterations
 points_per_iteration <- 2000  # Number of points per dataset (to place on 1000x100 cell grid)
 grid_size <- 1000 # Set dimension of grid for simulated data
-NeighborDist <- 100 # set maximum distance for two points to be considered "neighbors" (shrink???)
+NeighborDist <- 50 # set maximum distance for two points to be considered "neighbors" (shrink???)
 
 # Define response model constants (true values)
 alpha <- 0.2
@@ -128,14 +128,17 @@ for(i in 1:N){
   ### 3B) Compute response w/ binary spillover (Indicator spatial correlation) ###
   # Create spatial weights matrix
   coordinates <- as.matrix(points[, c("x", "y")])
-  dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # list of "neighbors" for each point (0, NeighborDist)
-  W_ind <- nb2listw(dlist, style = "W")
+  dlist <- dnearneigh(coordinates, d1 = 0, 
+                      d2 = NeighborDist, longlat = FALSE) # list of "neighbors" for each point (0, NeighborDist)
+  W_ind <- nb2listw(dlist, style = "W", zero.policy = TRUE)
   W.ind.dense <- as(as_dgRMatrix_listw(W_ind), "matrix") # convert to dense matrix
+  W.ind.dense[is.na(W.ind.dense)] <- 0
   
   I <- diag(points_per_iteration) # create identity matrix
   
   # generate linear response (from 3A)
   linear_response <- points$response_binary
+  linear_response[is.na(linear_response)] <- 0
   
   # solve for y using closed-form expression
   A.ind <- I - rho * W.ind.dense # (I - rho*W)
@@ -154,14 +157,17 @@ for(i in 1:N){
   W_matrix <- ifelse(distance_matrix <= NeighborDist & distance_matrix > 0, 1 / distance_matrix, 0) # inverse distance decay weights
   W_matrix <- W_matrix / rowSums(W_matrix, na.rm = TRUE) # normalize weights
   W_matrix[is.na(W_matrix)] <- 0 # set potential NaNs to 0
-  W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(points)) # convert weights matrix to listw object
+  W_dist <- mat2listw(W_matrix, style = "W", 
+                      row.names = rownames(points), zero.policy = TRUE) # convert weights matrix to listw object
   W.dist.dense <- as(as_dgRMatrix_listw(W_dist), "matrix")
+  W.dist.dense[is.na(W.dist.dense)] <- 0
   
   I <- diag(points_per_iteration) # create identity matrix
   
   # generate linear response (from 3A)
   linear_response <- points$response_binary
-  
+  linear_response[is.na(linear_response)] <- 0
+
   # solve for y using closed-form expression
   A.dist <- I - rho * W.dist.dense # (I - rho*W)
   response.dist <- solve(A.dist, linear_response) # (I - rho W)^(-1) * (linear_response)
@@ -188,10 +194,12 @@ for(i in 1:N){
   # Determine neighbors up to 100 distance units (coords/min dist/max dist -> output IDs of points that are neighbors)
   coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
   dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # d1 = min neighbor dist, d2 = max neighbor dist
-  W_ind <- nb2listw(dlist, style = "W") # spatial weights matrix -> for spatial lag model (neighboring points influence effect)
+  W_ind <- nb2listw(dlist, style = "W", zero.policy = TRUE) # spatial weights matrix -> for spatial lag model (neighboring points influence effect)
+  W_ind[is.na(W_ind)] <- 0
   
   # Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
-  model_ind <- lagsarlm(response_binary_IndCorr ~ intervention_zone + spillover_zone, data = points, listw = W_ind) # lag SAR lm
+  model_ind <- lagsarlm(response_binary_IndCorr ~ intervention_zone + spillover_zone, 
+                        data = points, listw = W_ind) # lag SAR lm
 
   # Store the estimates (indicator based correlation matrix)
   alpha_estimates_ind[i] <- coef(model_ind)[1] # Intercept (alpha)
@@ -213,10 +221,12 @@ for(i in 1:N){
   # Normalize the weights by RowSums to ensure they sum to 1
   W_matrix <- W_matrix / rowSums(W_matrix, na.rm = TRUE) 
   # Convert the weights matrix into a listw object
-  W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(coordinates))
+  W_dist <- mat2listw(W_matrix, style = "W", row.names = rownames(coordinates), zero.policy = TRUE)
+  W_dist[is.na(W_dist)] <- 0
 
   # Fit a Spatial Lag Model (SLM) w/ intervention & spillover effects, & spatial weights matrix (adapt for distance vs. indicator)
-  model_dist <- lagsarlm(response_binary_DistCorr ~ intervention_zone + spillover_zone, data = points, listw = W_dist)
+  model_dist <- lagsarlm(response_binary_DistCorr ~ intervention_zone + spillover_zone, 
+                         data = points, listw = W_dist)
 
   # Store the estimates (distance based correlation matrix)
   alpha_estimates_dist[i] <- coef(model_dist)[1] # Intercept (alpha)
