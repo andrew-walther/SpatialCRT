@@ -23,17 +23,17 @@ library(tictoc) # measure function elapsed time
 
 ### Set Constants ###
 # parameters for simulation
-N <- 250  # Number of iterations
+N <- 50  # Number of iterations
 points_per_iteration <- 2000  # Number of points per dataset (to place on 1000x100 cell grid)
 grid_size <- 1000 # Set dimension of grid for simulated data
-NeighborDist <- 50 # set maximum distance for two points to be considered "neighbors" (shrink???)
+NeighborDist <- 100 # set maximum distance for two points to be considered "neighbors" (shrink???)
 
 # Define response model constants (true values)
 alpha <- 0.2
 beta <- 1
 psi <- 0.8 # maximum spillover effect (binary)
 rho <- 0.01 # spatial correlation parameter t
-sd <- 1 # set standard deviation (for epsilon)
+sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
 
 # max distance (between intervention & spillover boundaries) (max(d_i))
 max_distance <- sqrt((133-333)^2 + (866-666)^2) # ~282.84 units
@@ -90,6 +90,8 @@ rho_estimates_dist <- numeric(N) # spatial correlation
 rho_estimates_SE_dist <- numeric(N)
 ```
 
+### Simulation Loop
+
 ```{r}
 ### Loop over N to generate datasets/compute response/obtain parameter estimates ###
 for(i in 1:N){
@@ -119,7 +121,7 @@ for(i in 1:N){
   ####################################################################################################
   ### 3A) Compute Response w/ Binary Spillover ###
   # Generate random noise (epsilon) from normal distribution
-  epsilon <- rnorm(points_per_iteration, mean = 0, sd = 1)
+  epsilon <- rnorm(points_per_iteration, mean = 0, sd = sd)
   
   # Compute response w/ binary spillover (spillover gets 80% of intervention effect, need to incorporate spatial correlation?)
   points$response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) # initialize general response
@@ -142,7 +144,7 @@ for(i in 1:N){
   
   # solve for y using closed-form expression
   A.ind <- I - rho * W.ind.dense # (I - rho*W)
-  response.ind <- solve(A.ind, linear_response) # (I - rho W)^(-1) * (linear_response)
+  response.ind <- solve(A.ind, linear_response) # (I - rho W)^(-1) * (a + XB + e)
   points$response_binary_IndCorr <- response.ind # simultaneous response (response_binary_IndCorr) (1)
   
   # # Compute the spatially correlated response using indicator-based weights
