@@ -9,7 +9,7 @@ output: html_document
 
 - The purpose of this code is to design a spatial simulation where the direct and indirect effects of an arbitrary intervention are assessed over a grid structure designed to be representative of the spatial arrangement of districts in eastern North Carolina. This space is divided into 8 districts.
 
-- Each district is composed of a possible number of counties in North Carolina and has approximately 20 subjects (law enforcement officers) upon which the intervention (training) is applied.
+- Each district is composed of a possible number of counties in North Carolina and has approximately 20 subjects (law enforcement officers) upon which the intervention (training) is applied. (Do we allow 20 to vary by randomly selecting across the whole space?)
 
 - Each of the 8 districts will be assigned to either the intervention or control based on one of two possible methods: (1) intervention assigned randomly to 4 districts, (2) intervention and control assigned according to "blocking" stratification where pairs of adjacent cells/districts are assigned as one to intervention and the other to control. This strategy prefers that adjacent cells are not either both intervention or both control. 
 
@@ -49,7 +49,7 @@ cell_length <- 100
 
 # Define response model constants (true values)
 alpha <- 0.2
-beta <- 1
+beta <- 1 # consider a range of intervention effects (start with Null case -> 1)
 psi <- 0.8 # maximum spillover effect (binary)
 rho <- 0.01 # spatial correlation parameter t
 sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
@@ -541,4 +541,3 @@ for(i in 1:N){
   cat(sprintf("Iteration %d: %.2f seconds elapsed\n", i, as.numeric(elapsed_time, units = "secs")))
 }
 ```
-
