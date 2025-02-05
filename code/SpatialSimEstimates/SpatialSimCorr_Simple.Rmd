@@ -106,40 +106,6 @@ psi_estimates_SE <- summary(model)$coefficients[3, 2]
 ```
 
 ```{r}
-# ####################################################################################################
-# ### 3B) Compute response w/ binary spillover (Indicator spatial correlation) ###
-# # Create spatial weights matrix
-# coordinates <- as.matrix(points[, c("x", "y")])
-# dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE)
-# W_ind <- nb2listw(dlist, style = "W")
-# # Compute the spatially correlated response using indicator-based weights
-# points$response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) # initialize general response
-# Wy_ind <- lag.listw(W_ind, points$response) # matrix multiplication and turn into list (Wy) (neighborhood info)
-# points$response_binary_IndCorr <- points$response + rho * Wy_ind + epsilon # use "response" from (3A) (spatially independent response + spatial dependent adjustment)
-# ####################################################################################################
-# ### 4B) Neighbor indicator weight matrix  ###
-# # Determine neighbors up to 100 distance units (coords/min dist/max dist -> output IDs of points that are neighbors)
-# coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
-# dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # d1 = min neighbor dist, d2 = max neighbor dist
-# W_ind <- nb2listw(dlist, style = "W") # spatial weights matrix -> for spatial lag model (neighboring points influence effect)
-# 
-# # Fit a Spatial Lag Model (SLM) w/ intervention effect, spillover effect, & spatial weights matrix (adapt for distance vs. indicator)
-# model_ind <- lagsarlm(response_binary ~ intervention_zone + spillover_zone, data = points, listw = W_ind) # lag SAR lm
-# 
-# # Store the estimates (indicator based correlation matrix)
-# alpha_estimates_ind <- coef(model_ind)[1] # Intercept (alpha)
-# beta_estimates_ind <- coef(model_ind)[2] # Coefficient for intervention_zone (beta)
-# psi_estimates_ind <- coef(model_ind)[3] # Coefficient for linear spillover effect (psi)
-# rho_estimates_ind <- model_ind$rho # spatial lag parameter
-# 
-# # Store the standard errors
-# alpha_estimates_SE_ind <- summary(model_ind)$Coef[1, 2]
-# beta_estimates_SE_ind <- summary(model_ind)$Coef[2, 2]
-# psi_estimates_SE_ind <- summary(model_ind)$Coef[3, 2]
-# rho_estimates_SE_ind <- summary(model_ind)$rho.se
-```
-
-```{r}
 ### Update to "simultaneously" estimate response of neighbors w/ spatial lag term ###
 # instead of spat. independent response -> adjusted w/ spatial lag term (sequential)
 ####################################################################################################
