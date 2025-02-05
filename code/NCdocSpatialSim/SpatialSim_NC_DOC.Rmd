@@ -1,0 +1,296 @@
+---
+title: "SpatialSim_NC_DOC"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Goal
+
+- The purpose of this code is to design a spatial simulation where the direct and indirect effects of an arbitrary intervention are assessed over a grid structure designed to be representative of the spatial arrangement of districts in eastern North Carolina. This space is divided into 8 districts.
+
+- Each district is composed of a possible number of counties in North Carolina and has approximately 20 subjects (law enforcement officers) upon which the intervention (training) is applied.
+
+- Each of the 8 districts will be assigned to either the intervention or control based on one of two possible methods: (1) intervention assigned randomly to 4 districts, (2) intervention assigned to districts with consideration for underlying case incidence levels and effort to isolate intervention districts with control districts surrounding
+
+- For method (1), all permutations of the arrangement of 4 intervention and 4 control districts will be simulated to determine the overall "consistency" (variance) of the estimate of the direct effect (intervention).
+
+- Our overall goal is to understand whether method (1) or (2) leads to an overall more consistent (less variable among many simulations) estimate of the intervention effect. In all cases, spillover effects may be observed in districts neighboring the districts assigned to have an intervention applied.
+
+### Preliminaries
+
+```{r, message=FALSE, warning=FALSE}
+# set seed
+set.seed(2024) # ensures reproducibility
+
+# load packages
+library(tidyverse)
+library(ggplot2)
+library(sf) # simple features-store/manipulate spatial data
+library(reshape2)
+library(gridExtra)
+library(spdep)
+library(spatialreg)
+library(tictoc) # measure function elapsed time
+```
+
+```{r}
+### Set Constants ###
+# parameters for simulation
+N <- 40  # Number of iterations (combos of trt assignments)
+points_per_iteration <- 160  # Number of points per dataset (20 per district)
+grid_width <- 500 # Set dimensions of grid for simulated data
+grid_height <- 200
+cell_length <- 100
+
+# Define response model constants (true values)
+alpha <- 0.2
+beta <- 1
+psi <- 0.8 # maximum spillover effect (binary)
+rho <- 0.01 # spatial correlation parameter t
+sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
+```
+
+### Data Setup
+
+```{r}
+### Generate combinations of 8 distcits (4 intervention, 4 control)
+# Create a vector representing the 8 districts
+districts <- 1:8
+
+# Generate all combinations of 4 intervention districts out of 8
+combinations <- combn(districts, 4)
+
+# Initialize an empty data frame for the results
+results <- data.frame(Combination = 1:ncol(combinations))
+
+# Loop through each combination and create a row for the table
+for (i in 1:ncol(combinations)) {
+  # Create a vector of 0s (control) and 1s (intervention)
+  treatment_assignment <- ifelse(districts %in% combinations[, i], 1, 0)
+  
+  # Add the treatment assignment for this combination as a new column
+  results[i, 2:9] <- treatment_assignment
+}
+
+# Rename the columns
+colnames(results) <- c('Combination', paste('Cell', 1:8))
+
+# Print the results table
+print(results)
+```
+
+```{r}
+### Table of Neighbor Assignments ###
+# neighbors are cells that are directly adjacent (not diagonal) to a reference cell
+# Initialize the 8x8 matrix with zeros (no neighbors initially)
+neighbor_matrix <- matrix(0, nrow = 8, ncol = 8)
+
+# Define the neighbor relationships (cells are indexed from 1 to 8)
+neighbors <- list(
+  `1` = c(2, 3), # Cell 1 neighbors
+  `2` = c(1, 4), # Cell 2 neighbors
+  `3` = c(1, 4, 5), # Cell 3 neighbors
+  `4` = c(2, 3, 8), # Cell 4 neighbors
+  `5` = c(3, 6, 8), # Cell 5 neighbors
+  `6` = c(5, 7, 8), # Cell 6 neighbors
+  `7` = c(6, 8), # Cell 7 neighbors
+  `8` = c(4, 5, 6, 7) # Cell 8 neighbors
+)
+
+# Loop through each cell and mark its neighbors in the matrix
+for (cell in names(neighbors)) {
+  for (neighbor in neighbors[[cell]]) {
+    neighbor_matrix[as.numeric(cell), neighbor] <- 1
+  }
+}
+
+# Print the resulting matrix
+print(neighbor_matrix)
+```
+
+### Setup Spatial Polygons
+
+```{r}
+### Define the coordinates for each district (100x100 units) ###
+# The top row (districts 7, 6, 5, 3, 1) & bottom row (district 8, 4, 2)
+district_1 <- st_polygon(list(matrix(c(400, 100, 500, 100, 500, 200, 400, 200, 400, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 1 (top-right corner)
+district_2 <- st_polygon(list(matrix(c(400, 0, 500, 0, 500, 100, 400, 100, 400, 0), 
+                                     ncol = 2, byrow = TRUE))) # District 2 (bottom-right corner)
+district_3 <- st_polygon(list(matrix(c(300, 100, 400, 100, 400, 200, 300, 200, 300, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 3 (top middle)
+district_4 <- st_polygon(list(matrix(c(300, 0, 400, 0, 400, 100, 300, 100, 300, 0), 
+                                     ncol = 2, byrow = TRUE))) # District 4 (bottom middle)
+district_5 <- st_polygon(list(matrix(c(200, 100, 300, 100, 300, 200, 200, 200, 200, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 5 (top-left)
+district_6 <- st_polygon(list(matrix(c(100, 100, 200, 100, 200, 200, 100, 200, 100, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 6 (top-left middle)
+district_7 <- st_polygon(list(matrix(c(0, 100, 100, 100, 100, 200, 0, 200, 0, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 7 (top far left)
+district_8 <- st_polygon(list(matrix(c(0, 0, 300, 0, 300, 100, 0, 100, 0, 0), 
+                                     ncol = 2, byrow = TRUE))) # District 8 (bottom-left corner, large block)
+
+# Combine all districts into one list
+districts_list <- list(district_1, district_2, district_3, district_4, district_5, district_6, district_7, district_8)
+
+# Create sf object for all districts (combine into a single sf object)
+districts_sf <- st_sfc(districts_list, crs = NA_crs_)
+
+### Assign labels to each cell ###
+# Create a dataframe with district names and their centroid coordinates for labeling
+district_names <- c("1", "2", "3", "4", "5", "6", "7", "8")
+centroids <- st_centroid(districts_sf)
+centroids_sf <- st_sf(district = district_names, geometry = centroids)  # Create an sf object for centroids
+
+# Plot the districts with labels
+ggplot() +
+  geom_sf(data = districts_sf, fill = "white", color = "black") +
+  geom_sf_text(data = centroids_sf, aes(label = district), size = 5, color = "black") +
+  theme_minimal() +
+  ggtitle("Spatial region with district labels (1-8)") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank()
+  )
+```
+
+```{r}
+### Assign intervention & control w/ legend ###
+# Randomly assign 4 districts as intervention (1) and the remaining 4 as control (0)
+treatment_assignment <- sample(c(1, 0), 8, replace = TRUE)
+treatment_assignment[order(treatment_assignment)] <- c(rep(1, 4), rep(0, 4))  # Ensure 4 intervention and 4 control
+
+# Add treatment column to centroids_sf
+centroids_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
+
+# Plot the districts with labels and color by treatment
+ggplot() +
+  geom_sf(data = districts_sf, aes(fill = centroids_sf$treatment), color = "black") +
+  geom_sf_text(data = centroids_sf, aes(label = district), size = 5, color = "black") +
+  scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
+  labs(fill = "Treatment") +
+  theme_minimal() +
+  ggtitle("Spatial Layout with Treatment Assignment") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank()
+  )
+```
+
+### Simulation Datasets
+
+```{r}
+# initialize object to store all N=500 datasets
+simulated_datasets <- vector("list", N)
+
+# indicator based w/ spatial correlation (estimates for each combo of trt/ctrl assignments)
+alpha_estimates <- numeric(N) # baseline response
+alpha_estimates_SE <- numeric(N)
+beta_estimates <- numeric(N) # intervention effect
+beta_estimates_SE <- numeric(N)
+psi_estimates <- numeric(N) # spillover effect
+psi_estimates_SE <- numeric(N)
+rho_estimates <- numeric(N) # spatial correlation
+rho_estimates_SE <- numeric(N)
+```
+
+### Simulation Loop
+
+- for each set of trt/control assignments, generate 20 subjects in each cell.
+- generate response: assign baseline effect, treatment effect, spillover effect (fixed amount to neighbor cells)
+- fit spatial lag model to compute: baseline estimate, direct effect estimate, spillover effect estimate, spatial autocorrelation parameter estimate
+- iterate over each set of trt/control assignments and aggregate estimates for each parameter
+- compare to trt assignment method based on underlying case incidence???
+
+```{r}
+### Loop over N to generate datasets/compute response/obtain parameter estimates ###
+for(i in 1:N){
+  start_time <- Sys.time() # start timer for each iteration
+  ### 1) Data Simulation ###
+  # Simulate random points on the grid with integer coordinates
+  points <- tibble(x = sample(1:grid_size, points_per_iteration, replace = TRUE),
+                   y = sample(1:grid_size, points_per_iteration, replace = TRUE))
+  
+  # Convert points to sf objects
+  points_sf <- st_as_sf(points, coords = c("x", "y"), crs = NA_crs_)
+  ####################################################################################################
+  # 2) Calculate distance from each point to the intervention zone boundary
+  distances <- st_distance(points_sf, intervention_sf)
+  points$intervention_distance <- as.vector(distances)
+  intervention_distance <- points$intervention_distance # for use in spillover formulas
+  
+  # Assign zones based on their location (intervention/spillover/control)
+  points$intervention_zone <- ifelse(st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # intervention
+  points$spillover_zone <- ifelse(
+    st_within(points_sf, spillover_sf, 
+              sparse = FALSE) & !st_within(points_sf, intervention_sf, sparse = FALSE), 1, 0) # spillover
+  
+  # Add zone label ("Intervention", "Spillover", "Control")
+  points$zone <- ifelse(points$intervention_zone == 1, "Intervention",
+                        ifelse(points$spillover_zone == 1, "Spillover", "Control"))
+  ####################################################################################################
+  ### 3A) Compute Response w/ Binary Spillover ###
+  # Generate random noise (epsilon) from normal distribution
+  epsilon <- rnorm(points_per_iteration, mean = 0, sd = sd)
+  
+  # Compute response w/ binary spillover
+  points$response <- alpha + (beta*points$intervention_zone) + (psi*points$spillover_zone) # initialize general response
+  points$response_binary <- points$response + epsilon # add random error component (response_binary)
+  ####################################################################################################
+  ### 3B) Compute response w/ binary spillover (Indicator spatial correlation) ###
+  # Create spatial weights matrix
+  coordinates <- as.matrix(points[, c("x", "y")])
+  dlist <- dnearneigh(coordinates, d1 = 0, 
+                      d2 = NeighborDist, longlat = FALSE) # list of "neighbors" for each point (0, NeighborDist)
+  W_ind <- nb2listw(dlist, style = "W", zero.policy = TRUE)
+  W.ind.dense <- as(as_dgRMatrix_listw(W_ind), "matrix") # convert to dense matrix
+  W.ind.dense[is.na(W.ind.dense)] <- 0
+  
+  I <- diag(points_per_iteration) # create identity matrix
+  
+  # generate linear response (from 3A)
+  linear_response <- points$response_binary
+  linear_response[is.na(linear_response)] <- 0
+  
+  # solve for y using closed-form expression
+  A.ind <- I - rho * W.ind.dense # (I - rho*W)
+  response.ind <- solve(A.ind, linear_response) # (I - rho W)^(-1) * (a + XB + e)
+  points$response_binary_IndCorr <- response.ind # simultaneous response (response_binary_IndCorr) (1)
+  ####################################################################################################
+  ### 4) Neighbor indicator weight matrix  ###
+  # Determine neighbors up to 100 distance units (coords/min dist/max dist -> output IDs of points that are neighbors)
+  coordinates <- as.matrix(points[, c("x", "y")]) # coordinates of each point (x and y)
+  dlist <- dnearneigh(coordinates, d1 = 0, d2 = NeighborDist, longlat = FALSE) # d1 = min dist, d2 = max dist
+  W_ind <- nb2listw(dlist, style = "W", zero.policy = TRUE) # spatial weights matrix -> neighboring points influence effect
+  W_ind[is.na(W_ind)] <- 0
+  
+  # Fit a Spatial Lag Model (SLM) w/ intervention and spillover effect, & spatial weights matrix
+  model_ind <- lagsarlm(response_binary_IndCorr ~ intervention_zone + spillover_zone, 
+                        data = points, listw = W_ind) # lag SAR lm
+
+  # Store the estimates (indicator based correlation matrix)
+  alpha_estimates[i] <- coef(model_ind)[1] # Intercept (alpha)
+  beta_estimates[i] <- coef(model_ind)[2] # Coefficient for intervention_zone (beta)
+  psi_estimates[i] <- coef(model_ind)[3] # Coefficient for linear spillover effect (psi)
+  rho_estimates[i] <- model_ind$rho # spatial lag parameter
+  
+  # Store the standard errors
+  alpha_estimates_SE[i] <- summary(model_ind)$Coef[1, 2]
+  beta_estimates_SE[i] <- summary(model_ind)$Coef[2, 2]
+  psi_estimates_SE[i] <- summary(model_ind)$Coef[3, 2]
+  rho_estimates_SE[i] <- summary(model_ind)$rho.se
+  ####################################################################################################
+  # 5) Store the dataset for this iteration in the list (ith simulated point locations)
+  simulated_datasets[[i]] <- points
+  # measure elapsed time for iteration
+  elapsed_time <- Sys.time() - start_time
+  # print elapsed time for iteration
+  cat(sprintf("Iteration %d: %.2f seconds elapsed\n", i, as.numeric(elapsed_time, units = "secs")))
+}
+```
+
