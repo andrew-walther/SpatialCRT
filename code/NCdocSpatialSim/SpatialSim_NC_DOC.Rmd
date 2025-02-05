@@ -11,7 +11,9 @@ output: html_document
 
 - Each district is composed of a possible number of counties in North Carolina and has approximately 20 subjects (law enforcement officers) upon which the intervention (training) is applied.
 
-- Each of the 8 districts will be assigned to either the intervention or control based on one of two possible methods: (1) intervention assigned randomly to 4 districts, (2) intervention assigned to districts with consideration for underlying case incidence levels and effort to isolate intervention districts with control districts surrounding
+- Each of the 8 districts will be assigned to either the intervention or control based on one of two possible methods: (1) intervention assigned randomly to 4 districts, (2) intervention and control assigned according to "blocking" stratification where pairs of adjacent cells/districts are assigned as one to intervention and the other to control. This strategy prefers that adjacent cells are not either both intervention or both control. 
+
+- A third assignment strategy will be considered in a subsequent project where (3) intervention is assigned to districts with consideration for underlying case incidence levels and effort to isolate intervention districts with control districts surrounding
 
 - For method (1), all permutations of the arrangement of 4 intervention and 4 control districts will be simulated to determine the overall "consistency" (variance) of the estimate of the direct effect (intervention).
 
@@ -19,7 +21,7 @@ output: html_document
 
 ### Preliminaries
 
-```{r, message=FALSE, warning=FALSE}
+```{r Load Libraries, message=FALSE, warning=FALSE}
 # set seed
 set.seed(2024) # ensures reproducibility
 
@@ -32,14 +34,16 @@ library(gridExtra)
 library(spdep)
 library(spatialreg)
 library(tictoc) # measure function elapsed time
+library(combinat)
 ```
 
-```{r}
+```{r Initiate Constants}
 ### Set Constants ###
 # parameters for simulation
-N <- 40  # Number of iterations (combos of trt assignments)
+N <- 50 # number of datasets to generate (iterate over each trt combo for each - 50*70=3500)  
+Num.Combos <- 70 # Number of trt combos to iterate over
 points_per_iteration <- 160  # Number of points per dataset (20 per district)
-grid_width <- 500 # Set dimensions of grid for simulated data
+grid_width <- 400 # Set dimensions of grid for simulated data
 grid_height <- 200
 cell_length <- 100
 
@@ -51,10 +55,12 @@ rho <- 0.01 # spatial correlation parameter t
 sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
 ```
 
+- There are 70 possible combinations of the (1) simple random assignment intervention/control strategy and 10 possible combinations of the (2) blocking stratification strategy. We can ID the appropriate indices of the blocking stratification treatment assignments to use for comparison to the random assignment method (70 cases vs. 10 cases).
+
 ### Data Setup
 
-```{r}
-### Generate combinations of 8 distcits (4 intervention, 4 control)
+```{r Identify all combinations of 4 Intervention & Control}
+### Generate combinations of 8 districts (4 intervention, 4 control)
 # Create a vector representing the 8 districts
 districts <- 1:8
 
@@ -80,27 +86,27 @@ colnames(results) <- c('Combination', paste('Cell', 1:8))
 print(results)
 ```
 
-```{r}
-### Table of Neighbor Assignments ###
-# neighbors are cells that are directly adjacent (not diagonal) to a reference cell
+```{r Assign table of Rook Neighbors for 8 districts}
+### Table of Rook Neighbor Assignments ###
+# neighbors are cells that are directly adjacent - "rook" case contiguity (not diagonal) to a reference cell
 # Initialize the 8x8 matrix with zeros (no neighbors initially)
 neighbor_matrix <- matrix(0, nrow = 8, ncol = 8)
 
 # Define the neighbor relationships (cells are indexed from 1 to 8)
-neighbors <- list(
+rook_neighbors <- list(
   `1` = c(2, 3), # Cell 1 neighbors
   `2` = c(1, 4), # Cell 2 neighbors
   `3` = c(1, 4, 5), # Cell 3 neighbors
-  `4` = c(2, 3, 8), # Cell 4 neighbors
-  `5` = c(3, 6, 8), # Cell 5 neighbors
-  `6` = c(5, 7, 8), # Cell 6 neighbors
-  `7` = c(6, 8), # Cell 7 neighbors
-  `8` = c(4, 5, 6, 7) # Cell 8 neighbors
+  `4` = c(2, 3, 6), # Cell 4 neighbors
+  `5` = c(3, 6, 7), # Cell 5 neighbors
+  `6` = c(4, 5, 8), # Cell 6 neighbors
+  `7` = c(5, 8), # Cell 7 neighbors
+  `8` = c(6, 7) # Cell 8 neighbors
 )
 
 # Loop through each cell and mark its neighbors in the matrix
-for (cell in names(neighbors)) {
-  for (neighbor in neighbors[[cell]]) {
+for (cell in names(rook_neighbors)) {
+  for (neighbor in rook_neighbors[[cell]]) {
     neighbor_matrix[as.numeric(cell), neighbor] <- 1
   }
 }
@@ -108,45 +114,46 @@ for (cell in names(neighbors)) {
 # Print the resulting matrix
 print(neighbor_matrix)
 ```
+- List of neighbors (rook case contiguity) for 8 cell 2x4 spatial polygon
 
 ### Setup Spatial Polygons
 
-```{r}
+```{r Define spatial polygon 2x4 grid}
 ### Define the coordinates for each district (100x100 units) ###
-# The top row (districts 7, 6, 5, 3, 1) & bottom row (district 8, 4, 2)
-district_1 <- st_polygon(list(matrix(c(400, 100, 500, 100, 500, 200, 400, 200, 400, 100), 
-                                     ncol = 2, byrow = TRUE))) # District 1 (top-right corner)
-district_2 <- st_polygon(list(matrix(c(400, 0, 500, 0, 500, 100, 400, 100, 400, 0), 
-                                     ncol = 2, byrow = TRUE))) # District 2 (bottom-right corner)
-district_3 <- st_polygon(list(matrix(c(300, 100, 400, 100, 400, 200, 300, 200, 300, 100), 
-                                     ncol = 2, byrow = TRUE))) # District 3 (top middle)
-district_4 <- st_polygon(list(matrix(c(300, 0, 400, 0, 400, 100, 300, 100, 300, 0), 
-                                     ncol = 2, byrow = TRUE))) # District 4 (bottom middle)
-district_5 <- st_polygon(list(matrix(c(200, 100, 300, 100, 300, 200, 200, 200, 200, 100), 
-                                     ncol = 2, byrow = TRUE))) # District 5 (top-left)
-district_6 <- st_polygon(list(matrix(c(100, 100, 200, 100, 200, 200, 100, 200, 100, 100), 
-                                     ncol = 2, byrow = TRUE))) # District 6 (top-left middle)
+district_1 <- st_polygon(list(matrix(c(300, 100, 400, 100, 400, 200, 300, 200, 300, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 1 (top-right)
+district_2 <- st_polygon(list(matrix(c(300, 0, 400, 0, 400, 100, 300, 100, 300, 0), 
+                                     ncol = 2, byrow = TRUE))) # District 2 (bottom-right)
+district_3 <- st_polygon(list(matrix(c(200, 100, 300, 100, 300, 200, 200, 200, 200, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 3 (top-center-right)
+district_4 <- st_polygon(list(matrix(c(200, 0, 300, 0, 300, 100, 200, 100, 200, 0), 
+                                     ncol = 2, byrow = TRUE))) # District 4 (bottom-center-right)
+district_5 <- st_polygon(list(matrix(c(100, 100, 200, 100, 200, 200, 100, 200, 100, 100), 
+                                     ncol = 2, byrow = TRUE))) # District 5 (top-center-left)
+district_6 <- st_polygon(list(matrix(c(100, 0, 200, 0, 200, 100, 100, 100, 100, 0), 
+                                     ncol = 2, byrow = TRUE))) # District 6 (bottom-center-left)
 district_7 <- st_polygon(list(matrix(c(0, 100, 100, 100, 100, 200, 0, 200, 0, 100), 
-                                     ncol = 2, byrow = TRUE))) # District 7 (top far left)
-district_8 <- st_polygon(list(matrix(c(0, 0, 300, 0, 300, 100, 0, 100, 0, 0), 
-                                     ncol = 2, byrow = TRUE))) # District 8 (bottom-left corner, large block)
+                                     ncol = 2, byrow = TRUE))) # District 7 (top-left)
+district_8 <- st_polygon(list(matrix(c(0, 0, 100, 0, 100, 100, 0, 100, 0, 0), 
+                                     ncol = 2, byrow = TRUE))) # District 8 (bottom-left)
 
 # Combine all districts into one list
 districts_list <- list(district_1, district_2, district_3, district_4, district_5, district_6, district_7, district_8)
+districts_sf <- st_sfc(districts_list, crs = NA_crs_) # this is the spatial object?
 
-# Create sf object for all districts (combine into a single sf object)
-districts_sf <- st_sfc(districts_list, crs = NA_crs_)
-
-### Assign labels to each cell ###
-# Create a dataframe with district names and their centroid coordinates for labeling
+### Manually Adjusted Centroids ###
 district_names <- c("1", "2", "3", "4", "5", "6", "7", "8")
-centroids <- st_centroid(districts_sf)
-centroids_sf <- st_sf(district = district_names, geometry = centroids)  # Create an sf object for centroids
+label_positions <- data.frame(
+  district = district_names,
+  x = c(350, 350, 250, 250, 150, 150, 50, 50),  # X-coordinates
+  y = c(150, 50, 150, 50, 150, 50, 150, 50)     # Y-coordinates
+)
+label_sf <- st_as_sf(label_positions, coords = c("x", "y"), crs = NA_crs_)
 
-# Plot the districts with labels
+# Plot with corrected labels
 ggplot() +
   geom_sf(data = districts_sf, fill = "white", color = "black") +
-  geom_sf_text(data = centroids_sf, aes(label = district), size = 5, color = "black") +
+  geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
   theme_minimal() +
   ggtitle("Spatial region with district labels (1-8)") +
   theme(
@@ -155,38 +162,174 @@ ggplot() +
     axis.ticks = element_blank(),
     axis.title = element_blank()
   )
+
+# ### Example: Plot single random treatment assignment combination ###
+# # Randomly assign 4 districts as intervention (1) and the remaining 4 as control (0)
+# treatment_assignment <- sample(c(1, 0), 8, replace = TRUE)
+# treatment_assignment[order(treatment_assignment)] <- c(rep(1, 4), rep(0, 4))  # Ensure 4 intervention and 4 control
+# 
+# # Add treatment column to centroids_sf
+# label_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
+# 
+# # Plot the districts with labels and color by treatment
+# ggplot() +
+#   geom_sf(data = districts_sf, aes(fill = label_sf$treatment), color = "black") +
+#   geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
+#   scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
+#   labs(fill = "Treatment") +
+#   theme_minimal() +
+#   ggtitle("Spatial Layout with Treatment Assignment") +
+#   theme(
+#     plot.title = element_text(hjust = 0.5),
+#     axis.text = element_blank(),
+#     axis.ticks = element_blank(),
+#     axis.title = element_blank()
+#   )
 ```
 
-```{r}
-### Assign intervention & control w/ legend ###
-# Randomly assign 4 districts as intervention (1) and the remaining 4 as control (0)
-treatment_assignment <- sample(c(1, 0), 8, replace = TRUE)
-treatment_assignment[order(treatment_assignment)] <- c(rep(1, 4), rep(0, 4))  # Ensure 4 intervention and 4 control
+```{r Plot all possible treatment assignment combos}
+### Plot Treatment assignments for all possible combinations ###
+# Generate all 70 treatment assignments
+districts <- 1:8
+combinations <- combn(districts, 4, simplify = FALSE)
 
-# Add treatment column to centroids_sf
-centroids_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
+# Loop through each treatment combination and plot
+for (i in seq_along(combinations)) {
+  
+  # Assign intervention (1) and control (0) based on the current combination
+  treatment_assignment <- ifelse(districts %in% combinations[[i]], 1, 0)
+  
+  # Convert to factor with labels
+  label_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
+  
+  # Generate plot
+  p <- ggplot() +
+    geom_sf(data = districts_sf, aes(fill = label_sf$treatment), color = "black") +
+    geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
+    scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
+    labs(fill = "Treatment") +
+    ggtitle(paste("Treatment Combination", i, "(Intervention/Control)")) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      axis.title = element_blank()
+    )
+  
+  # Print plot to display
+  print(p)
+  
+  # Short delay to prevent overloading the graphics device
+  Sys.sleep(0.3)  # Adjust as needed
+}
+```
 
-# Plot the districts with labels and color by treatment
-ggplot() +
-  geom_sf(data = districts_sf, aes(fill = centroids_sf$treatment), color = "black") +
-  geom_sf_text(data = centroids_sf, aes(label = district), size = 5, color = "black") +
-  scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
-  labs(fill = "Treatment") +
-  theme_minimal() +
-  ggtitle("Spatial Layout with Treatment Assignment") +
-  theme(
-    plot.title = element_text(hjust = 0.5),
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    axis.title = element_blank()
-  )
+```{r Identify trt/ctrl combos satisfying block stratification}
+### Identify combinations that satisfy block stratification rules ###
+# Intervention neighbors with only control and vice versa
+# Define neighbors using Rook's contiguity
+rook_neighbors <- list(
+  "1" = c(2,3),
+  "2" = c(1,4),
+  "3" = c(1,4,5),
+  "4" = c(2,3,6),
+  "5" = c(3,6,7),
+  "6" = c(4,5,8),
+  "7" = c(5,8),
+  "8" = c(6,7)
+)
+
+# Generate all 4-intervention, 4-control assignments
+districts <- 1:8
+combinations <- combn(districts, 4, simplify = FALSE)
+###########################################################################
+# Function to check if an assignment satisfies the separation rule (block stratification)
+is_valid_assignment <- function(intervention_cells) {
+  
+  # Convert to character for lookup
+  intervention_cells <- as.character(intervention_cells)
+  
+  # Determine control cells
+  control_cells <- setdiff(as.character(districts), intervention_cells)
+  
+  # Check Rook's contiguity
+  for (cell in intervention_cells) {
+    neighbors <- as.character(rook_neighbors[[cell]])
+    if (any(neighbors %in% intervention_cells)) {
+      return(FALSE)  # Found an intervention neighbor -> Invalid
+    }
+  }
+  
+  for (cell in control_cells) {
+    neighbors <- as.character(rook_neighbors[[cell]])
+    if (any(neighbors %in% control_cells)) {
+      return(FALSE)  # Found a control neighbor -> Invalid
+    }
+  }
+  
+  return(TRUE)  # If all conditions passed, this assignment is valid!
+}
+
+# Apply function to all 70 assignments
+valid_combinations <- Filter(is_valid_assignment, combinations)
+###########################################################################
+### Print count and contents of valid assignments ###
+print(paste("Number of valid assignments:", length(valid_combinations)))
+
+# Print valid assignments
+if (length(valid_combinations) > 0) {
+  for (i in seq_along(valid_combinations)) {
+    cat(sprintf("Valid Combination %d: Intervention = %s, Control = %s\n", 
+                i, paste(valid_combinations[[i]], collapse = ", "), 
+                paste(setdiff(districts, valid_combinations[[i]]), collapse = ", ")))
+  }
+}
+
+### Print indices of all combinations where these sets occur ###
+# Store valid indices
+valid_indices <- which(sapply(combinations, is_valid_assignment))
+
+# Print the valid indices
+print(paste("Valid combinations occur at indices:", paste(valid_indices, collapse = ", ")))
+
+### Print Plots of trt/ctrl combos satisfying block stratification ###
+# Function to plot a specific treatment combination
+plot_combination <- function(index, intervention_cells) {
+  # Assign intervention (1) and control (0)
+  treatment_assignment <- rep(0, 8)
+  treatment_assignment[intervention_cells] <- 1  # Mark intervention cells
+  
+  # Convert to factor for coloring
+  label_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
+  
+  # Plot the treatment layout
+  ggplot() +
+    geom_sf(data = districts_sf, aes(fill = label_sf$treatment), color = "black") +
+    geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
+    scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
+    labs(fill = "Treatment") +
+    ggtitle(paste("Treatment Combination", index, "(Intervention/Control)")) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      axis.title = element_blank()
+    )
+}
+
+# Loop through valid indices and print the plots
+for (valid_index in valid_indices) {
+  print(plot_combination(valid_index, combinations[[valid_index]]))
+}
 ```
 
 ### Simulation Datasets
 
 ```{r}
-# initialize object to store all N=500 datasets
-simulated_datasets <- vector("list", N)
+# initialize object to store all N=50 datasets
+simulated_datasets <- matrix(list(), nrow = N, ncol = Num.Combos) # 70 combinations * 50 datasets
 
 # indicator based w/ spatial correlation (estimates for each combo of trt/ctrl assignments)
 alpha_estimates <- numeric(N) # baseline response
@@ -197,17 +340,122 @@ psi_estimates <- numeric(N) # spillover effect
 psi_estimates_SE <- numeric(N)
 rho_estimates <- numeric(N) # spatial correlation
 rho_estimates_SE <- numeric(N)
+
+# Generate all 70 treatment assignments combinations
+districts <- 1:8
+combinations <- combn(districts, 4, simplify = FALSE)
+
+# Function to assign district based on the coordinates
+assign_district <- function(x, y) {
+  if (x >= 300 & x < 400 & y >= 100 & y < 200) return(1) # District 1
+  if (x >= 200 & x < 300 & y >= 100 & y < 200) return(5) # District 5
+  if (x >= 100 & x < 200 & y >= 100 & y < 200) return(7) # District 7
+  if (x >= 0 & x < 100 & y >= 100 & y < 200) return(8)  # District 8
+  if (x >= 300 & x < 400 & y >= 0 & y < 100) return(3)  # District 3
+  if (x >= 200 & x < 300 & y >= 0 & y < 100) return(6)  # District 6
+  if (x >= 100 & x < 200 & y >= 0 & y < 100) return(4)  # District 4
+  if (x >= 0 & x < 100 & y >= 0 & y < 100) return(2)    # District 2
+}
 ```
 
 ### Simulation Loop
 
-- for each set of trt/control assignments, generate 20 subjects in each cell.
+- for each set of trt/control assignments, generate 20 subjects in each cell (160 total).
 - generate response: assign baseline effect, treatment effect, spillover effect (fixed amount to neighbor cells)
 - fit spatial lag model to compute: baseline estimate, direct effect estimate, spillover effect estimate, spatial autocorrelation parameter estimate
 - iterate over each set of trt/control assignments and aggregate estimates for each parameter
-- compare to trt assignment method based on underlying case incidence???
+- compare: (1) random assignment vs. (2) block stratified)
+
+- Spatial Lag Model: $$y = \rho Wy + X\beta + \varepsilon$$
+
+```{r Spatial Effects Simulation}
+### Loop over (70 trt combos) and (N resampled point sets) ###
+# 1) generate datasets, 2) compute response, 3) obtain parameter estimates
+# compare methods: (A) simple random assignment (all indices) vs. (B) block stratification (28, 43)
+####################################################################################################
+# Outer loop: iterate over each intervention/control combination (70 combos)
+for (combo_index in 1:length(combinations)) {
+  
+  # Get the current intervention/control combination (set of cells receiving intervention)
+  current_combination <- combinations[[combo_index]]
+  
+  # Inner loop: iterate over the number of datasets (N) to generate for each combination
+  for (dataset_num in 1:N) {
+  
+    # Simulate random points on the grid with integer coordinates
+    points <- tibble(x = sample(1:grid_width-1, points_per_iteration, replace = TRUE),
+                     y = sample(1:grid_height-1, points_per_iteration, replace = TRUE))
+    
+    # Convert points to sf objects
+    points_sf <- st_as_sf(points, coords = c("x", "y"), crs = NA_crs_)
+    
+    # Assign districts based on the x and y coordinates
+    points$district <- mapply(assign_district, points$x, points$y)
+    ####################################################################################################
+    # Assign the intervention/control treatment based on the district for the current trt cell combo
+    points$treatment <- ifelse(points$district %in% current_combination, "intervention", "control")
+    points$spillover <- NA
+    
+    # Columns for nb.i (rook neighbors), trt.i (intervention in current combo), spillover (neighbor w/ trt)
+    for (i in 1:8) {
+      # ID neighbors
+      points[[paste0("nb.", i)]] <- ifelse(points$district %in% rook_neighbors[[as.character(i)]], 1, 0)
+      # ID intervention cells
+      points[[paste0("trt.", i)]] <- ifelse(i %in% current_combination, 1, 0)
+      # ID points w/ spillover from neighbors w/ intervention
+      points$spillover <- ifelse(
+        points[[paste0("nb.", i)]] == 1 & 
+          points[[paste0("trt.", i)]] == 1 & 
+          points$treatment != "intervention", 1, 0)
+    }
+    ####################################################################################################
+    # generate response (based on intervention/spillover status)
+    
+    # add random noise (epsilon)
+    
+    # compute spatial lag response (w/ indicator-based neighbors)
+    
+    ####################################################################################################
+    # Save the dataset in the appropriate row (dataset_num) and column (combo_index)
+    simulated_datasets[[dataset_num, combo_index]] <- points
+  }
+}
+
+# print first sim dataset iteration
+print(simulated_datasets[[1,1]])
+
+# table of district assignments
+table(simulated_datasets[[1,1]][,3])
+```
 
 ```{r}
+### Print simulated dataset points on the spatial object ###
+# Plot the spatial object and the simulated points
+ggplot() +
+  # Plot the spatial grid (districts)
+  geom_sf(data = districts_sf, fill = "lightgray", color = "black") +
+  
+  # Plot the points, colored by district
+  geom_sf(data = points_sf, aes(color = district), size = 2) +
+  
+  # Customize the color scale for districts
+  scale_color_manual(values = c("1" = "red", "2" = "blue", "3" = "green", "4" = "yellow", 
+                                "5" = "purple", "6" = "orange", "7" = "hotpink", "8" = "cyan")) +
+  
+  # Add labels and titles
+  labs(color = "District") +
+  theme_minimal() +
+  ggtitle("Simulated Points on Districts Grid") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank()
+  )
+```
+
+
+```{r SAMPLE CODE FOR SIMULATION LOOP - DO NOT USE}
 ### Loop over N to generate datasets/compute response/obtain parameter estimates ###
 for(i in 1:N){
   start_time <- Sys.time() # start timer for each iteration
