@@ -48,10 +48,10 @@ grid_height <- 200
 cell_length <- 100
 
 # Define response model constants (true values)
-alpha <- 0.2
+alpha <- 0.2 # intercept/baseline effecgt
 beta <- 1 # consider a range of intervention effects (start with Null case -> 1)
 psi <- 0.8 # maximum spillover effect (binary)
-rho <- 0.00 # spatial correlation parameter t
+rho <- 0.00 # spatial correlation parameter
 sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
 ```
 
@@ -431,6 +431,7 @@ for (combo_index in 1:length(combinations)) {
     }
     
     # Assign spillover if a point has a neighboring treated district (points in trt can't get spillover)
+    # can points in intervention receive spillover? or just points in control? (both when adjacent to intervention)
     for (i in 1:8) {
       points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
                                    points[[paste0("trt.", i)]] == 1 & 
@@ -537,32 +538,7 @@ ggplot() +
   )
 ```
 
-### Model Parameter Estimates
-
-```{r}
-### Aggregate Model Estimates ###
-## Random Sampling ##
-RandomAlphas <- as.matrix(colMeans(alpha_estimates))
-RandomBetas <- as.matrix(colMeans(beta_estimates))
-#RandomPsis <- as.matrix(colMeans(psi_estimates))
-RandomRhos <- as.matrix(colMeans(rho_estimates))
-
-RandomAlphasSE <- as.matrix(colMeans(alpha_estimates_SE))
-RandomBetasSE <- as.matrix(colMeans(beta_estimates_SE))
-#RandomPsisSE <- as.matrix(colMeans(psi_estimates_SE))
-RandomRhosSE <- as.matrix(colMeans(rho_estimates_SE))
-
-## Block Stratification (28 & 43) ##
-BlockAlphas <- as.matrix(colMeans(alpha_estimates[,c(28, 43)]))
-BlockBetas <- as.matrix(colMeans(beta_estimates[,c(28, 43)]))
-#BlockPsis <- as.matrix(colMeans(psi_estimates[,c(28, 43)]))
-BlockRhos <- as.matrix(colMeans(rho_estimates[,c(28, 43)]))
-
-BlockAlphasSE <- as.matrix(colMeans(alpha_estimates_SE[,c(28, 43)]))
-BlockBetasSE <- as.matrix(colMeans(beta_estimates_SE[,c(28, 43)]))
-#BlockPsisSE <- as.matrix(colMeans(psi_estimates_SE[,c(28, 43)]))
-BlockRhosSE <- as.matrix(colMeans(rho_estimates_SE[,c(28, 43)]))
-```
+### Model Parameter Estimates (all combos at the same time)
 
 ```{r}
 ### Grand Means ###
@@ -609,4 +585,50 @@ ggplot(comparison_df, aes(x = recode(Parameter, "Alpha" = "Baseline", "Beta" = "
 
 - can we scale this due to the difference between 70 combos & 2 combos?
 - at present, the block stratification method has a larger standard error of the baseline & intervention estimates (this isn't what we expected to see!)
+
+### Model Parameter Estimates (1 random vs. 1 blocking)
+
+```{r}
+# Alpha: combo Means & SEs
+AlphaMeans <- colMeans(alpha_estimates)
+AlphaSEs <- apply(alpha_estimates, 2, function(x) sd(x) / sqrt(length(x)))
+AlphaResults <- as.data.frame(cbind(AlphaMeans, AlphaSEs))
+AlphaResults$Parameter <- "Alpha"
+colnames(AlphaResults) <- c("Mean", "SE", "Parameter")
+
+# Alpha: combo Means & SEs
+BetaMeans <- colMeans(beta_estimates)
+BetaSEs <- apply(beta_estimates, 2, function(x) sd(x) / sqrt(length(x)))
+BetaResults <- as.data.frame(cbind(BetaMeans, BetaSEs))
+BetaResults$Parameter <- "Beta"
+colnames(BetaResults) <- c("Mean", "SE", "Parameter")
+
+# Randomly Select 1 from 1-70 & 1 from 28 & 43 to compare
+RandomSampleIndex <- sample(1:70, 1) # Randomly select an integer from 1 to 70
+BlockStratificationIndex <- sample(c(28, 43), 1) # Randomly select integer from either 28 or 43
+
+# combine alpha & beta results of randomly selected indices for the two methods
+RandomSampleResult <- rbind(AlphaResults[RandomSampleIndex,], BetaResults[RandomSampleIndex,])
+RandomSampleResult$Index <- RandomSampleIndex
+RandomSampleResult$Method <- "Random Sampling"
+
+BlockStratificationResult <- rbind(AlphaResults[BlockStratificationIndex,], BetaResults[BlockStratificationIndex,])
+BlockStratificationResult$Index <- BlockStratificationIndex
+BlockStratificationResult$Method <- "Block Stratification"
+
+CombinedResults <- rbind(RandomSampleResult, BlockStratificationResult) # combine the random & block results
+
+# Make Plot
+ggplot(CombinedResults, aes(x = recode(Parameter, "Alpha" = "Baseline", "Beta" = "Intervention"), 
+                          y = Mean, color = Method)) +
+  geom_point(position = position_dodge(width = 0.5), size = 3) +  # Plot points
+  geom_errorbar(aes(ymin = Mean - 1.96 * SE, ymax = Mean + 1.96 * SE),
+                position = position_dodge(width = 0.5), width = 0.2) +  # Error bars for 95% CI
+  labs(title = "Random vs. Blocking treatment assignment model estimates ",
+       y = "Parameter Estimate",
+       x = "Effect Type",
+       color = "Treatment Assignment Method") +
+  theme_minimal() +
+  theme(text = element_text(size = 14), legend.position = "bottom")
+```
 
