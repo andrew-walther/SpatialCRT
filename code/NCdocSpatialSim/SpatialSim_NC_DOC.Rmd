@@ -162,29 +162,6 @@ ggplot() +
     axis.ticks = element_blank(),
     axis.title = element_blank()
   )
-
-# ### Example: Plot single random treatment assignment combination ###
-# # Randomly assign 4 districts as intervention (1) and the remaining 4 as control (0)
-# treatment_assignment <- sample(c(1, 0), 8, replace = TRUE)
-# treatment_assignment[order(treatment_assignment)] <- c(rep(1, 4), rep(0, 4))  # Ensure 4 intervention and 4 control
-# 
-# # Add treatment column to centroids_sf
-# label_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
-# 
-# # Plot the districts with labels and color by treatment
-# ggplot() +
-#   geom_sf(data = districts_sf, aes(fill = label_sf$treatment), color = "black") +
-#   geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
-#   scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
-#   labs(fill = "Treatment") +
-#   theme_minimal() +
-#   ggtitle("Spatial Layout with Treatment Assignment") +
-#   theme(
-#     plot.title = element_text(hjust = 0.5),
-#     axis.text = element_blank(),
-#     axis.ticks = element_blank(),
-#     axis.title = element_blank()
-#   )
 ```
 
 ```{r Plot all possible treatment assignment combos}
@@ -538,6 +515,12 @@ ggplot() +
   )
 ```
 
+```{r}
+### Save current R environment (after simulation) ###
+#save.image(file='SpatialSim_NC_DOC.RData') # save environment
+#load('SpatialSim_NC_DOC.RData') # load environment objects
+```
+
 ### Model Parameter Estimates (all combos at the same time)
 
 ```{r}
@@ -550,7 +533,7 @@ RandomSampling <- data.frame(
   SE = c(sqrt(mean(alpha_estimates_SE^2, na.rm = TRUE)), 
          sqrt(mean(beta_estimates_SE^2, na.rm = TRUE)))
 )
-print(RandomSampling)
+#print(RandomSampling)
 
 # Block Stratification (28 & 43)
 BlockStratification <- data.frame(
@@ -560,15 +543,15 @@ BlockStratification <- data.frame(
   SE = c(sqrt(mean(alpha_estimates_SE[,c(28, 43)]^2, na.rm = TRUE)), 
          sqrt(mean(beta_estimates_SE[,c(28, 43)]^2, na.rm = TRUE)))
 )
-print(BlockStratification)
-```
-```{r}
+#print(BlockStratification)
+
 # Combine datasets with a method identifier
 RandomSampling$Method <- "Random Sampling"
 BlockStratification$Method <- "Block Stratification"
 comparison_df <- bind_rows(RandomSampling, BlockStratification)
+print(comparison_df)
 
-# Create the plot with recoded labels for Alpha and Beta
+# Create plot (average alpha/beta of random sample combos & average alpha/beta of block stratify combos)
 ggplot(comparison_df, aes(x = recode(Parameter, "Alpha" = "Baseline", "Beta" = "Intervention"), 
                           y = Mean, color = Method)) +
   geom_point(position = position_dodge(width = 0.5), size = 3) +  # Plot points
@@ -580,7 +563,6 @@ ggplot(comparison_df, aes(x = recode(Parameter, "Alpha" = "Baseline", "Beta" = "
        color = "Treatment Assignment Method") +
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom")
-
 ```
 
 - can we scale this due to the difference between 70 combos & 2 combos?
@@ -617,18 +599,61 @@ BlockStratificationResult$Index <- BlockStratificationIndex
 BlockStratificationResult$Method <- "Block Stratification"
 
 CombinedResults <- rbind(RandomSampleResult, BlockStratificationResult) # combine the random & block results
+print(CombinedResults)
 
 # Make Plot
-ggplot(CombinedResults, aes(x = recode(Parameter, "Alpha" = "Baseline", "Beta" = "Intervention"), 
+ggplot(CombinedResults, aes(x = factor(recode(Parameter, "Alpha" = "Baseline", "Beta" = "Intervention")), 
                           y = Mean, color = Method)) +
   geom_point(position = position_dodge(width = 0.5), size = 3) +  # Plot points
   geom_errorbar(aes(ymin = Mean - 1.96 * SE, ymax = Mean + 1.96 * SE),
                 position = position_dodge(width = 0.5), width = 0.2) +  # Error bars for 95% CI
+  geom_text(aes(label = round(Mean, 3)),
+            position = position_dodge(width = 0.5), hjust = 1.2, size = 3) +  # Add labels
   labs(title = "Random vs. Blocking treatment assignment model estimates ",
        y = "Parameter Estimate",
        x = "Effect Type",
        color = "Treatment Assignment Method") +
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom")
+```
+
+### Compute CIs for each combo & compare to CIs of Block Stratify Method
+
+```{r}
+### Add Upper/Lower 95% CI Bounds, CI Width to results tables ###
+# Add CIs to AlphaResults
+AlphaResults <- AlphaResults %>%
+  mutate(LowerCI = Mean - 1.96 * SE,
+         UpperCI = Mean + 1.96 * SE,
+         WidthCI = UpperCI - LowerCI)
+
+# Add CIs to BetaResults
+BetaResults <- BetaResults %>%
+  mutate(LowerCI = Mean - 1.96 * SE,
+         UpperCI = Mean + 1.96 * SE,
+         WidthCI = UpperCI - LowerCI)
+
+### Proportion of combos with CI width larger than the Block Stratification CI widths
+# Calculate proportions
+threshold_28_alpha <- AlphaResults$WidthCI[28]
+prop_alpha_28 <- mean(AlphaResults$WidthCI > threshold_28_alpha)
+
+threshold_43_alpha <- AlphaResults$WidthCI[43]
+prop_alpha_43 <- mean(AlphaResults$WidthCI > threshold_43_alpha)
+
+threshold_28_beta <- BetaResults$WidthCI[28]
+prop_beta_28 <- mean(BetaResults$WidthCI > threshold_28_beta)
+
+threshold_43_beta <- BetaResults$WidthCI[43]
+prop_beta_43 <- mean(BetaResults$WidthCI > threshold_43_beta)
+
+# Create a summary table
+results_table <- data.frame(
+  Dataset = c("Alpha", "Alpha", "Beta", "Beta"),
+  Index = c(28, 43, 28, 43),
+  PropWider = round(c(prop_alpha_28, prop_alpha_43, prop_beta_28, prop_beta_43),3),
+  PropNarrower = round(c(1-prop_alpha_28, 1-prop_alpha_43, 1-prop_beta_28, 1-prop_beta_43),3)
+)
+print(results_table)
 ```
 
