@@ -408,11 +408,17 @@ for (combo_index in 1:length(combinations)) {
     }
     
     # Assign spillover if a point has a neighboring treated district (points in trt can't get spillover)
-    # can points in intervention receive spillover? or just points in control? (both when adjacent to intervention)
+    # # only allow spillover on control districts
+    # for (i in 1:8) {
+    #   points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
+    #                                points[[paste0("trt.", i)]] == 1 & 
+    #                                points$treatment == "control", 1, points$spillover)
+    # }
+    
+    # allow spillover on intervention & control districts
     for (i in 1:8) {
       points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
-                                   points[[paste0("trt.", i)]] == 1 & 
-                                   points$treatment == "control", 1, points$spillover)
+                                   points[[paste0("trt.", i)]] == 1, 1, points$spillover)
     }
     
     # Remove unnecessary columns after assigning spillover
@@ -517,11 +523,33 @@ ggplot() +
 
 ```{r}
 ### Save current R environment (after simulation) ###
-#save.image(file='SpatialSim_NC_DOC.RData') # save environment
-#load('SpatialSim_NC_DOC.RData') # load environment objects
+#save.image(file='SpatialSim_NC_DOC_noTrtSpill.RData') # save environment
+#load('SpatialSim_NC_DOC_noTrtSpill.RData') # load environment objects
+
+#save.image(file='SpatialSim_NC_DOC_TrtSpill.RData') # save environment
+#load('SpatialSim_NC_DOC_TrtSpill.RData') # load environment objects
 ```
 
 ### Model Parameter Estimates (all combos at the same time)
+
+```{r compute bias, variance, and mse for model estiamtes}
+### Compute bias, variance, mse for each combination ###
+compute_metrics <- function(beta_estimates, true_value) {
+  results <- as.data.frame(t(apply(beta_estimates, 2, function(estimates) {
+    bias <- mean(estimates) - true_value
+    bias.abs <- abs(mean(estimates) - true_value)
+    variance <- var(estimates)
+    mse <- mean((estimates - true_value)^2)
+    return(c(bias = bias, bias.abs = bias.abs, variance = variance, MSE = mse))
+  })))
+  return(results)
+}
+
+# results for alpha & beta
+beta.mse <- compute_metrics(beta_estimates, true_value = beta)
+alpha.mse <- compute_metrics(alpha_estimates, true_value = alpha)
+```
+
 
 ```{r}
 ### Grand Means ###
@@ -657,3 +685,40 @@ results_table <- data.frame(
 print(results_table)
 ```
 
+- It looks like nearly all of the CIs for the direct effect estimates (beta) among the 70 possible treatment/control assignment combinations are either as narrow or narrower than those of the block stratification strategy.
+
+```{r}
+### Compare estimate bias between random sampling & block stratification ###
+# Add bias to AlphaResults
+AlphaResults <- AlphaResults %>%
+  mutate(Bias = abs(alpha - Mean))
+
+# Add bias to BetaResults
+BetaResults <- BetaResults %>%
+  mutate(Bias = abs(beta - Mean))
+
+### Proportion of combos with CI width larger than the Block Stratification CI widths
+# Calculate proportions
+bias_28_alpha <- AlphaResults$Bias[28]
+prop_alpha_bias_28 <- mean(AlphaResults$Bias > bias_28_alpha)
+
+bias_43_alpha <- AlphaResults$Bias[43]
+prop_alpha_bias_43 <- mean(AlphaResults$Bias > bias_43_alpha)
+
+bias_28_beta <- BetaResults$Bias[28]
+prop_beta_bias_28 <- mean(BetaResults$Bias > bias_28_beta)
+
+bias_43_beta <- BetaResults$Bias[43]
+prop_beta_bias_43 <- mean(BetaResults$Bias > bias_43_beta)
+
+# Create a summary table
+bias_results_table <- data.frame(
+  Dataset = c("Alpha", "Alpha", "Beta", "Beta"),
+  Index = c(28, 43, 28, 43),
+  PropGreater = round(c(prop_alpha_bias_28, prop_alpha_bias_43, prop_beta_bias_28, prop_beta_bias_43),3),
+  PropLess = round(c(1-prop_alpha_bias_28, 1-prop_alpha_bias_43, 1-prop_beta_bias_28, 1-prop_beta_bias_43),3)
+)
+print(bias_results_table)
+```
+
+- most random sampling combos have greater bias (relative to the estimate true value) than the block stratification combos
