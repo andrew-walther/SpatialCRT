@@ -548,6 +548,9 @@ compute_metrics <- function(beta_estimates, true_value) {
 # results for alpha & beta
 beta.mse <- compute_metrics(beta_estimates, true_value = beta)
 alpha.mse <- compute_metrics(alpha_estimates, true_value = alpha)
+
+#write.csv(beta.mse, "beta_mse_results_noTrtSpill.csv", row.names = TRUE)
+#write.csv(beta.mse, "beta_mse_results_TrtSpill.csv", row.names = TRUE)
 ```
 
 
