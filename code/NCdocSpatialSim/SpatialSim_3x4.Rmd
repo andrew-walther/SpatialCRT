@@ -40,8 +40,8 @@ cell_length <- 100
 # Define response model constants (true values)
 alpha <- 0.2 # intercept/baseline effecgt
 beta <- 1 # consider a range of intervention effects (start with Null case -> 1)
-psi <- 0.8 # maximum spillover effect (binary)
-rho <- 0.00 # spatial correlation parameter
+psi <- 0.5 # maximum spillover effect (binary)
+rho <- 0.01 # spatial correlation parameter
 sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
 ```
 
@@ -459,18 +459,18 @@ for (combo_index in 1:length(combinations)) {
     }
     
     # Assign spillover if a point has a neighboring treated district (points in trt can't get spillover)
-    # # only allow spillover on control districts (case 1)
-    # for (i in 1:8) {
-    #   points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
-    #                                points[[paste0("trt.", i)]] == 1 & 
-    #                                points$treatment == "control", 1, points$spillover)
-    # }
+    # only allow spillover on control districts (case 1)
+    for (i in 1:8) {
+      points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 &
+                                   points[[paste0("trt.", i)]] == 1 &
+                                   points$treatment == "control", 1, points$spillover)
+    }
     
     # allow spillover on intervention & control districts (case 2)
-    for (i in 1:12) {
-      points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
-                                   points[[paste0("trt.", i)]] == 1, 1, points$spillover)
-    }
+    # for (i in 1:12) {
+    #   points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
+    #                                points[[paste0("trt.", i)]] == 1, 1, points$spillover)
+    # }
     
     # Remove unnecessary columns after assigning spillover
     points <- points %>% select(-starts_with("nb."), -starts_with("trt."))
@@ -605,10 +605,10 @@ psi.mse <- compute_metrics(psi_estimates, true_value = psi)
 rho.mse <- compute_metrics(rho_estimates, true_value = rho)
 
 # save results to CSV (AX_BX_PX_RX where X is the value)
-# write.csv(beta.mse, "beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv", row.names = TRUE)
-# write.csv(alpha.mse, "alpha_mse/alpha_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv", row.names = TRUE)
-# write.csv(psi.mse, "psi_mse/psi_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv", row.names = TRUE)
-# write.csv(rho.mse, "rho_mse/rho_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv", row.names = TRUE)
+write.csv(beta.mse, "beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
+write.csv(alpha.mse, "alpha_mse/alpha_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
+write.csv(psi.mse, "psi_mse/psi_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
+write.csv(rho.mse, "rho_mse/rho_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
 
 #write.csv(beta.mse, "beta_mse_results_noTrtSpill.csv", row.names = TRUE)
 #write.csv(beta.mse, "beta_mse_results_TrtSpill.csv", row.names = TRUE)
