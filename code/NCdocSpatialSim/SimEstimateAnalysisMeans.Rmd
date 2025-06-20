@@ -1,0 +1,930 @@
+---
+title: "SimEstimateAnalysisMeans"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Preliminaries
+
+- This R Markdown script computes mean Beta MSE estimates for each grouping of TrtSpill/TrtNoSpill, Psi, Rho, and Block vs. Random sampling for each of the 2x4, 3x3, and 3x4 grid setups. 
+- For each spatial grid setup, one plot is made for the "Block stratification" sampling setting and another for the "random" sampling setting such that there are 2 plots for each grid size. 
+- The y-axis of each plot is the Mean Beta MSE for a particular grouping. 
+- The x-axis lists the 4 combinations of TrtSpill (yes/no) and Rho (0.00/0.01) and then then the plotted points are stratifed by the 4 levels of the spillover parameter psi (0.5/0.6/0.7/0.8). 
+- For each plotted point, a corresponding 95% confidence interval based on the standard error from each group of estimates is also plotted.
+
+```{r Load Libraries, message=FALSE, warning=FALSE}
+# load packages
+library(tidyverse)
+library(ggplot2)
+library(plotrix)
+```
+
+### Analysis of 2x4 plot (70)
+
+```{r}
+### Load 2x4 datasets (random & block) ###
+# TrtNoSpill
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE) # random mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE) # random se
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE[c(28, 43)]) # block se
+
+# TrtSpill
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block se
+
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R001$MSE) # random mean
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R001$MSE[c(28, 43)]) # block mean
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P08_R001$MSE) # random se
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P08_R001$MSE[c(28, 43)]) # block se
+```
+
+```{r}
+### generate dataframe & plot (random) ###
+# Create the data frame manually, row by row
+df_random_2x4 <- data.frame(
+  TrtSpill = c(
+    "No",  "No",  "No",  "No",
+    "No",  "No",  "No",  "No",
+    "Yes", "Yes", "Yes", "Yes",
+    "Yes", "Yes", "Yes", "Yes"
+  ),
+  Rho = c(
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01
+  ),
+  Psi = c(
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8,
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8
+  ),
+  Estimate = c(
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R00_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R001_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R00_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R001_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R00_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R001_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R00_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R001_mean
+  ),
+  SE = c(
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R00_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R001_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R00_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R001_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R00_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R001_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R00_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R001_se
+  )
+)
+print(df_random_2x4)
+
+# Ensure TrtSpill is a factor with desired order
+df_random_2x4$TrtSpill <- factor(df_random_2x4$TrtSpill, levels = c("No", "Yes"))
+
+# compute CI lower/upper bounds
+df_random_2x4$LowerCI <- df_random_2x4$Estimate - 1.96 * df_random_2x4$SE
+df_random_2x4$UpperCI <- df_random_2x4$Estimate + 1.96 * df_random_2x4$SE
+
+# Create a combined grouping variable
+df_random_2x4 <- df_random_2x4 %>%
+  mutate(Condition = paste0("TrtSpill: ", TrtSpill, "\nRho: ", Rho))
+
+# Optional: sort the Condition factor levels explicitly
+df_random_2x4$Condition <- factor(df_random_2x4$Condition,
+                       levels = c("TrtSpill: No\nRho: 0", 
+                                  "TrtSpill: No\nRho: 0.01", 
+                                  "TrtSpill: Yes\nRho: 0", 
+                                  "TrtSpill: Yes\nRho: 0.01"))
+
+# Plot of MSE estimates
+ggplot(df_random_2x4, aes(x = Condition, y = Estimate)) +
+  geom_point(aes(color = factor(Psi)), size = 3) +
+  geom_errorbar(
+    aes(ymin = LowerCI, ymax = UpperCI, color = as.factor(Psi)),
+    width = 0.1,
+    alpha = 0.6  # makes error bars slightly transparent
+  ) +
+  labs(
+    title = "Beta MSE Estimates (2x4 all): stratified by TrtSpill, Psi, and Rho",
+    x = "Condition",
+    y = "MSE",
+    color = "Psi"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+```{r}
+### generate dataframe & plot (block) ###
+# Create the data frame manually, row by row
+df_block_2x4 <- data.frame(
+  TrtSpill = c(
+    "No",  "No",  "No",  "No",
+    "No",  "No",  "No",  "No",
+    "Yes", "Yes", "Yes", "Yes",
+    "Yes", "Yes", "Yes", "Yes"
+  ),
+  Rho = c(
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01
+  ),
+  Psi = c(
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8,
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8
+  ),
+  Estimate = c(
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block_mean,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block_mean,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block_mean
+  ),
+  SE = c(
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block_se,
+    beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block_se,
+    beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block_se
+  )
+)
+print(df_block_2x4)
+
+# Ensure TrtSpill is a factor with desired order
+df_block_2x4$TrtSpill <- factor(df_block_2x4$TrtSpill, levels = c("No", "Yes"))
+
+# compute CI lower/upper bounds
+df_block_2x4$LowerCI <- df_block_2x4$Estimate - 1.96 * df_block_2x4$SE
+df_block_2x4$UpperCI <- df_block_2x4$Estimate + 1.96 * df_block_2x4$SE
+
+# Create a combined grouping variable
+df_block_2x4 <- df_block_2x4 %>%
+  mutate(Condition = paste0("TrtSpill: ", TrtSpill, "\nRho: ", Rho))
+
+# Optional: sort the Condition factor levels explicitly
+df_block_2x4$Condition <- factor(df_block_2x4$Condition,
+                       levels = c("TrtSpill: No\nRho: 0", 
+                                  "TrtSpill: No\nRho: 0.01", 
+                                  "TrtSpill: Yes\nRho: 0", 
+                                  "TrtSpill: Yes\nRho: 0.01"))
+
+# Plot of MSE estimates
+ggplot(df_block_2x4, aes(x = Condition, y = Estimate)) +
+  geom_point(aes(color = factor(Psi)), size = 3) +
+  geom_errorbar(
+    aes(ymin = LowerCI, ymax = UpperCI, color = as.factor(Psi)),
+    width = 0.1,
+    alpha = 0.6  # makes error bars slightly transparent
+  ) +
+  labs(
+    title = "Beta MSE Estimates (2x4 block): stratified by TrtSpill, Psi, and Rho",
+    x = "Condition",
+    y = "MSE",
+    color = "Psi"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+### Analysis of 3x3 plot (126)
+
+```{r}
+### Load 3x3 datasets (random & block) ###
+# TrtNoSpill
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+# TrtSpill
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R001$MSE) # random mean
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P08_R001$MSE) # random se
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P08_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
+```
+
+```{r}
+### generate dataframe & plot (random) ###
+# Create the data frame manually, row by row
+df_random_3x3 <- data.frame(
+  TrtSpill = c(
+    "No",  "No",  "No",  "No",
+    "No",  "No",  "No",  "No",
+    "Yes", "Yes", "Yes", "Yes",
+    "Yes", "Yes", "Yes", "Yes"
+  ),
+  Rho = c(
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01
+  ),
+  Psi = c(
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8,
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8
+  ),
+  Estimate = c(
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R00_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R001_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R00_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R001_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R00_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R001_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R00_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R001_mean
+  ),
+  SE = c(
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R00_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R001_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R00_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R001_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R00_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R001_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R00_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R001_se
+  )
+)
+print(df_random_3x3)
+
+# Ensure TrtSpill is a factor with desired order
+df_random_3x3$TrtSpill <- factor(df_random_3x3$TrtSpill, levels = c("No", "Yes"))
+
+# compute CI lower/upper bounds
+df_random_3x3$LowerCI <- df_random_3x3$Estimate - 1.96 * df_random_3x3$SE
+df_random_3x3$UpperCI <- df_random_3x3$Estimate + 1.96 * df_random_3x3$SE
+
+# Create a combined grouping variable
+df_random_3x3 <- df_random_3x3 %>%
+  mutate(Condition = paste0("TrtSpill: ", TrtSpill, "\nRho: ", Rho))
+
+# Optional: sort the Condition factor levels explicitly
+df_random_3x3$Condition <- factor(df_random_3x3$Condition,
+                       levels = c("TrtSpill: No\nRho: 0", 
+                                  "TrtSpill: No\nRho: 0.01", 
+                                  "TrtSpill: Yes\nRho: 0", 
+                                  "TrtSpill: Yes\nRho: 0.01"))
+
+# Plot of MSE estimates
+ggplot(df_random_3x3, aes(x = Condition, y = Estimate)) +
+  geom_point(aes(color = factor(Psi)), size = 3) +
+  geom_errorbar(
+    aes(ymin = LowerCI, ymax = UpperCI, color = as.factor(Psi)),
+    width = 0.1,
+    alpha = 0.6  # makes error bars slightly transparent
+  ) +
+  labs(
+    title = "Beta MSE Estimates (3x3 all): stratified by TrtSpill, Psi, and Rho",
+    x = "Condition",
+    y = "MSE",
+    color = "Psi"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+```{r}
+### generate dataframe & plot (block) ###
+# Create the data frame manually, row by row
+df_block_3x3 <- data.frame(
+  TrtSpill = c(
+    "No",  "No",  "No",  "No",
+    "No",  "No",  "No",  "No",
+    "Yes", "Yes", "Yes", "Yes",
+    "Yes", "Yes", "Yes", "Yes"
+  ),
+  Rho = c(
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01
+  ),
+  Psi = c(
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8,
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8
+  ),
+  Estimate = c(
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block_mean,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block_mean,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R001_block_mean
+  ),
+  SE = c(
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block_se,
+    beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block_se,
+    beta_mse_TrtSpill_3x3_A02_B1_P08_R001_block_se
+  )
+)
+print(df_block_3x3)
+
+# Ensure TrtSpill is a factor with desired order
+df_block_3x3$TrtSpill <- factor(df_block_3x3$TrtSpill, levels = c("No", "Yes"))
+
+# compute CI lower/upper bounds
+df_block_3x3$LowerCI <- df_block_3x3$Estimate - 1.96 * df_block_3x3$SE
+df_block_3x3$UpperCI <- df_block_3x3$Estimate + 1.96 * df_block_3x3$SE
+
+# Create a combined grouping variable
+df_block_3x3 <- df_block_3x3 %>%
+  mutate(Condition = paste0("TrtSpill: ", TrtSpill, "\nRho: ", Rho))
+
+# Optional: sort the Condition factor levels explicitly
+df_block_3x3$Condition <- factor(df_block_3x3$Condition,
+                       levels = c("TrtSpill: No\nRho: 0", 
+                                  "TrtSpill: No\nRho: 0.01", 
+                                  "TrtSpill: Yes\nRho: 0", 
+                                  "TrtSpill: Yes\nRho: 0.01"))
+
+# Plot of MSE estimates
+ggplot(df_block_3x3, aes(x = Condition, y = Estimate)) +
+  geom_point(aes(color = factor(Psi)), size = 3) +
+  geom_errorbar(
+    aes(ymin = LowerCI, ymax = UpperCI, color = as.factor(Psi)),
+    width = 0.1,
+    alpha = 0.6  # makes error bars slightly transparent
+  ) +
+  labs(
+    title = "Beta MSE Estimates (3x3 block): stratified by TrtSpill, Psi, and Rho",
+    x = "Condition",
+    y = "MSE",
+    color = "Psi"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+### Analysis of 3x4 plot (924)
+
+```{r}
+### Load 3x4 datasets (random & block) ###
+# TrtNoSpill
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE) # random mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE) # random se
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE[c(313, 612)]) # block se
+
+# TrtSpill
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block se
+
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R001$MSE) # random mean
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R001$MSE[c(313, 612)]) # block mean
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P08_R001$MSE) # random se
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P08_R001$MSE[c(313, 612)]) # block se
+```
+
+```{r}
+### generate dataframe & plot (random) ###
+# Create the data frame manually, row by row
+df_random_3x4 <- data.frame(
+  TrtSpill = c(
+    "No",  "No",  "No",  "No",
+    "No",  "No",  "No",  "No",
+    "Yes", "Yes", "Yes", "Yes",
+    "Yes", "Yes", "Yes", "Yes"
+  ),
+  Rho = c(
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01
+  ),
+  Psi = c(
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8,
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8
+  ),
+  Estimate = c(
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R00_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R001_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R00_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R001_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R00_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R001_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R00_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R001_mean
+  ),
+  SE = c(
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R00_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R001_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R00_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R001_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R00_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R001_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R00_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R001_se
+  )
+)
+print(df_random_3x4)
+
+# Ensure TrtSpill is a factor with desired order
+df_random_3x4$TrtSpill <- factor(df_random_3x4$TrtSpill, levels = c("No", "Yes"))
+
+# compute CI lower/upper bounds
+df_random_3x4$LowerCI <- df_random_3x4$Estimate - 1.96 * df_random_3x4$SE
+df_random_3x4$UpperCI <- df_random_3x4$Estimate + 1.96 * df_random_3x4$SE
+
+# Create a combined grouping variable
+df_random_3x4 <- df_random_3x4 %>%
+  mutate(Condition = paste0("TrtSpill: ", TrtSpill, "\nRho: ", Rho))
+
+# Optional: sort the Condition factor levels explicitly
+df_random_3x4$Condition <- factor(df_random_3x4$Condition,
+                       levels = c("TrtSpill: No\nRho: 0", 
+                                  "TrtSpill: No\nRho: 0.01", 
+                                  "TrtSpill: Yes\nRho: 0", 
+                                  "TrtSpill: Yes\nRho: 0.01"))
+
+# Plot of MSE estimates
+ggplot(df_random_3x4, aes(x = Condition, y = Estimate)) +
+  geom_point(aes(color = factor(Psi)), size = 3) +
+  geom_errorbar(
+    aes(ymin = LowerCI, ymax = UpperCI, color = as.factor(Psi)),
+    width = 0.1,
+    alpha = 0.6  # makes error bars slightly transparent
+  ) +
+  labs(
+    title = "Beta MSE Estimates (3x4 all): stratified by TrtSpill, Psi, and Rho",
+    x = "Condition",
+    y = "MSE",
+    color = "Psi"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+```{r}
+### generate dataframe & plot (block) ###
+# Create the data frame manually, row by row
+df_block_3x4 <- data.frame(
+  TrtSpill = c(
+    "No",  "No",  "No",  "No",
+    "No",  "No",  "No",  "No",
+    "Yes", "Yes", "Yes", "Yes",
+    "Yes", "Yes", "Yes", "Yes"
+  ),
+  Rho = c(
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01,
+    0.00, 0.01, 0.00, 0.01
+  ),
+  Psi = c(
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8,
+    0.5, 0.5, 0.6, 0.6,
+    0.7, 0.7, 0.8, 0.8
+  ),
+  Estimate = c(
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block_mean,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block_mean,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R001_block_mean
+  ),
+  SE = c(
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block_se,
+    beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block_se,
+    beta_mse_TrtSpill_3x4_A02_B1_P08_R001_block_se
+  )
+)
+print(df_block_3x4)
+
+# Ensure TrtSpill is a factor with desired order
+df_block_3x4$TrtSpill <- factor(df_block_3x4$TrtSpill, levels = c("No", "Yes"))
+
+# compute CI lower/upper bounds
+df_block_3x4$LowerCI <- df_block_3x4$Estimate - 1.96 * df_block_3x4$SE
+df_block_3x4$UpperCI <- df_block_3x4$Estimate + 1.96 * df_block_3x4$SE
+
+# Create a combined grouping variable
+df_block_3x4 <- df_block_3x4 %>%
+  mutate(Condition = paste0("TrtSpill: ", TrtSpill, "\nRho: ", Rho))
+
+# Optional: sort the Condition factor levels explicitly
+df_block_3x4$Condition <- factor(df_block_3x4$Condition,
+                       levels = c("TrtSpill: No\nRho: 0", 
+                                  "TrtSpill: No\nRho: 0.01", 
+                                  "TrtSpill: Yes\nRho: 0", 
+                                  "TrtSpill: Yes\nRho: 0.01"))
+
+# Plot of MSE estimates
+ggplot(df_block_3x4, aes(x = Condition, y = Estimate)) +
+  geom_point(aes(color = factor(Psi)), size = 3) +
+  geom_errorbar(
+    aes(ymin = LowerCI, ymax = UpperCI, color = as.factor(Psi)),
+    width = 0.1,
+    alpha = 0.6  # makes error bars slightly transparent
+  ) +
+  labs(
+    title = "Beta MSE Estimates (3x4 block): stratified by TrtSpill, Psi, and Rho",
+    x = "Condition",
+    y = "MSE",
+    color = "Psi"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
