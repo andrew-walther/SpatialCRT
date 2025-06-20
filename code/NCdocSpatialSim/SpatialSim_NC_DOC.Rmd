@@ -408,18 +408,18 @@ for (combo_index in 1:length(combinations)) {
     }
     
     # Assign spillover if a point has a neighboring treated district (points in trt can't get spillover)
-    # # only allow spillover on control districts
+    # only allow spillover on control districts (case 1)
+    for (i in 1:8) {
+      points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 &
+                                   points[[paste0("trt.", i)]] == 1 &
+                                   points$treatment == "control", 1, points$spillover)
+    }
+    
+    # allow spillover on intervention & control districts (case 2)
     # for (i in 1:8) {
     #   points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
-    #                                points[[paste0("trt.", i)]] == 1 & 
-    #                                points$treatment == "control", 1, points$spillover)
+    #                                points[[paste0("trt.", i)]] == 1, 1, points$spillover)
     # }
-    
-    # allow spillover on intervention & control districts
-    for (i in 1:8) {
-      points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
-                                   points[[paste0("trt.", i)]] == 1, 1, points$spillover)
-    }
     
     # Remove unnecessary columns after assigning spillover
     points <- points %>% select(-starts_with("nb."), -starts_with("trt."))
@@ -469,15 +469,17 @@ for (combo_index in 1:length(combinations)) {
     ####################################################################################################
     # ### Extract Model Parameters (alpha/beta/psi/rho) ###
     # parameter estimates
-    alpha_estimates[dataset_num, combo_index] <- coef(model)[1] # intercept (alpha) -> row=interation/col=combo
-    beta_estimates[dataset_num, combo_index] <- coef(model)[2] # intervention effect (beta) -> row=interation/col=combo
-    #psi_estimates[dataset_num, combo_index] <- coef(model)[3] # spillover effect (psi) -> row=interation/col=combo
-    rho_estimates[dataset_num, combo_index] <- model$rho # spatial correlation (rho) -> row=interation/col=combo
+    alpha_estimates[dataset_num, combo_index] <- coef(model)[2] # intercept (alpha) -> row=interation/col=combo
+    beta_estimates[dataset_num, combo_index] <- coef(model)[3] # intervention effect (beta) -> row=interation/col=combo
+    psi_estimates[dataset_num, combo_index] <- coef(model)[4] # spillover effect (psi) -> row=interation/col=combo
+    rho_estimates[dataset_num, combo_index] <- coef(model)[1] # spatial correlation (rho) -> row=interation/col=combo
 
     # estimate standard errors
     alpha_estimates_SE[dataset_num, combo_index] <- summary(model)$Coef[1,2] # intercept (alpha)
     beta_estimates_SE[dataset_num, combo_index] <- summary(model)$Coef[2,2] # intervention effect (beta)
-    #psi_estimates_SE[dataset_num, combo_index] <- summary(model)$Coef[3,2] # spillover effect (psi)
+    psi_estimates_SE[dataset_num, combo_index] <- tryCatch(summary(model)$Coef[3, 2],
+                                                           error = function(e) NA
+                                                           ) # spillover effect (psi)
     rho_estimates_SE[dataset_num, combo_index] <- summary(model)$rho.se # spatial correlation (rho)
     ####################################################################################################
     # Save the dataset in the appropriate row (dataset_num) and column (combo_index)
@@ -548,6 +550,14 @@ compute_metrics <- function(beta_estimates, true_value) {
 # results for alpha & beta
 beta.mse <- compute_metrics(beta_estimates, true_value = beta)
 alpha.mse <- compute_metrics(alpha_estimates, true_value = alpha)
+psi.mse <- compute_metrics(psi_estimates, true_value = psi)
+rho.mse <- compute_metrics(rho_estimates, true_value = rho)
+
+# save results to CSV (AX_BX_PX_RX where X is the value)
+write.csv(beta.mse, "beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv", row.names = TRUE)
+write.csv(alpha.mse, "alpha_mse/alpha_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv", row.names = TRUE)
+write.csv(psi.mse, "psi_mse/psi_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv", row.names = TRUE)
+write.csv(rho.mse, "rho_mse/rho_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv", row.names = TRUE)
 
 #write.csv(beta.mse, "beta_mse_results_noTrtSpill.csv", row.names = TRUE)
 #write.csv(beta.mse, "beta_mse_results_TrtSpill.csv", row.names = TRUE)
