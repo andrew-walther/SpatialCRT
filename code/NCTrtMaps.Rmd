@@ -1,0 +1,406 @@
+---
+title: "NC Treatment Assignment Maps"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Goals
+1) Generate representative maps of the state of North Carolina with R programming (gis-like functions)
+2) Identify NC counties and group them into districts (and divisions) according to this map (https://www.ncdps.gov/community-corrections-district-map/open)
+3) After grouping counties according to their districts (numbered) and divisions (colored), further notate by color/shading/pattern a block stratified sampling approach to assigning a hypothetical intervention (treatment & control) to each district (grouping of counties)
+
+
+```{r, warning=FALSE, message=FALSE}
+# Load necessary libraries
+library(sf)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tigris)
+library(janitor)
+```
+
+```{r}
+# --- Step 1: Load and Clean County/Judicial Data (FINAL ROBUST FIX) ---
+# Load the attached CSV file
+judicial_assignments <- read.csv("~/Library/CloudStorage/OneDrive-UniversityofNorthCarolinaatChapelHill/UNC Dissertation (Lin)/Project 1 - Spillover Effects/NC DOC Training/NC_County_Assignments.csv") %>%
+  clean_names() %>%
+  rename(county_name = county) %>%
+  mutate(
+    # FIX: Use trimws() to remove any invisible leading/trailing spaces
+    division = trimws(division),
+    district = trimws(district),
+
+    # Standardize county names for joining
+    county_name = tolower(county_name),
+    
+    # Standardize division names to the EXACT strings "First", "Second", "Third", "Fourth"
+    # This is the most reliable way to prevent mismatch.
+    division = case_when(
+      grepl("first", tolower(division)) ~ "First",
+      grepl("second", tolower(division)) ~ "Second",
+      grepl("third", tolower(division)) ~ "Third",
+      grepl("fourth", tolower(division)) ~ "Fourth",
+      TRUE ~ division 
+    ),
+
+    # Ensure District is character and Division is factor
+    district = as.character(district),
+    division = as.factor(division)
+  )
+
+# Print the actual factor levels for Division
+print(levels(judicial_assignments$division)) 
+```
+
+```{r}
+# --- Step 2 & 3: Get Spatial Data and Merge Data ---
+nc_counties_sf <- counties(state = "NC", class = "sf") %>%
+  mutate(county_name = tolower(NAME)) %>%
+  select(COUNTYFP, county_name, geometry)
+
+# Join the judicial data to the spatial data
+nc_map_data <- nc_counties_sf %>%
+  left_join(judicial_assignments, by = "county_name") %>%
+  filter(!is.na(district) & !is.na(division))
+```
+
+```{r}
+# --- Step 4: Dissolve Boundaries for Divisions and Districts ---
+# A) Dissolve to create the larger DIVISION boundaries
+nc_divisions <- nc_map_data %>%
+  group_by(division) %>%
+  summarise(geometry = st_union(geometry), .groups = "drop")
+
+# B) Dissolve to create the DISTRICT boundaries
+nc_districts <- nc_map_data %>%
+  group_by(division, district) %>%
+  summarise(geometry = st_union(geometry), .groups = "drop") %>%
+  # Calculate the centroid for labeling the districts
+  mutate(
+    center = st_centroid(geometry),
+    lon = st_coordinates(center)[, "X"],
+    lat = st_coordinates(center)[, "Y"]
+  )
+```
+
+```{r}
+# --- Step 5: Generate the Division/District Map (Color scale uses forced names) ---
+# Define the colors. Names are guaranteed to be "First", "Second", "Third", "Fourth"
+division_colors <- c(
+  "1" = "#ffeb3b",  # Yellowish (First Judicial Division - East)
+  "2" = "#e53935", # Reddish (Second Judicial Division - Southeast)
+  "3" = "#43a047",  # Greenish (Third Judicial Division - Central)
+  "4" = "#1e88e5"  # Bluish (Fourth Judicial Division - West)
+)
+
+final_division_map <- ggplot() +
+  # 1. Draw the Divisions (Colored Areas) - the 'fill' aesthetic
+  geom_sf(data = nc_divisions, aes(fill = division), color = NA) +
+  
+  # 2. Draw the District Boundaries (Overlaid black lines)
+  geom_sf(data = nc_districts, fill = NA, color = "black", linewidth = 0.8) +
+  
+  # 3. Label the District Number at its centroid
+  geom_text(
+    data = st_drop_geometry(nc_districts), 
+    aes(x = lon, y = lat, label = district),
+    color = "black",
+    size = 3.5,
+    fontface = "bold",
+    check_overlap = TRUE
+  ) +
+  
+  # 4. Apply the custom colors
+  # This scale_fill_manual should now work perfectly with the cleaned data
+  scale_fill_manual(
+    values = division_colors,
+    name = "Judicial Division"
+  ) +
+  
+  # 5. Add titles and clean up theme
+  labs(
+    title = "North Carolina Judicial Divisions and Districts",
+    subtitle = "Divisions are colored; Districts are delineated by solid black borders and numbered."
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+
+# Print the map
+print(final_division_map)
+```
+
+```{r}
+# --- Block Stratified Sampling Assignment ---
+# Define a function to apply sampling group-wise (ensures a strict 50/50 split within groups)
+assign_intervention <- function(df) {
+  n_total <- nrow(df)
+  # Calculate exact 50/50 split (ceiling and floor handle odd numbers)
+  n_treatment <- ceiling(n_total / 2)
+  n_control <- floor(n_total / 2)
+  
+  df$intervention <- sample(c(
+    rep("Treatment", n_treatment), 
+    rep("Control", n_control)
+  ), size = n_total, replace = FALSE)
+  
+  return(df)
+}
+
+set.seed(42) # Set seed for reproducibility
+nc_districts_sampled <- nc_districts %>%
+  dplyr::group_by(division) %>% # 1. Group by the STRATA (Division: 1, 2, 3, 4)
+  dplyr::do(assign_intervention(.)) %>% # 2. Apply the random assignment (50/50) to the BLOCKS (Districts)
+  dplyr::ungroup()
+
+# Select final columns and drop geometry for tabular output
+nc_assignments <- sf::st_drop_geometry(nc_districts_sampled) %>%
+  dplyr::select(division, district, intervention)
+
+# --- Generate the Detailed District Assignment List ---
+
+# Create the descriptive Division Name column for readability in the output
+division_names_lookup <- data.frame(
+  division = factor(c("1", "2", "3", "4")),
+  Division_Name = c("First (East)", "Second (Southeast)", "Third (Central)", "Fourth (West)")
+)
+
+district_assignments_list <- nc_assignments %>%
+  dplyr::left_join(division_names_lookup, by = "division") %>%
+  dplyr::select(Division_Name, District = district, Assignment = intervention) %>%
+  dplyr::distinct() %>%
+  dplyr::arrange(Division_Name, District)
+
+# Print and save the result
+print(district_assignments_list)
+```
+
+```{r, warning=FALSE}
+### Generate just one random map of intervention assignments ###
+# --- Block Stratified Sampling Assignment (Fix for SF Class Loss) ---
+
+# Define a function to apply sampling group-wise (ensures a strict 50/50 split within groups)
+assign_intervention <- function(df) {
+  n_total <- nrow(df)
+  n_treatment <- ceiling(n_total / 2)
+  n_control <- floor(n_total / 2)
+  
+  df$intervention <- sample(c(
+    rep("Treatment", n_treatment), 
+    rep("Control", n_control)
+  ), size = n_total, replace = FALSE)
+  
+  return(df)
+}
+
+set.seed(42) # Set seed for reproducibility
+
+# 1. Perform randomization using dplyr::do()
+nc_districts_sampled <- nc_districts %>%
+  dplyr::group_by(division) %>% 
+  dplyr::do(assign_intervention(.)) %>% 
+  dplyr::ungroup()
+
+# 2. Explicitly check/restore the 'sf' class after the randomization
+# This prevents the 'geometry missing' error in the map layers.
+if (!inherits(nc_districts_sampled, "sf")) {
+  nc_districts_sampled <- sf::st_set_geometry(nc_districts_sampled, nc_districts_sampled$geometry)
+}
+
+# --- Prepare Map Data (Safely Calculate Centroids) ---
+nc_map_final <- nc_districts_sampled %>%
+  # Calculate centroids, which is needed to get coordinates
+  mutate(center_geom = sf::st_centroid(geometry)) %>%
+  # Extract coordinates (lon/lat) from the new centroid geometry
+  mutate(
+    lon = sf::st_coordinates(center_geom)[, "X"],
+    lat = sf::st_coordinates(center_geom)[, "Y"]
+  ) %>%
+  # Drop the temporary centroid geometry, keeping the main 'geometry' column for mapping
+  dplyr::select(-center_geom) 
+
+
+# --- Define Color Scales (Updated for Division Border Colors) ---
+# Colors for the Intervention (District FILL - KEPT RED/GREEN)
+intervention_colors <- c("Treatment" = "springgreen4", "Control" = "red4") 
+
+# Colors for the Division (Thick Border COLOR - NEW NON-CONFLICTING PALETTE)
+division_border_colors_safe <- c(
+  "1" = "dodgerblue", # Dark Blue (First Division - East)
+  "2" = "gold", # Gold/Amber (Second Division - Southeast)
+  "3" = "violet", # Deep Purple (Third Division - Central)
+  "4" = "hotpink"  # Cyan/Turquoise (Fourth Division - West)
+) 
+
+# --- Generate the Final Map (Modified) ---
+final_sampling_map_safe_colors <- ggplot() +
+  
+  # 1. Draw the Districts (FILL) and color them by their INTERVENTION STATUS
+  geom_sf(data = nc_map_final, 
+          aes(fill = intervention), 
+          color = "gray60", # Thin light border for individual districts
+          linewidth = 0.2) +
+  
+  # 2. Draw the DIVISIONS (Strata) as thick, COLORED borders
+  geom_sf(data = nc_divisions, 
+          aes(color = division), 
+          fill = NA, 
+          linewidth = 1.5) + # Thick border
+  
+  # 3. Label the District Number at its centroid
+  geom_text(
+    data = sf::st_drop_geometry(nc_map_final),
+    aes(x = lon, y = lat, label = district),
+    color = "white",
+    size = 3.5,
+    fontface = "bold"
+  ) +
+  
+  # 4. Apply the custom colors for the intervention (FILL)
+  scale_fill_manual(
+    values = intervention_colors,
+    name = "Intervention Status (Assignment)"
+  ) +
+  
+  # 5. Apply the new custom colors for the division borders (COLOR)
+  scale_color_manual(
+    values = division_border_colors_safe,
+    name = "Judicial Division (Stratum)"
+  ) +
+  
+  # 6. Add titles and clean up theme
+  labs(
+    title = "NC DOC District Intervention Sampling Design",
+    subtitle = ""
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    legend.box = "vertical",
+    legend.position = "bottom"
+  )
+
+print(final_sampling_map_safe_colors)
+```
+
+```{r, warning=FALSE}
+### Generate Maps: (1) BSS & (2) SRS ###
+# --- 1. Deterministic Assignment (Hard-Coded Assignment) ---
+# Goal: Districts 1-16 = Treatment, All Others (including 19A, 19B) = Control
+
+# Define the districts that will be in the TREATMENT group
+treatment_districts_list <- c(
+  "1", "3", "4", "7", "10", "12", "13", "15", 
+  "19A", "19B", "21", "23", "24", "27", "30"
+)
+
+nc_map_final_deterministic <- nc_districts %>%
+  dplyr::mutate(
+    # Assign TREATMENT if the district is in the specified list, otherwise CONTROL
+    intervention = dplyr::case_when(
+      district %in% treatment_districts_list ~ "Treatment",
+      TRUE ~ "Control"
+    )
+  )
+
+# --- 2. Block Stratified Sampling Assignment (Random Assignment) ---
+# Goal: Random 50/50 split within each Judicial Division (stratum)
+set.seed(42) # Set seed for reproducibility
+
+assign_intervention <- function(df) {
+  n_total <- nrow(df)
+  n_treatment <- ceiling(n_total / 2)
+  n_control <- floor(n_total / 2)
+  
+  df$intervention <- sample(c(
+    rep("Treatment", n_treatment), 
+    rep("Control", n_control)
+  ), size = n_total, replace = FALSE)
+  
+  return(df)
+}
+
+nc_districts_sampled <- nc_districts %>%
+  dplyr::group_by(division) %>% 
+  dplyr::do(assign_intervention(.)) %>% 
+  dplyr::ungroup()
+
+# Explicitly restore the 'sf' class after the randomization
+if (!inherits(nc_districts_sampled, "sf")) {
+  nc_districts_sampled <- sf::st_set_geometry(nc_districts_sampled, nc_districts_sampled$geometry)
+}
+
+# --- 3. Prepare Mapping Data (Centroids) for BOTH Maps ---
+prepare_map_data <- function(map_sf) {
+  map_sf %>%
+    mutate(center_geom = sf::st_centroid(geometry)) %>%
+    mutate(
+      lon = sf::st_coordinates(center_geom)[, "X"],
+      lat = sf::st_coordinates(center_geom)[, "Y"]
+    ) %>%
+    dplyr::select(-center_geom)
+}
+
+nc_map_final_deterministic_labeled <- prepare_map_data(nc_map_final_deterministic)
+nc_map_final_random_labeled <- prepare_map_data(nc_districts_sampled)
+
+# --- 4. Define Color Scales ---
+intervention_colors <- c("Treatment" = "red3", "Control" = "dodgerblue3") 
+division_border_colors_safe <- c(
+  "1" = "springgreen4", "2" = "tan1", "3" = "purple1", "4" = "turquoise3" 
+) 
+
+# =================================================================
+# MAP 1: DETERMINISTIC ASSIGNMENT (1-16 Treatment, Others Control)
+# =================================================================
+map_deterministic <- ggplot() +
+  geom_sf(data = nc_map_final_deterministic_labeled, 
+          aes(fill = intervention), color = "gray60", linewidth = 0.2) +
+  geom_sf(data = nc_divisions, aes(color = division), fill = NA, linewidth = 1.5) + 
+  geom_text(
+    data = sf::st_drop_geometry(nc_map_final_deterministic_labeled),
+    aes(x = lon, y = lat, label = district), color = "white", size = 3.5, fontface = "bold"
+  ) +
+  scale_fill_manual(values = intervention_colors, name = "Intervention Assignment") +
+  scale_color_manual(values = division_border_colors_safe, name = "Judicial Division") +
+  labs(
+    #title = "Map 1: Deterministic Assignment (1-16 Treatment)",
+    #subtitle = "Non-Random Policy Assignment"
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.box = "vertical", legend.position = "bottom"
+  )
+print(map_deterministic)
+
+# =================================================================
+# MAP 2: BLOCK STRATIFIED RANDOM ASSIGNMENT
+# =================================================================
+map_random <- ggplot() +
+  geom_sf(data = nc_map_final_random_labeled, 
+          aes(fill = intervention), color = "gray60", linewidth = 0.2) +
+  geom_sf(data = nc_divisions, aes(color = division), fill = NA, linewidth = 1.5) + 
+  geom_text(
+    data = sf::st_drop_geometry(nc_map_final_random_labeled),
+    aes(x = lon, y = lat, label = district), color = "white", size = 3.5, fontface = "bold"
+  ) +
+  scale_fill_manual(values = intervention_colors, name = "Intervention Assignment") +
+  scale_color_manual(values = division_border_colors_safe, name = "Judicial Division") +
+  labs(
+    #title = "Map 2: Block Stratified Random Assignment",
+    #subtitle = "Random 50/50 Split within Each Division (Stratum)"
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.box = "vertical", legend.position = "bottom"
+  )
+print(map_random)
+```
