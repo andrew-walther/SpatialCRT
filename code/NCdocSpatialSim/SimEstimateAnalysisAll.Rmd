@@ -18,6 +18,8 @@ output: html_document
 library(tidyverse)
 library(ggplot2)
 library(plotrix)
+library(patchwork)
+library(gridExtra)
 ```
 
 ### Function to process dfs
@@ -56,7 +58,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
@@ -66,7 +68,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
@@ -76,7 +78,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
@@ -86,7 +88,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
@@ -96,7 +98,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
@@ -106,7 +108,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
@@ -116,7 +118,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
@@ -126,7 +128,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_random <- beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block$Sampling <- "Block"
 
@@ -137,7 +139,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P05_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P05_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P05_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P05_R00_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
@@ -147,7 +149,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P05_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P05_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P05_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block <- beta_mse_TrtSpill_2x4_A02_B1_P05_R001_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
@@ -157,7 +159,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P06_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P06_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P06_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P06_R00_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
@@ -167,7 +169,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P06_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P06_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P06_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block <- beta_mse_TrtSpill_2x4_A02_B1_P06_R001_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
@@ -177,7 +179,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P07_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P07_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P07_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P07_R00_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
@@ -187,7 +189,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P07_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P07_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P07_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block <- beta_mse_TrtSpill_2x4_A02_B1_P07_R001_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
@@ -197,7 +199,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P08_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P08_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00_random <- beta_mse_TrtSpill_2x4_A02_B1_P08_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P08_R00_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
@@ -207,9 +209,59 @@ beta_mse_TrtSpill_2x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001$Sampling <- "Random"
-beta_mse_TrtSpill_2x4_A02_B1_P08_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P08_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001_random <- beta_mse_TrtSpill_2x4_A02_B1_P08_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block <- beta_mse_TrtSpill_2x4_A02_B1_P08_R001_random[c(28,43),]
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block$Sampling <- "Block"
+```
+
+```{r}
+# --- Simplify Block Above ---
+# # Load necessary libraries
+# library(dplyr)
+# library(purrr)
+# library(stringr)
+# 
+# # Define a function to read and process one simulation file
+# process_sim_file <- function(file_path) {
+#   # Get just the filename to extract parameters from it
+#   filename <- basename(file_path)
+# 
+#   # Extract parameters directly from the filename string
+#   trt_spill <- if_else(str_detect(filename, "TrtNoSpill"), "No", "Yes")
+#   psi <- as.numeric(str_sub(str_extract(filename, "P\\d{2}"), 2)) / 10
+#   rho_str <- str_extract(filename, "R\\d{3}|R\\d{2}")
+#   rho <- if_else(rho_str == "R00", 0.00, 0.01)
+# 
+#   # Read the CSV file and process the "Random" sampling data
+#   data_random <- read.csv(file_path) %>%
+#     select(-X, -bias.abs) %>%
+#     mutate(Sampling = "Random")
+# 
+#   # Create the "Block" sampling data by subsetting specific rows
+#   data_block <- data_random[c(28, 43), ] %>%
+#     mutate(Sampling = "Block")
+# 
+#   # Combine "Random" and "Block" data, then add the parameter columns
+#   bind_rows(data_random, data_block) %>%
+#     mutate(
+#       Psi = psi,
+#       Rho = rho,
+#       TrtSpill = trt_spill
+#     )
+# }
+# 
+# # 1. Define the base path to your data folder
+# base_path <- "~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/"
+# 
+# # 2. Automatically find all relevant .csv files in the folder
+# all_file_paths <- list.files(
+#   path = base_path,
+#   pattern = "beta_mse_results_.*_2x4_.*\\.csv$",
+#   full.names = TRUE
+# )
+# 
+# # 3. Apply the function to every file and stack them into one data frame
+# all_data <- map_dfr(all_file_paths, process_sim_file)
 ```
 
 ```{r}
@@ -302,6 +354,71 @@ ggplot(df_plot, aes(x = Group, y = MSE, fill = Psi)) +
 ```
 
 ```{r}
+plot1 <- ggplot(beta_mse_TrtNoSpill_join, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Beta MSE Estimates (2x4) by Psi, Rho, Sampling Group",
+    x = "Condition (TrtNoSpill)",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  facet_wrap(~ Rho, labeller = label_bquote(Rho == .(Rho)), scales = "free_y") + # remove scales = "free_y" to fix y-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(plot1)
+
+plot2 <- ggplot(beta_mse_TrtSpill_join, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Beta MSE Estimates (2x4) by Psi, Rho, Sampling Group",
+    x = "Condition (TrtSpill)",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  facet_wrap(~ Rho, labeller = label_bquote(Rho == .(Rho)), scales = "free_y") + # remove scales = "free_y" to fix y-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(plot2)
+
+# stack plots
+plot1 / plot2
+```
+
+```{r}
+# --- Create 2x2 plot for 2x4 grid ---
+# Combine the two data frames
+combined_df <- bind_rows(beta_mse_TrtNoSpill_join, beta_mse_TrtSpill_join)
+
+# Create a new data frame with the modified labels
+combined_df_relabeled <- combined_df %>%
+  mutate(TrtSpill = recode(TrtSpill,
+                           "Yes" = "Intervention & Control",
+                           "No" = "Control Only"))
+
+# Generate the faceted plot from the combined data
+ggplot(combined_df_relabeled, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    # title = "Beta MSE Estimates by Scenario",
+    # subtitle = expression(paste("Faceted by Treatment Spillover Type and ", Rho)),
+    x = "Sampling Group",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  # Use facet_grid to create a grid: rows ~ columns
+  facet_grid(TrtSpill ~ Rho, scales = "free_y", labeller = label_bquote(rows = .(TrtSpill), cols = rho == .(Rho))) +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10),
+    strip.text.y = element_text(size = 8, angle = 90),
+    axis.title.y = element_text(size = 10), # Adjusts the y-axis title size
+    axis.title.x = element_text(size = 10), # Adjusts the x-axis title size
+    # Add a border around each facet panel
+    #panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5)
+  )
+```
+
+```{r}
 ### Point + 95% CI for 2x4 TrtNoSpill ###
 # Step 1: Summarize the data
 df_summary <- beta_mse_TrtNoSpill_join %>%
@@ -313,7 +430,9 @@ df_summary <- beta_mse_TrtNoSpill_join %>%
   group_by(Group, Psi) %>%
   summarise(
     mean_MSE = mean(MSE),
+    sd_MSE = sd(MSE),
     se = sd(MSE) / sqrt(n()),
+    mean_bias = mean(bias),
     .groups = "drop"
   ) %>%
   mutate(
@@ -348,7 +467,9 @@ df_summary <- beta_mse_TrtSpill_join %>%
   group_by(Group, Psi) %>%
   summarise(
     mean_MSE = mean(MSE),
+    sd_MSE = sd(MSE),
     se = sd(MSE) / sqrt(n()),
+    mean_bias = mean(bias),
     .groups = "drop"
   ) %>%
   mutate(
@@ -384,7 +505,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block$Sampling <- "Block"
 
@@ -394,7 +515,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block$Sampling <- "Block"
 
@@ -404,7 +525,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block$Sampling <- "Block"
 
@@ -414,7 +535,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block$Sampling <- "Block"
 
@@ -424,7 +545,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block$Sampling <- "Block"
 
@@ -434,7 +555,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block$Sampling <- "Block"
 
@@ -444,7 +565,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block$Sampling <- "Block"
 
@@ -454,7 +575,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_random <- beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block$Sampling <- "Block"
 
@@ -465,7 +586,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P05_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P05_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P05_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P05_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block$Sampling <- "Block"
 
@@ -475,7 +596,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P05_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P05_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P05_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block <- beta_mse_TrtSpill_3x3_A02_B1_P05_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block$Sampling <- "Block"
 
@@ -485,7 +606,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P06_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P06_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P06_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P06_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block$Sampling <- "Block"
 
@@ -495,7 +616,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P06_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P06_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P06_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block <- beta_mse_TrtSpill_3x3_A02_B1_P06_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block$Sampling <- "Block"
 
@@ -505,7 +626,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P07_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P07_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P07_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P07_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block$Sampling <- "Block"
 
@@ -515,7 +636,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P07_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P07_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P07_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block <- beta_mse_TrtSpill_3x3_A02_B1_P07_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block$Sampling <- "Block"
 
@@ -525,7 +646,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P08_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P08_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00_random <- beta_mse_TrtSpill_3x3_A02_B1_P08_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P08_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block$Sampling <- "Block"
 
@@ -535,7 +656,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x3_A02_B1_P08_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P08_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001_random <- beta_mse_TrtSpill_3x3_A02_B1_P08_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001_block <- beta_mse_TrtSpill_3x3_A02_B1_P08_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001_block$Sampling <- "Block"
 ```
@@ -630,6 +751,70 @@ ggplot(df_plot, aes(x = Group, y = MSE, fill = Psi)) +
 ```
 
 ```{r}
+plot1 <- ggplot(beta_mse_TrtNoSpill_join, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Beta MSE Estimates (3x3) by Psi, Rho, Sampling Group",
+    x = "Condition (TrtNoSpill)",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  facet_wrap(~ Rho, labeller = label_bquote(Rho == .(Rho)), scales = "free_y") + # remove scales = "free_y" to fix y-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(plot1)
+
+plot2 <- ggplot(beta_mse_TrtSpill_join, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Beta MSE Estimates (3x3) by Psi, Rho, Sampling Group",
+    x = "Condition (TrtSpill)",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  facet_wrap(~ Rho, labeller = label_bquote(Rho == .(Rho)), scales = "free_y") + # remove scales = "free_y" to fix y-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(plot2)
+
+# stack plots
+plot1 / plot2
+```
+```{r}
+# --- Create 2x2 plot for 3x3 grid ---
+# Combine the two data frames
+combined_df <- bind_rows(beta_mse_TrtNoSpill_join, beta_mse_TrtSpill_join)
+
+# Create a new data frame with the modified labels
+combined_df_relabeled <- combined_df %>%
+  mutate(TrtSpill = recode(TrtSpill,
+                           "Yes" = "Intervention & Control",
+                           "No" = "Control Only"))
+
+# Generate the faceted plot from the combined data
+ggplot(combined_df_relabeled, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    # title = "Beta MSE Estimates by Scenario",
+    # subtitle = expression(paste("Faceted by Treatment Spillover Type and ", Rho)),
+    x = "Sampling Group",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  # Use facet_grid to create a grid: rows ~ columns
+  facet_grid(TrtSpill ~ Rho, scales = "free_y", labeller = label_bquote(rows = .(TrtSpill), cols = rho == .(Rho))) +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10),
+    strip.text.y = element_text(size = 8, angle = 90),
+    axis.title.y = element_text(size = 10), # Adjusts the y-axis title size
+    axis.title.x = element_text(size = 10), # Adjusts the x-axis title size
+    # Add a border around each facet panel
+    #panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5)
+  )
+```
+
+```{r}
 ### Point + 95% CI for 3x3 TrtNoSpill ###
 # Step 1: Summarize the data
 df_summary <- beta_mse_TrtNoSpill_join %>%
@@ -641,7 +826,9 @@ df_summary <- beta_mse_TrtNoSpill_join %>%
   group_by(Group, Psi) %>%
   summarise(
     mean_MSE = mean(MSE),
+    sd_MSE = sd(MSE),
     se = sd(MSE) / sqrt(n()),
+    mean_bias = mean(bias),
     .groups = "drop"
   ) %>%
   mutate(
@@ -676,7 +863,9 @@ df_summary <- beta_mse_TrtSpill_join %>%
   group_by(Group, Psi) %>%
   summarise(
     mean_MSE = mean(MSE),
+    sd_MSE = sd(MSE),
     se = sd(MSE) / sqrt(n()),
+    mean_bias = mean(bias),
     .groups = "drop"
   ) %>%
   mutate(
@@ -712,7 +901,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
@@ -722,7 +911,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
@@ -732,7 +921,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
@@ -742,7 +931,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
@@ -752,7 +941,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
@@ -762,7 +951,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
@@ -772,7 +961,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
@@ -782,7 +971,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$TrtSpill <- "No"
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$Sampling <- "Random"
-beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_random <- beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_random[c(28,43),]
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block$Sampling <- "Block"
 
@@ -793,7 +982,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P05_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P05_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P05_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P05_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
@@ -803,7 +992,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P05_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P05_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P05_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block <- beta_mse_TrtSpill_3x4_A02_B1_P05_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
@@ -813,7 +1002,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P06_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P06_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P06_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P06_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
@@ -823,7 +1012,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P06_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P06_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P06_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block <- beta_mse_TrtSpill_3x4_A02_B1_P06_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
@@ -833,7 +1022,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P07_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P07_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P07_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P07_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
@@ -843,7 +1032,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P07_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P07_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P07_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block <- beta_mse_TrtSpill_3x4_A02_B1_P07_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
@@ -853,7 +1042,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P08_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P08_R00 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00_random <- beta_mse_TrtSpill_3x4_A02_B1_P08_R00 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P08_R00_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
@@ -863,7 +1052,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001$TrtSpill <- "Yes"
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001$Sampling <- "Random"
-beta_mse_TrtSpill_3x4_A02_B1_P08_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P08_R001 %>% select(-c(X, bias, bias.abs))
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001_random <- beta_mse_TrtSpill_3x4_A02_B1_P08_R001 %>% select(-c(X, bias.abs))
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001_block <- beta_mse_TrtSpill_3x4_A02_B1_P08_R001_random[c(28,43),]
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001_block$Sampling <- "Block"
 ```
@@ -958,6 +1147,73 @@ ggplot(df_plot, aes(x = Group, y = MSE, fill = Psi)) +
 ```
 
 ```{r}
+# Boxplots: TrtNoSpill
+plot1 <- ggplot(beta_mse_TrtNoSpill_join, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Beta MSE Estimates (3x4) by Psi, Rho, Sampling Group",
+    x = "Condition (TrtNoSpill)",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  facet_wrap(~ Rho, labeller = label_bquote(Rho == .(Rho)), scales = "free_y") + # remove scales = "free_y" to fix y-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(plot1)
+
+# Boxplots: TrtSpill
+plot2 <- ggplot(beta_mse_TrtSpill_join, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Beta MSE Estimates (3x4) by Psi, Rho, Sampling Group",
+    x = "Condition (TrtSpill)",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  facet_wrap(~ Rho, labeller = label_bquote(Rho == .(Rho)), scales = "free_y") + # remove scales = "free_y" to fix y-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(plot2)
+# --- Join Plots together ---
+plot1 / plot2
+```
+
+```{r}
+# --- Create 2x2 plot for 3x4 grid ---
+# Combine the two data frames
+combined_df <- bind_rows(beta_mse_TrtNoSpill_join, beta_mse_TrtSpill_join)
+
+# Create a new data frame with the modified labels
+combined_df_relabeled <- combined_df %>%
+  mutate(TrtSpill = recode(TrtSpill,
+                           "Yes" = "Intervention & Control",
+                           "No" = "Control Only"))
+
+# Generate the faceted plot from the combined data
+ggplot(combined_df_relabeled, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+  theme_minimal(base_size = 14) +
+  labs(
+    # title = "Beta MSE Estimates by Scenario",
+    # subtitle = expression(paste("Faceted by Treatment Spillover Type and ", Rho)),
+    x = "Sampling Group",
+    y = "Mean Squared Error (MSE)",
+    fill = expression(Psi)
+  ) +
+  # Use facet_grid to create a grid: rows ~ columns
+  facet_grid(TrtSpill ~ Rho, scales = "free_y", labeller = label_bquote(rows = .(TrtSpill), cols = rho == .(Rho))) +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5, size = 10),
+    strip.text.y = element_text(size = 8, angle = 90),
+    axis.title.y = element_text(size = 10), # Adjusts the y-axis title size
+    axis.title.x = element_text(size = 10), # Adjusts the x-axis title size
+    # Add a border around each facet panel
+    #panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5)
+  )
+```
+
+
+```{r}
 ### Point + 95% CI for 3x4 TrtNoSpill ###
 # Step 1: Summarize the data
 df_summary <- beta_mse_TrtNoSpill_join %>%
@@ -969,7 +1225,9 @@ df_summary <- beta_mse_TrtNoSpill_join %>%
   group_by(Group, Psi) %>%
   summarise(
     mean_MSE = mean(MSE),
+    sd_MSE = sd(MSE),
     se = sd(MSE) / sqrt(n()),
+    mean_bias = mean(bias),
     .groups = "drop"
   ) %>%
   mutate(
@@ -1004,7 +1262,9 @@ df_summary <- beta_mse_TrtSpill_join %>%
   group_by(Group, Psi) %>%
   summarise(
     mean_MSE = mean(MSE),
+    sd_MSE = sd(MSE),
     se = sd(MSE) / sqrt(n()),
+    mean_bias = mean(bias),
     .groups = "drop"
   ) %>%
   mutate(
