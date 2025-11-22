@@ -181,7 +181,7 @@ print(district_assignments_list)
 ```
 
 ```{r, warning=FALSE}
-### Generate just one random map of intervention assignments ###
+### Generate just one random map of intervention assignments ### (intermediate step!)
 # --- Block Stratified Sampling Assignment (Fix for SF Class Loss) ---
 
 # Define a function to apply sampling group-wise (ensures a strict 50/50 split within groups)
@@ -357,7 +357,7 @@ division_border_colors_safe <- c(
 ) 
 
 # =================================================================
-# MAP 1: DETERMINISTIC ASSIGNMENT (1-16 Treatment, Others Control)
+# MAP 1: Block Stratified Sampling Assignment
 # =================================================================
 map_deterministic <- ggplot() +
   geom_sf(data = nc_map_final_deterministic_labeled, 
@@ -365,13 +365,13 @@ map_deterministic <- ggplot() +
   geom_sf(data = nc_divisions, aes(color = division), fill = NA, linewidth = 1.5) + 
   geom_text(
     data = sf::st_drop_geometry(nc_map_final_deterministic_labeled),
-    aes(x = lon, y = lat, label = district), color = "white", size = 3.5, fontface = "bold"
+    aes(x = lon, y = lat, label = district), color = "white", size = 2.5, fontface = "bold"
   ) +
   scale_fill_manual(values = intervention_colors, name = "Intervention Assignment") +
   scale_color_manual(values = division_border_colors_safe, name = "Judicial Division") +
   labs(
-    #title = "Map 1: Deterministic Assignment (1-16 Treatment)",
-    #subtitle = "Non-Random Policy Assignment"
+    #title = "Map 1: Block Stratified Sampling Assignment",
+    #subtitle = "Blocking of Treatment & Control"
   ) +
   theme_void() +
   theme(
@@ -381,7 +381,7 @@ map_deterministic <- ggplot() +
 print(map_deterministic)
 
 # =================================================================
-# MAP 2: BLOCK STRATIFIED RANDOM ASSIGNMENT
+# MAP 2: Simple Random Sampling Assignment
 # =================================================================
 map_random <- ggplot() +
   geom_sf(data = nc_map_final_random_labeled, 
@@ -389,12 +389,12 @@ map_random <- ggplot() +
   geom_sf(data = nc_divisions, aes(color = division), fill = NA, linewidth = 1.5) + 
   geom_text(
     data = sf::st_drop_geometry(nc_map_final_random_labeled),
-    aes(x = lon, y = lat, label = district), color = "white", size = 3.5, fontface = "bold"
+    aes(x = lon, y = lat, label = district), color = "white", size = 2.5, fontface = "bold"
   ) +
   scale_fill_manual(values = intervention_colors, name = "Intervention Assignment") +
   scale_color_manual(values = division_border_colors_safe, name = "Judicial Division") +
   labs(
-    #title = "Map 2: Block Stratified Random Assignment",
+    #title = "Map 2: Simple Random Sampling Assignment",
     #subtitle = "Random 50/50 Split within Each Division (Stratum)"
   ) +
   theme_void() +
@@ -404,3 +404,180 @@ map_random <- ggplot() +
   )
 print(map_random)
 ```
+```{r}
+### Maps w/o highlighting by division (labels added) ###
+# --- 1. Deterministic Assignment (Hard-Coded Assignment) ---
+# Goal: Districts 1-16 = Treatment, All Others = Control (as defined by your list)
+
+# Define the districts that will be in the TREATMENT group
+treatment_districts_list <- c(
+  "1", "3", "4", "7", "10", "12", "13", "15", 
+  "19A", "19B", "21", "23", "24", "27", "30"
+)
+
+nc_map_final_deterministic <- nc_districts %>%
+  dplyr::mutate(
+    intervention = dplyr::case_when(
+      district %in% treatment_districts_list ~ "Treatment",
+      TRUE ~ "Control"
+    )
+  )
+
+# --- 2. Block Stratified Sampling Assignment (Random Assignment) ---
+# Goal: Random 50/50 split within each Judicial Division (stratum)
+set.seed(42) # Set seed for reproducibility
+
+assign_intervention <- function(df) {
+  n_total <- nrow(df)
+  n_treatment <- ceiling(n_total / 2)
+  n_control <- floor(n_total / 2)
+  
+  df$intervention <- sample(c(
+    rep("Treatment", n_treatment), 
+    rep("Control", n_control)
+  ), size = n_total, replace = FALSE)
+  
+  return(df)
+}
+
+nc_districts_sampled <- nc_districts %>%
+  dplyr::group_by(division) %>% 
+  dplyr::do(assign_intervention(.)) %>% 
+  dplyr::ungroup()
+
+# Explicitly restore the 'sf' class after the randomization (Crucial Fix)
+if (!inherits(nc_districts_sampled, "sf")) {
+  nc_districts_sampled <- sf::st_set_geometry(nc_districts_sampled, nc_districts_sampled$geometry)
+}
+
+# --- 3. Prepare Mapping Data (Centroids) for BOTH Maps ---
+prepare_map_data <- function(map_sf) {
+  map_sf %>%
+    mutate(center_geom = sf::st_centroid(geometry)) %>%
+    mutate(
+      lon = sf::st_coordinates(center_geom)[, "X"],
+      lat = sf::st_coordinates(center_geom)[, "Y"]
+    ) %>%
+    dplyr::select(-center_geom)
+}
+
+nc_map_final_deterministic_labeled <- prepare_map_data(nc_map_final_deterministic)
+nc_map_final_random_labeled <- prepare_map_data(nc_districts_sampled)
+
+# --- 4. Prepare Division Label Data (New Step) ---
+
+division_centers <- nc_divisions %>%
+  sf::st_centroid() %>%
+  dplyr::mutate(
+    Division_Name = paste("Division", division),
+    lon = sf::st_coordinates(.)[, "X"],
+    lat = sf::st_coordinates(.)[, "Y"]
+  ) %>%
+  sf::st_drop_geometry()
+
+# Manually adjust label positions for visual clarity
+# division 1
+division_centers[division_centers$division == "1", "lat"] <- division_centers[division_centers$division == "1", "lat"] + 0.25
+division_centers[division_centers$division == "1", "lon"] <- division_centers[division_centers$division == "1", "lon"] + 0.30
+# division 2
+division_centers[division_centers$division == "2", "lat"] <- division_centers[division_centers$division == "2", "lat"] + 0.80
+division_centers[division_centers$division == "2", "lon"] <- division_centers[division_centers$division == "2", "lon"] - 0.00
+# division 3
+division_centers[division_centers$division == "3", "lat"] <- division_centers[division_centers$division == "3", "lat"] + 0.18
+division_centers[division_centers$division == "3", "lon"] <- division_centers[division_centers$division == "3", "lon"] - 0.15
+# division 4
+division_centers[division_centers$division == "4", "lat"] <- division_centers[division_centers$division == "4", "lat"] + 0.15
+division_centers[division_centers$division == "4", "lon"] <- division_centers[division_centers$division == "4", "lon"] + 0.35
+
+
+# --- 5. Define Color Scales (Simplified) ---
+intervention_colors <- c("Treatment" = "red3", "Control" = "dodgerblue3") 
+
+# =================================================================
+# MAP 1: Block Stratified Sampling Assignment
+# =================================================================
+map_deterministic <- ggplot() +
+  # 1. Draw Districts (FILL by Intervention)
+  geom_sf(data = nc_map_final_deterministic_labeled, 
+          aes(fill = intervention), color = "gray60", linewidth = 0.2) +
+  
+  # 2. Draw Divisions (SIMPLE GRAY BORDER) - No AES mapping to color
+  geom_sf(data = nc_divisions, color = "gray20", fill = NA, linewidth = 1.0) + 
+  
+  # 3. Add Floating Division Labels
+  geom_text(
+    data = division_centers,
+    aes(x = lon, y = lat, label = Division_Name),
+    color = "gold", 
+    size = 3.5, 
+    fontface = "bold.italic"
+  ) +
+  
+  # 4. Label Districts
+  geom_text(
+    data = sf::st_drop_geometry(nc_map_final_deterministic_labeled),
+    aes(x = lon, y = lat, label = district), color = "white", size = 2.5, fontface = "bold"
+  ) +
+  
+  # 5. Apply Fill Scale
+  scale_fill_manual(
+    values = intervention_colors, 
+    name = "Treatment Assignment",
+    labels = c("Treatment" = "Intervention", "Control" = "Control")
+    ) +  
+  # 6. Remove scale_color_manual (because division borders are not mapped to color aesthetic)
+  labs(
+    #title = "Map 1: Block Stratified Sampling Assignment",
+    #subtitle = "Blocking of Treatment & Control"
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.box = "vertical", 
+    legend.position = "bottom"
+  )
+print(map_deterministic)
+
+# # =================================================================
+# # MAP 2: Simple Random Sampling Assignment
+# # =================================================================
+# map_random <- ggplot() +
+#   # 1. Draw Districts (FILL by Intervention)
+#   geom_sf(data = nc_map_final_random_labeled, 
+#           aes(fill = intervention), color = "gray60", linewidth = 0.2) +
+#   
+#   # 2. Draw Divisions (SIMPLE GRAY BORDER) - No AES mapping to color
+#   geom_sf(data = nc_divisions, color = "gray20", fill = NA, linewidth = 1.0) + 
+#   
+#   # 3. Add Floating Division Labels
+#   geom_text(
+#     data = division_centers,
+#     aes(x = lon, y = lat, label = Division_Name),
+#     color = "black", 
+#     size = 3.5, 
+#     fontface = "bold.italic"
+#   ) +
+#   
+#   # 4. Label Districts
+#   geom_text(
+#     data = sf::st_drop_geometry(nc_map_final_random_labeled),
+#     aes(x = lon, y = lat, label = district), color = "white", size = 2.5, fontface = "bold"
+#   ) +
+#   
+#   # 5. Apply Fill Scale
+#   scale_fill_manual(values = intervention_colors, name = "Intervention Assignment") +
+#   
+#   # 6. Remove scale_color_manual (because division borders are not mapped to color aesthetic)
+#   labs(
+#     #title = "Map 2: Simple Random Sampling Assignment",
+#     #subtitle = "Random 50/50 Split within Each Division (Stratum)"
+#   ) +
+#   theme_void() +
+#   theme(
+#     plot.title = element_text(hjust = 0.5, face = "bold"),
+#     legend.box = "vertical", 
+#     legend.position = "bottom"
+#   )
+# print(map_random)
+```
+
