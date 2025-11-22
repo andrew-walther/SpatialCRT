@@ -38,7 +38,7 @@ grid_height <- 300
 cell_length <- 100
 
 # Define response model constants (true values)
-alpha <- 0.2 # intercept/baseline effecgt
+alpha <- 0.2 # intercept/baseline effect
 beta <- 1 # consider a range of intervention effects (start with Null case -> 1)
 psi <- 0.5 # maximum spillover effect (binary)
 rho <- 0.01 # spatial correlation parameter
@@ -161,40 +161,40 @@ ggplot() +
 
 ```{r Plot all possible treatment assignment combos}
 # ### Plot Treatment assignments for all possible combinations ###
-# # Generate all 924 treatment assignments
-# districts <- 1:12
-# combinations <- combn(districts, 6, simplify = FALSE)
-# 
-# # Loop through each treatment combination and plot
-# for (i in seq_along(combinations)) {
-#   
-#   # Assign intervention (1) and control (0) based on the current combination
-#   treatment_assignment <- ifelse(districts %in% combinations[[i]], 1, 0)
-#   
-#   # Convert to factor with labels
-#   label_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
-#   
-#   # Generate plot
-#   p <- ggplot() +
-#     geom_sf(data = districts_sf, aes(fill = label_sf$treatment), color = "black") +
-#     geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
-#     scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
-#     labs(fill = "Treatment") +
-#     ggtitle(paste("Treatment Combination", i, "(Intervention/Control)")) +
-#     theme_minimal() +
-#     theme(
-#       plot.title = element_text(hjust = 0.5),
-#       axis.text = element_blank(),
-#       axis.ticks = element_blank(),
-#       axis.title = element_blank()
-#     )
-#   
-#   # Print plot to display
-#   print(p)
-#   
-#   # Short delay to prevent overloading the graphics device
-#   Sys.sleep(0.3)  # Adjust as needed
-# }
+# Generate all 924 treatment assignments
+districts <- 1:12
+combinations <- combn(districts, 6, simplify = FALSE)
+
+# Loop through each treatment combination and plot
+for (i in seq_along(combinations)) {
+
+  # Assign intervention (1) and control (0) based on the current combination
+  treatment_assignment <- ifelse(districts %in% combinations[[i]], 1, 0)
+
+  # Convert to factor with labels
+  label_sf$treatment <- factor(treatment_assignment, levels = c(0, 1), labels = c("Control", "Intervention"))
+
+  # Generate plot
+  p <- ggplot() +
+    geom_sf(data = districts_sf, aes(fill = label_sf$treatment), color = "black") +
+    geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
+    scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
+    labs(fill = "Treatment") +
+    ggtitle(paste("Treatment Combination", i, "(Intervention/Control)")) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      axis.title = element_blank()
+    )
+
+  # Print plot to display
+  print(p)
+
+  # Short delay to prevent overloading the graphics device
+  Sys.sleep(0.3)  # Adjust as needed
+}
 ```
 
 - Combos that satisfy "block stratification": 313 & 612
@@ -331,14 +331,14 @@ plot_combination <- function(index, intervention_cells) {
 }
 
 # # Loop through valid indices and print the plots for full separation
-# for (valid_index in valid_indices_full) {
-#   print(plot_combination(valid_index, combinations[[valid_index]]))
-# }
-# 
-# # Loop through valid indices and print the plots for intervention-only separation
-# for (valid_index in valid_indices_intervention_only) {
-#   print(plot_combination(valid_index, combinations[[valid_index]]))
-# }
+for (valid_index in valid_indices_full) {
+  print(plot_combination(valid_index, combinations[[valid_index]]))
+}
+
+# Loop through valid indices and print the plots for intervention-only separation
+for (valid_index in valid_indices_intervention_only) {
+  print(plot_combination(valid_index, combinations[[valid_index]]))
+}
 ```
 
 - Note: combos 313 & 612 both have the "checkerboard" pattern that we see for block stratification when the number of intervention & control districts are the same.
