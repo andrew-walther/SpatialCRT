@@ -444,7 +444,10 @@ for (combo_index in 1:length(combinations)) {
         neighbor_matrix[i, neighbor_indices] <- 1
       }
     }
-    W <- as.matrix(neighbor_matrix)
+    W <- as.matrix(neighbor_matrix) # do we need to row-standardize Sum(w_ij) = 1 this?
+    
+    # W_listw <- mat2listw(W_raw, style = "W") # Convert raw adjacency matrix to listw with row-standardization (style="W")
+    # W_standardized <- listw2mat(W_listw) # If you need matrix format back (or direct matrix multiplication)
     
     # create identity matrix
     I <- diag(points_per_iteration) 
