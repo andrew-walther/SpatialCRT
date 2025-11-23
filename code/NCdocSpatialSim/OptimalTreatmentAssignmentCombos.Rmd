@@ -1,0 +1,100 @@
+---
+title: "Optimal Treatment Assignment Combo"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r, warning=FALSE, message=FALSE}
+# load libaries
+library(tidyverse)
+library(fs)
+
+# --- define folder path --- (Using path.expand to ensure the tilde (~) is read correctly by the OS)
+folder_path <- path.expand("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse")
+
+# --- list of all CSV files in "beta_mse" ---
+file_list <- list.files(path = folder_path, pattern = "\\.csv$", full.names = TRUE)
+```
+
+```{r}
+# --- write function to process each dataset ---
+process_mse_file <- function(file_path) {
+  
+  # Read the CSV (suppressing messages for cleaner output)
+  # We expect columns: ...1, bias, bias.abs, variance, MSE
+  df <- read_csv(file_path, show_col_types = FALSE)
+  
+  # Sort by MSE (ascending) and take the top row (minimum MSE)
+  # We assume the column "...1" holds the row index/identifier
+  best_row <- df %>%
+    arrange(MSE) %>%
+    slice(1)
+  
+  # Extract the filename without extension for parsing
+  file_name_full <- path_file(file_path) %>% path_ext_remove()
+  
+  # --- Parsing Metadata from Filename ---
+  
+  # Dimensions: Matches pattern like "2x4", "3x3", "3x4"
+  dims <- str_extract(file_name_full, "\\dx\\d")
+  
+  # Spillover: Matches "TrtSpill" or "TrtNoSpill"
+  spill <- str_extract(file_name_full, "Trt(No)?Spill")
+  
+  # Psi: Extract digits after "P" and divide by 10 
+  # (e.g., P05 -> 5 -> 0.5)
+  psi_str <- str_extract(file_name_full, "P\\d+")
+  psi_val <- as.numeric(str_remove(psi_str, "P")) / 10
+  
+  # Rho: Extract digits after "R" and divide by 100 
+  # (e.g., R00 -> 0 -> 0.0; R01 -> 1 -> 0.01)
+  rho_str <- str_extract(file_name_full, "R\\d+")
+  rho_val <- as.numeric(str_remove(rho_str, "R")) / 100
+  
+  # Create a single-row tibble with all attributes
+  tibble(
+    Dataset_Name = file_name_full,
+    Minimum_MSE = best_row$MSE,
+    Optimal_Combo = best_row$...1, # The identifier column
+    Dimensions = dims,
+    Spillover_Condition = spill,
+    Psi = psi_val,
+    Rho = rho_val
+  )
+}
+```
+
+```{r, message=FALSE, warning=FALSE}
+# --- map function over file list & combine into single dataframe ---
+final_results_table <- map_dfr(file_list, process_mse_file) %>%
+  arrange(
+    Dimensions,           # 1. 2x4 -> 3x3 -> 3x4 (Alphabetical works here)
+    Spillover_Condition,  # 2. TrtNoSpill -> TrtSpill ("N" comes before "S")
+    Psi,                  # 3. Numeric ascending (0.5 -> 0.8)
+    Rho                   # 4. Numeric ascending (0 -> 0.01)
+  )
+
+# --- print table ---
+print(final_results_table)
+
+# Optional: Save the results to a new CSV
+# write_csv(final_results_table, file.path(folder_path, "summary_mse_results.csv"))
+```
+
+
+```{r}
+# --- Calculate Frequency of Optimal_Combo for each Dimension ---
+combo_frequencies <- final_results_table %>%
+  count(Dimensions, Optimal_Combo, name = "Frequency") %>%
+  arrange(Dimensions, desc(Frequency)) # Sort by Dimension, then most frequent combo
+
+# --- Print the results ---
+print(combo_frequencies)
+
+# Split results into separate lists ---
+combo_frequencies %>%
+  group_split(Dimensions) %>%
+  walk(~print(.x))
+```
+
