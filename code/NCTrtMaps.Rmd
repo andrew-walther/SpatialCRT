@@ -121,12 +121,12 @@ final_division_map <- ggplot() +
   
   # 5. Add titles and clean up theme
   labs(
-    title = "North Carolina Judicial Divisions and Districts",
-    subtitle = "Divisions are colored; Districts are delineated by solid black borders and numbered."
+    #title = "North Carolina Judicial Divisions and Districts",
+    #subtitle = "Divisions are colored; Districts are delineated by solid black borders and numbered."
   ) +
   theme_void() +
   theme(
-    legend.position = "right",
+    legend.position = "bottom",
     plot.title = element_text(hjust = 0.5, face = "bold"),
     plot.subtitle = element_text(hjust = 0.5)
   )
