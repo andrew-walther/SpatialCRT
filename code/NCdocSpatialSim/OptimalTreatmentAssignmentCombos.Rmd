@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r, warning=FALSE, message=FALSE}
-# load libaries
+# load libraries
 library(tidyverse)
 library(fs)
 
