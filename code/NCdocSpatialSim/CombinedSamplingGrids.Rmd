@@ -1,0 +1,417 @@
+---
+title: "Combine Sampling Grids"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+# --- Combined Sampling Grids: Block & Random ---
+library(tidyverse)
+library(sf)
+library(patchwork)
+library(grid)
+
+# Helper function with manual tagging and exact grid specifications
+generate_exact_grid <- function(type, method, tag) {
+  if (type == "2x4") {
+    # Zigzag numbering matching original source
+    coords <- data.frame(
+      id = c(7, 5, 3, 1, 8, 6, 4, 2),
+      x_idx = c(0, 1, 2, 3, 0, 1, 2, 3),
+      y_idx = c(1, 1, 1, 1, 0, 0, 0, 0)
+    )
+    # Intervention cells for block (indices 28/43) vs random example
+    trt_ids <- if(method == "block") c(1, 4, 5, 8) else c(1, 5, 6, 8)
+    
+  } else if (type == "3x3") {
+    # Standard 1-9 numbering
+    coords <- expand.grid(x_idx = 0:2, y_idx = 2:0) %>% mutate(id = 1:9)
+    trt_ids <- if(method == "block") c(2, 4, 6, 8) else c(3, 4, 8, 9)
+    
+  } else if (type == "3x4") {
+    # Standard 1-12 numbering
+    coords <- expand.grid(x_idx = 0:3, y_idx = 2:0) %>% mutate(id = 1:12)
+    trt_ids <- if(method == "block") c(1, 3, 6, 8, 9, 11) else c(4, 6, 8, 10, 11, 12)
+  }
+
+  polys <- apply(coords, 1, function(row) {
+    x <- row["x_idx"] * 100; y <- row["y_idx"] * 100
+    st_polygon(list(matrix(c(x, y, x+100, y, x+100, y+100, x, y+100, x, y), ncol=2, byrow=T)))
+  })
+  
+  grid_sf <- st_sf(id = coords$id, geometry = st_sfc(polys))
+  grid_sf$treatment <- ifelse(grid_sf$id %in% trt_ids, "Intervention", "Control")
+  
+  ggplot(grid_sf) +
+    geom_sf(aes(fill = treatment), color = "black") +
+    geom_sf_text(aes(label = id), size = 4, fontface = "bold", color = "black") + # change cell font size
+    scale_fill_manual(values = c("Control" = "blue", "Intervention" = "red")) +
+    coord_sf(expand = FALSE) + 
+    labs(tag = tag) + # Manual tag assignment
+    theme_void() +
+    theme(
+      legend.position = "none",
+      plot.tag = element_text(size = 16, face = "bold", hjust = 0),
+      plot.tag.position = c(0.02, 1.10), # Hovering above grid
+      plot.margin = margin(25, 10, 10, 10)
+    )
+}
+
+# Generate subfigures with specific tags (a)-(f)
+p_a <- generate_exact_grid("2x4", "block", "(a)")
+p_c <- generate_exact_grid("3x3", "block", "(c)")
+p_e <- generate_exact_grid("3x4", "block", "(e)")
+
+p_b <- generate_exact_grid("2x4", "random", "(b)")
+p_d <- generate_exact_grid("3x3", "random", "(d)")
+p_f <- generate_exact_grid("3x4", "random", "(f)")
+
+# Shortened row labels
+label_block <- textGrob("Block", rot = 90, gp = gpar(fontsize = 16, fontface = "bold"))
+label_random <- textGrob("Random", rot = 90, gp = gpar(fontsize = 16, fontface = "bold"))
+
+# Assemble figure row by row to exclude tags from text grobs
+row1 <- wrap_elements(label_block) + p_a + p_c + p_e + plot_layout(widths = c(0.1, 1, 1, 1))
+row2 <- wrap_elements(label_random) + p_b + p_d + p_f + plot_layout(widths = c(0.1, 1, 1, 1))
+
+final_plot <- (row1 / row2)
+
+print(final_plot)
+```
+
+```{r}
+# --- Rook & Queen Continuity (greyscale) ---
+library(tidyverse)
+library(sf)
+library(patchwork)
+
+# Function to generate a 3x3 neighbor grid matching source aesthetics
+generate_neighbor_plot_tight <- function(type) {
+  # Define a 3x3 grid
+  coords <- expand.grid(x = 0:2, y = 0:2) %>%
+    mutate(id = 1:n())
+  
+  # Define neighbor status based on Rook or Queen contiguity
+  if (type == "Rook") {
+    # Rook: share an edge only (4 neighbors)
+    coords$status <- case_when(
+      coords$id == 5 ~ "Reference",
+      coords$id %in% c(2, 4, 6, 8) ~ "Neighbor",
+      TRUE ~ "Non-Neighbor"
+    )
+  } else {
+    # Queen: share edge or vertex (8 neighbors)
+    coords$status <- case_when(
+      coords$id == 5 ~ "Reference",
+      TRUE ~ "Neighbor"
+    )
+  }
+  
+  # Create polygons for each cell
+  polys <- apply(coords, 1, function(row) {
+    x <- as.numeric(row["x"])
+    y <- as.numeric(row["y"])
+    st_polygon(list(matrix(c(x, y, x+1, y, x+1, y+1, x, y+1, x, y), ncol=2, byrow=T)))
+  })
+  
+  grid_sf <- st_sf(status = coords$status, geometry = st_sfc(polys))
+  
+  # Plot using source colors: dark grey (reference), light grey (neighbor), white (none)
+  ggplot(grid_sf) +
+    geom_sf(aes(fill = status), color = "grey40") +
+    scale_fill_manual(values = c("Reference" = "grey30", 
+                                 "Neighbor" = "grey80", 
+                                 "Non-Neighbor" = "white")) +
+    coord_sf(expand = FALSE) + # Critical: forces grid to the very edge of the plot area
+    theme_void() +
+    theme(
+      legend.position = "none",
+      plot.margin = margin(0, 0, 0, 0, "pt") # Zero internal margins for each sub-plot
+    )
+}
+
+# Generate both plots
+p1 <- generate_neighbor_plot_tight("Rook")
+p2 <- generate_neighbor_plot_tight("Queen")
+
+# Combine with a specific spacing (gap) between them
+# 'widths' controls the relative size, and '& theme' strips global outer white space.
+final_plot <- (p1 + plot_spacer() + p2) + 
+  plot_layout(widths = c(1, 0.2, 1)) & # The middle element (0.2) acts as the gap
+  theme(plot.margin = margin(0, 0, 0, 0, "pt"))
+
+print(final_plot)
+```
+
+```{r}
+# --- Rook & Queen Continuity (color w/ tags) ---
+library(tidyverse)
+library(sf)
+library(patchwork)
+
+generate_neighbor_plot_final <- function(type, tag) {
+  # 1. Setup Grid Geometry
+  coords <- expand.grid(x = 0:2, y = 0:2) %>% mutate(id = 1:n())
+  
+  # 2. Assign Neighbor Logic
+  if (type == "Rook") {
+    coords$status <- case_when(coords$id == 5 ~ "Ref", 
+                               coords$id %in% c(2,4,6,8) ~ "Nb", 
+                               TRUE ~ "None")
+  } else {
+    coords$status <- case_when(coords$id == 5 ~ "Ref", 
+                               TRUE ~ "Nb")
+  }
+  
+  polys <- apply(coords, 1, function(row) {
+    x <- as.numeric(row["x"]); y <- as.numeric(row["y"])
+    st_polygon(list(matrix(c(x,y, x+1,y, x+1,y+1, x,y+1, x,y), ncol=2, byrow=T)))
+  })
+  grid_sf <- st_sf(status = coords$status, geometry = st_sfc(polys))
+  
+  # 3. Plot with Tight Tagging
+  ggplot(grid_sf) +
+    geom_sf(aes(fill = status), color = "black") +
+    scale_fill_manual(values = c("Ref" = "red", "Nb" = "blue", "None" = "white")) +
+    coord_sf(expand = FALSE, clip = "off") + 
+    labs(title = tag) + 
+    theme_void() +
+    theme(
+      legend.position = "none",
+      # ADJUST THESE TWO LINES TO MOVE TAGS:
+      plot.title = element_text(size = 18, face = "bold", hjust = 0, 
+                                margin = margin(t = 5, b = -20, unit = "pt")), # Negative b pulls label DOWN
+      plot.margin = margin(t = 5, r = 0, b = 0, l = 0, unit = "pt")     # Small t margin keeps it tight
+    )
+}
+
+# Generate and Combine
+p_a <- generate_neighbor_plot_final("Rook", "(a)")
+p_b <- generate_neighbor_plot_final("Queen", "(b)")
+
+final_plot <- (p_a + plot_spacer() + p_b) + 
+  plot_layout(widths = c(1, 0.2, 1)) & 
+  theme(plot.margin = margin(0, 0, 0, 0, "pt"))
+
+print(final_plot)
+```
+
+```{r}
+# --- 2nd Order Neighbors (color) ---
+library(tidyverse)
+library(sf)
+library(ggforce)
+
+# 1. Define exact bounding boxes for the 10 irregular polygons
+polys_data <- tibble(
+  id = 1:10,
+  xmin = c(0, 3, 3, 1, 0, 2, 3, 1, -1, 3), 
+  xmax = c(3, 4, 4, 2, 1, 3, 4, 3, 1, 4),
+  ymin = c(2, 3, 2, 1, 1, 1, 1, 0, 0, 0),
+  ymax = c(4, 4, 3, 2, 2, 2, 2, 1, 1, 1)
+) %>%
+  mutate(
+    x_c = (xmin + xmax) / 2,
+    y_c = (ymin + ymax) / 2
+  )
+
+# 2. Assign Status based on centroid distance
+ref_x <- 1.5; ref_y <- 1.5; radius <- 1.9
+
+polys_data <- polys_data %>%
+  mutate(
+    dist = sqrt((x_c - ref_x)^2 + (y_c - ref_y)^2),
+    status = case_when(
+      id == 4 ~ "Reference",
+      dist <= radius ~ "Neighbor",
+      TRUE ~ "Non-Neighbor"
+    )
+  )
+
+# 3. Create Visualization with Zero Margins
+ggplot(polys_data) +
+  # Draw polygons with established palette
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = status), 
+            color = "black", linewidth = 0.5) +
+  # Draw centroids (dots)
+  geom_point(aes(x = x_c, y = y_c), color = "black", size = 2) +
+  # Draw the fixed radius circle
+  geom_circle(aes(x0 = ref_x, y0 = ref_y, r = radius), 
+              color = "black", linewidth = 0.5, inherit.aes = FALSE) +
+  scale_fill_manual(values = c("Reference" = "red", 
+                               "Neighbor" = "blue", 
+                               "Non-Neighbor" = "white")) +
+  # Use expand = FALSE to clip white space at the data limits
+  coord_fixed(expand = FALSE) + 
+  theme_void() +
+  theme(
+    legend.position = "none",
+    plot.margin = margin(0, 0, 0, 0, "pt"),
+    panel.spacing = unit(0, "pt")
+  )
+```
+
+```{r}
+# --- Rook/Queen/2nd Order Neighbor Plots in color ---
+library(tidyverse)
+library(sf)
+library(patchwork)
+library(ggforce)
+
+# Integrated function focusing on geometry
+generate_spatial_neighbor_plot <- function(type, tag) {
+  
+  if (type %in% c("Rook", "Queen")) {
+    # 1. Setup Grid Geometry (3x3)
+    coords <- expand.grid(x = 0:2, y = 0:2) %>% mutate(id = 1:n())
+    
+    if (type == "Rook") {
+      coords$status <- case_when(coords$id == 5 ~ "Ref", 
+                                 coords$id %in% c(2,4,6,8) ~ "Nb", 
+                                 TRUE ~ "None")
+    } else {
+      coords$status <- case_when(coords$id == 5 ~ "Ref", 
+                                 TRUE ~ "Nb")
+    }
+    
+    polys <- apply(coords, 1, function(row) {
+      x <- as.numeric(row["x"]); y <- as.numeric(row["y"])
+      st_polygon(list(matrix(c(x,y, x+1,y, x+1,y+1, x,y+1, x,y), ncol=2, byrow=T)))
+    })
+    grid_sf <- st_sf(status = coords$status, geometry = st_sfc(polys))
+    
+    p <- ggplot(grid_sf) +
+      geom_sf(aes(fill = status), color = "black") +
+      coord_sf(expand = FALSE, clip = "off")
+    
+  } else if (type == "Distance") {
+    # 1. Setup Exact Geometry for Distance-based
+    polys_data <- tibble(
+      id = 1:10,
+      xmin = c(0, 3, 3, 1, 0, 2, 3, 1, -1, 3), 
+      xmax = c(3, 4, 4, 2, 1, 3, 4, 3, 1, 4),
+      ymin = c(2, 3, 2, 1, 1, 1, 1, 0, 0, 0),
+      ymax = c(4, 4, 3, 2, 2, 2, 2, 1, 1, 1)
+    ) %>%
+      mutate(x_c = (xmin + xmax) / 2, y_c = (ymin + ymax) / 2)
+    
+    ref_x <- 1.5; ref_y <- 1.5; radius <- 1.9
+    polys_data$status <- case_when(
+      polys_data$id == 4 ~ "Ref",
+      sqrt((polys_data$x_c - ref_x)^2 + (polys_data$y_c - ref_y)^2) <= radius ~ "Nb",
+      TRUE ~ "None"
+    )
+    
+    p <- ggplot(polys_data) +
+      geom_rect(aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = status), 
+                color = "black", linewidth = 0.5) +
+      geom_point(aes(x = x_c, y = y_c), color = "black", size = 2) +
+      geom_circle(aes(x0 = ref_x, y0 = ref_y, r = radius), 
+                  color = "black", linewidth = 0.5, inherit.aes = FALSE) +
+      coord_fixed(expand = FALSE, clip = "off") 
+  }
+  
+  # Return plot with basic theme only
+  p + scale_fill_manual(values = c("Ref" = "red", "Nb" = "blue", "None" = "white")) +
+    labs(tag = tag) + 
+    theme_void() +
+    theme(legend.position = "none")
+}
+
+# Generate subplots
+p_a <- generate_spatial_neighbor_plot("Rook", "(a)")
+p_b <- generate_spatial_neighbor_plot("Queen", "(b)")
+p_c <- generate_spatial_neighbor_plot("Distance", "(c)")
+
+# Assemble and apply GLOBAL theme settings for tags
+final_plot <- (p_a + plot_spacer() + p_b + plot_spacer() + p_c) + 
+  plot_layout(widths = c(1, 0.1, 1, 0.1, 1.15)) & 
+  theme(
+    plot.tag = element_text(size = 18, face = "bold", hjust = 0),
+    # Coordinates for 'floating' tags
+    plot.tag.position = c(0, 0.80), 
+    # Global top margin creates space for tags across all panes
+    plot.margin = margin(t = 0, r = 5, b = 0, l = 5, unit = "pt")
+  )
+
+print(final_plot)
+```
+
+```{r}
+# --- Spillover Types w/ color & arrows ---
+library(tidyverse)
+library(patchwork)
+
+# Function to generate spillover grids
+generate_spillover_final <- function(type, tag) {
+  grid_data <- data.frame(
+    x = c(0.5, 1.5, 0.5, 1.5),
+    y = c(1.5, 1.5, 0.5, 0.5),
+    fill = c("blue", "red", "red", "blue")
+  )
+  
+  if (type == "Control Only") {
+    # Left Panel: Arrows FROM red TO blue
+    arrows <- data.frame(
+      x =    c(1.25, 0.75, 0.5, 1.5), 
+      y =    c(1.5, 0.5, 0.75, 1.25), 
+      xend = c(0.75, 1.25, 0.5, 1.5), 
+      yend = c(1.5, 0.5, 1.25, 0.75)
+    )
+    subtitle <- "Control only"
+  } else {
+    # Right Panel
+    arrows <- data.frame(
+      x =    c(0.75, 0.75),           
+      y =    c(1.5, 0.5),           
+      xend = c(1.25, 1.25),           
+      yend = c(1.5, 0.5)            
+    )
+    double_arrow <- data.frame(x = 0.5, y = 0.75, xend = 0.5, yend = 1.25)
+    subtitle <- "Intervention & Control"
+  }
+
+  p <- ggplot() +
+    geom_tile(data = grid_data, aes(x, y, fill = fill), color = "black", size = 0.8) +
+    scale_fill_manual(values = c("red" = "red", "blue" = "blue")) +
+    # CRITICAL: clip='off' must be inside the coordinate system
+    coord_fixed(expand = FALSE, clip = "off") + 
+    labs(tag = tag, x = subtitle) +
+    theme_void() +
+    theme(
+      legend.position = "none",
+      axis.title.x = element_text(size = 14, margin = margin(t = 10), face = "bold")
+    )
+
+  # Add thick arrows
+  p <- p + geom_segment(data = arrows, aes(x = x, y = y, xend = xend, yend = yend),
+                        arrow = arrow(length = unit(0.5, "cm"), type = "closed"),
+                        size = 3, color = "black")
+  
+  if (type == "Both") {
+    p <- p + geom_segment(data = double_arrow, aes(x = x, y = y, xend = xend, yend = yend),
+                          arrow = arrow(length = unit(0.5, "cm"), ends = "both", type = "closed"),
+                          size = 3, color = "black")
+  }
+  
+  return(p)
+}
+
+# Generate subplots
+p_a <- generate_spillover_final("Control Only", "(a)")
+p_b <- generate_spillover_final("Both", "(b)")
+
+# Assemble with GLOBAL coordinate positioning
+final_plot <- (p_a + plot_spacer() + p_b) + 
+  plot_layout(widths = c(1, 0.2, 1)) & 
+  theme(
+    plot.tag = element_text(size = 18, face = "bold", hjust = 0),
+    # Adjust y (1.05) to tune vertical 'hover'
+    plot.tag.position = c(0, 0.95), 
+    # Global margin for tag headroom
+    plot.margin = margin(t = 10, r = 5, b = 0, l = 5, unit = "pt")
+  )
+
+print(final_plot)
+```
