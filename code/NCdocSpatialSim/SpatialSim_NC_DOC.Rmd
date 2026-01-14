@@ -47,11 +47,11 @@ grid_width <- 400 # Set dimensions of grid for simulated data
 grid_height <- 200
 cell_length <- 100
 
-# Define response model constants (true values)
+# Define response model constants (true values) (iterate through combos of psi/rho/TrtSpill)
 alpha <- 0.2 # intercept/baseline effecgt
 beta <- 1 # consider a range of intervention effects (start with Null case -> 1)
-psi <- 0.8 # maximum spillover effect (binary)
-rho <- 0.00 # spatial correlation parameter
+psi <- 0.8 # maximum spillover effect (binary) (options: 0.5, 0.6, 0.7, 0.8)
+rho <- 0.00 # spatial correlation parameter (options: 0.00, 0.01)
 sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
 ```
 
