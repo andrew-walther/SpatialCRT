@@ -1,0 +1,141 @@
+---
+title: "Unified Spatial Simulation & Analysis"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### 1. Setup
+```{r setup, message=FALSE, warning=FALSE}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, sf, spdep, spatialreg, combinat, ggplot2, Matrix)
+
+set.seed(2024)
+
+# Constants
+N_SIMS           <- 10    
+PTS_PER_CELL     <- 20    
+CELL_SIZE        <- 100   
+SD_EPSILON       <- 0.1   
+ALPHA_TRUE       <- 0.2
+BETA_TRUE        <- 1.0
+```
+
+```{r}
+grid_configs <- list(
+  "2x4" = c(r=2, c=4, n_trt=4),
+  "3x3" = c(r=3, c=3, n_trt=4), 
+  "3x4" = c(r=3, c=4, n_trt=6)
+)
+
+master_results <- list()
+
+for (dim_name in names(grid_configs)) {
+  g <- grid_configs[[dim_name]]
+  
+  # A. Define Grid Geometry
+  grid_sf <- st_sf(district = 1:(g['r']*g['c']), 
+                   geometry = st_make_grid(st_as_sfc(st_bbox(c(xmin=0, xmax=g['c']*100, ymin=0, ymax=g['r']*100))), 
+                                           n = c(g['c'], g['r']), square = TRUE))
+  
+  # B. District Neighbors
+  nb_dist <- spdep::poly2nb(grid_sf, queen = FALSE)
+  adj_dist <- spdep::nb2mat(nb_dist, style = "B", zero.policy = TRUE)
+  
+  # C. Sample Points onto Grid (160, 180, or 240 total)
+  pts_total <- nrow(grid_sf) * PTS_PER_CELL
+  points_sf <- st_sf(id = 1:pts_total, 
+                     geometry = st_sample(grid_sf, size = rep(PTS_PER_CELL, nrow(grid_sf))))
+  # Link points to districts
+  points_sf$district <- as.integer(st_intersects(points_sf, grid_sf))
+  
+  # D. Build Weight Matrix Manually
+  # We use a sparse Matrix (dgCMatrix) to avoid any spdep listw crashes
+  dist_to_pts <- split(1:pts_total, points_sf$district)
+  W_mat <- Matrix(0, pts_total, pts_total, sparse = TRUE)
+  
+  for (d in 1:length(nb_dist)) {
+    neighbors <- nb_dist[[d]]
+    if (any(neighbors > 0)) {
+      row_pts <- dist_to_pts[[as.character(d)]]
+      col_pts <- unlist(dist_to_pts[as.character(neighbors)])
+      W_mat[row_pts, col_pts] <- 1 / length(col_pts) # Row-standardized
+    }
+  }
+  
+  # Convert to listw only at the very end for lagsarlm, using a wrapper that ignores NA
+  point_listw <- mat2listw(as.matrix(W_mat), style="W", zero.policy=TRUE)
+
+  # E. Combinations
+  combos_matrix <- combn(1:nrow(grid_sf), g['n_trt'])
+  is_block <- apply(combos_matrix, 2, function(x) {
+    vec <- rep(0, nrow(grid_sf)); vec[x] <- 1
+    int_adj <- any(adj_dist[which(vec==1), which(vec==1)] > 0)
+    ctl_adj <- any(adj_dist[which(vec==0), which(vec==0)] > 0)
+    return(!int_adj && !ctl_adj)
+  })
+
+  cat(sprintf("\nProcessing %s...", dim_name))
+  
+  sim_params <- expand.grid(psi = c(0.5, 0.6, 0.7, 0.8), rho = c(0.00, 0.01), 
+                            spill = c("TrtNoSpill", "TrtSpill"), stringsAsFactors = FALSE)
+  
+  for (i in 1:nrow(sim_params)) {
+    p <- sim_params[i, ]
+    # A_mat = (I - rho*W)
+    A_inv <- solve(as(diag(pts_total), "dgCMatrix") - (p$rho * W_mat))
+    
+    beta_batch <- numeric(ncol(combos_matrix) * N_SIMS)
+    combo_ids <- rep(1:ncol(combos_matrix), each = N_SIMS)
+    
+    for (c_idx in 1:ncol(combos_matrix)) {
+      trt_vec <- rep(0, nrow(grid_sf)); trt_vec[combos_matrix[, c_idx]] <- 1
+      points_sf$intervention <- trt_vec[points_sf$district]
+      
+      # Spillover Logic
+      point_nb_dist <- nb_dist[points_sf$district]
+      has_nb_trt <- sapply(point_nb_dist, function(n) if(any(n > 0)) any(trt_vec[n] == 1) else FALSE)
+      points_sf$spillover <- if(p$spill == "TrtSpill") as.numeric(has_nb_trt) else as.numeric(has_nb_trt & points_sf$intervention == 0)
+      
+      for (s in 1:N_SIMS) {
+        # Data Generation
+        lin_pred <- ALPHA_TRUE + (BETA_TRUE * points_sf$intervention) + (p$psi * points_sf$spillover) + rnorm(pts_total, 0, SD_EPSILON)
+        points_sf$response <- as.numeric(A_inv %*% lin_pred)
+        
+        # Fit Model - Using try to skip the !anyNA error if it occurs
+        fit <- try(lagsarlm(response ~ intervention + spillover, data = points_sf, listw = point_listw, zero.policy = TRUE), silent=TRUE)
+        
+        # Extract Beta
+        if(!inherits(fit, "try-error")) {
+          beta_batch[((c_idx-1)*N_SIMS) + s] <- coef(fit)[3]
+        } else {
+          # Fallback: OLS if Spatial Fit fails (to keep loop moving)
+          beta_batch[((c_idx-1)*N_SIMS) + s] <- coef(lm(response ~ intervention + spillover, data = points_sf))[2]
+        }
+      }
+    }
+    
+    # Aggregate and Save
+    df_res <- data.frame(Beta = beta_batch, ComboID = combo_ids) %>%
+      group_by(ComboID) %>% summarise(Mean_Beta = mean(Beta, na.rm=T), Var_Beta = var(Beta, na.rm=T)) %>%
+      mutate(Grid=dim_name, Psi=p$psi, Rho=p$rho, TrtSpill=p$spill, Bias=Mean_Beta-BETA_TRUE, MSE=Bias^2+Var_Beta)
+    
+    master_results[[length(master_results) + 1]] <- bind_rows(
+      df_res %>% mutate(Sampling = "Simple Random Sampling"),
+      df_res[is_block, ] %>% mutate(Sampling = "Block Stratified Sampling")
+    )
+  }
+}
+```
+
+```{r}
+final_results <- bind_rows(master_results)
+
+# Plotting the consolidated results
+ggplot(final_results, aes(x = Sampling, y = MSE, fill = as.factor(Psi))) +
+  geom_boxplot() +
+  facet_wrap(~Grid, scales = "free_y") +
+  theme_minimal() +
+  labs(title = "Consolidated MSE Results by Grid Dimension", y = "MSE", fill = "Psi Value")
+```
+
