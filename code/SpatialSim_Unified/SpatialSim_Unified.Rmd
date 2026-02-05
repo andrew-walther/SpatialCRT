@@ -1,0 +1,374 @@
+---
+title: "Unified Spatial Simulation & Analysis"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Objective
+
+-   **Consolidated Framework:** Unifies simulation logic for 2x4, 3x3, and 3x4 grids.
+-   **No External Saving:** Results stored in `master_results`.
+-   **Parallel Processing:** High-performance execution.
+-   **Robustness:** Fixed `spdep` errors by reconstructing neighbor lists safely.
+
+### 1. Setup & Libraries
+
+```{r setup, message=FALSE, warning=FALSE}
+# Initialize Package Manager
+if (!require("pacman")) install.packages("pacman")
+
+# Load required libraries
+pacman::p_load(
+  tidyverse,      # Data manipulation
+  sf,             # Spatial features
+  spdep,          # Neighbors & weights
+  spatialreg,     # Spatial models (lagsarlm)
+  combinat,       # Combinatorics
+  foreach,        # Parallel looping
+  doParallel,     # Parallel backend
+  parallel,       # Core detection
+  ggplot2,        # Plotting
+  gridExtra       # Plot arrangement
+)
+
+# Ensure Reproducibility
+set.seed(2024)
+
+# --- Simulation Constants ---
+N_SIMS           <- 50    
+PTS_PER_CELL     <- 20    
+CELL_SIZE        <- 100   
+SD_EPSILON       <- 0.1   
+
+# True Model Parameters
+ALPHA_TRUE       <- 0.2
+BETA_TRUE        <- 1.0
+```
+
+```{r}
+# ------------------------------------------------------------------------------
+# Function: Setup Grid System
+# Dynamically creates SF grid and neighbor matrix for any dimension.
+# ------------------------------------------------------------------------------
+setup_grid_system <- function(rows, cols) {
+  # Create Grid Geometry
+  grid_geom <- st_make_grid(
+    st_as_sfc(st_bbox(c(xmin = 0, xmax = cols * CELL_SIZE, 
+                        ymin = 0, ymax = rows * CELL_SIZE))),
+    n = c(cols, rows), what = "polygons", square = TRUE
+  )
+  
+  # SF Object
+  grid_sf <- st_sf(district = 1:(rows*cols), geometry = grid_geom)
+  
+  # Neighbors (Rook) & Adjacency Matrix
+  nb_list <- spdep::cell2nb(nrow = rows, ncol = cols, type = "rook")
+  adj_mat <- spdep::nb2mat(nb_list, style = "B", zero.policy = TRUE)
+  
+  return(list(sf = grid_sf, nb = nb_list, mat = adj_mat))
+}
+
+# ------------------------------------------------------------------------------
+# Function: Check Block Stratification
+# Returns TRUE if assignment satisfies blocking (no neighbor shares treatment).
+# ------------------------------------------------------------------------------
+check_block_stratification <- function(trt_vector, adj_mat) {
+  idx_int <- which(trt_vector == 1)
+  idx_ctl <- which(trt_vector == 0)
+  
+  # Check for adjacency within the same group
+  int_adjacent <- any(adj_mat[idx_int, idx_int] > 0)
+  ctl_adjacent <- any(adj_mat[idx_ctl, idx_ctl] > 0)
+  
+  return(!int_adjacent && !ctl_adjacent)
+}
+
+# ------------------------------------------------------------------------------
+# Function: Worker Simulation (Runs on Parallel Cores)
+# Runs N_SIMS for a specific treatment combination.
+# ------------------------------------------------------------------------------
+run_batch_simulation <- function(c_idx, combo_matrix, grid_sys, params, n_sims, 
+                                 pts_per_cell, sd_epsilon, alpha_true, beta_true) {
+  
+  force(grid_sys)
+  library(spatialreg)
+  library(spdep)
+  library(sf)
+  
+  # Enable Zero Policy globally for this worker to handle islands safely
+  spdep::set.ZeroPolicyOption(TRUE)
+  
+  total_districts <- nrow(grid_sys$mat)
+  pts_total <- total_districts * pts_per_cell
+  
+  # Set Treatment Vector
+  trt_vec <- rep(0, total_districts)
+  trt_vec[combo_matrix[, c_idx]] <- 1
+  
+  # Vector to store beta estimates
+  beta_results <- numeric(n_sims)
+  
+  for (s in 1:n_sims) {
+    
+    # 1. Generate Points (Random Sampling with Replacement)
+    # Rejection Sampling: Ensure NO district is empty (0 points).
+    # Empty districts cause disconnection errors.
+    valid_sample <- FALSE
+    points_df <- NULL
+    
+    while(!valid_sample) {
+      d_samples <- sample(1:total_districts, pts_total, replace = TRUE)
+      if(length(unique(d_samples)) == total_districts) {
+        points_df <- data.frame(district = d_samples)
+        # Create a unique ID for each point (needed for manual mapping)
+        points_df$id <- 1:nrow(points_df) 
+        valid_sample <- TRUE
+      }
+    }
+    
+    points_df$intervention <- trt_vec[points_df$district]
+    
+    # 2. Assign Spillover
+    point_dist_nb <- grid_sys$nb[points_df$district]
+    has_trt_neighbor <- sapply(point_dist_nb, function(nbs) any(trt_vec[nbs] == 1))
+    
+    if (params$spill == "TrtSpill") {
+      points_df$spillover <- ifelse(has_trt_neighbor, 1, 0)
+    } else {
+      points_df$spillover <- ifelse(has_trt_neighbor & points_df$intervention == 0, 1, 0)
+    }
+    
+    # 3. MANUAL NEIGHBOR CONSTRUCTION (The Fix)
+    # Instead of mat2listw (which crashes), we build the neighbor list manually.
+    # Logic: Point i's neighbors are ALL points located in districts adjacent to Point i.
+    
+    # Create an empty list for neighbors
+    nbs_manual <- vector("list", pts_total)
+    
+    # Helper: Pre-calculate which points belong to which district
+    # Returns a list where district_map[[d]] = vector of point indices in district d
+    district_map <- split(points_df$id, points_df$district)
+    
+    # Loop through every point to find its neighbors
+    for (i in 1:pts_total) {
+      my_district <- points_df$district[i]
+      neighbor_districts <- grid_sys$nb[[my_district]]
+      
+      # Check if point is an Island (neighbor_districts is 0)
+      if (length(neighbor_districts) == 1 && neighbor_districts[1] == 0) {
+        nbs_manual[[i]] <- 0L
+      } else {
+        # Get all points residing in those neighbor districts
+        nb_points <- unlist(district_map[as.character(neighbor_districts)], use.names = FALSE)
+        
+        if (length(nb_points) > 0) {
+          nbs_manual[[i]] <- as.integer(nb_points)
+        } else {
+          nbs_manual[[i]] <- 0L # No points found in neighbor districts
+        }
+      }
+    }
+    
+    # Convert manual list to 'nb' class
+    class(nbs_manual) <- "nb"
+    attr(nbs_manual, "region.id") <- as.character(1:pts_total)
+    attr(nbs_manual, "call") <- match.call()
+    attr(nbs_manual, "type") <- "rook"
+    
+    # Create Weights (Row Standardized)
+    # nb2listw is robust to "Islands" (0L) when zero.policy=TRUE
+    listw_points <- tryCatch({
+      nb2listw(nbs_manual, style = "W", zero.policy = TRUE)
+    }, error = function(e) NULL)
+    
+    if(is.null(listw_points)) {
+      beta_results[s] <- NA
+      next
+    }
+    
+    # 4. Response Generation
+    # We use the robust listw to create a sparse matrix for generation
+    W_sparse <- listw2mat(listw_points) 
+    
+    epsilon <- rnorm(pts_total, mean = 0, sd = sd_epsilon)
+    linear_pred <- alpha_true + (beta_true * points_df$intervention) + (params$psi * points_df$spillover) + epsilon
+    
+    I <- diag(pts_total)
+    A_matrix <- I - (params$rho * W_sparse)
+    
+    points_df$response <- tryCatch({
+      as.numeric(solve(A_matrix, linear_pred))
+    }, error = function(e) return(rep(NA, pts_total)))
+    
+    if (any(!is.finite(points_df$response))) {
+      beta_results[s] <- NA
+      next
+    }
+    
+    # 5. Fit Model
+    try_fit <- tryCatch({
+      suppressWarnings({
+        lagsarlm(response ~ intervention + spillover, 
+                 data = points_df, listw = listw_points, 
+                 zero.policy = TRUE)
+      })
+    }, error = function(e) NULL)
+    
+    if (!is.null(try_fit)) {
+      beta_results[s] <- coef(try_fit)[3]
+    } else {
+      beta_results[s] <- NA
+    }
+  }
+  
+  return(data.frame(
+    Mean_Beta = mean(beta_results, na.rm=TRUE),
+    Var_Beta = var(beta_results, na.rm=TRUE)
+  ))
+}
+```
+
+```{r}
+# 1. Setup Parallel Backend
+num_cores <- parallel::detectCores() - 1 
+cl <- makeCluster(num_cores)
+registerDoParallel(cl)
+cat(sprintf("Parallel backend registered with %d cores.\n", num_cores))
+
+# 2. Define Iteration Parameters
+grid_configs <- list(
+  "2x4" = c(r=2, c=4, n_trt=4),
+  "3x3" = c(r=3, c=3, n_trt=4), 
+  "3x4" = c(r=3, c=4, n_trt=6)
+)
+psi_vals   <- c(0.5, 0.6, 0.7, 0.8)
+rho_vals   <- c(0.00, 0.01)
+spill_conds <- c("TrtNoSpill", "TrtSpill")
+
+master_results <- list()
+
+# 3. Execution Loop
+for (dim_name in names(grid_configs)) {
+  
+  # Setup Grid
+  g_conf <- grid_configs[[dim_name]]
+  grid_sys <- setup_grid_system(rows = g_conf['r'], cols = g_conf['c'])
+  total_districts <- g_conf['r'] * g_conf['c']
+  
+  # Generate Combinations
+  combos_matrix <- combn(1:total_districts, g_conf['n_trt'])
+  num_combos <- ncol(combos_matrix)
+  
+  cat(sprintf("\nProcessing %s (%d Combos)...\n", dim_name, num_combos))
+  
+  # Identify Block Indices
+  is_block_subset <- logical(num_combos)
+  for(k in 1:num_combos) {
+    vec <- rep(0, total_districts)
+    vec[combos_matrix[,k]] <- 1
+    is_block_subset[k] <- check_block_stratification(vec, grid_sys$mat)
+  }
+  
+  cat(sprintf("  -> Found %d Block Stratified combinations.\n", sum(is_block_subset)))
+  
+  # Expand Params
+  sim_params <- expand.grid(psi = psi_vals, rho = rho_vals, spill = spill_conds, 
+                            stringsAsFactors = FALSE)
+  
+  for (i in 1:nrow(sim_params)) {
+    curr_params <- sim_params[i, ]
+    cat(sprintf("  -> Condition: Psi=%.1f Rho=%.2f %s\n", 
+                curr_params$psi, curr_params$rho, curr_params$spill))
+    
+    # PARALLEL RUN
+    # Note: NOT exporting mat2listw. 
+    results_list <- foreach(c_idx = 1:num_combos, 
+                            .packages = c("spatialreg", "spdep", "sf"),
+                            .export = c("run_batch_simulation")) %dopar% {
+                              
+      run_batch_simulation(c_idx, combos_matrix, grid_sys, curr_params, N_SIMS,
+                           PTS_PER_CELL, SD_EPSILON, ALPHA_TRUE, BETA_TRUE)
+    }
+    
+    # Combine results
+    raw_df <- bind_rows(results_list)
+    
+    # Metadata
+    raw_df$ComboID <- 1:num_combos
+    raw_df$Grid <- dim_name
+    raw_df$Psi <- curr_params$psi
+    raw_df$Rho <- curr_params$rho
+    raw_df$TrtSpill <- curr_params$spill
+    raw_df$Bias <- raw_df$Mean_Beta - BETA_TRUE
+    raw_df$MSE  <- raw_df$Bias^2 + raw_df$Var_Beta
+    
+    # SRS vs BSS Logic
+    df_srs <- raw_df
+    df_srs$Sampling <- "Simple Random Sampling"
+    
+    df_bss <- raw_df[is_block_subset, ]
+    df_bss$Sampling <- "Block Stratified Sampling"
+    
+    final_batch <- bind_rows(df_srs, df_bss)
+    master_results[[length(master_results) + 1]] <- final_batch
+  }
+}
+
+stopCluster(cl)
+cat("\nSimulation Complete. Results stored in 'master_results'.\n")
+```
+
+```{r}
+# 1. Consolidate Data
+final_data <- bind_rows(master_results) %>%
+  mutate(
+    Rho = sprintf("%.2f", Rho),
+    Psi = as.factor(Psi),
+    TrtSpillLabel = recode(TrtSpill, 
+                           "TrtNoSpill" = "Control Only", 
+                           "TrtSpill" = "Intervention & Control"),
+    Condition = paste0(Sampling, "\nRho=", Rho)
+  )
+
+# 2. Plotting Functions
+plot_grid_boxplots <- function(data, grid_dim) {
+  p <- data %>% 
+    filter(Grid == grid_dim) %>%
+    ggplot(aes(x = Sampling, y = MSE, fill = Psi)) +
+    geom_boxplot(outlier.alpha = 0.3) +
+    facet_grid(TrtSpillLabel ~ Rho, scales = "free_y",
+               labeller = label_bquote(rows = .(TrtSpillLabel), cols = rho == .(Rho))) +
+    theme_minimal(base_size = 12) +
+    labs(title = paste("MSE Boxplots:", grid_dim), y = "Mean Squared Error (MSE)") +
+    theme(strip.background = element_rect(fill = "grey90", color = NA))
+  return(p)
+}
+
+plot_grid_means <- function(data, grid_dim) {
+  summary_df <- data %>%
+    filter(Grid == grid_dim) %>%
+    group_by(TrtSpillLabel, Rho, Psi, Sampling, Condition) %>%
+    summarise(Avg_MSE = mean(MSE), SE = sd(MSE)/sqrt(n()), .groups = "drop") %>%
+    mutate(Lower = Avg_MSE - 1.96*SE, Upper = Avg_MSE + 1.96*SE)
+  
+  p <- ggplot(summary_df, aes(x = Condition, y = Avg_MSE, color = Psi, group = Psi)) +
+    geom_point(position = position_dodge(0.5), size = 3) +
+    geom_errorbar(aes(ymin = Lower, ymax = Upper), position = position_dodge(0.5), width = 0.2) +
+    facet_wrap(~ TrtSpillLabel, ncol = 1, scales = "free_y") +
+    theme_minimal(base_size = 12) +
+    labs(title = paste("Mean MSE (with 95% CI):", grid_dim), y = "Average MSE") +
+    theme(axis.text.x = element_text(angle = 0, hjust = 0.5))
+  return(p)
+}
+
+# 3. Generate and Display Plots
+unique_grids <- unique(final_data$Grid)
+
+for (g in unique_grids) {
+  cat(paste0("\n--- Results for Grid: ", g, " ---\n"))
+  print(plot_grid_boxplots(final_data, g))
+  print(plot_grid_means(final_data, g))
+}
+```
+
