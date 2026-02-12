@@ -1,0 +1,21 @@
+---
+title: "Spatial CRT Simulation - Heterogeneous Incidence"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Preliminaries
+
+* X
+* X
+* X
+
+```{r, message=FALSE, warning=FALSE}
+# --- Load Libraries ---
+library(tidyverse)
+library(sf)
+library(patchwork)
+library(grid)
+```
+
