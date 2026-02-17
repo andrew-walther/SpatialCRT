@@ -1,0 +1,378 @@
+---
+title: "Incidence-based Design Simulation (6 variations)"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## 1. Environment Setup
+
+First, we load the necessary packages for spatial dependence, data manipulation, and visualization.
+
+```{r setup_libraries, message=FALSE, warning=FALSE}
+# Install packages if not already installed
+if (!require(spdep)) install.packages("spdep")
+if (!require(dplyr)) install.packages("dplyr")
+if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(viridis)) install.packages("viridis")
+
+library(spdep)
+library(dplyr)
+library(ggplot2)
+library(viridis)
+```
+
+## 2. Simulation Parameters & Toggles
+
+Here we define the dimensions of our spatial grid, the values for spatial dependence ($\rho$) and spillover ($\gamma$), and the core parameters for the Spatial Durbin Model (SDM). We also include a toggle for Design 6 (Center Hotspot).
+
+```{r parameters}
+# Toggle for Design 6 (Center Hotspot / Concentric Rings)
+include_design_6 <- FALSE 
+
+# Base Parameters
+n_designs_resamples <- 100
+n_outcome_resamples <- 1000
+grid_dim <- 10
+N_clusters <- grid_dim^2
+coords <- expand.grid(x = 1:grid_dim, y = 1:grid_dim)
+
+# Spatial Parameters
+rho_vals <- c(0.00, 0.01, 0.20, 0.50)
+gamma_vals <- c(0.5, 0.6, 0.7, 0.8)
+spill_types <- c("control_only", "both")
+neighbor_types <- c("rook", "queen")
+
+# SDM Parameters
+true_tau <- 1.0   # Direct intervention effect
+beta <- 1.0       # Effect of baseline incidence on outcome
+sigma <- 1.0      # Variance of the error term
+
+# Determine which designs to run
+if(include_design_6) {
+  design_ids <- 1:7
+} else {
+  design_ids <- c(1, 2, 3, 4, 5, 7)
+}
+```
+
+## 3. Spatial Weight Matrices
+
+We generate both Rook (edge-sharing) and Queen (edge- and vertex-sharing) contiguity matrices. We row-standardize them (`style = "W"`) as required by the Spatial Durbin Model.
+
+```{r spatial_weights}
+# Generate neighbor lists
+nb_rook <- cell2nb(grid_dim, grid_dim, type = "rook")
+nb_queen <- cell2nb(grid_dim, grid_dim, type = "queen")
+
+# Generate Row-Standardized (style="W") Weight Matrices
+W_rook <- nb2mat(nb_rook, style = "W", zero.policy = TRUE)
+W_queen <- nb2mat(nb_queen, style = "W", zero.policy = TRUE)
+```
+
+## 4. Design Generator Function
+
+This function dynamically generates the treatment assignment vectors for the specified sampling designs based on the simulation document specifications.
+
+```{r design_function}
+get_designs <- function(design_id, n_resamples, N, incidence, nb_list) {
+  mat <- matrix(0, nrow = N, ncol = n_resamples)
+  
+  if (design_id == 1) {
+    # Design 1: Checkerboard (Block Stratification)
+    cb1 <- (coords$x + coords$y) %% 2
+    mat <- matrix(rep(cb1, n_resamples), ncol = n_resamples)
+    
+  } else if (design_id == 2) {
+    # Design 2: High Incidence Focus
+    med_val <- median(incidence)
+    trt_assign <- ifelse(incidence > med_val, 1, 0)
+    mat <- matrix(rep(trt_assign, n_resamples), ncol = n_resamples)
+    
+  } else if (design_id == 3) {
+    # Design 3: Saturation Quadrants
+    q_id <- ifelse(coords$x <= 5 & coords$y <= 5, 1,
+            ifelse(coords$x > 5  & coords$y <= 5, 2,
+            ifelse(coords$x <= 5 & coords$y > 5,  3, 4)))
+    
+    for (i in 1:n_resamples) {
+      z <- numeric(N)
+      current_sats <- sample(c(0.20, 0.40, 0.60, 0.80)) 
+      for (q in 1:4) {
+        idx <- which(q_id == q)
+        n_trt <- round(length(idx) * current_sats[q])
+        z[idx] <- sample(c(rep(1, n_trt), rep(0, length(idx) - n_trt)))
+      }
+      mat[, i] <- z
+    }
+    
+  } else if (design_id == 4) {
+    # Design 4: Intervention Isolation (Buffer)
+    for (i in 1:n_resamples) {
+      z <- numeric(N)
+      available <- 1:N
+      while(length(available) > 0) {
+        target <- ifelse(length(available) == 1, available, sample(available, 1))
+        z[target] <- 1
+        neighbors <- nb_list[[target]]
+        blocked <- c(target, neighbors)
+        available <- setdiff(available, blocked)
+      }
+      mat[, i] <- z
+    }
+    
+  } else if (design_id == 5) {
+    # Design 5: 2x2 Blocking
+    block_id <- paste((coords$x-1) %/% 2, (coords$y-1) %/% 2)
+    unique_blocks <- unique(block_id)
+    for (i in 1:n_resamples) {
+      z <- numeric(N)
+      for (b in unique_blocks) {
+        idx <- which(block_id == b)
+        z[idx] <- sample(c(1, 1, 0, 0)) 
+      }
+      mat[, i] <- z
+    }
+    
+  } else if (design_id == 6) {
+    # Design 6: Center Hotspot (Concentric Rings)
+    dist_from_center <- pmax(abs(coords$x - 5.5), abs(coords$y - 5.5))
+    rings <- as.numeric(as.factor(dist_from_center)) 
+    for (i in 1:n_resamples) {
+      z <- numeric(N)
+      for (r in unique(rings)) {
+        idx <- which(rings == r)
+        n_half <- round(length(idx) / 2)
+        z[idx] <- sample(c(rep(1, n_half), rep(0, length(idx) - n_half)))
+      }
+      mat[, i] <- z
+    }
+    
+  } else if (design_id == 7) {
+    # Design 7: Balanced Quartiles
+    quartiles <- ntile(incidence, 4)
+    for (i in 1:n_resamples) {
+      z <- numeric(N)
+      for (q in 1:4) {
+        idx <- which(quartiles == q)
+        n_half <- round(length(idx) / 2)
+        z[idx] <- sample(c(rep(1, n_half), rep(0, length(idx) - n_half)))
+      }
+      mat[, i] <- z
+    }
+  }
+  return(mat)
+}
+```
+
+## 4.5 Sanity Check: Visualize Sample Designs with Uniform Incidence
+
+```{r visualize_designs, fig.width=12, fig.height=8}
+set.seed(2026)
+
+# 1. Generate uniformly distributed incidence from U(0,1)
+dummy_incidence <- runif(N_clusters, 0, 1)
+
+# Focus only on the 6 relevant designs
+design_ids_to_plot <- c(1, 2, 3, 4, 5, 7)
+
+design_names <- c(
+  "1" = "1: Checkerboard",
+  "2" = "2: High Incidence Focus",
+  "3" = "3: Saturation Quadrants",
+  "4" = "4: Isolation Buffer",
+  "5" = "5: 2x2 Blocking",
+  "7" = "7: Balanced Quartiles (1:1)"
+)
+
+# 2. Generate exactly 1 assignment vector for each design
+sample_designs_list <- lapply(design_ids_to_plot, function(d) {
+  
+  z <- get_designs(design_id = d, n_resamples = 1, N = N_clusters, 
+                   incidence = dummy_incidence, nb_list = nb_queen)[, 1]
+  
+  data.frame(
+    x = coords$x,
+    y = coords$y,
+    Incidence = dummy_incidence,
+    Assignment = as.factor(z),
+    Design = design_names[as.character(d)]
+  )
+})
+
+sample_designs_df <- bind_rows(sample_designs_list)
+
+# 3. Plot the 6 designs
+plot_designs <- ggplot(sample_designs_df, aes(x = x, y = y)) +
+  # Heatmap base layer mapped to Incidence
+  geom_tile(aes(fill = Incidence), color = "grey50", linewidth = 0.5) +
+  # Overlay treatment assignment as shapes 
+  geom_point(aes(shape = Assignment), fill = "white", color = "black", size = 2.5, stroke = 1) +
+  # Continuous color scale for the Incidence heatmap
+  scale_fill_viridis_c(option = "mako", direction = -1, name = "Baseline\nIncidence") +
+  # Shape scale for Treatment Assignment
+  scale_shape_manual(
+    values = c("0" = 4, "1" = 21), 
+    labels = c("0" = "Control (X)", "1" = "Treated (\u25cf)"),
+    name = "Treatment\nAssignment"
+  ) +
+  # Layout in a 3 columns by 2 rows grid
+  facet_wrap(~ Design, ncol = 3) + 
+  theme_void(base_size = 14) +
+  labs(
+    title = "Visual Examples of the 6 Spatial Treatment Designs",
+    subtitle = "Grid colored by Uniform(0,1) Baseline Incidence",
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 5, t = 10)),
+    plot.subtitle = element_text(hjust = 0.5, margin = margin(b = 20)),
+    strip.text = element_text(face = "bold", margin = margin(b = 10, t = 10)),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5) 
+  ) +
+  coord_fixed() 
+
+# Print the visualization
+print(plot_designs)
+```
+
+## 5. Main Simulation Execution
+
+This chunk runs the fully vectorized Spatial Durbin Model. Note that `cache=TRUE` is set so you don't have to re-run the simulation if you are just tweaking the visualizations below.
+
+```{r simulation_run, cache=TRUE}
+results_list <- list()
+list_index <- 1
+total_scenarios <- length(neighbor_types) * length(rho_vals) * length(gamma_vals) * length(spill_types) * length(design_ids)
+
+set.seed(2026)
+start_time <- Sys.time()
+
+cat("Starting SDM Simulation. Total scenarios:", total_scenarios, "\n")
+cat("--------------------------------------------------------------\n")
+
+for (nb_type in neighbor_types) {
+  
+  # Set active matrix
+  W <- if(nb_type == "rook") W_rook else W_queen
+  active_nb <- if(nb_type == "rook") nb_rook else nb_queen
+  I <- diag(N_clusters)
+  
+  for (rho in rho_vals) {
+    
+    # 1. SDM Spatial Multiplier: (I - rho*W)^-1
+    inv_mat <- solve(I - rho * W)
+    
+    # 2. Baseline Matrix (X and Epsilon)
+    X_matrix <- matrix(runif(N_clusters * n_outcome_resamples, 0, 1), ncol = n_outcome_resamples)
+    Epsilon_matrix <- matrix(rnorm(N_clusters * n_outcome_resamples, 0, sigma), ncol = n_outcome_resamples)
+    baseline_part <- inv_mat %*% (X_matrix * beta + Epsilon_matrix)
+    
+    for (gamma in gamma_vals) {
+      for (spill_type in spill_types) {
+        for (d_id in design_ids) {
+          
+          # Get treatment assignments (Uses X_matrix[, 1] for covariate-dependent designs)
+          base_incidence <- X_matrix[, 1] 
+          Z_matrix <- get_designs(d_id, n_designs_resamples, N_clusters, base_incidence, active_nb)
+          
+          scenario_estimates <- numeric(n_designs_resamples * n_outcome_resamples)
+          counter <- 1
+          
+          for (d_resample in 1:n_designs_resamples) {
+            Z <- Z_matrix[, d_resample]
+            
+            # 3. Exogenous Spillover Term: WZ
+            WZ <- as.vector(W %*% Z)
+            spill_term <- if(spill_type == "control_only") gamma * WZ * (1 - Z) else gamma * WZ
+            
+            # 4. Final Y = Multiplier * (Treatment + Baseline)
+            trt_effect_vector <- as.vector(inv_mat %*% (true_tau * Z + spill_term))
+            Y_sim <- trt_effect_vector + baseline_part
+            
+            # 5. ESTIMATION STEP
+            if (sum(Z) == 0 || sum(Z) == N_clusters) {
+              ate_est <- rep(NA, n_outcome_resamples) 
+            } else {
+              # Fast Naive Difference-in-Means
+              mean_Y_trt <- colMeans(Y_sim[Z == 1, , drop = FALSE])
+              mean_Y_ctrl <- colMeans(Y_sim[Z == 0, , drop = FALSE])
+              ate_est <- mean_Y_trt - mean_Y_ctrl
+            }
+            
+            idx_start <- counter
+            idx_end <- counter + n_outcome_resamples - 1
+            scenario_estimates[idx_start:idx_end] <- ate_est
+            counter <- idx_end + 1
+          }
+          
+          valid_estimates <- na.omit(scenario_estimates)
+          
+          results_list[[list_index]] <- data.frame(
+            Neighbor_Type = nb_type,
+            Design = paste("Design", d_id),
+            Rho = rho,
+            Gamma = gamma,
+            Spillover_Type = spill_type,
+            Mean_Estimate = mean(valid_estimates),
+            Bias = mean(valid_estimates) - true_tau,
+            SD = sd(valid_estimates),
+            MSE = mean((valid_estimates - true_tau)^2)
+          )
+          list_index <- list_index + 1
+        }
+      }
+    }
+  }
+}
+
+granular_results <- bind_rows(results_list)
+end_time <- Sys.time()
+cat("--------------------------------------------------------------\n")
+print(paste("Simulation finished in", round(difftime(end_time, start_time, units="mins"), 2), "minutes."))
+```
+
+## 6. Visualizations
+
+Here we visualize the distribution of Mean Squared Error (MSE) to assess design performance across Rook and Queen contiguity assumptions.
+
+```{r plot_results, fig.width=10, fig.height=6}
+# PLOT 1: Overall Design Robustness by Neighbor Type
+plot_mse_overall <- ggplot(granular_results, aes(x = reorder(Design, MSE, FUN = median), y = MSE, fill = Design)) +
+  geom_boxplot(alpha = 0.8, outlier.alpha = 0.5) +
+  facet_wrap(~ Neighbor_Type, labeller = as_labeller(c("queen" = "Queen Contiguity", "rook" = "Rook Contiguity"))) +
+  scale_fill_viridis_d(option = "turbo") +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Distribution of Estimation Error (MSE) by Spatial Contiguity",
+    subtitle = "Aggregated across all spatial dependence and spillover scenarios",
+    x = "Sampling Design",
+    y = "Mean Squared Error (Lower is Better)"
+  ) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(plot_mse_overall)
+
+# PLOT 2: Heatmap of MSE by Spatial Dependence (rho)
+mse_rho_summary <- granular_results %>%
+  group_by(Design, Rho, Neighbor_Type) %>%
+  summarise(Avg_MSE = mean(MSE), .groups = "drop") %>%
+  mutate(text_color = ifelse(Avg_MSE > quantile(Avg_MSE, 0.75), "black", "white"))
+
+plot_mse_heatmap <- ggplot(mse_rho_summary, aes(x = as.factor(Rho), y = Design, fill = Avg_MSE)) +
+  geom_tile(color = "white", linewidth = 0.5) +
+  geom_text(aes(label = sprintf("%.3f", Avg_MSE), color = text_color), size = 3.5, fontface = "bold", show.legend = FALSE) +
+  facet_wrap(~ Neighbor_Type, labeller = as_labeller(c("queen" = "Queen Contiguity", "rook" = "Rook Contiguity"))) +
+  scale_fill_viridis_c(option = "magma") + 
+  scale_color_identity() + 
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Heatmap of Error by Spatial Dependence & Neighbor Type",
+    x = "Spatial Dependence (\u03c1)",
+    y = "Sampling Design",
+    fill = "Avg MSE"
+  ) +
+  theme(panel.grid = element_blank())
+
+print(plot_mse_heatmap)
+```
