@@ -420,7 +420,7 @@ datatable(
 
 comprehensive_table <- granular_results %>%
   arrange(Design, Neighbor_Type, Spillover_Type, Rho, Gamma) %>%
-  select(Design, Neighbor_Type, Spillover_Type, Rho, Gamma, Bias, SD, MSE)
+  dplyr::select(Design, Neighbor_Type, Spillover_Type, Rho, Gamma, Bias, SD, MSE)
 
 datatable(
   comprehensive_table,
@@ -489,7 +489,7 @@ plot_master_comparison <- ggplot(comparison_data, aes(x = Design, y = MSE, fill 
   facet_grid(
     Spillover_Type ~ paste("\u03c1 =", Rho), 
     scales = "free_y", # Allows y-axis to adjust if high-rho errors explode
-    labeller = labeller(Spillover_Type = c("both" = "Spillover: Both", "control_only" = "Spillover: Control Only"))
+    labeller = labeller(Spillover_Type = c("both" = "Spillover: Both", "control_only" = "Spillover: Control"))
   ) +
   scale_fill_viridis_d(option = "turbo", name = "Spillover\nMagnitude (\u03b3)") +
   theme_bw(base_size = 13) +
