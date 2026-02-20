@@ -11,6 +11,8 @@ output: html_document
 * Consider multiple potential design strategies (Null Scenario, Intervention-High Incidence, Block stratification among high/low incidence) to address optimal strategy for study design with heterogeneous outcome incidence
 * Understand which design achieves best estimation efficiency (minimal error) -> Sampling strategies when there is spillover, spatial dependence, and heterogeneous incidence of the outcome.
 * How can we "best" design a study with known historical data on outcome incidences
+* **Target of estimation:** The direct effect $\tau$ (coefficient on $Z$ in the SDM) is the estimand. The naive difference-in-means is biased for $\tau$ when spillover or spatial dependence is present.
+* **Design vs outcome:** Treatment is assigned using a single "historical" incidence (first baseline draw). Outcome replicates use different baseline draws and errors to reflect sampling variation given that design.
 
 ## 1. Environment Setup
 
@@ -24,6 +26,7 @@ if (!require(dplyr)) install.packages("dplyr")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(viridis)) install.packages("viridis")
 
+# Load libraries for spatial modeling, data wrangling, and plotting
 library(spdep)
 library(spatialreg)
 library(dplyr)
@@ -37,36 +40,41 @@ Here we define the dimensions of our spatial grid, the values for spatial depend
 
 ```{r parameters}
 # Toggle for Estimation Mode: "DIM" (Quick) or "MLE" (Thorough/Rigorous)
-estimation_mode <- "DIM" # MLE or DIM
+estimation_mode <- "MLE" # MLE or DIM
 
 # Toggle for Design 6 (Center Hotspot / Concentric Rings)
 include_design_6 <- FALSE 
 
 # Base Parameters (Dynamically scaled based on estimation mode)
 if (estimation_mode == "MLE") {
+  # 25 design resamples x 10 outcome resamples = 250 iterations per scenario.
+  # This provides a strong balance between robustness (testing multiple spatial 
+  # allocations) and computational efficiency for the maximum likelihood estimator.
   n_designs_resamples <- 25   
-  n_outcome_resamples <- 40   # 1,000 total iterations per scenario (computationally feasible for MLE)
+  n_outcome_resamples <- 10  
 } else {
+  # Fast Difference-in-Means can easily handle 100,000 iterations per scenario
   n_designs_resamples <- 100  
-  n_outcome_resamples <- 1000 # 100,000 total iterations per scenario (fast for DIM)
+  n_outcome_resamples <- 1000 
 }
 
+# Grid definitions: 10x10 grid yielding 100 clusters
 grid_dim <- 10
 N_clusters <- grid_dim^2
 coords <- expand.grid(x = 1:grid_dim, y = 1:grid_dim)
 
 # Spatial Parameters
-rho_vals <- c(0.00, 0.01, 0.20, 0.50) # spatial dependence
-gamma_vals <- c(0.5, 0.6, 0.7, 0.8) # spillover effect
-spill_types <- c("control_only", "both") # spillover constraint (neighbors that are just control or either)
-neighbor_types <- c("rook", "queen") # neighbor definition: just adjacent (rook) or diagonal as well (queen)
+rho_vals <- c(0.00, 0.01, 0.20, 0.50) # Spatial dependence (autocorrelation)
+gamma_vals <- c(0.5, 0.6, 0.7, 0.8) # Spillover effect magnitude
+spill_types <- c("control_only", "both") # Spillover target constraint
+neighbor_types <- c("rook", "queen") # Contiguity definition
 
 # SDM Parameters
-true_tau <- 1.0   # Direct intervention effect
-beta <- 1.0       # Effect of baseline incidence on outcome
-sigma <- 1.0      # Variance of the error term
+true_tau <- 1.0   # True direct intervention effect
+beta <- 1.0       # Effect of baseline incidence on the outcome
+sigma <- 1.0      # Variance of the random error term
 
-# Determine which designs to run (toggle on off to include "hot spot" design)
+# Determine which designs to run based on the hotspot toggle
 if(include_design_6) {
   design_ids <- 1:7
 } else {
@@ -79,15 +87,15 @@ if(include_design_6) {
 We generate both Rook (edge-sharing) and Queen (edge- and vertex-sharing) contiguity matrices. We row-standardize them (`style = "W"`) as required by the Spatial Durbin Model.
 
 ```{r spatial_weights}
-# Generate neighbor lists
+# Generate basic neighbor lists identifying adjacent clusters
 nb_rook <- cell2nb(grid_dim, grid_dim, type = "rook")
 nb_queen <- cell2nb(grid_dim, grid_dim, type = "queen")
 
-# Generate Row-Standardized (style="W") Weight Matrices
+# Generate Row-Standardized Weight Matrices (Used in the Data Generating Process)
 W_rook <- nb2mat(nb_rook, style = "W", zero.policy = TRUE)
 W_queen <- nb2mat(nb_queen, style = "W", zero.policy = TRUE)
 
-# Generate listw objects for lagsarlm() spatial regression
+# Generate listw objects (Specifically formatted for lagsarlm() spatial regression)
 listw_rook <- mat2listw(W_rook, style = "W")
 listw_queen <- mat2listw(W_queen, style = "W")
 ```
@@ -98,21 +106,22 @@ This function dynamically generates the treatment assignment vectors for the spe
 
 ```{r design_function}
 get_designs <- function(design_id, n_resamples, N, incidence, nb_list) {
+  # Initialize the matrix that will hold all treatment assignment vectors
   mat <- matrix(0, nrow = N, ncol = n_resamples)
   
   if (design_id == 1) {
-    # Design 1: Checkerboard (Block Stratification)
+    # Design 1: Checkerboard (Strict Block Stratification)
     cb1 <- (coords$x + coords$y) %% 2
     mat <- matrix(rep(cb1, n_resamples), ncol = n_resamples)
     
   } else if (design_id == 2) {
-    # Design 2: High Incidence Focus
+    # Design 2: High Incidence Focus (Treat only the worst-off clusters)
     med_val <- median(incidence)
     trt_assign <- ifelse(incidence > med_val, 1, 0)
     mat <- matrix(rep(trt_assign, n_resamples), ncol = n_resamples)
     
   } else if (design_id == 3) {
-    # Design 3: Saturation Quadrants
+    # Design 3: Saturation Quadrants (Varying treatment density by region)
     q_id <- ifelse(coords$x <= 5 & coords$y <= 5, 1,
             ifelse(coords$x > 5  & coords$y <= 5, 2,
             ifelse(coords$x <= 5 & coords$y > 5,  3, 4)))
@@ -129,7 +138,7 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list) {
     }
     
   } else if (design_id == 4) {
-    # Design 4: Intervention Isolation (Buffer)
+    # Design 4: Intervention Isolation (Force control buffers around treated units)
     for (i in 1:n_resamples) {
       z <- numeric(N)
       available <- 1:N
@@ -144,7 +153,7 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list) {
     }
     
   } else if (design_id == 5) {
-    # Design 5: 2x2 Blocking
+    # Design 5: 2x2 Blocking (Localized 1:1 randomization)
     block_id <- paste((coords$x-1) %/% 2, (coords$y-1) %/% 2)
     unique_blocks <- unique(block_id)
     for (i in 1:n_resamples) {
@@ -157,7 +166,7 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list) {
     }
     
   } else if (design_id == 6) {
-    # Design 6: Center Hotspot (Concentric Rings)
+    # Design 6: Center Hotspot (Concentric Rings - Optional)
     dist_from_center <- pmax(abs(coords$x - 5.5), abs(coords$y - 5.5))
     rings <- as.numeric(as.factor(dist_from_center)) 
     for (i in 1:n_resamples) {
@@ -171,7 +180,7 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list) {
     }
     
   } else if (design_id == 7) {
-    # Design 7: Balanced Quartiles
+    # Design 7: Balanced Quartiles (1:1 randomization within incidence strata)
     quartiles <- ntile(incidence, 4)
     for (i in 1:n_resamples) {
       z <- numeric(N)
@@ -347,10 +356,12 @@ for (nb_type in neighbor_types) {
                   
                   # Fit the Spatial Durbin Model using Maximum Likelihood
                   # tryCatch handles scenarios where Z and Spillover are perfectly collinear
+                  # suppressWarnings() is used to hide the "Aliased variables found" warning generated by collinearity.
                   fit <- tryCatch({
-                    spatialreg::lagsarlm(Y ~ Z + Spill + X, data = df, listw = active_listw, quiet = TRUE)
+                    suppressWarnings(spatialreg::lagsarlm(Y ~ Z + Spill + X, data = df, listw = active_listw, quiet = TRUE))
                   }, error = function(e) NULL)
                   
+                  # Extract the Z coefficient if the model successfully converged
                   if (!is.null(fit) && "Z" %in% names(coef(fit))) {
                     scenario_estimates[counter] <- coef(fit)["Z"]
                   } else {
@@ -362,6 +373,7 @@ for (nb_type in neighbor_types) {
             }
           }
           
+          # Compute failure rates (from multicollinearity) and aggregate results
           valid_estimates <- na.omit(scenario_estimates)
           fail_rate <- 1 - (length(valid_estimates) / length(scenario_estimates))
           
@@ -404,11 +416,8 @@ print(paste("Simulation finished in", round(difftime(end_time, start_time, units
 Here we visualize the distribution of Mean Squared Error (MSE) to assess design performance across Rook and Queen contiguity assumptions.
 
 ```{r plot_results, fig.width=10, fig.height=6}
-# Exclude failed designs from visualization if any exist
-plot_data <- granular_results %>% filter(!is.na(MSE))
-
 # PLOT 1: Overall Design Robustness by Neighbor Type
-plot_mse_overall <- ggplot(plot_data, aes(x = reorder(Design, MSE, FUN = median), y = MSE, fill = Design)) +
+plot_mse_overall <- ggplot(granular_results, aes(x = reorder(Design, MSE, FUN = median), y = MSE, fill = Design)) +
   geom_boxplot(alpha = 0.8, outlier.alpha = 0.5) +
   facet_wrap(~ Neighbor_Type, labeller = as_labeller(c("queen" = "Queen Contiguity", "rook" = "Rook Contiguity"))) +
   scale_fill_viridis_d(option = "turbo") +
@@ -424,10 +433,10 @@ plot_mse_overall <- ggplot(plot_data, aes(x = reorder(Design, MSE, FUN = median)
 print(plot_mse_overall)
 
 # PLOT 2: Heatmap of MSE by Spatial Dependence (rho)
-mse_rho_summary <- plot_data %>%
+mse_rho_summary <- granular_results %>%
   group_by(Design, Rho, Neighbor_Type) %>%
   summarise(Avg_MSE = mean(MSE), .groups = "drop") %>%
-  mutate(text_color = ifelse(Avg_MSE > quantile(Avg_MSE, 0.75, na.rm = TRUE), "black", "white"))
+  mutate(text_color = ifelse(Avg_MSE > quantile(Avg_MSE, 0.75, na.rm=TRUE), "black", "white"))
 
 plot_mse_heatmap <- ggplot(mse_rho_summary, aes(x = as.factor(Rho), y = Design, fill = Avg_MSE)) +
   geom_tile(color = "white", linewidth = 0.5) +
@@ -461,36 +470,38 @@ library(dplyr)
 summary_by_design <- granular_results %>%
   group_by(Design) %>%
   summarise(
-    Avg_Bias = mean(Bias, na.rm = TRUE),
-    Avg_SD = mean(SD, na.rm = TRUE),
-    Avg_MSE = mean(MSE, na.rm = TRUE),
-    Avg_Fail_Rate = mean(Fail_Rate, na.rm = TRUE)
+    Avg_Bias = mean(Bias, na.rm=TRUE),
+    Avg_SD = mean(SD, na.rm=TRUE),
+    Avg_MSE = mean(MSE, na.rm=TRUE)
   ) %>%
   arrange(Avg_MSE) # Sort best (lowest MSE) to worst
 
 datatable(
   summary_by_design,
-  caption = "Table 1: Overall Average Bias, SD, MSE, and Failure Rate by Design",
+  caption = "Table 1: Overall Average Bias, SD, and MSE by Design",
   rownames = FALSE,
   options = list(dom = 't') # Simple table without search bars for the summary
 ) %>%
-  formatRound(columns = c("Avg_Bias", "Avg_SD", "Avg_MSE", "Avg_Fail_Rate"), digits = 4)
+  formatRound(columns = c("Avg_Bias", "Avg_SD", "Avg_MSE"), digits = 4)
 
 # ------------------------------------------------------------------------------
 # Table 2: Comprehensive Scenario-Specific Results
 # ------------------------------------------------------------------------------
+# The granular_results dataframe already contains the exact bias, SD, and MSE 
+# for every specific simulation parameter combination. We just format it nicely.
+
 comprehensive_table <- granular_results %>%
   arrange(Design, Neighbor_Type, Spillover_Type, Rho, Gamma) %>%
-  dplyr::select(Design, Neighbor_Type, Spillover_Type, Rho, Gamma, Bias, SD, MSE, Fail_Rate)
+  dplyr::select(Design, Neighbor_Type, Spillover_Type, Rho, Gamma, Bias, SD, MSE)
 
 datatable(
   comprehensive_table,
   caption = "Table 2: Comprehensive Simulation Results by Scenario",
   rownames = FALSE,
-  filter = "top", 
+  filter = "top", # Adds search/filter boxes for exploring specific scenarios
   options = list(pageLength = 12, autoWidth = TRUE, scrollX = TRUE)
 ) %>%
-  formatRound(columns = c("Bias", "SD", "MSE", "Fail_Rate"), digits = 4)
+  formatRound(columns = c("Bias", "SD", "MSE"), digits = 4)
 ```
 
 ```{r}
@@ -500,15 +511,19 @@ datatable(
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(viridis)) install.packages("viridis")
 
-unique_designs <- sort(unique(plot_data$Design))
+# Extract the unique design names
+unique_designs <- sort(unique(granular_results$Design))
 
+# Loop through each design and create a dedicated figure
 for (current_design in unique_designs) {
   
-  design_data <- plot_data %>% filter(Design == current_design)
+  # Filter data for the specific design
+  design_data <- granular_results %>% filter(Design == current_design)
   
   p_design <- ggplot(design_data, aes(x = as.factor(Gamma), y = MSE, color = Spillover_Type, group = Spillover_Type)) +
     geom_line(linewidth = 1) +
     geom_point(size = 3) +
+    # Facet grid: Rho on the columns, Neighbor_Type on the rows
     facet_grid(Neighbor_Type ~ paste("\u03c1 =", Rho)) +
     scale_color_viridis_d(option = "turbo", labels = c("both" = "Treated & Control", "control_only" = "Control Only")) +
     theme_bw(base_size = 14) +
@@ -525,6 +540,7 @@ for (current_design in unique_designs) {
       strip.text = element_text(face = "bold")
     )
   
+  # Print the plot so it renders in the document/console
   print(p_design)
 }
 ```
@@ -534,10 +550,14 @@ for (current_design in unique_designs) {
 # FIGURE SET 2: MASTER DESIGN COMPARISON
 # ==============================================================================
 
-comparison_data <- plot_data %>% filter(Neighbor_Type == "queen")
+# Filter for Queen contiguity to prevent facet overcrowding
+# (You can change this to "rook" to view the alternative spatial structure)
+comparison_data <- granular_results %>% filter(Neighbor_Type == "queen")
 
 plot_master_comparison <- ggplot(comparison_data, aes(x = Design, y = MSE, fill = as.factor(Gamma))) +
+  # Grouped bar chart to show multiple Gamma values side-by-side for each design
   geom_col(position = position_dodge(width = 0.8), width = 0.7, color = "black", linewidth = 0.2) +
+  # Facet grid: Rho on columns, Spillover_Type on rows (just like the attached image)
   facet_grid(
     Spillover_Type ~ paste("\u03c1 =", Rho), 
     scales = "free_y", 
