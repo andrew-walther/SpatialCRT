@@ -312,6 +312,9 @@ for (nb_type in neighbor_types) {
           scenario_estimates <- numeric(n_designs_resamples * n_outcome_resamples)
           counter <- 1
           
+          # Capture start time for the current scenario
+          scenario_start_time <- Sys.time()
+          
           cat(sprintf("Processing %3d / %d | NB: %-5s | Rho: %.2f | Gam: %.2f | Spill: %-12s | Design: %d\n", 
                       list_index, total_scenarios, nb_type, rho, gamma, spill_type, d_id))
           flush.console()
@@ -398,6 +401,15 @@ for (nb_type in neighbor_types) {
               Mean_Estimate = NA, Bias = NA, SD = NA, MSE = NA, Fail_Rate = fail_rate
             )
           }
+          
+          # Calculate and print elapsed time for the scenario
+          scenario_end_time <- Sys.time()
+          scenario_elapsed <- as.numeric(difftime(scenario_end_time, scenario_start_time, units = "secs"))
+          mins <- floor(scenario_elapsed / 60)
+          secs <- round(scenario_elapsed %% 60, 1)
+          cat(sprintf("   -> Scenario %d Elapsed Time: %d min %.1f sec\n", list_index, mins, secs))
+          flush.console()
+          
           list_index <- list_index + 1
         }
       }
