@@ -593,3 +593,16 @@ plot_master_comparison <- ggplot(comparison_data, aes(x = Design, y = MSE, fill 
 
 print(plot_master_comparison)
 ```
+
+```{r}
+# ==============================================================================
+# Save R Environment for Future Analysis (MLE or DIM)
+# ==============================================================================
+# save the current R environment specific for when estimation is performed with "MLE" vs. "DIM". This allows us to keep the large MLE results without overwriting them when we run the faster DIM version for quick checks and visualizations.
+save.image(file = paste0("SpatialCRT_Incidence_Simulation_", estimation_mode, "_Results.RData"))
+
+# load the saved environment based on specification of MLE vs. DIM estimation mode (create an object to select whether to load MLE or DIM results for future analysis and visualization)
+# estimation_mode_to_load <- "MLE" # Change to "DIM" to load the faster
+# load(paste0("SpatialCRT_Incidence_Simulation_", estimation_mode_to_load, "_Results.RData"))
+```
+
