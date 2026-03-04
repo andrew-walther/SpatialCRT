@@ -1,0 +1,498 @@
+---
+title: "Mathematical Specification: Spatial CRT Design Simulation with Heterogeneous Incidence"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: true
+    theme: cosmo
+    css: !expr NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+# Introduction
+
+This document provides a rigorous mathematical specification for the simulation study
+evaluating treatment assignment designs in Spatial Cluster Randomized Trials (CRTs) under
+heterogeneous outcome incidence. The study investigates which sampling design strategy
+yields the most efficient (lowest error) estimates of the direct intervention effect
+$\tau$ when spillover effects and spatial dependence are present.
+
+**Research question:** Given known historical incidence data exhibiting spatial
+heterogeneity, which treatment assignment design minimizes estimation error for $\tau$
+across a range of spatial dependence and spillover configurations?
+
+**Application context:** Sudden Unexpected Death (SUD) in North Carolina, where
+county-level and census tract-level incidence rates are modeled via Poisson regression
+(Gan et al., 2019; Watson et al., AHA Abstract). The base SUD incidence rate is
+approximately 35 per 100,000 (Mirzaei et al., 2019).
+
+---
+
+# Study Region and Spatial Structure
+
+## Regular Lattice Grid
+
+The study region is a regular square lattice grid:
+
+$$\mathcal{G} = \{s_1, s_2, \ldots, s_N\}$$
+
+where each cluster $s_i$ is located at integer coordinates $(x_i, y_i)$ on a
+$G \times G$ grid, so $N = G^2$. In this study, $G = 10$ and $N = 100$.
+
+## Spatial Contiguity
+
+Two contiguity definitions are considered:
+
+- **Rook contiguity**: clusters sharing an edge (4-connected). The neighbor set is
+$$\mathcal{N}_R(s_i) = \{s_j : |x_i - x_j| + |y_i - y_j| = 1\}$$
+
+- **Queen contiguity**: clusters sharing an edge or vertex (8-connected). The neighbor set is
+$$\mathcal{N}_Q(s_i) = \{s_j : \max(|x_i - x_j|, |y_i - y_j|) = 1\}$$
+
+## Spatial Weight Matrix
+
+Let $\mathbf{A}$ denote the binary adjacency matrix where $A_{ij} = \mathbf{1}[s_j \in \mathcal{N}(s_i)]$.
+The row-standardized spatial weight matrix is:
+
+$$W_{ij} = \frac{A_{ij}}{\sum_{k=1}^{N} A_{ik}}, \quad i \neq j; \quad W_{ii} = 0$$
+
+This ensures $\sum_j W_{ij} = 1$ for each row, so spatial lags represent neighborhood averages.
+We construct $\mathbf{W}_R$ (rook) and $\mathbf{W}_Q$ (queen) weight matrices.
+
+---
+
+# Outcome Data Generating Process
+
+## Spatial Durbin Model (SDM)
+
+The outcome vector $\mathbf{Y} = (Y_1, \ldots, Y_N)^\top$ is generated from the
+Spatial Durbin Model:
+
+$$\mathbf{Y} = (\mathbf{I}_N - \rho\mathbf{W})^{-1}\left[\tau\mathbf{Z} + \gamma \cdot \text{Spill}(\mathbf{Z}) + \beta\mathbf{X} + \boldsymbol{\varepsilon}\right]$$
+
+where:
+
+| Symbol | Description | Role |
+|:---:|:---|:---|
+| $\mathbf{Y}$ | $N \times 1$ outcome vector | Response |
+| $\mathbf{I}_N$ | $N \times N$ identity matrix | --- |
+| $\rho$ | Spatial autocorrelation parameter | Controls global spatial dependence in $\mathbf{Y}$ |
+| $\mathbf{W}$ | $N \times N$ row-standardized weight matrix | Spatial structure (rook or queen) |
+| $\tau$ | Direct treatment effect | **Estimand of interest** |
+| $\mathbf{Z}$ | $N \times 1$ binary treatment vector | $Z_i \in \{0, 1\}$ |
+| $\gamma$ | Spillover effect magnitude | Indirect effect via treated neighbors |
+| $\text{Spill}(\mathbf{Z})$ | $N \times 1$ spillover term | See Section 3.2 |
+| $\beta$ | Effect of baseline incidence on outcome | Covariate coefficient |
+| $\mathbf{X}$ | $N \times 1$ baseline incidence vector | $X_i \in [0, 1]$ |
+| $\boldsymbol{\varepsilon}$ | $N \times 1$ error vector | $\varepsilon_i \overset{\text{iid}}{\sim} N(0, \sigma^2)$ |
+
+The spatial multiplier $(\mathbf{I}_N - \rho\mathbf{W})^{-1}$ induces global spatial
+dependence: each cluster's outcome depends on the entire network through higher-order
+neighbors.
+
+**Stationarity condition:** The model requires $|\rho| < 1 / \lambda_{\max}(\mathbf{W})$.
+For row-standardized $\mathbf{W}$, $\lambda_{\max} = 1$, so we require $|\rho| < 1$.
+
+## Spillover Construction
+
+The spillover term captures indirect treatment effects transmitted through the spatial network:
+
+$$\text{Spill}_i = \frac{\sum_{j \in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|} = (\mathbf{W}\mathbf{Z})_i$$
+
+This is the proportion of cluster $i$'s neighbors that are treated. Two spillover types are
+considered:
+
+1. **Control-only spillover**: The spillover effect applies only to untreated clusters:
+$$\text{Spill}_i^{(\text{ctrl})} = \gamma \cdot (\mathbf{W}\mathbf{Z})_i \cdot (1 - Z_i)$$
+
+2. **Bidirectional spillover**: The spillover effect applies to all clusters:
+$$\text{Spill}_i^{(\text{both})} = \gamma \cdot (\mathbf{W}\mathbf{Z})_i$$
+
+---
+
+# Incidence Generation Modes
+
+The baseline incidence vector $\mathbf{X}$ represents prior observed outcome rates across
+clusters. We consider three generation modes with increasing structural complexity. All
+modes produce values in $[0, 1]$ to ensure comparability across modes and with the
+treatment assignment designs.
+
+## Mode 1: Independent and Identically Distributed (iid)
+
+$$X_i \overset{\text{iid}}{\sim} \text{Uniform}(0, 1), \quad i = 1, \ldots, N$$
+
+This serves as the **naive baseline** with no spatial structure in incidence. It represents
+the case where historical outcome rates show no geographic clustering.
+
+**Properties:** $\mathbb{E}[X_i] = 0.5$, $\text{Var}(X_i) = 1/12$, $\text{Cor}(X_i, X_j) = 0$ for $i \neq j$.
+
+## Mode 2: Spatially Correlated (SAR Filter)
+
+Spatially correlated incidence is generated via the Simultaneous Autoregressive (SAR) filter:
+
+$$\mathbf{X}^* = (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$$
+
+where $\rho_X \in [0, 1)$ controls the degree of spatial correlation in incidence.
+
+The raw values $X_i^*$ are then transformed to $[0, 1]$ via the probability integral transform:
+
+$$X_i = \Phi(X_i^*)$$
+
+where $\Phi(\cdot)$ is the standard normal CDF.
+
+**Key property:** When $\rho_X = 0$, $\mathbf{X}^* = \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$ and
+$X_i = \Phi(u_i) \sim \text{Uniform}(0,1)$ by the probability integral transform, recovering Mode 1
+marginally. When $\rho_X > 0$, the $X_i$ remain marginally approximately uniform but exhibit
+positive spatial correlation: nearby clusters have similar incidence values.
+
+**Parameters:** $\rho_X \in \{0.20, 0.50\}$ (incidence spatial correlation).
+
+## Mode 3: Poisson Count-Based
+
+Motivated by the SUD application, this mode generates incidence from a Poisson count model
+with spatially correlated rates:
+
+**Step 1.** Generate spatially correlated log-rates:
+$$\log \boldsymbol{\lambda}^* = \mu_0 \cdot \mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$$
+
+where $\mu_0 = \log(\text{base rate})$ is the log of the baseline incidence rate
+(e.g., $\mu_0 = \log(35/100{,}000)$ for SUD).
+
+**Step 2.** Generate Poisson counts given cluster populations:
+$$C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)$$
+
+where $P_i$ is the population of cluster $i$.
+
+**Step 3.** Compute observed rates:
+$$R_i = C_i / P_i$$
+
+**Step 4.** Rank-normalize to $[0, 1]$:
+$$X_i = \frac{\text{rank}(R_i) - 0.5}{N}$$
+
+This quantile-based transformation preserves the ordering of rates while mapping to a
+uniform marginal distribution on $[0, 1]$.
+
+### Population Modes
+
+Two population specifications are available:
+
+1. **Equal population:** $P_i = P_0$ for all $i$ (default: $P_0 = 1{,}000$)
+2. **Heterogeneous population:** $P_i \sim \text{LogNormal}(\log P_0, \sigma_P^2)$,
+   where $\sigma_P = 0.5$ provides moderate population heterogeneity
+
+**Parameters:** $\rho_X \in \{0.20, 0.50\}$, base rate $= 35/100{,}000$,
+$P_0 = 1{,}000$, population mode $\in \{\text{equal}, \text{heterogeneous}\}$.
+
+---
+
+# Treatment Assignment Designs
+
+Six designs are evaluated. Each design produces a binary treatment vector
+$\mathbf{Z} \in \{0, 1\}^N$. Designs 1--2 are deterministic given $\mathbf{X}$;
+Designs 3--5, 7 involve randomization.
+
+## Design 1: Checkerboard (Strict Spatial Stratification)
+
+$$Z_i = (x_i + y_i) \mod 2$$
+
+Treatment is assigned in an alternating checkerboard pattern. Every treated cluster is
+surrounded entirely by control clusters (under rook contiguity), maximizing spatial
+separation between treatment groups.
+
+**Properties:** Deterministic, exactly 50% treated, zero spatial correlation in $\mathbf{Z}$.
+
+## Design 2: High Incidence Focus
+
+$$Z_i = \mathbf{1}[X_i > \text{median}(\mathbf{X})]$$
+
+Treatment is assigned to clusters with above-median historical incidence. This represents
+a strategy that deliberately targets high-burden areas.
+
+**Properties:** Deterministic given $\mathbf{X}$, exactly 50% treated, treatment
+correlated with $\mathbf{X}$.
+
+## Design 3: Saturation Quadrants
+
+The grid is partitioned into four spatial quadrants:
+$$Q_k, \quad k = 1, 2, 3, 4$$
+
+defined by dividing at the grid midpoint $(G/2, G/2)$.  For each randomization:
+
+1. Randomly assign saturation levels $\{0.20, 0.40, 0.60, 0.80\}$ to the four quadrants (one per quadrant, without replacement)
+2. Within quadrant $Q_k$ with saturation $p_k$, randomly select $\lfloor |Q_k| \cdot p_k \rceil$ clusters for treatment
+
+**Properties:** Stochastic, treatment proportion varies by region, captures varying
+treatment density.
+
+## Design 4: Isolation Buffer
+
+Treatment is assigned sequentially with spatial constraints:
+
+1. Initialize all clusters as available
+2. Randomly select an available cluster and assign treatment ($Z_i = 1$)
+3. Remove the selected cluster and all its neighbors from the available set
+4. Repeat until no available clusters remain
+
+**Properties:** Stochastic, treated clusters are never adjacent (under the active
+contiguity), creates a spatial buffer around each treated unit. Treatment proportion
+varies across realizations (typically $\sim$20--30%).
+
+## Design 5: 2$\times$2 Blocking
+
+The grid is partitioned into non-overlapping $2 \times 2$ blocks:
+$$B_m = \{s_i : \lfloor(x_i-1)/2\rfloor = a_m, \lfloor(y_i-1)/2\rfloor = b_m\}, \quad |B_m| = 4$$
+
+Within each block, exactly 2 of 4 clusters are randomly assigned to treatment:
+$$\sum_{i \in B_m} Z_i = 2 \quad \text{for all } m$$
+
+**Properties:** Stochastic, exactly 50% treated, locally balanced (1:1 within each block).
+
+## Design 7: Balanced Quartiles
+
+Clusters are stratified by incidence quartile:
+$$S_q = \{s_i : X_i \in [F_X^{-1}((q-1)/4),\ F_X^{-1}(q/4)]\}, \quad q = 1, 2, 3, 4$$
+
+Within each stratum, approximately half the clusters are randomly assigned to treatment:
+$$\sum_{i \in S_q} Z_i \approx |S_q|/2$$
+
+**Properties:** Stochastic, approximately 50% treated, balanced across the incidence
+distribution. Combines covariate stratification with randomization.
+
+---
+
+# Estimation Methods
+
+## Difference in Means (DIM)
+
+The naive estimator:
+$$\hat{\tau}_{\text{DIM}} = \bar{Y}_1 - \bar{Y}_0 = \frac{\sum_{i: Z_i=1} Y_i}{\sum_i Z_i} - \frac{\sum_{i: Z_i=0} Y_i}{\sum_i (1-Z_i)}$$
+
+**Variance estimation** (Neyman):
+$$\widehat{\text{Var}}(\hat{\tau}_{\text{DIM}}) = \frac{S_1^2}{n_1} + \frac{S_0^2}{n_0}$$
+
+where $S_g^2$ is the sample variance in group $g$ and $n_g = \sum_i \mathbf{1}[Z_i = g]$.
+
+**Confidence interval:**
+$$\hat{\tau}_{\text{DIM}} \pm z_{0.975} \cdot \sqrt{\widehat{\text{Var}}(\hat{\tau}_{\text{DIM}})}$$
+
+**Note:** DIM is biased for $\tau$ when spillover ($\gamma \neq 0$) or spatial dependence
+($\rho \neq 0$) is present, because it ignores the spatial structure of the DGP.
+
+## Maximum Likelihood Estimation (MLE)
+
+The spatial autoregressive model is estimated via maximum likelihood using `spatialreg::lagsarlm()`:
+
+$$Y_i = \rho \sum_j W_{ij} Y_j + \tau Z_i + \gamma \cdot \text{Spill}_i + \beta X_i + \varepsilon_i$$
+
+or in matrix form:
+$$\mathbf{Y} = \rho \mathbf{W}\mathbf{Y} + \mathbf{X}_{\text{design}}\boldsymbol{\beta}_{\text{design}} + \boldsymbol{\varepsilon}$$
+
+where $\mathbf{X}_{\text{design}} = [\mathbf{Z},\ \text{Spill},\ \mathbf{X}]$ and
+$\boldsymbol{\beta}_{\text{design}} = (\tau, \gamma, \beta)^\top$.
+
+The MLE simultaneously estimates $\rho$ and $\boldsymbol{\beta}_{\text{design}}$ via
+concentrated log-likelihood optimization. Confidence intervals for $\tau$ are obtained
+from the asymptotic covariance matrix:
+
+$$\hat{\tau}_{\text{MLE}} \pm z_{0.975} \cdot \text{SE}(\hat{\tau}_{\text{MLE}})$$
+
+where $\text{SE}(\hat{\tau})$ is extracted from the summary of the fitted `lagsarlm` object.
+
+### Oracle vs. Realistic Estimation
+
+A configurable toggle controls whether the true spillover term is included:
+
+- **Oracle** (`include_spill_covariate = TRUE`): The model includes the true $\text{Spill}(\mathbf{Z})$
+  covariate. This provides the best-case estimation performance.
+- **Realistic** (`include_spill_covariate = FALSE`): The model omits the spillover term,
+  fitting $Y \sim Z + X$ only. This reflects what a researcher would estimate without
+  knowledge of the spillover mechanism.
+
+---
+
+# Simulation Algorithm
+
+## Parameter Space
+
+The simulation sweeps over the following parameter grid:
+
+| Parameter | Symbol | Values | Count |
+|:---|:---:|:---|:---:|
+| Incidence mode | --- | iid, spatial, poisson | 3 modes |
+| Incidence spatial correlation | $\rho_X$ | 0 (iid), 0.20, 0.50 | 5 configs |
+| Neighbor type | --- | rook, queen | 2 |
+| Spatial autocorrelation | $\rho$ | 0.00, 0.01, 0.20, 0.50 | 4 |
+| Spillover magnitude | $\gamma$ | 0.50, 0.60, 0.70, 0.80 | 4 |
+| Spillover type | --- | control_only, both | 2 |
+| Treatment design | --- | 1, 2, 3, 4, 5, 7 | 6 |
+
+**Total scenarios:** 5 incidence configs $\times$ 2 neighbor types $\times$ 4 $\rho$
+$\times$ 4 $\gamma$ $\times$ 2 spillover types $\times$ 6 designs = **1,920 scenarios**.
+
+## Resample Structure
+
+Each scenario is evaluated over:
+
+- $R_d$ = design resamples (distinct treatment assignment draws)
+- $R_o$ = outcome resamples (distinct error realizations per design draw)
+- Total iterations per scenario: $K = R_d \times R_o$
+
+**Default values:**
+
+| Estimation Mode | $R_d$ | $R_o$ | $K$ |
+|:---|:---:|:---:|:---:|
+| MLE | 25 | 10 | 250 |
+| DIM | 100 | 1,000 | 100,000 |
+
+## Pseudocode
+
+```
+BUILD spatial grid -> coords, W_rook, W_queen, listw_rook, listw_queen
+SET I_mat = diag(N)
+
+FOR EACH incidence_mode IN {iid, spatial, poisson}:
+  SET rho_X_values = {0} if iid, else {0.20, 0.50}
+
+  FOR EACH rho_X IN rho_X_values:
+    GENERATE X_matrix (N x R_o) using incidence_mode, rho_X, W_queen
+    SET base_incidence = X_matrix[, 1]     # "historical" for design decisions
+
+    FOR EACH nb_type IN {rook, queen}:
+      SELECT active W, listw for nb_type
+
+      FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
+        COMPUTE inv_mat = solve(I_mat - rho * W)
+        GENERATE Epsilon_matrix (N x R_o) ~ N(0, sigma^2)
+        COMPUTE baseline_part = inv_mat %*% (X_matrix * beta + Epsilon_matrix)
+
+        FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
+          FOR EACH spill_type IN {control_only, both}:
+            FOR EACH design_id IN {1, 2, 3, 4, 5, 7}:
+
+              SET scenario_seed = hash(incidence_mode, rho_X, nb_type,
+                                       rho, gamma, spill_type, design_id)
+              set.seed(scenario_seed)
+
+              IF design is deterministic:
+                GENERATE Z_matrix with 1 column, replicate to R_d
+              ELSE:
+                GENERATE Z_matrix (N x R_d)
+
+              INITIALIZE estimates[], ci_lower[], ci_upper[]
+
+              FOR d IN 1:R_d:
+                Z = Z_matrix[, d]
+                COMPUTE spillover = W %*% Z (apply spill_type mask)
+                COMPUTE trt_effect = inv_mat %*% (tau * Z + spillover)
+                Y_sim = trt_effect + baseline_part
+
+                ESTIMATE tau_hat, CI for each of R_o outcome columns
+
+              COMPUTE Bias, SD, MSE, Coverage, Fail_Rate
+              STORE results row
+```
+
+**Critical structural fix:** Incidence ($\mathbf{X}$) is generated **once per
+(incidence_mode, $\rho_X$) configuration** and held fixed across all spatial parameter
+combinations ($\rho$, neighbor type). This reflects the real-world scenario where
+historical incidence is observed once, and the question is how different spatial models
+and designs affect estimation quality.
+
+## Deterministic Design Optimization
+
+Designs 1 (Checkerboard) and 2 (High Incidence Focus) produce identical treatment vectors
+for every resample given fixed $\mathbf{X}$. The algorithm detects this and generates
+a single assignment, replicating it across $R_d$ to avoid redundant computation.
+
+## Per-Scenario Seeding
+
+Rather than a single global seed, each scenario receives a deterministic seed computed
+from its parameter combination:
+
+$$\text{seed} = \text{hash}(\text{incidence\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, \text{design\_id})$$
+
+This ensures reproducibility even if scenarios are added, removed, or reordered.
+
+---
+
+# Evaluation Metrics
+
+For each scenario, let $\hat{\tau}_1, \ldots, \hat{\tau}_K$ denote the $K$ estimates
+of $\tau$ (excluding convergence failures).
+
+## Bias
+
+$$\text{Bias} = \bar{\hat{\tau}} - \tau, \quad \text{where } \bar{\hat{\tau}} = \frac{1}{K}\sum_{k=1}^{K} \hat{\tau}_k$$
+
+## Standard Deviation
+
+$$\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^{K} \left(\hat{\tau}_k - \bar{\hat{\tau}}\right)^2}$$
+
+## Mean Squared Error
+
+$$\text{MSE} = \frac{1}{K}\sum_{k=1}^{K} \left(\hat{\tau}_k - \tau\right)^2 = \text{Bias}^2 + \text{Var}(\hat{\tau})$$
+
+MSE decomposes into squared bias plus variance, capturing both accuracy and precision.
+
+## Coverage Probability
+
+$$\text{Coverage} = \frac{1}{K}\sum_{k=1}^{K} \mathbf{1}\left[\tau \in \left(\hat{\tau}_{k,L},\ \hat{\tau}_{k,U}\right)\right]$$
+
+where $(\hat{\tau}_{k,L}, \hat{\tau}_{k,U})$ is the 95% confidence interval for the $k$-th
+estimate. Nominal coverage is 0.95; under- or over-coverage indicates CI miscalibration.
+
+## Convergence Failure Rate
+
+$$\text{Fail Rate} = 1 - \frac{|\{\text{valid estimates}\}|}{K_{\text{total}}}$$
+
+This captures the proportion of iterations where the MLE optimizer failed to converge
+(typically due to perfect collinearity between $\mathbf{Z}$ and $\text{Spill}$).
+
+---
+
+# Complete Parameter Table
+
+| Parameter | Symbol | Default | Sweep Values | Configurable |
+|:---|:---:|:---:|:---|:---:|
+| Grid dimension | $G$ | 10 | --- | Yes |
+| Number of clusters | $N$ | 100 | $G^2$ | Derived |
+| True treatment effect | $\tau$ | 1.0 | --- | Yes |
+| Incidence coefficient | $\beta$ | 1.0 | --- | Yes |
+| Error std. deviation | $\sigma$ | 1.0 | --- | Yes |
+| Spatial autocorrelation | $\rho$ | --- | 0.00, 0.01, 0.20, 0.50 | Yes |
+| Spillover magnitude | $\gamma$ | --- | 0.50, 0.60, 0.70, 0.80 | Yes |
+| Spillover type | --- | --- | control_only, both | Yes |
+| Neighbor type | --- | --- | rook, queen | Yes |
+| Incidence mode | --- | --- | iid, spatial, poisson | Yes |
+| Incidence spatial corr. | $\rho_X$ | --- | 0 (iid), 0.20, 0.50 | Yes |
+| Base rate (Poisson) | $\mu_0$ | 35/100,000 | --- | Yes |
+| Cluster population | $P_0$ | 1,000 | --- | Yes |
+| Population mode | --- | equal | equal, heterogeneous | Yes |
+| Design resamples (MLE) | $R_d$ | 25 | --- | Yes |
+| Outcome resamples (MLE) | $R_o$ | 10 | --- | Yes |
+| Design resamples (DIM) | $R_d$ | 100 | --- | Yes |
+| Outcome resamples (DIM) | $R_o$ | 1,000 | --- | Yes |
+| Design IDs | --- | {1,2,3,4,5,7} | --- | Yes |
+| Oracle spillover toggle | --- | TRUE | TRUE, FALSE | Yes |
+| Estimation mode | --- | MLE | MLE, DIM | Yes |
+
+All parameters are configurable to allow investigators to apply these findings to their
+own study contexts, even when some parameters (e.g., spillover magnitude) would not be
+known in practice.
+
+---
+
+# References
+
+- Gan, C. et al. (2019). County-level SUD incidence in North Carolina via Poisson regression.
+- Mirzaei, S. et al. (2019). Age- and sex-specific SUD incidence rates; base rate $\approx 35/100{,}000$.
+- Watson, G. et al. (AHA Abstract). Census tract-level Poisson regression for SUD with environmental risk factors.
+- LeSage, J. & Pace, R.K. (2009). *Introduction to Spatial Econometrics*. CRC Press.
+- Bivand, R. et al. `spdep` and `spatialreg` R packages for spatial regression modeling.
