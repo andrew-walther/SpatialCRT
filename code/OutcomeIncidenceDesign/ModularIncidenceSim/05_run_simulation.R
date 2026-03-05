@@ -4,9 +4,10 @@
 # nested simulation loop, saves results.
 #
 # Usage:
-#   source("05_run_simulation.R")
-#   -- or --
-#   Rscript 05_run_simulation.R
+#   source("05_run_simulation.R")            # sequential
+#   Rscript 05_run_simulation.R              # sequential
+#   Set n_cores > 1 before sourcing for parallel execution across
+#   incidence configs (iid, spatial, poisson).
 # ==============================================================================
 
 # --- Load Libraries ---
@@ -14,6 +15,7 @@ library(spdep)
 library(spatialreg)
 library(dplyr)
 library(digest)
+library(parallel)
 
 # --- Source Module Scripts ---
 # Detect script directory: works via Rscript, source(), or interactive
@@ -35,7 +37,11 @@ source(file.path(script_dir, "04_estimation.R"))
 # ==============================================================================
 
 # Estimation mode
-estimation_mode <- "DIM"      # "MLE" or "DIM"
+estimation_mode <- "MLE"      # "MLE" or "DIM"
+
+# Parallelization: number of cores for parallel incidence config processing
+# Set to 1 for sequential, or detectCores() - 1 for max parallelism
+n_cores <- 1
 
 # Grid
 grid_dim <- 10                 # 10x10 = 100 clusters
@@ -65,8 +71,8 @@ if (estimation_mode == "MLE") {
   n_designs_resamples <- 25
   n_outcome_resamples <- 10
 } else {
-  n_designs_resamples <- 100
-  n_outcome_resamples <- 1000
+  n_designs_resamples <- 25
+  n_outcome_resamples <- 100
 }
 
 # Designs to evaluate
@@ -86,10 +92,9 @@ coords <- grid_obj$coords
 I_mat <- diag(N)
 
 # ==============================================================================
-# COMPUTE TOTAL SCENARIO COUNT & ETA TRACKER
+# BUILD INCIDENCE CONFIGS
 # ==============================================================================
 
-# Build incidence config list: (mode, rho_X) pairs
 inc_configs <- list()
 for (inc_mode in incidence_modes) {
   rho_sweep <- if (inc_mode == "iid") 0 else rho_incidence_vals
@@ -98,55 +103,56 @@ for (inc_mode in incidence_modes) {
   }
 }
 
-total_scenarios <- length(inc_configs) * length(neighbor_types) * length(rho_vals) *
-                   length(gamma_vals) * length(spill_types) * length(design_ids)
+scenarios_per_config <- length(neighbor_types) * length(rho_vals) *
+                        length(gamma_vals) * length(spill_types) * length(design_ids)
+total_scenarios <- length(inc_configs) * scenarios_per_config
 
 cat(sprintf("\n=== Simulation Configuration ===\n"))
-cat(sprintf("Estimation mode:    %s\n", estimation_mode))
-cat(sprintf("Incidence configs:  %d\n", length(inc_configs)))
-cat(sprintf("Total scenarios:    %d\n", total_scenarios))
-cat(sprintf("Iterations/scenario: %d (%d design x %d outcome)\n",
+cat(sprintf("Estimation mode:      %s\n", estimation_mode))
+cat(sprintf("Incidence configs:    %d\n", length(inc_configs)))
+cat(sprintf("Scenarios per config: %d\n", scenarios_per_config))
+cat(sprintf("Total scenarios:      %d\n", total_scenarios))
+cat(sprintf("Iterations/scenario:  %d (%d design x %d outcome)\n",
             n_designs_resamples * n_outcome_resamples,
             n_designs_resamples, n_outcome_resamples))
+cat(sprintf("Parallel cores:       %d\n", n_cores))
 cat(sprintf("================================\n\n"))
 
-# ETA tracking
-scenario_times <- numeric(0)
-scenario_counter <- 0
-global_start <- Sys.time()
-
 # ==============================================================================
-# RESULTS STORAGE
+# CORE SIMULATION FUNCTION (processes one incidence config)
 # ==============================================================================
 
-results_list <- vector("list", total_scenarios)
-list_index <- 1
-
-# ==============================================================================
-# MAIN SIMULATION LOOP
-# ==============================================================================
-
-for (ic in seq_along(inc_configs)) {
-  inc_mode <- inc_configs[[ic]]$mode
-  rho_x    <- inc_configs[[ic]]$rho_x
-
-  # --- Generate incidence ONCE per config (using queen W as reference) ---
+run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
+                                  verbose = TRUE) {
+  inc_mode <- ic_config$mode
+  rho_x    <- ic_config$rho_x
   inc_label <- if (inc_mode == "iid") "iid" else sprintf("%s(rho_X=%.2f)", inc_mode, rho_x)
-  cat(sprintf("\n--- Incidence config %d/%d: %s ---\n", ic, length(inc_configs), inc_label))
 
+  if (verbose) cat(sprintf("\n--- [Config %d] %s ---\n", ic_index, inc_label))
+
+  N <- grid_obj$N_clusters
+
+  # Generate incidence ONCE for this config
   X_matrix <- generate_incidence(
-    mode         = inc_mode,
-    N            = N,
-    n_resamples  = n_outcome_resamples,
-    W            = grid_obj$W_queen,
+    mode          = inc_mode,
+    N             = N,
+    n_resamples   = n_outcome_resamples,
+    W             = grid_obj$W_queen,
     rho_incidence = rho_x,
-    base_rate    = base_rate,
+    base_rate     = base_rate,
     pop_per_cluster = pop_per_cluster,
-    pop_mode     = pop_mode
+    pop_mode      = pop_mode
   )
-
-  # "Historical" incidence for design decisions (first column)
   base_incidence <- X_matrix[, 1]
+
+  if (verbose) {
+    cat(sprintf("  X range: [%.4f, %.4f], mean: %.4f\n",
+                min(X_matrix), max(X_matrix), mean(X_matrix)))
+  }
+
+  config_results <- list()
+  config_idx <- 1
+  config_times <- numeric(0)
 
   for (nb_type in neighbor_types) {
     spatial <- get_active_spatial(grid_obj, nb_type)
@@ -155,10 +161,7 @@ for (ic in seq_along(inc_configs)) {
     active_nb <- spatial$nb
 
     for (rho in rho_vals) {
-      # SDM spatial multiplier: (I - rho*W)^{-1}
       inv_mat <- solve(I_mat - rho * W)
-
-      # Baseline part: inv_mat %*% (X * beta + epsilon)
       Epsilon_matrix <- matrix(rnorm(N * n_outcome_resamples, 0, sigma),
                                nrow = N, ncol = n_outcome_resamples)
       baseline_part <- inv_mat %*% (X_matrix * beta + Epsilon_matrix)
@@ -168,7 +171,6 @@ for (ic in seq_along(inc_configs)) {
           for (d_id in design_ids) {
 
             scenario_start <- Sys.time()
-            scenario_counter <- scenario_counter + 1
 
             # Per-scenario deterministic seed
             seed_string <- paste(inc_mode, rho_x, nb_type, rho,
@@ -177,24 +179,21 @@ for (ic in seq_along(inc_configs)) {
             set.seed(scenario_seed)
 
             # Progress logging with ETA
-            avg_time <- if (length(scenario_times) > 0) mean(scenario_times) else NA
-            eta_str <- if (!is.na(avg_time)) {
-              remaining <- avg_time * (total_scenarios - scenario_counter + 1)
-              if (remaining > 3600) {
-                sprintf("ETA: %.1f hrs", remaining / 3600)
-              } else if (remaining > 60) {
-                sprintf("ETA: %.1f min", remaining / 60)
+            if (verbose) {
+              avg_time <- if (length(config_times) > 0) mean(config_times) else NA
+              eta_str <- if (!is.na(avg_time)) {
+                remaining <- avg_time * (scenarios_per_config - config_idx + 1)
+                if (remaining > 3600) sprintf("ETA: %.1f hrs", remaining / 3600)
+                else if (remaining > 60) sprintf("ETA: %.1f min", remaining / 60)
+                else sprintf("ETA: %.0f sec", remaining)
               } else {
-                sprintf("ETA: %.0f sec", remaining)
+                "ETA: calculating..."
               }
-            } else {
-              "ETA: calculating..."
+              cat(sprintf("  [%3d/%d] NB:%-5s | rho:%.2f | gam:%.2f | spill:%-12s | D%d | %s\n",
+                          config_idx, scenarios_per_config,
+                          nb_type, rho, gamma_val, spill_type, d_id, eta_str))
+              flush.console()
             }
-
-            cat(sprintf("[%4d/%d] %s | NB:%-5s | rho:%.2f | gam:%.2f | spill:%-12s | D%d | %s\n",
-                        scenario_counter, total_scenarios, inc_label,
-                        nb_type, rho, gamma_val, spill_type, d_id, eta_str))
-            flush.console()
 
             # Generate treatment assignments
             if (is_design_deterministic(d_id)) {
@@ -206,15 +205,13 @@ for (ic in seq_along(inc_configs)) {
                                       base_incidence, active_nb, coords)
             }
 
-            # Collect estimates across all (design resample x outcome resample)
+            # Collect estimates
             all_estimates <- numeric(0)
             all_ci_lower  <- numeric(0)
             all_ci_upper  <- numeric(0)
 
             for (d_resample in seq_len(n_designs_resamples)) {
               Z <- Z_matrix[, d_resample]
-
-              # Spillover term: WZ with type mask
               WZ <- as.vector(W %*% Z)
               spill_term <- if (spill_type == "control_only") {
                 gamma_val * WZ * (1 - Z)
@@ -222,18 +219,16 @@ for (ic in seq_along(inc_configs)) {
                 gamma_val * WZ
               }
 
-              # Outcome: Y = inv_mat %*% (tau*Z + spillover) + baseline
               trt_effect <- as.vector(inv_mat %*% (true_tau * Z + spill_term))
               Y_sim <- sweep(baseline_part, 1, trt_effect, "+")
 
-              # Estimate tau
               est_result <- estimate_tau(
-                estimation_mode    = estimation_mode,
-                Y_sim              = Y_sim,
-                Z                  = Z,
-                spill_term         = spill_term,
-                X_matrix           = X_matrix,
-                active_listw       = active_listw,
+                estimation_mode     = estimation_mode,
+                Y_sim               = Y_sim,
+                Z                   = Z,
+                spill_term          = spill_term,
+                X_matrix            = X_matrix,
+                active_listw        = active_listw,
                 n_outcome_resamples = n_outcome_resamples,
                 include_spill_covariate = include_spill_covariate
               )
@@ -243,27 +238,19 @@ for (ic in seq_along(inc_configs)) {
               all_ci_upper  <- c(all_ci_upper,  est_result$ci_upper)
             }
 
-            # Aggregate results
+            # Aggregate
             valid_idx <- !is.na(all_estimates)
             valid_est <- all_estimates[valid_idx]
             fail_rate <- 1 - sum(valid_idx) / length(all_estimates)
 
             if (length(valid_est) > 0) {
-              bias_val <- mean(valid_est) - true_tau
-              sd_val   <- sd(valid_est)
-              mse_val  <- mean((valid_est - true_tau)^2)
-
-              # Coverage: proportion of CIs that contain true_tau
               valid_ci <- valid_idx & !is.na(all_ci_lower) & !is.na(all_ci_upper)
-              if (sum(valid_ci) > 0) {
-                covers <- (all_ci_lower[valid_ci] <= true_tau) &
-                          (all_ci_upper[valid_ci] >= true_tau)
-                coverage_val <- mean(covers)
-              } else {
-                coverage_val <- NA
-              }
+              coverage_val <- if (sum(valid_ci) > 0) {
+                mean((all_ci_lower[valid_ci] <= true_tau) &
+                     (all_ci_upper[valid_ci] >= true_tau))
+              } else NA
 
-              results_list[[list_index]] <- data.frame(
+              config_results[[config_idx]] <- data.frame(
                 Incidence_Mode  = inc_mode,
                 Rho_Incidence   = rho_x,
                 Neighbor_Type   = nb_type,
@@ -272,15 +259,15 @@ for (ic in seq_along(inc_configs)) {
                 Gamma           = gamma_val,
                 Spillover_Type  = spill_type,
                 Mean_Estimate   = mean(valid_est),
-                Bias            = bias_val,
-                SD              = sd_val,
-                MSE             = mse_val,
+                Bias            = mean(valid_est) - true_tau,
+                SD              = sd(valid_est),
+                MSE             = mean((valid_est - true_tau)^2),
                 Coverage        = coverage_val,
                 Fail_Rate       = fail_rate,
                 stringsAsFactors = FALSE
               )
             } else {
-              results_list[[list_index]] <- data.frame(
+              config_results[[config_idx]] <- data.frame(
                 Incidence_Mode  = inc_mode,
                 Rho_Incidence   = rho_x,
                 Neighbor_Type   = nb_type,
@@ -288,50 +275,110 @@ for (ic in seq_along(inc_configs)) {
                 Rho             = rho,
                 Gamma           = gamma_val,
                 Spillover_Type  = spill_type,
-                Mean_Estimate   = NA,
-                Bias            = NA,
-                SD              = NA,
-                MSE             = NA,
-                Coverage        = NA,
-                Fail_Rate       = fail_rate,
+                Mean_Estimate   = NA, Bias = NA, SD = NA, MSE = NA,
+                Coverage        = NA, Fail_Rate = fail_rate,
                 stringsAsFactors = FALSE
               )
             }
 
-            # Timing
             scenario_elapsed <- as.numeric(difftime(Sys.time(), scenario_start, units = "secs"))
-            scenario_times <- c(scenario_times, scenario_elapsed)
-            mins <- floor(scenario_elapsed / 60)
-            secs <- round(scenario_elapsed %% 60, 1)
-            cat(sprintf("   -> %d min %.1f sec\n", mins, secs))
-            flush.console()
+            config_times <- c(config_times, scenario_elapsed)
 
-            list_index <- list_index + 1
+            if (verbose) {
+              mins <- floor(scenario_elapsed / 60)
+              secs <- round(scenario_elapsed %% 60, 1)
+              cat(sprintf("     -> %d min %.1f sec\n", mins, secs))
+              flush.console()
+            }
+
+            config_idx <- config_idx + 1
           }
         }
       }
     }
   }
+
+  config_df <- bind_rows(config_results)
+  total_time <- sum(config_times)
+  if (verbose) {
+    cat(sprintf("  Config %s complete: %d rows, %.1f min total\n",
+                inc_label, nrow(config_df), total_time / 60))
+  }
+  config_df
+}
+
+# ==============================================================================
+# EXECUTE SIMULATION (sequential or parallel)
+# ==============================================================================
+
+global_start <- Sys.time()
+
+if (n_cores > 1 && length(inc_configs) > 1) {
+  cat(sprintf("Running %d incidence configs in parallel across %d cores...\n",
+              length(inc_configs), min(n_cores, length(inc_configs))))
+
+  results_by_config <- mclapply(
+    seq_along(inc_configs),
+    function(i) {
+      run_incidence_config(i, inc_configs[[i]], grid_obj, coords, I_mat,
+                           verbose = FALSE)
+    },
+    mc.cores = min(n_cores, length(inc_configs))
+  )
+
+  # Check for errors
+  errors <- sapply(results_by_config, inherits, "try-error")
+  if (any(errors)) {
+    cat("WARNING: Some configs failed:\n")
+    for (i in which(errors)) {
+      cat(sprintf("  Config %d: %s\n", i, as.character(results_by_config[[i]])))
+    }
+    results_by_config <- results_by_config[!errors]
+  }
+} else {
+  cat("Running sequentially...\n")
+  results_by_config <- lapply(
+    seq_along(inc_configs),
+    function(i) {
+      run_incidence_config(i, inc_configs[[i]], grid_obj, coords, I_mat,
+                           verbose = TRUE)
+    }
+  )
 }
 
 # ==============================================================================
 # COMBINE & SAVE RESULTS
 # ==============================================================================
 
-granular_results <- bind_rows(results_list)
+granular_results <- bind_rows(results_by_config)
 
 total_elapsed <- as.numeric(difftime(Sys.time(), global_start, units = "mins"))
 cat(sprintf("\n=== Simulation Complete ===\n"))
 cat(sprintf("Total time: %.1f minutes\n", total_elapsed))
 cat(sprintf("Scenarios completed: %d\n", nrow(granular_results)))
-cat(sprintf("Results columns: %s\n", paste(names(granular_results), collapse = ", ")))
 
-# Save results
+# --- Save combined results ---
 results_dir <- file.path(script_dir, "results")
 if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
 
 timestamp_str <- format(Sys.time(), "%Y%m%d_%H%M%S")
-output_file <- file.path(results_dir,
-                          sprintf("sim_results_%s_%s.rds", estimation_mode, timestamp_str))
-saveRDS(granular_results, output_file)
-cat(sprintf("Results saved to: %s\n", output_file))
+
+combined_file <- file.path(results_dir,
+                            sprintf("sim_results_%s_combined_%s.rds",
+                                    estimation_mode, timestamp_str))
+saveRDS(granular_results, combined_file)
+cat(sprintf("Combined results saved: %s\n", basename(combined_file)))
+
+# --- Save split results by incidence mode ---
+inc_mode_groups <- split(granular_results, granular_results$Incidence_Mode)
+for (mode_name in names(inc_mode_groups)) {
+  split_file <- file.path(results_dir,
+                           sprintf("sim_results_%s_%s_%s.rds",
+                                   estimation_mode, mode_name, timestamp_str))
+  saveRDS(inc_mode_groups[[mode_name]], split_file)
+  cat(sprintf("  Split results saved: %s (%d rows)\n",
+              basename(split_file), nrow(inc_mode_groups[[mode_name]])))
+}
+
+cat(sprintf("\nTotal files saved: %d (1 combined + %d per incidence mode)\n",
+            1 + length(inc_mode_groups), length(inc_mode_groups)))
