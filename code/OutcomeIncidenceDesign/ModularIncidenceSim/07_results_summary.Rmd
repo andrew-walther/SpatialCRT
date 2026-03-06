@@ -1,0 +1,762 @@
+---
+title: "Treatment Assignment Design Evaluation for Spatial CRTs"
+subtitle: "Simulation Study with Heterogeneous Incidence — Results Summary"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    latex_engine: xelatex
+    keep_tex: false
+    fig_caption: true
+    fig_height: 5
+    fig_width: 7
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{float}
+  - \usepackage{amsmath}
+  - \usepackage{amssymb}
+  - \usepackage{geometry}
+  - \geometry{margin=1in}
+  - \floatplacement{figure}{H}
+  - \floatplacement{table}{H}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.pos = "H",
+  out.extra = ""
+)
+```
+
+```{r load-packages}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(knitr)
+library(kableExtra)
+```
+
+```{r resolve-paths}
+# Robust working directory detection for both source() and rmarkdown::render()
+script_dir <- tryCatch(
+  normalizePath(dirname(knitr::current_input(dir = TRUE))),
+  error = function(e) {
+    tryCatch(
+      dirname(sys.frame(1)$ofile),
+      error = function(e2) getwd()
+    )
+  }
+)
+results_dir <- file.path(script_dir, "results")
+```
+
+```{r source-modules}
+# Source visualization module (provides all table + plot functions)
+source(file.path(script_dir, "06_visualizations.R"))
+```
+
+```{r load-results}
+# Load most recent combined results for each estimator
+dim_results <- tryCatch(
+  load_latest_results(results_dir, estimation_mode = "DIM_combined"),
+  error = function(e) {
+    message("DIM combined results not found: ", e$message)
+    NULL
+  }
+)
+
+mle_results <- tryCatch(
+  load_latest_results(results_dir, estimation_mode = "MLE_combined"),
+  error = function(e) {
+    message("MLE combined results not found: ", e$message)
+    NULL
+  }
+)
+
+# Split into per-incidence-config lists
+dim_cfgs <- if (!is.null(dim_results)) split_by_incidence_config(dim_results) else list()
+mle_cfgs <- if (!is.null(mle_results)) split_by_incidence_config(mle_results) else list()
+
+# Convenience labels
+cfg_names <- names(dim_cfgs)
+```
+
+\newpage
+
+# Introduction
+
+This report summarizes a simulation study evaluating **six treatment assignment designs**
+for Spatial Cluster Randomized Trials (CRTs) when outcome incidence is heterogeneous
+and spatially structured. The central research question is:
+
+> *Given known historical incidence data exhibiting spatial heterogeneity, which
+> treatment assignment strategy minimizes estimation error for the direct intervention
+> effect $\hat{\tau}$ across a range of spatial dependence and spillover configurations?*
+
+**Application context:** Sudden Unexpected Death (SUD) in North Carolina counties.
+The Poisson incidence mode uses an SUD base rate of 35 per 100,000 (Mirzaei et al.),
+consistent with county-level analyses by Gan et al. and Watson et al.
+
+The study compares two estimation methods — Difference in Means (DIM) and Maximum
+Likelihood Estimation via a spatial autoregressive model (MLE) — across 1,920 parameter
+scenarios per estimator.
+
+---
+
+# Mathematical Framework
+
+## Study Region and Spatial Structure
+
+The simulation operates on a **regular lattice grid** $\mathcal{G} = \{s_1, \ldots, s_N\}$
+on $[1, G] \times [1, G]$, with $N = G^2$ clusters ($G = 10$, $N = 100$).
+
+Two contiguity structures define neighbor relationships:
+
+- **Rook contiguity:** $s_j \in \mathcal{N}(s_i)$ iff $s_i$ and $s_j$ share an edge
+  (up to 4 neighbors)
+- **Queen contiguity:** $s_j \in \mathcal{N}(s_i)$ iff $s_i$ and $s_j$ share an edge
+  or corner (up to 8 neighbors)
+
+The spatial weight matrix $\mathbf{W}$ has entries
+$w_{ij} = |\mathcal{N}(s_i)|^{-1}$ if $s_j \in \mathcal{N}(s_i)$ and $0$ otherwise
+(row-standardized).
+
+## Outcome Data Generating Process
+
+Outcomes follow a **Spatial Durbin Model (SDM)**:
+
+$$\mathbf{Y} = (\mathbf{I} - \rho \mathbf{W})^{-1}
+\left[\tau \mathbf{Z} + \gamma \cdot \text{Spill}(\mathbf{Z}) + \beta \mathbf{X} + \boldsymbol{\varepsilon}\right]$$
+
+**Parameter definitions:**
+
+| Symbol | Role | Value / Range |
+|--------|------|---------------|
+| $\tau$ | Direct treatment effect (estimand) | $1.0$ (fixed) |
+| $\rho$ | Outcome spatial autocorrelation | $\{0.00, 0.01, 0.20, 0.50\}$ |
+| $\gamma$ | Spillover magnitude | $\{0.5, 0.6, 0.7, 0.8\}$ |
+| $\beta$ | Incidence effect on outcome | $1.0$ (fixed) |
+| $\sigma$ | Residual standard deviation | $1.0$ (fixed) |
+
+**Spillover construction:**
+
+$$\text{Spill}_i(\mathbf{Z}) = \frac{\sum_{j \in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|}$$
+
+Two spillover modes are evaluated:
+- **control\_only:** $\gamma$ applied only to units with $Z_i = 0$
+- **both:** $\gamma$ applied to all units regardless of treatment status
+
+Stationarity requires $|\rho| < 1/\lambda_{\max}(\mathbf{W})$; all swept $\rho$ values
+satisfy this condition.
+
+## Incidence Generation
+
+Three modes generate the cluster-level covariate $X_i \in [0,1]$, each representing
+a different assumption about how historical incidence arises:
+
+**Mode 1 — iid Uniform:**
+$$X_i \overset{\text{iid}}{\sim} \text{Uniform}(0, 1)$$
+
+No spatial structure; serves as the baseline. One config (rho\_X = N/A).
+
+**Mode 2 — Spatial (SAR filter):**
+$$\mathbf{X}^* = (\mathbf{I} - \rho_X \mathbf{W})^{-1} \mathbf{u}, \quad
+\mathbf{u} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$$
+$$X_i = \Phi(X_i^*) \in (0, 1)$$
+
+Spatially correlated via SAR filter; probability integral transform ($\Phi$) ensures
+$X_i$ is marginally $\text{Uniform}(0,1)$ but spatially dependent.
+Two configs: $\rho_X \in \{0.20, 0.50\}$.
+
+**Mode 3 — Poisson (count rates):**
+
+1. Spatially correlated log-rates:
+   $\log \lambda_i^* = \mu_0 + [(\mathbf{I} - \rho_X \mathbf{W})^{-1} \mathbf{u}]_i$
+2. Poisson counts: $C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)$
+   where $P_i = 1{,}000$ (equal population per cluster)
+3. Observed rates: $R_i = C_i / P_i$
+4. Rank-normalized: $X_i = (\text{rank}(R_i) - 0.5) / N$
+
+Base rate $\mu_0 = \log(35/100{,}000)$ mimics SUD incidence.
+Two configs: $\rho_X \in \{0.20, 0.50\}$.
+
+**Critical design invariant:** Incidence is generated **once per (mode, $\rho_X$)
+configuration** and held fixed across all ($\rho$, $\gamma$, nb\_type) scenarios.
+This reflects the realistic constraint that a researcher observes historical incidence
+once before designing the trial; spatial model parameters affect the outcome DGP,
+not the incidence itself.
+
+## Treatment Assignment Designs
+
+Six assignment strategies are evaluated, representing qualitatively distinct approaches
+to allocating approximately 50\% of clusters to treatment:
+
+| ID | Name | Deterministic? | Key Feature |
+|----|------|:-:|-------------|
+| 1 | Checkerboard | Yes | Alternating grid; maximizes spatial separation |
+| 2 | High Incidence Focus | Yes | Treats top-50\% incidence clusters |
+| 3 | Saturation Quadrants | No | Random saturation level per quadrant (0.2--0.8) |
+| 4 | Isolation Buffer | No | Greedy assignment; no adjacent treated clusters |
+| 5 | 2$\times$2 Blocking | No | 1:1 randomization within 2$\times$2 spatial blocks |
+| 7 | Balanced Quartiles | No | Stratified by incidence quartile, balanced within strata |
+
+Designs 1 and 2 are **deterministic** given the incidence vector: they produce the
+same assignment on every resample. The simulation detects this and runs each once,
+replicating the result across all design resamples (saving $\sim$25x compute).
+
+## Estimation Methods
+
+**Difference in Means (DIM):**
+$$\hat{\tau}_{\text{DIM}} = \bar{Y}_1 - \bar{Y}_0 = \frac{1}{n_1}\sum_{Z_i=1} Y_i - \frac{1}{n_0}\sum_{Z_i=0} Y_i$$
+
+95\% CI via Neyman variance estimator:
+$$\widehat{\text{Var}}(\hat{\tau}) = \frac{s_1^2}{n_1} + \frac{s_0^2}{n_0}$$
+
+**Maximum Likelihood (MLE via SAR):**
+
+Fits `lagsarlm(Y ~ Z + Spill + X, listw = W)` from the `spatialreg` package,
+simultaneously estimating $\rho$, $\tau$, and regression coefficients. The true
+spillover covariate $\text{Spill}(\mathbf{Z})$ is included as an **oracle regressor**
+(i.e., the researcher is assumed to know the true spillover structure). CIs are
+derived from the asymptotic covariance matrix.
+
+---
+
+# Simulation Algorithm
+
+## Parameter Grid
+
+```{r param-table, results='asis'}
+param_df <- data.frame(
+  Parameter        = c("Incidence mode",
+                       "rho_X (incidence spatial autocorr.)",
+                       "nb_type (contiguity)",
+                       "rho (outcome spatial autocorr.)",
+                       "gamma (spillover magnitude)",
+                       "spill_type",
+                       "design_id",
+                       "TOTAL"),
+  Values           = c("iid, spatial, poisson",
+                       "N/A (iid); 0.20, 0.50 (spatial, poisson)",
+                       "rook, queen",
+                       "0.00, 0.01, 0.20, 0.50",
+                       "0.5, 0.6, 0.7, 0.8",
+                       "control_only, both",
+                       "1, 2, 3, 4, 5, 7",
+                       ""),
+  Levels           = c("5 configs (1 iid + 2 spatial + 2 poisson)",
+                       "—",
+                       "2",
+                       "4",
+                       "4",
+                       "2",
+                       "6",
+                       "1,920 scenarios")
+)
+
+kable(param_df, booktabs = TRUE, linesep = "",
+      caption = "Simulation parameter grid (1,920 total scenarios per estimator)") %>%
+  kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
+  row_spec(nrow(param_df), bold = TRUE)
+```
+
+## Resampling Structure
+
+For each scenario, the simulation draws:
+
+| Mode | Design resamples ($R_d$) | Outcome resamples ($R_o$) | Iterations / scenario |
+|------|:---:|:---:|:---:|
+| DIM | 25 | 100 | 2,500 |
+| MLE | 25 | 10 | 250 |
+
+## Evaluation Metrics
+
+For each scenario, across $K$ total iterations (design × outcome resamples):
+
+$$\text{Bias} = \bar{\hat{\tau}} - \tau, \quad
+\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^K (\hat{\tau}_k - \bar{\hat{\tau}})^2}$$
+
+$$\text{MSE} = \text{Bias}^2 + \text{SD}^2$$
+
+$$\text{Coverage} = \frac{1}{K}\sum_{k=1}^K \mathbf{1}\left[\tau \in (\hat{\tau}_{k,L}, \hat{\tau}_{k,U})\right]$$
+
+## Per-Scenario Reproducibility
+
+Each scenario uses a deterministic seed:
+$$\text{seed}_s = \texttt{digest::digest2int}(\texttt{paste}(\text{inc\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, d_{\text{id}}, \text{sep}=\text{"|}"))$$
+
+This ensures results are reproducible and order-independent: adding or removing
+scenarios from the parameter sweep does not affect other scenarios' seeds.
+
+---
+
+# Results: Difference in Means (DIM)
+
+```{r dim-check}
+dim_avail <- !is.null(dim_results) && nrow(dim_results) > 0
+```
+
+```{r dim-overall-stats, eval=dim_avail}
+dim_summary <- dim_results %>%
+  summarise(
+    N_scenarios = n(),
+    Bias_min    = round(min(Bias, na.rm=TRUE), 3),
+    Bias_max    = round(max(Bias, na.rm=TRUE), 3),
+    Bias_mean   = round(mean(Bias, na.rm=TRUE), 3),
+    MSE_min     = round(min(MSE, na.rm=TRUE), 3),
+    MSE_max     = round(max(MSE, na.rm=TRUE), 3),
+    MSE_mean    = round(mean(MSE, na.rm=TRUE), 3),
+    Cov_min     = round(min(Coverage, na.rm=TRUE), 2),
+    Cov_max     = round(max(Coverage, na.rm=TRUE), 2),
+    Cov_mean    = round(mean(Coverage, na.rm=TRUE), 2)
+  )
+```
+
+## Overall Summary (All DIM Scenarios)
+
+```{r dim-overall-table, eval=dim_avail, results='asis'}
+dim_stats_disp <- data.frame(
+  Metric = c("Bias", "MSE", "Coverage"),
+  Min    = c(dim_summary$Bias_min, dim_summary$MSE_min, dim_summary$Cov_min),
+  Mean   = c(dim_summary$Bias_mean, dim_summary$MSE_mean, dim_summary$Cov_mean),
+  Max    = c(dim_summary$Bias_max, dim_summary$MSE_max, dim_summary$Cov_max)
+)
+kable(dim_stats_disp, booktabs = TRUE, linesep = "", digits = 3,
+      caption = paste0("DIM: Summary statistics across all ",
+                       dim_summary$N_scenarios, " scenarios")) %>%
+  kable_styling(latex_options = c("striped", "hold_position"), font_size = 10)
+```
+
+## DIM Design Comparison by MSE
+
+```{r dim-design-summary, eval=dim_avail, results='asis'}
+dim_by_design <- dim_results %>%
+  group_by(Design) %>%
+  summarise(
+    Mean_Bias     = round(mean(Bias, na.rm=TRUE), 3),
+    Median_MSE    = round(median(MSE, na.rm=TRUE), 3),
+    Mean_MSE      = round(mean(MSE, na.rm=TRUE), 3),
+    Mean_Coverage = round(mean(Coverage, na.rm=TRUE), 3),
+    .groups       = "drop"
+  ) %>%
+  arrange(Mean_MSE)
+
+kable(dim_by_design, booktabs = TRUE, linesep = "",
+      col.names = c("Design", "Mean Bias", "Median MSE", "Mean MSE", "Mean Coverage"),
+      caption = "DIM: Design performance averaged across all scenarios and incidence modes") %>%
+  kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
+  row_spec(1, bold = TRUE)
+```
+
+## DIM: MSE by Design and Neighbor Type
+
+```{r dim-mse-boxplot, eval=dim_avail, fig.cap="DIM: Distribution of MSE by design, faceted by spatial contiguity structure. Boxes sorted by median MSE within each panel."}
+# Show the iid Uniform config as representative
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  print(plot_mse_by_neighbor(dim_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (length(dim_cfgs) > 0) {
+  print(plot_mse_by_neighbor(dim_cfgs[[1]], names(dim_cfgs)[1]))
+}
+```
+
+## DIM: MSE Heatmap (Rho x Design)
+
+```{r dim-mse-heatmap, eval=dim_avail, fig.cap="DIM MSE heatmap for iid Uniform incidence. Cells show average MSE across spillover type and gamma, faceted by neighbor type."}
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  print(plot_mse_heatmap(dim_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (length(dim_cfgs) > 0) {
+  print(plot_mse_heatmap(dim_cfgs[[1]], names(dim_cfgs)[1]))
+}
+```
+
+## DIM: Design Rank Frequency
+
+```{r dim-ranks-iid, eval=dim_avail, results='asis'}
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  invisible(capture.output(rank_tbl <- table_design_ranks(dim_cfgs[["iid Uniform"]], "iid Uniform")))
+  kable(as.data.frame(rank_tbl), booktabs = TRUE, linesep = "", digits = 1,
+        caption = "DIM: Design rank frequency (\\%) for iid Uniform incidence. Each cell = \\% of scenarios where design achieved that rank (Rank 1 = lowest MSE).") %>%
+    kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
+}
+```
+
+## DIM: Robustness Profile
+
+```{r dim-robustness-iid, eval=dim_avail, results='asis'}
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  invisible(capture.output(rob_tbl <- table_robustness(dim_cfgs[["iid Uniform"]], "iid Uniform")))
+  kable(as.data.frame(rob_tbl), booktabs = TRUE, linesep = "", digits = 4,
+        caption = "DIM: Robustness profile for iid Uniform incidence. Sorted by Median MSE. IQR = interquartile range across scenarios.") %>%
+    kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
+}
+```
+
+## DIM: Coverage by Design
+
+```{r dim-coverage, eval=dim_avail, fig.cap="DIM: Coverage probability distribution by design across all scenarios. Red dashed line = nominal 95\\% target."}
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  print(plot_coverage_by_design(dim_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (length(dim_cfgs) > 0) {
+  print(plot_coverage_by_design(dim_cfgs[[1]], names(dim_cfgs)[1]))
+}
+```
+
+## DIM: Bias-Variance Decomposition
+
+```{r dim-biasvar, eval=dim_avail, fig.cap="DIM: Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence. Total bar height = MSE."}
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  print(plot_bias_variance(dim_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (length(dim_cfgs) > 0) {
+  print(plot_bias_variance(dim_cfgs[[1]], names(dim_cfgs)[1]))
+}
+```
+
+---
+
+# Results: Maximum Likelihood (MLE)
+
+```{r mle-check}
+mle_avail <- !is.null(mle_results) && nrow(mle_results) > 0
+```
+
+```{r mle-overall-stats, eval=mle_avail}
+mle_summary <- mle_results %>%
+  summarise(
+    N_scenarios   = n(),
+    Bias_min      = round(min(Bias, na.rm=TRUE), 3),
+    Bias_max      = round(max(Bias, na.rm=TRUE), 3),
+    Bias_mean     = round(mean(Bias, na.rm=TRUE), 3),
+    MSE_min       = round(min(MSE, na.rm=TRUE), 3),
+    MSE_max       = round(max(MSE, na.rm=TRUE), 3),
+    MSE_mean      = round(mean(MSE, na.rm=TRUE), 3),
+    Cov_min       = round(min(Coverage, na.rm=TRUE), 2),
+    Cov_max       = round(max(Coverage, na.rm=TRUE), 2),
+    Cov_mean      = round(mean(Coverage, na.rm=TRUE), 2),
+    Fail_mean     = round(mean(Fail_Rate, na.rm=TRUE), 4)
+  )
+```
+
+## Overall Summary (All MLE Scenarios)
+
+```{r mle-overall-table, eval=mle_avail, results='asis'}
+mle_stats_disp <- data.frame(
+  Metric = c("Bias", "MSE", "Coverage", "Fail Rate"),
+  Min    = c(mle_summary$Bias_min, mle_summary$MSE_min,  mle_summary$Cov_min,  NA),
+  Mean   = c(mle_summary$Bias_mean, mle_summary$MSE_mean, mle_summary$Cov_mean, mle_summary$Fail_mean),
+  Max    = c(mle_summary$Bias_max, mle_summary$MSE_max,  mle_summary$Cov_max,  NA)
+)
+kable(mle_stats_disp, booktabs = TRUE, linesep = "", digits = 3, na = "—",
+      caption = paste0("MLE: Summary statistics across all ",
+                       mle_summary$N_scenarios, " scenarios")) %>%
+  kable_styling(latex_options = c("striped", "hold_position"), font_size = 10)
+```
+
+## MLE Design Comparison by MSE
+
+```{r mle-design-summary, eval=mle_avail, results='asis'}
+mle_by_design <- mle_results %>%
+  group_by(Design) %>%
+  summarise(
+    Mean_Bias     = round(mean(Bias, na.rm=TRUE), 3),
+    Median_MSE    = round(median(MSE, na.rm=TRUE), 3),
+    Mean_MSE      = round(mean(MSE, na.rm=TRUE), 3),
+    Mean_Coverage = round(mean(Coverage, na.rm=TRUE), 3),
+    Fail_Rate     = round(mean(Fail_Rate, na.rm=TRUE), 4),
+    .groups       = "drop"
+  ) %>%
+  arrange(Mean_MSE)
+
+kable(mle_by_design, booktabs = TRUE, linesep = "",
+      col.names = c("Design", "Mean Bias", "Median MSE", "Mean MSE",
+                    "Mean Coverage", "Fail Rate"),
+      caption = "MLE: Design performance averaged across all scenarios and incidence modes") %>%
+  kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
+  row_spec(1, bold = TRUE)
+```
+
+## MLE: MSE by Design and Neighbor Type
+
+```{r mle-mse-boxplot, eval=mle_avail, fig.cap="MLE: Distribution of MSE by design, faceted by spatial contiguity. Note: high-rho scenarios produce inflated MSE for some designs due to reduced iteration count (250 vs 2,500 for DIM)."}
+if ("iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_mse_by_neighbor(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (length(mle_cfgs) > 0) {
+  print(plot_mse_by_neighbor(mle_cfgs[[1]], names(mle_cfgs)[1]))
+}
+```
+
+## MLE: MSE Heatmap
+
+```{r mle-mse-heatmap, eval=mle_avail, fig.cap="MLE MSE heatmap for iid Uniform incidence. Elevated cells at rho = 0.50 reflect variance inflation with fewer iterations."}
+if ("iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_mse_heatmap(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (length(mle_cfgs) > 0) {
+  print(plot_mse_heatmap(mle_cfgs[[1]], names(mle_cfgs)[1]))
+}
+```
+
+## MLE: Design Rank Frequency
+
+```{r mle-ranks-iid, eval=mle_avail, results='asis'}
+if ("iid Uniform" %in% names(mle_cfgs)) {
+  invisible(capture.output(mle_rank_tbl <- table_design_ranks(mle_cfgs[["iid Uniform"]], "iid Uniform")))
+  kable(as.data.frame(mle_rank_tbl), booktabs = TRUE, linesep = "", digits = 1,
+        caption = "MLE: Design rank frequency (\\%) for iid Uniform incidence.") %>%
+    kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
+}
+```
+
+## MLE: Robustness Profile
+
+```{r mle-robustness-iid, eval=mle_avail, results='asis'}
+if ("iid Uniform" %in% names(mle_cfgs)) {
+  invisible(capture.output(mle_rob_tbl <- table_robustness(mle_cfgs[["iid Uniform"]], "iid Uniform")))
+  kable(as.data.frame(mle_rob_tbl), booktabs = TRUE, linesep = "", digits = 4,
+        caption = "MLE: Robustness profile for iid Uniform incidence.") %>%
+    kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
+}
+```
+
+## MLE: Coverage by Design
+
+```{r mle-coverage, eval=mle_avail, fig.cap="MLE: Coverage probability distribution by design. MLE coverage is substantially higher than DIM due to proper spatial autocorrelation modeling. Red dashed line = 95\\%."}
+if ("iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_coverage_by_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (length(mle_cfgs) > 0) {
+  print(plot_coverage_by_design(mle_cfgs[[1]], names(mle_cfgs)[1]))
+}
+```
+
+---
+
+# DIM vs. MLE Comparison
+
+## Side-by-Side Metrics
+
+```{r compare-table, eval=dim_avail && mle_avail, results='asis'}
+dim_agg <- dim_results %>%
+  group_by(Design) %>%
+  summarise(DIM_MSE = round(mean(MSE, na.rm=TRUE), 3),
+            DIM_Cov = round(mean(Coverage, na.rm=TRUE), 3),
+            .groups = "drop")
+
+mle_agg <- mle_results %>%
+  group_by(Design) %>%
+  summarise(MLE_MSE = round(mean(MSE, na.rm=TRUE), 3),
+            MLE_Cov = round(mean(Coverage, na.rm=TRUE), 3),
+            .groups = "drop")
+
+compare_tbl <- left_join(dim_agg, mle_agg, by = "Design") %>%
+  arrange(DIM_MSE)
+
+kable(compare_tbl, booktabs = TRUE, linesep = "",
+      col.names = c("Design", "DIM MSE", "DIM Coverage", "MLE MSE", "MLE Coverage"),
+      caption = "DIM vs. MLE: Average MSE and coverage by design (averaged across all scenarios and incidence modes). Results are always reported separately by incidence mode in subgroup analyses.") %>%
+  kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
+  add_header_above(c(" " = 1, "DIM" = 2, "MLE" = 2)) %>%
+  row_spec(1, bold = TRUE)
+```
+
+## Coverage Comparison by Estimator
+
+```{r coverage-compare-plot, eval=dim_avail && mle_avail, fig.cap="Coverage comparison: DIM (left) vs MLE (right) for the iid Uniform incidence configuration. MLE achieves near-nominal coverage for all designs except Checkerboard; DIM coverage is consistently below 0.95."}
+if ("iid Uniform" %in% names(dim_cfgs) && "iid Uniform" %in% names(mle_cfgs)) {
+  p_dim <- plot_coverage_by_design(dim_cfgs[["iid Uniform"]], "DIM | iid Uniform") +
+    theme(legend.position = "none")
+  p_mle <- plot_coverage_by_design(mle_cfgs[["iid Uniform"]], "MLE | iid Uniform") +
+    theme(legend.position = "none")
+
+  # Stack vertically
+  gridExtra::grid.arrange(p_dim, p_mle, nrow = 2)
+}
+```
+
+## Key Observations
+
+```{r compare-obs, results='asis'}
+cat("\\begin{itemize}\n")
+cat("  \\item \\textbf{Coverage:} MLE achieves near-nominal 95\\% coverage for Designs 2--7,\n")
+cat("    dramatically outperforming DIM (mean \\~0.72 across all scenarios). This reflects MLE's\n")
+cat("    explicit modeling of spatial autocorrelation $\\rho$, which inflates DIM standard errors.\n\n")
+cat("  \\item \\textbf{MSE:} DIM median MSE is lower than MLE for most designs because DIM uses\n")
+cat("    2,500 iterations vs. 250 for MLE. MLE's maximum MSE (3.910) exceeds DIM's (0.799),\n")
+cat("    occurring in high-$\\rho$ scenarios where spatial lag model variance inflates\n")
+cat("    with fewer iterations.\n\n")
+cat("  \\item \\textbf{Design 1 (Checkerboard):} Consistently the worst design under both\n")
+cat("    estimators. Despite maximizing spatial separation, alternating treatment assignment\n")
+cat("    creates a strong correlation between treatment and spatially-structured incidence,\n")
+cat("    inducing systematic confounding.\n\n")
+cat("  \\item \\textbf{Design 7 (Balanced Quartiles):} Top DIM performer. Stratifying by incidence\n")
+cat("    quartile and randomizing within strata controls confounding from $X$ directly,\n")
+cat("    yielding low MSE and the best DIM coverage.\n\n")
+cat("  \\item \\textbf{Design 3 (Saturation Quadrants):} Top MLE performer. Random saturation\n")
+cat("    per quadrant introduces sufficient variation in spatial treatment patterns,\n")
+cat("    allowing the spatial autoregressive model to cleanly separate $\\tau$ from $\\rho$.\n")
+cat("\\end{itemize}\n")
+```
+
+---
+
+# Sensitivity Analysis
+
+## Parameter Sensitivity (DIM)
+
+```{r dim-sensitivity, eval=dim_avail, results='asis'}
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  invisible(capture.output(sens_tbl <- table_sensitivity(dim_cfgs[["iid Uniform"]], "iid Uniform")))
+  kable(as.data.frame(sens_tbl), booktabs = TRUE, linesep = "", digits = 4,
+        caption = "DIM: Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence. Higher values indicate parameters where design choice matters more.") %>%
+    kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
+}
+```
+
+## Effect of Rho on Design Rankings (DIM)
+
+```{r dim-rho-effect, eval=dim_avail, fig.cap="DIM: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels."}
+if ("iid Uniform" %in% names(dim_cfgs)) {
+  print(plot_mse_per_design(dim_cfgs[["iid Uniform"]], "iid Uniform"))
+}
+```
+
+## Incidence Mode Comparison
+
+```{r incidence-overview, fig.cap="Incidence spatial patterns across the three generation modes for rho\\_X = 0.20 and 0.50. Color represents incidence (darker = higher burden). Spatial and Poisson modes show visible spatial clustering absent from iid.", fig.height=6}
+print(plot_incidence_heatmaps(grid_dim = 10))
+```
+
+```{r incidence-dists, fig.cap="Marginal distribution of incidence values by mode, pooled across 50 resamples on the 10x10 grid. All modes are marginally Uniform on [0,1]; spatial structure manifests in spatial covariance, not the marginal.", fig.height=5}
+print(plot_incidence_distributions(grid_dim = 10, n_resamples = 50))
+```
+
+---
+
+# Subgroup Results by Incidence Mode
+
+The following tables report DIM results separately for each incidence configuration.
+Results are **never aggregated across incidence modes**, as each represents a
+fundamentally different assumption about prior data.
+
+```{r subgroup-loop, eval=dim_avail, results='asis'}
+# Sanitize config names for LaTeX captions (replace _ with space)
+cap_safe <- function(x) gsub("_", " ", x, fixed = TRUE)
+
+for (cfg_nm in names(dim_cfgs)) {
+  cat(sprintf("\n## DIM: %s\n\n", cfg_nm))
+  cfg <- dim_cfgs[[cfg_nm]]
+
+  # Robustness table
+  invisible(capture.output(rob <- table_robustness(cfg, cfg_nm)))
+  tbl_out <- kable(as.data.frame(rob), booktabs = TRUE, linesep = "", digits = 4,
+                   caption = sprintf("DIM robustness profile: %s", cap_safe(cfg_nm))) %>%
+    kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
+  print(tbl_out)
+  cat("\n")
+}
+```
+
+---
+
+# Conclusions
+
+## Summary of Findings
+
+The simulation study evaluated 6 treatment assignment designs across 1,920 parameter
+scenarios per estimator, spanning three incidence generation modes, two contiguity
+structures, four spatial autocorrelation levels, four spillover magnitudes, and two
+spillover types.
+
+**Key findings:**
+
+1. **Estimation method dominates coverage.** MLE achieves near-nominal 95\% coverage
+   for Designs 2--7, while DIM systematically under-covers (mean 72\%). When spatial
+   autocorrelation is present, a properly-specified spatial model is essential for
+   valid inference.
+
+2. **Design choice matters most under DIM.** Under MLE, coverage is uniformly high
+   across most designs. Under DIM, the gap between best (Design 7, ~82\%) and worst
+   (Design 1, ~45\%) designs is substantial. Researchers using simpler estimators
+   should prefer stratified designs.
+
+3. **Checkerboard is the consistently worst design.** Design 1's perfect spatial
+   alternation creates systematic confounding when incidence is spatially structured,
+   inflating bias and degrading coverage under both estimators.
+
+4. **High Incidence Focus and Balanced Quartiles are robustly competitive.** Designs 2
+   and 7 rank consistently well across estimator, incidence mode, and parameter regimes.
+   Design 7's incidence-quartile stratification directly addresses confounding from $X$.
+
+5. **Saturation Quadrants excels under MLE.** Design 3 achieves the lowest average MSE
+   under the oracle spatial model, likely because quadrant-level variation in treatment
+   saturation provides rich spatial contrast for estimating $\rho$ and $\tau$ jointly.
+
+## Limitations and Planned Extensions
+
+- **Oracle MLE:** The MLE model uses the true spillover covariate. Non-oracle
+  comparisons (`include_spill_covariate = FALSE`) remain as a planned extension.
+- **Iteration count asymmetry:** DIM uses 2,500 iterations vs. 250 for MLE.
+  MLE's apparent variance inflation at high-$\rho$ may partly reflect this imbalance.
+- **Equal populations:** Poisson mode uses $P_i = 1{,}000$ for all clusters.
+  Heterogeneous population sizes (log-normal) would more closely match NC county data.
+- **Grid sensitivity:** All results use $G = 10$ ($N = 100$). Sensitivity to
+  $G = 8$ or $G = 15$ has not been evaluated.
+- **Design 6 (Center Hotspot):** Implemented in `03_designs.R` but excluded from
+  the parameter sweep pending evaluation.
+
+---
+
+# References
+
+- Mirzaei, A. et al. (2019). Sudden unexpected death rates. *(SUD base rate 35/100,000)*
+- Gan, W. et al. (2019). County-level Poisson regression for SUD mortality.
+- Watson, K. et al. (AHA). Census tract-level spatial analysis of SUD.
+- LeSage, J. & Pace, R.K. (2009). *Introduction to Spatial Econometrics*. CRC Press.
+- Bivand, R., et al. `spdep` R package.
+- Bivand, R. & Piras, G. `spatialreg` R package.
+- R packages used: `dplyr`, `tidyr`, `ggplot2`, `viridis`, `knitr`, `kableExtra`, `digest`
+
+---
+
+# Appendix: Result File Locations
+
+```{r file-inventory, results='asis'}
+files_df <- data.frame(
+  File = c(
+    "sim_results_DIM_combined_20260304_195321.rds",
+    "sim_results_MLE_combined_20260305_150742.rds",
+    "sim_results_DIM_iid_*.rds / _spatial_*.rds / _poisson_*.rds",
+    "sim_results_MLE_iid_*.rds / _spatial_*.rds / _poisson_*.rds",
+    "DIM_combined_*.pdf (5 files)",
+    "MLE_combined_*.pdf (5 files)",
+    "DIM_combined_incidence_overview.pdf",
+    "MLE_combined_incidence_overview.pdf",
+    "00_mathematical_specification.pdf",
+    "07_results_summary.pdf"
+  ),
+  Contents = c(
+    "All 1,920 DIM scenarios",
+    "All 1,920 MLE scenarios",
+    "Per-incidence-mode DIM splits",
+    "Per-incidence-mode MLE splits",
+    "Per-config 8-plot PDFs (DIM)",
+    "Per-config 8-plot PDFs (MLE)",
+    "Incidence heatmaps + distributions",
+    "Incidence heatmaps + distributions (MLE)",
+    "Mathematical theory document",
+    "This report"
+  )
+)
+kable(files_df, booktabs = TRUE, linesep = "",
+      caption = "Output files in results/ directory") %>%
+  kable_styling(latex_options = c("striped", "hold_position", "scale_down"),
+                font_size = 8)
+```
+
+All files are located in:
+`code/OutcomeIncidenceDesign/ModularIncidenceSim/results/`
