@@ -22,6 +22,28 @@ how should you select which clusters receive treatment to maximize statistical e
 
 ---
 
+## Research Focus and Framing (IMPORTANT)
+
+**The primary research question is a comparison of treatment sampling designs**
+(Checkerboard, High Incidence Focus, Saturation Quadrants, Isolation Buffer,
+2x2 Blocking, Balanced Quartiles) — NOT a comparison of estimation methods.
+
+**DIM (Difference in Means)** is included as a **proof-of-concept / baseline**
+to verify simulation mechanics and provide a simple benchmark. It is NOT the
+focus of the research.
+
+**MLE (spatial autoregressive model via `lagsarlm`)** is the **primary estimation
+method** for all substantive conclusions. It is essential to use MLE because:
+- Spatial dependence ($\rho$) is present in the outcome DGP
+- Spillover effects ($\gamma$) must be properly modeled
+- DIM ignores both and produces systematically invalid coverage (~72%)
+- MLE accounts for spatial structure and yields near-nominal coverage (~94%)
+
+When continuing this work, focus analysis and reporting on **MLE results**.
+DIM results are secondary and serve only as a naive comparator.
+
+---
+
 ## Repository Status (as of 2026-03-05)
 
 | Directory | Status | Description |

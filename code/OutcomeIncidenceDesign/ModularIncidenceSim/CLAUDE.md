@@ -12,13 +12,29 @@
 A modular simulation study evaluating **6 treatment assignment designs** for Spatial
 Cluster Randomized Trials (CRTs) under heterogeneous outcome incidence and spatial
 spillover. The estimand is **tau = 1.0** (direct treatment effect). Two estimators
-(DIM, MLE) are compared across 1,920 parameter scenarios with 3 incidence generation
+(DIM, MLE) are run across 1,920 parameter scenarios with 3 incidence generation
 modes that are always reported **separately** — never aggregated.
 
 **Application context:** Sudden Unexpected Death (SUD) in NC counties.
 Poisson base rate 35/100,000 (Mirzaei et al.).
 
 **Metrics tracked per scenario:** Bias, SD, MSE, Coverage (95% CI), Fail_Rate.
+
+---
+
+## Research Focus and Framing (IMPORTANT)
+
+**Primary goal: compare the 6 treatment sampling designs** under realistic spatial
+conditions. The key question is which design minimizes estimation error and maintains
+valid coverage — NOT which estimator is better.
+
+**MLE is the primary estimator.** It is the methodologically appropriate choice
+because spatial dependence ($\rho$) and spillover ($\gamma$) are both present in
+the outcome DGP. DIM ignores both and produces systematically poor coverage (~72%).
+
+**DIM serves as a proof-of-concept / naive baseline only.** Use DIM results to
+sanity-check simulation mechanics and as a secondary comparator. All substantive
+design recommendations should be based on MLE results.
 
 ---
 
