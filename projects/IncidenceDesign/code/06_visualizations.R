@@ -68,7 +68,7 @@ split_by_incidence_config <- function(results) {
 #' @param results_dir Path to results directory
 #' @param estimation_mode Optional filter for "MLE" or "DIM"
 #' @return Data frame of results
-load_latest_results <- function(results_dir = file.path(script_dir, "results"),
+load_latest_results <- function(results_dir = file.path(dirname(script_dir), "results"),
                                 estimation_mode = NULL) {
   files <- list.files(results_dir, pattern = "sim_results_.*\\.rds$",
                       full.names = TRUE)
@@ -708,7 +708,7 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
                                    estimation_mode = NULL,
                                    output_pdf = TRUE) {
   if (is.null(results)) {
-    rd <- if (!is.null(results_dir)) results_dir else file.path(script_dir, "results")
+    rd <- if (!is.null(results_dir)) results_dir else file.path(dirname(script_dir), "results")
     results <- load_latest_results(rd, estimation_mode)
   }
 

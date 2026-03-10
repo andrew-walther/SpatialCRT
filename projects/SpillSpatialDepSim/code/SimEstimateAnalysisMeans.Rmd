@@ -25,98 +25,98 @@ library(plotrix)
 ```{r}
 ### Load 2x4 datasets (random & block) ###
 # TrtNoSpill
-beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE) # random mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE) # random se
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$MSE[c(28, 43)]) # block se
 
 # TrtSpill
-beta_mse_TrtSpill_2x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE) # random se
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtSpill_2x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE) # random se
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P05_R001$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtSpill_2x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE) # random se
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtSpill_2x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE) # random se
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P06_R001$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtSpill_2x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE) # random se
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtSpill_2x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE) # random se
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P07_R001$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtSpill_2x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE) # random se
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P08_R00$MSE[c(28, 43)]) # block se
 
-beta_mse_TrtSpill_2x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R001$MSE) # random mean
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtSpill_2x4_A02_B1_P08_R001$MSE[c(28, 43)]) # block mean
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtSpill_2x4_A02_B1_P08_R001$MSE) # random se
@@ -328,98 +328,98 @@ ggplot(df_block_2x4, aes(x = Condition, y = Estimate)) +
 ```{r}
 ### Load 3x3 datasets (random & block) ###
 # TrtNoSpill
-beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
 # TrtSpill
-beta_mse_TrtSpill_3x3_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE) # random se
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtSpill_3x3_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE) # random se
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P05_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtSpill_3x3_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE) # random se
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtSpill_3x3_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE) # random se
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P06_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtSpill_3x3_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE) # random se
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtSpill_3x3_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE) # random se
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P07_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtSpill_3x3_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE) # random se
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P08_R00$MSE[c(28, 30, 35, 51, 77, 106)]) # block se
 
-beta_mse_TrtSpill_3x3_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R001$MSE) # random mean
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtSpill_3x3_A02_B1_P08_R001$MSE[c(28, 30, 35, 51, 77, 106)]) # block mean
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001_se <- std.error(beta_mse_TrtSpill_3x3_A02_B1_P08_R001$MSE) # random se
@@ -631,98 +631,98 @@ ggplot(df_block_3x3, aes(x = Condition, y = Estimate)) +
 ```{r}
 ### Load 3x4 datasets (random & block) ###
 # TrtNoSpill
-beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE) # random mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE) # random se
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block_se <- std.error(beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$MSE[c(313, 612)]) # block se
 
 # TrtSpill
-beta_mse_TrtSpill_3x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE) # random se
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtSpill_3x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE) # random se
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P05_R001$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtSpill_3x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE) # random se
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtSpill_3x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE) # random se
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P06_R001$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtSpill_3x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE) # random se
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtSpill_3x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE) # random se
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P07_R001$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtSpill_3x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE) # random se
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P08_R00$MSE[c(313, 612)]) # block se
 
-beta_mse_TrtSpill_3x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R001$MSE) # random mean
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001_block_mean <- mean(beta_mse_TrtSpill_3x4_A02_B1_P08_R001$MSE[c(313, 612)]) # block mean
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001_se <- std.error(beta_mse_TrtSpill_3x4_A02_B1_P08_R001$MSE) # random se

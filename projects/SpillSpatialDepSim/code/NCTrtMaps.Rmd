@@ -24,7 +24,7 @@ library(janitor)
 ```{r}
 # --- Step 1: Load and Clean County/Judicial Data (FINAL ROBUST FIX) ---
 # Load the attached CSV file
-judicial_assignments <- read.csv("~/Library/CloudStorage/OneDrive-UniversityofNorthCarolinaatChapelHill/UNC Dissertation (Lin)/Project 1 - Spillover Effects/NC DOC Training/NC_County_Assignments.csv") %>%
+judicial_assignments <- read.csv("../data/NC_Judicial_District_Assignments.csv") %>%
   clean_names() %>%
   rename(county_name = county) %>%
   mutate(

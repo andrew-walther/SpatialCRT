@@ -53,7 +53,7 @@ library(gridExtra)
 ### Load 2x4 datasets (random & block) ###
 ## TrtNoSpill ##
 # psi = 0.5, rho = 0.00
-beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00$TrtSpill <- "No"
@@ -63,7 +63,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
 # psi = 0.5, rho = 0.01
-beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P05_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001$TrtSpill <- "No"
@@ -73,7 +73,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block <- beta_mse_TrtNoSpill_2x4_A02_B1_
 beta_mse_TrtNoSpill_2x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.00
-beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00$TrtSpill <- "No"
@@ -83,7 +83,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.01
-beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P06_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001$TrtSpill <- "No"
@@ -93,7 +93,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block <- beta_mse_TrtNoSpill_2x4_A02_B1_
 beta_mse_TrtNoSpill_2x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.00
-beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00$TrtSpill <- "No"
@@ -103,7 +103,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.01
-beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P07_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001$TrtSpill <- "No"
@@ -113,7 +113,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block <- beta_mse_TrtNoSpill_2x4_A02_B1_
 beta_mse_TrtNoSpill_2x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.00
-beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R00.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00$TrtSpill <- "No"
@@ -123,7 +123,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block <- beta_mse_TrtNoSpill_2x4_A02_B1_P
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.01
-beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_2x4_A02_B1_P08_R001.csv")
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001$TrtSpill <- "No"
@@ -134,7 +134,7 @@ beta_mse_TrtNoSpill_2x4_A02_B1_P08_R001_block$Sampling <- "Block"
 
 ## TrtSpill ##
 # psi = 0.5, rho = 0.00
-beta_mse_TrtSpill_2x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00$TrtSpill <- "Yes"
@@ -144,7 +144,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P05_R
 beta_mse_TrtSpill_2x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
 # psi = 0.5, rho = 0.01
-beta_mse_TrtSpill_2x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P05_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001$TrtSpill <- "Yes"
@@ -154,7 +154,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block <- beta_mse_TrtSpill_2x4_A02_B1_P05_
 beta_mse_TrtSpill_2x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.00
-beta_mse_TrtSpill_2x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00$TrtSpill <- "Yes"
@@ -164,7 +164,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P06_R
 beta_mse_TrtSpill_2x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.01
-beta_mse_TrtSpill_2x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P06_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001$TrtSpill <- "Yes"
@@ -174,7 +174,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block <- beta_mse_TrtSpill_2x4_A02_B1_P06_
 beta_mse_TrtSpill_2x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.00
-beta_mse_TrtSpill_2x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00$TrtSpill <- "Yes"
@@ -184,7 +184,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P07_R
 beta_mse_TrtSpill_2x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.01
-beta_mse_TrtSpill_2x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P07_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001$TrtSpill <- "Yes"
@@ -194,7 +194,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block <- beta_mse_TrtSpill_2x4_A02_B1_P07_
 beta_mse_TrtSpill_2x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.00
-beta_mse_TrtSpill_2x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R00.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00$TrtSpill <- "Yes"
@@ -204,7 +204,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block <- beta_mse_TrtSpill_2x4_A02_B1_P08_R
 beta_mse_TrtSpill_2x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.01
-beta_mse_TrtSpill_2x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_2x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_2x4_A02_B1_P08_R001.csv")
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtSpill_2x4_A02_B1_P08_R001$TrtSpill <- "Yes"
@@ -251,7 +251,7 @@ beta_mse_TrtSpill_2x4_A02_B1_P08_R001_block$Sampling <- "Block"
 # }
 # 
 # # 1. Define the base path to your data folder
-# base_path <- "~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/"
+# base_path <- "../results/beta_mse/"
 # 
 # # 2. Automatically find all relevant .csv files in the folder
 # all_file_paths <- list.files(
@@ -500,7 +500,7 @@ ggplot(df_summary, aes(x = Group, y = mean_MSE, color = Psi, group = Psi)) +
 ### Load 3x3 datasets (random & block) ###
 ## TrtNoSpill ##
 # psi = 0.5, rho = 0.00
-beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00$TrtSpill <- "No"
@@ -510,7 +510,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R00_block$Sampling <- "Block"
 
 # psi = 0.5, rho = 0.01
-beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P05_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001$TrtSpill <- "No"
@@ -520,7 +520,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block <- beta_mse_TrtNoSpill_3x3_A02_B1_
 beta_mse_TrtNoSpill_3x3_A02_B1_P05_R001_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.00
-beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00$TrtSpill <- "No"
@@ -530,7 +530,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R00_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.01
-beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P06_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001$TrtSpill <- "No"
@@ -540,7 +540,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block <- beta_mse_TrtNoSpill_3x3_A02_B1_
 beta_mse_TrtNoSpill_3x3_A02_B1_P06_R001_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.00
-beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00$TrtSpill <- "No"
@@ -550,7 +550,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R00_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.01
-beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P07_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001$TrtSpill <- "No"
@@ -560,7 +560,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block <- beta_mse_TrtNoSpill_3x3_A02_B1_
 beta_mse_TrtNoSpill_3x3_A02_B1_P07_R001_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.00
-beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00$TrtSpill <- "No"
@@ -570,7 +570,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block <- beta_mse_TrtNoSpill_3x3_A02_B1_P
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R00_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.01
-beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R001.csv")
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001$TrtSpill <- "No"
@@ -581,7 +581,7 @@ beta_mse_TrtNoSpill_3x3_A02_B1_P08_R001_block$Sampling <- "Block"
 
 ## TrtSpill ##
 # psi = 0.5, rho = 0.00
-beta_mse_TrtSpill_3x3_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00$TrtSpill <- "Yes"
@@ -591,7 +591,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P05_R
 beta_mse_TrtSpill_3x3_A02_B1_P05_R00_block$Sampling <- "Block"
 
 # psi = 0.5, rho = 0.01
-beta_mse_TrtSpill_3x3_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P05_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001$TrtSpill <- "Yes"
@@ -601,7 +601,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block <- beta_mse_TrtSpill_3x3_A02_B1_P05_
 beta_mse_TrtSpill_3x3_A02_B1_P05_R001_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.00
-beta_mse_TrtSpill_3x3_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00$TrtSpill <- "Yes"
@@ -611,7 +611,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P06_R
 beta_mse_TrtSpill_3x3_A02_B1_P06_R00_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.01
-beta_mse_TrtSpill_3x3_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P06_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001$TrtSpill <- "Yes"
@@ -621,7 +621,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block <- beta_mse_TrtSpill_3x3_A02_B1_P06_
 beta_mse_TrtSpill_3x3_A02_B1_P06_R001_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.00
-beta_mse_TrtSpill_3x3_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00$TrtSpill <- "Yes"
@@ -631,7 +631,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P07_R
 beta_mse_TrtSpill_3x3_A02_B1_P07_R00_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.01
-beta_mse_TrtSpill_3x3_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P07_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001$TrtSpill <- "Yes"
@@ -641,7 +641,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block <- beta_mse_TrtSpill_3x3_A02_B1_P07_
 beta_mse_TrtSpill_3x3_A02_B1_P07_R001_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.00
-beta_mse_TrtSpill_3x3_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R00.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00$TrtSpill <- "Yes"
@@ -651,7 +651,7 @@ beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block <- beta_mse_TrtSpill_3x3_A02_B1_P08_R
 beta_mse_TrtSpill_3x3_A02_B1_P08_R00_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.01
-beta_mse_TrtSpill_3x3_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_3x3_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x3_A02_B1_P08_R001.csv")
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x3_A02_B1_P08_R001$TrtSpill <- "Yes"
@@ -896,7 +896,7 @@ ggplot(df_summary, aes(x = Group, y = mean_MSE, color = Psi, group = Psi)) +
 ### Load 3x4 datasets (random & block) ###
 ## TrtNoSpill ##
 # psi = 0.5, rho = 0.00
-beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00$TrtSpill <- "No"
@@ -906,7 +906,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
 # psi = 0.5, rho = 0.01
-beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001$TrtSpill <- "No"
@@ -916,7 +916,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block <- beta_mse_TrtNoSpill_3x4_A02_B1_
 beta_mse_TrtNoSpill_3x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.00
-beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00$TrtSpill <- "No"
@@ -926,7 +926,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.01
-beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P06_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001$TrtSpill <- "No"
@@ -936,7 +936,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block <- beta_mse_TrtNoSpill_3x4_A02_B1_
 beta_mse_TrtNoSpill_3x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.00
-beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00$TrtSpill <- "No"
@@ -946,7 +946,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.01
-beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P07_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001$TrtSpill <- "No"
@@ -956,7 +956,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block <- beta_mse_TrtNoSpill_3x4_A02_B1_
 beta_mse_TrtNoSpill_3x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.00
-beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R00.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R00.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00$TrtSpill <- "No"
@@ -966,7 +966,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block <- beta_mse_TrtNoSpill_3x4_A02_B1_P
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.01
-beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R001.csv")
+beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P08_R001.csv")
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001$TrtSpill <- "No"
@@ -977,7 +977,7 @@ beta_mse_TrtNoSpill_3x4_A02_B1_P08_R001_block$Sampling <- "Block"
 
 ## TrtSpill ##
 # psi = 0.5, rho = 0.00
-beta_mse_TrtSpill_3x4_A02_B1_P05_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P05_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00$Psi <- 0.5
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00$TrtSpill <- "Yes"
@@ -987,7 +987,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P05_R
 beta_mse_TrtSpill_3x4_A02_B1_P05_R00_block$Sampling <- "Block"
 
 # psi = 0.5, rho = 0.01
-beta_mse_TrtSpill_3x4_A02_B1_P05_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P05_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P05_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001$Psi <- 0.5
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001$TrtSpill <- "Yes"
@@ -997,7 +997,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block <- beta_mse_TrtSpill_3x4_A02_B1_P05_
 beta_mse_TrtSpill_3x4_A02_B1_P05_R001_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.00
-beta_mse_TrtSpill_3x4_A02_B1_P06_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P06_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00$Psi <- 0.6
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00$TrtSpill <- "Yes"
@@ -1007,7 +1007,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P06_R
 beta_mse_TrtSpill_3x4_A02_B1_P06_R00_block$Sampling <- "Block"
 
 # psi = 0.6, rho = 0.01
-beta_mse_TrtSpill_3x4_A02_B1_P06_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P06_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P06_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001$Psi <- 0.6
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001$TrtSpill <- "Yes"
@@ -1017,7 +1017,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block <- beta_mse_TrtSpill_3x4_A02_B1_P06_
 beta_mse_TrtSpill_3x4_A02_B1_P06_R001_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.00
-beta_mse_TrtSpill_3x4_A02_B1_P07_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P07_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00$Psi <- 0.7
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00$TrtSpill <- "Yes"
@@ -1027,7 +1027,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P07_R
 beta_mse_TrtSpill_3x4_A02_B1_P07_R00_block$Sampling <- "Block"
 
 # psi = 0.7, rho = 0.01
-beta_mse_TrtSpill_3x4_A02_B1_P07_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P07_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P07_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001$Psi <- 0.7
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001$TrtSpill <- "Yes"
@@ -1037,7 +1037,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block <- beta_mse_TrtSpill_3x4_A02_B1_P07_
 beta_mse_TrtSpill_3x4_A02_B1_P07_R001_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.00
-beta_mse_TrtSpill_3x4_A02_B1_P08_R00 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R00.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P08_R00 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R00.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00$Psi <- 0.8
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00$Rho <- 0.00
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00$TrtSpill <- "Yes"
@@ -1047,7 +1047,7 @@ beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block <- beta_mse_TrtSpill_3x4_A02_B1_P08_R
 beta_mse_TrtSpill_3x4_A02_B1_P08_R00_block$Sampling <- "Block"
 
 # psi = 0.8, rho = 0.01
-beta_mse_TrtSpill_3x4_A02_B1_P08_R001 <- read.csv("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv")
+beta_mse_TrtSpill_3x4_A02_B1_P08_R001 <- read.csv("../results/beta_mse/beta_mse_results_TrtSpill_3x4_A02_B1_P08_R001.csv")
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001$Psi <- 0.8
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001$Rho <- 0.01
 beta_mse_TrtSpill_3x4_A02_B1_P08_R001$TrtSpill <- "Yes"

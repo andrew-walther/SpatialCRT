@@ -55,7 +55,7 @@ script_dir <- tryCatch(
     )
   }
 )
-results_dir <- file.path(script_dir, "results")
+results_dir <- file.path(dirname(script_dir), "results")
 ```
 
 ```{r source-modules}
