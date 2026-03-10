@@ -22,7 +22,7 @@ Application domain: NC law enforcement / SUD prevention policy.
 | **Grid** | 2×4 / 3×3 / 3×4 (8–12 districts) | 10×10 (100 clusters) |
 | **Estimand** | alpha, beta, psi, rho | tau (direct treatment effect) |
 | **Question** | Block vs. random assignment with spillover | Which design minimizes MSE across incidence modes? |
-| **Status** | Original complete; unified scripts planned (Plan B) | **Complete** |
+| **Status** | **Complete** (original + UnifiedSpatialSim scripts) | **Complete** |
 | **Entry point** | `code/SpatialSim_NC_DOC.Rmd` | `code/05_run_simulation.R` |
 
 ### How the Projects Relate
