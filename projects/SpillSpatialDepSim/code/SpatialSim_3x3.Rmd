@@ -1,5 +1,5 @@
 ---
-title: "SpatialSim_3x4"
+title: "SpatialSim_3x3"
 author: "Andrew Walther"
 date: "`r Sys.Date()`"
 output: html_document
@@ -7,9 +7,9 @@ output: html_document
 
 ### Objecive
 
-- Expand spatial simulation w/ spillover estimation to a 3x4 grid (beyond previous 4x2 grid) to understand estimation efficiency on larger spaces.
+- Expand spatial simulation w/ spillover estimation to a 3x3 and/or 4x4 grid (beyond previous 4x2 grid) to understand estimation efficiency on larger spaces.
 
-### Preliminaries
+### Preliminaries (3x3)
 
 ```{r Load Libraries, message=FALSE, warning=FALSE}
 # set seed
@@ -30,20 +30,24 @@ library(combinat)
 ```{r Initiate Constants}
 ### Set Constants ###
 # parameters for simulation
-N <- 10 # number of datasets to generate (iterate over each trt combo for each - 50*70=3500)  
-Num.Combos <- 924 # Number of trt combos to iterate over
-points_per_iteration <- 240  # Number of points per dataset (20 per district)
-grid_width <- 400 # Set dimensions of grid for simulated data
+N <- 50 # number of datasets to generate (iterate over each trt combo for each - 50*70=3500)  
+Num.Combos <- 126 # Number of trt combos to iterate over
+points_per_iteration <- 180  # Number of points per dataset (20 per district)
+grid_width <- 300 # Set dimensions of grid for simulated data
 grid_height <- 300
 cell_length <- 100
 
 # Define response model constants (true values) (iterate through combos of psi/rho/TrtSpill)
-alpha <- 0.2 # intercept/baseline effect
+alpha <- 0.2 # intercept/baseline effecgt
 beta <- 1 # consider a range of intervention effects (start with Null case -> 1)
-psi <- 0.5 # maximum spillover effect (binary) (options: 0.5, 0.6, 0.7, 0.8)
-rho <- 0.01 # spatial correlation parameter (options: 0.00, 0.01)
+psi <- 0.8 # maximum spillover effect (binary) (options: 0.5, 0.6, 0.7, 0.8)
+rho <- 0.0 # spatial correlation parameter (options: 0.00, 0.01)
 sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise"/more consistent estimates
 ```
+
+- For 3x3 grid with 4 or 5 control/intervention and 4 or 5 of the other (likely choose 4 intervention), there are 9 choose 4 (or 9 choose 5) = 126 combinations of how to select these grid setups.
+
+- For a 4x4 grid (16 cells) with 8 intervention and 8 control districts, there are 9 choose 8 = 12870 different combinations of how to choose the grid setup (this seems impractical). Note: 16 choose 4 = 1820 combinations.
 
 - Additionally, 3x4 grid (12 cells) with 6 intervention and 6 control districts has 12 choose 6 = 924 different combinations to choose the grid setup.
 
@@ -52,10 +56,10 @@ sd <- 0.1 # set standard deviation (for epsilon) -> change this to reduce "noise
 ```{r Identify all combinations of 4 Intervention & Control}
 ### Generate combinations of 8 districts (4 intervention, 4 control)
 # Create a vector representing the 8 districts
-districts <- 1:12
+districts <- 1:9
 
 # Generate all combinations of 4 intervention districts out of 8
-combinations <- combn(districts, 6)
+combinations <- combn(districts, 4)
 
 # Initialize an empty data frame for the results
 results <- data.frame(Combination = 1:ncol(combinations))
@@ -66,11 +70,11 @@ for (i in 1:ncol(combinations)) {
   treatment_assignment <- ifelse(districts %in% combinations[, i], 1, 0)
   
   # Add the treatment assignment for this combination as a new column
-  results[i, 2:13] <- treatment_assignment
+  results[i, 2:10] <- treatment_assignment
 }
 
 # Rename the columns
-colnames(results) <- c('Combination', paste('Cell', 1:12))
+colnames(results) <- c('Combination', paste('Cell', 1:9))
 
 # Print the results table
 print(results)
@@ -80,22 +84,19 @@ print(results)
 ### Table of Rook Neighbor Assignments ###
 # neighbors are cells that are directly adjacent - "rook" case contiguity (not diagonal) to a reference cell
 # Initialize the 8x8 matrix with zeros (no neighbors initially)
-neighbor_matrix <- matrix(0, nrow = 12, ncol = 12)
+neighbor_matrix <- matrix(0, nrow = 9, ncol = 9)
 
 # Define the neighbor relationships (cells are indexed from 1 to 8)
 rook_neighbors <- list(
-  `1` = c(2, 5), # Cell 1 neighbors
-  `2` = c(1, 3, 6), # Cell 2 neighbors
-  `3` = c(2, 4, 7), # Cell 3 neighbors
-  `4` = c(3, 8), # Cell 4 neighbors
-  `5` = c(1, 6, 9), # Cell 5 neighbors
-  `6` = c(2, 5, 7, 10), # Cell 6 neighbors
-  `7` = c(3, 6, 8, 11), # Cell 7 neighbors
-  `8` = c(4, 7, 12), # Cell 8 neighbors
-  `9` = c(5, 10), # Cell 9 neighbors
-  `10` = c(6, 9, 11), # Cell 10 neighbors
-  `11` = c(7, 10, 12), # Cell 11 neighbors
-  `12` = c(8, 11) # Cell 9 neighbors
+  `1` = c(2, 4), # Cell 1 neighbors
+  `2` = c(1, 3, 5), # Cell 2 neighbors
+  `3` = c(2, 6), # Cell 3 neighbors
+  `4` = c(1, 5, 7), # Cell 4 neighbors
+  `5` = c(2, 4, 6, 8), # Cell 5 neighbors
+  `6` = c(3, 5, 9), # Cell 6 neighbors
+  `7` = c(4, 8), # Cell 7 neighbors
+  `8` = c(5, 7, 9), # Cell 8 neighbors
+  `9` = c(6, 8) # Cell 9 neighbors
 )
 
 # Loop through each cell and mark its neighbors in the matrix
@@ -109,48 +110,50 @@ for (cell in names(rook_neighbors)) {
 print(neighbor_matrix)
 ```
 
-```{r}
+```{r Define spatial polygon 2x4 grid}
 ### Define the coordinates for each district (100x100 units) ###
-# Row 1 (top)
-district_1 <- st_polygon(list(matrix(c(0, 200, 100, 200, 100, 300, 0, 300, 0, 200), ncol = 2, byrow = TRUE)))
-district_2 <- st_polygon(list(matrix(c(100, 200, 200, 200, 200, 300, 100, 300, 100, 200), ncol = 2, byrow = TRUE)))
-district_3 <- st_polygon(list(matrix(c(200, 200, 300, 200, 300, 300, 200, 300, 200, 200), ncol = 2, byrow = TRUE)))
-district_4 <- st_polygon(list(matrix(c(300, 200, 400, 200, 400, 300, 300, 300, 300, 200), ncol = 2, byrow = TRUE)))
+# row 1
+district_1 <- st_polygon(list(matrix(c(0, 200, 100, 200, 100, 300, 0, 300, 0, 200), 
+                                     ncol = 2, byrow = TRUE))) # Top-left
+district_2 <- st_polygon(list(matrix(c(100, 200, 200, 200, 200, 300, 100, 300, 100, 200), 
+                                     ncol = 2, byrow = TRUE))) # Top-center
+district_3 <- st_polygon(list(matrix(c(200, 200, 300, 200, 300, 300, 200, 300, 200, 200), 
+                                     ncol = 2, byrow = TRUE))) # Top-right
+# row 2
+district_4 <- st_polygon(list(matrix(c(0, 100, 100, 100, 100, 200, 0, 200, 0, 100), 
+                                     ncol = 2, byrow = TRUE))) # Middle-left
+district_5 <- st_polygon(list(matrix(c(100, 100, 200, 100, 200, 200, 100, 200, 100, 100), 
+                                     ncol = 2, byrow = TRUE))) # Center
+district_6 <- st_polygon(list(matrix(c(200, 100, 300, 100, 300, 200, 200, 200, 200, 100), 
+                                     ncol = 2, byrow = TRUE))) # Middle-right
+# row 3
+district_7 <- st_polygon(list(matrix(c(0, 0, 100, 0, 100, 100, 0, 100, 0, 0), 
+                                     ncol = 2, byrow = TRUE))) # Bottom-left
+district_8 <- st_polygon(list(matrix(c(100, 0, 200, 0, 200, 100, 100, 100, 100, 0), 
+                                     ncol = 2, byrow = TRUE))) # Bottom-center
+district_9 <- st_polygon(list(matrix(c(200, 0, 300, 0, 300, 100, 200, 100, 200, 0), 
+                                     ncol = 2, byrow = TRUE))) # Bottom-right
 
-# Row 2 (middle)
-district_5 <- st_polygon(list(matrix(c(0, 100, 100, 100, 100, 200, 0, 200, 0, 100), ncol = 2, byrow = TRUE)))
-district_6 <- st_polygon(list(matrix(c(100, 100, 200, 100, 200, 200, 100, 200, 100, 100), ncol = 2, byrow = TRUE)))
-district_7 <- st_polygon(list(matrix(c(200, 100, 300, 100, 300, 200, 200, 200, 200, 100), ncol = 2, byrow = TRUE)))
-district_8 <- st_polygon(list(matrix(c(300, 100, 400, 100, 400, 200, 300, 200, 300, 100), ncol = 2, byrow = TRUE)))
 
-# Row 3 (bottom)
-district_9  <- st_polygon(list(matrix(c(0, 0, 100, 0, 100, 100, 0, 100, 0, 0), ncol = 2, byrow = TRUE)))
-district_10 <- st_polygon(list(matrix(c(100, 0, 200, 0, 200, 100, 100, 100, 100, 0), ncol = 2, byrow = TRUE)))
-district_11 <- st_polygon(list(matrix(c(200, 0, 300, 0, 300, 100, 200, 100, 200, 0), ncol = 2, byrow = TRUE)))
-district_12 <- st_polygon(list(matrix(c(300, 0, 400, 0, 400, 100, 300, 100, 300, 0), ncol = 2, byrow = TRUE)))
+# Combine all districts into one list
+districts_list <- list(district_1, district_2, district_3, district_4, district_5, district_6, district_7, district_8, district_9)
+districts_sf <- st_sfc(districts_list, crs = NA_crs_) # this is the spatial object
 
-# Combine all districts
-districts_list <- list(district_1, district_2, district_3, district_4,
-                       district_5, district_6, district_7, district_8,
-                       district_9, district_10, district_11, district_12)
-
-districts_sf <- st_sfc(districts_list, crs = NA_crs_)
-
-### Adjusted Centroids for 3x4 grid ###
-district_names <- as.character(1:12)
+### Manually Adjusted Centroids for 3x3 grid ###
+district_names <- c("1", "2", "3", "4", "5", "6", "7", "8", "9")
 label_positions <- data.frame(
   district = district_names,
-  x = rep(c(50, 150, 250, 350), 3),          # Repeating x-centroids per column
-  y = rep(c(250, 150, 50), each = 4)          # Repeating y-centroids per row
+  x = c(50, 150, 250, 50, 150, 250, 50, 150, 250),  # X-coordinates
+  y = c(250, 250, 250, 150, 150, 150, 50, 50, 50)   # Y-coordinates
 )
 label_sf <- st_as_sf(label_positions, coords = c("x", "y"), crs = NA_crs_)
 
-# Plot
+# Plot with corrected labels
 ggplot() +
   geom_sf(data = districts_sf, fill = "white", color = "black") +
   geom_sf_text(data = label_sf, aes(label = district), size = 5, color = "black") +
   theme_minimal() +
-  ggtitle("Spatial region with district labels (1–12)") +
+  ggtitle("Spatial region with district labels (1-9)") +
   theme(
     plot.title = element_text(hjust = 0.5),
     axis.text = element_blank(),
@@ -160,10 +163,10 @@ ggplot() +
 ```
 
 ```{r Plot all possible treatment assignment combos}
-# ### Plot Treatment assignments for all possible combinations ###
-# Generate all 924 treatment assignments
-districts <- 1:12
-combinations <- combn(districts, 6, simplify = FALSE)
+### Plot Treatment assignments for all possible combinations ###
+# Generate all 126 treatment assignments
+districts <- 1:9
+combinations <- combn(districts, 4, simplify = FALSE)
 
 # Loop through each treatment combination and plot
 for (i in seq_along(combinations)) {
@@ -197,7 +200,7 @@ for (i in seq_along(combinations)) {
 }
 ```
 
-- Combos that satisfy "block stratification": 313 & 612
+- Combos that satisfy "block stratification": 28, 30, 35, 51, 77, 106
 - Combos that satisfy "random sampling/other" (intervention districts adjacent to each other): all others!
 
 ```{r Identify trt/ctrl combos satisfying block stratification}
@@ -205,23 +208,20 @@ for (i in seq_along(combinations)) {
 # Intervention neighbors with only control and vice versa
 # Define neighbors using Rook's contiguity (used in simulation)
 rook_neighbors <- list(
-  "1" = c(2, 5), # Cell 1 neighbors
-  "2" = c(1, 3, 6), # Cell 2 neighbors
-  "3" = c(2, 4, 7), # Cell 3 neighbors
-  "4" = c(3, 8), # Cell 4 neighbors
-  "5" = c(1, 6, 9), # Cell 5 neighbors
-  "6" = c(2, 5, 7, 10), # Cell 6 neighbors
-  "7" = c(3, 6, 8, 11), # Cell 7 neighbors
-  "8" = c(4, 7, 12), # Cell 8 neighbors
-  "9" = c(5, 10), # Cell 9 neighbors
-  "10" = c(6, 9, 11), # Cell 10 neighbors
-  "11" = c(7, 10, 12), # Cell 11 neighbors
-  "12" = c(8, 11) # Cell 9 neighbors
+  "1" = c(2, 4), # Cell 1 neighbors
+  "2" = c(1, 3, 5), # Cell 2 neighbors
+  "3" = c(2, 6), # Cell 3 neighbors
+  "4" = c(1, 5, 7), # Cell 4 neighbors
+  "5" = c(2, 4, 6, 8), # Cell 5 neighbors
+  "6" = c(3, 5, 9), # Cell 6 neighbors
+  "7" = c(4, 8), # Cell 7 neighbors
+  "8" = c(5, 7, 9), # Cell 8 neighbors
+  "9" = c(6, 8) # Cell 9 neighbors
 )
 
-# Generate all 6-intervention, 6-control assignments (used in simulation)
-districts <- 1:12
-combinations <- combn(districts, 6, simplify = FALSE)
+# Generate all 4-intervention, 4-control assignments (used in simulation)
+districts <- 1:9
+combinations <- combn(districts, 4, simplify = FALSE)
 ###########################################################################
 # Function 1: Check if an assignment satisfies full block stratification
 is_valid_assignment_full <- function(intervention_cells) {
@@ -269,7 +269,7 @@ is_valid_assignment_intervention_only <- function(intervention_cells) {
 }
 
 ###########################################################################
-### Apply functions to all 924 assignments ###
+### Apply functions to all 70 assignments ###
 valid_combinations_full <- Filter(is_valid_assignment_full, combinations)
 valid_combinations_intervention_only <- Filter(is_valid_assignment_intervention_only, combinations)
 
@@ -308,7 +308,7 @@ print(paste("Valid combinations (intervention-only separation) occur at indices:
 # Function to plot a specific treatment combination
 plot_combination <- function(index, intervention_cells) {
   # Assign intervention (1) and control (0)
-  treatment_assignment <- rep(0, 12)
+  treatment_assignment <- rep(0, 9)
   treatment_assignment[intervention_cells] <- 1  # Mark intervention cells
   
   # Convert to factor for coloring
@@ -341,7 +341,7 @@ for (valid_index in valid_indices_intervention_only) {
 }
 ```
 
-- Note: combos 313 & 612 both have the "checkerboard" pattern that we see for block stratification when the number of intervention & control districts are the same.
+- Combo 77 is only setup where the all control cells & intervention cells are not adjacent (rook neighbors) with other cells of the same treatment type. However, if we relax the rook neighbor restriction on the control cells (controls can be adjacent to controls), we also get that combos 28, 30, 35, 51, 106 satisfy the block stratification condition as well!
 
 ### Simulation Datasets
 
@@ -349,29 +349,26 @@ for (valid_index in valid_indices_intervention_only) {
 ### Setup simulation datasets, neighbor matrix, treatment combos ###
 # Define neighbors using Rook's contiguity (used in simulation)
 rook_neighbors <- list(
-  "1" = c(2, 5), # Cell 1 neighbors
-  "2" = c(1, 3, 6), # Cell 2 neighbors
-  "3" = c(2, 4, 7), # Cell 3 neighbors
-  "4" = c(3, 8), # Cell 4 neighbors
-  "5" = c(1, 6, 9), # Cell 5 neighbors
-  "6" = c(2, 5, 7, 10), # Cell 6 neighbors
-  "7" = c(3, 6, 8, 11), # Cell 7 neighbors
-  "8" = c(4, 7, 12), # Cell 8 neighbors
-  "9" = c(5, 10), # Cell 9 neighbors
-  "10" = c(6, 9, 11), # Cell 10 neighbors
-  "11" = c(7, 10, 12), # Cell 11 neighbors
-  "12" = c(8, 11) # Cell 9 neighbors
+  "1" = c(2, 4), # Cell 1 neighbors
+  "2" = c(1, 3, 5), # Cell 2 neighbors
+  "3" = c(2, 6), # Cell 3 neighbors
+  "4" = c(1, 5, 7), # Cell 4 neighbors
+  "5" = c(2, 4, 6, 8), # Cell 5 neighbors
+  "6" = c(3, 5, 9), # Cell 6 neighbors
+  "7" = c(4, 8), # Cell 7 neighbors
+  "8" = c(5, 7, 9), # Cell 8 neighbors
+  "9" = c(6, 8) # Cell 9 neighbors
 )
 
 # Generate all 4-intervention, 4-control assignments (used in simulation)
-districts <- 1:12
-combinations <- combn(districts, 6, simplify = FALSE)
+districts <- 1:9
+combinations <- combn(districts, 4, simplify = FALSE)
 
 # Create a single 8x8 district adjacency matrix (rook neighbors)
-neighbor_matrix <- matrix(0, nrow = 12, ncol = 12, dimnames = list(1:12, 1:12))
+neighbor_matrix <- matrix(0, nrow = 9, ncol = 9, dimnames = list(1:9, 1:9))
 
 # Fill in the adjacency matrix based on rook_neighbors
-for (i in 1:12) {
+for (i in 1:9) {
   if (!is.null(rook_neighbors[[as.character(i)]])) {
     neighbor_matrix[i, rook_neighbors[[as.character(i)]]] <- 1
   }
@@ -391,25 +388,20 @@ rho_estimates <- matrix(, nrow = N, ncol = Num.Combos) # spatial correlation
 rho_estimates_SE <- matrix(, nrow = N, ncol = Num.Combos)
 
 # Generate all 70 treatment assignments combinations
-districts <- 1:12
-combinations <- combn(districts, 6, simplify = FALSE)
+districts <- 1:9
+combinations <- combn(districts, 4, simplify = FALSE)
 
 # Function to assign district based on the coordinates for 3x3 grid
 assign_district <- function(x, y) {
-  if (x >= 0   & x < 100  & y >= 200 & y < 300) return(1) # row 1 (left)
-  if (x >= 100 & x < 200  & y >= 200 & y < 300) return(2)
-  if (x >= 200 & x < 300  & y >= 200 & y < 300) return(3)
-  if (x >= 300 & x < 400  & y >= 200 & y < 300) return(4) # row 1 (right)
-
-  if (x >= 0   & x < 100  & y >= 100 & y < 200) return(5) # row 2 (left)
-  if (x >= 100 & x < 200  & y >= 100 & y < 200) return(6)
-  if (x >= 200 & x < 300  & y >= 100 & y < 200) return(7)
-  if (x >= 300 & x < 400  & y >= 100 & y < 200) return(8) # row 2 (right)
-
-  if (x >= 0   & x < 100  & y >= 0   & y < 100) return(9) # row 3 (left)
-  if (x >= 100 & x < 200  & y >= 0   & y < 100) return(10)
-  if (x >= 200 & x < 300  & y >= 0   & y < 100) return(11)
-  if (x >= 300 & x < 400  & y >= 0   & y < 100) return(12) # row 4 (right)
+  if (x >= 0 & x < 100 & y >= 200 & y < 300) return(1)  # District 1
+  if (x >= 100 & x < 200 & y >= 200 & y < 300) return(2) # District 2
+  if (x >= 200 & x < 300 & y >= 200 & y < 300) return(3) # District 3
+  if (x >= 0 & x < 100 & y >= 100 & y < 200) return(4)   # District 4
+  if (x >= 100 & x < 200 & y >= 100 & y < 200) return(5) # District 5
+  if (x >= 200 & x < 300 & y >= 100 & y < 200) return(6) # District 6
+  if (x >= 0 & x < 100 & y >= 0 & y < 100) return(7)     # District 7
+  if (x >= 100 & x < 200 & y >= 0 & y < 100) return(8)   # District 8
+  if (x >= 200 & x < 300 & y >= 0 & y < 100) return(9)   # District 9
 }
 ```
 
@@ -453,7 +445,7 @@ for (combo_index in 1:length(combinations)) {
     points$spillover <- 0 # initialize spillover vector (will change to 1 if nb.i & trt.i = 1)
     
     # Add neighbor columns (nb.1 to nb.8) and treatment columns (trt.1 to trt.8)
-    for (i in 1:12) {
+    for (i in 1:9) {
       points[[paste0("nb.", i)]] <- ifelse(points$district %in% rook_neighbors[[as.character(i)]], 1, 0)
       points[[paste0("trt.", i)]] <- ifelse(i %in% current_combination, 1, 0)
     }
@@ -467,7 +459,7 @@ for (combo_index in 1:length(combinations)) {
     }
     
     # allow spillover on intervention & control districts (case 2)
-    # for (i in 1:12) {
+    # for (i in 1:9) {
     #   points$spillover <- ifelse(points[[paste0("nb.", i)]] == 1 & 
     #                                points[[paste0("trt.", i)]] == 1, 1, points$spillover)
     # }
@@ -508,7 +500,7 @@ for (combo_index in 1:length(combinations)) {
     
     # compute spatial lag response (solve for y using closed-form expression)
     A <- I - rho * W # (I - rho*W)
-    points$response <- solve(A, linear_response) # (I - rho W)^(-1) * (a + XB + e) - simultaneous response
+    points$response <- solve(A, linear_response) # (I - rho W)^(-1) * (a + XB + e) - simultaneous response (solve system of equations)
     ####################################################################################################
     ### Fit Spatial Lag Model for Parameter Estimation on response values ###
     # Convert the matrix to a neighbor list (listw)
@@ -592,7 +584,7 @@ compute_metrics <- function(beta_estimates, true_value) {
     bias <- mean(estimates) - true_value
     bias.abs <- abs(mean(estimates) - true_value)
     variance <- var(estimates)
-    mse <- mean((estimates - true_value)^2)
+    mse <- mean((estimates - true_value)^2) # MSE = bias^2 + var
     return(c(bias = bias, bias.abs = bias.abs, variance = variance, MSE = mse))
   })))
   return(results)
@@ -605,10 +597,10 @@ psi.mse <- compute_metrics(psi_estimates, true_value = psi)
 rho.mse <- compute_metrics(rho_estimates, true_value = rho)
 
 # save results to CSV (AX_BX_PX_RX where X is the value)
-write.csv(beta.mse, "beta_mse/beta_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
-write.csv(alpha.mse, "alpha_mse/alpha_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
-write.csv(psi.mse, "psi_mse/psi_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
-write.csv(rho.mse, "rho_mse/rho_mse_results_TrtNoSpill_3x4_A02_B1_P05_R001.csv", row.names = TRUE)
+write.csv(beta.mse, "../results/beta_mse/beta_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv", row.names = TRUE)
+write.csv(alpha.mse, "../results/alpha_mse/alpha_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv", row.names = TRUE)
+write.csv(psi.mse, "../results/psi_mse/psi_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv", row.names = TRUE)
+write.csv(rho.mse, "../results/rho_mse/rho_mse_results_TrtNoSpill_3x3_A02_B1_P08_R00.csv", row.names = TRUE)
 
 #write.csv(beta.mse, "beta_mse_results_noTrtSpill.csv", row.names = TRUE)
 #write.csv(beta.mse, "beta_mse_results_TrtSpill.csv", row.names = TRUE)

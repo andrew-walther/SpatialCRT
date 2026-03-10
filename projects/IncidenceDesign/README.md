@@ -22,7 +22,7 @@ consistent with county-level Poisson analyses by Gan et al. and Watson et al.
 ## Project Lineage
 
 This is a clean-room rewrite of
-`code/OutcomeIncidenceDesign/SpatialCRT_Incidence_TreatmentAssignment_Simulation.Rmd`
+`archive/OutcomeIncidenceDesign_Legacy/SpatialCRT_Incidence_TreatmentAssignment_Simulation.Rmd`
 (~600 lines, monolithic Rmd). Refactoring goals:
 
 1. **Modularity** — 6 numbered R scripts (01-06) that can be run independently or sourced in sequence
@@ -65,7 +65,7 @@ install.packages(c("spdep", "spatialreg", "dplyr", "tidyr",
 # In 05_run_simulation.R, ensure line 40 reads:
 #   estimation_mode <- "DIM"
 
-setwd("code/OutcomeIncidenceDesign/ModularIncidenceSim")
+setwd("projects/IncidenceDesign/code")
 source("05_run_simulation.R")
 ```
 
@@ -75,7 +75,7 @@ source("05_run_simulation.R")
 # Run from terminal to keep process independent of IDE session
 # Use caffeinate to prevent sleep on macOS:
 #   caffeinate -i -w $(pgrep -f 05_run_simulation) &
-cd code/OutcomeIncidenceDesign/ModularIncidenceSim
+cd projects/IncidenceDesign/code
 Rscript 05_run_simulation.R
 ```
 
@@ -219,6 +219,16 @@ results/
 - [ ] DIM vs MLE comparison — joint analysis of both result sets
 - [ ] Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
 - [ ] Additional designs — evaluate Design 6 (Center Hotspot) or add new strategies
+
+---
+
+## Relationship to SpillSpatialDepSim
+
+IncidenceDesign extends the simulation framework from `projects/SpillSpatialDepSim/`.
+SpillSpatialDepSim established the SAR model, spillover mechanics, and block stratification
+approach in an applied NC DOC context (8–12 districts). IncidenceDesign asks the same
+core design question at larger scale (100 clusters) with systematic variation across
+incidence modes and formal design strategies.
 
 ---
 
