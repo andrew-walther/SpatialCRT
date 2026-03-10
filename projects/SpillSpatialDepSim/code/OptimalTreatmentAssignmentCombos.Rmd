@@ -11,7 +11,7 @@ library(tidyverse)
 library(fs)
 
 # --- define folder path --- (Using path.expand to ensure the tilde (~) is read correctly by the OS)
-folder_path <- path.expand("~/GithubProjects/SpatialCRT/code/NCdocSpatialSim/beta_mse")
+folder_path <- "../results/beta_mse"
 
 # --- list of all CSV files in "beta_mse" ---
 file_list <- list.files(path = folder_path, pattern = "\\.csv$", full.names = TRUE)

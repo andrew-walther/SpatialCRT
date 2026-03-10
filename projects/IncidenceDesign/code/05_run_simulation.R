@@ -358,7 +358,7 @@ cat(sprintf("Total time: %.1f minutes\n", total_elapsed))
 cat(sprintf("Scenarios completed: %d\n", nrow(granular_results)))
 
 # --- Save combined results ---
-results_dir <- file.path(script_dir, "results")
+results_dir <- file.path(dirname(script_dir), "results")
 if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
 
 timestamp_str <- format(Sys.time(), "%Y%m%d_%H%M%S")
