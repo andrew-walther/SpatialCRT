@@ -74,15 +74,15 @@ See `paper/SpatialCRT_Manuscript_V2.pdf` for the full manuscript.
 | `code/CombinedSamplingGrids.Rmd` | Visual comparison across grid sizes |
 | `code/NCTrtMaps.Rmd` | NC judicial district map visualization |
 
-### Unified Scripts (planned — Plan B)
+### Unified Scripts (`code/UnifiedSpatialSim/`)
 
 | File | Description |
 |------|-------------|
-| `code/01_grid_setup.R` | Programmatic polygon + rook neighbor construction |
-| `code/02_simulation_core.R` | `run_scenario()`, `compute_metrics()`, both spillover types |
-| `code/03_analysis_functions.R` | Reusable plot and summary functions |
-| `code/04_run_simulation.R` | Parallel orchestrator (`mclapply`), all 48 scenarios |
-| `code/05_analysis_report.Rmd` | Combined report across all grids and parameters |
+| `01_grid_setup.R` | Programmatic polygon + rook neighbor construction |
+| `02_simulation_core.R` | `run_scenario()`, `compute_metrics()`, both spillover types |
+| `03_analysis_functions.R` | Reusable plot and summary functions |
+| `04_run_simulation.R` | Parallel orchestrator (`mclapply`), all 48 scenarios |
+| `05_analysis_report.Rmd` | Combined report across all grids and parameters |
 
 ### Data
 
@@ -118,12 +118,12 @@ rmarkdown::render("SimEstimateAnalysisMeans.Rmd")
 rmarkdown::render("OptimalTreatmentAssignmentCombos.Rmd")
 ```
 
-## Run Unified Simulation (Plan B)
+## Run Unified Simulation
 
 ```r
-setwd("projects/SpillSpatialDepSim/code")
+setwd("projects/SpillSpatialDepSim/code/UnifiedSpatialSim")
 source("04_run_simulation.R")  # parallel, all 48 scenarios
-# Output: ../results/sim_results_unified.rds (~71,680 rows)
+# Output: ../../results/sim_results_unified.rds (~71,680 rows)
 rmarkdown::render("05_analysis_report.Rmd")
 ```
 

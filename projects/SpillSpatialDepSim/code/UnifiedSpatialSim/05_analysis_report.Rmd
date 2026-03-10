@@ -22,7 +22,7 @@ script_dir <- tryCatch(
 )
 
 source(file.path(script_dir, "03_analysis_functions.R"))
-results_dir <- file.path(dirname(script_dir), "results")
+results_dir <- file.path(dirname(dirname(script_dir)), "results")
 ```
 
 # Overview

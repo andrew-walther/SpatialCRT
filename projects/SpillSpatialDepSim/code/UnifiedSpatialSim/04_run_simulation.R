@@ -6,14 +6,14 @@
 # cluster setup overhead. Workers share the pre-built grid/combo objects via
 # OS copy-on-write semantics.
 #
-# Output: ../results/sim_results_unified.rds
+# Output: ../../results/sim_results_unified.rds
 #
 # Usage (from terminal, recommended for long runs):
-#   cd projects/SpillSpatialDepSim/code
+#   cd projects/SpillSpatialDepSim/code/UnifiedSpatialSim
 #   caffeinate -i Rscript 04_run_simulation.R
 #
 # Usage (from RStudio):
-#   setwd("projects/SpillSpatialDepSim/code")
+#   setwd("projects/SpillSpatialDepSim/code/UnifiedSpatialSim")
 #   source("04_run_simulation.R")
 
 # --- Detect script directory (works from Rscript or RStudio source()) ---
@@ -21,7 +21,7 @@ script_dir <- tryCatch(
   dirname(sys.frame(1)$ofile),
   error = function(e) getwd()
 )
-results_dir <- file.path(dirname(script_dir), "results")
+results_dir <- file.path(dirname(dirname(script_dir)), "results")
 if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
 
 # --- Source dependencies ---
