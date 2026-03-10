@@ -1,230 +1,110 @@
 # CLAUDE.md — AI Session Context for SpatialCRT
 
-> **Read this file first** when starting a new Claude session on this project.
-> For human-readable narrative, see [README.md](README.md).
-> For ModularIncidenceSim-specific AI context, see
-> `code/OutcomeIncidenceDesign/ModularIncidenceSim/CLAUDE.md`.
+> Cross-project orchestrator. For project-level detail, see:
+> - `projects/SpillSpatialDepSim/CLAUDE.md`
+> - `projects/IncidenceDesign/CLAUDE.md`
 
 ---
 
-## What This Repository Is
+## Repository Overview
 
-A research codebase evaluating **treatment assignment designs for Spatial Cluster
-Randomized Trials (CRTs)** — specifically which design strategy minimizes estimation
-error for a direct treatment effect tau when outcome incidence is spatially
-heterogeneous and spillover is present.
-
-**Application domain:** Sudden Unexpected Death (SUD) in North Carolina counties.
-Policy-relevant question: if you plan to intervene in some subset of counties/clusters,
-how should you select which clusters receive treatment to maximize statistical efficiency?
-
-**Active estimation target:** tau = 1.0 (direct treatment effect, SDM framework).
+**SpatialCRT** evaluates treatment assignment designs for **Spatial Cluster Randomized
+Trials (CRTs)** where outcomes exhibit spatial heterogeneity and spillover is present.
+Application domain: NC law enforcement / SUD prevention policy.
 
 ---
 
-## Research Focus and Framing (IMPORTANT)
+## Two Active Projects
 
-**The primary research question is a comparison of treatment sampling designs**
-(Checkerboard, High Incidence Focus, Saturation Quadrants, Isolation Buffer,
-2x2 Blocking, Balanced Quartiles) — NOT a comparison of estimation methods.
+| | SpillSpatialDepSim | IncidenceDesign |
+|-|--------------------|-----------------|
+| **Location** | `projects/SpillSpatialDepSim/` | `projects/IncidenceDesign/` |
+| **Grid** | 2×4 / 3×3 / 3×4 (8–12 districts) | 10×10 (100 clusters) |
+| **Estimand** | alpha, beta, psi, rho | tau (direct treatment effect) |
+| **Question** | Block vs. random assignment with spillover | Which design minimizes MSE across incidence modes? |
+| **Status** | Original complete; unified scripts planned (Plan B) | **Complete** |
+| **Entry point** | `code/SpatialSim_NC_DOC.Rmd` | `code/05_run_simulation.R` |
 
-**DIM (Difference in Means)** is included as a **proof-of-concept / baseline**
-to verify simulation mechanics and provide a simple benchmark. It is NOT the
-focus of the research.
+### How the Projects Relate
 
-**MLE (spatial autoregressive model via `lagsarlm`)** is the **primary estimation
-method** for all substantive conclusions. It is essential to use MLE because:
-- Spatial dependence ($\rho$) is present in the outcome DGP
-- Spillover effects ($\gamma$) must be properly modeled
-- DIM ignores both and produces systematically invalid coverage (~72%)
-- MLE accounts for spatial structure and yields near-nominal coverage (~94%)
-
-When continuing this work, focus analysis and reporting on **MLE results**.
-DIM results are secondary and serve only as a naive comparator.
+SpillSpatialDepSim is the **applied predecessor**: it established the simulation
+framework (SAR model, spillover types, block stratification logic) that IncidenceDesign
+extended to a larger grid with heterogeneous outcome incidence and 6 formal design
+strategies.
 
 ---
 
-## Repository Status (as of 2026-03-05)
+## Research Focus (IncidenceDesign — PRIMARY)
 
-| Directory | Status | Description |
-|-----------|--------|-------------|
-| `code/OutcomeIncidenceDesign/ModularIncidenceSim/` | **ACTIVE — PRIMARY** | Full simulation study: 6 designs, 3 incidence modes, DIM + MLE, 1920 scenarios each — COMPLETE |
-| `code/NCdocSpatialSim/` | **ACTIVE — APPLIED** | NC DOC applied simulation: 4x2 grid, 8 districts, specific policy context |
-| `code/OutcomeIncidenceDesign/` (root files) | Legacy | Predecessor monolithic Rmd (~600 lines), preserved untouched |
-| `code/SpatialSim_Unified/` | Legacy | Earlier unification attempts |
-| `code/PreliminarySpatialSim/` | Legacy | Early exploratory analyses |
-| `code/DistrictAssignments/` | Legacy | Assignment-specific tooling |
-| `paper/` | Drafts | Manuscript in progress |
+**Primary question: which treatment assignment design minimizes MSE for tau?**
+The 6 designs are: Checkerboard (1), High Incidence Focus (2), Saturation Quadrants (3),
+Isolation Buffer (4), 2x2 Blocking (5), Balanced Quartiles (7).
+
+**MLE (lagsarlm oracle) is the primary estimator.** DIM is a naive baseline only.
+
+Key results:
+- **Best design: Design 3 (Saturation Quadrants)** under MLE
+- **Worst design: Design 1 (Checkerboard)** under both estimators
+- MLE coverage ~0.94; DIM coverage ~0.72
 
 ---
 
-## Repository Map
+## Repository Structure
 
 ```
 SpatialCRT/
-  CLAUDE.md                          # This file (AI context, top-level)
-  README.md                          # Human-facing project overview
-  PROJECT_CONTEXT.md                 # Early planning doc (historical, largely superseded)
-  SpatialCRT.Rproj                   # RStudio project file
-  code/
-    OutcomeIncidenceDesign/
-      ModularIncidenceSim/           # PRIMARY WORK — see below
-        CLAUDE.md                    # Module-level AI context (detailed)
-        README.md                    # Module-level human docs
-        00_mathematical_specification.Rmd  # Theory doc (rendered HTML + PDF)
-        01_spatial_setup.R           # Grid + weight matrices
-        02_incidence_generation.R    # 3 incidence modes
-        03_designs.R                 # 6 treatment designs
-        04_estimation.R              # DIM + MLE estimation
-        05_run_simulation.R          # Main orchestrator (sources 01-04)
-        06_visualizations.R          # All plots + tables
-        07_results_summary.Rmd       # Comprehensive results + theory PDF report
-        complete_after_mle.R         # Post-completion script (already run)
-        results/                     # All .rds results + .pdf figures
-      SpatialCRT_Incidence_TreatmentAssignment_Simulation.Rmd  # Legacy (unchanged)
-      SpatialCRT_Incidence_Sim.Rmd   # Legacy
-    NCdocSpatialSim/
-      SpatialSim_NC_DOC.Rmd          # Main applied simulation (4x2 grid, 8 districts)
-      SpatialSim_3x3.Rmd             # 3x3 grid variant
-      SpatialSim_3x4.Rmd             # 3x4 grid variant
-      CombinedSamplingGrids.Rmd      # Multi-grid comparison
-      OptimalTreatmentAssignmentCombos.Rmd  # Optimal assignment analysis
-      SimEstimateAnalysisAll.Rmd     # Simulation estimate analysis
-      alpha_mse/ beta_mse/ psi_mse/ rho_mse/  # Saved MSE result files
-    SpatialSim_Unified/              # Legacy unification attempts
-    PreliminarySpatialSim/           # Legacy exploratory
-    DistrictAssignments/             # Assignment tooling
-  paper/                             # Manuscript drafts
+  CLAUDE.md                    # This file
+  README.md                    # Human-facing overview
+  SpatialCRT.Rproj             # Single .Rproj at root
+  projects/
+    SpillSpatialDepSim/        # Project 1 (applied, NC DOC context)
+      CLAUDE.md  README.md
+      code/      data/  results/  paper/
+    IncidenceDesign/            # Project 2 (systematic design study)
+      CLAUDE.md  README.md
+      code/      results/  paper/
+  archive/                     # Legacy/exploratory (not maintained)
+    README.md
+    PreliminarySpatialSim/
+    SpatialSim_Unified/
+    OutcomeIncidenceDesign_Legacy/
 ```
 
 ---
 
-## ModularIncidenceSim Quick Reference
+## Cross-Project Path Reference
 
-**The primary simulation study.** All results complete as of 2026-03-05.
-
-### Simulation Design
-- **Grid:** 10x10 regular lattice, N=100 clusters, rook + queen contiguity
-- **DGP:** Spatial Durbin Model: `Y = (I - rho*W)^{-1}[tau*Z + gamma*Spill + beta*X + eps]`
-- **Estimand:** tau = 1.0 (direct treatment effect)
-- **Three incidence modes:** iid Uniform, Spatial (SAR + pnorm), Poisson (count rates, rank-normalized)
-- **Six designs:** Checkerboard (1), High Incidence Focus (2), Saturation Quadrants (3), Isolation Buffer (4), 2x2 Blocking (5), Balanced Quartiles (7)
-- **Two estimators:** DIM (Neyman variance) and MLE (lagsarlm oracle)
-- **1,920 scenarios** per estimator: 5 incidence configs x 2 nb_types x 4 rho x 4 gamma x 2 spill_types x 6 designs
-
-### Key Results
-| Estimator | Winner | Loser | Coverage (mean) | MSE range |
-|-----------|--------|-------|-----------------|-----------|
-| DIM | Design 7 (Balanced Quartiles) | Design 1 (Checkerboard) | 0.72 | [0.032, 0.799] |
-| MLE | Design 3 (Saturation Quadrants) | Design 1 (Checkerboard) | ~0.94 | [0.009, 3.910] |
-
-**Design 1 (Checkerboard) is consistently worst** under both estimators despite
-maximizing spatial separation — it creates systematic treatment-control confounding
-when incidence is spatially structured.
-
-**MLE dramatically improves coverage** (~0.94 vs ~0.72 for DIM) by properly
-accounting for spatial autocorrelation.
-
-### Result Files
-```
-results/sim_results_DIM_combined_20260304_195321.rds   # 1,920 DIM scenarios
-results/sim_results_MLE_combined_20260305_150742.rds   # 1,920 MLE scenarios
-results/sim_results_{DIM|MLE}_{iid|spatial|poisson}_*.rds  # Per-mode splits
-results/{DIM|MLE}_combined_*.pdf                        # Per-config 8-plot PDFs
-results/00_mathematical_specification.pdf               # Math theory (PDF)
-results/07_results_summary.pdf                          # Comprehensive report (PDF)
-```
-
-### Critical Invariants (DO NOT Violate)
-1. **Results NEVER aggregated across incidence modes** (iid / spatial / poisson always separate)
-2. **Incidence generated ONCE per (mode, rho_X) config** — not per (nb_type, rho) scenario
-3. **Deterministic designs (1, 2) generate ONE assignment and replicate** across resamples
-4. **Per-scenario seed:** `digest::digest2int(paste(inc_mode, rho_x, nb_type, rho, gamma, spill_type, d_id, sep="|"))`
-5. **`base_incidence = X_matrix[, 1]`** — only first column used for design decisions
-
----
-
-## NCdocSpatialSim Quick Reference
-
-**The applied simulation.** Evaluates treatment assignments for the NC DOC context.
-
-- **Grid:** 4x2 spatial arrangement, 8 districts
-- **Entry point:** `SpatialSim_NC_DOC.Rmd`
-- **Output parameters encoded in filenames:** e.g., `SpatialSim_NC_DOC_TrtSpill.RData`
-- **Estimated parameters:** alpha, beta, psi, rho (see `alpha_mse/`, `beta_mse/`, `psi_mse/`, `rho_mse/` directories)
-- **Comparison scripts:** `SimEstimateAnalysisAll.Rmd`, `SimEstimateAnalysisMeans.Rmd`
-
----
-
-## Key Differences: ModularIncidenceSim vs NCdocSpatialSim
-
-| Aspect | ModularIncidenceSim | NCdocSpatialSim |
-|--------|--------------------|-----------------|
-| Grid | 10x10 (100 clusters) | 4x2 (8 districts) |
-| Estimand | tau (treatment effect) | alpha, beta, psi, rho |
-| Incidence modes | 3 (iid, spatial, Poisson) | Single mode |
-| Designs evaluated | 6 treatment strategies | Applied NC DOC configurations |
-| Estimators | DIM + MLE (lagsarlm) | Various spatial models |
-| Status | Complete, documented | Earlier / applied |
-| Scale | Simulation study (1920 scenarios) | Applied analysis |
-
----
-
-## How to Continue from Current State
-
-### Review completed simulation results:
+From IncidenceDesign code, reference SpillSpatialDepSim results via:
 ```r
-setwd("code/OutcomeIncidenceDesign/ModularIncidenceSim")
-source("06_visualizations.R")
+here::here("projects", "SpillSpatialDepSim", "results")
+# or relative: ../../SpillSpatialDepSim/results/
+```
 
-# Load combined results:
-dim_results <- load_latest_results(estimation_mode = "DIM_combined")
+---
+
+## Getting Started
+
+```r
+# Open the project
+# File > Open Project > SpatialCRT.Rproj
+
+# IncidenceDesign — load completed results
+setwd("projects/IncidenceDesign/code")
+source("06_visualizations.R")
 mle_results <- load_latest_results(estimation_mode = "MLE_combined")
 
-# Per-config analysis:
-cfgs <- split_by_incidence_config(dim_results)
-run_standard_tables(cfgs[["iid Uniform"]], "iid Uniform")
-```
-
-### Render the PDF summary report:
-```r
-setwd("code/OutcomeIncidenceDesign/ModularIncidenceSim")
-rmarkdown::render("07_results_summary.Rmd",
-  output_format = rmarkdown::pdf_document(
-    toc = TRUE, number_sections = TRUE, latex_engine = "xelatex"
-  ),
-  output_file = "results/07_results_summary.pdf"
-)
-```
-
-### Planned extensions (not yet run):
-- Non-oracle MLE: set `include_spill_covariate = FALSE` in `estimate_tau()` call in `05`
-- Heterogeneous populations: set `pop_mode = "heterogeneous"` in `05` Poisson configs
-- Grid sensitivity: change `grid_dim = 8` or `grid_dim = 15` in `01`
-- Design 6 (Center Hotspot): add `6` to `design_ids` in `05`
-- DIM vs MLE joint comparison: load both result sets, join on scenario keys
-
----
-
-## Packages Required
-
-```r
-# Core simulation:
-install.packages(c("spdep", "spatialreg", "dplyr", "tidyr", "digest", "parallel"))
-
-# Visualization:
-install.packages(c("ggplot2", "viridis"))
-
-# PDF reporting:
-install.packages(c("rmarkdown", "knitr", "kableExtra", "tinytex"))
-tinytex::install_tinytex()  # If LaTeX not already installed
+# SpillSpatialDepSim — reproduce paper results
+setwd("projects/SpillSpatialDepSim/code")
+rmarkdown::render("SpatialSim_NC_DOC.Rmd")
+rmarkdown::render("SimEstimateAnalysisAll.Rmd")
 ```
 
 ---
 
-## Git History
+## Shared Packages
 
-All work lives on `main`. The primary development branch was `claude/gallant-buck`
-(a git worktree), merged to main on 2026-03-05 with 34 files in a single atomic commit.
-The predecessor Rmd (`SpatialCRT_Incidence_TreatmentAssignment_Simulation.Rmd`) was
-preserved untouched throughout.
+```r
+install.packages(c("sf", "spdep", "spatialreg", "dplyr", "tidyr",
+                   "ggplot2", "viridis", "rmarkdown", "knitr",
+                   "digest", "parallel", "here"))
+```

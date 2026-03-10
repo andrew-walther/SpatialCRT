@@ -1,0 +1,179 @@
+---
+title: "SpillSpatialDepSim — Unified Analysis Report"
+author: "Andrew Walther"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE,
+                      fig.width = 10, fig.height = 6, dpi = 120)
+
+# Detect script directory for relative paths
+script_dir <- tryCatch(
+  dirname(knitr::current_input(dir = TRUE)),
+  error = function(e) getwd()
+)
+
+source(file.path(script_dir, "03_analysis_functions.R"))
+results_dir <- file.path(dirname(dirname(script_dir)), "results")
+```
+
+# Overview
+
+This report presents results from the SpillSpatialDepSim unified simulation.
+It covers all three grid sizes (2×4, 3×3, 3×4) and all 48 parameter scenarios
+in a single document, replacing the inline-only output of
+`SimEstimateAnalysisAll.Rmd` and `SimEstimateAnalysisMeans.Rmd`.
+
+**Research question:** Does block-stratified treatment assignment produce more
+precise estimates of intervention effects than random assignment, in the presence
+of spillover effects and spatial autocorrelation?
+
+**Key parameters:**
+
+| Parameter | Symbol | Values |
+|-----------|--------|--------|
+| Intervention effect | beta | 1.0 (true) |
+| Spillover effect    | psi  | 0.5, 0.6, 0.7, 0.8 |
+| Spatial autocorrelation | rho | 0.00, 0.01 |
+| Spillover type | — | TrtNoSpill (case 1), TrtSpill (case 2) |
+| Grid sizes | — | 2×4 (70 combos), 3×3 (126 combos), 3×4 (924 combos) |
+
+```{r load-data}
+results <- load_unified_results(results_dir)
+cat(sprintf("Loaded %d rows from sim_results_unified.rds\n", nrow(results)))
+cat(sprintf("Grids: %s\n", paste(unique(results$grid), collapse = ", ")))
+cat(sprintf("Parameters: %s\n", paste(unique(results$param), collapse = ", ")))
+```
+
+---
+
+# Intervention Effect (beta)
+
+## MSE Distributions by Grid
+
+### 2×4 Grid
+
+```{r mse-box-2x4-beta-nospill, fig.cap="MSE distribution, 2x4 grid, TrtNoSpill"}
+plot_mse_boxplot(results, param_nm = "beta", grid_nm = "2x4", spill = FALSE)
+```
+
+```{r mse-box-2x4-beta-spill, fig.cap="MSE distribution, 2x4 grid, TrtSpill"}
+plot_mse_boxplot(results, param_nm = "beta", grid_nm = "2x4", spill = TRUE)
+```
+
+### 3×3 Grid
+
+```{r mse-box-3x3-beta-nospill}
+plot_mse_boxplot(results, param_nm = "beta", grid_nm = "3x3", spill = FALSE)
+```
+
+```{r mse-box-3x3-beta-spill}
+plot_mse_boxplot(results, param_nm = "beta", grid_nm = "3x3", spill = TRUE)
+```
+
+### 3×4 Grid
+
+```{r mse-box-3x4-beta-nospill}
+plot_mse_boxplot(results, param_nm = "beta", grid_nm = "3x4", spill = FALSE)
+```
+
+```{r mse-box-3x4-beta-spill}
+plot_mse_boxplot(results, param_nm = "beta", grid_nm = "3x4", spill = TRUE)
+```
+
+## All Grids Side-by-Side
+
+```{r mse-all-grids-beta-nospill, fig.width=12}
+plot_mse_all_grids(results, param_nm = "beta", spill = FALSE)
+```
+
+```{r mse-all-grids-beta-spill, fig.width=12}
+plot_mse_all_grids(results, param_nm = "beta", spill = TRUE)
+```
+
+## Mean MSE by Assignment Method
+
+```{r mse-means-2x4-beta, fig.height=8}
+plot_mse_means(results, param_nm = "beta", grid_nm = "2x4")
+```
+
+```{r mse-means-3x3-beta, fig.height=8}
+plot_mse_means(results, param_nm = "beta", grid_nm = "3x3")
+```
+
+```{r mse-means-3x4-beta, fig.height=8}
+plot_mse_means(results, param_nm = "beta", grid_nm = "3x4")
+```
+
+---
+
+# Spillover Effect (psi)
+
+## MSE Distributions
+
+```{r mse-all-grids-psi-nospill, fig.width=12}
+plot_mse_all_grids(results, param_nm = "psi", spill = FALSE)
+```
+
+```{r mse-all-grids-psi-spill, fig.width=12}
+plot_mse_all_grids(results, param_nm = "psi", spill = TRUE)
+```
+
+---
+
+# Baseline (alpha) and Spatial Autocorrelation (rho)
+
+```{r mse-all-grids-alpha, fig.width=12}
+plot_mse_all_grids(results, param_nm = "alpha")
+```
+
+```{r mse-all-grids-rho, fig.width=12}
+plot_mse_all_grids(results, param_nm = "rho")
+```
+
+---
+
+# Optimal Treatment Combinations
+
+Minimum-MSE treatment combination for each scenario (parameter = beta).
+
+```{r optimal-combos}
+opt <- get_optimal_combos(results, param_nm = "beta")
+knitr::kable(opt,
+             caption = "Minimum-MSE treatment combination per scenario (beta)",
+             digits  = 4)
+```
+
+Proportion of optimal combos that are block-stratified assignments:
+
+```{r optimal-prop-block}
+cat(sprintf("%.1f%% of optimal combos are block-stratified assignments\n",
+            100 * mean(opt$is_block)))
+```
+
+---
+
+# Random vs. Block Stratification Summary
+
+```{r comparison-table}
+comp <- table_mse_comparison(results, param_nm = "beta")
+knitr::kable(comp,
+             caption = "Mean and median MSE by assignment method — beta",
+             digits  = 4)
+```
+
+---
+
+# Session Information
+
+```{r session-info, echo=TRUE}
+sessionInfo()
+```
