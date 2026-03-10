@@ -1,9 +1,10 @@
-# CLAUDE.md — AI Session Context for ModularIncidenceSim
+# CLAUDE.md — AI Session Context for IncidenceDesign
 
 > **Read this file first** when starting a new Claude session on this project.
 > Provides ~80% of the context needed to be immediately productive without
 > re-reading all 1,589+ lines of code, result files, or figure PDFs.
 > For human-readable narrative documentation see [README.md](README.md).
+> For cross-project context, see [../../CLAUDE.md](../../CLAUDE.md).
 
 ---
 
@@ -176,7 +177,8 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 - Note: MLE MSE max (3.910) exceeds DIM max (0.799) — occurs in high-rho scenarios where spatial lag model variance inflates with only 250 iterations
 - Visualizations: 6 PDFs in results/ (5 per-config + overview)
 
-**Git:** All files committed on branch `claude/gallant-buck`, merged to `main`.
+**Git:** Original work on branch `claude/gallant-buck`, merged to `main` 2026-03-05.
+Reorganized into `projects/IncidenceDesign/` on branch `claude/dreamy-wiles`.
 
 ---
 
@@ -269,3 +271,19 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 - Formal DIM vs MLE comparison analysis (joint load of both result sets)
 - Sensitivity to grid dimension (`grid_dim = 8` or `15`)
 - Additional designs or design variants
+
+---
+
+## Relationship to SpillSpatialDepSim
+
+IncidenceDesign extends the applied simulation framework from `projects/SpillSpatialDepSim/`.
+SpillSpatialDepSim used a small grid (8–12 districts) with SAR estimation to evaluate
+block vs. random assignment in an NC DOC applied context. IncidenceDesign asks the same
+core question but at larger scale (100 clusters) with systematic design variation and
+heterogeneous incidence modes.
+
+Cross-reference SpillSpatialDepSim results:
+```r
+here::here("projects", "SpillSpatialDepSim", "results")
+# or relative: ../../SpillSpatialDepSim/results/
+```
