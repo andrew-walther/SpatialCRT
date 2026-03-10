@@ -53,7 +53,7 @@ hardcoded: {28,43} for 2×4, {28,30,35,51,77,106} for 3×3, {313,612} for 3×4.
 `SimEstimateAnalysisMeans.Rmd` only load from `beta_mse/` — not alpha/psi/rho.
 They produce inline HTML plots only (no saved figure files).
 
-### Unified Scripts (Plan B)
+### Unified Scripts (`code/UnifiedSpatialSim/`)
 
 | File | Description |
 |------|-------------|
@@ -72,7 +72,7 @@ results/
   alpha_mse/  beta_mse/  psi_mse/  rho_mse/   # 48 CSVs each (192 total)
   SpatialSim_NC_DOC_TrtSpill.RData             # 2x4 full run (TrtSpill)
   SpatialSim_NC_DOC_noTrtSpill.RData           # 2x4 full run (TrtNoSpill)
-  sim_results_unified.rds                      # (after Plan B is run)
+  sim_results_unified.rds                      # (created by UnifiedSpatialSim/04_run_simulation.R)
 ```
 
 CSV naming convention: `{param}_mse_results_{TrtSpill|TrtNoSpill}_{grid}_A02_B1_P{psi*10}_R{rho*100}.csv`
@@ -116,7 +116,7 @@ SpillSpatialDepSim is the **applied predecessor** of IncidenceDesign. Key differ
 | Incidence | Single mode | 3 modes (iid, spatial, Poisson) |
 | Designs | Applied NC DOC configurations | 6 systematic designs |
 | Estimators | SAR lagsarlm | DIM + MLE (lagsarlm oracle) |
-| Status | Original complete; Plan B pending | Complete |
+| Status | **Complete** (original + UnifiedSpatialSim) | Complete |
 
 Cross-reference: `here("projects", "SpillSpatialDepSim", "results")` from
 IncidenceDesign code.
