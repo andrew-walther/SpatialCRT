@@ -53,15 +53,15 @@ hardcoded: {28,43} for 2×4, {28,30,35,51,77,106} for 3×3, {313,612} for 3×4.
 `SimEstimateAnalysisMeans.Rmd` only load from `beta_mse/` — not alpha/psi/rho.
 They produce inline HTML plots only (no saved figure files).
 
-### Unified Scripts (Plan B — to be created)
+### Unified Scripts (Plan B)
 
 | File | Description |
 |------|-------------|
-| `code/01_grid_setup.R` | Programmatic grid geometry + rook neighbors |
-| `code/02_simulation_core.R` | `run_scenario()` engine, `compute_metrics()` |
-| `code/03_analysis_functions.R` | Plot + analysis functions |
-| `code/04_run_simulation.R` | Parallel orchestrator (`mclapply`), saves RDS |
-| `code/05_analysis_report.Rmd` | Unified report: all grids + parameters |
+| `code/UnifiedSpatialSim/01_grid_setup.R` | Programmatic grid geometry + rook neighbors |
+| `code/UnifiedSpatialSim/02_simulation_core.R` | `run_scenario()` engine, `compute_metrics()` |
+| `code/UnifiedSpatialSim/03_analysis_functions.R` | Plot + analysis functions |
+| `code/UnifiedSpatialSim/04_run_simulation.R` | Parallel orchestrator (`mclapply`), saves RDS |
+| `code/UnifiedSpatialSim/05_analysis_report.Rmd` | Unified report: all grids + parameters |
 
 ---
 
@@ -94,12 +94,12 @@ rmarkdown::render("SpatialSim_3x3.Rmd")       # 3x3 grid
 rmarkdown::render("SimEstimateAnalysisAll.Rmd")  # Analysis (loads from results/)
 ```
 
-## Run Unified Simulation (after Plan B)
+## Run Unified Simulation
 
 ```r
-setwd("projects/SpillSpatialDepSim/code")
+setwd("projects/SpillSpatialDepSim/code/UnifiedSpatialSim")
 source("04_run_simulation.R")  # all 48 scenarios, parallel
-# Output: ../results/sim_results_unified.rds
+# Output: ../../results/sim_results_unified.rds
 rmarkdown::render("05_analysis_report.Rmd")
 ```
 
