@@ -50,17 +50,21 @@ design recommendations should be based on MLE results.
 | `04_estimation.R` | 102 | DIM + MLE estimation | `estimate_tau()` |
 | `05_run_simulation.R` | ~385 | Main orchestrator | `run_incidence_config()` |
 | `06_visualizations.R` | ~800 | Plots + tables | 18 functions — see section below |
+| `07_results_summary.Rmd` | ~800 | Rendered results report | Knitted HTML/PDF summary |
+| `08_design_recommendations.R` | ~560 | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
+| `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative report | Knitted to `results/MLE_design_recommendation_report.pdf` |
 | `complete_after_mle.R` | ~250 | Post-MLE script | Runs viz, writes docs, prints stats |
 
 ---
 
 ## Architecture
 
-**Pipeline:** `01 -> 02 -> 03 -> 04`, orchestrated by `05`, visualized by `06`.
+**Pipeline:** `01 -> 02 -> 03 -> 04`, orchestrated by `05`, visualized by `06`, recommended by `08`.
 
 - `05_run_simulation.R` sources `01`-`04` at runtime via `file.path(script_dir, "0X_*.R")`
 - `06_visualizations.R` sources `01`-`03` (needs grid/incidence/design helpers)
-- Both detect working directory via `dirname(sys.frame(1)$ofile)` with `tryCatch` fallback to `getwd()`
+- `08_design_recommendations.R` sources `06` (which sources `01`-`03`)
+- All detect working directory via `normalizePath(dirname(sys.frame(1)$ofile))` with `tryCatch` fallback to `normalizePath(getwd())`
 
 ---
 
@@ -162,20 +166,34 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-03-05)
+## Current State (as of 2026-03-11)
 
-**DIM simulation:** COMPLETE
-- File: `results/sim_results_DIM_combined_20260304_195321.rds`
-- Splits: `sim_results_DIM_iid_*.rds`, `sim_results_DIM_spatial_*.rds`, `sim_results_DIM_poisson_*.rds`
-- Stats: 1,920 scenarios | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] (mean 0.179) | Coverage [0.00, 0.99] (mean 0.72)
-- Visualizations: 6 PDFs in results/ (5 per-config + overview)
+**MLE simulation:** COMPLETE (primary estimator)
+- Data: `results/sim_data/sim_results_MLE_combined_20260305_150742.rds`
+- Splits: `results/sim_data/sim_results_MLE_{iid|spatial|poisson}_20260305_150742.rds`
+- Stats: 1,920 scenarios | Bias [-0.895, 0.454] | MSE [0.009, 3.910] | Coverage [0.00, 1.00] | Fail_Rate = 0.0
+- Visualizations: `results/mle_per_config/` (5 per-config PDFs + incidence overview)
+- Design recommendations: `results/MLE_combined_design_recommendations.pdf` (27 pages)
+- Companion narrative: `results/MLE_design_recommendation_report.pdf` (26 pages)
 
-**MLE simulation:** COMPLETE
-- File: `results/sim_results_MLE_combined_20260305_150742.rds`
-- Splits: `sim_results_MLE_iid_*.rds`, `sim_results_MLE_spatial_*.rds`, `sim_results_MLE_poisson_*.rds`
-- Stats: 1,920 scenarios | Bias [-0.895, 0.454] | MSE [0.009, 3.910] | Coverage [0.00, 1.00] | Fail_Rate = 0.0 (zero convergence failures)
-- Note: MLE MSE max (3.910) exceeds DIM max (0.799) — occurs in high-rho scenarios where spatial lag model variance inflates with only 250 iterations
-- Visualizations: 6 PDFs in results/ (5 per-config + overview)
+**DIM simulation:** COMPLETE (naive baseline only)
+- Data: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
+- Stats: 1,920 scenarios | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] | Coverage [0.00, 0.99] (mean 0.72)
+- Visualizations: `results/dim/` (5 per-config PDFs + overview)
+- Note: DIM coverage systematically low (~72%) because it ignores spatial dependence and spillover. Use MLE for all substantive analysis.
+
+**Results directory layout:**
+```
+results/
+  MLE_design_recommendation_report.pdf     # PRIMARY narrative report (26 pages)
+  MLE_combined_design_recommendations.pdf  # PRIMARY figures/tables PDF (27 pages)
+  00_mathematical_specification.pdf
+  07_results_summary.pdf                   # Pending revision (remove DIM vs MLE framing)
+  sim_data/          # All .rds files (load_latest_results() auto-detects this)
+  mle_per_config/    # MLE per-config PDFs
+  dim/               # DIM output PDFs (baseline reference only)
+  archive/           # Dev artifacts (test_plots.pdf, quicktest.rds, completion_log.txt)
+```
 
 **Git:** Original work on branch `claude/gallant-buck`, merged to `main` 2026-03-05.
 Reorganized into `projects/IncidenceDesign/` on branch `claude/dreamy-wiles`.
@@ -220,14 +238,21 @@ Reorganized into `projects/IncidenceDesign/` on branch `claude/dreamy-wiles`.
 |---------|--------|
 | Run DIM simulation | Set `estimation_mode <- "DIM"` in `05` line 40, `Rscript 05_run_simulation.R` |
 | Run MLE simulation | Set `estimation_mode <- "MLE"` in `05` line 40, `Rscript 05_run_simulation.R` |
-| Generate plots only | `source("06_visualizations.R"); run_all_visualizations(estimation_mode="DIM_combined")` |
-| One incidence config | `r <- load_latest_results(); cfg <- split_by_incidence_config(r); run_standard_tables(cfg[["iid Uniform"]])` |
+| Generate MLE plots only | `source("06_visualizations.R"); run_all_visualizations(estimation_mode="MLE_combined")` |
+| One incidence config | `r <- load_latest_results(estimation_mode="MLE_combined"); cfg <- split_by_incidence_config(r); run_standard_tables(cfg[["iid Uniform"]])` |
 | Custom stratified table | `table_stratified(results, c("Design", "Rho"), "iid Uniform")` |
 | Add a new design | Add `case` to `get_designs()` in `03`, update `get_design_names()`, add ID to `design_ids` in `05` |
 | Change parameter sweep | Edit `*_vals` vectors in `05` CONFIGURABLE PARAMETERS section (lines ~50-80) |
 | Run parallel | Set `n_cores > 1` in `05` line 44 |
 | Compare DIM vs MLE | Load both result sets, join on scenario keys, compare Coverage and Bias columns |
 | Non-oracle MLE | Set `include_spill_covariate = FALSE` in `estimate_tau()` call in `05` |
+| Full recommendation report | `source("08_design_recommendations.R"); run_recommendation_report(estimation_mode="MLE_combined")` |
+| Rankings per incidence mode | `table_incidence_rankings(results)` or `plot_incidence_rankings(results)` |
+| Rankings for one parameter | `table_marginal_rankings(results, "Rho", "iid Uniform")` |
+| Rank trajectory plot | `plot_rank_trajectories(results, "Gamma", "iid Uniform")` |
+| Best design heatmap | `plot_best_design_heatmap(results, "Rho", "Gamma", "iid Uniform")` |
+| Specific scenario lookup | `table_scenario_lookup(results, rho=0.2, gamma=0.7, spill_type="both", nb_type="queen")` |
+| Validate recommendations | `validate_recommendations()` then `validate_no_side_effects()` |
 
 ---
 
@@ -236,7 +261,7 @@ Reorganized into `projects/IncidenceDesign/` on branch `claude/dreamy-wiles`.
 **Helpers:**
 - `inc_config_label(inc_mode, rho_x)` — human-readable config label string
 - `split_by_incidence_config(results)` — splits combined df into named list of per-config dfs
-- `load_latest_results(results_dir, estimation_mode)` — loads most recently modified .rds
+- `load_latest_results(results_dir, estimation_mode)` — loads most recently modified .rds; auto-detects `sim_data/` subdirectory if present
 
 **Plots** (each accepts `results` df + `inc_label` string):
 - `plot_mse_by_neighbor()` — boxplot of MSE by design, faceted by rook/queen
@@ -264,11 +289,43 @@ Reorganized into `projects/IncidenceDesign/` on branch `claude/dreamy-wiles`.
 
 ---
 
+## Design Recommendation Functions (`08_design_recommendations.R`)
+
+Sources `06_visualizations.R`. Answers three personalization questions.
+**Always run on MLE results only** (`estimation_mode = "MLE_combined"`).
+
+**Core utility:**
+- `rank_designs_by_group(results, group_vars, metric)` — rank designs by avg MSE within groups
+
+**Q1 — Per incidence mode:**
+- `table_incidence_rankings(results)` — console table: design rank + MSE + Coverage per config
+- `plot_incidence_rankings(results)` — faceted bar chart: avg MSE per design per config
+- `plot_incidence_coverage(results)` — faceted bar chart: avg Coverage per design per config
+
+**Q2 — Per parameter level (marginal):**
+- `table_marginal_rankings(results, param, inc_label)` — wide table: param levels × designs, cells = MSE (#Rank)
+- `plot_rank_trajectories(results, param, inc_label)` — line plot of rank vs parameter level (1 = best at top)
+- `plot_conditional_mse(results, param, inc_label)` — faceted boxplot: MSE distribution per design at each param level
+
+**Q3 — Per parameter combination:**
+- `plot_best_design_heatmap(results, row_param, col_param, inc_label)` — tile heatmap: winning design per (row, col) combo
+- `table_scenario_lookup(results, rho, gamma, spill_type, nb_type, inc_label)` — filter to specific params, rank designs, print recommendation
+
+**Summary:**
+- `generate_commentary(results, inc_label)` — 6-finding programmatic narrative: winner, dominance %, stability, coverage, sensitivity, recommendation
+- `run_recommendation_report(results, estimation_mode, output_pdf)` — master orchestrator → `results/MLE_combined_design_recommendations.pdf`
+
+**Validation:**
+- `validate_recommendations(results)` — 8 unit tests for new functions
+- `validate_no_side_effects(results)` — 6 integration tests verifying existing modules unaffected
+
+---
+
 ## Planned Extensions (not yet implemented)
 
+- **Revise `07_results_summary.Rmd`** — remove DIM vs MLE comparison framing; reframe as MLE-focused with DIM as a brief baseline footnote
 - Heterogeneous population mode for Poisson (`pop_mode = "heterogeneous"`)
 - Non-oracle MLE runs (`include_spill_covariate = FALSE`) for realistic estimation
-- Formal DIM vs MLE comparison analysis (joint load of both result sets)
 - Sensitivity to grid dimension (`grid_dim = 8` or `15`)
 - Additional designs or design variants
 

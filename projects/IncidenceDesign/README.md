@@ -45,8 +45,10 @@ The predecessor Rmd is preserved untouched.
 | `04_estimation.R` | 102 | DIM and MLE estimation with CI extraction | `estimate_tau()` |
 | `05_run_simulation.R` | ~385 | Main orchestrator, nested parameter loop | `run_incidence_config()` |
 | `06_visualizations.R` | ~800 | All plots and summary tables | 18 functions; entry point `run_all_visualizations()` |
+| `07_results_summary.Rmd` | ~800 | Rendered results report (HTML/PDF) | Knitted summary of all MLE findings |
+| `08_design_recommendations.R` | ~560 | Personalized design recommendations | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
+| `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative PDF report | Knitted to `results/MLE_design_recommendation_report.pdf` |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
-| `results/` | — | All output: .rds data files + .pdf figures | — |
 
 ---
 
@@ -87,16 +89,28 @@ Optionally set `n_cores > 1` (line 44) for parallel execution across incidence c
 ```r
 source("06_visualizations.R")
 
-# All configs, most recent DIM results:
-run_all_visualizations(estimation_mode = "DIM_combined")
-
-# All configs, most recent MLE results:
+# All configs, most recent MLE results (primary estimator):
 run_all_visualizations(estimation_mode = "MLE_combined")
 
 # Single incidence config with all tables:
-r <- load_latest_results(estimation_mode = "DIM_combined")
+r <- load_latest_results(estimation_mode = "MLE_combined")
 cfgs <- split_by_incidence_config(r)
 run_standard_tables(cfgs[["iid Uniform"]], "iid Uniform")
+```
+
+### Generating Design Recommendations
+
+```r
+source("08_design_recommendations.R")
+
+# Full recommendation report (PDF + console output):
+run_recommendation_report(estimation_mode = "MLE_combined")
+
+# Specific scenario lookup:
+r <- load_latest_results(estimation_mode = "MLE_combined")
+cfgs <- split_by_incidence_config(r)
+table_scenario_lookup(cfgs[["iid Uniform"]], rho = 0.2, gamma = 0.7,
+                      spill_type = "both", nb_type = "queen")
 ```
 
 ---
@@ -134,33 +148,50 @@ Quadrants, Isolation Buffer, 2x2 Blocking, Balanced Quartiles.
 
 ## Results Summary
 
-### DIM (completed 2026-03-04)
-
-- **1,920 scenarios** | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] (mean 0.179)
-- Coverage [0.00, 0.99] (mean 0.72)
-- File: `results/sim_results_DIM_combined_20260304_195321.rds`
-
-### MLE (completed 2026-03-05)
+### MLE (primary, completed 2026-03-05)
 
 - **1,920 scenarios** | Bias [-0.895, 0.454] | MSE [0.009, 3.910] | Coverage [0.00, 1.00]
 - Convergence fail rate = 0.0 (zero failures across all 480,000 lagsarlm calls)
-- Note: MLE max MSE (3.910) exceeds DIM (0.799) — occurs in high-rho scenarios where spatial lag model variance inflates with 250 iterations; median MSE is lower for MLE
-- File: `results/sim_results_MLE_combined_20260305_150742.rds`
+- **Best design: Design 3 (Saturation Quadrants)** | **Worst: Design 1 (Checkerboard)**
+- Mean coverage ~0.94; mean MSE ~0.09
+- File: `results/sim_data/sim_results_MLE_combined_20260305_150742.rds`
 
-### Results File Naming Convention
+### DIM (naive baseline, completed 2026-03-04)
+
+- **1,920 scenarios** | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] (mean 0.179)
+- Coverage [0.00, 0.99] (mean 0.72) — systematically low; DIM ignores spatial dependence and spillover
+- File: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
+
+### Results Directory Structure
 
 ```
 results/
-  sim_results_{DIM|MLE}_combined_{YYYYMMDD_HHMMSS}.rds  # All 1,920 scenarios
-  sim_results_{DIM|MLE}_iid_{timestamp}.rds             # iid Uniform only (384 rows)
-  sim_results_{DIM|MLE}_spatial_{timestamp}.rds         # Spatial only (768 rows)
-  sim_results_{DIM|MLE}_poisson_{timestamp}.rds         # Poisson only (768 rows)
-  {DIM|MLE}_combined_{config_name}.pdf                  # Per-config 8-plot PDF
-  {DIM|MLE}_combined_incidence_overview.pdf             # Incidence heatmaps + distributions
+  MLE_design_recommendation_report.pdf     # PRIMARY — narrative report (26 pages)
+  MLE_combined_design_recommendations.pdf  # PRIMARY — figures/tables PDF (27 pages)
+  00_mathematical_specification.pdf        # Theory document
+  07_results_summary.pdf                   # Results summary (pending revision)
+  sim_data/
+    sim_results_MLE_combined_{timestamp}.rds   # All 1,920 MLE scenarios
+    sim_results_MLE_iid_{timestamp}.rds        # iid Uniform only (384 rows)
+    sim_results_MLE_spatial_{timestamp}.rds    # Spatial only (768 rows)
+    sim_results_MLE_poisson_{timestamp}.rds    # Poisson only (768 rows)
+    sim_results_DIM_combined_{timestamp}.rds   # DIM baseline (1,920 rows)
+    sim_results_DIM_{iid|spatial|poisson}_{timestamp}.rds
+  mle_per_config/
+    MLE_combined_{config_name}.pdf             # Per-config 8-plot PDF (5 configs)
+    MLE_combined_incidence_overview.pdf        # Incidence heatmaps + distributions
+  dim/
+    DIM_combined_{config_name}.pdf             # DIM per-config PDFs (baseline only)
+    DIM_visualizations.pdf
+  archive/
+    test_plots.pdf                             # Dev artifacts
+    sim_results_DIM_quicktest.rds
+    completion_log.txt
 ```
 
 **Key rule:** Results for iid Uniform, Spatial, and Poisson are always reported
 **separately** — never aggregated. The combined .rds exists for loading convenience only.
+`load_latest_results()` automatically detects the `sim_data/` subdirectory.
 
 ---
 
@@ -207,16 +238,19 @@ results/
 ## Status & Next Steps
 
 **Completed:**
-- [x] All 7 code files (00-06) written and tested
+- [x] All code files (00–09) written and tested
 - [x] Mathematical specification document (00) rendered to HTML
-- [x] DIM simulation: 1,920 scenarios, visualizations generated
+- [x] DIM simulation: 1,920 scenarios, visualizations generated (baseline)
 - [x] MLE simulation: 1,920 scenarios, visualizations generated, zero convergence failures
+- [x] Design recommendations module (08) with validation tests
+- [x] Narrative PDF report (09): `results/MLE_design_recommendation_report.pdf`
+- [x] Results directory reorganized: `sim_data/`, `mle_per_config/`, `dim/`, `archive/`
 - [x] Project documentation: CLAUDE.md + README.md
 
 **Planned extensions:**
+- [ ] Revise `07_results_summary.Rmd` — remove DIM vs MLE comparison framing; reframe as MLE-focused with DIM as brief baseline footnote
 - [ ] Heterogeneous population — Poisson mode with `pop_mode = "heterogeneous"`
 - [ ] Non-oracle MLE — run without the true Spill covariate for realistic comparison
-- [ ] DIM vs MLE comparison — joint analysis of both result sets
 - [ ] Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
 - [ ] Additional designs — evaluate Design 6 (Center Hotspot) or add new strategies
 

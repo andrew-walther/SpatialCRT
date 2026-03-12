@@ -64,18 +64,24 @@ split_by_incidence_config <- function(results) {
 # LOAD RESULTS
 # ==============================================================================
 
-#' Load the most recent results file from the results directory
-#' @param results_dir Path to results directory
-#' @param estimation_mode Optional filter for "MLE" or "DIM"
+#' Load the most recent results file from the results directory.
+#' Automatically checks for a sim_data/ subdirectory first (new layout),
+#' then falls back to results_dir itself (legacy layout).
+#' @param results_dir Path to results directory (or results/sim_data/)
+#' @param estimation_mode Optional filter string, e.g. "MLE_combined" or "DIM_combined"
 #' @return Data frame of results
 load_latest_results <- function(results_dir = file.path(dirname(script_dir), "results"),
                                 estimation_mode = NULL) {
-  files <- list.files(results_dir, pattern = "sim_results_.*\\.rds$",
+  # Auto-detect sim_data/ subdirectory (new layout)
+  sim_data_dir <- file.path(results_dir, "sim_data")
+  search_dir <- if (dir.exists(sim_data_dir)) sim_data_dir else results_dir
+
+  files <- list.files(search_dir, pattern = "sim_results_.*\\.rds$",
                       full.names = TRUE)
   if (!is.null(estimation_mode)) {
     files <- files[grepl(estimation_mode, files)]
   }
-  if (length(files) == 0) stop("No results files found in ", results_dir)
+  if (length(files) == 0) stop("No results files found in ", search_dir)
 
   # Pick the most recently modified
   latest <- files[which.max(file.mtime(files))]
