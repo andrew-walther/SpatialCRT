@@ -1,8 +1,9 @@
-# CLAUDE.md — AI Session Context for IncidenceDesign
+# CLAUDE.md
 
-> **Read this file first** when starting a new Claude session on this project.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 > Provides ~80% of the context needed to be immediately productive without
-> re-reading all 1,589+ lines of code, result files, or figure PDFs.
+> re-reading all code, result files, or figure PDFs.
 > For human-readable narrative documentation see [README.md](README.md).
 > For cross-project context, see [../../CLAUDE.md](../../CLAUDE.md).
 
@@ -51,9 +52,12 @@ design recommendations should be based on MLE results.
 | `05_run_simulation.R` | ~385 | Main orchestrator | `run_incidence_config()` |
 | `06_visualizations.R` | ~800 | Plots + tables | 18 functions — see section below |
 | `07_results_summary.Rmd` | ~800 | Rendered results report | Knitted HTML/PDF summary |
-| `08_design_recommendations.R` | ~560 | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
+| `08_design_recommendations.R` | ~891 | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
 | `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative report | Knitted to `results/MLE_design_recommendation_report.pdf` |
-| `complete_after_mle.R` | ~250 | Post-MLE script | Runs viz, writes docs, prints stats |
+| `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
+| **paper/** | | | |
+| `SpatialCRT_IncidenceDesign_Manuscript.qmd` | ~28 | Manuscript template | Quarto HTML manuscript (scaffold) |
+| `SpatialCRT_IncidenceDesign_Presentation.qmd` | ~26 | Presentation template | Quarto revealjs slides (scaffold) |
 
 ---
 
@@ -166,7 +170,7 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-03-11)
+## Current State (as of 2026-03-16)
 
 **MLE simulation:** COMPLETE (primary estimator)
 - Data: `results/sim_data/sim_results_MLE_combined_20260305_150742.rds`
@@ -193,6 +197,9 @@ results/
   mle_per_config/    # MLE per-config PDFs
   dim/               # DIM output PDFs (baseline reference only)
   archive/           # Dev artifacts (test_plots.pdf, quicktest.rds, completion_log.txt)
+paper/
+  SpatialCRT_IncidenceDesign_Manuscript.qmd   # Quarto manuscript (scaffold)
+  SpatialCRT_IncidenceDesign_Presentation.qmd # Quarto slides (scaffold)
 ```
 
 **Git:** Original work on branch `claude/gallant-buck`, merged to `main` 2026-03-05.
@@ -324,6 +331,7 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 ## Planned Extensions (not yet implemented)
 
 - **Revise `07_results_summary.Rmd`** — remove DIM vs MLE comparison framing; reframe as MLE-focused with DIM as a brief baseline footnote
+- **Populate `paper/` QMD templates** — manuscript and presentation are scaffolds with default Quarto content; need project-specific sections, figures, and results integration
 - Heterogeneous population mode for Poisson (`pop_mode = "heterogeneous"`)
 - Non-oracle MLE runs (`include_spill_covariate = FALSE`) for realistic estimation
 - Sensitivity to grid dimension (`grid_dim = 8` or `15`)
