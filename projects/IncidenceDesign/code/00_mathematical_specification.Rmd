@@ -10,6 +10,10 @@ output:
     number_sections: true
     theme: cosmo
     css: !expr NULL
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
 ---
 
 ```{r setup, include=FALSE}
@@ -242,9 +246,9 @@ Treatment is assigned sequentially with spatial constraints:
 
 **Properties:** Stochastic, treated clusters are never adjacent (under the active
 contiguity), creates a spatial buffer around each treated unit. Treatment proportion
-varies across realizations (typically $\sim$20--30%).
+varies across realizations (typically approximately 20--30%).
 
-## Design 5: 2$\times$2 Blocking
+## Design 5: 2x2 Blocking
 
 The grid is partitioned into non-overlapping $2 \times 2$ blocks:
 $$B_m = \{s_i : \lfloor(x_i-1)/2\rfloor = a_m, \lfloor(y_i-1)/2\rfloor = b_m\}, \quad |B_m| = 4$$

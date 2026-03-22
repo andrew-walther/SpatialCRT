@@ -313,6 +313,8 @@ run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
 
 results_dir <- file.path(dirname(script_dir), "results")
 if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+sim_data_dir <- file.path(results_dir, "sim_data")
+if (!dir.exists(sim_data_dir)) dir.create(sim_data_dir, recursive = TRUE)
 checkpoint_dir <- file.path(results_dir, "checkpoints")
 if (!dir.exists(checkpoint_dir)) dir.create(checkpoint_dir, recursive = TRUE)
 
@@ -389,7 +391,7 @@ cat(sprintf("Scenarios completed: %d\n", nrow(granular_results)))
 # --- Save combined results ---
 timestamp_str <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
-combined_file <- file.path(results_dir,
+combined_file <- file.path(sim_data_dir,
                             sprintf("sim_results_%s_combined_%s.rds",
                                     estimation_mode, timestamp_str))
 saveRDS(granular_results, combined_file)
@@ -398,7 +400,7 @@ cat(sprintf("Combined results saved: %s\n", basename(combined_file)))
 # --- Save split results by incidence mode ---
 inc_mode_groups <- split(granular_results, granular_results$Incidence_Mode)
 for (mode_name in names(inc_mode_groups)) {
-  split_file <- file.path(results_dir,
+  split_file <- file.path(sim_data_dir,
                            sprintf("sim_results_%s_%s_%s.rds",
                                    estimation_mode, mode_name, timestamp_str))
   saveRDS(inc_mode_groups[[mode_name]], split_file)

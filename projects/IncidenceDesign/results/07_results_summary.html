@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrew Walther">
+<meta name="dcterms.date" content="2026-03-22">
+
+<title>Treatment Assignment Design Evaluation for Spatial CRTs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="07_results_summary_files/libs/clipboard/clipboard.min.js"></script>
+<script src="07_results_summary_files/libs/quarto-html/quarto.js"></script>
+<script src="07_results_summary_files/libs/quarto-html/popper.min.js"></script>
+<script src="07_results_summary_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="07_results_summary_files/libs/quarto-html/anchor.min.js"></script>
+<link href="07_results_summary_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="07_results_summary_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="07_results_summary_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="07_results_summary_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="07_results_summary_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#mathematical-framework" id="toc-mathematical-framework" class="nav-link" data-scroll-target="#mathematical-framework"><span class="header-section-number">2</span> Mathematical Framework</a>
+  <ul class="collapse">
+  <li><a href="#study-region-and-spatial-structure" id="toc-study-region-and-spatial-structure" class="nav-link" data-scroll-target="#study-region-and-spatial-structure"><span class="header-section-number">2.1</span> Study Region and Spatial Structure</a></li>
+  <li><a href="#outcome-data-generating-process" id="toc-outcome-data-generating-process" class="nav-link" data-scroll-target="#outcome-data-generating-process"><span class="header-section-number">2.2</span> Outcome Data Generating Process</a></li>
+  <li><a href="#incidence-generation" id="toc-incidence-generation" class="nav-link" data-scroll-target="#incidence-generation"><span class="header-section-number">2.3</span> Incidence Generation</a></li>
+  <li><a href="#treatment-assignment-designs" id="toc-treatment-assignment-designs" class="nav-link" data-scroll-target="#treatment-assignment-designs"><span class="header-section-number">2.4</span> Treatment Assignment Designs</a></li>
+  <li><a href="#estimation-method" id="toc-estimation-method" class="nav-link" data-scroll-target="#estimation-method"><span class="header-section-number">2.5</span> Estimation Method</a></li>
+  </ul></li>
+  <li><a href="#simulation-algorithm" id="toc-simulation-algorithm" class="nav-link" data-scroll-target="#simulation-algorithm"><span class="header-section-number">3</span> Simulation Algorithm</a>
+  <ul class="collapse">
+  <li><a href="#parameter-grid" id="toc-parameter-grid" class="nav-link" data-scroll-target="#parameter-grid"><span class="header-section-number">3.1</span> Parameter Grid</a></li>
+  <li><a href="#resampling-structure" id="toc-resampling-structure" class="nav-link" data-scroll-target="#resampling-structure"><span class="header-section-number">3.2</span> Resampling Structure</a></li>
+  <li><a href="#evaluation-metrics" id="toc-evaluation-metrics" class="nav-link" data-scroll-target="#evaluation-metrics"><span class="header-section-number">3.3</span> Evaluation Metrics</a></li>
+  <li><a href="#per-scenario-reproducibility" id="toc-per-scenario-reproducibility" class="nav-link" data-scroll-target="#per-scenario-reproducibility"><span class="header-section-number">3.4</span> Per-Scenario Reproducibility</a></li>
+  </ul></li>
+  <li><a href="#results-maximum-likelihood-estimation-mle" id="toc-results-maximum-likelihood-estimation-mle" class="nav-link" data-scroll-target="#results-maximum-likelihood-estimation-mle"><span class="header-section-number">4</span> Results: Maximum Likelihood Estimation (MLE)</a>
+  <ul class="collapse">
+  <li><a href="#overall-summary" id="toc-overall-summary" class="nav-link" data-scroll-target="#overall-summary"><span class="header-section-number">4.1</span> Overall Summary</a></li>
+  <li><a href="#design-comparison-by-mse" id="toc-design-comparison-by-mse" class="nav-link" data-scroll-target="#design-comparison-by-mse"><span class="header-section-number">4.2</span> Design Comparison by MSE</a></li>
+  <li><a href="#mse-by-design-and-neighbor-type" id="toc-mse-by-design-and-neighbor-type" class="nav-link" data-scroll-target="#mse-by-design-and-neighbor-type"><span class="header-section-number">4.3</span> MSE by Design and Neighbor Type</a></li>
+  <li><a href="#mse-heatmap" id="toc-mse-heatmap" class="nav-link" data-scroll-target="#mse-heatmap"><span class="header-section-number">4.4</span> MSE Heatmap</a></li>
+  <li><a href="#design-rank-frequency" id="toc-design-rank-frequency" class="nav-link" data-scroll-target="#design-rank-frequency"><span class="header-section-number">4.5</span> Design Rank Frequency</a></li>
+  <li><a href="#robustness-profile" id="toc-robustness-profile" class="nav-link" data-scroll-target="#robustness-profile"><span class="header-section-number">4.6</span> Robustness Profile</a></li>
+  <li><a href="#coverage-by-design" id="toc-coverage-by-design" class="nav-link" data-scroll-target="#coverage-by-design"><span class="header-section-number">4.7</span> Coverage by Design</a></li>
+  <li><a href="#bias-variance-decomposition" id="toc-bias-variance-decomposition" class="nav-link" data-scroll-target="#bias-variance-decomposition"><span class="header-section-number">4.8</span> Bias-Variance Decomposition</a></li>
+  </ul></li>
+  <li><a href="#sensitivity-analysis" id="toc-sensitivity-analysis" class="nav-link" data-scroll-target="#sensitivity-analysis"><span class="header-section-number">5</span> Sensitivity Analysis</a>
+  <ul class="collapse">
+  <li><a href="#parameter-sensitivity" id="toc-parameter-sensitivity" class="nav-link" data-scroll-target="#parameter-sensitivity"><span class="header-section-number">5.1</span> Parameter Sensitivity</a></li>
+  <li><a href="#effect-of-rho-on-design-rankings" id="toc-effect-of-rho-on-design-rankings" class="nav-link" data-scroll-target="#effect-of-rho-on-design-rankings"><span class="header-section-number">5.2</span> Effect of Rho on Design Rankings</a></li>
+  <li><a href="#incidence-mode-comparison" id="toc-incidence-mode-comparison" class="nav-link" data-scroll-target="#incidence-mode-comparison"><span class="header-section-number">5.3</span> Incidence Mode Comparison</a></li>
+  </ul></li>
+  <li><a href="#subgroup-results-by-incidence-mode" id="toc-subgroup-results-by-incidence-mode" class="nav-link" data-scroll-target="#subgroup-results-by-incidence-mode"><span class="header-section-number">6</span> Subgroup Results by Incidence Mode</a>
+  <ul class="collapse">
+  <li><a href="#mle-iid-uniform" id="toc-mle-iid-uniform" class="nav-link" data-scroll-target="#mle-iid-uniform"><span class="header-section-number">6.1</span> MLE: iid Uniform</a></li>
+  <li><a href="#mle-poisson-rho_x-0.20" id="toc-mle-poisson-rho_x-0.20" class="nav-link" data-scroll-target="#mle-poisson-rho_x-0.20"><span class="header-section-number">6.2</span> MLE: Poisson (rho_X = 0.20)</a></li>
+  <li><a href="#mle-poisson-rho_x-0.50" id="toc-mle-poisson-rho_x-0.50" class="nav-link" data-scroll-target="#mle-poisson-rho_x-0.50"><span class="header-section-number">6.3</span> MLE: Poisson (rho_X = 0.50)</a></li>
+  <li><a href="#mle-spatial-rho_x-0.20" id="toc-mle-spatial-rho_x-0.20" class="nav-link" data-scroll-target="#mle-spatial-rho_x-0.20"><span class="header-section-number">6.4</span> MLE: Spatial (rho_X = 0.20)</a></li>
+  <li><a href="#mle-spatial-rho_x-0.50" id="toc-mle-spatial-rho_x-0.50" class="nav-link" data-scroll-target="#mle-spatial-rho_x-0.50"><span class="header-section-number">6.5</span> MLE: Spatial (rho_X = 0.50)</a></li>
+  </ul></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions"><span class="header-section-number">7</span> Conclusions</a>
+  <ul class="collapse">
+  <li><a href="#summary-of-findings" id="toc-summary-of-findings" class="nav-link" data-scroll-target="#summary-of-findings"><span class="header-section-number">7.1</span> Summary of Findings</a></li>
+  <li><a href="#limitations-and-planned-extensions" id="toc-limitations-and-planned-extensions" class="nav-link" data-scroll-target="#limitations-and-planned-extensions"><span class="header-section-number">7.2</span> Limitations and Planned Extensions</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">8</span> References</a></li>
+  <li><a href="#appendix-result-file-locations" id="toc-appendix-result-file-locations" class="nav-link" data-scroll-target="#appendix-result-file-locations"><span class="header-section-number">9</span> Appendix: Result File Locations</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="07_results_summary.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Treatment Assignment Design Evaluation for Spatial CRTs</h1>
+<p class="subtitle lead">Simulation Study with Heterogeneous Incidence — Results Summary</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andrew Walther </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 22, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Loading results from: sim_results_MLE_combined_20260322_151030.rds </code></pre>
+</div>
+</div>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>This report summarizes a simulation study evaluating <strong>8 treatment assignment designs</strong> for Spatial Cluster Randomized Trials (CRTs) when outcome incidence is heterogeneous and spatially structured. The central research question is:</p>
+<blockquote class="blockquote">
+<p><em>Given known historical incidence data exhibiting spatial heterogeneity, which treatment assignment strategy minimizes estimation error for the direct intervention effect <span class="math inline">\(\hat{\tau}\)</span> across a range of spatial dependence and spillover configurations?</em></p>
+</blockquote>
+<p><strong>Application context:</strong> Sudden Unexpected Death (SUD) in North Carolina counties. The Poisson incidence mode uses an SUD base rate of 35 per 100,000 (Mirzaei et al.), consistent with county-level analyses by Gan et al.&nbsp;and Watson et al.</p>
+<p>The study uses Maximum Likelihood Estimation via a spatial autoregressive model (MLE) as the primary estimator, evaluated across 2,560 parameter scenarios.</p>
+<hr>
+</section>
+<section id="mathematical-framework" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Mathematical Framework</h1>
+<section id="study-region-and-spatial-structure" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="study-region-and-spatial-structure"><span class="header-section-number">2.1</span> Study Region and Spatial Structure</h2>
+<p>The simulation operates on a <strong>regular lattice grid</strong> <span class="math inline">\(\mathcal{G} = \{s_1, \ldots, s_N\}\)</span> on <span class="math inline">\([1, G] \times [1, G]\)</span>, with <span class="math inline">\(N = G^2\)</span> clusters (<span class="math inline">\(G = 10\)</span>, <span class="math inline">\(N = 100\)</span>).</p>
+<p>Two contiguity structures define neighbor relationships:</p>
+<ul>
+<li><strong>Rook contiguity:</strong> <span class="math inline">\(s_j \in \mathcal{N}(s_i)\)</span> iff <span class="math inline">\(s_i\)</span> and <span class="math inline">\(s_j\)</span> share an edge (up to 4 neighbors)</li>
+<li><strong>Queen contiguity:</strong> <span class="math inline">\(s_j \in \mathcal{N}(s_i)\)</span> iff <span class="math inline">\(s_i\)</span> and <span class="math inline">\(s_j\)</span> share an edge or corner (up to 8 neighbors)</li>
+</ul>
+<p>The spatial weight matrix <span class="math inline">\(\mathbf{W}\)</span> has entries <span class="math inline">\(w_{ij} = |\mathcal{N}(s_i)|^{-1}\)</span> if <span class="math inline">\(s_j \in \mathcal{N}(s_i)\)</span> and <span class="math inline">\(0\)</span> otherwise (row-standardized).</p>
+</section>
+<section id="outcome-data-generating-process" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="outcome-data-generating-process"><span class="header-section-number">2.2</span> Outcome Data Generating Process</h2>
+<p>Outcomes follow a <strong>Spatial Durbin Model (SDM)</strong>:</p>
+<p><span class="math display">\[\mathbf{Y} = (\mathbf{I} - \rho \mathbf{W})^{-1}
+\left[\tau \mathbf{Z} + \gamma \cdot \text{Spill}(\mathbf{Z}) + \beta \mathbf{X} + \boldsymbol{\varepsilon}\right]\]</span></p>
+<p><strong>Parameter definitions:</strong></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Role</th>
+<th>Value / Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\tau\)</span></td>
+<td>Direct treatment effect (estimand)</td>
+<td><span class="math inline">\(1.0\)</span> (fixed)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\rho\)</span></td>
+<td>Outcome spatial autocorrelation</td>
+<td>{0, 0.01, 0.2, 0.5}</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\gamma\)</span></td>
+<td>Spillover magnitude</td>
+<td>{0.5, 0.6, 0.7, 0.8}</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\beta\)</span></td>
+<td>Incidence effect on outcome</td>
+<td><span class="math inline">\(1.0\)</span> (fixed)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>Residual standard deviation</td>
+<td><span class="math inline">\(1.0\)</span> (fixed)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Spillover construction:</strong></p>
+<p><span class="math display">\[\text{Spill}_i(\mathbf{Z}) = \frac{\sum_{j \in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|}\]</span></p>
+<p>Two spillover modes are evaluated:</p>
+<ul>
+<li><strong>control_only:</strong> <span class="math inline">\(\gamma\)</span> applied only to units with <span class="math inline">\(Z_i = 0\)</span></li>
+<li><strong>both:</strong> <span class="math inline">\(\gamma\)</span> applied to all units regardless of treatment status</li>
+</ul>
+<p>Stationarity requires <span class="math inline">\(|\rho| &lt; 1/\lambda_{\max}(\mathbf{W})\)</span>; all swept <span class="math inline">\(\rho\)</span> values satisfy this condition.</p>
+</section>
+<section id="incidence-generation" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="incidence-generation"><span class="header-section-number">2.3</span> Incidence Generation</h2>
+<p>Three modes generate the cluster-level covariate <span class="math inline">\(X_i \in [0,1]\)</span>, each representing a different assumption about how historical incidence arises:</p>
+<p><strong>Mode 1 — iid Uniform:</strong> <span class="math display">\[X_i \overset{\text{iid}}{\sim} \text{Uniform}(0, 1)\]</span></p>
+<p>No spatial structure; serves as the baseline. One config (rho_X = N/A).</p>
+<p><strong>Mode 2 — Spatial (SAR filter):</strong> <span class="math display">\[\mathbf{X}^* = (\mathbf{I} - \rho_X \mathbf{W})^{-1} \mathbf{u}, \quad
+\mathbf{u} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})\]</span> <span class="math display">\[X_i = \Phi(X_i^*) \in (0, 1)\]</span></p>
+<p>Spatially correlated via SAR filter; probability integral transform (<span class="math inline">\(\Phi\)</span>) ensures <span class="math inline">\(X_i\)</span> is marginally <span class="math inline">\(\text{Uniform}(0,1)\)</span> but spatially dependent. Two configs: <span class="math inline">\(\rho_X \in \{0.20, 0.50\}\)</span>.</p>
+<p><strong>Mode 3 — Poisson (count rates):</strong></p>
+<ol type="1">
+<li>Spatially correlated log-rates: <span class="math inline">\(\log \lambda_i^* = \mu_0 + [(\mathbf{I} - \rho_X \mathbf{W})^{-1} \mathbf{u}]_i\)</span></li>
+<li>Poisson counts: <span class="math inline">\(C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)\)</span> where <span class="math inline">\(P_i = 1{,}000\)</span> (equal population per cluster)</li>
+<li>Observed rates: <span class="math inline">\(R_i = C_i / P_i\)</span></li>
+<li>Rank-normalized: <span class="math inline">\(X_i = (\text{rank}(R_i) - 0.5) / N\)</span></li>
+</ol>
+<p>Base rate <span class="math inline">\(\mu_0 = \log(35/100{,}000)\)</span> mimics SUD incidence. Two configs: <span class="math inline">\(\rho_X \in \{0.20, 0.50\}\)</span>.</p>
+<p><strong>Critical design invariant:</strong> Incidence is generated <strong>once per (mode, <span class="math inline">\(\rho_X\)</span>) configuration</strong> and held fixed across all (<span class="math inline">\(\rho\)</span>, <span class="math inline">\(\gamma\)</span>, nb_type) scenarios. This reflects the realistic constraint that a researcher observes historical incidence once before designing the trial; spatial model parameters affect the outcome DGP, not the incidence itself.</p>
+</section>
+<section id="treatment-assignment-designs" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="treatment-assignment-designs"><span class="header-section-number">2.4</span> Treatment Assignment Designs</h2>
+<div class="cell-output-display">
+<table class="table">
+<caption>8 treatment assignment strategies evaluated in this simulation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">ID</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Deterministic?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Design 1: Checkerboard</td>
+<td style="text-align: left;">Yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Design 2: High Incidence Focus</td>
+<td style="text-align: left;">Yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Design 3: Saturation Quadrants</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Design 4: Isolation Buffer</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Design 5: 2x2 Blocking</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Design 6: Balanced Quartiles</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">Design 7: Balanced Halves</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">Design 8: Incidence-Guided Saturation Quadrants</td>
+<td style="text-align: left;">No</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Designs 1 and 2 are <strong>deterministic</strong> given the incidence vector: they produce the same assignment on every resample. The simulation detects this and runs each once, replicating the result across all design resamples (saving ~25x compute).</p>
+</section>
+<section id="estimation-method" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="estimation-method"><span class="header-section-number">2.5</span> Estimation Method</h2>
+<p><strong>Maximum Likelihood (MLE via SAR):</strong></p>
+<p>Fits <code>lagsarlm(Y ~ Z + Spill + X, listw = W)</code> from the <code>spatialreg</code> package, simultaneously estimating <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\tau\)</span>, and regression coefficients. The true spillover covariate <span class="math inline">\(\text{Spill}(\mathbf{Z})\)</span> is included as an <strong>oracle regressor</strong> (i.e., the researcher is assumed to know the true spillover structure). CIs are derived from the asymptotic covariance matrix.</p>
+<hr>
+</section>
+</section>
+<section id="simulation-algorithm" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Simulation Algorithm</h1>
+<section id="parameter-grid" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="parameter-grid"><span class="header-section-number">3.1</span> Parameter Grid</h2>
+<div class="cell-output-display">
+<table class="table">
+<caption>Simulation parameter grid (2,560 total scenarios)</caption>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 34%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Values</th>
+<th style="text-align: left;">Levels</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Incidence mode</td>
+<td style="text-align: left;">iid, poisson, spatial</td>
+<td style="text-align: left;">5 configs (1 iid + 2 spatial + 2 poisson)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rho_X (incidence spatial autocorr.)</td>
+<td style="text-align: left;">N/A (iid); 0.20, 0.50 (spatial, poisson)</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">nb_type (contiguity)</td>
+<td style="text-align: left;">queen, rook</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rho (outcome spatial autocorr.)</td>
+<td style="text-align: left;">0, 0.01, 0.2, 0.5</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gamma (spillover magnitude)</td>
+<td style="text-align: left;">0.5, 0.6, 0.7, 0.8</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">spill_type</td>
+<td style="text-align: left;">both, control_only</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">design_id</td>
+<td style="text-align: left;">1, 2, 3, 4, 5, 6, 7, 8</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TOTAL</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">2,560</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="resampling-structure" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="resampling-structure"><span class="header-section-number">3.2</span> Resampling Structure</h2>
+<p>For each scenario, the simulation draws:</p>
+<table class="table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th style="text-align: center;">Design resamples (<span class="math inline">\(R_d\)</span>)</th>
+<th style="text-align: center;">Outcome resamples (<span class="math inline">\(R_o\)</span>)</th>
+<th style="text-align: center;">Iterations / scenario</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MLE</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">250</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="evaluation-metrics" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="evaluation-metrics"><span class="header-section-number">3.3</span> Evaluation Metrics</h2>
+<p>For each scenario, across <span class="math inline">\(K\)</span> total iterations (design × outcome resamples):</p>
+<p><span class="math display">\[\text{Bias} = \bar{\hat{\tau}} - \tau, \quad
+\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^K (\hat{\tau}_k - \bar{\hat{\tau}})^2}\]</span></p>
+<p><span class="math display">\[\text{MSE} = \text{Bias}^2 + \text{SD}^2\]</span></p>
+<p><span class="math display">\[\text{Coverage} = \frac{1}{K}\sum_{k=1}^K \mathbf{1}\left[\tau \in (\hat{\tau}_{k,L}, \hat{\tau}_{k,U})\right]\]</span></p>
+</section>
+<section id="per-scenario-reproducibility" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="per-scenario-reproducibility"><span class="header-section-number">3.4</span> Per-Scenario Reproducibility</h2>
+<p>Each scenario uses a deterministic seed: <span class="math display">\[\text{seed}_s = \texttt{digest::digest2int}(\texttt{paste}(\text{inc\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, d_{\text{id}}, \text{sep}=\text{"|}"))\]</span></p>
+<p>This ensures results are reproducible and order-independent: adding or removing scenarios from the parameter sweep does not affect other scenarios’ seeds.</p>
+<hr>
+</section>
+</section>
+<section id="results-maximum-likelihood-estimation-mle" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Results: Maximum Likelihood Estimation (MLE)</h1>
+<section id="overall-summary" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overall-summary"><span class="header-section-number">4.1</span> Overall Summary</h2>
+<div class="cell-output-display">
+<table class="table">
+<caption>MLE: Summary statistics across all 2,560 scenarios</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: right;">Min</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bias</td>
+<td style="text-align: right;">-0.898</td>
+<td style="text-align: right;">-0.029</td>
+<td style="text-align: right;">0.455</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MSE</td>
+<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">0.206</td>
+<td style="text-align: right;">4.061</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Coverage</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.890</td>
+<td style="text-align: right;">1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fail Rate</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="design-comparison-by-mse" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="design-comparison-by-mse"><span class="header-section-number">4.2</span> Design Comparison by MSE</h2>
+<div class="cell-output-display">
+<table class="table">
+<caption>MLE: Design performance averaged across all scenarios and incidence modes</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Mean Bias</th>
+<th style="text-align: right;">Median MSE</th>
+<th style="text-align: right;">Mean MSE</th>
+<th style="text-align: right;">Mean Coverage</th>
+<th style="text-align: right;">Fail Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: right;">0.064</td>
+<td style="text-align: right;">0.079</td>
+<td style="text-align: right;">0.939</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.065</td>
+<td style="text-align: right;">0.080</td>
+<td style="text-align: right;">0.937</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">0.073</td>
+<td style="text-align: right;">0.103</td>
+<td style="text-align: right;">0.937</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.082</td>
+<td style="text-align: right;">0.108</td>
+<td style="text-align: right;">0.937</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.144</td>
+<td style="text-align: right;">0.148</td>
+<td style="text-align: right;">0.940</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.016</td>
+<td style="text-align: right;">0.090</td>
+<td style="text-align: right;">0.156</td>
+<td style="text-align: right;">0.937</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.008</td>
+<td style="text-align: right;">0.128</td>
+<td style="text-align: right;">0.229</td>
+<td style="text-align: right;">0.938</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">-0.322</td>
+<td style="text-align: right;">0.451</td>
+<td style="text-align: right;">0.744</td>
+<td style="text-align: right;">0.553</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="mse-by-design-and-neighbor-type" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="mse-by-design-and-neighbor-type"><span class="header-section-number">4.3</span> MSE by Design and Neighbor Type</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-mse-boxplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Distribution of MSE by design, faceted by spatial contiguity structure. Boxes sorted by median MSE within each panel.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mse-heatmap" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="mse-heatmap"><span class="header-section-number">4.4</span> MSE Heatmap</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-mse-heatmap-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE MSE heatmap for iid Uniform incidence. Cells show average MSE across spillover type and gamma, faceted by neighbor type.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="design-rank-frequency" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="design-rank-frequency"><span class="header-section-number">4.5</span> Design Rank Frequency</h2>
+<div class="cell-output-display">
+<table class="table">
+<caption>MLE: Design rank frequency (%) for iid Uniform incidence. Each cell = % of scenarios where design achieved that rank (Rank 1 = lowest MSE).</caption>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Rank_2</th>
+<th style="text-align: right;">Rank_3</th>
+<th style="text-align: right;">Rank_4</th>
+<th style="text-align: right;">Rank_6</th>
+<th style="text-align: right;">Rank_7</th>
+<th style="text-align: right;">Rank_8</th>
+<th style="text-align: right;">Rank_1</th>
+<th style="text-align: right;">Rank_5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">20.3</td>
+<td style="text-align: right;">17.2</td>
+<td style="text-align: right;">14.1</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">34.4</td>
+<td style="text-align: right;">12.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">34.4</td>
+<td style="text-align: right;">14.1</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">6.2</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">23.4</td>
+<td style="text-align: right;">14.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">14.1</td>
+<td style="text-align: right;">14.1</td>
+<td style="text-align: right;">26.6</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">18.8</td>
+<td style="text-align: right;">18.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">9.4</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">39.1</td>
+<td style="text-align: right;">14.1</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">17.2</td>
+<td style="text-align: right;">6.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">10.9</td>
+<td style="text-align: right;">18.8</td>
+<td style="text-align: right;">25.0</td>
+<td style="text-align: right;">12.5</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">6.2</td>
+<td style="text-align: right;">26.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">9.4</td>
+<td style="text-align: right;">68.8</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">17.2</td>
+<td style="text-align: right;">18.8</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">23.4</td>
+<td style="text-align: right;">26.6</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">9.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">6.2</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">21.9</td>
+<td style="text-align: right;">53.1</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">12.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="robustness-profile" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="robustness-profile"><span class="header-section-number">4.6</span> Robustness Profile</h2>
+<div class="cell-output-display">
+<table class="table">
+<caption>MLE: Robustness profile for iid Uniform incidence. Sorted by Median MSE. IQR = interquartile range across scenarios.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Best_MSE</th>
+<th style="text-align: right;">Q25_MSE</th>
+<th style="text-align: right;">Median_MSE</th>
+<th style="text-align: right;">Q75_MSE</th>
+<th style="text-align: right;">Worst_MSE</th>
+<th style="text-align: right;">IQR_MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.0351</td>
+<td style="text-align: right;">0.0447</td>
+<td style="text-align: right;">0.0646</td>
+<td style="text-align: right;">0.1105</td>
+<td style="text-align: right;">0.1544</td>
+<td style="text-align: right;">0.0658</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.0363</td>
+<td style="text-align: right;">0.0454</td>
+<td style="text-align: right;">0.0677</td>
+<td style="text-align: right;">0.1114</td>
+<td style="text-align: right;">0.1753</td>
+<td style="text-align: right;">0.0661</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.0358</td>
+<td style="text-align: right;">0.0421</td>
+<td style="text-align: right;">0.0757</td>
+<td style="text-align: right;">0.1576</td>
+<td style="text-align: right;">0.2512</td>
+<td style="text-align: right;">0.1155</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.0327</td>
+<td style="text-align: right;">0.0449</td>
+<td style="text-align: right;">0.0827</td>
+<td style="text-align: right;">0.1590</td>
+<td style="text-align: right;">0.2818</td>
+<td style="text-align: right;">0.1141</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.0278</td>
+<td style="text-align: right;">0.0530</td>
+<td style="text-align: right;">0.1043</td>
+<td style="text-align: right;">0.2042</td>
+<td style="text-align: right;">0.3970</td>
+<td style="text-align: right;">0.1512</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.0426</td>
+<td style="text-align: right;">0.0560</td>
+<td style="text-align: right;">0.1195</td>
+<td style="text-align: right;">0.3031</td>
+<td style="text-align: right;">0.7737</td>
+<td style="text-align: right;">0.2471</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.1010</td>
+<td style="text-align: right;">0.1281</td>
+<td style="text-align: right;">0.1487</td>
+<td style="text-align: right;">0.1659</td>
+<td style="text-align: right;">0.1964</td>
+<td style="text-align: right;">0.0377</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">0.0356</td>
+<td style="text-align: right;">0.1083</td>
+<td style="text-align: right;">0.4729</td>
+<td style="text-align: right;">0.9530</td>
+<td style="text-align: right;">1.9159</td>
+<td style="text-align: right;">0.8447</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="coverage-by-design" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="coverage-by-design"><span class="header-section-number">4.7</span> Coverage by Design</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-coverage-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Coverage probability distribution by design across all scenarios. Red dashed line = nominal 95% target.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="bias-variance-decomposition" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="bias-variance-decomposition"><span class="header-section-number">4.8</span> Bias-Variance Decomposition</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-biasvar-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence. Total bar height = MSE.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="sensitivity-analysis" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Sensitivity Analysis</h1>
+<section id="parameter-sensitivity" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="parameter-sensitivity"><span class="header-section-number">5.1</span> Parameter Sensitivity</h2>
+<div class="cell-output-display">
+<table class="table">
+<caption>MLE: Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence. Higher values indicate parameters where design choice matters more.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Rho</th>
+<th style="text-align: right;">Gamma</th>
+<th style="text-align: right;">Spillover_Type</th>
+<th style="text-align: right;">Neighbor_Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">0.0301</td>
+<td style="text-align: right;">0.0123</td>
+<td style="text-align: right;">0.4164</td>
+<td style="text-align: right;">0.0954</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.2274</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.5639</td>
+<td style="text-align: right;">0.0091</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.0200</td>
+<td style="text-align: right;">0.0018</td>
+<td style="text-align: right;">0.8354</td>
+<td style="text-align: right;">0.0342</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.1691</td>
+<td style="text-align: right;">0.0123</td>
+<td style="text-align: right;">0.0002</td>
+<td style="text-align: right;">0.5471</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.0045</td>
+<td style="text-align: right;">0.0008</td>
+<td style="text-align: right;">0.5781</td>
+<td style="text-align: right;">0.2035</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.0049</td>
+<td style="text-align: right;">0.0038</td>
+<td style="text-align: right;">0.7908</td>
+<td style="text-align: right;">0.0808</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.0014</td>
+<td style="text-align: right;">0.0011</td>
+<td style="text-align: right;">0.7864</td>
+<td style="text-align: right;">0.0870</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.0543</td>
+<td style="text-align: right;">0.0029</td>
+<td style="text-align: right;">0.8104</td>
+<td style="text-align: right;">0.0242</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="effect-of-rho-on-design-rankings" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="effect-of-rho-on-design-rankings"><span class="header-section-number">5.2</span> Effect of Rho on Design Rankings</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-2.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-3.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-4.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-5.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-6.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-7.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-8.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`Design 1`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-9.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+$`Design 2`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-10.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+$`Design 3`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-11.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+$`Design 4`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-12.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+$`Design 5`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-13.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+$`Design 6`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-14.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+$`Design 7`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-15.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+$`Design 8`</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/mle-rho-effect-16.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="incidence-mode-comparison" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="incidence-mode-comparison"><span class="header-section-number">5.3</span> Incidence Mode Comparison</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/incidence-overview-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Incidence spatial patterns across the three generation modes for rho_X = 0.20 and 0.50. Color represents incidence (darker = higher burden). Spatial and Poisson modes show visible spatial clustering absent from iid.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="07_results_summary_files/figure-html/incidence-dists-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Marginal distribution of incidence values by mode, pooled across 50 resamples on the 10x10 grid. All modes are marginally Uniform on [0,1]; spatial structure manifests in spatial covariance, not the marginal.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="subgroup-results-by-incidence-mode" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Subgroup Results by Incidence Mode</h1>
+<p>The following tables report MLE results separately for each incidence configuration. Results are <strong>never aggregated across incidence modes</strong>, as each represents a fundamentally different assumption about prior data.</p>
+<section id="mle-iid-uniform" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="mle-iid-uniform"><span class="header-section-number">6.1</span> MLE: iid Uniform</h2>
+<table class="table">
+<caption>MLE robustness profile: iid Uniform</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Best_MSE</th>
+<th style="text-align: right;">Q25_MSE</th>
+<th style="text-align: right;">Median_MSE</th>
+<th style="text-align: right;">Q75_MSE</th>
+<th style="text-align: right;">Worst_MSE</th>
+<th style="text-align: right;">IQR_MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.0351</td>
+<td style="text-align: right;">0.0447</td>
+<td style="text-align: right;">0.0646</td>
+<td style="text-align: right;">0.1105</td>
+<td style="text-align: right;">0.1544</td>
+<td style="text-align: right;">0.0658</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.0363</td>
+<td style="text-align: right;">0.0454</td>
+<td style="text-align: right;">0.0677</td>
+<td style="text-align: right;">0.1114</td>
+<td style="text-align: right;">0.1753</td>
+<td style="text-align: right;">0.0661</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.0358</td>
+<td style="text-align: right;">0.0421</td>
+<td style="text-align: right;">0.0757</td>
+<td style="text-align: right;">0.1576</td>
+<td style="text-align: right;">0.2512</td>
+<td style="text-align: right;">0.1155</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.0327</td>
+<td style="text-align: right;">0.0449</td>
+<td style="text-align: right;">0.0827</td>
+<td style="text-align: right;">0.1590</td>
+<td style="text-align: right;">0.2818</td>
+<td style="text-align: right;">0.1141</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.0278</td>
+<td style="text-align: right;">0.0530</td>
+<td style="text-align: right;">0.1043</td>
+<td style="text-align: right;">0.2042</td>
+<td style="text-align: right;">0.3970</td>
+<td style="text-align: right;">0.1512</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.0426</td>
+<td style="text-align: right;">0.0560</td>
+<td style="text-align: right;">0.1195</td>
+<td style="text-align: right;">0.3031</td>
+<td style="text-align: right;">0.7737</td>
+<td style="text-align: right;">0.2471</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.1010</td>
+<td style="text-align: right;">0.1281</td>
+<td style="text-align: right;">0.1487</td>
+<td style="text-align: right;">0.1659</td>
+<td style="text-align: right;">0.1964</td>
+<td style="text-align: right;">0.0377</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">0.0356</td>
+<td style="text-align: right;">0.1083</td>
+<td style="text-align: right;">0.4729</td>
+<td style="text-align: right;">0.9530</td>
+<td style="text-align: right;">1.9159</td>
+<td style="text-align: right;">0.8447</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mle-poisson-rho_x-0.20" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="mle-poisson-rho_x-0.20"><span class="header-section-number">6.2</span> MLE: Poisson (rho_X = 0.20)</h2>
+<table class="table">
+<caption>MLE robustness profile: Poisson (rho X = 0.20)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Best_MSE</th>
+<th style="text-align: right;">Q25_MSE</th>
+<th style="text-align: right;">Median_MSE</th>
+<th style="text-align: right;">Q75_MSE</th>
+<th style="text-align: right;">Worst_MSE</th>
+<th style="text-align: right;">IQR_MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.0374</td>
+<td style="text-align: right;">0.0454</td>
+<td style="text-align: right;">0.0608</td>
+<td style="text-align: right;">0.1034</td>
+<td style="text-align: right;">0.1446</td>
+<td style="text-align: right;">0.0580</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.0406</td>
+<td style="text-align: right;">0.0456</td>
+<td style="text-align: right;">0.0702</td>
+<td style="text-align: right;">0.1065</td>
+<td style="text-align: right;">0.1980</td>
+<td style="text-align: right;">0.0609</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.0362</td>
+<td style="text-align: right;">0.0438</td>
+<td style="text-align: right;">0.0781</td>
+<td style="text-align: right;">0.1689</td>
+<td style="text-align: right;">0.2610</td>
+<td style="text-align: right;">0.1251</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.0357</td>
+<td style="text-align: right;">0.0427</td>
+<td style="text-align: right;">0.0800</td>
+<td style="text-align: right;">0.1553</td>
+<td style="text-align: right;">0.2555</td>
+<td style="text-align: right;">0.1126</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.0448</td>
+<td style="text-align: right;">0.0570</td>
+<td style="text-align: right;">0.1260</td>
+<td style="text-align: right;">0.3076</td>
+<td style="text-align: right;">0.7115</td>
+<td style="text-align: right;">0.2505</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.0969</td>
+<td style="text-align: right;">0.1319</td>
+<td style="text-align: right;">0.1455</td>
+<td style="text-align: right;">0.1657</td>
+<td style="text-align: right;">0.2349</td>
+<td style="text-align: right;">0.0339</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.0235</td>
+<td style="text-align: right;">0.0722</td>
+<td style="text-align: right;">0.2460</td>
+<td style="text-align: right;">0.4426</td>
+<td style="text-align: right;">0.7982</td>
+<td style="text-align: right;">0.3704</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">0.0537</td>
+<td style="text-align: right;">0.2567</td>
+<td style="text-align: right;">0.5481</td>
+<td style="text-align: right;">1.0538</td>
+<td style="text-align: right;">4.0611</td>
+<td style="text-align: right;">0.7970</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mle-poisson-rho_x-0.50" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="mle-poisson-rho_x-0.50"><span class="header-section-number">6.3</span> MLE: Poisson (rho_X = 0.50)</h2>
+<table class="table">
+<caption>MLE robustness profile: Poisson (rho X = 0.50)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Best_MSE</th>
+<th style="text-align: right;">Q25_MSE</th>
+<th style="text-align: right;">Median_MSE</th>
+<th style="text-align: right;">Q75_MSE</th>
+<th style="text-align: right;">Worst_MSE</th>
+<th style="text-align: right;">IQR_MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.0367</td>
+<td style="text-align: right;">0.0442</td>
+<td style="text-align: right;">0.0634</td>
+<td style="text-align: right;">0.1110</td>
+<td style="text-align: right;">0.1725</td>
+<td style="text-align: right;">0.0668</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.0370</td>
+<td style="text-align: right;">0.0449</td>
+<td style="text-align: right;">0.0644</td>
+<td style="text-align: right;">0.1010</td>
+<td style="text-align: right;">0.1724</td>
+<td style="text-align: right;">0.0561</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.0327</td>
+<td style="text-align: right;">0.0426</td>
+<td style="text-align: right;">0.0781</td>
+<td style="text-align: right;">0.1451</td>
+<td style="text-align: right;">0.2771</td>
+<td style="text-align: right;">0.1025</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.0298</td>
+<td style="text-align: right;">0.0426</td>
+<td style="text-align: right;">0.0853</td>
+<td style="text-align: right;">0.1548</td>
+<td style="text-align: right;">0.2443</td>
+<td style="text-align: right;">0.1122</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.0395</td>
+<td style="text-align: right;">0.0533</td>
+<td style="text-align: right;">0.1157</td>
+<td style="text-align: right;">0.2949</td>
+<td style="text-align: right;">0.8079</td>
+<td style="text-align: right;">0.2416</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.0493</td>
+<td style="text-align: right;">0.0843</td>
+<td style="text-align: right;">0.1287</td>
+<td style="text-align: right;">0.2036</td>
+<td style="text-align: right;">0.6502</td>
+<td style="text-align: right;">0.1193</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.1054</td>
+<td style="text-align: right;">0.1239</td>
+<td style="text-align: right;">0.1412</td>
+<td style="text-align: right;">0.1559</td>
+<td style="text-align: right;">0.1881</td>
+<td style="text-align: right;">0.0320</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">0.0202</td>
+<td style="text-align: right;">0.1664</td>
+<td style="text-align: right;">0.4381</td>
+<td style="text-align: right;">0.7554</td>
+<td style="text-align: right;">2.1564</td>
+<td style="text-align: right;">0.5890</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mle-spatial-rho_x-0.20" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="mle-spatial-rho_x-0.20"><span class="header-section-number">6.4</span> MLE: Spatial (rho_X = 0.20)</h2>
+<table class="table">
+<caption>MLE robustness profile: Spatial (rho X = 0.20)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Best_MSE</th>
+<th style="text-align: right;">Q25_MSE</th>
+<th style="text-align: right;">Median_MSE</th>
+<th style="text-align: right;">Q75_MSE</th>
+<th style="text-align: right;">Worst_MSE</th>
+<th style="text-align: right;">IQR_MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.0345</td>
+<td style="text-align: right;">0.0440</td>
+<td style="text-align: right;">0.0631</td>
+<td style="text-align: right;">0.1111</td>
+<td style="text-align: right;">0.1618</td>
+<td style="text-align: right;">0.0670</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.0333</td>
+<td style="text-align: right;">0.0451</td>
+<td style="text-align: right;">0.0669</td>
+<td style="text-align: right;">0.1138</td>
+<td style="text-align: right;">0.1992</td>
+<td style="text-align: right;">0.0687</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.0360</td>
+<td style="text-align: right;">0.0440</td>
+<td style="text-align: right;">0.0768</td>
+<td style="text-align: right;">0.1394</td>
+<td style="text-align: right;">0.2265</td>
+<td style="text-align: right;">0.0955</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.0124</td>
+<td style="text-align: right;">0.0509</td>
+<td style="text-align: right;">0.0782</td>
+<td style="text-align: right;">0.1351</td>
+<td style="text-align: right;">0.2586</td>
+<td style="text-align: right;">0.0842</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.0344</td>
+<td style="text-align: right;">0.0439</td>
+<td style="text-align: right;">0.0865</td>
+<td style="text-align: right;">0.1624</td>
+<td style="text-align: right;">0.2496</td>
+<td style="text-align: right;">0.1185</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.0443</td>
+<td style="text-align: right;">0.0539</td>
+<td style="text-align: right;">0.1278</td>
+<td style="text-align: right;">0.3036</td>
+<td style="text-align: right;">0.7249</td>
+<td style="text-align: right;">0.2497</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.1079</td>
+<td style="text-align: right;">0.1285</td>
+<td style="text-align: right;">0.1445</td>
+<td style="text-align: right;">0.1604</td>
+<td style="text-align: right;">0.2158</td>
+<td style="text-align: right;">0.0319</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">0.0343</td>
+<td style="text-align: right;">0.1650</td>
+<td style="text-align: right;">0.4272</td>
+<td style="text-align: right;">0.8489</td>
+<td style="text-align: right;">3.0219</td>
+<td style="text-align: right;">0.6838</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mle-spatial-rho_x-0.50" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="mle-spatial-rho_x-0.50"><span class="header-section-number">6.5</span> MLE: Spatial (rho_X = 0.50)</h2>
+<table class="table">
+<caption>MLE robustness profile: Spatial (rho X = 0.50)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: right;">Best_MSE</th>
+<th style="text-align: right;">Q25_MSE</th>
+<th style="text-align: right;">Median_MSE</th>
+<th style="text-align: right;">Q75_MSE</th>
+<th style="text-align: right;">Worst_MSE</th>
+<th style="text-align: right;">IQR_MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Design 8</td>
+<td style="text-align: right;">0.0389</td>
+<td style="text-align: right;">0.0457</td>
+<td style="text-align: right;">0.0647</td>
+<td style="text-align: right;">0.1037</td>
+<td style="text-align: right;">0.1686</td>
+<td style="text-align: right;">0.0580</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 3</td>
+<td style="text-align: right;">0.0359</td>
+<td style="text-align: right;">0.0444</td>
+<td style="text-align: right;">0.0670</td>
+<td style="text-align: right;">0.1092</td>
+<td style="text-align: right;">0.1724</td>
+<td style="text-align: right;">0.0648</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 2</td>
+<td style="text-align: right;">0.0135</td>
+<td style="text-align: right;">0.0499</td>
+<td style="text-align: right;">0.0672</td>
+<td style="text-align: right;">0.0895</td>
+<td style="text-align: right;">0.1433</td>
+<td style="text-align: right;">0.0396</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 6</td>
+<td style="text-align: right;">0.0364</td>
+<td style="text-align: right;">0.0433</td>
+<td style="text-align: right;">0.0727</td>
+<td style="text-align: right;">0.1452</td>
+<td style="text-align: right;">0.2282</td>
+<td style="text-align: right;">0.1019</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 7</td>
+<td style="text-align: right;">0.0343</td>
+<td style="text-align: right;">0.0427</td>
+<td style="text-align: right;">0.0804</td>
+<td style="text-align: right;">0.1670</td>
+<td style="text-align: right;">0.2627</td>
+<td style="text-align: right;">0.1243</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 5</td>
+<td style="text-align: right;">0.0460</td>
+<td style="text-align: right;">0.0559</td>
+<td style="text-align: right;">0.1253</td>
+<td style="text-align: right;">0.3048</td>
+<td style="text-align: right;">0.7440</td>
+<td style="text-align: right;">0.2489</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design 4</td>
+<td style="text-align: right;">0.1039</td>
+<td style="text-align: right;">0.1314</td>
+<td style="text-align: right;">0.1419</td>
+<td style="text-align: right;">0.1625</td>
+<td style="text-align: right;">0.1987</td>
+<td style="text-align: right;">0.0311</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design 1</td>
+<td style="text-align: right;">0.0169</td>
+<td style="text-align: right;">0.1502</td>
+<td style="text-align: right;">0.3835</td>
+<td style="text-align: right;">0.9498</td>
+<td style="text-align: right;">2.2750</td>
+<td style="text-align: right;">0.7996</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="conclusions" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Conclusions</h1>
+<section id="summary-of-findings" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="summary-of-findings"><span class="header-section-number">7.1</span> Summary of Findings</h2>
+<p>The simulation study evaluated 8 treatment assignment designs across 2,560 parameter scenarios, spanning three incidence generation modes, two contiguity structures, 4 spatial autocorrelation levels, 4 spillover magnitudes, and two spillover types.</p>
+<p><strong>Key findings:</strong></p>
+<ol type="1">
+<li><p><strong>MLE achieves near-nominal coverage.</strong> The average coverage across all scenarios is 0.89, close to the nominal 0.95 target. This reflects MLE’s explicit modeling of spatial autocorrelation <span class="math inline">\(\rho\)</span>, which ensures valid inference when spatial dependence is present.</p></li>
+<li><p><strong>Design 8 is the top performer.</strong> It achieves the lowest average MSE (0.079) and a mean coverage of 0.94. Random saturation per quadrant introduces sufficient variation in spatial treatment patterns, allowing the spatial autoregressive model to cleanly separate <span class="math inline">\(\tau\)</span> from <span class="math inline">\(\rho\)</span>.</p></li>
+<li><p><strong>Design 1 is the consistently worst design.</strong> It achieves the highest average MSE (0.744) and the lowest mean coverage (0.55). Its perfect spatial alternation creates systematic confounding when incidence is spatially structured, inflating bias and degrading coverage.</p></li>
+<li><p><strong>High Incidence Focus and Balanced Quartile/Strata designs are robustly competitive.</strong> These designs rank consistently well across incidence mode and parameter regimes. Incidence-stratified assignment directly addresses confounding from <span class="math inline">\(X\)</span>.</p></li>
+<li><p><strong>Design rankings are stable across incidence modes.</strong> The ordering of designs by MSE is largely consistent across iid, spatial, and Poisson incidence configurations, suggesting the findings generalize across different assumptions about prior data structure.</p></li>
+</ol>
+</section>
+<section id="limitations-and-planned-extensions" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="limitations-and-planned-extensions"><span class="header-section-number">7.2</span> Limitations and Planned Extensions</h2>
+<ul>
+<li><strong>Oracle MLE:</strong> The MLE model uses the true spillover covariate. Non-oracle comparisons (<code>include_spill_covariate = FALSE</code>) remain as a planned extension.</li>
+<li><strong>Iteration count:</strong> MLE uses 250 iterations per scenario. Apparent variance inflation at high-<span class="math inline">\(\rho\)</span> may partly reflect this count; a larger sweep would reduce Monte Carlo error.</li>
+<li><strong>Equal populations:</strong> Poisson mode uses <span class="math inline">\(P_i = 1{,}000\)</span> for all clusters. Heterogeneous population sizes (log-normal) would more closely match NC county data.</li>
+<li><strong>Grid sensitivity:</strong> All results use <span class="math inline">\(G = 10\)</span> (<span class="math inline">\(N = 100\)</span>). Sensitivity to <span class="math inline">\(G = 8\)</span> or <span class="math inline">\(G = 15\)</span> has not been evaluated.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="references" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> References</h1>
+<ul>
+<li>Mirzaei, A. et al.&nbsp;(2019). Sudden unexpected death rates. <em>(SUD base rate 35/100,000)</em></li>
+<li>Gan, W. et al.&nbsp;(2019). County-level Poisson regression for SUD mortality.</li>
+<li>Watson, K. et al.&nbsp;(AHA). Census tract-level spatial analysis of SUD.</li>
+<li>LeSage, J. &amp; Pace, R.K. (2009). <em>Introduction to Spatial Econometrics</em>. CRC Press.</li>
+<li>Bivand, R., et al.&nbsp;<code>spdep</code> R package.</li>
+<li>Bivand, R. &amp; Piras, G. <code>spatialreg</code> R package.</li>
+<li>R packages used: <code>dplyr</code>, <code>tidyr</code>, <code>ggplot2</code>, <code>viridis</code>, <code>knitr</code>, <code>kableExtra</code>, <code>digest</code></li>
+</ul>
+<hr>
+</section>
+<section id="appendix-result-file-locations" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Appendix: Result File Locations</h1>
+<div class="cell-output-display">
+<table class="table">
+<caption>RDS result files in results/sim_data/</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">File</th>
+<th style="text-align: left;">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">sim_results_DIM_combined_20260304_195321.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sim_results_DIM_iid_20260304_195321.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sim_results_DIM_poisson_20260304_195321.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sim_results_DIM_spatial_20260304_195321.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sim_results_MLE_combined_20260305_150742.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sim_results_MLE_combined_20260322_151030.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sim_results_MLE_iid_20260305_150742.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sim_results_MLE_iid_20260322_151030.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sim_results_MLE_poisson_20260305_150742.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sim_results_MLE_poisson_20260322_151030.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sim_results_MLE_spatial_20260305_150742.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sim_results_MLE_spatial_20260322_151030.rds</td>
+<td style="text-align: left;">sim_data</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>All simulation data files are located in: <code>results/sim_data/</code></p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
