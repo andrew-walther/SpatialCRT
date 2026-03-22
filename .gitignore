@@ -6,3 +6,7 @@
 **/.DS_Store
 *_cache/
 *_files/
+
+# Claude Code worktrees (internal tooling, not part of repo)
+.claude/worktrees/
+**/.claude/worktrees/
