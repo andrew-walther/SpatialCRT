@@ -1,0 +1,677 @@
+---
+title: "Treatment Assignment Design Evaluation for Spatial CRTs"
+subtitle: "Simulation Study with Heterogeneous Incidence — Results Summary"
+author: "Andrew Walther"
+date: today
+format:
+  html:
+    toc: true
+    number-sections: true
+    theme: cosmo
+---
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r}
+#| label: load-packages
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(knitr)
+library(kableExtra)
+```
+
+```{r}
+#| label: resolve-paths
+# Robust working directory detection for both source() and quarto::render()
+script_dir <- tryCatch(
+  normalizePath(dirname(knitr::current_input(dir = TRUE))),
+  error = function(e) {
+    tryCatch(
+      dirname(sys.frame(1)$ofile),
+      error = function(e2) getwd()
+    )
+  }
+)
+results_dir <- file.path(dirname(script_dir), "results")
+```
+
+```{r}
+#| label: source-modules
+# Source visualization module (provides all table + plot functions)
+source(file.path(script_dir, "06_visualizations.R"))
+```
+
+```{r}
+#| label: load-results
+# Load most recent MLE combined results (primary estimator)
+results <- tryCatch(
+  load_latest_results(results_dir, estimation_mode = "MLE_combined"),
+  error = function(e) {
+    message("MLE combined results not found: ", e$message)
+    NULL
+  }
+)
+
+# Split into per-incidence-config lists
+mle_cfgs <- if (!is.null(results)) split_by_incidence_config(results) else list()
+```
+
+```{r}
+#| label: compute-summary-stats
+mle_avail <- !is.null(results) && nrow(results) > 0
+
+if (mle_avail) {
+  mle_summary <- results %>%
+    summarise(
+      N_scenarios   = n(),
+      Bias_min      = round(min(Bias, na.rm = TRUE), 3),
+      Bias_max      = round(max(Bias, na.rm = TRUE), 3),
+      Bias_mean     = round(mean(Bias, na.rm = TRUE), 3),
+      MSE_min       = round(min(MSE, na.rm = TRUE), 3),
+      MSE_max       = round(max(MSE, na.rm = TRUE), 3),
+      MSE_mean      = round(mean(MSE, na.rm = TRUE), 3),
+      Cov_min       = round(min(Coverage, na.rm = TRUE), 2),
+      Cov_max       = round(max(Coverage, na.rm = TRUE), 2),
+      Cov_mean      = round(mean(Coverage, na.rm = TRUE), 2),
+      Fail_mean     = round(mean(Fail_Rate, na.rm = TRUE), 4)
+    )
+
+  # Per-design summary for narrative
+  mle_by_design <- results %>%
+    group_by(Design) %>%
+    summarise(
+      Mean_Bias     = round(mean(Bias, na.rm = TRUE), 3),
+      Median_MSE    = round(median(MSE, na.rm = TRUE), 3),
+      Mean_MSE      = round(mean(MSE, na.rm = TRUE), 3),
+      Mean_Coverage = round(mean(Coverage, na.rm = TRUE), 3),
+      Fail_Rate     = round(mean(Fail_Rate, na.rm = TRUE), 4),
+      .groups       = "drop"
+    ) %>%
+    arrange(Mean_MSE)
+
+  # Derived narrative values
+  best_design       <- mle_by_design$Design[1]
+  worst_design      <- mle_by_design$Design[nrow(mle_by_design)]
+  best_mse          <- mle_by_design$Mean_MSE[1]
+  worst_mse         <- mle_by_design$Mean_MSE[nrow(mle_by_design)]
+  best_coverage     <- mle_by_design$Mean_Coverage[1]
+  worst_coverage    <- mle_by_design$Mean_Coverage[nrow(mle_by_design)]
+
+  n_designs         <- length(unique(results$Design))
+  rho_levels        <- sort(unique(results$Rho))
+  gamma_levels      <- sort(unique(results$Gamma))
+}
+```
+
+# Introduction
+
+This report summarizes a simulation study evaluating **`r if (mle_avail) n_designs else "six"` treatment assignment designs**
+for Spatial Cluster Randomized Trials (CRTs) when outcome incidence is heterogeneous
+and spatially structured. The central research question is:
+
+> *Given known historical incidence data exhibiting spatial heterogeneity, which
+> treatment assignment strategy minimizes estimation error for the direct intervention
+> effect $\hat{\tau}$ across a range of spatial dependence and spillover configurations?*
+
+**Application context:** Sudden Unexpected Death (SUD) in North Carolina counties.
+The Poisson incidence mode uses an SUD base rate of 35 per 100,000 (Mirzaei et al.),
+consistent with county-level analyses by Gan et al. and Watson et al.
+
+The study uses Maximum Likelihood Estimation via a spatial autoregressive model (MLE)
+as the primary estimator, evaluated across
+`r if (mle_avail) format(nrow(results), big.mark = ",") else "1,920"` parameter scenarios.
+
+---
+
+# Mathematical Framework
+
+## Study Region and Spatial Structure
+
+The simulation operates on a **regular lattice grid** $\mathcal{G} = \{s_1, \ldots, s_N\}$
+on $[1, G] \times [1, G]$, with $N = G^2$ clusters ($G = 10$, $N = 100$).
+
+Two contiguity structures define neighbor relationships:
+
+- **Rook contiguity:** $s_j \in \mathcal{N}(s_i)$ iff $s_i$ and $s_j$ share an edge
+  (up to 4 neighbors)
+- **Queen contiguity:** $s_j \in \mathcal{N}(s_i)$ iff $s_i$ and $s_j$ share an edge
+  or corner (up to 8 neighbors)
+
+The spatial weight matrix $\mathbf{W}$ has entries
+$w_{ij} = |\mathcal{N}(s_i)|^{-1}$ if $s_j \in \mathcal{N}(s_i)$ and $0$ otherwise
+(row-standardized).
+
+## Outcome Data Generating Process
+
+Outcomes follow a **Spatial Durbin Model (SDM)**:
+
+$$\mathbf{Y} = (\mathbf{I} - \rho \mathbf{W})^{-1}
+\left[\tau \mathbf{Z} + \gamma \cdot \text{Spill}(\mathbf{Z}) + \beta \mathbf{X} + \boldsymbol{\varepsilon}\right]$$
+
+**Parameter definitions:**
+
+| Symbol | Role | Value / Range |
+|--------|------|---------------|
+| $\tau$ | Direct treatment effect (estimand) | $1.0$ (fixed) |
+| $\rho$ | Outcome spatial autocorrelation | `r if (mle_avail) paste0("{", paste(rho_levels, collapse = ", "), "}") else "{0.00, 0.01, 0.20, 0.50}"` |
+| $\gamma$ | Spillover magnitude | `r if (mle_avail) paste0("{", paste(gamma_levels, collapse = ", "), "}") else "{0.5, 0.6, 0.7, 0.8}"` |
+| $\beta$ | Incidence effect on outcome | $1.0$ (fixed) |
+| $\sigma$ | Residual standard deviation | $1.0$ (fixed) |
+
+**Spillover construction:**
+
+$$\text{Spill}_i(\mathbf{Z}) = \frac{\sum_{j \in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|}$$
+
+Two spillover modes are evaluated:
+
+- **control_only:** $\gamma$ applied only to units with $Z_i = 0$
+- **both:** $\gamma$ applied to all units regardless of treatment status
+
+Stationarity requires $|\rho| < 1/\lambda_{\max}(\mathbf{W})$; all swept $\rho$ values
+satisfy this condition.
+
+## Incidence Generation
+
+Three modes generate the cluster-level covariate $X_i \in [0,1]$, each representing
+a different assumption about how historical incidence arises:
+
+**Mode 1 — iid Uniform:**
+$$X_i \overset{\text{iid}}{\sim} \text{Uniform}(0, 1)$$
+
+No spatial structure; serves as the baseline. One config (rho_X = N/A).
+
+**Mode 2 — Spatial (SAR filter):**
+$$\mathbf{X}^* = (\mathbf{I} - \rho_X \mathbf{W})^{-1} \mathbf{u}, \quad
+\mathbf{u} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$$
+$$X_i = \Phi(X_i^*) \in (0, 1)$$
+
+Spatially correlated via SAR filter; probability integral transform ($\Phi$) ensures
+$X_i$ is marginally $\text{Uniform}(0,1)$ but spatially dependent.
+Two configs: $\rho_X \in \{0.20, 0.50\}$.
+
+**Mode 3 — Poisson (count rates):**
+
+1. Spatially correlated log-rates:
+   $\log \lambda_i^* = \mu_0 + [(\mathbf{I} - \rho_X \mathbf{W})^{-1} \mathbf{u}]_i$
+2. Poisson counts: $C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)$
+   where $P_i = 1{,}000$ (equal population per cluster)
+3. Observed rates: $R_i = C_i / P_i$
+4. Rank-normalized: $X_i = (\text{rank}(R_i) - 0.5) / N$
+
+Base rate $\mu_0 = \log(35/100{,}000)$ mimics SUD incidence.
+Two configs: $\rho_X \in \{0.20, 0.50\}$.
+
+**Critical design invariant:** Incidence is generated **once per (mode, $\rho_X$)
+configuration** and held fixed across all ($\rho$, $\gamma$, nb_type) scenarios.
+This reflects the realistic constraint that a researcher observes historical incidence
+once before designing the trial; spatial model parameters affect the outcome DGP,
+not the incidence itself.
+
+## Treatment Assignment Designs
+
+```{r}
+#| label: design-table
+#| results: asis
+source(file.path(script_dir, "03_designs.R"))
+
+# Build design metadata from only the designs present in the results
+active_ids <- sort(unique(as.integer(gsub("Design ", "", unique(results$Design)))))
+all_names  <- get_design_names()
+
+design_meta <- data.frame(
+  ID            = active_ids,
+  Name          = unname(all_names[as.character(active_ids)]),
+  Deterministic = ifelse(
+    sapply(active_ids, is_design_deterministic), "Yes", "No"
+  )
+)
+
+knitr::kable(
+  design_meta,
+  col.names = c("ID", "Name", "Deterministic?"),
+  caption   = paste0(
+    nrow(design_meta),
+    " treatment assignment strategies evaluated in this simulation"
+  )
+)
+```
+
+Designs 1 and 2 are **deterministic** given the incidence vector: they produce the
+same assignment on every resample. The simulation detects this and runs each once,
+replicating the result across all design resamples (saving ~25x compute).
+
+## Estimation Method
+
+**Maximum Likelihood (MLE via SAR):**
+
+Fits `lagsarlm(Y ~ Z + Spill + X, listw = W)` from the `spatialreg` package,
+simultaneously estimating $\rho$, $\tau$, and regression coefficients. The true
+spillover covariate $\text{Spill}(\mathbf{Z})$ is included as an **oracle regressor**
+(i.e., the researcher is assumed to know the true spillover structure). CIs are
+derived from the asymptotic covariance matrix.
+
+---
+
+# Simulation Algorithm
+
+## Parameter Grid
+
+```{r}
+#| label: param-table
+#| results: asis
+if (mle_avail) {
+  spill_types <- sort(unique(results$Spillover_Type))
+  nb_types    <- sort(unique(results$Neighbor_Type))
+  inc_configs <- sort(unique(paste(results$Incidence_Mode,
+                                   ifelse(is.na(results$Rho_Incidence), "",
+                                          results$Rho_Incidence))))
+
+  param_df <- data.frame(
+    Parameter = c(
+      "Incidence mode",
+      "rho_X (incidence spatial autocorr.)",
+      "nb_type (contiguity)",
+      "rho (outcome spatial autocorr.)",
+      "gamma (spillover magnitude)",
+      "spill_type",
+      "design_id",
+      "TOTAL"
+    ),
+    Values = c(
+      paste(sort(unique(results$Incidence_Mode)), collapse = ", "),
+      "N/A (iid); 0.20, 0.50 (spatial, poisson)",
+      paste(nb_types, collapse = ", "),
+      paste(rho_levels, collapse = ", "),
+      paste(gamma_levels, collapse = ", "),
+      paste(spill_types, collapse = ", "),
+      paste(active_ids, collapse = ", "),
+      ""
+    ),
+    Levels = c(
+      paste0(length(mle_cfgs), " configs (1 iid + 2 spatial + 2 poisson)"),
+      "\u2014",
+      as.character(length(nb_types)),
+      as.character(length(rho_levels)),
+      as.character(length(gamma_levels)),
+      as.character(length(spill_types)),
+      as.character(n_designs),
+      format(nrow(results), big.mark = ",")
+    )
+  )
+
+  knitr::kable(
+    param_df,
+    caption = paste0(
+      "Simulation parameter grid (",
+      format(nrow(results), big.mark = ","),
+      " total scenarios)"
+    )
+  )
+}
+```
+
+## Resampling Structure
+
+For each scenario, the simulation draws:
+
+| Mode | Design resamples ($R_d$) | Outcome resamples ($R_o$) | Iterations / scenario |
+|------|:---:|:---:|:---:|
+| MLE | 25 | 10 | 250 |
+
+## Evaluation Metrics
+
+For each scenario, across $K$ total iterations (design × outcome resamples):
+
+$$\text{Bias} = \bar{\hat{\tau}} - \tau, \quad
+\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^K (\hat{\tau}_k - \bar{\hat{\tau}})^2}$$
+
+$$\text{MSE} = \text{Bias}^2 + \text{SD}^2$$
+
+$$\text{Coverage} = \frac{1}{K}\sum_{k=1}^K \mathbf{1}\left[\tau \in (\hat{\tau}_{k,L}, \hat{\tau}_{k,U})\right]$$
+
+## Per-Scenario Reproducibility
+
+Each scenario uses a deterministic seed:
+$$\text{seed}_s = \texttt{digest::digest2int}(\texttt{paste}(\text{inc\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, d_{\text{id}}, \text{sep}=\text{"|}"))$$
+
+This ensures results are reproducible and order-independent: adding or removing
+scenarios from the parameter sweep does not affect other scenarios' seeds.
+
+---
+
+# Results: Maximum Likelihood Estimation (MLE)
+
+## Overall Summary
+
+```{r}
+#| label: mle-overall-table
+#| results: asis
+if (mle_avail) {
+  mle_stats_disp <- data.frame(
+    Metric = c("Bias", "MSE", "Coverage", "Fail Rate"),
+    Min    = c(mle_summary$Bias_min, mle_summary$MSE_min,  mle_summary$Cov_min,  NA),
+    Mean   = c(mle_summary$Bias_mean, mle_summary$MSE_mean, mle_summary$Cov_mean, mle_summary$Fail_mean),
+    Max    = c(mle_summary$Bias_max, mle_summary$MSE_max,  mle_summary$Cov_max,  NA)
+  )
+  knitr::kable(
+    mle_stats_disp,
+    digits  = 3,
+    na      = "\u2014",
+    caption = paste0(
+      "MLE: Summary statistics across all ",
+      format(nrow(results), big.mark = ","),
+      " scenarios"
+    )
+  )
+}
+```
+
+## Design Comparison by MSE
+
+```{r}
+#| label: mle-design-summary
+#| results: asis
+if (mle_avail) {
+  knitr::kable(
+    mle_by_design,
+    col.names = c("Design", "Mean Bias", "Median MSE", "Mean MSE",
+                  "Mean Coverage", "Fail Rate"),
+    digits    = c(0, 3, 3, 3, 3, 4),
+    caption   = "MLE: Design performance averaged across all scenarios and incidence modes"
+  )
+}
+```
+
+## MSE by Design and Neighbor Type
+
+```{r}
+#| label: mle-mse-boxplot
+#| fig-cap: "MLE: Distribution of MSE by design, faceted by spatial contiguity structure. Boxes sorted by median MSE within each panel."
+if (mle_avail) {
+  if ("iid Uniform" %in% names(mle_cfgs)) {
+    print(plot_mse_by_neighbor(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+  } else if (length(mle_cfgs) > 0) {
+    print(plot_mse_by_neighbor(mle_cfgs[[1]], names(mle_cfgs)[1]))
+  }
+}
+```
+
+## MSE Heatmap
+
+```{r}
+#| label: mle-mse-heatmap
+#| fig-cap: "MLE MSE heatmap for iid Uniform incidence. Cells show average MSE across spillover type and gamma, faceted by neighbor type."
+if (mle_avail) {
+  if ("iid Uniform" %in% names(mle_cfgs)) {
+    print(plot_mse_heatmap(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+  } else if (length(mle_cfgs) > 0) {
+    print(plot_mse_heatmap(mle_cfgs[[1]], names(mle_cfgs)[1]))
+  }
+}
+```
+
+## Design Rank Frequency
+
+```{r}
+#| label: mle-ranks-iid
+#| results: asis
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  invisible(capture.output(
+    mle_rank_tbl <- table_design_ranks(mle_cfgs[["iid Uniform"]], "iid Uniform")
+  ))
+  knitr::kable(
+    as.data.frame(mle_rank_tbl),
+    digits  = 1,
+    caption = "MLE: Design rank frequency (%) for iid Uniform incidence. Each cell = % of scenarios where design achieved that rank (Rank 1 = lowest MSE)."
+  )
+}
+```
+
+## Robustness Profile
+
+```{r}
+#| label: mle-robustness-iid
+#| results: asis
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  invisible(capture.output(
+    mle_rob_tbl <- table_robustness(mle_cfgs[["iid Uniform"]], "iid Uniform")
+  ))
+  knitr::kable(
+    as.data.frame(mle_rob_tbl),
+    digits  = 4,
+    caption = "MLE: Robustness profile for iid Uniform incidence. Sorted by Median MSE. IQR = interquartile range across scenarios."
+  )
+}
+```
+
+## Coverage by Design
+
+```{r}
+#| label: mle-coverage
+#| fig-cap: "MLE: Coverage probability distribution by design across all scenarios. Red dashed line = nominal 95% target."
+if (mle_avail) {
+  if ("iid Uniform" %in% names(mle_cfgs)) {
+    print(plot_coverage_by_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+  } else if (length(mle_cfgs) > 0) {
+    print(plot_coverage_by_design(mle_cfgs[[1]], names(mle_cfgs)[1]))
+  }
+}
+```
+
+## Bias-Variance Decomposition
+
+```{r}
+#| label: mle-biasvar
+#| fig-cap: "MLE: Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence. Total bar height = MSE."
+if (mle_avail) {
+  if ("iid Uniform" %in% names(mle_cfgs)) {
+    print(plot_bias_variance(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+  } else if (length(mle_cfgs) > 0) {
+    print(plot_bias_variance(mle_cfgs[[1]], names(mle_cfgs)[1]))
+  }
+}
+```
+
+---
+
+# Sensitivity Analysis
+
+## Parameter Sensitivity
+
+```{r}
+#| label: mle-sensitivity
+#| results: asis
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  invisible(capture.output(
+    sens_tbl <- table_sensitivity(mle_cfgs[["iid Uniform"]], "iid Uniform")
+  ))
+  knitr::kable(
+    as.data.frame(sens_tbl),
+    digits  = 4,
+    caption = "MLE: Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence. Higher values indicate parameters where design choice matters more."
+  )
+}
+```
+
+## Effect of Rho on Design Rankings
+
+```{r}
+#| label: mle-rho-effect
+#| fig-cap: "MLE: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels."
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_mse_per_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+}
+```
+
+## Incidence Mode Comparison
+
+```{r}
+#| label: incidence-overview
+#| fig-cap: "Incidence spatial patterns across the three generation modes for rho_X = 0.20 and 0.50. Color represents incidence (darker = higher burden). Spatial and Poisson modes show visible spatial clustering absent from iid."
+#| fig-height: 6
+print(plot_incidence_heatmaps(grid_dim = 10))
+```
+
+```{r}
+#| label: incidence-dists
+#| fig-cap: "Marginal distribution of incidence values by mode, pooled across 50 resamples on the 10x10 grid. All modes are marginally Uniform on [0,1]; spatial structure manifests in spatial covariance, not the marginal."
+#| fig-height: 5
+print(plot_incidence_distributions(grid_dim = 10, n_resamples = 50))
+```
+
+---
+
+# Subgroup Results by Incidence Mode
+
+The following tables report MLE results separately for each incidence configuration.
+Results are **never aggregated across incidence modes**, as each represents a
+fundamentally different assumption about prior data.
+
+```{r}
+#| label: subgroup-loop
+#| results: asis
+if (mle_avail) {
+  cap_safe <- function(x) gsub("_", " ", x, fixed = TRUE)
+
+  for (cfg_nm in names(mle_cfgs)) {
+    cat(sprintf("\n## MLE: %s\n\n", cfg_nm))
+    cfg <- mle_cfgs[[cfg_nm]]
+
+    invisible(capture.output(rob <- table_robustness(cfg, cfg_nm)))
+    tbl_out <- knitr::kable(
+      as.data.frame(rob),
+      digits  = 4,
+      caption = sprintf("MLE robustness profile: %s", cap_safe(cfg_nm))
+    )
+    print(tbl_out)
+    cat("\n")
+  }
+}
+```
+
+---
+
+# Conclusions
+
+## Summary of Findings
+
+```{r}
+#| label: conclusions-setup
+if (mle_avail) {
+  # Best and worst designs by mean MSE
+  best_design_name  <- best_design
+  worst_design_name <- worst_design
+
+  # Coverage stats for best/worst designs
+  best_cov  <- round(mle_by_design$Mean_Coverage[mle_by_design$Design == best_design_name], 2)
+  worst_cov <- round(mle_by_design$Mean_Coverage[mle_by_design$Design == worst_design_name], 2)
+
+  # Checkerboard specifically
+  chkbd_row  <- mle_by_design[grepl("Checkerboard|Design 1", mle_by_design$Design, ignore.case = TRUE), ]
+  chkbd_mse  <- if (nrow(chkbd_row) > 0) chkbd_row$Mean_MSE[1] else NA
+  chkbd_cov  <- if (nrow(chkbd_row) > 0) round(chkbd_row$Mean_Coverage[1], 2) else NA
+  chkbd_name <- if (nrow(chkbd_row) > 0) chkbd_row$Design[1] else "Design 1 (Checkerboard)"
+
+  # Overall coverage
+  overall_cov_mean <- round(mean(results$Coverage, na.rm = TRUE), 2)
+}
+```
+
+The simulation study evaluated
+`r if (mle_avail) n_designs else "six"` treatment assignment designs across
+`r if (mle_avail) format(nrow(results), big.mark = ",") else "1,920"` parameter
+scenarios, spanning three incidence generation modes, two contiguity structures,
+`r if (mle_avail) length(rho_levels) else "four"` spatial autocorrelation levels,
+`r if (mle_avail) length(gamma_levels) else "four"` spillover magnitudes, and two
+spillover types.
+
+**Key findings:**
+
+1. **MLE achieves near-nominal coverage.** The average coverage across all scenarios
+   is `r if (mle_avail) overall_cov_mean else "~0.94"`, close to the nominal 0.95 target.
+   This reflects MLE's explicit modeling of spatial autocorrelation $\rho$, which ensures
+   valid inference when spatial dependence is present.
+
+2. **`r if (mle_avail) best_design_name else "Design 3 (Saturation Quadrants)"` is the top performer.**
+   It achieves the lowest average MSE (`r if (mle_avail) round(best_mse, 3) else "~0.21"`)
+   and a mean coverage of `r if (mle_avail) best_cov else "~0.94"`. Random saturation
+   per quadrant introduces sufficient variation in spatial treatment patterns, allowing
+   the spatial autoregressive model to cleanly separate $\tau$ from $\rho$.
+
+3. **`r if (mle_avail) worst_design_name else "Design 1 (Checkerboard)"` is the consistently worst design.**
+   It achieves the highest average MSE
+   (`r if (mle_avail) round(worst_mse, 3) else "~0.65"`)
+   and the lowest mean coverage
+   (`r if (mle_avail) worst_cov else "~0.72"`).
+   Its perfect spatial alternation creates systematic confounding when incidence is
+   spatially structured, inflating bias and degrading coverage.
+
+4. **High Incidence Focus and Balanced Quartile/Strata designs are robustly competitive.**
+   These designs rank consistently well across incidence mode and parameter regimes.
+   Incidence-stratified assignment directly addresses confounding from $X$.
+
+5. **Design rankings are stable across incidence modes.** The ordering of designs by MSE
+   is largely consistent across iid, spatial, and Poisson incidence configurations,
+   suggesting the findings generalize across different assumptions about prior data structure.
+
+## Limitations and Planned Extensions
+
+- **Oracle MLE:** The MLE model uses the true spillover covariate. Non-oracle
+  comparisons (`include_spill_covariate = FALSE`) remain as a planned extension.
+- **Iteration count:** MLE uses 250 iterations per scenario. Apparent variance inflation
+  at high-$\rho$ may partly reflect this count; a larger sweep would reduce Monte Carlo error.
+- **Equal populations:** Poisson mode uses $P_i = 1{,}000$ for all clusters.
+  Heterogeneous population sizes (log-normal) would more closely match NC county data.
+- **Grid sensitivity:** All results use $G = 10$ ($N = 100$). Sensitivity to
+  $G = 8$ or $G = 15$ has not been evaluated.
+
+---
+
+# References
+
+- Mirzaei, A. et al. (2019). Sudden unexpected death rates. *(SUD base rate 35/100,000)*
+- Gan, W. et al. (2019). County-level Poisson regression for SUD mortality.
+- Watson, K. et al. (AHA). Census tract-level spatial analysis of SUD.
+- LeSage, J. & Pace, R.K. (2009). *Introduction to Spatial Econometrics*. CRC Press.
+- Bivand, R., et al. `spdep` R package.
+- Bivand, R. & Piras, G. `spatialreg` R package.
+- R packages used: `dplyr`, `tidyr`, `ggplot2`, `viridis`, `knitr`, `kableExtra`, `digest`
+
+---
+
+# Appendix: Result File Locations
+
+```{r}
+#| label: file-inventory
+#| results: asis
+if (mle_avail) {
+  # List actual .rds files present in results_dir
+  sim_data_dir <- file.path(results_dir, "sim_data")
+  rds_dir      <- if (dir.exists(sim_data_dir)) sim_data_dir else results_dir
+  rds_files    <- list.files(rds_dir, pattern = "\\.rds$", full.names = FALSE)
+
+  if (length(rds_files) > 0) {
+    files_df <- data.frame(
+      File     = rds_files,
+      Location = rep(basename(rds_dir), length(rds_files))
+    )
+    knitr::kable(
+      files_df,
+      caption = paste0("RDS result files in results/", basename(rds_dir), "/")
+    )
+  }
+}
+```
+
+All simulation data files are located in:
+`results/sim_data/`

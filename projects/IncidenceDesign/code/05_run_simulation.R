@@ -76,7 +76,7 @@ if (estimation_mode == "MLE") {
 }
 
 # Designs to evaluate
-design_ids <- c(1, 2, 3, 4, 5, 7)
+design_ids <- c(1, 2, 3, 4, 5, 6, 7, 8)
 
 # Oracle spillover toggle
 include_spill_covariate <- TRUE
@@ -308,6 +308,22 @@ run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
 }
 
 # ==============================================================================
+# CHECKPOINTING SETUP
+# ==============================================================================
+
+results_dir <- file.path(dirname(script_dir), "results")
+if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
+checkpoint_dir <- file.path(results_dir, "checkpoints")
+if (!dir.exists(checkpoint_dir)) dir.create(checkpoint_dir, recursive = TRUE)
+
+# Helper: canonical checkpoint filename for a config
+config_checkpoint_file <- function(ic_config) {
+  label <- paste0(ic_config$mode, "_rhoX", sprintf("%.2f", ic_config$rho_x))
+  file.path(checkpoint_dir,
+            sprintf("checkpoint_%s_%s.rds", estimation_mode, label))
+}
+
+# ==============================================================================
 # EXECUTE SIMULATION (sequential or parallel)
 # ==============================================================================
 
@@ -320,8 +336,15 @@ if (n_cores > 1 && length(inc_configs) > 1) {
   results_by_config <- mclapply(
     seq_along(inc_configs),
     function(i) {
-      run_incidence_config(i, inc_configs[[i]], grid_obj, coords, I_mat,
-                           verbose = FALSE)
+      cp_file <- config_checkpoint_file(inc_configs[[i]])
+      if (file.exists(cp_file)) {
+        cat(sprintf("  Config %d: loading checkpoint (skipping)\n", i))
+        return(readRDS(cp_file))
+      }
+      result <- run_incidence_config(i, inc_configs[[i]], grid_obj, coords, I_mat,
+                                     verbose = FALSE)
+      saveRDS(result, cp_file)
+      result
     },
     mc.cores = min(n_cores, length(inc_configs))
   )
@@ -337,13 +360,19 @@ if (n_cores > 1 && length(inc_configs) > 1) {
   }
 } else {
   cat("Running sequentially...\n")
-  results_by_config <- lapply(
-    seq_along(inc_configs),
-    function(i) {
-      run_incidence_config(i, inc_configs[[i]], grid_obj, coords, I_mat,
-                           verbose = TRUE)
+  results_by_config <- vector("list", length(inc_configs))
+  for (i in seq_along(inc_configs)) {
+    cp_file <- config_checkpoint_file(inc_configs[[i]])
+    if (file.exists(cp_file)) {
+      cat(sprintf("\n--- [Config %d] checkpoint found, loading and skipping ---\n", i))
+      results_by_config[[i]] <- readRDS(cp_file)
+    } else {
+      results_by_config[[i]] <- run_incidence_config(
+        i, inc_configs[[i]], grid_obj, coords, I_mat, verbose = TRUE)
+      saveRDS(results_by_config[[i]], cp_file)
+      cat(sprintf("  Checkpoint saved: %s\n", basename(cp_file)))
     }
-  )
+  }
 }
 
 # ==============================================================================
@@ -358,9 +387,6 @@ cat(sprintf("Total time: %.1f minutes\n", total_elapsed))
 cat(sprintf("Scenarios completed: %d\n", nrow(granular_results)))
 
 # --- Save combined results ---
-results_dir <- file.path(dirname(script_dir), "results")
-if (!dir.exists(results_dir)) dir.create(results_dir, recursive = TRUE)
-
 timestamp_str <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
 combined_file <- file.path(results_dir,
