@@ -149,16 +149,15 @@ Incidence-Guided Saturation Quadrants.
 
 ## Results Summary
 
-### MLE (primary — prior 6-design sweep, completed 2026-03-05; re-run needed for 8 designs)
+### MLE (primary — full 8-design sweep, completed 2026-03-22)
 
-- **1,920 scenarios** (old sweep, designs 1–7 excl. 6) | Bias [-0.895, 0.454] | MSE [0.009, 3.910] | Coverage [0.00, 1.00]
-- Convergence fail rate = 0.0 (zero failures across all 480,000 lagsarlm calls)
-- **Best design: Design 3 (Saturation Quadrants)** | **Worst: Design 1 (Checkerboard)**
-- Mean coverage ~0.94; mean MSE ~0.09
-- File: `results/sim_data/sim_results_MLE_combined_20260305_150742.rds`
-- **Note:** Re-run needed for full 2,560-scenario sweep covering all 8 designs (1–8).
+- **2,560 scenarios** (designs 1–8, all incidence configs) | Fail_Rate = 0.0
+- **Best: Design 8 (Incidence-Guided Saturation Quadrants)** MSE=0.079 ≈ **Design 3 (Saturation Quadrants)** MSE=0.080
+- **Worst: Design 1 (Checkerboard)** MSE=0.744, coverage ~55%
+- Mean coverage ~0.94 for all designs except D1
+- File: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
 
-### DIM (naive baseline — prior 6-design sweep, completed 2026-03-04; re-run needed for 8 designs)
+### DIM (naive baseline — prior 6-design sweep only, completed 2026-03-04)
 
 - **1,920 scenarios** (old sweep) | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] (mean 0.179)
 - Coverage [0.00, 0.99] (mean 0.72) — systematically low; DIM ignores spatial dependence and spillover
@@ -251,8 +250,8 @@ results/
 - [x] Design set expanded to 8 designs (Balanced Halves, Incidence-Guided Saturation Quadrants added)
 
 **Pending:**
-- [ ] Re-run MLE simulation: 2,560 scenarios covering all 8 designs (1–8)
-- [ ] Re-run DIM simulation: 2,560 scenarios (baseline)
+- [x] Re-run MLE simulation: 2,560 scenarios covering all 8 designs (1–8) — completed 2026-03-22
+- [ ] Re-run DIM simulation: 2,560 scenarios (baseline, optional — DIM is naive reference only)
 - [ ] Regenerate visualizations and design recommendations after re-run
 
 **Planned extensions:**

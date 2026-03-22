@@ -169,20 +169,15 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-03-21)
+## Current State (as of 2026-03-22)
 
-**SIMULATION NEEDS RE-RUN** — Design set expanded from 6 to 8 designs (added Designs 7
-and 8; renumbered former Design 7 Balanced Quartiles to Design 6). Prior results below
-cover the old 6-design sweep (1,920 scenarios) and are superseded once the new 2,560-scenario
-run completes.
-
-**MLE simulation:** COMPLETE for prior 6-design sweep (primary estimator)
-- Data: `results/sim_data/sim_results_MLE_combined_20260305_150742.rds`
-- Splits: `results/sim_data/sim_results_MLE_{iid|spatial|poisson}_20260305_150742.rds`
-- Stats (old): 1,920 scenarios | Bias [-0.895, 0.454] | MSE [0.009, 3.910] | Coverage [0.00, 1.00] | Fail_Rate = 0.0
+**MLE simulation:** COMPLETE — full 8-design, 2,560-scenario sweep (primary estimator)
+- Data: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
+- Splits: `results/sim_data/sim_results_MLE_{iid|spatial|poisson}_20260322_151030.rds`
+- Stats: 2,560 scenarios | Best: D8 MSE=0.079, D3 MSE=0.080 | Worst: D1 MSE=0.744, coverage=55% | Fail_Rate = 0.0
 - Visualizations: `results/mle_per_config/` (5 per-config PDFs + incidence overview)
-- Design recommendations: `results/MLE_combined_design_recommendations.pdf` (27 pages)
-- Companion narrative: `results/MLE_design_recommendation_report.pdf` (26 pages)
+- Design recommendations: `results/MLE_combined_design_recommendations.pdf`
+- Companion narrative: `results/MLE_design_recommendation_report.pdf`
 
 **DIM simulation:** COMPLETE for prior 6-design sweep (naive baseline only)
 - Data: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
