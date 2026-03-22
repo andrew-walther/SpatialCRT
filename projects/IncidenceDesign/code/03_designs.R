@@ -1,6 +1,6 @@
 # ==============================================================================
 # 03_designs.R
-# Six treatment assignment strategies for the spatial CRT simulation
+# Eight treatment assignment strategies for the spatial CRT simulation
 # ==============================================================================
 
 #' Human-readable names for each design ID
@@ -14,8 +14,9 @@ get_design_names <- function(design_id = NULL) {
     "3" = "Design 3: Saturation Quadrants",
     "4" = "Design 4: Isolation Buffer",
     "5" = "Design 5: 2x2 Blocking",
-    "6" = "Design 6: Center Hotspot",
-    "7" = "Design 7: Balanced Quartiles"
+    "6" = "Design 6: Balanced Quartiles",
+    "7" = "Design 7: Balanced Halves",
+    "8" = "Design 8: Incidence-Guided Saturation Quadrants"
   )
   if (is.null(design_id)) return(all_names)
   all_names[as.character(design_id)]
@@ -34,7 +35,7 @@ is_design_deterministic <- function(design_id) {
 
 #' Generate treatment assignment matrices for a given design
 #'
-#' @param design_id Integer, design identifier (1-7, excluding 6 by default)
+#' @param design_id Integer, design identifier (1-8)
 #' @param n_resamples Integer, number of assignment vectors to generate
 #' @param N Integer, number of clusters
 #' @param incidence Numeric vector length N, baseline incidence values in [0,1]
@@ -102,22 +103,7 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
     }
 
   } else if (design_id == 6) {
-    # Design 6: Center Hotspot — concentric rings (optional)
-    dist_from_center <- pmax(abs(coords$x - (max(coords$x) + 1) / 2),
-                             abs(coords$y - (max(coords$y) + 1) / 2))
-    rings <- as.numeric(as.factor(dist_from_center))
-    for (i in seq_len(n_resamples)) {
-      z <- numeric(N)
-      for (r in unique(rings)) {
-        idx <- which(rings == r)
-        n_half <- round(length(idx) / 2)
-        z[idx] <- sample(c(rep(1, n_half), rep(0, length(idx) - n_half)))
-      }
-      mat[, i] <- z
-    }
-
-  } else if (design_id == 7) {
-    # Design 7: Balanced Quartiles — stratified by incidence quartile
+    # Design 6: Balanced Quartiles — stratified by incidence quartile
     quartiles <- dplyr::ntile(incidence, 4)
     for (i in seq_len(n_resamples)) {
       z <- numeric(N)
@@ -125,6 +111,44 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
         idx <- which(quartiles == q)
         n_half <- round(length(idx) / 2)
         z[idx] <- sample(c(rep(1, n_half), rep(0, length(idx) - n_half)))
+      }
+      mat[, i] <- z
+    }
+
+  } else if (design_id == 7) {
+    # Design 7: Balanced Halves — stratified by median incidence, balanced within each half
+    med_val <- median(incidence)
+    half_id <- ifelse(incidence > med_val, 1, 2)
+    for (i in seq_len(n_resamples)) {
+      z <- numeric(N)
+      for (h in 1:2) {
+        idx <- which(half_id == h)
+        n_half <- round(length(idx) / 2)
+        z[idx] <- sample(c(rep(1, n_half), rep(0, length(idx) - n_half)))
+      }
+      mat[, i] <- z
+    }
+
+  } else if (design_id == 8) {
+    # Design 8: Incidence-Guided Saturation Quadrants — saturation assigned by avg incidence rank
+    half <- coords$x[which.max(coords$x)] / 2
+    q_id <- ifelse(coords$x <= half & coords$y <= half, 1,
+            ifelse(coords$x > half  & coords$y <= half, 2,
+            ifelse(coords$x <= half & coords$y > half,  3, 4)))
+
+    # Compute average incidence per quadrant and assign saturations by rank
+    quad_means <- sapply(1:4, function(q) mean(incidence[q_id == q]))
+    rank_order <- order(quad_means, decreasing = TRUE)
+    sat_levels <- c(0.80, 0.60, 0.40, 0.20)
+    quad_sats <- numeric(4)
+    quad_sats[rank_order] <- sat_levels
+
+    for (i in seq_len(n_resamples)) {
+      z <- numeric(N)
+      for (q in 1:4) {
+        idx <- which(q_id == q)
+        n_trt <- round(length(idx) * quad_sats[q])
+        z[idx] <- sample(c(rep(1, n_trt), rep(0, length(idx) - n_trt)))
       }
       mat[, i] <- z
     }

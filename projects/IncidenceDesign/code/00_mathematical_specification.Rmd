@@ -194,9 +194,9 @@ $P_0 = 1{,}000$, population mode $\in \{\text{equal}, \text{heterogeneous}\}$.
 
 # Treatment Assignment Designs
 
-Six designs are evaluated. Each design produces a binary treatment vector
+Eight designs are evaluated. Each design produces a binary treatment vector
 $\mathbf{Z} \in \{0, 1\}^N$. Designs 1--2 are deterministic given $\mathbf{X}$;
-Designs 3--5, 7 involve randomization.
+Designs 3--8 involve randomization.
 
 ## Design 1: Checkerboard (Strict Spatial Stratification)
 
@@ -254,7 +254,7 @@ $$\sum_{i \in B_m} Z_i = 2 \quad \text{for all } m$$
 
 **Properties:** Stochastic, exactly 50% treated, locally balanced (1:1 within each block).
 
-## Design 7: Balanced Quartiles
+## Design 6: Balanced Quartiles
 
 Clusters are stratified by incidence quartile:
 $$S_q = \{s_i : X_i \in [F_X^{-1}((q-1)/4),\ F_X^{-1}(q/4)]\}, \quad q = 1, 2, 3, 4$$
@@ -264,6 +264,39 @@ $$\sum_{i \in S_q} Z_i \approx |S_q|/2$$
 
 **Properties:** Stochastic, approximately 50% treated, balanced across the incidence
 distribution. Combines covariate stratification with randomization.
+
+## Design 7: Balanced Halves
+
+Clusters are stratified into two groups by median baseline incidence:
+
+$$S_h = \{s_i : X_i \in H_h\}, \quad h = 1, 2$$
+
+where $H_1 = \{X_i : X_i > \text{median}(X)\}$ (high incidence) and $H_2 = \{X_i : X_i \leq \text{median}(X)\}$ (low incidence).
+
+Within each half, approximately half the clusters are randomly assigned to treatment:
+
+$$\sum_{i \in S_h} Z_i = \lfloor |S_h| / 2 \rceil, \quad h = 1, 2$$
+
+**Properties:** Stochastic assignment. Approximately 50% treated overall. Balanced across the two halves of the incidence distribution. This is a 2-stratum analog of Design 6 (Balanced Quartiles), which uses 4 strata.
+
+## Design 8: Incidence-Guided Saturation Quadrants
+
+The grid is partitioned into four spatial quadrants $Q_1, \ldots, Q_4$ using the same spatial partition as Design 3. Let $\bar{X}_{Q_k} = |Q_k|^{-1} \sum_{i \in Q_k} X_i$ denote the average baseline incidence in quadrant $k$.
+
+Quadrants are ranked by $\bar{X}_{Q_k}$ in descending order and assigned saturation levels deterministically:
+
+| Rank (by $\bar{X}_{Q_k}$) | Saturation $p_k$ |
+|:---:|:---:|
+| 1 (highest) | 0.80 |
+| 2 | 0.60 |
+| 3 | 0.40 |
+| 4 (lowest) | 0.20 |
+
+Within each quadrant, $\lfloor |Q_k| \cdot p_k \rceil$ clusters are randomly selected for treatment:
+
+$$\sum_{i \in Q_k} Z_i = \lfloor |Q_k| \cdot p_k \rceil$$
+
+**Properties:** The quadrant-to-saturation mapping is deterministic given incidence; within-quadrant assignment is stochastic. Overall treatment rate approximately 50%. Unlike Design 3, the saturation assignment is guided by incidence data rather than random.
 
 ---
 
@@ -331,10 +364,10 @@ The simulation sweeps over the following parameter grid:
 | Spatial autocorrelation | $\rho$ | 0.00, 0.01, 0.20, 0.50 | 4 |
 | Spillover magnitude | $\gamma$ | 0.50, 0.60, 0.70, 0.80 | 4 |
 | Spillover type | --- | control_only, both | 2 |
-| Treatment design | --- | 1, 2, 3, 4, 5, 7 | 6 |
+| Treatment design | --- | 1, 2, 3, 4, 5, 6, 7, 8 | 8 |
 
 **Total scenarios:** 5 incidence configs $\times$ 2 neighbor types $\times$ 4 $\rho$
-$\times$ 4 $\gamma$ $\times$ 2 spillover types $\times$ 6 designs = **1,920 scenarios**.
+$\times$ 4 $\gamma$ $\times$ 2 spillover types $\times$ 8 designs = **2,560 scenarios**.
 
 ## Resample Structure
 
@@ -374,7 +407,7 @@ FOR EACH incidence_mode IN {iid, spatial, poisson}:
 
         FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
           FOR EACH spill_type IN {control_only, both}:
-            FOR EACH design_id IN {1, 2, 3, 4, 5, 7}:
+            FOR EACH design_id IN {1, 2, 3, 4, 5, 6, 7, 8}:
 
               SET scenario_seed = hash(incidence_mode, rho_X, nb_type,
                                        rho, gamma, spill_type, design_id)
@@ -479,7 +512,7 @@ This captures the proportion of iterations where the MLE optimizer failed to con
 | Outcome resamples (MLE) | $R_o$ | 10 | --- | Yes |
 | Design resamples (DIM) | $R_d$ | 100 | --- | Yes |
 | Outcome resamples (DIM) | $R_o$ | 1,000 | --- | Yes |
-| Design IDs | --- | {1,2,3,4,5,7} | --- | Yes |
+| Design IDs | --- | {1,2,3,4,5,6,7,8} | --- | Yes |
 | Oracle spillover toggle | --- | TRUE | TRUE, FALSE | Yes |
 | Estimation mode | --- | MLE | MLE, DIM | Yes |
 
