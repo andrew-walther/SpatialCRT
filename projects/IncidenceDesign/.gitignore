@@ -1,0 +1,12 @@
+# Simulation run logs
+code/sim_run.log
+code/report_run.log
+code/MLE_design_recommendation_report.log
+
+# Checkpoint files (intermediate simulation state)
+results/checkpoints/
+
+# Quarto/knitr intermediate files
+code/*_cache/
+code/*_files/
+code/*.tex

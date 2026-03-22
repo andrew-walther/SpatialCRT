@@ -4,6 +4,10 @@ subtitle: "MLE-Based Analysis for Spatial CRT Treatment Assignment"
 author: "Andrew Walther"
 date: today
 format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
   pdf:
     toc: true
     toc-depth: 3
@@ -543,9 +547,20 @@ of how the historical incidence was generated.
 
 ## Cross-Config Coverage Rankings
 
+```{r q1-cov-cap, include=FALSE}
+q1_cov_cap <- paste0(
+  "Average 95% CI coverage probability per design for each incidence configuration.",
+  " Red dashed line = nominal 0.95. Coverage near 0.95 indicates valid inference; ",
+  if (mle_avail) worst_design_short else "worst design",
+  " coverage falls to ",
+  if (mle_avail) worst_cov_range else "?",
+  " across all configs."
+)
+```
+
 ```{r q1-cov-plot}
 #| eval: !expr mle_avail
-#| fig-cap: !expr paste0("Average 95\\% CI coverage probability per design for each incidence configuration. Red dashed line = nominal 0.95. Coverage near 0.95 indicates valid inference; ", if(mle_avail) worst_design_short else "worst design", " coverage falls to ", if(mle_avail) worst_cov_range else "?", " across all configs.")
+#| fig-cap: !expr q1_cov_cap
 #| fig-height: 5.0
 print(plot_incidence_coverage(mle_results) +
   theme(text        = element_text(size = 10),
@@ -646,9 +661,19 @@ each design's rank change as one parameter varies?**
 
 ## Effect of Outcome Spatial Autocorrelation (Rho)
 
+```{r q2-rho-cap, include=FALSE}
+q2_rho_cap <- paste0(
+  "Design rank trajectories across Rho for each incidence config (one panel per config).",
+  " Rank 1 = best. Lines that stay flat indicate robust designs;",
+  " crossing lines reveal parameter-driven rank reversals. ",
+  if (mle_avail) modal_best_short else "Best design",
+  " stays near rank 1 across all Rho levels in most configs."
+)
+```
+
 ```{r q2-rho-trajectories}
 #| eval: !expr mle_avail
-#| fig-cap: !expr paste0("Design rank trajectories across Rho for each incidence config (one panel per config). Rank 1 = best. Lines that stay flat indicate robust designs; crossing lines reveal parameter-driven rank reversals. ", if(mle_avail) modal_best_short else "Best design", " stays near rank 1 across all Rho levels in most configs.")
+#| fig-cap: !expr q2_rho_cap
 #| fig-height: 8.0
 p_list <- lapply(seq_along(mle_cfgs), function(i) {
   plot_rank_trajectories(mle_cfgs[[i]], "Rho", cfg_names[i],
@@ -712,9 +737,20 @@ rho_exception_str <- if (length(rho_exceptions) == 0) {
 
 ## Effect of Spillover Magnitude (Gamma)
 
+```{r q2-gamma-cap, include=FALSE}
+q2_gamma_cap <- paste0(
+  "Design rank trajectories across Gamma. Gamma controls the magnitude of",
+  " treatment spillover to neighbors. Unlike Rho, Gamma has minimal effect",
+  " on design rankings under MLE (eta-squared < ",
+  if (mle_avail) max_gamma_eta else "?",
+  " for all designs): all trajectory lines are nearly flat,",
+  " confirming Gamma is not a discriminating factor for design selection."
+)
+```
+
 ```{r q2-gamma-trajectories}
 #| eval: !expr mle_avail
-#| fig-cap: !expr paste0("Design rank trajectories across Gamma. Gamma controls the magnitude of treatment spillover to neighbors. Unlike Rho, Gamma has minimal effect on design rankings under MLE (eta-squared < ", if(mle_avail) max_gamma_eta else "?", " for all designs): all trajectory lines are nearly flat, confirming Gamma is not a discriminating factor for design selection.")
+#| fig-cap: !expr q2_gamma_cap
 #| fig-height: 8.0
 p_list2 <- lapply(seq_along(mle_cfgs), function(i) {
   plot_rank_trajectories(mle_cfgs[[i]], "Gamma", cfg_names[i],
@@ -822,9 +858,18 @@ average across both types.
 
 ## Rho x Gamma Best-Design Maps
 
+```{r q3-heatmaps-cap, include=FALSE}
+q3_heatmaps_cap <- paste0(
+  "Best design heatmap: Rho vs. Gamma for each incidence config.",
+  " Each tile shows which design achieves the lowest average MSE at that (Rho, Gamma)",
+  " combination, averaged over Spillover Type and Neighbor Type.",
+  " Tile text shows the winning design abbreviation and its average MSE."
+)
+```
+
 ```{r q3-heatmaps}
 #| eval: !expr mle_avail
-#| fig-cap: !expr paste0("Best design heatmap: Rho vs. Gamma for each incidence config. Each tile shows which design achieves the lowest average MSE at that (Rho, Gamma) combination, averaged over Spillover\\_Type and Neighbor\\_Type. Tile text shows the winning design abbreviation and its average MSE.")
+#| fig-cap: !expr q3_heatmaps_cap
 #| fig-height: 8.0
 p_list3 <- lapply(seq_along(mle_cfgs), function(i) {
   plot_best_design_heatmap(mle_cfgs[[i]], "Rho", "Gamma", cfg_names[i],
@@ -881,9 +926,21 @@ rho_mse_monotone <- all(diff(rho_mse_trend$Avg_MSE) >= 0)
 
 ## Rho x Spillover Type Best-Design Maps
 
+```{r q3-heatmaps-spill-cap, include=FALSE}
+q3_spill_cap <- paste0(
+  "Best design heatmap: Rho vs. Spillover Type for each incidence config.",
+  " This reveals the key interaction: under both-direction spillover,",
+  " the winner sometimes switches from ",
+  if (mle_avail) modal_best_short else "best design",
+  " to ",
+  if (mle_avail) best_under_both_short else "alternative",
+  " at low Rho."
+)
+```
+
 ```{r q3-heatmaps-spill}
 #| eval: !expr mle_avail
-#| fig-cap: !expr paste0("Best design heatmap: Rho vs. Spillover\\_Type for each incidence config. This reveals the key interaction: under both-direction spillover, the winner sometimes switches from ", if(mle_avail) modal_best_short else "best design", " to ", if(mle_avail) best_under_both_short else "alternative", " at low Rho.")
+#| fig-cap: !expr q3_spill_cap
 #| fig-height: 7.5
 p_list4 <- lapply(seq_along(mle_cfgs), function(i) {
   plot_best_design_heatmap(mle_cfgs[[i]], "Rho", "Spillover_Type", cfg_names[i],

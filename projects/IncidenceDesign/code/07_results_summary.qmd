@@ -8,6 +8,12 @@ format:
     toc: true
     number-sections: true
     theme: cosmo
+  pdf:
+    toc: true
+    number-sections: true
+    fig-pos: "htbp"
+    fig-height: 4
+    fig-width: 6.5
 ---
 
 ```{r}
