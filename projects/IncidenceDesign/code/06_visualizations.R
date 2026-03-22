@@ -720,6 +720,11 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
 
   est_label <- if (!is.null(estimation_mode)) estimation_mode else "SIM"
 
+  # Resolve output directory — prefer passed results_dir, fall back to script-relative
+  out_dir <- if (!is.null(results_dir)) results_dir else file.path(script_dir, "results")
+  per_config_dir <- file.path(out_dir, "mle_per_config")
+  if (!dir.exists(per_config_dir)) dir.create(per_config_dir, recursive = TRUE)
+
   # Split results by incidence config
   config_list <- split_by_incidence_config(results)
 
@@ -729,7 +734,7 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
 
   # --- Standalone plots (comparing across modes, produced once) ---
   if (output_pdf) {
-    overview_file <- file.path(script_dir, "results",
+    overview_file <- file.path(out_dir,
                                sprintf("%s_incidence_overview.pdf", est_label))
     pdf(overview_file, width = 14, height = 10)
   }
@@ -757,7 +762,7 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
     cat(sprintf("--- [%s] ---\n", config_name))
 
     if (output_pdf) {
-      pdf_file <- file.path(script_dir, "results",
+      pdf_file <- file.path(per_config_dir,
                             sprintf("%s_%s.pdf", est_label, safe_name))
       pdf(pdf_file, width = 14, height = 10)
     }
