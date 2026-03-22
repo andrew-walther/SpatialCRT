@@ -29,7 +29,7 @@ Application domain: NC law enforcement / SUD prevention policy.
 
 SpillSpatialDepSim is the **applied predecessor**: it established the simulation
 framework (SAR model, spillover types, block stratification logic) that IncidenceDesign
-extended to a larger grid with heterogeneous outcome incidence and 6 formal design
+extended to a larger grid with heterogeneous outcome incidence and 8 formal design
 strategies.
 
 ---
@@ -37,8 +37,9 @@ strategies.
 ## Research Focus (IncidenceDesign — PRIMARY)
 
 **Primary question: which treatment assignment design minimizes MSE for tau?**
-The 6 designs are: Checkerboard (1), High Incidence Focus (2), Saturation Quadrants (3),
-Isolation Buffer (4), 2x2 Blocking (5), Balanced Quartiles (7).
+The 8 designs are: Checkerboard (1), High Incidence Focus (2), Saturation Quadrants (3),
+Isolation Buffer (4), 2x2 Blocking (5), Balanced Quartiles (6), Balanced Halves (7),
+Incidence-Guided Saturation Quadrants (8).
 
 **MLE (lagsarlm oracle) is the primary estimator.** DIM is a naive baseline only.
 

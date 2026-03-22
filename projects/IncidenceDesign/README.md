@@ -10,7 +10,7 @@ and spillover effects are present. The setting is a Spatial Cluster Randomized T
 (CRT) on a 10x10 regular lattice grid of 100 clusters.
 
 **Research question:** Across a wide range of spatial dependence, spillover magnitude,
-and incidence structures, which of 6 candidate treatment assignment strategies minimizes
+and incidence structures, which of 8 candidate treatment assignment strategies minimizes
 estimation error (MSE) and maintains valid inferential coverage?
 
 **Application context:** Sudden Unexpected Death (SUD) in North Carolina counties.
@@ -25,7 +25,7 @@ This is a clean-room rewrite of
 `archive/OutcomeIncidenceDesign_Legacy/SpatialCRT_Incidence_TreatmentAssignment_Simulation.Rmd`
 (~600 lines, monolithic Rmd). Refactoring goals:
 
-1. **Modularity** — 6 numbered R scripts (01-06) that can be run independently or sourced in sequence
+1. **Modularity** — numbered R scripts (01-09) that can be run independently or sourced in sequence
 2. **Three incidence modes** — Added Spatial (SAR filter) and Poisson modes alongside iid Uniform
 3. **Correctness fixes** — Seven specific bugs and design flaws identified and corrected (see below)
 4. **Long-run reliability** — Replaced `save.image()` with targeted `saveRDS()`, added per-scenario seeding, ETA logging, and degenerate case handling
@@ -41,7 +41,7 @@ The predecessor Rmd is preserved untouched.
 | `00_mathematical_specification.Rmd` | ~495 | Theory doc with full LaTeX DGP formulas | (rendered to HTML) |
 | `01_spatial_setup.R` | 54 | Regular lattice grid, rook/queen weight matrices | `build_spatial_grid()`, `get_active_spatial()` |
 | `02_incidence_generation.R` | 112 | Three incidence generation modes | `generate_incidence()` + 3 mode functions |
-| `03_designs.R` | 137 | Six treatment assignment strategies | `get_designs()`, `get_design_names()`, `is_design_deterministic()` |
+| `03_designs.R` | ~162 | Eight treatment assignment strategies | `get_designs()`, `get_design_names()`, `is_design_deterministic()` |
 | `04_estimation.R` | 102 | DIM and MLE estimation with CI extraction | `estimate_tau()` |
 | `05_run_simulation.R` | ~385 | Main orchestrator, nested parameter loop | `run_incidence_config()` |
 | `06_visualizations.R` | ~800 | All plots and summary tables | 18 functions; entry point `run_all_visualizations()` |
@@ -135,30 +135,32 @@ to control units) and `both` (applied to all units).
 - **Spatial:** SAR filter + pnorm transform — spatially correlated but marginally Uniform(0,1)
 - **Poisson:** Spatially correlated log-rates -> Poisson counts -> rank-normalized rates in [0,1]
 
-**Treatment designs:** 6 strategies — Checkerboard, High Incidence Focus, Saturation
-Quadrants, Isolation Buffer, 2x2 Blocking, Balanced Quartiles.
+**Treatment designs:** 8 strategies — Checkerboard, High Incidence Focus, Saturation
+Quadrants, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Balanced Halves,
+Incidence-Guided Saturation Quadrants.
 
 **Estimation methods:**
 - **DIM:** Difference in Means with Neyman variance estimator (2,500 iterations/scenario)
 - **MLE:** Spatial autoregressive model `lagsarlm(Y ~ Z + Spill + X)` using oracle Spill covariate (250 iterations/scenario)
 
-**Total scenarios:** 5 incidence configs x 2 neighbor types x 4 rho x 4 gamma x 2 spillover types x 6 designs = **1,920 scenarios**
+**Total scenarios:** 5 incidence configs x 2 neighbor types x 4 rho x 4 gamma x 2 spillover types x 8 designs = **2,560 scenarios**
 
 ---
 
 ## Results Summary
 
-### MLE (primary, completed 2026-03-05)
+### MLE (primary — prior 6-design sweep, completed 2026-03-05; re-run needed for 8 designs)
 
-- **1,920 scenarios** | Bias [-0.895, 0.454] | MSE [0.009, 3.910] | Coverage [0.00, 1.00]
+- **1,920 scenarios** (old sweep, designs 1–7 excl. 6) | Bias [-0.895, 0.454] | MSE [0.009, 3.910] | Coverage [0.00, 1.00]
 - Convergence fail rate = 0.0 (zero failures across all 480,000 lagsarlm calls)
 - **Best design: Design 3 (Saturation Quadrants)** | **Worst: Design 1 (Checkerboard)**
 - Mean coverage ~0.94; mean MSE ~0.09
 - File: `results/sim_data/sim_results_MLE_combined_20260305_150742.rds`
+- **Note:** Re-run needed for full 2,560-scenario sweep covering all 8 designs (1–8).
 
-### DIM (naive baseline, completed 2026-03-04)
+### DIM (naive baseline — prior 6-design sweep, completed 2026-03-04; re-run needed for 8 designs)
 
-- **1,920 scenarios** | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] (mean 0.179)
+- **1,920 scenarios** (old sweep) | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] (mean 0.179)
 - Coverage [0.00, 0.99] (mean 0.72) — systematically low; DIM ignores spatial dependence and spillover
 - File: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
 
@@ -171,11 +173,11 @@ results/
   00_mathematical_specification.pdf        # Theory document
   07_results_summary.pdf                   # Results summary (pending revision)
   sim_data/
-    sim_results_MLE_combined_{timestamp}.rds   # All 1,920 MLE scenarios
-    sim_results_MLE_iid_{timestamp}.rds        # iid Uniform only (384 rows)
-    sim_results_MLE_spatial_{timestamp}.rds    # Spatial only (768 rows)
-    sim_results_MLE_poisson_{timestamp}.rds    # Poisson only (768 rows)
-    sim_results_DIM_combined_{timestamp}.rds   # DIM baseline (1,920 rows)
+    sim_results_MLE_combined_{timestamp}.rds   # All 2,560 MLE scenarios
+    sim_results_MLE_iid_{timestamp}.rds        # iid Uniform only (512 rows)
+    sim_results_MLE_spatial_{timestamp}.rds    # Spatial only (1,024 rows)
+    sim_results_MLE_poisson_{timestamp}.rds    # Poisson only (1,024 rows)
+    sim_results_DIM_combined_{timestamp}.rds   # DIM baseline (2,560 rows)
     sim_results_DIM_{iid|spatial|poisson}_{timestamp}.rds
   mle_per_config/
     MLE_combined_{config_name}.pdf             # Per-config 8-plot PDF (5 configs)
@@ -217,8 +219,8 @@ results/
 6. **DIM iteration counts** — Originally planned at 100,000 iterations/scenario; reduced
    to 2,500 (25 design x 100 outcome resamples) for practical runtime.
 
-7. **Design 6 excluded** — Center Hotspot is implemented in `03_designs.R` but not
-   included in the default `design_ids` sweep pending further evaluation.
+7. **All 8 designs included** — Design IDs 1–8 are all included in the default
+   `design_ids` sweep in `05_run_simulation.R`.
 
 ---
 
@@ -240,19 +242,24 @@ results/
 **Completed:**
 - [x] All code files (00–09) written and tested
 - [x] Mathematical specification document (00) rendered to HTML
-- [x] DIM simulation: 1,920 scenarios, visualizations generated (baseline)
-- [x] MLE simulation: 1,920 scenarios, visualizations generated, zero convergence failures
+- [x] DIM simulation: 1,920 scenarios (prior 6-design sweep), visualizations generated (baseline)
+- [x] MLE simulation: 1,920 scenarios (prior 6-design sweep), visualizations generated, zero convergence failures
 - [x] Design recommendations module (08) with validation tests
 - [x] Narrative PDF report (09): `results/MLE_design_recommendation_report.pdf`
 - [x] Results directory reorganized: `sim_data/`, `mle_per_config/`, `dim/`, `archive/`
 - [x] Project documentation: CLAUDE.md + README.md
+- [x] Design set expanded to 8 designs (Balanced Halves, Incidence-Guided Saturation Quadrants added)
+
+**Pending:**
+- [ ] Re-run MLE simulation: 2,560 scenarios covering all 8 designs (1–8)
+- [ ] Re-run DIM simulation: 2,560 scenarios (baseline)
+- [ ] Regenerate visualizations and design recommendations after re-run
 
 **Planned extensions:**
 - [ ] Revise `07_results_summary.Rmd` — remove DIM vs MLE comparison framing; reframe as MLE-focused with DIM as brief baseline footnote
 - [ ] Heterogeneous population — Poisson mode with `pop_mode = "heterogeneous"`
 - [ ] Non-oracle MLE — run without the true Spill covariate for realistic comparison
 - [ ] Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
-- [ ] Additional designs — evaluate Design 6 (Center Hotspot) or add new strategies
 
 ---
 
