@@ -49,7 +49,9 @@ short_design_name <- function(design_str) {
     "Design 3" = "D3: Sat. Quadrants",
     "Design 4" = "D4: Isolation Buffer",
     "Design 5" = "D5: 2x2 Blocking",
-    "Design 7" = "D7: Balanced Quartiles"
+    "Design 6" = "D6: Balanced Quartiles",
+    "Design 7" = "D7: Balanced Halves",
+    "Design 8" = "D8: Inc.-Guided Sat. Q."
   )
   ifelse(design_str %in% names(mapping), mapping[design_str], design_str)
 }
