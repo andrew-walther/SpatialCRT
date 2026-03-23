@@ -17,11 +17,11 @@ direct treatment effect when outcomes are spatially correlated and spillover is 
 |-|--------------------|-----------------|
 | **Grid** | 2×4 / 3×3 / 3×4 (8–12 districts) | 10×10 (100 clusters) |
 | **Estimand** | alpha, beta, psi, rho | tau (direct treatment effect) |
-| **Designs** | Applied NC DOC configurations | 6 systematic designs |
+| **Designs** | Applied NC DOC configurations | 8 systematic designs |
 | **Estimators** | SAR lagsarlm | DIM + MLE (lagsarlm oracle) |
 | **Spillover** | TrtNoSpill + TrtSpill | rook + queen contiguity |
-| **Status** | Original complete; unified scripts planned | **Complete (1,920 scenarios)** |
-| **Paper** | `paper/SpatialCRT_Manuscript_V2.pdf` | `results/07_results_summary.pdf` |
+| **Status** | Original complete; unified scripts planned | **Complete (2,560 scenarios)** |
+| **Report** | `paper/SpatialCRT_Manuscript_V2.pdf` | `paper/report/IncidenceSpatialCRT_Report.pdf` |
 
 ---
 
@@ -55,29 +55,33 @@ for the NC DOC context (specific district grid, spillover model, SAR estimation)
 formed the methodological foundation.
 
 **IncidenceDesign** extends the framework to a larger 10×10 grid and systematically
-compares 6 formal treatment assignment designs across 3 incidence modes (iid Uniform,
+compares 8 formal treatment assignment designs across 3 incidence modes (iid Uniform,
 Spatial, Poisson) — addressing the generalizability question: does the optimal design
-depend on how outcomes are distributed?
+depend on how outcomes are distributed? A unified project report and modular manuscript
+are in development under `paper/`.
 
 ---
 
-## IncidenceDesign Key Findings
+## IncidenceDesign Key Findings (8-design MLE sweep, 2,560 scenarios)
 
 | Design | Coverage (MLE) | MSE (MLE) |
 |--------|---------------|-----------|
-| 1 — Checkerboard | ~0.55 | ~0.80 |
+| **8 — Incidence-Guided Saturation Quadrants** | **~0.94** | **~0.079** |
+| **3 — Saturation Quadrants** | **~0.94** | **~0.080** |
+| 6 — Balanced Quartiles | ~0.94 | ~0.10 |
 | 2 — High Incidence Focus | ~0.94 | ~0.13 |
-| **3 — Saturation Quadrants** | **~0.94** | **~0.08** |
+| 7 — Balanced Halves | ~0.94 | ~0.13 |
 | 4 — Isolation Buffer | ~0.94 | ~0.15 |
 | 5 — 2x2 Blocking | ~0.94 | ~0.23 |
-| 7 — Balanced Quartiles | ~0.94 | ~0.10 |
+| 1 — Checkerboard | ~0.55 | ~0.744 |
 
 **MLE (spatialreg `lagsarlm`) achieves near-nominal coverage (~94%) vs. DIM (~72%)**
 by properly modeling spatial autocorrelation and spillover. MLE is the primary estimator;
-DIM is a naive baseline. Checkerboard is consistently worst despite maximizing spatial
-separation — it creates systematic imbalance when incidence is spatially structured.
+DIM is a naive baseline. Checkerboard is consistently worst — its perfect spatial
+alternation creates systematic confounding when incidence is spatially structured.
 
-*Results reported per incidence mode; table above averaged for reference.*
+*Results reported per incidence mode; table above averaged for reference.
+See `paper/report/IncidenceSpatialCRT_Report.pdf` for the comprehensive analysis.*
 
 ---
 
@@ -126,4 +130,5 @@ tinytex::install_tinytex()  # if LaTeX not installed
 - LeSage, J. & Pace, R.K. (2009). *Introduction to Spatial Econometrics*. CRC Press.
 - Bivand, R. et al. — `spdep` and `spatialreg` R packages.
 - Manuscript: `projects/SpillSpatialDepSim/paper/SpatialCRT_Manuscript_V2.pdf`
-- Comprehensive IncidenceDesign report: `projects/IncidenceDesign/results/07_results_summary.pdf`
+- Comprehensive IncidenceDesign report: `projects/IncidenceDesign/paper/report/IncidenceSpatialCRT_Report.pdf`
+- Manuscript (in progress): `projects/IncidenceDesign/paper/manuscript/IncidenceSpatialCRT_Manuscript.pdf`

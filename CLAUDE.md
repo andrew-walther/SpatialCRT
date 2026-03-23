@@ -63,7 +63,11 @@ SpatialCRT/
       code/      data/  results/  paper/
     IncidenceDesign/            # Project 2 (systematic design study)
       CLAUDE.md  README.md
-      code/      results/  paper/
+      code/      results/
+      paper/
+        report/                  # Unified project report (HTML + PDF)
+        manuscript/              # Modular Quarto manuscript (child sections)
+        section_drafts/          # Archival LaTeX drafts + bibliography
   archive/                     # Legacy/exploratory (not maintained)
     README.md
     PreliminarySpatialSim/
