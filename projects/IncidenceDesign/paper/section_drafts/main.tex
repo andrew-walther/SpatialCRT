@@ -1,0 +1,321 @@
+ %This is the preamble of settings
+\documentclass{article}[11pt]
+\usepackage[utf8]{inputenc}
+\RequirePackage{etex}
+\usepackage{dirtytalk}
+\usepackage{amsthm,amssymb,amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+%\usepackage{makecell}
+\usepackage{bm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{lineno} % line numbers
+
+%\linespread{1.15}
+\linespread{2.0} % double space (BMC Medical Research Methodology)
+
+%\begin{solution}\renewcommand{\qedsymbol}{}
+%\end{solution}
+
+\usepackage[a4paper,margin=1.0in]{geometry}
+\usepackage{fancybox}
+\usepackage{linegoal}
+\usepackage[shortlabels]{enumitem}
+%\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{makecell}
+\usepackage{fancyhdr}
+    \lhead{Walther et al.}
+    \pagestyle{fancy}
+
+% keywords environment
+\newcommand{\keywords}[1]{%
+  \noindent\textbf{Keywords:} #1%
+}
+
+%enumerate alphabetically: a,b,c,...
+%\usepackage[shortlabels]{enumitem}
+% --- Count items (enumerate or itemize (bullets)) ---
+%\begin{enumerate}[(a)] % (a), (b), (c), ...
+%\begin{enumerate}[(i)] % (i), (ii), (iii), ...
+
+%write "\pagebreak" to add a page break
+%use \begin{align*} & \end{align*} to align a bunch of questions on their = signs
+
+%%% --- Insert Figure ---
+%\begin{figure} [!ht]
+%\centering
+%\includegraphics[width=0.80\textwidth]{Figure.png}
+%\caption{Insert Caption Here}
+%\label{figure:figurename}
+%\end{figure}
+
+%Figure~\ref{figure:figurename} "in-text figure reference"
+
+% --- Insert Table ---
+% \begin{center}
+%     \begin{tabular}{ |c|c|c|c|c| }
+%         \hline
+%         \multicolumn{5}{|c|}{Table X: Table Name}\\ % {number of columns}
+%         \hline
+%         Column 1 & Column 2 & Column 3 & Column 4 & Column 5\\
+%         \hline
+%         X & X & X & X & X\\
+%         X & X & X & X & X\\
+%         X & X & X & X & X\\
+%         X & X & X & X & X\\
+%         \hline
+%     \end{tabular}
+%     \label{figure:NAME}
+% \end{center}
+
+% --- Insert Equation ---
+% \begin{equation*}
+%     WRITE EQUATION HERE (use "align*" if more than one line)
+% \end{equation*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Header: Title, Author, Date --- 
+\begin{document}
+\linenumbers
+\title{Spatial Cluster Randomized Trials - Sampling Design with Heterogeneous Outcome Incidence}
+\author{Andrew Walther$^1$, Tonya Van Deinse$^2$, and Feng-Chang Lin$^1$}
+\date{
+    $^1$The University of North Carolina at Chapel Hill, Department of Biostatistics\\
+    $^2$The University of North Carolina at Chapel Hill, School of Social Work\\%[2ex]
+    $^*$Corresponding author: flin@bios.unc.edu\\
+    \today
+}
+
+%\date{\today}
+
+% alternative method for authors & affiliations:
+%\usepackage{authblk}
+%\author[1]{Name 1}
+%\author[2]{Name 2}
+%\affil[1]{Department of Mathematics, University X}
+%\affil[2]{Department of Biology, University Y}
+
+% alternative titles:
+% Spatial CRTs: Estimation efficiency with spillover effects & spatial dependence
+% Spatial CRTs: Treatment assignment with spillover effects & spatial dependence
+% Spatial CRTs: Random vs. Block Stratified sampling with spillover effects & spatial dependence
+
+\maketitle
+
+% Insert keywords here
+\keywords{spatial autoregressive, simple random sampling, block stratified sampling, treatment assignment, clinical trials} 
+
+\vspace{1em} % Adds a little space between keywords and abstract
+
+
+% --- ABSTRACT ---
+\begin{abstract}
+   $\textbf{Background}$: X
+
+   $\textbf{Methods \& Simulation}$: X
+
+   $\textbf{Results}$: X
+
+   $\textbf{Conclusion}$: X
+\end{abstract}
+
+% --- INTRODUCTION ---
+\section{Introduction}
+% 1) general background & problem statement
+% 2) detail the problem: spillover and spatial dependence
+% 3) gap in current literature & motivation
+% 4) study contributions and objectives
+% 5) paper roadmap
+
+X
+
+\subsection{Background \& Motivation}
+
+X
+
+\subsection{Aims \& Contributions}
+
+X
+
+% --- METHODS (theory) ---
+\section{Design of Spatial CRTs}
+
+X
+
+\subsection{Cluster Randomized Trials}
+
+X
+
+\subsection{Neighbor Definitions}
+
+X
+
+\subsubsection{Contiguity-Based}
+
+X
+
+\subsubsection{Distance-Based}
+
+X
+
+\subsection{Intervention \& Spillover Effects}
+
+X
+
+\subsubsection{Intervention Effect}\label{Section:InterventionEffect}
+
+X
+
+\subsubsection{Spillover Effect Methods}\label{Section:SpilloverEffectMethods}
+
+X
+
+\subsubsection{Spillover Effect Types}\label{section:SpilloverEffectTypes}
+
+X
+
+\subsection{Simple Random vs. Block Stratified Sampling}
+
+X
+
+\subsubsection{2x4 Grid}
+
+X
+
+\subsubsection{3x3 Grid}
+
+X
+
+\subsubsection{3x4 Grid}
+
+X
+
+\subsection{Spatial Autoregressive (SAR) Model}\label{section:SAR}
+
+X
+
+\subsection{Spatial Dependence}\label{section:SpatialWeightsMatrix}
+
+X
+
+% --- SIMULATIONS (application) ---
+\section{Simulation Study}
+
+\begin{itemize}
+    \item Define simulation study region of $10 \times 10$ clusters
+
+    \item Uniformly sample 20 (or more) subjects into the boundaries of each of cluster for a total of 2000 subjects (or more) -> can we sample an outcome directly from a cluster region and not specific points?
+
+    \item Consider a normal distribution $\left(Y_i \sim N\left(\mu, \sigma^2\right)\right)$ (or other distribution) to model the distribution of the arbitrary observed primary outcome
+\end{itemize} 
+
+\subsection{Simulation Scenarios \& Response}
+
+X
+
+\subsection{Simulation Procedure}
+
+X
+
+\subsection{Simulation Evaluation Metrics}
+
+X
+
+\subsection{Intervention Effect Estimates (2x4 grid)}
+
+X
+
+\subsection{Intervention Effect Estimates (3x3 grid)}
+
+X
+
+\subsection{Intervention Effect Estimates (3x4 grid)}
+
+X
+
+% --- GA Study APPLICATION (application in practice) ---
+\section{Application}
+
+X
+
+\subsection{Background of Probation in North Carolina}
+
+X
+
+\subsection{Case 1: Trauma-Informed and Engaged Supervision}
+
+X
+
+\subsection{Case 2: Testing an implementation strategy for specialty mental health probation}
+
+X
+
+\subsection{Recommendations for treatment assignment}
+
+X
+
+% --- DISCUSSION ---
+\section{Discussion}
+
+X
+
+\subsection{Relevance of results}
+
+X
+
+\subsection{Limitations}
+
+X
+
+\subsection{Future Considerations}
+
+X
+
+% --- AUTHORS CONTRIBUTIONS ---
+\subsection*{Authors' Contributions}
+A.W. wrote the manuscript text and prepared figures 1-7 \& 10. T.V. provided figures 8 \& 9 and provided advisement for the text of section 4 of the manuscript. All authors reviewed the manuscript.
+
+% --- FUNDING ---
+\subsection*{Funding}
+Dr. Van Deinse is supported by the National Institutes of Mental Health (K01MH129619). The trauma-informed supervision approached referenced in this manuscript was funded by the Bureau of Justice Assistance 15PBJA-24-GG-01896-PRJH and awarded to the North Carolina Department of Adult Correction.
+
+% --- DATA AVAILABILITY ---
+\subsection*{Data Availability}
+All data supporting the findings of this study are generated via simulation for the included simulation study. Summarized findings are included in tables X. The simulation data are available upon request and with permission of the authors.
+
+% --- DECLARATIONS ---
+\subsection*{Declarations}
+
+% Ethics, Consent to Participate, and Consent to Publish
+\subsubsection*{Ethics, Consent to Participate, and Consent to Publish}
+Not applicable.
+
+% Competing interests
+\subsubsection*{Competing interests}
+The authors declare that they have no competing interests.
+
+% --- APPENDIX --- (Include extra figures/equations/comments to be used later)
+%\section{Appendix}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- BIBLIOGRAPHY (from Zotero) ---
+% sample citations
+
+% print bibliography
+%\bibliographystyle{plain} % alphabetical order
+\bibliographystyle{unsrt} % order of appearance
+\bibliography{references.bib}
+\end{document}

@@ -1,0 +1,28 @@
+# Discussion {#sec-discussion}
+
+<!-- TODO: Develop this section with substantive discussion of findings, limitations, and future work. -->
+
+## Relevance of Results
+
+<!-- Content to be developed: why incidence-guided designs matter for spatial CRT practice, implications for trial design in public health -->
+
+## Limitations
+
+<!-- Content to be developed:
+  - Oracle MLE assumption (true spillover covariate known)
+  - Fixed true treatment effect (tau = 1.0)
+  - Equal cluster populations in Poisson mode
+  - Regular lattice grid (vs. irregular real-world geographies)
+  - Single grid size (G=10, N=100)
+-->
+
+## Future Considerations
+
+<!-- Content to be developed:
+  - Non-oracle estimation (omitting spillover covariate)
+  - Varying tau across scenarios
+  - Heterogeneous population sizes
+  - Irregular spatial geometries
+  - Larger grid sizes and sensitivity analysis
+  - Integration with real NC county/census tract data
+-->

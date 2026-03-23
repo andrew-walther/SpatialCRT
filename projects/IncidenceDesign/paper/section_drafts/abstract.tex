@@ -1,0 +1,36 @@
+% Purpose: Standalone LaTeX file to draft and preview the abstract independently.
+% Function: Includes its own minimal preamble so it compiles in Overleaf without relying on main.tex.
+
+\documentclass[11pt]{article} % Note: Corrected syntax for document class options
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,margin=1.0in]{geometry}
+\usepackage{amsmath,amssymb,amsthm} 
+
+%\linespread{1.15}
+\linespread{2.0} % double space (BMC Medical Research Methodology)
+
+% Define the custom keywords environment (copied from your main preamble)
+\newcommand{\keywords}[1]{%
+  \noindent\textbf{Keywords:} #1%
+}
+
+\begin{document}
+
+% Define keywords relevant to the spatial simulation study
+% \keywords{spatial autoregressive, simple random sampling, block stratified sampling, treatment assignment, clinical trials} 
+
+\vspace{1em} % Adds vertical space between keywords and the abstract text
+
+% --- ABSTRACT ---
+% Structured abstract environment containing the core manuscript summary
+\begin{abstract}
+   $\textbf{Background}$: Investigators designing cluster randomized trials (CRTs) frequently encounter spatial dependence and spillover effects. While prior work has explored spatial stratification under uniform assumptions, real-world trials often feature strong, spatially heterogeneous baseline incidence. Understanding how to leverage known prior incidence to optimize spatial treatment assignment remains a critical knowledge gap.
+
+   $\textbf{Methods \& Simulation}$: A Monte Carlo simulation on a spatial lattice evaluated six treatment assignment strategies, contrasting strictly spatial methods (block stratification, $2\times 2$ random blocking, and treatment isolation buffer clusters) with covariate-constrained methods utilizing baseline incidence (median incidence grouping, saturation quadrants, and treatment balanced incidence quartiles). A Spatial Durbin Model (SDM) generated outcomes across varying levels of spatial dependence, spillover magnitude, and incidence structures (iid Uniform, spatially correlated, and Poisson count-based rates). Intervention effect estimation was evaluated strictly using spatial Maximum Likelihood Estimation (MLE) to appropriately model spatial auto-regression.
+
+   $\textbf{Results}$: Strict geometric alternation (e.g., the block stratification design) induced systematic confounding when incidence was spatially structured, producing the highest Mean Squared Error (MSE) and poorest inferential coverage. Conversely, assignment mechanisms that introduced regional variation optimized estimation efficiency. The saturation quadrants design achieved the lowest overall MSE; varying treatment saturation regionally provided the necessary spatial contrast for the MLE to cleanly separate direct intervention effects from indirect spillover. Furthermore, pairing these incidence-aware designs with MLE consistently achieved near-nominal 95\% coverage probabilities, even under high spatial dependence.
+
+   $\textbf{Conclusion}$: Historical incidence distributions must directly inform treatment assignment methodology in spatial CRTs. Strategically varying treatment allocation based on regional boundaries or baseline burden—rather than relying on strict geographic blocking—drastically reduces estimation error. Investigators anticipating spillover should prioritize spatially contrasting assignment strategies paired with spatial autoregressive modeling to maximize trial validity.
+\end{abstract}
+
+\end{document}

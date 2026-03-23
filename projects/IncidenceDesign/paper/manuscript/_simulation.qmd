@@ -1,0 +1,80 @@
+# Simulation Study and Results {#sec-simulation}
+
+To empirically evaluate the performance of the proposed spatial and covariate-constrained sampling designs, an extensive Monte Carlo simulation study was conducted. The simulation assesses the efficiency and inferential validity of estimating the direct intervention effect ($\tau$) under varying degrees of spatial dependence, spillover magnitude, and structurally diverse baseline incidence distributions.
+
+## Simulation Algorithm and Parameter Space
+
+The simulation was executed on a fixed $10 \times 10$ regular spatial lattice, yielding a total of $N = 100$ clusters. The true intervention effect ($\tau$), the baseline covariate coefficient ($\beta$), and the error variance ($\sigma^2$) were held constant at $1.0$ across all scenarios to establish a standardized baseline for comparison.
+
+The parameter space was designed to capture a comprehensive range of spatial trial conditions. We systematically varied the following parameters:
+
+- **Spatial Dependence ($\rho$):** $\{0.00, 0.01, 0.20, 0.50\}$
+- **Spillover Magnitude ($\gamma$):** $\{0.50, 0.60, 0.70, 0.80\}$
+- **Spillover Target Mechanism:** Bidirectional vs. Control-Only
+- **Contiguity Definition:** Rook vs. Queen
+- **Incidence Generation Modes:** iid Uniform, SAR Filter ($\rho_X \in \{0.20, 0.50\}$), Poisson Count-Based ($\rho_X \in \{0.20, 0.50\}$)
+- **Treatment Assignment Designs:** All 8 designs described in @sec-methods
+
+This yielded 5 incidence configurations $\times$ 2 neighbor types $\times$ 4 $\rho$ values $\times$ 4 $\gamma$ values $\times$ 2 spillover types $\times$ 8 designs = **2,560 total scenarios**.
+
+To ensure rigorous evaluation while maintaining computational feasibility under spatial Maximum Likelihood Estimation (MLE), a nested resampling structure was employed:
+
+1. **Spatial Initialization:** Establish the geographic grid and compute the row-standardized spatial weight matrix $\mathbf{W}$.
+2. **Incidence Generation:** Draw the baseline incidence vector $\mathbf{X}$ according to the specified generation mode (generated once per incidence configuration and held fixed across all spatial parameter combinations).
+3. **Design Resampling ($R_d = 25$):** For each of the eight evaluated sampling designs, generate 25 distinct binary treatment assignment vectors ($\mathbf{Z}$).
+4. **Outcome Resampling ($R_o = 10$):** For each treatment assignment vector, simulate 10 unique error realizations ($\mathbf{\epsilon}$) to produce distinct outcome vectors ($\mathbf{Y}$) via the Spatial Durbin Model (SDM).
+5. **Estimation:** Fit the spatial autoregressive MLE model to each generated dataset to estimate $\hat{\tau}$ and its standard error.
+
+This nested structure yielded $R_{\text{total}} = 250$ independent model evaluations per scenario.
+
+## Evaluation Metrics
+
+For each simulated trial iteration $r \in \{1, \dots, R_{\text{total}}\}$, the direct intervention effect was estimated via spatial MLE, producing the estimate $\hat{\tau}_r$ and its corresponding standard error $\text{SE}(\hat{\tau}_r)$. The comparative efficacy of the eight sampling designs was quantified using four primary performance metrics:
+
+1. **Bias:** The empirical mean deviation of the estimates from the true intervention effect ($\tau = 1.0$).
+$$\text{Bias} = \frac{1}{R_{\text{total}}} \sum_{r=1}^{R_{\text{total}}} (\hat{\tau}_r - \tau)$$
+
+2. **Empirical Standard Deviation (SD):** The variability of the point estimates across iterations.
+$$\text{SD} = \sqrt{ \frac{1}{R_{\text{total}} - 1} \sum_{r=1}^{R_{\text{total}}} \left( \hat{\tau}_r - \bar{\hat{\tau}} \right)^2 }$$
+
+3. **Mean Squared Error (MSE):** The primary metric of overall estimation efficiency.
+$$\text{MSE} = \text{Bias}^2 + \text{SD}^2 = \frac{1}{R_{\text{total}}} \sum_{r=1}^{R_{\text{total}}} (\hat{\tau}_r - \tau)^2$$
+
+4. **Coverage Probability (95% CI):** The proportion of simulated trials where the true parameter $\tau$ fell within the estimated 95% Wald confidence interval.
+$$\text{Coverage} = \frac{1}{R_{\text{total}}} \sum_{r=1}^{R_{\text{total}}} \mathbf{1} \left\{ \hat{\tau}_r - 1.96 \cdot \text{SE}(\hat{\tau}_r) \leq \tau \leq \hat{\tau}_r + 1.96 \cdot \text{SE}(\hat{\tau}_r) \right\}$$
+
+## Results: Design Performance
+
+<!-- TODO: Replace placeholder content below with live R-generated figures and tables from the simulation results. Key figures to include:
+  - Overall MSE comparison table (all 8 designs)
+  - MSE boxplots by contiguity type
+  - Design rank frequency tables
+  - Faceted MSE plots across rho and gamma
+  - Coverage probability comparison
+  Reference the unified project report (paper/report/IncidenceSpatialCRT_Report.qmd) for the complete R code chunks that generate these outputs.
+-->
+
+### Overall Efficiency and Robustness
+
+<!-- Content to be populated with simulation results. Key findings:
+  - Design 8 (Incidence-Guided Saturation Quadrants) achieves lowest overall MSE (~0.079)
+  - Design 3 (Saturation Quadrants) is a close second (~0.080)
+  - Design 1 (Checkerboard) is consistently worst (MSE ~0.744, coverage ~55%)
+  - MLE achieves ~0.94 coverage for all designs except D1
+-->
+
+### Impact of Spillover Magnitude and Spatial Dependence
+
+<!-- Content to be populated. Key findings:
+  - Spillover type (control-only vs. both) is the most influential parameter
+  - Gamma (spillover magnitude) has negligible effect on design rankings
+  - Rho (spatial autocorrelation) increases MSE but does not change relative design rankings
+-->
+
+### Inferential Coverage and Type I Error Control
+
+<!-- Content to be populated. Key findings:
+  - MLE paired with non-checkerboard designs achieves near-nominal 95% coverage
+  - Checkerboard design produces severely anti-conservative CIs
+  - Incidence-guided designs maintain valid inference across all parameter regimes
+-->
