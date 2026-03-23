@@ -1,0 +1,119 @@
+% Purpose: Standalone LaTeX file to draft and preview the Simulation Study section.
+% Function: Includes a minimal preamble and sets the section counter to 2 so it renders as Section 3.
+
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,margin=1.0in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm} 
+\usepackage{graphicx}
+\usepackage{booktabs} % For professional table formatting
+
+%\linespread{1.15}
+\linespread{2.0} % double space (BMC Medical Research Methodology)
+
+\begin{document}
+\setcounter{section}{2} % Forces the following \section to be numbered 3
+
+% --- SIMULATION STUDY & RESULTS ---
+\section{Simulation Study and Results}
+
+To empirically evaluate the performance of the proposed spatial and covariate-constrained sampling designs, an extensive Monte Carlo simulation study was conducted. The simulation assesses the efficiency and inferential validity of estimating the direct intervention effect ($\tau$) under varying degrees of spatial dependence, spillover magnitude, and structurally diverse baseline incidence distributions.
+
+\subsection{Simulation Algorithm and Parameter Space}
+
+The simulation was executed on a fixed $10 \times 10$ regular spatial lattice, yielding a total of $N = 100$ clusters. The true intervention effect ($\tau$), the baseline covariate coefficient ($\beta$), and the error variance ($\sigma^2$) were held constant at $1.0$ across all scenarios to establish a standardized baseline for comparison.
+
+The parameter space was designed to capture a comprehensive range of spatial trial conditions. We systematically varied the following parameters:
+\begin{itemize}
+    \item \textbf{Spatial Dependence ($\rho$):} $\{0.00, 0.01, 0.20, 0.50\}$
+    \item \textbf{Spillover Magnitude ($\gamma$):} $\{0.50, 0.60, 0.70, 0.80\}$
+    \item \textbf{Spillover Target Mechanism:} Bidirectional vs. Control-Only
+    \item \textbf{Contiguity Definition:} Rook vs. Queen
+    \item \textbf{Incidence Generation Modes:} iid Uniform, SAR Filter, Poisson Count-Based
+\end{itemize}
+
+To ensure rigorous evaluation while maintaining computational feasibility under spatial Maximum Likelihood Estimation (MLE), a nested resampling structure was employed. The simulation algorithm proceeded as follows for each unique parameter configuration:
+\begin{enumerate}
+    \item \textbf{Spatial Initialization:} Establish the geographic grid and compute the row-standardized spatial weight matrix $\bm{W}$.
+    \item \textbf{Incidence Generation:} Draw the baseline incidence vector $\bm{X}$ according to the specified generation mode.
+    \item \textbf{Design Resampling ($R_d = 25$):} For each of the six evaluated sampling designs, generate $25$ distinct binary treatment assignment vectors ($\bm{Z}$).
+    \item \textbf{Outcome Resampling ($R_o = 10$):} For each treatment assignment vector, simulate $10$ unique universes of error ($\bm{\epsilon}$) to produce distinct outcome vectors ($\bm{Y}$) via the Spatial Durbin Model (SDM).
+    \item \textbf{Estimation:} Fit the spatial autoregressive MLE model to each generated dataset to estimate $\hat{\tau}$ and its standard error.
+\end{enumerate}
+This nested structure yielded $R_{total} = 250$ independent model evaluations per scenario. Across all parameter combinations, this generated a highly robust assessment framework capturing both assignment variability and outcome noise.
+
+\subsection{Evaluation Metrics}
+
+For each simulated trial iteration $r \in \{1, \dots, R_{total}\}$, the direct intervention effect was estimated via spatial MLE, producing the estimate $\hat{\tau}_r$ and its corresponding standard error $\text{SE}(\hat{\tau}_r)$. The comparative efficacy of the six sampling designs was quantified using four primary performance metrics:
+
+\begin{enumerate}
+    \item \textbf{Bias:} The empirical mean deviation of the estimates from the true intervention effect ($\tau = 1.0$).
+    \begin{equation}
+        \text{Bias} = \frac{1}{R_{total}} \sum_{r=1}^{R_{total}} (\hat{\tau}_r - \tau)
+    \end{equation}
+
+    \item \textbf{Empirical Standard Deviation (SD):} The variability of the point estimates across the simulation iterations, reflecting the statistical stability of the design.
+    \begin{equation}
+        \text{SD} = \sqrt{ \frac{1}{R_{total} - 1} \sum_{r=1}^{R_{total}} \left( \hat{\tau}_r - \bar{\hat{\tau}} \right)^2 }
+    \end{equation}
+
+    \item \textbf{Mean Squared Error (MSE):} The primary metric of overall estimation efficiency, summarizing the trade-off between Bias and Variance.
+    \begin{equation}
+        \text{MSE} = \text{Bias}^2 + \text{SD}^2 = \frac{1}{R_{total}} \sum_{r=1}^{R_{total}} (\hat{\tau}_r - \tau)^2
+    \end{equation}
+
+    \item \textbf{Coverage Probability (95\% CI):} The proportion of simulated trials where the true parameter $\tau$ fell within the estimated 95\% Wald confidence interval. Let $\mathbf{1}\{\cdot\}$ denote the indicator function.
+    \begin{equation}
+        \text{Coverage} = \frac{1}{R_{total}} \sum_{r=1}^{R_{total}} \mathbf{1} \left\{ \hat{\tau}_r - 1.96 \cdot \text{SE}(\hat{\tau}_r) \leq \tau \leq \hat{\tau}_r + 1.96 \cdot \text{SE}(\hat{\tau}_r) \right\}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Results: Design Performance by Incidence Structure}
+
+[STAND-IN PARAGRAPH: This section will detail the findings from the MLE simulation output. It will contrast how strictly spatial designs (e.g., Block Stratification) behave when aligned with clustered incidence (SAR and Poisson modes). It will then highlight how covariate-constrained designs successfully minimize MSE by actively orthogonalizing the treatment vector from the underlying risk distribution.]
+
+\subsubsection{Overall Efficiency and Robustness}
+
+[STAND-IN PARAGRAPH: Discussion of the aggregated MSE and Bias results across all spatial parameter combinations, introducing Table 1 and Figure 2.]
+
+\begin{table}[htbp]
+    \centering
+    \caption{Overall Average Bias, SD, and MSE by Treatment Assignment Design}
+    \label{tab:overall_results}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Sampling Design} & \textbf{Avg. Bias} & \textbf{Avg. SD} & \textbf{Avg. MSE} \\
+        \midrule
+        \textit{[Data Placeholder: Balanced Quartiles]} & 0.000 & 0.000 & 0.000 \\
+        \textit{[Data Placeholder: Saturation Quadrants]} & 0.000 & 0.000 & 0.000 \\
+        \textit{[Data Placeholder: Median Incidence Grouping]} & 0.000 & 0.000 & 0.000 \\
+        \textit{[Data Placeholder: $2 \times 2$ Random Blocking]} & 0.000 & 0.000 & 0.000 \\
+        \textit{[Data Placeholder: Isolation Buffer]} & 0.000 & 0.000 & 0.000 \\
+        \textit{[Data Placeholder: Block Stratification]} & 0.000 & 0.000 & 0.000 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \rule{0.8\textwidth}{6cm} % Placeholder box for the visual plot
+    \caption{Distribution of Estimation Error (MSE) by Spatial Contiguity (Rook vs. Queen). The boxplots aggregate performance across all spatial dependence ($\rho$) and spillover ($\gamma$) parameters, demonstrating the overall stability of the incidence-guided designs compared to strictly spatial methods.}
+    \label{fig:mse_boxplot}
+\end{figure}
+
+\subsubsection{Impact of Spillover Magnitude and Spatial Dependence}
+
+[STAND-IN PARAGRAPH: Detailed breakdown of how increasing $\rho$ and $\gamma$ interact with the designs. Will reference the faceted master comparison plot to show that while all designs degrade under extreme spatial dependence, the rate of degradation is significantly slower for covariate-constrained algorithms.]
+
+\begin{figure}[htbp]
+    \centering
+    \rule{0.9\textwidth}{7cm} % Placeholder box for the master comparison plot
+    \caption{Design Comparison: Mean Squared Error (MSE) across Simulation Scenarios. The faceted grid illustrates performance across varying levels of spatial dependence ($\rho$) and spillover magnitudes ($\gamma$).}
+    \label{fig:master_comparison}
+\end{figure}
+
+\subsubsection{Inferential Coverage and Type I Error Control}
+
+[STAND-IN PARAGRAPH: Final analysis paragraph focusing on the 95\% Coverage metric. Will explain that accurate point estimation (low bias) must be paired with accurate variance estimation. Incidence-constrained designs paired with MLE appropriately managed the spatial feedback loop, resulting in nominal ($\sim 0.95$) coverage rates.]
+
+\end{document}

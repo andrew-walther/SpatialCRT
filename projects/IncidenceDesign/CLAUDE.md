@@ -55,8 +55,21 @@ design recommendations should be based on MLE results.
 | `08_design_recommendations.R` | ~891 | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
 | `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative report | Knitted to `results/MLE_design_recommendation_report.pdf` |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
+| **paper/report/** | | | |
+| `IncidenceSpatialCRT_Report.qmd` | ~900 | Unified project report | Consolidates 00, 07, 09 into one end-to-end reference (HTML + PDF) |
+| **paper/manuscript/** | | | |
+| `IncidenceSpatialCRT_Manuscript.qmd` | ~80 | Master manuscript | Assembles child sections via `{{< include >}}` |
+| `_abstract.qmd` | ~20 | Structured abstract | Background, Methods, Results, Conclusion |
+| `_introduction.qmd` | ~40 | Introduction | Lit review, motivation, aims (converted from LaTeX draft) |
+| `_methods.qmd` | ~150 | Theoretical methods | Spatial structure, SDM, incidence modes, 8 designs, MLE |
+| `_simulation.qmd` | ~80 | Simulation study | Parameter space, metrics, results (placeholders for figures) |
+| `_application.qmd` | ~15 | Application | SUD in NC (skeleton — content TBD) |
+| `_discussion.qmd` | ~30 | Discussion | Relevance, limitations, future work (skeleton — content TBD) |
+| **paper/section_drafts/** | | | |
+| `*.tex` | varies | Archival LaTeX drafts | Original Gemini-drafted sections (6-design era) |
+| `references.bib` | ~113K | Canonical bibliography | Comprehensive Zotero export |
 | **paper/** | | | |
-| `SpatialCRT_IncidenceDesign_Manuscript.qmd` | ~28 | Manuscript template | Quarto HTML manuscript (scaffold) |
+| `spatialCRT.bib` | ~86K | Secondary bibliography | Zotero export (subset) |
 | `SpatialCRT_IncidenceDesign_Presentation.qmd` | ~26 | Presentation template | Quarto revealjs slides (scaffold) |
 
 ---

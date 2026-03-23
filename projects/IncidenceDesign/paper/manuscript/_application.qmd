@@ -1,0 +1,15 @@
+# Application {#sec-application}
+
+<!-- TODO: Develop this section with substantive content about applying the simulation findings to real-world spatial CRT design. -->
+
+## Background of Sudden Death (SUD) in North Carolina
+
+<!-- Content to be developed: epidemiological context of SUD in NC counties, base rate ~35/100,000, spatial clustering patterns -->
+
+## Spatial Considerations
+
+<!-- Content to be developed: geographic factors that create spatially heterogeneous incidence (flood risk, pollution, socioeconomic factors) -->
+
+## Recommendations for Treatment Assignment
+
+<!-- Content to be developed: practical guidance for applying simulation findings to design a real spatial CRT in the NC SUD context -->

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrew Walther">
+<meta name="author" content="Tonya Van Deinse">
+<meta name="author" content="Feng-Chang Lin">
+<meta name="dcterms.date" content="2026-03-23">
+
+<title>Incidence-Guided Treatment Assignment Designs for Spatial Cluster Randomized Trials: A Simulation Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="IncidenceSpatialCRT_Manuscript_files/libs/clipboard/clipboard.min.js"></script>
+<script src="IncidenceSpatialCRT_Manuscript_files/libs/quarto-html/quarto.js"></script>
+<script src="IncidenceSpatialCRT_Manuscript_files/libs/quarto-html/popper.min.js"></script>
+<script src="IncidenceSpatialCRT_Manuscript_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="IncidenceSpatialCRT_Manuscript_files/libs/quarto-html/anchor.min.js"></script>
+<link href="IncidenceSpatialCRT_Manuscript_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="IncidenceSpatialCRT_Manuscript_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="IncidenceSpatialCRT_Manuscript_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="IncidenceSpatialCRT_Manuscript_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="IncidenceSpatialCRT_Manuscript_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract">Abstract</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#background-motivation" id="toc-background-motivation" class="nav-link" data-scroll-target="#background-motivation"><span class="header-section-number">1.1</span> Background &amp; Motivation</a></li>
+  <li><a href="#aims-contributions" id="toc-aims-contributions" class="nav-link" data-scroll-target="#aims-contributions"><span class="header-section-number">1.2</span> Aims &amp; Contributions</a></li>
+  </ul></li>
+  <li><a href="#sec-methods" id="toc-sec-methods" class="nav-link" data-scroll-target="#sec-methods"><span class="header-section-number">2</span> Theoretical Methods</a>
+  <ul class="collapse">
+  <li><a href="#study-region-and-spatial-structure" id="toc-study-region-and-spatial-structure" class="nav-link" data-scroll-target="#study-region-and-spatial-structure"><span class="header-section-number">2.1</span> Study Region and Spatial Structure</a></li>
+  <li><a href="#data-generating-process-and-the-spatial-durbin-model" id="toc-data-generating-process-and-the-spatial-durbin-model" class="nav-link" data-scroll-target="#data-generating-process-and-the-spatial-durbin-model"><span class="header-section-number">2.2</span> Data Generating Process and the Spatial Durbin Model</a></li>
+  <li><a href="#spatially-heterogeneous-incidence-generation" id="toc-spatially-heterogeneous-incidence-generation" class="nav-link" data-scroll-target="#spatially-heterogeneous-incidence-generation"><span class="header-section-number">2.3</span> Spatially Heterogeneous Incidence Generation</a></li>
+  <li><a href="#treatment-assignment-designs" id="toc-treatment-assignment-designs" class="nav-link" data-scroll-target="#treatment-assignment-designs"><span class="header-section-number">2.4</span> Treatment Assignment Designs</a>
+  <ul class="collapse">
+  <li><a href="#strictly-spatial-methods" id="toc-strictly-spatial-methods" class="nav-link" data-scroll-target="#strictly-spatial-methods"><span class="header-section-number">2.4.1</span> Strictly Spatial Methods</a></li>
+  <li><a href="#covariate-constrained-methods-incidence-guided" id="toc-covariate-constrained-methods-incidence-guided" class="nav-link" data-scroll-target="#covariate-constrained-methods-incidence-guided"><span class="header-section-number">2.4.2</span> Covariate-Constrained Methods (Incidence-Guided)</a></li>
+  </ul></li>
+  <li><a href="#estimation-via-maximum-likelihood" id="toc-estimation-via-maximum-likelihood" class="nav-link" data-scroll-target="#estimation-via-maximum-likelihood"><span class="header-section-number">2.5</span> Estimation via Maximum Likelihood</a></li>
+  </ul></li>
+  <li><a href="#sec-simulation" id="toc-sec-simulation" class="nav-link" data-scroll-target="#sec-simulation"><span class="header-section-number">3</span> Simulation Study and Results</a>
+  <ul class="collapse">
+  <li><a href="#simulation-algorithm-and-parameter-space" id="toc-simulation-algorithm-and-parameter-space" class="nav-link" data-scroll-target="#simulation-algorithm-and-parameter-space"><span class="header-section-number">3.1</span> Simulation Algorithm and Parameter Space</a></li>
+  <li><a href="#evaluation-metrics" id="toc-evaluation-metrics" class="nav-link" data-scroll-target="#evaluation-metrics"><span class="header-section-number">3.2</span> Evaluation Metrics</a></li>
+  <li><a href="#results-design-performance" id="toc-results-design-performance" class="nav-link" data-scroll-target="#results-design-performance"><span class="header-section-number">3.3</span> Results: Design Performance</a>
+  <ul class="collapse">
+  <li><a href="#overall-efficiency-and-robustness" id="toc-overall-efficiency-and-robustness" class="nav-link" data-scroll-target="#overall-efficiency-and-robustness"><span class="header-section-number">3.3.1</span> Overall Efficiency and Robustness</a></li>
+  <li><a href="#impact-of-spillover-magnitude-and-spatial-dependence" id="toc-impact-of-spillover-magnitude-and-spatial-dependence" class="nav-link" data-scroll-target="#impact-of-spillover-magnitude-and-spatial-dependence"><span class="header-section-number">3.3.2</span> Impact of Spillover Magnitude and Spatial Dependence</a></li>
+  <li><a href="#inferential-coverage-and-type-i-error-control" id="toc-inferential-coverage-and-type-i-error-control" class="nav-link" data-scroll-target="#inferential-coverage-and-type-i-error-control"><span class="header-section-number">3.3.3</span> Inferential Coverage and Type I Error Control</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#sec-application" id="toc-sec-application" class="nav-link" data-scroll-target="#sec-application"><span class="header-section-number">4</span> Application</a>
+  <ul class="collapse">
+  <li><a href="#background-of-sudden-death-sud-in-north-carolina" id="toc-background-of-sudden-death-sud-in-north-carolina" class="nav-link" data-scroll-target="#background-of-sudden-death-sud-in-north-carolina"><span class="header-section-number">4.1</span> Background of Sudden Death (SUD) in North Carolina</a></li>
+  <li><a href="#spatial-considerations" id="toc-spatial-considerations" class="nav-link" data-scroll-target="#spatial-considerations"><span class="header-section-number">4.2</span> Spatial Considerations</a></li>
+  <li><a href="#recommendations-for-treatment-assignment" id="toc-recommendations-for-treatment-assignment" class="nav-link" data-scroll-target="#recommendations-for-treatment-assignment"><span class="header-section-number">4.3</span> Recommendations for Treatment Assignment</a></li>
+  </ul></li>
+  <li><a href="#sec-discussion" id="toc-sec-discussion" class="nav-link" data-scroll-target="#sec-discussion"><span class="header-section-number">5</span> Discussion</a>
+  <ul class="collapse">
+  <li><a href="#relevance-of-results" id="toc-relevance-of-results" class="nav-link" data-scroll-target="#relevance-of-results"><span class="header-section-number">5.1</span> Relevance of Results</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">5.2</span> Limitations</a></li>
+  <li><a href="#future-considerations" id="toc-future-considerations" class="nav-link" data-scroll-target="#future-considerations"><span class="header-section-number">5.3</span> Future Considerations</a></li>
+  <li><a href="#authors-contributions" id="toc-authors-contributions" class="nav-link" data-scroll-target="#authors-contributions">Authors’ Contributions</a></li>
+  <li><a href="#funding" id="toc-funding" class="nav-link" data-scroll-target="#funding">Funding</a></li>
+  <li><a href="#data-availability" id="toc-data-availability" class="nav-link" data-scroll-target="#data-availability">Data Availability</a></li>
+  <li><a href="#declarations" id="toc-declarations" class="nav-link" data-scroll-target="#declarations">Declarations</a>
+  <ul class="collapse">
+  <li><a href="#ethics-consent-to-participate-and-consent-to-publish" id="toc-ethics-consent-to-participate-and-consent-to-publish" class="nav-link" data-scroll-target="#ethics-consent-to-participate-and-consent-to-publish">Ethics, Consent to Participate, and Consent to Publish</a></li>
+  <li><a href="#competing-interests" id="toc-competing-interests" class="nav-link" data-scroll-target="#competing-interests">Competing Interests</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="IncidenceSpatialCRT_Manuscript.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Incidence-Guided Treatment Assignment Designs for Spatial Cluster Randomized Trials: A Simulation Study</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Andrew Walther </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            The University of North Carolina at Chapel Hill, Department of Biostatistics
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Tonya Van Deinse </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            The University of North Carolina at Chapel Hill, School of Social Work
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Feng-Chang Lin </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            The University of North Carolina at Chapel Hill, Department of Biostatistics
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 23, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><strong>Keywords:</strong> spatial autoregressive, treatment assignment, cluster randomized trials, spillover effects, incidence-guided design, simulation study</p>
+<section id="abstract" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="abstract">Abstract</h2>
+<p><strong>Background</strong>: Investigators designing cluster randomized trials (CRTs) frequently encounter spatial dependence and spillover effects. While prior work has explored spatial stratification under uniform assumptions, real-world trials often feature strong, spatially heterogeneous baseline incidence. Understanding how to leverage known prior incidence to optimize spatial treatment assignment remains a critical knowledge gap.</p>
+<p><strong>Methods &amp; Simulation</strong>: A Monte Carlo simulation on a <span class="math inline">\(10 \times 10\)</span> spatial lattice evaluated eight treatment assignment strategies, contrasting strictly spatial methods (checkerboard stratification, <span class="math inline">\(2\times 2\)</span> random blocking, treatment isolation buffer clusters, and saturation quadrants) with covariate-constrained methods utilizing baseline incidence (median incidence grouping, treatment balanced incidence quartiles, balanced halves, and incidence-guided saturation quadrants). A Spatial Durbin Model (SDM) generated outcomes across varying levels of spatial dependence, spillover magnitude, and incidence structures (iid Uniform, spatially correlated, and Poisson count-based rates). Intervention effect estimation was evaluated using spatial Maximum Likelihood Estimation (MLE) to appropriately model spatial auto-regression, across 2,560 total parameter scenarios.</p>
+<p><strong>Results</strong>: Strict geometric alternation (the checkerboard design) induced systematic confounding when incidence was spatially structured, producing the highest Mean Squared Error (MSE <span class="math inline">\(\approx\)</span> 0.744) and poorest inferential coverage ($<span class="math inline">\(55%). Conversely, assignment mechanisms that introduced regional variation optimized estimation efficiency. The incidence-guided saturation quadrants design (Design 8) and saturation quadrants design (Design 3) achieved the lowest overall MSE (\)</span>$ 0.079–0.080), with MLE consistently achieving near-nominal 95% coverage probabilities across all non-checkerboard designs, even under high spatial dependence.</p>
+<p><strong>Conclusion</strong>: Historical incidence distributions must directly inform treatment assignment methodology in spatial CRTs. Strategically varying treatment allocation based on regional boundaries and baseline burden—rather than relying on strict geographic blocking—drastically reduces estimation error. Investigators anticipating spillover should prioritize spatially contrasting assignment strategies paired with spatial autoregressive modeling to maximize trial validity.</p>
+</section>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<section id="background-motivation" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="background-motivation"><span class="header-section-number">1.1</span> Background &amp; Motivation</h2>
+<p>Randomized controlled trials (RCTs) represent the preeminent methodological framework for establishing causal inference when evaluating the efficacy and safety of novel interventions <span class="citation" data-cites="pocock_clinical_1983 smith_field_2015">(<a href="#ref-pocock_clinical_1983" role="doc-biblioref">Pocock 1983</a>; <a href="#ref-smith_field_2015" role="doc-biblioref">Smith, Morrow, and Ross 2015</a>)</span>. By randomly allocating subjects to intervention or control arms, investigators ensure that measured and unmeasured confounding variables are theoretically balanced in expectation, thereby permitting an unbiased estimation of the average treatment effect. However, in numerous public health and social science contexts, randomizing at the individual level is logistically infeasible or scientifically inappropriate due to the community-level delivery of the intervention. For instance, interventions such as mass media health education campaigns or community-wide vector control mechanisms inherently apply to collective groups rather than discrete individuals. In such scenarios, the cluster randomized trial (CRT) emerges as a rigorous alternative, allocating intact social units or geographically defined regions (e.g., schools, clinics, counties) to study arms <span class="citation" data-cites="hayes_cluster_2017 donner_design_2000">(<a href="#ref-hayes_cluster_2017" role="doc-biblioref">Hayes and Moulton 2017</a>; <a href="#ref-donner_design_2000" role="doc-biblioref">Donner and Klar 2000</a>)</span>.</p>
+<p>Although CRTs successfully mitigate logistical barriers and attenuate within-cluster treatment contamination, geographically clustered trials introduce complex spatial dynamics that challenge the fundamental statistical assumption of unit independence. Two primary and interrelated spatial phenomena uniquely compromise the internal validity of spatial CRTs: spillover effects and spatial dependence <span class="citation" data-cites="hayes_cluster_2017 hudgens_toward_2008">(<a href="#ref-hayes_cluster_2017" role="doc-biblioref">Hayes and Moulton 2017</a>; <a href="#ref-hudgens_toward_2008" role="doc-biblioref">Hudgens and Halloran 2008</a>)</span>. Spillover, or interference, occurs when the application of an intervention in one cluster alters the potential outcomes of subjects residing in neighboring unassigned clusters. This transboundary phenomenon is extensively documented in community-based research, particularly within infectious disease interventions such as the deployment of permethrin-impregnated bed nets <span class="citation" data-cites="binka_impact_1998 gimnig_effect_2003 hawley_community-wide_2003">(<a href="#ref-binka_impact_1998" role="doc-biblioref">Binka, Indome, and Smith 1998</a>; <a href="#ref-gimnig_effect_2003" role="doc-biblioref">Gimnig et al. 2003</a>; <a href="#ref-hawley_community-wide_2003" role="doc-biblioref">Hawley et al. 2003</a>)</span> and school-based deworming programs <span class="citation" data-cites="miguel_worms_2004">(<a href="#ref-miguel_worms_2004" role="doc-biblioref">Miguel and Kremer 2004</a>)</span>. Under these conditions, control clusters situated near intervention clusters may receive a protective positive externality, thereby artificially enhancing their observed outcomes. Failing to account for this interference violates the Stable Unit Treatment Value Assumption (SUTVA), frequently precipitating a severe underestimation of the true direct effect of the intervention <span class="citation" data-cites="anayaizquierdo_spatial_2021">(<a href="#ref-anayaizquierdo_spatial_2021" role="doc-biblioref">Anaya‐Izquierdo and Alexander 2021</a>)</span>.</p>
+<p>Compounding this methodological challenge is spatial dependence, conceptualized by Tobler’s First Law of Geography, which postulates that proximally located entities exhibit greater similarity than distant ones <span class="citation" data-cites="tobler_computer_1970">(<a href="#ref-tobler_computer_1970" role="doc-biblioref">Tobler 1970</a>)</span>. In a spatial CRT, adjacent clusters often share unmeasured environmental exposures or socioeconomic demographics, causing their outcomes to be correlated independent of treatment assignment <span class="citation" data-cites="cressie_statistics_1993">(<a href="#ref-cressie_statistics_1993" role="doc-biblioref">Cressie 1993</a>)</span>. Ignoring this underlying spatial structure inherently assumes a greater effective sample size than actually exists, which artificially deflates standard errors, inflates the Type I error rate, and jeopardizes valid statistical inference <span class="citation" data-cites="campbell_how_2014 ntani_consequences_2021">(<a href="#ref-campbell_how_2014" role="doc-biblioref">Campbell and Walters 2014</a>; <a href="#ref-ntani_consequences_2021" role="doc-biblioref">Ntani et al. 2021</a>)</span>.</p>
+<p>Historically, the biostatistical and epidemiological literature has primarily confronted these challenges through retrospective analytical adjustments rather than via proactive trial design modifications. A systematic review by <span class="citation" data-cites="jarvis_spatial_2017">Jarvis et al. (<a href="#ref-jarvis_spatial_2017" role="doc-biblioref">2017</a>)</span> indicated that spatial location is frequently treated as an afterthought in CRT design. When researchers do account for spatial phenomena, they typically rely upon spatial variable approaches (such as incorporating distance-based covariates) <span class="citation" data-cites="hawley_community-wide_2003 lenhart_insecticidetreated_2008 chao_contribution_2015">(<a href="#ref-hawley_community-wide_2003" role="doc-biblioref">Hawley et al. 2003</a>; <a href="#ref-lenhart_insecticidetreated_2008" role="doc-biblioref">Lenhart et al. 2008</a>; <a href="#ref-chao_contribution_2015" role="doc-biblioref">Chao et al. 2015</a>)</span> or spatial modeling techniques that integrate geographic structure into the covariance matrix <span class="citation" data-cites="alexander_spatial_2003 silcocks_spatial_2010">(<a href="#ref-alexander_spatial_2003" role="doc-biblioref">Alexander et al. 2003</a>; <a href="#ref-silcocks_spatial_2010" role="doc-biblioref">Silcocks and Kendrick 2010</a>)</span>. While robust, relying solely on statistical correction post-data collection may result in a substantive loss of statistical power and remains highly vulnerable to model misspecification. Consequently, recent methodological literature has begun to advocate for addressing spatial interference proactively at the design stage, demonstrating that strictly spatial sampling strategies like block stratified sampling can minimize estimation variance compared to simple random sampling by physically isolating treatment clusters.</p>
+<p>Nevertheless, a critical gap remains regarding the performance of these design strategies under real-world conditions. The current spatial design literature predominantly operates under the assumption of a homogeneous spatial landscape. Empirically, this assumption rarely holds; geographic regions exhibit pronounced, spatially heterogeneous baseline incidence of primary outcomes prior to the introduction of any intervention. Conditions such as Sudden Unexpected Death (SUD) or localized infectious disease outbreaks frequently manifest in distinct geographic hotspots driven by localized socioeconomic determinants <span class="citation" data-cites="mirzaei_years_2019">(<a href="#ref-mirzaei_years_2019" role="doc-biblioref">Mirzaei et al. 2019</a>)</span>. When a spatially structured incidence profile exists, relying on strictly geometric randomization risks inducing severe systematic confounding. An intervention assignment may inadvertently align perfectly with an underlying disease hotspot, inducing structural multicollinearity. This confounds the spatial lag of the treatment with the endogenous spatial lag of the baseline risk, rendering it mathematically intractable for spatial autoregressive models to disentangle the direct intervention effect from the clustered pre-existing burden. Consequently, there is a profound lack of evidence-based guidance detailing how investigators might actively leverage known prior distributions of outcome incidence to optimize spatial treatment allocation.</p>
+</section>
+<section id="aims-contributions" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="aims-contributions"><span class="header-section-number">1.2</span> Aims &amp; Contributions</h2>
+<p>The present study addresses this critical methodological gap by shifting the analytical focus from retrospective spatial adjustments toward the rigorous evaluation of incidence-guided treatment sampling designs. By integrating pre-intervention epidemiological data directly into the randomization protocol, researchers can theoretically orthogonalize the treatment assignment from underlying spatial risks, thereby preserving the validity of subsequent causal inferences. The primary objective is to determine the extent to which the incorporation of historical incidence data during the treatment assignment phase minimizes estimation error for the direct intervention effect, particularly in the presence of unobserved spillover and spatial dependence. To achieve this objective, an extensive Monte Carlo simulation study is conducted on a regular spatial lattice, systematically comparing the estimation efficiency of eight distinct treatment assignment strategies. This analysis contrasts strictly spatial sampling methods (checkerboard stratification, 2x2 random blocking, isolation buffer, and saturation quadrants) against covariate-constrained methods that directly utilize baseline incidence data (median incidence grouping, balanced incidence quartiles, balanced halves, and incidence-guided saturation quadrants).</p>
+<p>Through this simulation framework, a comprehensive Data Generating Process is formalized utilizing a Spatial Durbin Model (SDM) that explicitly parameterizes both endogenous spatial dependence and exogenous treatment spillovers. The SDM provides a robust theoretical foundation by simultaneously accommodating the direct effects of the intervention, the indirect spillover effects originating from neighboring treated clusters, and the underlying spatial autocorrelation inherent to the outcome variable. Design performance is subsequently evaluated across multiple realistic data generation structures, including independent uniform incidence, spatially correlated incidence via a Simultaneous Autoregressive (SAR) filter, and Poisson count-based rates modeled after North Carolina SUD demographic data. Ultimately, the findings demonstrate that the estimation of intervention effects via rigorous spatial Maximum Likelihood Estimation (MLE) achieves optimal Mean Squared Error (MSE) predominantly when the initial sampling design actively balances underlying baseline risk and ensures sufficient regional variation. By identifying the systematic vulnerabilities of rigid spatial designs in heterogeneous environments, this research offers practical guidance enabling investigators to tailor sampling strategies based on prior incidence to facilitate more efficient and valid causal inference in complex spatial settings.</p>
+<p>The remainder of this article is organized as follows. <a href="#sec-methods">Section&nbsp;2</a> delineates the theoretical framework, detailing the spatial structure, the Spatial Durbin Model data generating process, the distinct incidence generation modes, and the specific algorithms underlying the eight treatment assignment designs. <a href="#sec-simulation">Section&nbsp;3</a> details the simulation study, encompassing the parameter space exploration, evaluation metrics, and comprehensive quantitative results. <a href="#sec-application">Section&nbsp;4</a> presents an empirical application of these findings to Sudden Unexpected Death in North Carolina. Finally, <a href="#sec-discussion">Section&nbsp;5</a> discusses the broader implications of these findings, provides actionable recommendations for researchers designing spatial CRTs, and outlines prevailing limitations alongside requisite avenues for future research.</p>
+</section>
+</section>
+<section id="sec-methods" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Theoretical Methods</h1>
+<section id="study-region-and-spatial-structure" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="study-region-and-spatial-structure"><span class="header-section-number">2.1</span> Study Region and Spatial Structure</h2>
+<p>To formalize the spatial relationships inherent in a cluster randomized trial (CRT), the theoretical study region is defined as a regular square lattice grid. Let the spatial domain be denoted as <span class="math inline">\(\mathcal{G} = \{s_1, s_2, \dots, s_N\}\)</span>, where each spatial cluster <span class="math inline">\(s_i\)</span> is located at discrete integer coordinates <span class="math inline">\((x_i, y_i)\)</span>. The total number of uniformly sized clusters within the geographic network is <span class="math inline">\(N\)</span>. Utilizing a regular lattice structure isolates the methodological evaluation of the sampling designs from the confounding effects of irregular polygon geometries and heterogeneous cluster populations, providing a standardized baseline to systematically compare trial designs <span class="citation" data-cites="cressie_statistics_1993">(<a href="#ref-cressie_statistics_1993" role="doc-biblioref">Cressie 1993</a>)</span>.</p>
+<p>The spatial relationships between clusters are parameterized using strict contiguity-based definitions, which dictate the pathways through which intervention effects and spatial dependence propagate. Two primary contiguity structures are formalized for this framework:</p>
+<ol type="1">
+<li><p><strong>Rook Contiguity:</strong> Clusters are considered adjacent neighbors strictly if they share a direct horizontal or vertical edge. The neighborhood set for a given cluster <span class="math inline">\(s_i\)</span> under Rook contiguity is defined as: <span class="math display">\[\mathcal{N}_R(s_i) = \left\{ s_j \in \mathcal{G} : |x_i - x_j| + |y_i - y_j| = 1 \right\}\]</span></p></li>
+<li><p><strong>Queen Contiguity:</strong> Clusters are considered neighbors if they share either a direct edge or a single vertex, inherently including diagonal adjacencies. The corresponding neighborhood set is defined as: <span class="math display">\[\mathcal{N}_Q(s_i) = \left\{ s_j \in \mathcal{G} : \max(|x_i - x_j|, |y_i - y_j|) = 1 \right\}\]</span></p></li>
+</ol>
+<p>To incorporate these neighborhood structures into the spatial econometric modeling, an <span class="math inline">\(N \times N\)</span> spatial weight matrix, <span class="math inline">\(\boldsymbol{W}\)</span>, is constructed <span class="citation" data-cites="lesage_introduction_2009">(<a href="#ref-lesage_introduction_2009" role="doc-biblioref">LeSage and Pace 2009</a>)</span>. Let <span class="math inline">\(\boldsymbol{A}\)</span> denote an <span class="math inline">\(N \times N\)</span> binary adjacency matrix where the element <span class="math inline">\(A_{ij} = 1\)</span> if <span class="math inline">\(s_j \in \mathcal{N}(s_i)\)</span>, and <span class="math inline">\(A_{ij} = 0\)</span> otherwise. By convention, <span class="math inline">\(A_{ii} = 0\)</span> for all <span class="math inline">\(i\)</span>. Clusters located on the boundaries of the spatial grid naturally possess fewer neighbors (edge effects). To facilitate the interpretation of spatial lags as localized neighborhood averages, the weight matrix <span class="math inline">\(\boldsymbol{W}\)</span> is row-standardized. This row-standardization inherently compensates for these edge effects by distributing the total weight equally among the available neighbors. The elements of the row-standardized spatial weight matrix are defined as:</p>
+<p><span class="math display">\[W_{ij} = \frac{A_{ij}}{\sum_{k=1}^N A_{ik}} \quad \text{for } i \neq j, \text{ and } W_{ii} = 0\]</span></p>
+</section>
+<section id="data-generating-process-and-the-spatial-durbin-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="data-generating-process-and-the-spatial-durbin-model"><span class="header-section-number">2.2</span> Data Generating Process and the Spatial Durbin Model</h2>
+<p>In community-based public health trials, the observed outcome within a specific geographic cluster is rarely independent of its surrounding spatial context. To capture both the endogenous spatial dependence of the outcome variable and the exogenous spillover effects generated by the localized treatment, the data-generating process utilizes the Spatial Durbin Model (SDM) <span class="citation" data-cites="lesage_introduction_2009">(<a href="#ref-lesage_introduction_2009" role="doc-biblioref">LeSage and Pace 2009</a>)</span>. The continuous outcome vector for the spatial grid, <span class="math inline">\(\boldsymbol{Y} = (Y_1, \dots, Y_N)^\top\)</span>, is expressed in its reduced structural form as:</p>
+<p><span class="math display">\[\boldsymbol{Y} = (\boldsymbol{I}_N - \rho \boldsymbol{W})^{-1} [\tau \boldsymbol{Z} + \gamma \cdot \text{Spill}(\boldsymbol{Z}) + \beta \boldsymbol{X} + \boldsymbol{\epsilon}]\]</span></p>
+<p>In this structural equation, the parameters operate as follows:</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{I}_N\)</span> is the <span class="math inline">\(N \times N\)</span> identity matrix.</li>
+<li><span class="math inline">\((\boldsymbol{I}_N - \rho \boldsymbol{W})^{-1}\)</span> acts as the global spatial multiplier, inducing global spatial dependence and ensuring that a localized intervention effect reverberates throughout the entire spatial network, decaying exponentially with topological distance.</li>
+<li><span class="math inline">\(\rho\)</span> is the spatial autocorrelation coefficient. The condition <span class="math inline">\(|\rho| &lt; 1\)</span> must be maintained to ensure the matrix is invertible and the spatial process remains stable.</li>
+<li><span class="math inline">\(\tau\)</span> is the primary estimand of interest, representing the true direct effect of the intervention on the treated cluster.</li>
+<li><span class="math inline">\(\boldsymbol{Z}\)</span> is an <span class="math inline">\(N \times 1\)</span> binary treatment assignment vector, where <span class="math inline">\(Z_i = 1\)</span> indicates that cluster <span class="math inline">\(s_i\)</span> received the active intervention.</li>
+<li><span class="math inline">\(\boldsymbol{X}\)</span> is an <span class="math inline">\(N \times 1\)</span> continuous vector representing the pre-existing baseline outcome incidence within each cluster.</li>
+<li><span class="math inline">\(\beta\)</span> is a scalar coefficient governing the direct linear effect of the baseline incidence <span class="math inline">\(\boldsymbol{X}\)</span> on the final observed outcome.</li>
+<li><span class="math inline">\(\boldsymbol{\epsilon}\)</span> represents an <span class="math inline">\(N \times 1\)</span> vector of independent and identically distributed random error terms, where <span class="math inline">\(\boldsymbol{\epsilon} \sim \mathcal{N}(\boldsymbol{0}, \sigma^2 \boldsymbol{I}_N)\)</span>.</li>
+</ul>
+<p>The function <span class="math inline">\(\text{Spill}(\boldsymbol{Z})\)</span> calculates an <span class="math inline">\(N \times 1\)</span> vector representing the degree of indirect treatment exposure that each cluster receives from its immediate neighbors, weighted by the scalar spillover magnitude parameter, <span class="math inline">\(\gamma\)</span>. The base spillover exposure for a given cluster <span class="math inline">\(i\)</span> is calculated as the proportion of its contiguous neighbors assigned to the intervention arm: <span class="math inline">\((\boldsymbol{W}\boldsymbol{Z})_i = \frac{1}{|\mathcal{N}(i)|} \sum_{j \in \mathcal{N}(i)} Z_j\)</span>.</p>
+<p>This framework accommodates two mathematical mechanisms of spillover propagation:</p>
+<ol type="1">
+<li><p><strong>Bidirectional Spillover (Intervention &amp; Control):</strong> The indirect spillover effect impacts all clusters in the network regardless of their internal treatment assignment status. The exposure for cluster <span class="math inline">\(i\)</span> is defined as <span class="math inline">\(\text{Spill}_i^{(\text{both})} = (\boldsymbol{W}\boldsymbol{Z})_i\)</span>.</p></li>
+<li><p><strong>Control-Only Spillover:</strong> The spillover effect functions exclusively as an externality for clusters that did not directly receive the intervention. The exposure is defined using a Hadamard product: <span class="math inline">\(\text{Spill}_i^{(\text{ctrl})} = (\boldsymbol{W}\boldsymbol{Z})_i \cdot (1 - Z_i)\)</span>.</p></li>
+</ol>
+</section>
+<section id="spatially-heterogeneous-incidence-generation" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="spatially-heterogeneous-incidence-generation"><span class="header-section-number">2.3</span> Spatially Heterogeneous Incidence Generation</h2>
+<p>The baseline incidence vector <span class="math inline">\(\boldsymbol{X}\)</span> models the historical, pre-intervention outcome rates distributed across the geographic clusters. To rigorously evaluate the vulnerability of spatial sampling designs to underlying data structures, <span class="math inline">\(\boldsymbol{X}\)</span> is generated via three distinct modes. The final incidence metric <span class="math inline">\(X_i\)</span> is computationally mapped to a strictly continuous scale bounded within <span class="math inline">\([0, 1]\)</span>.</p>
+<p><strong>Mode 1: Independent and Identically Distributed (iid) Uniform Incidence.</strong> As a methodological baseline, incidence is generated with no underlying spatial structure: <span class="math display">\[X_i \sim \text{Uniform}(0, 1) \quad \text{for } i = 1, \dots, N\]</span></p>
+<p><strong>Mode 2: Spatially Correlated Incidence (SAR Filter).</strong> To reflect scenarios where underlying outcomes naturally cluster geographically, incidence is generated utilizing a Simultaneous Autoregressive (SAR) filter <span class="citation" data-cites="lesage_introduction_2009">(<a href="#ref-lesage_introduction_2009" role="doc-biblioref">LeSage and Pace 2009</a>)</span>: <span class="math display">\[\boldsymbol{X}^* = (\boldsymbol{I}_N - \rho_X \boldsymbol{W})^{-1} \boldsymbol{u}, \quad \text{where } \boldsymbol{u} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{I}_N)\]</span></p>
+<p>Here, <span class="math inline">\(\rho_X \in [0, 1)\)</span> controls the degree of spatial autocorrelation in baseline incidence. A probability integral transform is applied using the standard normal CDF, <span class="math inline">\(\Phi(\cdot)\)</span>, yielding the final bounded incidence: <span class="math inline">\(X_i = \Phi(X_i^*)\)</span>.</p>
+<p><strong>Mode 3: Poisson Count-Based Incidence.</strong> Motivated by empirical disease incidence distributions—specifically Sudden Unexpected Death (SUD) demographic data <span class="citation" data-cites="mirzaei_years_2019 gan_factors_2019">(<a href="#ref-mirzaei_years_2019" role="doc-biblioref">Mirzaei et al. 2019</a>; <a href="#ref-gan_factors_2019" role="doc-biblioref">Gan et al. 2019</a>)</span>—this mode generates discrete event counts based on localized population densities and spatially correlated underlying relative risks. First, spatially correlated log-rates are generated: <span class="math display">\[\log \boldsymbol{\lambda}^* = \mu_0 \boldsymbol{1} + (\boldsymbol{I}_N - \rho_X \boldsymbol{W})^{-1} \boldsymbol{u}, \quad \text{where } \boldsymbol{u} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{I}_N)\]</span></p>
+<p>Expected case counts are drawn from a Poisson distribution scaled by cluster population <span class="math inline">\(P_i\)</span>: <span class="math display">\[C_i \sim \text{Poisson}(\lambda_i^* P_i)\]</span></p>
+<p>Observed rates <span class="math inline">\(R_i = C_i / P_i\)</span> are rank-normalized to preserve ordinal spatial clustering while mapping to <span class="math inline">\([0, 1]\)</span>: <span class="math display">\[X_i = \frac{\text{rank}(R_i) - 0.5}{N}\]</span></p>
+</section>
+<section id="treatment-assignment-designs" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="treatment-assignment-designs"><span class="header-section-number">2.4</span> Treatment Assignment Designs</h2>
+<p>The explicit determination of the binary treatment vector <span class="math inline">\(\boldsymbol{Z}\)</span> dictates how the direct intervention is deployed across the targeted region. This methodology contrasts strictly spatial randomization methods against covariate-constrained assignment algorithms that actively utilize the observed incidence vector <span class="math inline">\(\boldsymbol{X}\)</span>. Each sampling design targets a globally balanced allocation where approximately half of the clusters receive the intervention (<span class="math inline">\(\sum_{i=1}^N Z_i \approx N/2\)</span>).</p>
+<!-- TODO: Update figure to show all 8 designs -->
+<section id="strictly-spatial-methods" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="strictly-spatial-methods"><span class="header-section-number">2.4.1</span> Strictly Spatial Methods</h3>
+<ol type="1">
+<li><p><strong>Checkerboard (Block Stratification):</strong> A deterministic, alternating assignment pattern designed to maximize spatial separation by ensuring that every treated cluster is entirely surrounded by control clusters under Rook contiguity. For a cluster at coordinates <span class="math inline">\((x_i, y_i)\)</span>, the assignment is <span class="math inline">\(Z_i = (x_i + y_i) \pmod{2}\)</span>.</p></li>
+<li><p><strong>Saturation Quadrants:</strong> The spatial grid is bisected along both axes, partitioning the landscape into four equally sized geographic quadrants. Each quadrant is randomly assigned a distinct, fixed treatment saturation density without replacement (0.20, 0.40, 0.60, and 0.80). Clusters within each quadrant are randomly assigned to treatment until the saturation target is met.</p></li>
+<li><p><strong>Isolation Buffer Treatment Clusters:</strong> A stochastic, greedy spatial algorithm designed to prevent contiguous treatment spillover between active intervention units. An available cluster is randomly selected for treatment (<span class="math inline">\(Z_i = 1\)</span>). Immediately following selection, that cluster and all of its immediate contiguous neighbors are permanently removed from the eligible assignment pool. Treatment proportion varies across realizations (typically approximately 20–30%).</p></li>
+<li><p><strong><span class="math inline">\(2 \times 2\)</span> Random Blocking:</strong> The global spatial lattice is evenly partitioned into distinct, non-overlapping <span class="math inline">\(2 \times 2\)</span> contiguous geographic blocks. Within each localized block of four clusters, exactly two clusters are stochastically assigned to the intervention arm.</p></li>
+</ol>
+</section>
+<section id="covariate-constrained-methods-incidence-guided" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="covariate-constrained-methods-incidence-guided"><span class="header-section-number">2.4.2</span> Covariate-Constrained Methods (Incidence-Guided)</h3>
+<ol start="5" type="1">
+<li><p><strong>Median Incidence Grouping (High Incidence Focus):</strong> A deterministic allocation strategy that actively targets the geographic areas suffering from the highest historical burden. Clusters are assigned to the intervention arm strictly if their baseline incidence exceeds the median: <span class="math inline">\(Z_i = \mathbf{1}[X_i &gt; \text{median}(\boldsymbol{X})]\)</span>.</p></li>
+<li><p><strong>Treatment Balanced Incidence Quartiles:</strong> Clusters are stratified into four strata based on the quartiles of the baseline incidence vector <span class="math inline">\(\boldsymbol{X}\)</span>. Within each incidence stratum, approximately 50% of the clusters are randomly assigned to the intervention arm, balancing historical severity across both treatment and control groups.</p></li>
+<li><p><strong>Balanced Halves:</strong> Clusters are stratified into two groups by median baseline incidence. Within each half, approximately half of the clusters are randomly assigned to treatment. This is a 2-stratum analog of the Balanced Quartiles design, providing coarser but still effective incidence balancing.</p></li>
+<li><p><strong>Incidence-Guided Saturation Quadrants:</strong> The spatial grid is partitioned into four quadrants using the same spatial partition as Design 2 (Saturation Quadrants). Quadrants are ranked by their average baseline incidence <span class="math inline">\(\bar{X}_{Q_k}\)</span> in descending order and <strong>deterministically</strong> assigned saturation levels: the highest-incidence quadrant receives 0.80 saturation, the second receives 0.60, the third 0.40, and the lowest-incidence quadrant receives 0.20. Within each quadrant, clusters are randomly selected for treatment at the assigned rate. Unlike the standard Saturation Quadrants design, the saturation-to-quadrant mapping is guided by incidence data rather than random, concentrating treatment resources in areas of highest baseline burden while maintaining within-quadrant randomization.</p></li>
+</ol>
+</section>
+</section>
+<section id="estimation-via-maximum-likelihood" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="estimation-via-maximum-likelihood"><span class="header-section-number">2.5</span> Estimation via Maximum Likelihood</h2>
+<p>In the presence of endogenous spatial dependence (<span class="math inline">\(\rho \neq 0\)</span>) and exogenous spillover (<span class="math inline">\(\gamma \neq 0\)</span>), estimators such as the Difference-in-Means fundamentally violate the Stable Unit Treatment Value Assumption (SUTVA). Furthermore, Ordinary Least Squares (OLS) regression fails as an unbiased estimator in this context due to continuous spatial feedback loops. Because the unobserved spatial structure correlates simultaneously with both the treatment assignment mechanics and the final outcome, the expected value of the error term conditional on the regressors is non-zero (<span class="math inline">\(E[\boldsymbol{\epsilon} \mid \boldsymbol{Z}, \boldsymbol{W}] \neq 0\)</span>). Consequently, OLS models suffer from simultaneity bias, yielding systematically biased point estimates and artificially deflated standard errors.</p>
+<p>To achieve statistically consistent estimation of the direct intervention effect <span class="math inline">\(\tau\)</span>, a spatial autoregressive regression framework must be utilized <span class="citation" data-cites="bivand_comparing_2015">(<a href="#ref-bivand_comparing_2015" role="doc-biblioref">Bivand and Piras 2015</a>)</span>. The corresponding empirical estimation model takes the matrix form:</p>
+<p><span class="math display">\[\boldsymbol{Y} = \rho \boldsymbol{W} \boldsymbol{Y} + \boldsymbol{X}_{\text{design}}\boldsymbol{\beta}_{\text{design}} + \boldsymbol{\epsilon}\]</span></p>
+<p>where the composite design matrix is <span class="math inline">\(\boldsymbol{X}_{\text{design}} = [\boldsymbol{Z} \quad \text{Spill}(\boldsymbol{Z}) \quad \boldsymbol{X}]\)</span> and the corresponding coefficient vector is <span class="math inline">\(\boldsymbol{\beta}_{\text{design}} = (\tau, \gamma, \beta)^\top\)</span>.</p>
+<p>Because the response variable <span class="math inline">\(\boldsymbol{Y}\)</span> appears on both sides of the structural equation, the parameters must be estimated simultaneously via concentrated Maximum Likelihood Estimation (MLE). This approach optimizes a log-likelihood function that explicitly incorporates the Jacobian determinant of the spatial transformation, <span class="math inline">\(\ln|\boldsymbol{I}_N - \rho \boldsymbol{W}|\)</span>. This term evaluates the likelihood space and partitions the variance by concurrently estimating the spatial autocorrelation parameter alongside the direct and indirect treatment coefficients.</p>
+</section>
+</section>
+<section id="sec-simulation" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Simulation Study and Results</h1>
+<p>To empirically evaluate the performance of the proposed spatial and covariate-constrained sampling designs, an extensive Monte Carlo simulation study was conducted. The simulation assesses the efficiency and inferential validity of estimating the direct intervention effect (<span class="math inline">\(\tau\)</span>) under varying degrees of spatial dependence, spillover magnitude, and structurally diverse baseline incidence distributions.</p>
+<section id="simulation-algorithm-and-parameter-space" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="simulation-algorithm-and-parameter-space"><span class="header-section-number">3.1</span> Simulation Algorithm and Parameter Space</h2>
+<p>The simulation was executed on a fixed <span class="math inline">\(10 \times 10\)</span> regular spatial lattice, yielding a total of <span class="math inline">\(N = 100\)</span> clusters. The true intervention effect (<span class="math inline">\(\tau\)</span>), the baseline covariate coefficient (<span class="math inline">\(\beta\)</span>), and the error variance (<span class="math inline">\(\sigma^2\)</span>) were held constant at <span class="math inline">\(1.0\)</span> across all scenarios to establish a standardized baseline for comparison.</p>
+<p>The parameter space was designed to capture a comprehensive range of spatial trial conditions. We systematically varied the following parameters:</p>
+<ul>
+<li><strong>Spatial Dependence (<span class="math inline">\(\rho\)</span>):</strong> <span class="math inline">\(\{0.00, 0.01, 0.20, 0.50\}\)</span></li>
+<li><strong>Spillover Magnitude (<span class="math inline">\(\gamma\)</span>):</strong> <span class="math inline">\(\{0.50, 0.60, 0.70, 0.80\}\)</span></li>
+<li><strong>Spillover Target Mechanism:</strong> Bidirectional vs.&nbsp;Control-Only</li>
+<li><strong>Contiguity Definition:</strong> Rook vs.&nbsp;Queen</li>
+<li><strong>Incidence Generation Modes:</strong> iid Uniform, SAR Filter (<span class="math inline">\(\rho_X \in \{0.20, 0.50\}\)</span>), Poisson Count-Based (<span class="math inline">\(\rho_X \in \{0.20, 0.50\}\)</span>)</li>
+<li><strong>Treatment Assignment Designs:</strong> All 8 designs described in <a href="#sec-methods">Section&nbsp;2</a></li>
+</ul>
+<p>This yielded 5 incidence configurations <span class="math inline">\(\times\)</span> 2 neighbor types <span class="math inline">\(\times\)</span> 4 <span class="math inline">\(\rho\)</span> values <span class="math inline">\(\times\)</span> 4 <span class="math inline">\(\gamma\)</span> values <span class="math inline">\(\times\)</span> 2 spillover types <span class="math inline">\(\times\)</span> 8 designs = <strong>2,560 total scenarios</strong>.</p>
+<p>To ensure rigorous evaluation while maintaining computational feasibility under spatial Maximum Likelihood Estimation (MLE), a nested resampling structure was employed:</p>
+<ol type="1">
+<li><strong>Spatial Initialization:</strong> Establish the geographic grid and compute the row-standardized spatial weight matrix <span class="math inline">\(\boldsymbol{W}\)</span>.</li>
+<li><strong>Incidence Generation:</strong> Draw the baseline incidence vector <span class="math inline">\(\boldsymbol{X}\)</span> according to the specified generation mode (generated once per incidence configuration and held fixed across all spatial parameter combinations).</li>
+<li><strong>Design Resampling (<span class="math inline">\(R_d = 25\)</span>):</strong> For each of the eight evaluated sampling designs, generate 25 distinct binary treatment assignment vectors (<span class="math inline">\(\boldsymbol{Z}\)</span>).</li>
+<li><strong>Outcome Resampling (<span class="math inline">\(R_o = 10\)</span>):</strong> For each treatment assignment vector, simulate 10 unique error realizations (<span class="math inline">\(\boldsymbol{\epsilon}\)</span>) to produce distinct outcome vectors (<span class="math inline">\(\boldsymbol{Y}\)</span>) via the Spatial Durbin Model (SDM).</li>
+<li><strong>Estimation:</strong> Fit the spatial autoregressive MLE model to each generated dataset to estimate <span class="math inline">\(\hat{\tau}\)</span> and its standard error.</li>
+</ol>
+<p>This nested structure yielded <span class="math inline">\(R_{\text{total}} = 250\)</span> independent model evaluations per scenario.</p>
+</section>
+<section id="evaluation-metrics" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="evaluation-metrics"><span class="header-section-number">3.2</span> Evaluation Metrics</h2>
+<p>For each simulated trial iteration <span class="math inline">\(r \in \{1, \dots, R_{\text{total}}\}\)</span>, the direct intervention effect was estimated via spatial MLE, producing the estimate <span class="math inline">\(\hat{\tau}_r\)</span> and its corresponding standard error <span class="math inline">\(\text{SE}(\hat{\tau}_r)\)</span>. The comparative efficacy of the eight sampling designs was quantified using four primary performance metrics:</p>
+<ol type="1">
+<li><p><strong>Bias:</strong> The empirical mean deviation of the estimates from the true intervention effect (<span class="math inline">\(\tau = 1.0\)</span>). <span class="math display">\[\text{Bias} = \frac{1}{R_{\text{total}}} \sum_{r=1}^{R_{\text{total}}} (\hat{\tau}_r - \tau)\]</span></p></li>
+<li><p><strong>Empirical Standard Deviation (SD):</strong> The variability of the point estimates across iterations. <span class="math display">\[\text{SD} = \sqrt{ \frac{1}{R_{\text{total}} - 1} \sum_{r=1}^{R_{\text{total}}} \left( \hat{\tau}_r - \bar{\hat{\tau}} \right)^2 }\]</span></p></li>
+<li><p><strong>Mean Squared Error (MSE):</strong> The primary metric of overall estimation efficiency. <span class="math display">\[\text{MSE} = \text{Bias}^2 + \text{SD}^2 = \frac{1}{R_{\text{total}}} \sum_{r=1}^{R_{\text{total}}} (\hat{\tau}_r - \tau)^2\]</span></p></li>
+<li><p><strong>Coverage Probability (95% CI):</strong> The proportion of simulated trials where the true parameter <span class="math inline">\(\tau\)</span> fell within the estimated 95% Wald confidence interval. <span class="math display">\[\text{Coverage} = \frac{1}{R_{\text{total}}} \sum_{r=1}^{R_{\text{total}}} \mathbf{1} \left\{ \hat{\tau}_r - 1.96 \cdot \text{SE}(\hat{\tau}_r) \leq \tau \leq \hat{\tau}_r + 1.96 \cdot \text{SE}(\hat{\tau}_r) \right\}\]</span></p></li>
+</ol>
+</section>
+<section id="results-design-performance" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="results-design-performance"><span class="header-section-number">3.3</span> Results: Design Performance</h2>
+
+<!-- TODO: Replace placeholder content below with live R-generated figures and tables from the simulation results. Key figures to include:
+  - Overall MSE comparison table (all 8 designs)
+  - MSE boxplots by contiguity type
+  - Design rank frequency tables
+  - Faceted MSE plots across rho and gamma
+  - Coverage probability comparison
+  Reference the unified project report (paper/report/IncidenceSpatialCRT_Report.qmd) for the complete R code chunks that generate these outputs.
+-->
+<section id="overall-efficiency-and-robustness" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="overall-efficiency-and-robustness"><span class="header-section-number">3.3.1</span> Overall Efficiency and Robustness</h3>
+<!-- Content to be populated with simulation results. Key findings:
+  - Design 8 (Incidence-Guided Saturation Quadrants) achieves lowest overall MSE (~0.079)
+  - Design 3 (Saturation Quadrants) is a close second (~0.080)
+  - Design 1 (Checkerboard) is consistently worst (MSE ~0.744, coverage ~55%)
+  - MLE achieves ~0.94 coverage for all designs except D1
+-->
+</section>
+<section id="impact-of-spillover-magnitude-and-spatial-dependence" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="impact-of-spillover-magnitude-and-spatial-dependence"><span class="header-section-number">3.3.2</span> Impact of Spillover Magnitude and Spatial Dependence</h3>
+<!-- Content to be populated. Key findings:
+  - Spillover type (control-only vs. both) is the most influential parameter
+  - Gamma (spillover magnitude) has negligible effect on design rankings
+  - Rho (spatial autocorrelation) increases MSE but does not change relative design rankings
+-->
+</section>
+<section id="inferential-coverage-and-type-i-error-control" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="inferential-coverage-and-type-i-error-control"><span class="header-section-number">3.3.3</span> Inferential Coverage and Type I Error Control</h3>
+<!-- Content to be populated. Key findings:
+  - MLE paired with non-checkerboard designs achieves near-nominal 95% coverage
+  - Checkerboard design produces severely anti-conservative CIs
+  - Incidence-guided designs maintain valid inference across all parameter regimes
+-->
+</section>
+</section>
+</section>
+<section id="sec-application" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Application</h1>
+<!-- TODO: Develop this section with substantive content about applying the simulation findings to real-world spatial CRT design. -->
+<section id="background-of-sudden-death-sud-in-north-carolina" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="background-of-sudden-death-sud-in-north-carolina"><span class="header-section-number">4.1</span> Background of Sudden Death (SUD) in North Carolina</h2>
+<!-- Content to be developed: epidemiological context of SUD in NC counties, base rate ~35/100,000, spatial clustering patterns -->
+</section>
+<section id="spatial-considerations" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="spatial-considerations"><span class="header-section-number">4.2</span> Spatial Considerations</h2>
+<!-- Content to be developed: geographic factors that create spatially heterogeneous incidence (flood risk, pollution, socioeconomic factors) -->
+</section>
+<section id="recommendations-for-treatment-assignment" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="recommendations-for-treatment-assignment"><span class="header-section-number">4.3</span> Recommendations for Treatment Assignment</h2>
+<!-- Content to be developed: practical guidance for applying simulation findings to design a real spatial CRT in the NC SUD context -->
+</section>
+</section>
+<section id="sec-discussion" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Discussion</h1>
+<!-- TODO: Develop this section with substantive discussion of findings, limitations, and future work. -->
+<section id="relevance-of-results" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="relevance-of-results"><span class="header-section-number">5.1</span> Relevance of Results</h2>
+<!-- Content to be developed: why incidence-guided designs matter for spatial CRT practice, implications for trial design in public health -->
+</section>
+<section id="limitations" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="limitations"><span class="header-section-number">5.2</span> Limitations</h2>
+<!-- Content to be developed:
+  - Oracle MLE assumption (true spillover covariate known)
+  - Fixed true treatment effect (tau = 1.0)
+  - Equal cluster populations in Poisson mode
+  - Regular lattice grid (vs. irregular real-world geographies)
+  - Single grid size (G=10, N=100)
+-->
+</section>
+<section id="future-considerations" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="future-considerations"><span class="header-section-number">5.3</span> Future Considerations</h2>
+<!-- Content to be developed:
+  - Non-oracle estimation (omitting spillover covariate)
+  - Varying tau across scenarios
+  - Heterogeneous population sizes
+  - Irregular spatial geometries
+  - Larger grid sizes and sensitivity analysis
+  - Integration with real NC county/census tract data
+-->
+</section>
+<section id="authors-contributions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="authors-contributions">Authors’ Contributions</h2>
+<p>A.W. wrote the manuscript text, developed the simulation framework, and prepared all figures and tables. T.V. provided advisement for the application section and domain expertise in the NC criminal justice context. F.C.L. provided statistical methodology guidance and reviewed the manuscript. All authors reviewed the manuscript.</p>
+</section>
+<section id="funding" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="funding">Funding</h2>
+<p>Dr.&nbsp;Van Deinse is supported by the National Institutes of Mental Health (K01MH129619). The trauma-informed supervision approach referenced in this manuscript was funded by the Bureau of Justice Assistance 15PBJA-24-GG-01896-PRJH and awarded to the North Carolina Department of Adult Correction.</p>
+</section>
+<section id="data-availability" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="data-availability">Data Availability</h2>
+<p>All data supporting the findings of this study are generated via simulation. Summarized findings are included in the tables and figures. The simulation code and data are available upon request and with permission of the authors.</p>
+</section>
+<section id="declarations" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="declarations">Declarations</h2>
+<section id="ethics-consent-to-participate-and-consent-to-publish" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="ethics-consent-to-participate-and-consent-to-publish">Ethics, Consent to Participate, and Consent to Publish</h3>
+<p>Not applicable.</p>
+</section>
+<section id="competing-interests" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="competing-interests">Competing Interests</h3>
+<p>The authors declare that they have no competing interests.</p>
+</section>
+</section>
+<section id="references" class="level2 unnumbered">
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-alexander_spatial_2003" class="csl-entry" role="listitem">
+Alexander, Neal D, Rana A Moyeed, Phil J Hyun, Zachary B Dimber, Moses J Bockarie, Julian Stander, Bryan T Grenfell, James W Kazura, and Michael P Alpers. 2003. <span>“Spatial Variation of <span>Anopheles</span>-Transmitted <span>Wuchereria</span> Bancrofti and <span>Plasmodium</span> Falciparuminfection Densities in <span>Papua</span> <span>New</span> <span>Guinea</span>.”</span> <em>Filaria Journal</em> 2 (1): 14. <a href="https://doi.org/10.1186/1475-2883-2-14">https://doi.org/10.1186/1475-2883-2-14</a>.
+</div>
+<div id="ref-anayaizquierdo_spatial_2021" class="csl-entry" role="listitem">
+Anaya‐Izquierdo, Karim, and Neal Alexander. 2021. <span>“Spatial Regression and Spillover Effects in Cluster Randomized Trials with Count Outcomes.”</span> <em>Biometrics</em> 77 (2): 490–505. <a href="https://doi.org/10.1111/biom.13316">https://doi.org/10.1111/biom.13316</a>.
+</div>
+<div id="ref-binka_impact_1998" class="csl-entry" role="listitem">
+Binka, F. N., F. Indome, and T. Smith. 1998. <span>“Impact of Spatial Distribution of Permethrin-Impregnated Bed Nets on Child Mortality in Rural Northern <span>Ghana</span>.”</span> <em>The American Journal of Tropical Medicine and Hygiene</em> 59 (1): 80–85. <a href="https://doi.org/10.4269/ajtmh.1998.59.80">https://doi.org/10.4269/ajtmh.1998.59.80</a>.
+</div>
+<div id="ref-bivand_comparing_2015" class="csl-entry" role="listitem">
+Bivand, Roger, and Gianfranco Piras. 2015. <span>“Comparing <span>Implementations</span> of <span>Estimation</span> <span>Methods</span> for <span>Spatial</span> <span>Econometrics</span>.”</span> <em>Journal of Statistical Software</em> 63 (18). <a href="https://doi.org/10.18637/jss.v063.i18">https://doi.org/10.18637/jss.v063.i18</a>.
+</div>
+<div id="ref-campbell_how_2014" class="csl-entry" role="listitem">
+Campbell, Michael J., and Stephen John Walters. 2014. <em>How to Design, Analyse and Report Cluster Randomised Trials in Medicine and Health Related Research</em>. Chichester, West Sussex: John Wiley &amp; Sons.
+</div>
+<div id="ref-chao_contribution_2015" class="csl-entry" role="listitem">
+Chao, D. L., J. K. Park, F. Marks, R. L. Ochiai, I. M. Longini, and M. E. Halloran. 2015. <span>“The Contribution of Neighbours to an Individual’s Risk of Typhoid Outcome.”</span> <em>Epidemiology and Infection</em> 143 (16): 3520–27. <a href="https://doi.org/10.1017/S0950268815000692">https://doi.org/10.1017/S0950268815000692</a>.
+</div>
+<div id="ref-cressie_statistics_1993" class="csl-entry" role="listitem">
+Cressie, Noel A. C. 1993. <em>Statistics for <span>Spatial</span> <span>Data</span></em>. 1st ed. Wiley <span>Series</span> in <span>Probability</span> and <span>Statistics</span>. Wiley. <a href="https://doi.org/10.1002/9781119115151">https://doi.org/10.1002/9781119115151</a>.
+</div>
+<div id="ref-donner_design_2000" class="csl-entry" role="listitem">
+Donner, Allan, and Neil Klar. 2000. <em>Design and Analysis of Cluster Randomization Trials in Health Research</em>. 1. publ. London: Arnold.
+</div>
+<div id="ref-gan_factors_2019" class="csl-entry" role="listitem">
+Gan, Zoe Su Wen, Wansuk Choi, Feng-Chang Lin, Rebecca Tippett, Golsa Joodi, Irion Pursell, and Ross Joseph Simpson. 2019. <span>“Factors <span>Underlying</span> <span>Increased</span> <span>Incidence</span> of <span>Sudden</span> <span>Unexpected</span> <span>Death</span> in <span>Rural</span> <span>Counties</span> in <span>North</span> <span>Carolina</span>.”</span> <em>Journal of General Internal Medicine</em> 34 (6): 815–17. <a href="https://doi.org/10.1007/s11606-018-4771-5">https://doi.org/10.1007/s11606-018-4771-5</a>.
+</div>
+<div id="ref-gimnig_effect_2003" class="csl-entry" role="listitem">
+Gimnig, John E., Margarette S. Kolczak, Allen W. Hightower, John M. Vulule, Erik Schoute, Luna Kamau, Penelope A. Phillips-Howard, Feiko O. ter Kuile, Bernard L. Nahlen, and William A. Hawley. 2003. <span>“Effect of Permethrin-Treated Bed Nets on the Spatial Distribution of Malaria Vectors in Western <span>Kenya</span>.”</span> <em>The American Journal of Tropical Medicine and Hygiene</em> 68 (4 Suppl): 115–20.
+</div>
+<div id="ref-hawley_community-wide_2003" class="csl-entry" role="listitem">
+Hawley, William A., Penelope A. Phillips-Howard, Feiko O. ter Kuile, Dianne J. Terlouw, John M. Vulule, Maurice Ombok, Bernard L. Nahlen, et al. 2003. <span>“Community-Wide Effects of Permethrin-Treated Bed Nets on Child Mortality and Malaria Morbidity in Western <span>Kenya</span>.”</span> <em>The American Journal of Tropical Medicine and Hygiene</em> 68 (4 Suppl): 121–27.
+</div>
+<div id="ref-hayes_cluster_2017" class="csl-entry" role="listitem">
+Hayes, Richard J., and Lawrence H. Moulton. 2017. <em>Cluster <span>Randomised</span> <span>Trials</span>, <span>Second</span> <span>Edition</span></em>. Chapman; Hall/CRC. <a href="https://doi.org/10.4324/9781315370286">https://doi.org/10.4324/9781315370286</a>.
+</div>
+<div id="ref-hudgens_toward_2008" class="csl-entry" role="listitem">
+Hudgens, Michael G, and M. Elizabeth Halloran. 2008. <span>“Toward <span>Causal</span> <span>Inference</span> <span>With</span> <span>Interference</span>.”</span> <em>Journal of the American Statistical Association</em> 103 (482): 832–42. <a href="https://doi.org/10.1198/016214508000000292">https://doi.org/10.1198/016214508000000292</a>.
+</div>
+<div id="ref-jarvis_spatial_2017" class="csl-entry" role="listitem">
+Jarvis, Christopher, Gian Luca Di Tanna, Daniel Lewis, Neal Alexander, and W. John Edmunds. 2017. <span>“Spatial Analysis of Cluster Randomised Trials: A Systematic Review of Analysis Methods.”</span> <em>Emerging Themes in Epidemiology</em> 14 (1): 12. <a href="https://doi.org/10.1186/s12982-017-0066-2">https://doi.org/10.1186/s12982-017-0066-2</a>.
+</div>
+<div id="ref-lenhart_insecticidetreated_2008" class="csl-entry" role="listitem">
+Lenhart, Audrey, Nicolas Orelus, Rachael Maskill, Neal Alexander, Thomas Streit, and P. J. McCall. 2008. <span>“Insecticide‐treated Bednets to Control Dengue Vectors: Preliminary Evidence from a Controlled Trial in <span>Haiti</span>.”</span> <em>Tropical Medicine &amp; International Health</em> 13 (1): 56–67. <a href="https://doi.org/10.1111/j.1365-3156.2007.01966.x">https://doi.org/10.1111/j.1365-3156.2007.01966.x</a>.
+</div>
+<div id="ref-lesage_introduction_2009" class="csl-entry" role="listitem">
+LeSage, James, and Robert Kelley Pace. 2009. <em>Introduction to <span>Spatial</span> <span>Econometrics</span></em>. 0th ed. Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9781420064254">https://doi.org/10.1201/9781420064254</a>.
+</div>
+<div id="ref-miguel_worms_2004" class="csl-entry" role="listitem">
+Miguel, Edward, and Michael Kremer. 2004. <span>“Worms: <span>Identifying</span> <span>Impacts</span> on <span>Education</span> and <span>Health</span> in the <span>Presence</span> of <span>Treatment</span> <span>Externalities</span>.”</span> <em>Econometrica</em> 72 (1): 159–217. <a href="https://doi.org/10.1111/j.1468-0262.2004.00481.x">https://doi.org/10.1111/j.1468-0262.2004.00481.x</a>.
+</div>
+<div id="ref-mirzaei_years_2019" class="csl-entry" role="listitem">
+Mirzaei, Mojtaba, Golsa Joodi, Brittany Bogle, Sarah Chen, and Ross J. Simpson. 2019. <span>“Years of <span>Life</span> and <span>Productivity</span> <span>Loss</span> <span>Because</span> of <span>Adult</span> <span>Sudden</span> <span>Unexpected</span> <span>Death</span> in the <span>United</span> <span>States</span>.”</span> <em>Medical Care</em> 57 (7): 498–502. <a href="https://doi.org/10.1097/MLR.0000000000001129">https://doi.org/10.1097/MLR.0000000000001129</a>.
+</div>
+<div id="ref-ntani_consequences_2021" class="csl-entry" role="listitem">
+Ntani, Georgia, Hazel Inskip, Clive Osmond, and David Coggon. 2021. <span>“Consequences of Ignoring Clustering in Linear Regression.”</span> <em>BMC Medical Research Methodology</em> 21 (1): 139. <a href="https://doi.org/10.1186/s12874-021-01333-7">https://doi.org/10.1186/s12874-021-01333-7</a>.
+</div>
+<div id="ref-pocock_clinical_1983" class="csl-entry" role="listitem">
+Pocock, Stuart J. 1983. <em>Clinical Trials: A Practical Approach</em>. A <span>Wiley</span> Medical Publication. Chichester [West Sussex] ; New York: Wiley.
+</div>
+<div id="ref-silcocks_spatial_2010" class="csl-entry" role="listitem">
+Silcocks, Paul, and Denise Kendrick. 2010. <span>“Spatial Effects Should Be Allowed for in Primary Care and Other Community-Based Cluster <span>RCTS</span>.”</span> <em>Trials</em> 11 (1): 55. <a href="https://doi.org/10.1186/1745-6215-11-55">https://doi.org/10.1186/1745-6215-11-55</a>.
+</div>
+<div id="ref-smith_field_2015" class="csl-entry" role="listitem">
+Smith, Peter G., Richard H. Morrow, and David A. Ross, eds. 2015. <em>Field <span>Trials</span> of <span>Health</span> <span>Interventions</span>: <span>A</span> <span>Toolbox</span></em>. 3rd ed. Wellcome <span>Trust</span>–<span>Funded</span> <span>Monographs</span> and <span>Book</span> <span>Chapters</span>. Oxford (UK): OUP Oxford. <a href="http://www.ncbi.nlm.nih.gov/books/NBK305515/">http://www.ncbi.nlm.nih.gov/books/NBK305515/</a>.
+</div>
+<div id="ref-tobler_computer_1970" class="csl-entry" role="listitem">
+Tobler, W. R. 1970. <span>“A <span>Computer</span> <span>Movie</span> <span>Simulating</span> <span>Urban</span> <span>Growth</span> in the <span>Detroit</span> <span>Region</span>.”</span> <em>Economic Geography</em> 46 (June): 234. <a href="https://doi.org/10.2307/143141">https://doi.org/10.2307/143141</a>.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -194,6 +194,38 @@ results/
 **separately** — never aggregated. The combined .rds exists for loading convenience only.
 `load_latest_results()` automatically detects the `sim_data/` subdirectory.
 
+### Paper Directory Structure
+
+```
+paper/
+  spatialCRT.bib                              # Zotero bibliography export
+  SpatialCRT_IncidenceDesign_Presentation.qmd # Presentation slides (scaffold)
+  report/
+    IncidenceSpatialCRT_Report.qmd            # Unified project report (sources R modules)
+    IncidenceSpatialCRT_Report.pdf            # Rendered PDF
+    IncidenceSpatialCRT_Report.html           # Rendered HTML
+  manuscript/
+    IncidenceSpatialCRT_Manuscript.qmd        # Master document (includes child sections)
+    _abstract.qmd                             # Structured abstract
+    _introduction.qmd                         # Lit review, motivation, aims
+    _methods.qmd                              # Spatial structure, SDM, 8 designs, MLE
+    _simulation.qmd                           # Parameter space, metrics, results (WIP)
+    _application.qmd                          # SUD in NC (skeleton)
+    _discussion.qmd                           # Relevance, limitations, future (skeleton)
+  section_drafts/                             # Archival LaTeX drafts (Gemini, 6-design era)
+    abstract.tex, introduction.tex, methods.tex, simulation.tex
+    application.tex, disussion.tex, main.tex
+    references.bib                            # Canonical bibliography (113K, Zotero)
+    figures/SamplingGridExamples_crop.png
+```
+
+The **unified report** (`paper/report/`) consolidates the three code-side reports
+(00, 07, 09) into a single end-to-end reference with live R-generated figures and tables.
+
+The **manuscript** (`paper/manuscript/`) uses a modular Quarto structure with
+`{{< include >}}` directives. Each section is independently editable. The LaTeX
+originals in `section_drafts/` are preserved as archival reference.
+
 ---
 
 ## Key Design Decisions
@@ -251,11 +283,20 @@ results/
 
 **Pending:**
 - [x] Re-run MLE simulation: 2,560 scenarios covering all 8 designs (1–8) — completed 2026-03-22
+- [x] Unified project report consolidating all code-side reports — completed 2026-03-23
+- [x] Modular manuscript framework with converted LaTeX section drafts — completed 2026-03-23
 - [ ] Re-run DIM simulation: 2,560 scenarios (baseline, optional — DIM is naive reference only)
 - [ ] Regenerate visualizations and design recommendations after re-run
 
-**Planned extensions:**
-- [ ] Revise `07_results_summary.Rmd` — remove DIM vs MLE comparison framing; reframe as MLE-focused with DIM as brief baseline footnote
+**Manuscript development (in progress):**
+- [ ] Populate simulation results section with live R figures/tables
+- [ ] Develop Application section (SUD in NC context)
+- [ ] Develop Discussion section (relevance, limitations, future work)
+- [ ] Careful prose review and revision of all drafted sections
+- [ ] Generate updated 8-design grid visualization figure
+
+**Planned simulation extensions:**
+- [ ] Revise `07_results_summary.Rmd` — reframe as MLE-focused with DIM as brief baseline footnote
 - [ ] Heterogeneous population — Poisson mode with `pop_mode = "heterogeneous"`
 - [ ] Non-oracle MLE — run without the true Spill covariate for realistic comparison
 - [ ] Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`

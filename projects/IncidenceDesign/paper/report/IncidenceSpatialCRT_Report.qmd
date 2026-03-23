@@ -1,0 +1,1091 @@
+---
+title: "Incidence-Guided Treatment Assignment Designs for Spatial Cluster Randomized Trials"
+subtitle: "Comprehensive Simulation Study Report"
+author: "Andrew Walther"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+  pdf:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    latex-engine: xelatex
+    keep-tex: false
+    fig-pos: "htbp"
+    fig-height: 4
+    fig-width: 6.5
+    include-in-header:
+      text: |
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{float}
+        \usepackage{amsmath}
+        \usepackage{amssymb}
+        \usepackage{geometry}
+        \usepackage{xcolor}
+        \usepackage{mdframed}
+        \geometry{margin=1in}
+        \floatplacement{figure}{htbp}
+        \floatplacement{table}{H}
+        \definecolor{boxbg}{RGB}{240,248,255}
+        \definecolor{boxframe}{RGB}{70,130,180}
+bibliography: ../section_drafts/references.bib
+---
+
+```{r setup}
+#| include: false
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.pos = "htbp"
+)
+```
+
+```{r load-packages}
+#| include: false
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(knitr)
+library(kableExtra)
+```
+
+```{r resolve-paths}
+#| include: false
+# This report lives in paper/report/; code modules are in ../../code/
+script_dir <- normalizePath(file.path(
+  dirname(knitr::current_input(dir = TRUE)), "..", "..", "code"
+), mustWork = FALSE)
+results_dir <- normalizePath(file.path(
+  dirname(knitr::current_input(dir = TRUE)), "..", "..", "results"
+), mustWork = FALSE)
+```
+
+```{r source-modules}
+#| include: false
+# Source 08_design_recommendations.R (transitively sources 06 -> 01-03)
+# Must temporarily set working directory to code/ so internal path resolution works
+orig_wd <- getwd()
+setwd(script_dir)
+source(file.path(script_dir, "08_design_recommendations.R"))
+setwd(orig_wd)
+```
+
+```{r load-results}
+#| include: false
+mle_results <- tryCatch(
+  load_latest_results(results_dir, estimation_mode = "MLE_combined"),
+  error = function(e) {
+    message("MLE combined results not found: ", e$message)
+    NULL
+  }
+)
+mle_avail <- !is.null(mle_results) && nrow(mle_results) > 0
+mle_cfgs  <- if (mle_avail) split_by_incidence_config(mle_results) else list()
+cfg_names <- names(mle_cfgs)
+```
+
+```{r global-summaries}
+#| include: false
+if (mle_avail) {
+  # Design IDs and names from data
+  active_design_ids <- sort(unique(as.integer(
+    gsub("Design ", "", mle_results$Design)
+  )))
+  n_designs <- length(active_design_ids)
+
+  # Scenario counts
+  n_scenarios_total <- nrow(mle_results)
+  n_scenarios_per_config <- n_scenarios_total / length(mle_cfgs)
+
+  # Parameter levels
+  rho_levels   <- sort(unique(mle_results$Rho))
+  gamma_levels <- sort(unique(mle_results$Gamma))
+  spill_levels <- sort(unique(mle_results$Spillover_Type))
+  nb_levels    <- sort(unique(mle_results$Neighbor_Type))
+  n_params_per_design <- n_scenarios_per_config / n_designs
+
+  # Overall summary statistics
+  mle_summary <- mle_results %>%
+    summarise(
+      N_scenarios   = n(),
+      Bias_min      = round(min(Bias, na.rm = TRUE), 3),
+      Bias_max      = round(max(Bias, na.rm = TRUE), 3),
+      Bias_mean     = round(mean(Bias, na.rm = TRUE), 3),
+      MSE_min       = round(min(MSE, na.rm = TRUE), 3),
+      MSE_max       = round(max(MSE, na.rm = TRUE), 3),
+      MSE_mean      = round(mean(MSE, na.rm = TRUE), 3),
+      Cov_min       = round(min(Coverage, na.rm = TRUE), 2),
+      Cov_max       = round(max(Coverage, na.rm = TRUE), 2),
+      Cov_mean      = round(mean(Coverage, na.rm = TRUE), 2),
+      Fail_mean     = round(mean(Fail_Rate, na.rm = TRUE), 4)
+    )
+
+  # Per-design summary
+  mle_by_design <- mle_results %>%
+    group_by(Design) %>%
+    summarise(
+      Mean_Bias     = round(mean(Bias, na.rm = TRUE), 3),
+      Median_MSE    = round(median(MSE, na.rm = TRUE), 3),
+      Mean_MSE      = round(mean(MSE, na.rm = TRUE), 3),
+      Mean_Coverage = round(mean(Coverage, na.rm = TRUE), 3),
+      Fail_Rate     = round(mean(Fail_Rate, na.rm = TRUE), 4),
+      .groups       = "drop"
+    ) %>%
+    arrange(Mean_MSE)
+
+  # Ranked summary per config
+  all_ranked_list <- lapply(seq_along(mle_cfgs), function(i) {
+    r <- rank_designs_by_group(mle_cfgs[[i]], character(0))
+    r$Inc_Config <- cfg_names[i]
+    r
+  })
+  all_ranked <- bind_rows(all_ranked_list)
+
+  # Best and worst per config
+  best_per_config <- all_ranked %>%
+    filter(Rank == 1) %>%
+    select(Inc_Config, Design, Avg_MSE, Avg_Coverage)
+  worst_per_config <- all_ranked %>%
+    filter(Rank == n_designs) %>%
+    select(Inc_Config, Design, Avg_MSE, Avg_Coverage)
+
+  # Modal best and worst
+  modal_best       <- names(sort(table(best_per_config$Design), decreasing = TRUE))[1]
+  modal_best_short <- short_design_name(modal_best)
+  n_configs_modal_best_wins <- sum(best_per_config$Design == modal_best)
+  worst_design       <- names(sort(table(worst_per_config$Design), decreasing = TRUE))[1]
+  worst_design_short <- short_design_name(worst_design)
+
+  # Overall rankings
+  overall_all <- rank_designs_by_group(mle_results, character(0))
+  best_overall       <- overall_all %>% filter(Rank == 1)
+  worst_overall      <- overall_all %>% filter(Rank == max(Rank))
+  overall_mse_ratio  <- round(worst_overall$Avg_MSE[1] / best_overall$Avg_MSE[1], 1)
+  best_overall_short  <- short_design_name(best_overall$Design[1])
+  worst_overall_short <- short_design_name(worst_overall$Design[1])
+
+  # MSE ratio range across configs
+  mse_ratio_per_config <- all_ranked %>%
+    group_by(Inc_Config) %>%
+    summarise(
+      best_mse  = Avg_MSE[Rank == 1],
+      worst_mse = Avg_MSE[Rank == max(Rank)],
+      ratio     = round(worst_mse / best_mse, 1),
+      .groups   = "drop"
+    )
+  mse_ratio_range <- paste0(
+    min(mse_ratio_per_config$ratio), "--", max(mse_ratio_per_config$ratio)
+  )
+
+  # Worst design coverage range
+  worst_cov_vals <- worst_per_config$Avg_Coverage
+  worst_cov_range <- paste0(
+    round(min(worst_cov_vals), 2), "--", round(max(worst_cov_vals), 2)
+  )
+
+  # Spillover analysis
+  spill_rankings <- lapply(cfg_names, function(cn) {
+    cfg <- mle_cfgs[[cn]]
+    r <- rank_designs_by_group(cfg, "Spillover_Type")
+    r$Inc_Config <- cn
+    r
+  })
+  spill_all <- bind_rows(spill_rankings)
+
+  best_under_control_only <- spill_all %>%
+    filter(Spillover_Type == "control_only", Rank == 1) %>%
+    count(Design) %>% arrange(desc(n)) %>% slice(1) %>% pull(Design)
+  best_under_control_only_short <- short_design_name(best_under_control_only)
+
+  best_under_both <- spill_all %>%
+    filter(Spillover_Type == "both", Rank == 1) %>%
+    count(Design) %>% arrange(desc(n)) %>% slice(1) %>% pull(Design)
+  best_under_both_short <- short_design_name(best_under_both)
+
+  # Runner-up margin
+  runner_up_margins <- all_ranked %>%
+    group_by(Inc_Config) %>%
+    summarise(
+      best_mse   = Avg_MSE[Rank == 1],
+      second_mse = Avg_MSE[Rank == 2],
+      pct_margin = round((second_mse - best_mse) / best_mse * 100, 1),
+      .groups    = "drop"
+    )
+
+  # Gamma sensitivity
+  gamma_eta_vals <- sapply(cfg_names, function(cn) {
+    d_data <- mle_cfgs[[cn]] %>% filter(Design == modal_best)
+    gm    <- mean(d_data$MSE, na.rm = TRUE)
+    ss_tot <- sum((d_data$MSE - gm)^2, na.rm = TRUE)
+    if (ss_tot == 0) return(0)
+    gs <- d_data %>%
+      group_by(Gamma) %>%
+      summarise(gm2 = mean(MSE, na.rm = TRUE), gn = n(), .groups = "drop")
+    ss_b <- sum(gs$gn * (gs$gm2 - gm)^2)
+    ss_b / ss_tot
+  })
+  max_gamma_eta <- round(max(gamma_eta_vals), 3)
+
+  # Leading design coverage range
+  other_designs_cov <- all_ranked %>%
+    filter(Design != worst_design) %>%
+    pull(Avg_Coverage)
+  leading_cov_lo <- round(min(other_designs_cov), 2)
+  leading_cov_hi <- round(max(other_designs_cov), 2)
+
+  # Derived narrative values
+  best_design       <- mle_by_design$Design[1]
+  worst_design_name <- mle_by_design$Design[nrow(mle_by_design)]
+  best_mse          <- mle_by_design$Mean_MSE[1]
+  worst_mse         <- mle_by_design$Mean_MSE[nrow(mle_by_design)]
+  best_coverage     <- mle_by_design$Mean_Coverage[1]
+  worst_coverage    <- mle_by_design$Mean_Coverage[nrow(mle_by_design)]
+  overall_cov_mean  <- round(mean(mle_results$Coverage, na.rm = TRUE), 2)
+}
+```
+
+# Introduction
+
+This report provides a comprehensive reference for the simulation study evaluating **`r if (mle_avail) n_designs` treatment assignment designs** for Spatial Cluster Randomized Trials (CRTs) when outcome incidence is heterogeneous and spatially structured.
+
+> *Given known historical incidence data exhibiting spatial heterogeneity, which treatment assignment strategy minimizes estimation error for the direct intervention effect $\hat{\tau}$ across a range of spatial dependence and spillover configurations?*
+
+**Application context:** Sudden Unexpected Death (SUD) in North Carolina counties. The Poisson incidence mode uses an SUD base rate of 35 per 100,000, consistent with county-level analyses.
+
+The study uses Maximum Likelihood Estimation via a spatial autoregressive model (MLE) as the primary estimator, evaluated across `r if (mle_avail) format(n_scenarios_total, big.mark = ",")` parameter scenarios. Three analytical questions structure the results:
+
+- **Q1:** Which design performs best within each incidence generation mode?
+- **Q2:** How do design rankings change as individual parameters vary?
+- **Q3:** Which design wins for specific parameter combinations?
+
+---
+
+# Study Region and Spatial Structure {#sec-spatial}
+
+The study region is a regular square lattice grid:
+
+$$\mathcal{G} = \{s_1, s_2, \ldots, s_N\}$$
+
+where each cluster $s_i$ is located at integer coordinates $(x_i, y_i)$ on a $G \times G$ grid, so $N = G^2$. In this study, $G = 10$ and $N = 100$.
+
+## Spatial Contiguity
+
+Two contiguity definitions are considered:
+
+- **Rook contiguity**: clusters sharing an edge (4-connected).
+$$\mathcal{N}_R(s_i) = \{s_j : |x_i - x_j| + |y_i - y_j| = 1\}$$
+
+- **Queen contiguity**: clusters sharing an edge or vertex (8-connected).
+$$\mathcal{N}_Q(s_i) = \{s_j : \max(|x_i - x_j|, |y_i - y_j|) = 1\}$$
+
+## Spatial Weight Matrix
+
+Let $\mathbf{A}$ denote the binary adjacency matrix where $A_{ij} = \mathbf{1}[s_j \in \mathcal{N}(s_i)]$. The row-standardized spatial weight matrix is:
+
+$$W_{ij} = \frac{A_{ij}}{\sum_{k=1}^{N} A_{ik}}, \quad i \neq j; \quad W_{ii} = 0$$
+
+This ensures $\sum_j W_{ij} = 1$ for each row, so spatial lags represent neighborhood averages. We construct $\mathbf{W}_R$ (rook) and $\mathbf{W}_Q$ (queen) weight matrices.
+
+---
+
+# Outcome Data Generating Process {#sec-dgp}
+
+## Spatial Durbin Model (SDM)
+
+The outcome vector $\mathbf{Y} = (Y_1, \ldots, Y_N)^\top$ is generated from the Spatial Durbin Model:
+
+$$\mathbf{Y} = (\mathbf{I}_N - \rho\mathbf{W})^{-1}\left[\tau\mathbf{Z} + \gamma \cdot \text{Spill}(\mathbf{Z}) + \beta\mathbf{X} + \boldsymbol{\varepsilon}\right]$$
+
+where:
+
+| Symbol | Description | Role |
+|:---:|:---|:---|
+| $\mathbf{Y}$ | $N \times 1$ outcome vector | Response |
+| $\rho$ | Spatial autocorrelation parameter | Controls global spatial dependence in $\mathbf{Y}$ |
+| $\mathbf{W}$ | $N \times N$ row-standardized weight matrix | Spatial structure (rook or queen) |
+| $\tau$ | Direct treatment effect | **Estimand of interest** |
+| $\mathbf{Z}$ | $N \times 1$ binary treatment vector | $Z_i \in \{0, 1\}$ |
+| $\gamma$ | Spillover effect magnitude | Indirect effect via treated neighbors |
+| $\text{Spill}(\mathbf{Z})$ | $N \times 1$ spillover term | See below |
+| $\beta$ | Effect of baseline incidence on outcome | Covariate coefficient |
+| $\mathbf{X}$ | $N \times 1$ baseline incidence vector | $X_i \in [0, 1]$ |
+| $\boldsymbol{\varepsilon}$ | $N \times 1$ error vector | $\varepsilon_i \overset{\text{iid}}{\sim} N(0, \sigma^2)$ |
+
+The spatial multiplier $(\mathbf{I}_N - \rho\mathbf{W})^{-1}$ induces global spatial dependence.
+
+**Stationarity condition:** $|\rho| < 1 / \lambda_{\max}(\mathbf{W})$. For row-standardized $\mathbf{W}$, $\lambda_{\max} = 1$, so $|\rho| < 1$.
+
+## Spillover Construction
+
+$$\text{Spill}_i = \frac{\sum_{j \in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|} = (\mathbf{W}\mathbf{Z})_i$$
+
+Two spillover types are considered:
+
+1. **Control-only spillover**: $\text{Spill}_i^{(\text{ctrl})} = \gamma \cdot (\mathbf{W}\mathbf{Z})_i \cdot (1 - Z_i)$
+2. **Bidirectional spillover**: $\text{Spill}_i^{(\text{both})} = \gamma \cdot (\mathbf{W}\mathbf{Z})_i$
+
+---
+
+# Incidence Generation Modes {#sec-incidence}
+
+The baseline incidence vector $\mathbf{X}$ represents prior observed outcome rates. Three generation modes are considered, all producing values in $[0, 1]$.
+
+## Mode 1: Independent and Identically Distributed (iid)
+
+$$X_i \overset{\text{iid}}{\sim} \text{Uniform}(0, 1), \quad i = 1, \ldots, N$$
+
+No spatial structure; serves as the baseline. One config ($\rho_X$ = N/A).
+
+## Mode 2: Spatially Correlated (SAR Filter)
+
+$$\mathbf{X}^* = (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$$
+
+$$X_i = \Phi(X_i^*)$$
+
+where $\Phi(\cdot)$ is the standard normal CDF. Two configs: $\rho_X \in \{0.20, 0.50\}$.
+
+## Mode 3: Poisson Count-Based
+
+1. Spatially correlated log-rates: $\log \boldsymbol{\lambda}^* = \mu_0 \cdot \mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}$
+2. Poisson counts: $C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)$ where $P_i = 1{,}000$
+3. Observed rates: $R_i = C_i / P_i$
+4. Rank-normalized: $X_i = (\text{rank}(R_i) - 0.5) / N$
+
+Base rate $\mu_0 = \log(35/100{,}000)$ for SUD. Two configs: $\rho_X \in \{0.20, 0.50\}$.
+
+**Critical design invariant:** Incidence is generated **once per (mode, $\rho_X$) configuration** and held fixed across all ($\rho$, $\gamma$, nb_type) scenarios.
+
+## Incidence Spatial Patterns
+
+```{r incidence-heatmaps}
+#| fig-cap: "Incidence spatial patterns across generation modes. Color represents incidence (darker = higher burden). Spatial and Poisson modes show visible spatial clustering absent from iid."
+#| fig-height: 6
+print(plot_incidence_heatmaps(grid_dim = 10))
+```
+
+```{r incidence-distributions}
+#| fig-cap: "Marginal distribution of incidence values by mode, pooled across 50 resamples. All modes are marginally Uniform on [0,1]; spatial structure manifests in spatial covariance, not the marginal."
+#| fig-height: 5
+print(plot_incidence_distributions(grid_dim = 10, n_resamples = 50))
+```
+
+---
+
+# Treatment Assignment Designs {#sec-designs}
+
+Eight designs are evaluated. Each produces a binary treatment vector $\mathbf{Z} \in \{0, 1\}^N$.
+
+```{r design-table}
+#| results: asis
+source(file.path(script_dir, "03_designs.R"))
+
+all_names  <- get_design_names()
+design_meta <- data.frame(
+  ID            = active_design_ids,
+  Name          = unname(all_names[as.character(active_design_ids)]),
+  Deterministic = ifelse(
+    sapply(active_design_ids, is_design_deterministic), "Yes", "No"
+  )
+)
+
+knitr::kable(
+  design_meta,
+  col.names = c("ID", "Name", "Deterministic?"),
+  caption   = paste0(
+    nrow(design_meta),
+    " treatment assignment strategies evaluated in this simulation"
+  )
+)
+```
+
+## Design 1: Checkerboard (Strict Spatial Stratification)
+
+$$Z_i = (x_i + y_i) \mod 2$$
+
+Treatment in an alternating checkerboard pattern. **Deterministic**, exactly 50% treated.
+
+## Design 2: High Incidence Focus
+
+$$Z_i = \mathbf{1}[X_i > \text{median}(\mathbf{X})]$$
+
+Treatment assigned to above-median incidence clusters. **Deterministic** given $\mathbf{X}$.
+
+## Design 3: Saturation Quadrants
+
+Grid partitioned into four spatial quadrants. Saturation levels $\{0.20, 0.40, 0.60, 0.80\}$ randomly assigned to quadrants. Within each quadrant, clusters randomly selected at the assigned rate.
+
+## Design 4: Isolation Buffer
+
+Sequential treatment assignment: randomly select an available cluster, assign treatment, remove it and its neighbors from the available set. Treated clusters are never adjacent.
+
+## Design 5: 2x2 Blocking
+
+Grid partitioned into non-overlapping $2 \times 2$ blocks. Within each block, exactly 2 of 4 clusters randomly assigned to treatment.
+
+## Design 6: Balanced Quartiles
+
+Clusters stratified by incidence quartile. Within each stratum, approximately half randomly assigned to treatment.
+
+## Design 7: Balanced Halves
+
+Clusters stratified into two groups by median baseline incidence. Within each half, approximately half randomly assigned to treatment. A 2-stratum analog of Design 6.
+
+## Design 8: Incidence-Guided Saturation Quadrants
+
+Grid partitioned into four spatial quadrants (same as Design 3). Quadrants ranked by average baseline incidence and **deterministically** assigned saturation levels:
+
+| Rank (by $\bar{X}_{Q_k}$) | Saturation $p_k$ |
+|:---:|:---:|
+| 1 (highest) | 0.80 |
+| 2 | 0.60 |
+| 3 | 0.40 |
+| 4 (lowest) | 0.20 |
+
+Within each quadrant, clusters randomly selected at the assigned rate. Unlike Design 3, the saturation-to-quadrant mapping is guided by incidence data rather than random.
+
+---
+
+# Estimation Methods {#sec-estimation}
+
+## Difference in Means (DIM)
+
+The naive estimator:
+$$\hat{\tau}_{\text{DIM}} = \bar{Y}_1 - \bar{Y}_0$$
+
+DIM is biased for $\tau$ when spillover ($\gamma \neq 0$) or spatial dependence ($\rho \neq 0$) is present.
+
+## Maximum Likelihood Estimation (MLE)
+
+The spatial autoregressive model is estimated via maximum likelihood using `spatialreg::lagsarlm()`:
+
+$$Y_i = \rho \sum_j W_{ij} Y_j + \tau Z_i + \gamma \cdot \text{Spill}_i + \beta X_i + \varepsilon_i$$
+
+MLE simultaneously estimates $\rho$ and regression coefficients. The true spillover covariate $\text{Spill}(\mathbf{Z})$ is included as an **oracle regressor**. Confidence intervals for $\tau$ use the asymptotic covariance matrix.
+
+**MLE is the primary estimator throughout this report.** DIM serves only as a naive baseline.
+
+---
+
+# Simulation Design {#sec-simulation}
+
+## Parameter Grid
+
+```{r param-table}
+#| results: asis
+if (mle_avail) {
+  param_df <- data.frame(
+    Parameter = c(
+      "Incidence mode",
+      "rho_X (incidence spatial autocorr.)",
+      "nb_type (contiguity)",
+      "rho (outcome spatial autocorr.)",
+      "gamma (spillover magnitude)",
+      "spill_type",
+      "design_id",
+      "TOTAL"
+    ),
+    Values = c(
+      paste(sort(unique(mle_results$Incidence_Mode)), collapse = ", "),
+      "N/A (iid); 0.20, 0.50 (spatial, poisson)",
+      paste(nb_levels, collapse = ", "),
+      paste(rho_levels, collapse = ", "),
+      paste(gamma_levels, collapse = ", "),
+      paste(spill_levels, collapse = ", "),
+      paste(active_design_ids, collapse = ", "),
+      ""
+    ),
+    Levels = c(
+      paste0(length(mle_cfgs), " configs (1 iid + 2 spatial + 2 poisson)"),
+      "---",
+      as.character(length(nb_levels)),
+      as.character(length(rho_levels)),
+      as.character(length(gamma_levels)),
+      as.character(length(spill_levels)),
+      as.character(n_designs),
+      format(n_scenarios_total, big.mark = ",")
+    )
+  )
+
+  knitr::kable(
+    param_df,
+    caption = paste0(
+      "Simulation parameter grid (",
+      format(n_scenarios_total, big.mark = ","),
+      " total scenarios)"
+    )
+  )
+}
+```
+
+## Resampling Structure
+
+| Mode | Design resamples ($R_d$) | Outcome resamples ($R_o$) | Iterations / scenario |
+|------|:---:|:---:|:---:|
+| MLE | 25 | 10 | 250 |
+
+## Per-Scenario Reproducibility
+
+Each scenario uses a deterministic seed:
+$$\text{seed}_s = \texttt{digest::digest2int}(\texttt{paste}(\text{inc\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, d_{\text{id}}, \text{sep}=\text{"|}"))$$
+
+This ensures results are reproducible and order-independent.
+
+---
+
+# Evaluation Metrics {#sec-metrics}
+
+For each scenario, let $\hat{\tau}_1, \ldots, \hat{\tau}_K$ denote the $K$ estimates of $\tau$ (excluding convergence failures).
+
+- **Bias**: $\text{Bias} = \bar{\hat{\tau}} - \tau$
+- **Standard Deviation**: $\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^{K} \left(\hat{\tau}_k - \bar{\hat{\tau}}\right)^2}$
+- **Mean Squared Error**: $\text{MSE} = \text{Bias}^2 + \text{SD}^2$ — **primary ranking criterion**
+- **Coverage Probability**: $\text{Coverage} = \frac{1}{K}\sum_{k=1}^{K} \mathbf{1}\left[\tau \in \left(\hat{\tau}_{k,L},\ \hat{\tau}_{k,U}\right)\right]$
+- **Convergence Failure Rate**: Proportion of iterations where MLE failed to converge
+
+---
+
+# Results: Overall Performance {#sec-results-overall}
+
+## Overall Summary
+
+```{r mle-overall-table}
+#| results: asis
+if (mle_avail) {
+  mle_stats_disp <- data.frame(
+    Metric = c("Bias", "MSE", "Coverage", "Fail Rate"),
+    Min    = c(mle_summary$Bias_min, mle_summary$MSE_min,  mle_summary$Cov_min,  NA),
+    Mean   = c(mle_summary$Bias_mean, mle_summary$MSE_mean, mle_summary$Cov_mean, mle_summary$Fail_mean),
+    Max    = c(mle_summary$Bias_max, mle_summary$MSE_max,  mle_summary$Cov_max,  NA)
+  )
+  knitr::kable(
+    mle_stats_disp,
+    digits  = 3,
+    na      = "\u2014",
+    caption = paste0(
+      "MLE: Summary statistics across all ",
+      format(n_scenarios_total, big.mark = ","),
+      " scenarios"
+    )
+  )
+}
+```
+
+## Design Comparison by MSE
+
+```{r mle-design-summary}
+#| results: asis
+if (mle_avail) {
+  knitr::kable(
+    mle_by_design,
+    col.names = c("Design", "Mean Bias", "Median MSE", "Mean MSE",
+                  "Mean Coverage", "Fail Rate"),
+    digits    = c(0, 3, 3, 3, 3, 4),
+    caption   = "MLE: Design performance averaged across all scenarios and incidence modes"
+  )
+}
+```
+
+## MSE by Design and Neighbor Type
+
+```{r mle-mse-boxplot}
+#| fig-cap: "MLE: Distribution of MSE by design, faceted by spatial contiguity structure."
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_mse_by_neighbor(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (mle_avail && length(mle_cfgs) > 0) {
+  print(plot_mse_by_neighbor(mle_cfgs[[1]], names(mle_cfgs)[1]))
+}
+```
+
+## Coverage by Design
+
+```{r mle-coverage}
+#| fig-cap: "MLE: Coverage probability distribution by design. Red dashed line = nominal 95% target."
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_coverage_by_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (mle_avail && length(mle_cfgs) > 0) {
+  print(plot_coverage_by_design(mle_cfgs[[1]], names(mle_cfgs)[1]))
+}
+```
+
+## Bias-Variance Decomposition
+
+```{r mle-biasvar}
+#| fig-cap: "MLE: Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence."
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_bias_variance(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+} else if (mle_avail && length(mle_cfgs) > 0) {
+  print(plot_bias_variance(mle_cfgs[[1]], names(mle_cfgs)[1]))
+}
+```
+
+---
+
+# Results: Design Rankings by Incidence Mode (Q1) {#sec-q1}
+
+## Cross-Config MSE Rankings
+
+```{r q1-mse-plot}
+#| eval: !expr mle_avail
+#| fig-cap: "Average MSE per design for each incidence configuration. Bars sorted left-to-right (lowest = best). Rank labels above bars."
+#| fig-height: 5.0
+print(plot_incidence_rankings(mle_results) +
+  theme(text        = element_text(size = 10),
+        axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        strip.text  = element_text(size = 9, face = "bold")))
+```
+
+## Cross-Config Coverage Rankings
+
+```{r q1-cov-plot}
+#| eval: !expr mle_avail
+#| fig-cap: "Average 95% CI coverage probability per design for each incidence configuration. Red dashed line = nominal 0.95."
+#| fig-height: 5.0
+print(plot_incidence_coverage(mle_results) +
+  theme(text        = element_text(size = 10),
+        axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        strip.text  = element_text(size = 9, face = "bold")))
+```
+
+## Detailed Rankings by Incidence Config
+
+```{r q1-detail-table}
+#| eval: !expr mle_avail
+#| results: asis
+for (cfg_nm in cfg_names) {
+  cfg <- mle_cfgs[[cfg_nm]]
+  r <- rank_designs_by_group(cfg, character(0)) %>%
+    mutate(
+      Design       = short_design_name(Design),
+      Avg_MSE      = round(Avg_MSE, 4),
+      Avg_Coverage = round(Avg_Coverage, 3),
+      Avg_Bias     = round(Avg_Bias, 4)
+    ) %>%
+    select(Rank, Design, Avg_MSE, Avg_Coverage, Avg_Bias)
+
+  cap_safe_nm <- gsub("_", " ", cfg_nm)
+  tbl_out <- kable(r, booktabs = TRUE, linesep = "", align = "rlrrr",
+        col.names = c("Rank", "Design", "Avg MSE", "Avg Coverage", "Avg Bias"),
+        caption = sprintf("MLE design rankings for %s", cap_safe_nm)) %>%
+    kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
+    row_spec(1, bold = TRUE)
+  print(tbl_out)
+  cat("\n")
+}
+```
+
+---
+
+# Results: Parameter Sensitivity (Q2) {#sec-q2}
+
+## Effect of Outcome Spatial Autocorrelation (Rho)
+
+```{r q2-rho-trajectories}
+#| eval: !expr mle_avail
+#| fig-cap: "Design rank trajectories across Rho for each incidence config. Rank 1 = best. Flat lines indicate robust designs; crossing lines reveal rank reversals."
+#| fig-height: 8.0
+p_list <- lapply(seq_along(mle_cfgs), function(i) {
+  plot_rank_trajectories(mle_cfgs[[i]], "Rho", cfg_names[i],
+                         point_size = 2.5, line_size = 0.9, label_size = 2.0) +
+    theme(legend.position = if (i == length(mle_cfgs)) "right" else "none",
+          plot.title    = element_text(size = 9),
+          axis.text     = element_text(size = 8),
+          axis.title    = element_text(size = 9),
+          legend.text   = element_text(size = 8))
+})
+gridExtra::grid.arrange(grobs = p_list, ncol = 1)
+```
+
+## Effect of Spillover Magnitude (Gamma)
+
+```{r q2-gamma-trajectories}
+#| eval: !expr mle_avail
+#| fig-cap: "Design rank trajectories across Gamma. Gamma has minimal effect on design rankings under MLE: all trajectory lines are nearly flat."
+#| fig-height: 8.0
+p_list2 <- lapply(seq_along(mle_cfgs), function(i) {
+  plot_rank_trajectories(mle_cfgs[[i]], "Gamma", cfg_names[i],
+                         point_size = 2.5, line_size = 0.9, label_size = 2.0) +
+    theme(legend.position = if (i == length(mle_cfgs)) "right" else "none",
+          plot.title    = element_text(size = 9),
+          axis.text     = element_text(size = 8),
+          axis.title    = element_text(size = 9),
+          legend.text   = element_text(size = 8))
+})
+gridExtra::grid.arrange(grobs = p_list2, ncol = 1)
+```
+
+## Sensitivity Analysis (Eta-squared)
+
+```{r mle-sensitivity}
+#| results: asis
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  invisible(capture.output(
+    sens_tbl <- table_sensitivity(mle_cfgs[["iid Uniform"]], "iid Uniform")
+  ))
+  knitr::kable(
+    as.data.frame(sens_tbl),
+    digits  = 4,
+    caption = "MLE: Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence."
+  )
+}
+```
+
+## MSE Per Design Across Gamma
+
+```{r mle-rho-effect}
+#| fig-cap: "Per-design MSE line plots across gamma levels, for iid Uniform incidence."
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_mse_per_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+}
+```
+
+## Marginal Ranking Tables
+
+```{r q2-marginal-tables}
+#| eval: !expr mle_avail
+#| results: asis
+params_to_show <- c("Rho", "Gamma", "Spillover_Type")
+
+for (cfg_nm in cfg_names) {
+  cfg <- mle_cfgs[[cfg_nm]]
+  overall_order <- rank_designs_by_group(cfg, character(0)) %>%
+    arrange(Rank) %>% pull(Design)
+
+  cap_safe_nm <- gsub("_", " ", cfg_nm)
+  cat(sprintf("\n### %s\n\n", cfg_nm))
+
+  for (param in params_to_show) {
+    ranked <- rank_designs_by_group(cfg, param) %>%
+      mutate(cell = sprintf("%.4f (#%d)", Avg_MSE, Rank)) %>%
+      select(Design, all_of(param), cell) %>%
+      pivot_wider(names_from = all_of(param), values_from = cell,
+                  names_prefix = paste0(param, "=")) %>%
+      mutate(Design = factor(Design, levels = overall_order)) %>%
+      arrange(Design) %>%
+      mutate(Design = short_design_name(as.character(Design)))
+
+    param_label <- switch(param,
+      "Rho"            = "Rho (outcome spatial autocorrelation)",
+      "Gamma"          = "Gamma (spillover magnitude)",
+      "Spillover_Type" = "Spillover Type",
+      param)
+
+    tbl_out <- kable(ranked, booktabs = TRUE, linesep = "",
+          caption = sprintf(
+            "%s | Marginal rankings by %s.", cap_safe_nm, param_label)) %>%
+      kable_styling(latex_options = c("striped", "hold_position", "scale_down"),
+                    font_size = 8) %>%
+      row_spec(1, bold = TRUE)
+    print(tbl_out)
+    cat("\n")
+  }
+}
+```
+
+---
+
+# Results: Best Design by Parameter Combination (Q3) {#sec-q3}
+
+## Rho x Gamma Best-Design Maps
+
+```{r q3-heatmaps}
+#| eval: !expr mle_avail
+#| fig-cap: "Best design heatmap: Rho vs. Gamma for each incidence config. Each tile shows which design achieves the lowest average MSE."
+#| fig-height: 8.0
+p_list3 <- lapply(seq_along(mle_cfgs), function(i) {
+  plot_best_design_heatmap(mle_cfgs[[i]], "Rho", "Gamma", cfg_names[i],
+                           text_size = 3, text_color = "white",
+                           compact_labels = TRUE) +
+    labs(title = cfg_names[i], subtitle = NULL) +
+    theme(plot.title  = element_text(size = 9, face = "bold"),
+          axis.text   = element_text(size = 8),
+          axis.title  = element_text(size = 9),
+          legend.position = "none")
+})
+gridExtra::grid.arrange(grobs = p_list3, ncol = 2)
+```
+
+## Rho x Spillover Type Best-Design Maps
+
+```{r q3-heatmaps-spill}
+#| eval: !expr mle_avail
+#| fig-cap: "Best design heatmap: Rho vs. Spillover Type for each incidence config. Reveals the key spillover-type interaction."
+#| fig-height: 7.5
+p_list4 <- lapply(seq_along(mle_cfgs), function(i) {
+  plot_best_design_heatmap(mle_cfgs[[i]], "Rho", "Spillover_Type", cfg_names[i],
+                           text_size = 3, text_color = "white",
+                           compact_labels = TRUE) +
+    labs(title = cfg_names[i], subtitle = NULL) +
+    theme(plot.title  = element_text(size = 9, face = "bold"),
+          axis.text   = element_text(size = 8),
+          axis.title  = element_text(size = 9),
+          legend.position = "none")
+})
+gridExtra::grid.arrange(grobs = p_list4, ncol = 2)
+```
+
+---
+
+# Per-Config Narrative Findings {#sec-commentary}
+
+```{r per-config-commentary}
+#| eval: !expr mle_avail
+#| results: asis
+for (cfg_nm in cfg_names) {
+  cfg <- mle_cfgs[[cfg_nm]]
+
+  overall <- rank_designs_by_group(cfg, character(0))
+  best_row   <- overall %>% filter(Rank == 1)
+  worst_row  <- overall %>% filter(Rank == max(Rank))
+  second_row <- overall %>% filter(Rank == 2)
+
+  best_name   <- short_design_name(best_row$Design[1])
+  worst_name  <- short_design_name(worst_row$Design[1])
+  second_name <- short_design_name(second_row$Design[1])
+
+  # Pairwise dominance
+  scenario_ids <- c("Neighbor_Type", "Rho", "Gamma", "Spillover_Type")
+  wide <- cfg %>%
+    select(all_of(c(scenario_ids, "Design", "MSE"))) %>%
+    pivot_wider(names_from = Design, values_from = MSE, id_cols = all_of(scenario_ids))
+  dom_vs_second <- round(mean(wide[[best_row$Design[1]]] < wide[[second_row$Design[1]]], na.rm=TRUE)*100, 1)
+
+  # Rank stability
+  rho_ranks   <- rank_designs_by_group(cfg, "Rho")   %>% filter(Design == best_row$Design[1])
+  gamma_ranks <- rank_designs_by_group(cfg, "Gamma") %>% filter(Design == best_row$Design[1])
+  rho_stable   <- all(rho_ranks$Rank == 1)
+  gamma_stable <- all(gamma_ranks$Rank == 1)
+  stable_str <- if (rho_stable && gamma_stable) {
+    "holds rank 1 at every level of Rho and Gamma"
+  } else if (rho_stable) {
+    "stable across all Rho levels but shows minor rank changes across Gamma"
+  } else {
+    "shows some rank variation across parameter levels"
+  }
+
+  # MSE ratio
+  mse_ratio_cfg  <- round(worst_row$Avg_MSE[1] / best_row$Avg_MSE[1], 1)
+
+  cat(sprintf("## %s\n\n", cfg_nm))
+
+  cat(sprintf(
+    "**Overall Winner:** %s achieves the lowest average MSE (%.4f). Runner-up: %s (%.4f). The winner dominates in %.1f%% of individual scenarios.\n\n",
+    best_name, best_row$Avg_MSE[1], second_name, second_row$Avg_MSE[1], dom_vs_second
+  ))
+
+  cat(sprintf(
+    "**Robustness:** %s %s.\n\n", best_name, stable_str
+  ))
+
+  cat(sprintf(
+    "**Coverage:** %s achieves coverage of %.3f; worst design (%s) achieves only %.3f.\n\n",
+    best_name, best_row$Avg_Coverage[1], worst_name, worst_row$Avg_Coverage[1]
+  ))
+
+  cat(sprintf(
+    "**Recommendation:** Under %s incidence, select %s. It provides %.1fx lower MSE than %s and near-nominal coverage.\n\n",
+    cfg_nm, best_name, mse_ratio_cfg, worst_name
+  ))
+}
+```
+
+---
+
+# Practical Design Selection Guide {#sec-guide}
+
+```{r decision-table}
+#| results: asis
+#| eval: !expr mle_avail
+# Default (overall best)
+default_best_short <- modal_best_short
+
+# Best under both-spillover at low Rho
+low_rho_thresh <- sort(rho_levels)[2]
+both_low_rho_best <- rank_designs_by_group(
+  mle_results %>% filter(Spillover_Type == "both", Rho <= low_rho_thresh),
+  character(0)
+) %>% filter(Rank == 1) %>% pull(Design) %>% first()
+both_low_rho_short <- short_design_name(both_low_rho_best)
+
+decision_df <- data.frame(
+  Situation = c(
+    "Default (uncertain parameters)",
+    sprintf("Spillover is 'both' AND Rho <= %.2f", low_rho_thresh),
+    "ANY scenario",
+    "ANY scenario"
+  ),
+  Recommended = c(
+    default_best_short,
+    both_low_rho_short,
+    paste0("Avoid ", worst_design_short),
+    "Avoid D5: 2x2 Blocking under queen contiguity"
+  ),
+  Justification = c(
+    sprintf("Ranks 1st in %d of %d configs across all Gamma levels", n_configs_modal_best_wins, length(cfg_names)),
+    "Winner shifts at this corner; verify from Rho x Spillover_Type heatmap",
+    sprintf("Invalid CIs (coverage %s); MSE %sx higher than winner", worst_cov_range, mse_ratio_range),
+    "Queen contiguity amplifies 2x2 block effects"
+  ),
+  stringsAsFactors = FALSE
+)
+
+kable(decision_df, booktabs = TRUE, linesep = "",
+      col.names = c("Situation", "Recommended Design", "Justification"),
+      caption = "Practical design selection guide.") %>%
+  kable_styling(latex_options = c("striped", "hold_position", "scale_down"),
+                font_size = 9) %>%
+  column_spec(1, width = "4cm") %>%
+  column_spec(2, width = "4cm") %>%
+  column_spec(3, width = "6cm") %>%
+  row_spec(1, bold = TRUE)
+```
+
+---
+
+# Subgroup Robustness Profiles {#sec-robustness}
+
+```{r subgroup-robustness}
+#| eval: !expr mle_avail
+#| results: asis
+for (cfg_nm in names(mle_cfgs)) {
+  cat(sprintf("\n## %s\n\n", cfg_nm))
+  cfg <- mle_cfgs[[cfg_nm]]
+
+  invisible(capture.output(rob <- table_robustness(cfg, cfg_nm)))
+  tbl_out <- knitr::kable(
+    as.data.frame(rob),
+    digits  = 4,
+    caption = sprintf("MLE robustness profile: %s", gsub("_", " ", cfg_nm))
+  )
+  print(tbl_out)
+  cat("\n")
+}
+```
+
+## MSE Heatmap
+
+```{r mle-mse-heatmap}
+#| fig-cap: "MLE MSE heatmap for iid Uniform incidence."
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  print(plot_mse_heatmap(mle_cfgs[["iid Uniform"]], "iid Uniform"))
+}
+```
+
+## Design Rank Frequency
+
+```{r mle-ranks}
+#| results: asis
+if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
+  invisible(capture.output(
+    mle_rank_tbl <- table_design_ranks(mle_cfgs[["iid Uniform"]], "iid Uniform")
+  ))
+  knitr::kable(
+    as.data.frame(mle_rank_tbl),
+    digits  = 1,
+    caption = "MLE: Design rank frequency (%) for iid Uniform incidence. Each cell = % of scenarios where design achieved that rank."
+  )
+}
+```
+
+---
+
+# Conclusions and Future Work {#sec-conclusions}
+
+The simulation study evaluated `r if (mle_avail) n_designs` treatment assignment designs across `r if (mle_avail) format(n_scenarios_total, big.mark = ",")` parameter scenarios.
+
+**Key findings:**
+
+1. **MLE achieves near-nominal coverage.** Average coverage across all scenarios is `r if (mle_avail) overall_cov_mean`, close to the nominal 0.95 target.
+
+2. **`r if (mle_avail) best_design` is the top performer.** It achieves the lowest average MSE (`r if (mle_avail) round(best_mse, 3)`) and coverage of `r if (mle_avail) best_coverage`.
+
+3. **`r if (mle_avail) worst_design_name` is consistently worst.** Highest MSE (`r if (mle_avail) round(worst_mse, 3)`) and lowest coverage (`r if (mle_avail) worst_coverage`). Its perfect spatial alternation creates systematic confounding.
+
+4. **Spillover type is the key moderator.** Under control-only spillover, `r if (mle_avail) best_under_control_only_short` dominates. Under bidirectional spillover, `r if (mle_avail) best_under_both_short` becomes competitive.
+
+5. **Design rankings are stable across incidence modes and Gamma levels.** The ordering is largely consistent, and spillover magnitude does not affect design choice.
+
+## Limitations and Planned Extensions
+
+- **Oracle MLE:** The MLE model uses the true spillover covariate.
+- **Fixed $\tau$:** All results use $\tau = 1.0$. Sensitivity to varying $\tau$ is planned.
+- **Equal populations:** Poisson mode uses $P_i = 1{,}000$ for all clusters.
+- **Grid sensitivity:** Results use $G = 10$ ($N = 100$) only.
+
+---
+
+# Appendix A: Simulation Pseudocode {#sec-appendix-pseudocode}
+
+```
+BUILD spatial grid -> coords, W_rook, W_queen, listw_rook, listw_queen
+SET I_mat = diag(N)
+
+FOR EACH incidence_mode IN {iid, spatial, poisson}:
+  SET rho_X_values = {0} if iid, else {0.20, 0.50}
+
+  FOR EACH rho_X IN rho_X_values:
+    GENERATE X_matrix (N x R_o) using incidence_mode, rho_X, W_queen
+    SET base_incidence = X_matrix[, 1]
+
+    FOR EACH nb_type IN {rook, queen}:
+      SELECT active W, listw for nb_type
+
+      FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
+        COMPUTE inv_mat = solve(I_mat - rho * W)
+        GENERATE Epsilon_matrix (N x R_o) ~ N(0, sigma^2)
+        COMPUTE baseline_part = inv_mat %*% (X_matrix * beta + Epsilon_matrix)
+
+        FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
+          FOR EACH spill_type IN {control_only, both}:
+            FOR EACH design_id IN {1, 2, 3, 4, 5, 6, 7, 8}:
+
+              SET scenario_seed = hash(incidence_mode, rho_X, nb_type,
+                                       rho, gamma, spill_type, design_id)
+              set.seed(scenario_seed)
+
+              GENERATE Z_matrix (N x R_d)
+              FOR d IN 1:R_d:
+                Z = Z_matrix[, d]
+                COMPUTE spillover = W %*% Z (apply spill_type mask)
+                COMPUTE trt_effect = inv_mat %*% (tau * Z + spillover)
+                Y_sim = trt_effect + baseline_part
+                ESTIMATE tau_hat, CI for each of R_o outcome columns
+
+              COMPUTE Bias, SD, MSE, Coverage, Fail_Rate
+              STORE results row
+```
+
+---
+
+# Appendix B: File Locations {#sec-appendix-files}
+
+```{r appendix-files}
+#| results: asis
+if (mle_avail) {
+  rds_dir   <- file.path(results_dir, "sim_data")
+  rds_files <- list.files(rds_dir, pattern = "\\.rds$", full.names = FALSE)
+
+  if (length(rds_files) > 0) {
+    files_df <- data.frame(
+      File     = rds_files,
+      Location = rep("results/sim_data/", length(rds_files))
+    )
+    knitr::kable(
+      files_df,
+      caption = "RDS result files"
+    )
+  }
+}
+```
+
+All simulation data files are located in: `results/sim_data/`
+
+Code modules: `code/01_spatial_setup.R` through `code/08_design_recommendations.R`
+
+Reports: `code/00_mathematical_specification.Rmd`, `code/07_results_summary.qmd`, `code/09_MLE_design_recommendation_report.qmd`

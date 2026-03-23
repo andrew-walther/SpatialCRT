@@ -10,3 +10,9 @@ results/checkpoints/
 code/*_cache/
 code/*_files/
 code/*.tex
+
+# Paper intermediate LaTeX files
+paper/**/*.tex
+
+# Worktrees
+.claude/worktrees/

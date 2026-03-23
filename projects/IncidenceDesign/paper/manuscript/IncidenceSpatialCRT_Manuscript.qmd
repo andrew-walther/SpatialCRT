@@ -1,0 +1,94 @@
+---
+title: "Spatial Cluster Randomized Trials - Sampling Design with Heterogeneous Outcome Incidence"
+author:
+  - name: Andrew Walther
+    affiliations:
+      - name: "The University of North Carolina at Chapel Hill, Department of Biostatistics"
+  - name: Tonya Van Deinse
+    affiliations:
+      - name: "The University of North Carolina at Chapel Hill, School of Social Work"
+  - name: Feng-Chang Lin
+    affiliations:
+      - name: "The University of North Carolina at Chapel Hill, Department of Biostatistics"
+    corresponding: true
+    email: flin@bios.unc.edu
+date: today
+format:
+  pdf:
+    documentclass: article
+    number-sections: true
+    toc: false
+    latex-engine: xelatex
+    keep-tex: true
+    fig-pos: "htbp"
+    fig-height: 4
+    fig-width: 6.5
+    linestretch: 2.0
+    geometry: "margin=1in"
+    include-in-header:
+      text: |
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{float}
+        \usepackage{amsmath}
+        \usepackage{amssymb}
+        \usepackage{algorithm}
+        \usepackage{algpseudocode}
+        \usepackage{lineno}
+        \usepackage{fancyhdr}
+        \lhead{Walther et al.}
+        \pagestyle{fancy}
+        \linenumbers
+  html:
+    toc: true
+    number-sections: true
+bibliography: ../section_drafts/references.bib
+---
+
+```{r setup}
+#| include: false
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.pos = "htbp"
+)
+```
+
+**Keywords:** spatial autoregressive, treatment assignment, cluster randomized trials, spillover effects, incidence-guided design, simulation study
+
+{{< include _abstract.qmd >}}
+
+{{< include _introduction.qmd >}}
+
+{{< include _methods.qmd >}}
+
+{{< include _simulation.qmd >}}
+
+{{< include _application.qmd >}}
+
+{{< include _discussion.qmd >}}
+
+## Authors' Contributions {.unnumbered}
+
+A.W. wrote the manuscript text, developed the simulation framework, and prepared all figures and tables. T.V. provided advisement for the application section and domain expertise in the NC criminal justice context. F.C.L. provided statistical methodology guidance and reviewed the manuscript. All authors reviewed the manuscript.
+
+## Funding {.unnumbered}
+
+Dr. Van Deinse is supported by the National Institutes of Mental Health (K01MH129619). The trauma-informed supervision approach referenced in this manuscript was funded by the Bureau of Justice Assistance 15PBJA-24-GG-01896-PRJH and awarded to the North Carolina Department of Adult Correction.
+
+## Data Availability {.unnumbered}
+
+All data supporting the findings of this study are generated via simulation. Summarized findings are included in the tables and figures. The simulation code and data are available upon request and with permission of the authors.
+
+## Declarations {.unnumbered}
+
+### Ethics, Consent to Participate, and Consent to Publish {.unnumbered}
+
+Not applicable.
+
+### Competing Interests {.unnumbered}
+
+The authors declare that they have no competing interests.
+
+## References {.unnumbered}
