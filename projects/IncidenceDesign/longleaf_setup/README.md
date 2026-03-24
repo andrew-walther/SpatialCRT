@@ -1,104 +1,175 @@
-# Longleaf HPC R Simulation Template
+# Longleaf HPC Setup for IncidenceDesign
 
-A ready-to-use template for running R simulations on UNC's Longleaf HPC cluster using SLURM job arrays. Designed for researchers running many seeds or parameter combinations in parallel.
+Run the MLE simulation (2,560 scenarios) on UNC's Longleaf cluster using SLURM job arrays. Each scenario runs as an independent task (~1-5 min), enabling massive parallelism.
 
-## File structure
+## Directory Structure
 
 ```
-.
-├── submit_array.sl          # SLURM job array script (primary — use this)
-├── submit_single.sl         # SLURM single-run script (for one long job)
-├── LONGLEAF_CHEATSHEET.md   # Common commands reference
-├── R/
-│   ├── simulation.R         # Your simulation script (edit this)
-│   └── aggregate_results.R  # Combines output from all tasks after run
-├── logs/                    # SLURM output/error logs (auto-created)
-└── results/
-    ├── rds/                 # Per-task .rds output files
-    ├── csv/                 # Per-task .csv output files
-    └── figures/             # Per-task plot files
+longleaf_setup/
+  simulation.R           # Per-scenario simulation script (called by SLURM)
+  submit_array.sl        # SLURM job array submission script
+  aggregate_results.R    # Combines per-scenario outputs after completion
+  install_packages.R     # First-time R package setup
+  submit_single.sl       # Alternative: single long-running job (not used)
+  LONGLEAF_CHEATSHEET.md # Quick reference for Longleaf commands
+  CLAUDE_CODE_BRIEFING.md # Context for Claude Code sessions
+  logs/                  # SLURM stdout/stderr (created at runtime, git-ignored)
+  results/rds/           # Per-scenario .rds files (created at runtime, git-ignored)
 ```
 
-## Quickstart
+The simulation sources `../code/01-04*.R` modules — it does NOT modify them.
 
-### 1. Copy this template into your repo
+## How It Works
 
-Drop these files into your existing Git repo. Commit and push.
+The 2,560 scenarios are a full factorial of all parameter combinations:
 
-### 2. On Longleaf: clone/pull your repo into /work
+| Parameter | Values | Count |
+|-----------|--------|:-----:|
+| Incidence config | iid, spatial(0.2), spatial(0.5), poisson(0.2), poisson(0.5) | 5 |
+| Neighbor type | rook, queen | 2 |
+| Rho | 0.00, 0.01, 0.20, 0.50 | 4 |
+| Gamma | 0.5, 0.6, 0.7, 0.8 | 4 |
+| Spillover type | control_only, both | 2 |
+| Design | 1-8 | 8 |
+| **Total** | | **2,560** |
+
+`simulation.R` builds this grid via `expand.grid()`. SLURM passes a task ID (1-2560), which indexes into the grid. Each task:
+1. Rebuilds the spatial grid and generates incidence/epsilon with deterministic seeding
+2. Runs one scenario's estimation (25 design x 10 outcome resamples = 250 iterations)
+3. Saves a 1-row .rds file to `results/rds/scenario_<id>.rds`
+
+## One-Time Setup
 
 ```bash
-ssh onyen@longleaf.unc.edu
-cd /work/users/a/n/onyen           # your work directory
-git clone https://github.com/you/repo.git
-cd repo
-mkdir -p logs results/rds results/csv results/figures
-```
+ssh awalther@longleaf.unc.edu
+cd /work/users/a/w/awalther
+git clone https://github.com/<username>/SpatialCRT.git
+cd SpatialCRT/projects/IncidenceDesign/longleaf_setup
+mkdir -p logs results/rds
 
-### 3. Install your R packages (once, interactively)
-
-```bash
-srun -p interact -n 1 --cpus-per-task=1 --mem=8g -t 1:00:00 --pty /bin/bash
+# Install R packages (interactive session)
+srun -p interact -n 1 --mem=8g -t 1:00:00 --pty /bin/bash
 module add r/4.4.0
-R
-# install.packages(c("tidyverse", "your_packages_here"))
-# q()
+Rscript install_packages.R
 exit
 ```
 
-### 4. Adapt simulation.R
+## Running the Simulation
 
-Edit `R/simulation.R`. Key lines to understand:
-- `args <- commandArgs(trailingOnly = TRUE)` — receives the task ID from SLURM
-- `task_id` is the SLURM array index (1, 2, 3, ..., N) — use it as your seed or parameter index
-- Save all outputs with `task_id` in the filename to avoid file collisions across parallel tasks
-
-### 5. Configure and submit
-
-Edit `submit_array.sl`:
-- Set `--array=1-N` to the number of runs you want
-- Set `--mem=` and `--time=` appropriately (start conservative; tune with `seff` after first run)
-- Set `--mail-user=` to your UNC email
-
-Then submit:
 ```bash
+cd /work/users/a/w/awalther/SpatialCRT/projects/IncidenceDesign/longleaf_setup
+git pull  # if code was updated
+
+# Step 1: Test with one task
+sbatch --array=1-1 submit_array.sl
+squeue -u awalther
+# After completion:
+seff <jobID>               # check memory/time usage
+cat logs/slurm-*_1.out     # check output
+cat logs/slurm-*_1.err     # check errors
+
+# Step 2: Submit all 2,560 tasks
 sbatch submit_array.sl
+squeue -u awalther         # monitor progress
+
+# Step 3: Aggregate results
+module add r/4.4.0
+Rscript aggregate_results.R
+# -> saves to ../results/sim_data/longleaf/sim_results_MLE_combined_<timestamp>.rds
 ```
 
-### 6. Monitor
+## Getting Results to Your Mac
 
 ```bash
-squeue -u onyen         # watch progress
-seff <jobID>            # check resource usage after completion
+# Run on your Mac — copies the entire longleaf/ results tree:
+scp -r awalther@longleaf.unc.edu:/work/users/a/w/awalther/SpatialCRT/projects/IncidenceDesign/results/longleaf/ \
+    ~/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/longleaf/
 ```
 
-### 7. Aggregate results
+## Results Layout
 
-After all tasks complete, combine outputs:
+Longleaf results are kept separate from local results under `results/longleaf/`:
+
+```
+results/
+  sim_data/                         # LOCAL simulation data (.rds files)
+  07_results_summary.pdf            # LOCAL reports
+  09_MLE_design_recommendation_report.pdf
+  mle_per_config/                   # LOCAL per-config figure PDFs
+  longleaf/                         # ALL Longleaf outputs
+    sim_data/                       #   aggregated .rds files
+    reports/                        #   rendered reports (07, 09, etc.)
+    mle_per_config/                 #   per-config figure PDFs
+```
+
+**Loading Longleaf results in R:**
+```r
+# IMPORTANT: always use this path when working with Longleaf results
+longleaf_results <- load_latest_results(
+  results_dir = "results/longleaf/sim_data"
+)
+```
+
+**Generating reports from Longleaf results:**
+
+The existing report scripts (`06_visualizations.R`, `08_design_recommendations.R`) work
+with Longleaf results — just point them at the right data and output directory:
+
+```r
+source("code/06_visualizations.R")
+
+# Load Longleaf results
+results <- load_latest_results(results_dir = "results/longleaf/sim_data")
+
+# Generate visualizations into the longleaf reports directory
+run_all_visualizations(
+  results     = results,
+  results_dir = "results/longleaf",
+  estimation_mode = "MLE_combined",
+  output_pdf  = TRUE
+)
+
+# Generate design recommendations
+source("code/08_design_recommendations.R")
+run_recommendation_report(
+  results         = results,
+  estimation_mode = "MLE_combined",
+  results_dir     = "results/longleaf"
+)
+```
+
+Reports will be saved to `results/longleaf/reports/` and figures to
+`results/longleaf/mle_per_config/`, keeping them fully separate from
+local-run outputs.
+
+## Resubmitting Failed Tasks
+
 ```bash
-Rscript R/aggregate_results.R
+# Check which tasks completed:
+ls results/rds/ | wc -l
+
+# aggregate_results.R reports missing IDs. Resubmit specific ones:
+sbatch --array=5,12,47 submit_array.sl
 ```
 
-Or copy results back to your Mac first:
-```bash
-# Run on your Mac:
-scp -r onyen@longleaf.unc.edu:/work/users/a/n/onyen/repo/results/ ~/local/
+## Scaling Up (Phase 2)
+
+After validating the pipeline works, increase precision by editing `simulation.R`:
+```r
+n_design_resamples  <- 50    # was 25
+n_outcome_resamples <- 50    # was 10
+```
+And increase the time limit in `submit_array.sl`:
+```
+#SBATCH --time=01:00:00     # was 00:30:00
 ```
 
-## Resource sizing guide
+## Resource Sizing
 
-| Simulation type         | `--mem` | `--cpus-per-task` | `--time`     |
-|-------------------------|---------|-------------------|--------------|
-| Small MC (< 10k obs)    | 4g      | 1                 | 1:00:00      |
-| Medium (10k–1M obs)     | 8g      | 1                 | 4:00:00      |
-| Large / complex model   | 16–32g  | 1                 | 12:00:00     |
-| Parallel R (future etc) | 16g     | 4–8               | 4:00:00      |
+| Resamples | Iterations | Est. time/task | `--time` | `--mem` |
+|-----------|:----------:|:--------------:|:--------:|:-------:|
+| 25 x 10 (default) | 250 | ~2 min | 00:30:00 | 4g |
+| 50 x 25 | 1,250 | ~10 min | 00:30:00 | 4g |
+| 50 x 50 | 2,500 | ~25 min | 01:00:00 | 4g |
 
-**Always run `seff <jobID>` after your first job to see actual memory and CPU usage, then adjust.**
-
-## Notes
-
-- `results/` and `logs/` are intentionally git-ignored (add them to `.gitignore`)
-- The `%10` suffix in `--array=1-100%10` limits concurrent tasks to 10 — useful to be a good cluster citizen on large arrays
-- VPN required to SSH into Longleaf from off-campus
-- Never run code directly on the login node — always use `sbatch` or `srun`
+Always run `seff <jobID>` after your first job to check actual usage and adjust.
