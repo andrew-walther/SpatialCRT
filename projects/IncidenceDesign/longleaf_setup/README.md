@@ -75,7 +75,7 @@ squeue -u awalther         # monitor progress
 # Step 3: Aggregate results
 module add r/4.4.0
 Rscript aggregate_results.R
-# -> saves to ../results/sim_data/longleaf/sim_results_MLE_combined_<timestamp>.rds
+# -> saves to ../results/longleaf/sim_data/sim_results_MLE_combined_<timestamp>.rds
 ```
 
 ## Getting Results to Your Mac
