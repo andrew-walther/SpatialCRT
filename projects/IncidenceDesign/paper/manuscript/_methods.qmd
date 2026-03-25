@@ -69,7 +69,7 @@ $$X_i = \frac{\text{rank}(R_i) - 0.5}{N}$$
 
 The explicit determination of the binary treatment vector $\mathbf{Z}$ dictates how the direct intervention is deployed across the targeted region. This methodology contrasts strictly spatial randomization methods against covariate-constrained assignment algorithms that actively utilize the observed incidence vector $\mathbf{X}$. Each sampling design targets a globally balanced allocation where approximately half of the clusters receive the intervention ($\sum_{i=1}^N Z_i \approx N/2$).
 
-<!-- TODO: Update figure to show all 8 designs -->
+![Sample treatment assignments for each of the eight designs applied to a single realization of iid Uniform(0,1) baseline incidence on the 10×10 lattice. Tile color indicates baseline incidence (darker = higher). Symbols denote treatment status: circles (treated) and crosses (control). Designs 1–4 use only spatial information; designs 5–8 additionally condition on the observed incidence vector.](figures/design_samples_8panel.png){#fig-design-samples width="100%"}
 
 ### Strictly Spatial Methods
 

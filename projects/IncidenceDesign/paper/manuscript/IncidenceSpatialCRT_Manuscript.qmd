@@ -42,6 +42,7 @@ format:
   html:
     toc: true
     number-sections: true
+    embed-resources: true
 bibliography: ../section_drafts/references.bib
 ---
 
