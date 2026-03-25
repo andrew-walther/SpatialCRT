@@ -140,7 +140,7 @@ Quadrants, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Balanced Halves,
 Incidence-Guided Saturation Quadrants.
 
 <p align="center">
-  <img src="results/figures/design_samples_8panel.png" alt="Sample treatment assignments for each of the 8 designs on a 10x10 lattice with iid Uniform baseline incidence" width="100%">
+  <img src="results/figures/design_samples_8panel.png" alt="Sample treatment assignments for each of the 8 designs on a 10x10 lattice with iid Uniform baseline incidence" width="75%">
   <br><em>Sample treatment assignments for each design applied to a single realization of iid Uniform(0,1) baseline incidence. Tile color indicates baseline incidence (darker = higher). Circles = treated, crosses = control.</em>
 </p>
 
