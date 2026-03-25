@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>methods</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="_methods_files/libs/clipboard/clipboard.min.js"></script>
+<script src="_methods_files/libs/quarto-html/quarto.js"></script>
+<script src="_methods_files/libs/quarto-html/popper.min.js"></script>
+<script src="_methods_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="_methods_files/libs/quarto-html/anchor.min.js"></script>
+<link href="_methods_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="_methods_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="_methods_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="_methods_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="_methods_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="sec-methods" class="level1">
+<h1>Theoretical Methods</h1>
+<section id="study-region-and-spatial-structure" class="level2">
+<h2 class="anchored" data-anchor-id="study-region-and-spatial-structure">Study Region and Spatial Structure</h2>
+<p>To formalize the spatial relationships inherent in a cluster randomized trial (CRT), the theoretical study region is defined as a regular square lattice grid. Let the spatial domain be denoted as <span class="math inline">\(\mathcal{G} = \{s_1, s_2, \dots, s_N\}\)</span>, where each spatial cluster <span class="math inline">\(s_i\)</span> is located at discrete integer coordinates <span class="math inline">\((x_i, y_i)\)</span>. The total number of uniformly sized clusters within the geographic network is <span class="math inline">\(N\)</span>. Utilizing a regular lattice structure isolates the methodological evaluation of the sampling designs from the confounding effects of irregular polygon geometries and heterogeneous cluster populations, providing a standardized baseline to systematically compare trial designs <span class="citation" data-cites="cressie_statistics_1993">[@cressie_statistics_1993]</span>.</p>
+<p>The spatial relationships between clusters are parameterized using strict contiguity-based definitions, which dictate the pathways through which intervention effects and spatial dependence propagate. Two primary contiguity structures are formalized for this framework:</p>
+<ol type="1">
+<li><p><strong>Rook Contiguity:</strong> Clusters are considered adjacent neighbors strictly if they share a direct horizontal or vertical edge. The neighborhood set for a given cluster <span class="math inline">\(s_i\)</span> under Rook contiguity is defined as: <span class="math display">\[\mathcal{N}_R(s_i) = \left\{ s_j \in \mathcal{G} : |x_i - x_j| + |y_i - y_j| = 1 \right\}\]</span></p></li>
+<li><p><strong>Queen Contiguity:</strong> Clusters are considered neighbors if they share either a direct edge or a single vertex, inherently including diagonal adjacencies. The corresponding neighborhood set is defined as: <span class="math display">\[\mathcal{N}_Q(s_i) = \left\{ s_j \in \mathcal{G} : \max(|x_i - x_j|, |y_i - y_j|) = 1 \right\}\]</span></p></li>
+</ol>
+<p>To incorporate these neighborhood structures into the spatial econometric modeling, an <span class="math inline">\(N \times N\)</span> spatial weight matrix, <span class="math inline">\(\mathbf{W}\)</span>, is constructed <span class="citation" data-cites="lesage_introduction_2009">[@lesage_introduction_2009]</span>. Let <span class="math inline">\(\mathbf{A}\)</span> denote an <span class="math inline">\(N \times N\)</span> binary adjacency matrix where the element <span class="math inline">\(A_{ij} = 1\)</span> if <span class="math inline">\(s_j \in \mathcal{N}(s_i)\)</span>, and <span class="math inline">\(A_{ij} = 0\)</span> otherwise. By convention, <span class="math inline">\(A_{ii} = 0\)</span> for all <span class="math inline">\(i\)</span>. Clusters located on the boundaries of the spatial grid naturally possess fewer neighbors (edge effects). To facilitate the interpretation of spatial lags as localized neighborhood averages, the weight matrix <span class="math inline">\(\mathbf{W}\)</span> is row-standardized. This row-standardization inherently compensates for these edge effects by distributing the total weight equally among the available neighbors. The elements of the row-standardized spatial weight matrix are defined as:</p>
+<p><span class="math display">\[W_{ij} = \frac{A_{ij}}{\sum_{k=1}^N A_{ik}} \quad \text{for } i \neq j, \text{ and } W_{ii} = 0\]</span></p>
+</section>
+<section id="data-generating-process-and-the-spatial-durbin-model" class="level2">
+<h2 class="anchored" data-anchor-id="data-generating-process-and-the-spatial-durbin-model">Data Generating Process and the Spatial Durbin Model</h2>
+<p>In community-based public health trials, the observed outcome within a specific geographic cluster is rarely independent of its surrounding spatial context. To capture both the endogenous spatial dependence of the outcome variable and the exogenous spillover effects generated by the localized treatment, the data-generating process utilizes the Spatial Durbin Model (SDM) <span class="citation" data-cites="lesage_introduction_2009">[@lesage_introduction_2009]</span>. The continuous outcome vector for the spatial grid, <span class="math inline">\(\mathbf{Y} = (Y_1, \dots, Y_N)^\top\)</span>, is expressed in its reduced structural form as:</p>
+<p><span class="math display">\[\mathbf{Y} = (\mathbf{I}_N - \rho \mathbf{W})^{-1} [\tau \mathbf{Z} + \gamma \cdot \text{Spill}(\mathbf{Z}) + \beta \mathbf{X} + \mathbf{\epsilon}]\]</span></p>
+<p>In this structural equation, the parameters operate as follows:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{I}_N\)</span> is the <span class="math inline">\(N \times N\)</span> identity matrix.</li>
+<li><span class="math inline">\((\mathbf{I}_N - \rho \mathbf{W})^{-1}\)</span> acts as the global spatial multiplier, inducing global spatial dependence and ensuring that a localized intervention effect reverberates throughout the entire spatial network, decaying exponentially with topological distance.</li>
+<li><span class="math inline">\(\rho\)</span> is the spatial autocorrelation coefficient. The condition <span class="math inline">\(|\rho| &lt; 1\)</span> must be maintained to ensure the matrix is invertible and the spatial process remains stable.</li>
+<li><span class="math inline">\(\tau\)</span> is the primary estimand of interest, representing the true direct effect of the intervention on the treated cluster.</li>
+<li><span class="math inline">\(\mathbf{Z}\)</span> is an <span class="math inline">\(N \times 1\)</span> binary treatment assignment vector, where <span class="math inline">\(Z_i = 1\)</span> indicates that cluster <span class="math inline">\(s_i\)</span> received the active intervention.</li>
+<li><span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(N \times 1\)</span> continuous vector representing the pre-existing baseline outcome incidence within each cluster.</li>
+<li><span class="math inline">\(\beta\)</span> is a scalar coefficient governing the direct linear effect of the baseline incidence <span class="math inline">\(\mathbf{X}\)</span> on the final observed outcome.</li>
+<li><span class="math inline">\(\mathbf{\epsilon}\)</span> represents an <span class="math inline">\(N \times 1\)</span> vector of independent and identically distributed random error terms, where <span class="math inline">\(\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}_N)\)</span>.</li>
+</ul>
+<p>The function <span class="math inline">\(\text{Spill}(\mathbf{Z})\)</span> calculates an <span class="math inline">\(N \times 1\)</span> vector representing the degree of indirect treatment exposure that each cluster receives from its immediate neighbors, weighted by the scalar spillover magnitude parameter, <span class="math inline">\(\gamma\)</span>. The base spillover exposure for a given cluster <span class="math inline">\(i\)</span> is calculated as the proportion of its contiguous neighbors assigned to the intervention arm: <span class="math inline">\((\mathbf{W}\mathbf{Z})_i = \frac{1}{|\mathcal{N}(i)|} \sum_{j \in \mathcal{N}(i)} Z_j\)</span>.</p>
+<p>This framework accommodates two mathematical mechanisms of spillover propagation:</p>
+<ol type="1">
+<li><p><strong>Bidirectional Spillover (Intervention &amp; Control):</strong> The indirect spillover effect impacts all clusters in the network regardless of their internal treatment assignment status. The exposure for cluster <span class="math inline">\(i\)</span> is defined as <span class="math inline">\(\text{Spill}_i^{(\text{both})} = (\mathbf{W}\mathbf{Z})_i\)</span>.</p></li>
+<li><p><strong>Control-Only Spillover:</strong> The spillover effect functions exclusively as an externality for clusters that did not directly receive the intervention. The exposure is defined using a Hadamard product: <span class="math inline">\(\text{Spill}_i^{(\text{ctrl})} = (\mathbf{W}\mathbf{Z})_i \cdot (1 - Z_i)\)</span>.</p></li>
+</ol>
+</section>
+<section id="spatially-heterogeneous-incidence-generation" class="level2">
+<h2 class="anchored" data-anchor-id="spatially-heterogeneous-incidence-generation">Spatially Heterogeneous Incidence Generation</h2>
+<p>The baseline incidence vector <span class="math inline">\(\mathbf{X}\)</span> models the historical, pre-intervention outcome rates distributed across the geographic clusters. To rigorously evaluate the vulnerability of spatial sampling designs to underlying data structures, <span class="math inline">\(\mathbf{X}\)</span> is generated via three distinct modes. The final incidence metric <span class="math inline">\(X_i\)</span> is computationally mapped to a strictly continuous scale bounded within <span class="math inline">\([0, 1]\)</span>.</p>
+<p><strong>Mode 1: Independent and Identically Distributed (iid) Uniform Incidence.</strong> As a methodological baseline, incidence is generated with no underlying spatial structure: <span class="math display">\[X_i \sim \text{Uniform}(0, 1) \quad \text{for } i = 1, \dots, N\]</span></p>
+<p><strong>Mode 2: Spatially Correlated Incidence (SAR Filter).</strong> To reflect scenarios where underlying outcomes naturally cluster geographically, incidence is generated utilizing a Simultaneous Autoregressive (SAR) filter <span class="citation" data-cites="lesage_introduction_2009">[@lesage_introduction_2009]</span>: <span class="math display">\[\mathbf{X}^* = (\mathbf{I}_N - \rho_X \mathbf{W})^{-1} \mathbf{u}, \quad \text{where } \mathbf{u} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}_N)\]</span></p>
+<p>Here, <span class="math inline">\(\rho_X \in [0, 1)\)</span> controls the degree of spatial autocorrelation in baseline incidence. A probability integral transform is applied using the standard normal CDF, <span class="math inline">\(\Phi(\cdot)\)</span>, yielding the final bounded incidence: <span class="math inline">\(X_i = \Phi(X_i^*)\)</span>.</p>
+<p><strong>Mode 3: Poisson Count-Based Incidence.</strong> Motivated by empirical disease incidence distributions—specifically Sudden Unexpected Death (SUD) demographic data <span class="citation" data-cites="mirzaei_years_2019 gan_factors_2019">[@mirzaei_years_2019; @gan_factors_2019]</span>—this mode generates discrete event counts based on localized population densities and spatially correlated underlying relative risks. First, spatially correlated log-rates are generated: <span class="math display">\[\log \mathbf{\lambda}^* = \mu_0 \mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W})^{-1} \mathbf{u}, \quad \text{where } \mathbf{u} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}_N)\]</span></p>
+<p>Expected case counts are drawn from a Poisson distribution scaled by cluster population <span class="math inline">\(P_i\)</span>: <span class="math display">\[C_i \sim \text{Poisson}(\lambda_i^* P_i)\]</span></p>
+<p>Observed rates <span class="math inline">\(R_i = C_i / P_i\)</span> are rank-normalized to preserve ordinal spatial clustering while mapping to <span class="math inline">\([0, 1]\)</span>: <span class="math display">\[X_i = \frac{\text{rank}(R_i) - 0.5}{N}\]</span></p>
+</section>
+<section id="treatment-assignment-designs" class="level2">
+<h2 class="anchored" data-anchor-id="treatment-assignment-designs">Treatment Assignment Designs</h2>
+<p>The explicit determination of the binary treatment vector <span class="math inline">\(\mathbf{Z}\)</span> dictates how the direct intervention is deployed across the targeted region. This methodology contrasts strictly spatial randomization methods against covariate-constrained assignment algorithms that actively utilize the observed incidence vector <span class="math inline">\(\mathbf{X}\)</span>. Each sampling design targets a globally balanced allocation where approximately half of the clusters receive the intervention (<span class="math inline">\(\sum_{i=1}^N Z_i \approx N/2\)</span>).</p>
+<div id="fig-design-samples" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/design_samples_8panel.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Sample treatment assignments for each of the eight designs applied to a single realization of iid Uniform(0,1) baseline incidence on the 10×10 lattice. Tile color indicates baseline incidence (darker = higher). Symbols denote treatment status: circles (treated) and crosses (control). Designs 1–4 use only spatial information; designs 5–8 additionally condition on the observed incidence vector.</figcaption>
+</figure>
+</div>
+<section id="strictly-spatial-methods" class="level3">
+<h3 class="anchored" data-anchor-id="strictly-spatial-methods">Strictly Spatial Methods</h3>
+<ol type="1">
+<li><p><strong>Checkerboard (Block Stratification):</strong> A deterministic, alternating assignment pattern designed to maximize spatial separation by ensuring that every treated cluster is entirely surrounded by control clusters under Rook contiguity. For a cluster at coordinates <span class="math inline">\((x_i, y_i)\)</span>, the assignment is <span class="math inline">\(Z_i = (x_i + y_i) \pmod{2}\)</span>.</p></li>
+<li><p><strong>Saturation Quadrants:</strong> The spatial grid is bisected along both axes, partitioning the landscape into four equally sized geographic quadrants. Each quadrant is randomly assigned a distinct, fixed treatment saturation density without replacement (0.20, 0.40, 0.60, and 0.80). Clusters within each quadrant are randomly assigned to treatment until the saturation target is met.</p></li>
+<li><p><strong>Isolation Buffer Treatment Clusters:</strong> A stochastic, greedy spatial algorithm designed to prevent contiguous treatment spillover between active intervention units. An available cluster is randomly selected for treatment (<span class="math inline">\(Z_i = 1\)</span>). Immediately following selection, that cluster and all of its immediate contiguous neighbors are permanently removed from the eligible assignment pool. Treatment proportion varies across realizations (typically approximately 20–30%).</p></li>
+<li><p><strong><span class="math inline">\(2 \times 2\)</span> Random Blocking:</strong> The global spatial lattice is evenly partitioned into distinct, non-overlapping <span class="math inline">\(2 \times 2\)</span> contiguous geographic blocks. Within each localized block of four clusters, exactly two clusters are stochastically assigned to the intervention arm.</p></li>
+</ol>
+</section>
+<section id="covariate-constrained-methods-incidence-guided" class="level3">
+<h3 class="anchored" data-anchor-id="covariate-constrained-methods-incidence-guided">Covariate-Constrained Methods (Incidence-Guided)</h3>
+<ol start="5" type="1">
+<li><p><strong>Median Incidence Grouping (High Incidence Focus):</strong> A deterministic allocation strategy that actively targets the geographic areas suffering from the highest historical burden. Clusters are assigned to the intervention arm strictly if their baseline incidence exceeds the median: <span class="math inline">\(Z_i = \mathbf{1}[X_i &gt; \text{median}(\mathbf{X})]\)</span>.</p></li>
+<li><p><strong>Treatment Balanced Incidence Quartiles:</strong> Clusters are stratified into four strata based on the quartiles of the baseline incidence vector <span class="math inline">\(\mathbf{X}\)</span>. Within each incidence stratum, approximately 50% of the clusters are randomly assigned to the intervention arm, balancing historical severity across both treatment and control groups.</p></li>
+<li><p><strong>Balanced Halves:</strong> Clusters are stratified into two groups by median baseline incidence. Within each half, approximately half of the clusters are randomly assigned to treatment. This is a 2-stratum analog of the Balanced Quartiles design, providing coarser but still effective incidence balancing.</p></li>
+<li><p><strong>Incidence-Guided Saturation Quadrants:</strong> The spatial grid is partitioned into four quadrants using the same spatial partition as Design 2 (Saturation Quadrants). Quadrants are ranked by their average baseline incidence <span class="math inline">\(\bar{X}_{Q_k}\)</span> in descending order and <strong>deterministically</strong> assigned saturation levels: the highest-incidence quadrant receives 0.80 saturation, the second receives 0.60, the third 0.40, and the lowest-incidence quadrant receives 0.20. Within each quadrant, clusters are randomly selected for treatment at the assigned rate. Unlike the standard Saturation Quadrants design, the saturation-to-quadrant mapping is guided by incidence data rather than random, concentrating treatment resources in areas of highest baseline burden while maintaining within-quadrant randomization.</p></li>
+</ol>
+</section>
+</section>
+<section id="estimation-via-maximum-likelihood" class="level2">
+<h2 class="anchored" data-anchor-id="estimation-via-maximum-likelihood">Estimation via Maximum Likelihood</h2>
+<p>In the presence of endogenous spatial dependence (<span class="math inline">\(\rho \neq 0\)</span>) and exogenous spillover (<span class="math inline">\(\gamma \neq 0\)</span>), estimators such as the Difference-in-Means fundamentally violate the Stable Unit Treatment Value Assumption (SUTVA). Furthermore, Ordinary Least Squares (OLS) regression fails as an unbiased estimator in this context due to continuous spatial feedback loops. Because the unobserved spatial structure correlates simultaneously with both the treatment assignment mechanics and the final outcome, the expected value of the error term conditional on the regressors is non-zero (<span class="math inline">\(E[\mathbf{\epsilon} \mid \mathbf{Z}, \mathbf{W}] \neq 0\)</span>). Consequently, OLS models suffer from simultaneity bias, yielding systematically biased point estimates and artificially deflated standard errors.</p>
+<p>To achieve statistically consistent estimation of the direct intervention effect <span class="math inline">\(\tau\)</span>, a spatial autoregressive regression framework must be utilized <span class="citation" data-cites="bivand_comparing_2015">[@bivand_comparing_2015]</span>. The corresponding empirical estimation model takes the matrix form:</p>
+<p><span class="math display">\[\mathbf{Y} = \rho \mathbf{W} \mathbf{Y} + \mathbf{X}_{\text{design}}\mathbf{\beta}_{\text{design}} + \mathbf{\epsilon}\]</span></p>
+<p>where the composite design matrix is <span class="math inline">\(\mathbf{X}_{\text{design}} = [\mathbf{Z} \quad \text{Spill}(\mathbf{Z}) \quad \mathbf{X}]\)</span> and the corresponding coefficient vector is <span class="math inline">\(\mathbf{\beta}_{\text{design}} = (\tau, \gamma, \beta)^\top\)</span>.</p>
+<p>Because the response variable <span class="math inline">\(\mathbf{Y}\)</span> appears on both sides of the structural equation, the parameters must be estimated simultaneously via concentrated Maximum Likelihood Estimation (MLE). This approach optimizes a log-likelihood function that explicitly incorporates the Jacobian determinant of the spatial transformation, <span class="math inline">\(\ln|\mathbf{I}_N - \rho \mathbf{W}|\)</span>. This term evaluates the likelihood space and partitions the variance by concurrently estimating the spatial autocorrelation parameter alongside the direct and indirect treatment coefficients.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

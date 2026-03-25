@@ -809,3 +809,106 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
   cat("=== All visualizations complete ===\n")
   invisible(results)
 }
+
+# ==============================================================================
+# DESIGN SAMPLE FIGURE — 8-panel illustration of treatment assignments
+# ==============================================================================
+
+#' Plot a single example of each of the 8 treatment assignment designs
+#'
+#' Generates one treatment assignment per design on a shared iid Uniform(0,1)
+#' incidence surface, displayed as a 2x4 panel grid. Designed for manuscript
+#' inclusion in the Methods section.
+#'
+#' @param seed Integer, random seed for reproducibility (default 2026)
+#' @param grid_dim Integer, side length of the square lattice (default 10)
+#' @param save_path Optional directory path; if provided, saves PNG and PDF there
+#' @param width Figure width in inches (default 14)
+#' @param height Figure height in inches (default 7)
+#' @return A ggplot object (invisibly)
+plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
+                                width = 14, height = 7) {
+
+  set.seed(seed)
+
+  # Build grid infrastructure
+
+  grid <- build_spatial_grid(grid_dim)
+  coords     <- grid$coords
+  N_clusters <- grid$N_clusters
+  nb_queen   <- grid$nb_queen
+
+  # Shared incidence surface
+  dummy_incidence <- runif(N_clusters, 0, 1)
+
+  # Short facet labels
+  design_labels <- c(
+    "1" = "1: Checkerboard",
+    "2" = "2: High Incidence Focus",
+    "3" = "3: Saturation Quadrants",
+    "4" = "4: Isolation Buffer",
+    "5" = "5: 2\u00d72 Blocking",
+    "6" = "6: Balanced Quartiles",
+    "7" = "7: Balanced Halves",
+    "8" = "8: Guided Sat. Quadrants"
+  )
+
+  # Generate one assignment per design
+  sample_designs_list <- lapply(1:8, function(d) {
+    z <- get_designs(
+      design_id   = d,
+      n_resamples = 1,
+      N           = N_clusters,
+      incidence   = dummy_incidence,
+      nb_list     = nb_queen,
+      coords      = coords
+    )[, 1]
+
+    data.frame(
+      x          = coords$x,
+      y          = coords$y,
+      Incidence  = dummy_incidence,
+      Assignment = as.factor(z),
+      Design     = factor(design_labels[as.character(d)],
+                          levels = design_labels)
+    )
+  })
+
+  sample_designs_df <- do.call(rbind, sample_designs_list)
+
+  # Build the plot
+  p <- ggplot(sample_designs_df, aes(x = x, y = y)) +
+    geom_tile(aes(fill = Incidence), color = "grey50", linewidth = 0.4) +
+    geom_point(aes(shape = Assignment), fill = "white", color = "black",
+               size = 2.2, stroke = 0.9) +
+    scale_fill_viridis_c(option = "mako", direction = -1,
+                         name = "Baseline\nIncidence") +
+    scale_shape_manual(
+      values = c("0" = 4, "1" = 21),
+      labels = c("0" = "Control (X)", "1" = "Treated (\u25cf)"),
+      name   = "Treatment\nAssignment"
+    ) +
+    facet_wrap(~ Design, ncol = 4) +
+    theme_void(base_size = 12) +
+    theme(
+      legend.position  = "right",
+      strip.text       = element_text(face = "bold", size = 10,
+                                      margin = margin(b = 6, t = 6)),
+      panel.border     = element_rect(color = "black", fill = NA,
+                                      linewidth = 0.5),
+      plot.margin      = margin(10, 10, 10, 10)
+    ) +
+    coord_fixed()
+
+  # Save if requested
+  if (!is.null(save_path)) {
+    dir.create(save_path, showWarnings = FALSE, recursive = TRUE)
+    ggsave(file.path(save_path, "design_samples_8panel.png"), p,
+           width = width, height = height, dpi = 300, bg = "white")
+    ggsave(file.path(save_path, "design_samples_8panel.pdf"), p,
+           width = width, height = height, bg = "white")
+    cat(sprintf("Saved design sample figure to %s\n", save_path))
+  }
+
+  invisible(p)
+}
