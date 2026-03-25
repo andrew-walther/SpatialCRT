@@ -144,9 +144,7 @@ Incidence-Guided Saturation Quadrants.
   <br><em>Sample treatment assignments for each design applied to a single realization of iid Uniform(0,1) baseline incidence. Tile color indicates baseline incidence (darker = higher). Circles = treated, crosses = control.</em>
 </p>
 
-**Estimation methods:**
-- **DIM:** Difference in Means with Neyman variance estimator (2,500 iterations/scenario)
-- **MLE:** Spatial autoregressive model `lagsarlm(Y ~ Z + Spill + X)` using oracle Spill covariate (250 iterations/scenario)
+**Estimation:** MLE via spatial autoregressive model `lagsarlm(Y ~ Z + Spill + X)` using oracle Spill covariate (250 iterations/scenario).
 
 **Total scenarios:** 5 incidence configs x 2 neighbor types x 4 rho x 4 gamma x 2 spillover types x 8 designs = **2,560 scenarios**
 
@@ -154,19 +152,13 @@ Incidence-Guided Saturation Quadrants.
 
 ## Results Summary
 
-### MLE (primary — full 8-design sweep, completed 2026-03-22)
+### MLE (full 8-design sweep, completed 2026-03-22)
 
 - **2,560 scenarios** (designs 1–8, all incidence configs) | Fail_Rate = 0.0
 - **Best: Design 8 (Incidence-Guided Saturation Quadrants)** MSE=0.079 ≈ **Design 3 (Saturation Quadrants)** MSE=0.080
 - **Worst: Design 1 (Checkerboard)** MSE=0.744, coverage ~55%
 - Mean coverage ~0.94 for all designs except D1
 - File: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
-
-### DIM (naive baseline — prior 6-design sweep only, completed 2026-03-04)
-
-- **1,920 scenarios** (old sweep) | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] (mean 0.179)
-- Coverage [0.00, 0.99] (mean 0.72) — systematically low; DIM ignores spatial dependence and spillover
-- File: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
 
 ### Results Directory Structure
 
@@ -181,17 +173,14 @@ results/
     sim_results_MLE_iid_{timestamp}.rds        # iid Uniform only (512 rows)
     sim_results_MLE_spatial_{timestamp}.rds    # Spatial only (1,024 rows)
     sim_results_MLE_poisson_{timestamp}.rds    # Poisson only (1,024 rows)
-    sim_results_DIM_combined_{timestamp}.rds   # DIM baseline (2,560 rows)
-    sim_results_DIM_{iid|spatial|poisson}_{timestamp}.rds
   mle_per_config/
     MLE_combined_{config_name}.pdf             # Per-config 8-plot PDF (5 configs)
     MLE_combined_incidence_overview.pdf        # Incidence heatmaps + distributions
-  dim/
-    DIM_combined_{config_name}.pdf             # DIM per-config PDFs (baseline only)
-    DIM_visualizations.pdf
+  figures/
+    design_samples_8panel.{png,pdf}            # 8-panel design illustration (clean)
+    design_samples_option1_overlays.{png,pdf}  # 8-panel with strata/boundary annotations
   archive/
     test_plots.pdf                             # Dev artifacts
-    sim_results_DIM_quicktest.rds
     completion_log.txt
 ```
 
