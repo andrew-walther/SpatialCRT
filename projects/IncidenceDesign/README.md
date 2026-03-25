@@ -139,6 +139,11 @@ to control units) and `both` (applied to all units).
 Quadrants, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Balanced Halves,
 Incidence-Guided Saturation Quadrants.
 
+<p align="center">
+  <img src="results/figures/design_samples_8panel.png" alt="Sample treatment assignments for each of the 8 designs on a 10x10 lattice with iid Uniform baseline incidence" width="100%">
+  <br><em>Sample treatment assignments for each design applied to a single realization of iid Uniform(0,1) baseline incidence. Tile color indicates baseline incidence (darker = higher). Circles = treated, crosses = control.</em>
+</p>
+
 **Estimation methods:**
 - **DIM:** Difference in Means with Neyman variance estimator (2,500 iterations/scenario)
 - **MLE:** Spatial autoregressive model `lagsarlm(Y ~ Z + Spill + X)` using oracle Spill covariate (250 iterations/scenario)
