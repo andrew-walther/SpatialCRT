@@ -48,6 +48,8 @@ The predecessor Rmd is preserved untouched.
 | `07_results_summary.Rmd` | ~800 | Rendered results report (HTML/PDF) | Knitted summary of all MLE findings |
 | `08_design_recommendations.R` | ~560 | Personalized design recommendations | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
 | `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative PDF report | Knitted to `results/MLE_design_recommendation_report.pdf` |
+| `10_statistical_comparisons.R` | ~1050 | Formal statistical hypothesis tests | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()` |
+| `11_statistical_comparisons_report.qmd` | ~543 | Statistical comparisons narrative report | Rendered to `results/11_statistical_comparisons_report.{html,pdf}` |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
 
 ---
@@ -160,14 +162,26 @@ Incidence-Guided Saturation Quadrants.
 - Mean coverage ~0.94 for all designs except D1
 - File: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
 
+### Statistical Comparisons (completed 2026-03-25)
+
+- **Friedman test:** χ² = 993.38 (df=7), p < 2.2×10⁻¹⁶ — overwhelming evidence that designs differ
+- **Top equivalence group (Nemenyi post-hoc):** Design 3 (avg rank 2.663) and Design 8 (avg rank 2.731) — not significantly different from each other, significantly better than all others
+- **Design 1 (Checkerboard) is significantly worse than all alternatives** (avg rank 7.037)
+- **24/28 Nemenyi pairs** and **27/28 Wilcoxon pairs** are statistically significant (α = 0.05)
+- Rankings are **robust across all parameter strata** (p < 2.2×10⁻¹⁶ in every conditional test)
+- Full report: `results/11_statistical_comparisons_report.pdf`
+
 ### Results Directory Structure
 
 ```
 results/
-  MLE_design_recommendation_report.pdf     # PRIMARY — narrative report (26 pages)
-  MLE_combined_design_recommendations.pdf  # PRIMARY — figures/tables PDF (27 pages)
-  00_mathematical_specification.pdf        # Theory document
-  07_results_summary.pdf                   # Results summary (pending revision)
+  MLE_design_recommendation_report.pdf        # PRIMARY — narrative report (26 pages)
+  MLE_combined_design_recommendations.pdf     # PRIMARY — figures/tables PDF (27 pages)
+  11_statistical_comparisons_report.pdf       # PRIMARY — formal hypothesis testing report
+  11_statistical_comparisons_report.html      # HTML version (self-contained)
+  00_mathematical_specification.pdf           # Theory document
+  07_results_summary.pdf                      # Results summary
+  09_MLE_design_recommendation_report.pdf     # MLE recommendation report
   sim_data/
     sim_results_MLE_combined_{timestamp}.rds   # All 2,560 MLE scenarios
     sim_results_MLE_iid_{timestamp}.rds        # iid Uniform only (512 rows)
@@ -178,7 +192,7 @@ results/
     MLE_combined_incidence_overview.pdf        # Incidence heatmaps + distributions
   figures/
     design_samples_8panel.{png,pdf}            # 8-panel design illustration (clean)
-    design_samples_option1_overlays.{png,pdf}  # 8-panel with strata/boundary annotations
+    design_samples_option1_overlays.{png,pdf}  # 8-panel with saturation % annotations
   archive/
     test_plots.pdf                             # Dev artifacts
     completion_log.txt
@@ -213,12 +227,18 @@ paper/
     figures/SamplingGridExamples_crop.png
 ```
 
-The **unified report** (`paper/report/`) consolidates the three code-side reports
-(00, 07, 09) into a single end-to-end reference with live R-generated figures and tables.
+The **unified report** (`paper/report/`) consolidates all code-side reports into a single
+end-to-end reference (50+ pages): spatial setup, DGP, 8 design illustrations, estimation
+methods, simulation design, all MLE results, full statistical comparisons (Section 10 with
+Friedman/Nemenyi/Wilcoxon tests and conditional CD diagrams), and design recommendations.
 
 The **manuscript** (`paper/manuscript/`) uses a modular Quarto structure with
 `{{< include >}}` directives. Each section is independently editable. The LaTeX
 originals in `section_drafts/` are preserved as archival reference.
+
+Figures available in `paper/manuscript/figures/`:
+- `design_samples_8panel.{png,pdf}` — clean 2×4 design panel
+- `design_samples_option1_overlays.{png,pdf}` — annotated version with saturation % labels
 
 ---
 
@@ -274,26 +294,24 @@ originals in `section_drafts/` are preserved as archival reference.
 - [x] Results directory reorganized: `sim_data/`, `mle_per_config/`, `dim/`, `archive/`
 - [x] Project documentation: CLAUDE.md + README.md
 - [x] Design set expanded to 8 designs (Balanced Halves, Incidence-Guided Saturation Quadrants added)
-
-**Pending:**
 - [x] Re-run MLE simulation: 2,560 scenarios covering all 8 designs (1–8) — completed 2026-03-22
 - [x] Unified project report consolidating all code-side reports — completed 2026-03-23
 - [x] Modular manuscript framework with converted LaTeX section drafts — completed 2026-03-23
+- [x] Statistical comparisons module (10) + report (11): Friedman/Nemenyi/Wilcoxon tests — completed 2026-03-25
+- [x] Comprehensive report (`paper/report/`) expanded with full statistical section, design figures
+
+**Pending simulation extensions:**
+- [ ] **Tau sensitivity analysis** — re-run simulation varying `true_tau` ∈ {0.8, 1.0, 1.5, 2.0, 3.0}; requires ~12,800 scenarios, recommended for Longleaf HPC. See `CLAUDE.md` for implementation notes.
 - [ ] Re-run DIM simulation: 2,560 scenarios (baseline, optional — DIM is naive reference only)
-- [ ] Regenerate visualizations and design recommendations after re-run
+- [ ] Heterogeneous population — Poisson mode with `pop_mode = "heterogeneous"`
+- [ ] Non-oracle MLE — run without the true Spill covariate for realistic comparison
+- [ ] Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
 
 **Manuscript development (in progress):**
 - [ ] Populate simulation results section with live R figures/tables
 - [ ] Develop Application section (SUD in NC context)
 - [ ] Develop Discussion section (relevance, limitations, future work)
 - [ ] Careful prose review and revision of all drafted sections
-- [ ] Generate updated 8-design grid visualization figure
-
-**Planned simulation extensions:**
-- [ ] Revise `07_results_summary.Rmd` — reframe as MLE-focused with DIM as brief baseline footnote
-- [ ] Heterogeneous population — Poisson mode with `pop_mode = "heterogeneous"`
-- [ ] Non-oracle MLE — run without the true Spill covariate for realistic comparison
-- [ ] Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
 
 ---
 

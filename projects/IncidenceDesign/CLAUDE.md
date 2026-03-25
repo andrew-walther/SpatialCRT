@@ -54,9 +54,11 @@ design recommendations should be based on MLE results.
 | `07_results_summary.Rmd` | ~800 | Rendered results report | Knitted HTML/PDF summary |
 | `08_design_recommendations.R` | ~891 | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
 | `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative report | Knitted to `results/MLE_design_recommendation_report.pdf` |
+| `10_statistical_comparisons.R` | ~1050 | Formal hypothesis tests on design MSE | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()`, `plot_conditional_cd_diagrams()`, `generate_comparison_report()` |
+| `11_statistical_comparisons_report.qmd` | ~543 | Narrative statistical comparisons report | Renders to `results/11_statistical_comparisons_report.{html,pdf}` |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **paper/report/** | | | |
-| `IncidenceSpatialCRT_Report.qmd` | ~900 | Unified project report | Consolidates 00, 07, 09 into one end-to-end reference (HTML + PDF) |
+| `IncidenceSpatialCRT_Report.qmd` | ~1100 | Unified project report (50+ pages) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
 | **paper/manuscript/** | | | |
 | `IncidenceSpatialCRT_Manuscript.qmd` | ~80 | Master manuscript | Assembles child sections via `{{< include >}}` |
 | `_abstract.qmd` | ~20 | Structured abstract | Background, Methods, Results, Conclusion |
@@ -182,7 +184,7 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-03-22)
+## Current State (as of 2026-03-25)
 
 **MLE simulation:** COMPLETE — full 8-design, 2,560-scenario sweep (primary estimator)
 - Data: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
@@ -192,30 +194,45 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 - Design recommendations: `results/MLE_combined_design_recommendations.pdf`
 - Companion narrative: `results/MLE_design_recommendation_report.pdf`
 
+**Statistical comparisons:** COMPLETE — Friedman + Nemenyi + Wilcoxon on 320 blocks × 8 designs
+- χ² = 993.38 (p < 2.2×10⁻¹⁶). Top group: D3 (rank 2.663) & D8 (rank 2.731). Worst: D1 (rank 7.037).
+- 24/28 Nemenyi pairs significant; 27/28 Wilcoxon (Holm) pairs significant.
+- Rankings robust across all parameter strata (all conditional Friedman p < 2.2×10⁻¹⁶).
+- Full report: `results/11_statistical_comparisons_report.{html,pdf}`
+
+**Comprehensive report:** `paper/report/IncidenceSpatialCRT_Report.{html,pdf}` — 50+ pages
+- Section 10 contains the complete formal statistical comparisons analysis (Friedman table,
+  average ranks, CD diagram, MSE boxplot with stars, Wilcoxon heatmap, conditional Friedman
+  table, all conditional CD diagrams by parameter, summary bullet-point subsection).
+
 **DIM simulation:** COMPLETE for prior 6-design sweep (naive baseline only)
 - Data: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
-- Stats (old): 1,920 scenarios | Bias [-0.883, 0.558] (mean -0.200) | MSE [0.032, 0.799] | Coverage [0.00, 0.99] (mean 0.72)
-- Visualizations: `results/dim/` (5 per-config PDFs + overview)
-- Note: DIM coverage systematically low (~72%) because it ignores spatial dependence and spillover. Use MLE for all substantive analysis.
+- Coverage systematically ~72% — use MLE for all substantive analysis.
 
 **Results directory layout:**
 ```
 results/
-  MLE_design_recommendation_report.pdf     # PRIMARY narrative report (26 pages)
-  MLE_combined_design_recommendations.pdf  # PRIMARY figures/tables PDF (27 pages)
+  MLE_design_recommendation_report.pdf        # PRIMARY narrative report (26 pages)
+  MLE_combined_design_recommendations.pdf     # PRIMARY figures/tables PDF (27 pages)
+  11_statistical_comparisons_report.{html,pdf} # Formal hypothesis testing (17 pages)
   00_mathematical_specification.pdf
-  07_results_summary.pdf                   # Pending revision (remove DIM vs MLE framing)
+  07_results_summary.pdf
+  09_MLE_design_recommendation_report.pdf
   sim_data/          # All .rds files (load_latest_results() auto-detects this)
   mle_per_config/    # MLE per-config PDFs
-  dim/               # DIM output PDFs (baseline reference only)
-  archive/           # Dev artifacts (test_plots.pdf, quicktest.rds, completion_log.txt)
+  figures/           # design_samples_8panel + design_samples_option1_overlays
+  archive/
 paper/
-  SpatialCRT_IncidenceDesign_Manuscript.qmd   # Quarto manuscript (scaffold)
-  SpatialCRT_IncidenceDesign_Presentation.qmd # Quarto slides (scaffold)
+  report/
+    IncidenceSpatialCRT_Report.{qmd,html,pdf}  # Unified report (50+ pages, sources all modules)
+  manuscript/
+    figures/   # design_samples_8panel + design_samples_option1_overlays (for manuscript use)
+    *.qmd      # Modular manuscript sections
 ```
 
-**Git:** Original work on branch `claude/gallant-buck`, merged to `main` 2026-03-05.
-Reorganized into `projects/IncidenceDesign/` on branch `claude/dreamy-wiles`.
+**Git:** Original work on `claude/gallant-buck` → `main` 2026-03-05.
+Reorganized into `projects/IncidenceDesign/` on `claude/dreamy-wiles`.
+Statistical comparisons + report expansions on `claude/elated-lederberg`.
 
 ---
 
@@ -342,12 +359,30 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 ## Planned Extensions (not yet implemented)
 
-- **Revise `07_results_summary.Rmd`** — remove DIM vs MLE comparison framing; reframe as MLE-focused with DIM as a brief baseline footnote
-- **Populate `paper/` QMD templates** — manuscript and presentation are scaffolds with default Quarto content; need project-specific sections, figures, and results integration
+### HIGH PRIORITY: Tau Sensitivity Analysis
+Vary `true_tau` ∈ {0.8, 1.0, 1.5, 2.0, 3.0} to assess whether design rankings hold across effect sizes. Requires ~12,800 scenarios — recommended for Longleaf HPC.
+
+**Implementation checklist for `05_run_simulation.R`:**
+1. Replace `true_tau <- 1.0` with `true_tau_vals <- c(0.8, 1.0, 1.5, 2.0, 3.0)` and add outer loop over tau values
+2. Pass `true_tau` into the outcome DGP computation (`true_tau * Z` at ~line 222)
+3. Update `Bias` calculation: `Mean_Estimate - true_tau` (not hardcoded 1.0)
+4. Update `Coverage` check: CI contains actual `true_tau`, not 1.0
+5. Add `True_Tau` column to results dataframe
+6. Include `true_tau` in the per-scenario digest seed string
+
+**Downstream changes needed:**
+- `06_visualizations.R` — add tau as faceting variable; new MSE-vs-tau trajectory plot
+- `10_statistical_comparisons.R` — add `True_Tau` as a conditional stratification dimension
+- Reports (07, 09, 11, comprehensive) — incorporate tau dimension
+
+**Tau values rationale:** 0.8 tests boundary where τ ≈ γ (max spillover); 1.0 is current baseline; 1.5/2.0/3.0 test larger effects.
+
+### Other extensions
 - Heterogeneous population mode for Poisson (`pop_mode = "heterogeneous"`)
 - Non-oracle MLE runs (`include_spill_covariate = FALSE`) for realistic estimation
-- Sensitivity to grid dimension (`grid_dim = 8` or `15`)
-- Additional designs or design variants
+- Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
+- Populate `paper/manuscript/` QMD sections with live figures and results
+- Develop Application section (SUD in NC context)
 
 ---
 

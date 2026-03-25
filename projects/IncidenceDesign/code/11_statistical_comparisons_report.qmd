@@ -1,0 +1,538 @@
+---
+title: "Statistical Comparison of Treatment Assignment Designs"
+subtitle: "Formal Hypothesis Testing for Design Selection in Spatial CRTs"
+author: "Andrew Walther"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme: cosmo
+    smooth-scroll: true
+    code-fold: true
+    code-summary: "Show code"
+    self-contained: true
+  pdf:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    latex-engine: xelatex
+    keep-tex: false
+    fig-pos: "htbp"
+    fig-height: 4
+    fig-width: 6.5
+    include-in-header:
+      text: |
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{float}
+        \usepackage{amsmath}
+        \usepackage{amssymb}
+        \usepackage{geometry}
+        \usepackage{xcolor}
+        \usepackage{mdframed}
+        \geometry{margin=1in}
+        \floatplacement{figure}{htbp}
+        \floatplacement{table}{H}
+        \definecolor{boxbg}{RGB}{240,248,255}
+        \definecolor{boxframe}{RGB}{70,130,180}
+---
+
+```{r setup}
+#| include: false
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.pos = "htbp"
+)
+```
+
+```{r load-packages}
+#| include: false
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(knitr)
+library(kableExtra)
+library(PMCMRplus)
+library(patchwork)
+```
+
+```{r resolve-paths}
+#| include: false
+script_dir <- tryCatch(
+  normalizePath(dirname(knitr::current_input(dir = TRUE))),
+  error = function(e) {
+    tryCatch(
+      normalizePath(dirname(sys.frame(1)$ofile)),
+      error = function(e2) normalizePath(getwd())
+    )
+  }
+)
+results_dir <- file.path(dirname(script_dir), "results")
+```
+
+```{r source-modules}
+#| include: false
+source(file.path(script_dir, "10_statistical_comparisons.R"))
+```
+
+```{r load-results}
+#| include: false
+mle_results <- load_latest_results(results_dir, estimation_mode = "MLE_combined")
+n_scenarios <- nrow(mle_results)
+n_designs <- length(unique(mle_results$Design))
+n_blocks <- n_scenarios / n_designs
+```
+
+```{r run-tests}
+#| include: false
+# Run all core tests
+fr  <- run_friedman_test(mle_results)
+nem <- run_nemenyi_posthoc(mle_results)
+wil <- run_pairwise_wilcoxon(mle_results)
+
+# Run conditional tests
+cond_params <- c("Rho", "Gamma", "Spillover_Type", "Neighbor_Type", "Incidence_Mode")
+cond_results <- list()
+cond_summaries <- list()
+for (param in cond_params) {
+  cr <- run_conditional_tests(mle_results, param)
+  cond_results[[param]] <- cr
+  cond_summaries[[param]] <- summarize_conditional_tests(cr)
+}
+```
+
+# Introduction
+
+This report presents formal statistical hypothesis tests to compare the performance of `r n_designs` treatment assignment designs evaluated in the IncidenceDesign simulation study for Spatial Cluster Randomized Trials (CRTs). While prior analyses have characterized design performance descriptively using mean MSE, coverage probability, and win-rate rankings, these comparisons lack the statistical rigor needed to declare one design significantly better than another.
+
+The central question is: **can we provide statistical evidence that certain designs yield significantly better estimation accuracy (lower MSE for $\hat{\tau}$) than others?** Answering this question is essential for providing actionable guidance to investigators planning future spatial CRTs.
+
+The simulation evaluated `r n_scenarios` scenarios spanning `r n_blocks` unique parameter combinations, with each combination tested under all `r n_designs` designs. This paired structure is exploited by the non-parametric tests described below.
+
+# Methods
+
+## Overview of the Comparison Problem
+
+We seek to determine whether the `r n_designs` treatment assignment designs differ *significantly* in their ability to estimate the treatment effect $\tau$, as measured by MSE. This is fundamentally a **multiple treatment comparison** problem: we have $k = `r n_designs`$ designs, each observed under the same set of experimental conditions (parameter combinations), and we wish to test whether any design is systematically better or worse.
+
+Because the same data-generating conditions are shared across all designs within each parameter combination, we have a **paired / blocked** experimental structure. Standard parametric tests (e.g., repeated-measures ANOVA) assume normally distributed residuals, which may not hold for MSE values. We therefore use **non-parametric rank-based tests** that make no distributional assumptions.
+
+The total number of unique pairwise comparisons among $k = `r n_designs`$ designs is:
+$$\binom{k}{2} = \binom{`r n_designs`}{2} = `r choose(n_designs, 2)`$$
+
+## Blocking Structure
+
+Each scenario is defined by a unique combination of simulation parameters:
+
+| Parameter | Levels | Count |
+|-----------|--------|:-----:|
+| Incidence Mode | iid, spatial, poisson (with $\rho_X \in \{0.20, 0.50\}$) | 5 configs |
+| Neighbor Type | rook, queen | 2 |
+| $\rho$ (outcome spatial autocorrelation) | 0.00, 0.01, 0.20, 0.50 | 4 |
+| $\gamma$ (spillover magnitude) | 0.50, 0.60, 0.70, 0.80 | 4 |
+| Spillover Type | control-only, bidirectional | 2 |
+
+This produces $5 \times 2 \times 4 \times 4 \times 2 = `r n_blocks`$ **blocks**. Within each block, all `r n_designs` designs were evaluated under identical data-generating conditions, creating a natural repeated-measures / paired design. The metric of interest is the **Mean Squared Error (MSE)** of the MLE estimator $\hat{\tau}$ for the true treatment effect $\tau = 1.0$.
+
+Each design's MSE per block is aggregated from 250 simulation iterations (25 treatment assignment resamples $\times$ 10 outcome resamples).
+
+## Friedman Test (Omnibus)
+
+The **Friedman test** (Friedman, 1937) is a non-parametric alternative to one-way repeated-measures ANOVA. It is the standard method for comparing multiple treatments or methods measured under matched conditions.
+
+**Procedure:** Within each of the $N = `r n_blocks`$ blocks, the $k = `r n_designs`$ designs are ranked by MSE (rank 1 = lowest MSE = best performance). The test then evaluates whether the average ranks differ across designs more than expected by chance.
+
+**Hypotheses:**
+
+- $H_0$: All $k$ designs have equal average MSE ranks across the $N$ blocks. No design is systematically better or worse.
+- $H_1$: At least one design's average rank differs from the others.
+
+The Friedman test statistic is:
+$$Q = \frac{12N}{k(k+1)} \left[\sum_{j=1}^{k} \bar{R}_j^2 - \frac{k(k+1)^2}{4}\right]$$
+
+where $\bar{R}_j$ is the average rank of design $j$ across all blocks. Under $H_0$, $Q$ follows a $\chi^2$ distribution with $k - 1 = `r n_designs - 1`$ degrees of freedom.
+
+> **Reference:** Friedman, M. (1937). The use of ranks to avoid the assumption of normality implicit in the analysis of variance. *Journal of the American Statistical Association*, 32(200), 675-701.
+
+## Nemenyi Post-hoc Test
+
+When the Friedman test rejects $H_0$ (indicating at least one design differs), we need post-hoc pairwise comparisons to identify *which* designs differ. The **Nemenyi test** (Nemenyi, 1963) is the non-parametric analogue of the Tukey HSD test and controls the **family-wise error rate** across all $\binom{k}{2} = `r choose(n_designs, 2)`$ simultaneous comparisons.
+
+Two designs $i$ and $j$ are declared significantly different at level $\alpha$ if and only if their average rank difference $|\bar{R}_i - \bar{R}_j|$ exceeds the **Critical Difference (CD)**:
+
+$$CD = \frac{q_{\alpha, k, \infty}}{\sqrt{2}} \times \sqrt{\frac{k(k+1)}{6N}}$$
+
+where $q_{\alpha, k, \infty}$ is the critical value of the Studentized range distribution with $k$ groups and infinite degrees of freedom, $k = `r n_designs`$, and $N = `r n_blocks`$ blocks.
+
+Results are presented as a **Critical Difference (CD) diagram** (introduced to the machine learning community by Demšar, 2006). In this diagram:
+
+- Designs are placed on a horizontal number line by their **average rank** (lower = better MSE).
+- Thick horizontal bars connect groups of designs that are **NOT** significantly different from each other — these form **equivalence groups**.
+- If two designs are *not* connected by a shared bar, their performance difference *is* statistically significant.
+- A red arrow at the bottom shows the CD scale for reference.
+
+> **References:**
+>
+> - Nemenyi, P.B. (1963). *Distribution-free multiple comparisons*. Ph.D. dissertation, Princeton University.
+> - Demšar, J. (2006). Statistical comparisons of classifiers over multiple data sets. *Journal of Machine Learning Research*, 7, 1-30.
+
+## Pairwise Wilcoxon Signed-Rank Tests
+
+As a **sensitivity analysis** and to provide a more widely-known test alongside the Friedman/Nemenyi framework, we also perform pairwise **Wilcoxon signed-rank tests** (Wilcoxon, 1945) on the paired MSE values.
+
+**Hypotheses (for each pair of designs $i, j$):**
+
+- $H_0$: The distribution of paired MSE differences $(\text{MSE}_i - \text{MSE}_j)$ is symmetric about zero. That is, designs $i$ and $j$ have equivalent MSE performance.
+- $H_1$: The distribution is not symmetric about zero. One design systematically outperforms the other.
+
+This yields `r choose(n_designs, 2)` individual tests. To control the **family-wise error rate** across all tests, p-values are adjusted using the **Holm step-down procedure** (Holm, 1979), which is uniformly more powerful than Bonferroni correction while still controlling the Type I error rate.
+
+> **References:**
+>
+> - Wilcoxon, F. (1945). Individual comparisons by ranking methods. *Biometrics Bulletin*, 1(6), 80-83.
+> - Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scandinavian Journal of Statistics*, 6(2), 65-70.
+
+## Significance Notation
+
+Throughout this report, statistical significance is indicated using the following star notation:
+
+| Symbol | Meaning | Interpretation |
+|:------:|---------|----------------|
+| `***` | $p < 0.001$ | Very strong evidence against $H_0$ |
+| `**` | $p < 0.01$ | Strong evidence against $H_0$ |
+| `*` | $p < 0.05$ | Moderate evidence against $H_0$ |
+| `ns` | $p \geq 0.05$ | Insufficient evidence to reject $H_0$ |
+
+# Results: Aggregate Analysis {#sec-aggregate}
+
+## Friedman Omnibus Test
+
+```{r friedman-result}
+friedman_df <- data.frame(
+  Statistic = sprintf("%.2f", fr$statistic),
+  df = fr$n_designs - 1,
+  `P-value` = format.pval(fr$p_value, digits = 3),
+  `N Blocks` = fr$n_blocks,
+  Decision = ifelse(fr$p_value < 0.05, "Reject H0", "Fail to reject H0"),
+  check.names = FALSE
+)
+kable(friedman_df, caption = "Friedman omnibus test result.",
+      align = "c") %>%
+  kable_styling(full_width = FALSE, position = "center")
+```
+
+The Friedman test yields $\chi^2 = `r sprintf("%.2f", fr$statistic)`$ with $`r n_designs - 1`$ degrees of freedom ($p `r ifelse(fr$p_value < 2.2e-16, "< 2.2 \\times 10^{-16}", sprintf("= %.4f", fr$p_value))`$). We **reject the null hypothesis**: there is overwhelming evidence that the `r n_designs` designs differ in their MSE performance.
+
+## Average Ranks
+
+```{r avg-ranks-table}
+rank_df <- data.frame(
+  Design = names(fr$avg_ranks),
+  `Average Rank` = sprintf("%.3f", fr$avg_ranks),
+  `Rank Position` = seq_along(fr$avg_ranks),
+  check.names = FALSE
+)
+kable(rank_df, caption = "Designs ordered by average MSE rank across all scenarios (1 = best).",
+      align = c("l", "c", "c")) %>%
+  kable_styling(full_width = FALSE, position = "center") %>%
+  row_spec(1:2, bold = TRUE)
+```
+
+Designs 3 (Saturation Quadrants) and 8 (Incidence-Guided Saturation Quadrants) occupy the top two positions with nearly identical average ranks (`r sprintf("%.3f", fr$avg_ranks[1])` and `r sprintf("%.3f", fr$avg_ranks[2])`), while Design 1 (Checkerboard) ranks last at `r sprintf("%.3f", fr$avg_ranks[length(fr$avg_ranks)])`.
+
+## Critical Difference Diagram {#sec-cd-diagram}
+
+```{r cd-diagram}
+#| fig-cap: "Critical Difference diagram. Designs are placed by average MSE rank (lower = better). Horizontal bars connect designs that are NOT significantly different at the 0.05 level. The red arrow shows the critical difference scale."
+#| fig-height: 4
+#| fig-width: 6.5
+plot_cd_diagram(nem)
+```
+
+**How to read this diagram:** Each design is positioned on the number line by its average rank across all `r n_blocks` blocks (lower = better). The thick dark bars above the axis connect designs that are **statistically equivalent** — i.e., their pairwise Nemenyi p-value is $\geq 0.05$. Designs that do *not* share a bar are significantly different from each other.
+
+The red double-arrow labeled "CD" at the bottom shows the **Critical Difference** threshold: if two designs are separated by more than this distance on the rank axis, their difference is statistically significant.
+
+```{r cd-groups}
+groups <- find_cd_groups(nem$avg_ranks, nem$p_matrix, 0.05)
+```
+
+The CD diagram reveals **`r length(groups)` equivalence group(s)**:
+
+```{r cd-groups-list}
+#| results: asis
+for (i in seq_along(groups)) {
+  cat(sprintf("- **Group %d**: %s (avg ranks %.2f -- %.2f)\n", i,
+              paste(groups[[i]], collapse = ", "),
+              min(nem$avg_ranks[groups[[i]]]),
+              max(nem$avg_ranks[groups[[i]]])))
+}
+```
+
+The Nemenyi critical difference is **CD = `r sprintf("%.3f", nem$critical_diff)`** at $\alpha = 0.05$. Designs whose average rank difference exceeds `r sprintf("%.3f", nem$critical_diff)` are declared significantly different.
+
+## Pairwise Wilcoxon Results
+
+```{r wilcoxon-summary}
+n_sig_wil <- sum(wil$sig_matrix[upper.tri(wil$sig_matrix)])
+n_nonsig_wil <- choose(n_designs, 2) - n_sig_wil
+```
+
+Of the `r choose(n_designs, 2)` pairwise comparisons, **`r n_sig_wil` are statistically significant** (Holm-adjusted $p < 0.05$) and `r n_nonsig_wil` are not.
+
+```{r pvalue-heatmap-wilcoxon}
+#| fig-cap: "Pairwise Wilcoxon signed-rank p-values (Holm-adjusted). Stars indicate significance: *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant."
+#| fig-height: 6
+#| fig-width: 6.5
+plot_pvalue_heatmap(wil, "Wilcoxon (Holm)")
+```
+
+```{r pvalue-heatmap-nemenyi}
+#| fig-cap: "Pairwise Nemenyi post-hoc p-values from the Friedman test."
+#| fig-height: 6
+#| fig-width: 6.5
+plot_pvalue_heatmap(nem, "Nemenyi")
+```
+
+The non-significant pairs (Wilcoxon) identify designs whose MSE performance is statistically indistinguishable:
+
+```{r nonsig-pairs}
+designs <- rownames(wil$p_matrix)
+nonsig_pairs <- data.frame(Design_A = character(), Design_B = character(),
+                           Wilcoxon_p = numeric(), Nemenyi_p = numeric(),
+                           stringsAsFactors = FALSE)
+for (i in 1:(length(designs) - 1)) {
+  for (j in (i + 1):length(designs)) {
+    if (!wil$sig_matrix[designs[i], designs[j]]) {
+      nonsig_pairs <- rbind(nonsig_pairs, data.frame(
+        Design_A = designs[i], Design_B = designs[j],
+        Wilcoxon_p = wil$p_matrix[designs[i], designs[j]],
+        Nemenyi_p = nem$p_matrix[designs[i], designs[j]],
+        stringsAsFactors = FALSE
+      ))
+    }
+  }
+}
+if (nrow(nonsig_pairs) > 0) {
+  nonsig_pairs$Wilcoxon_p <- sprintf("%.4f", nonsig_pairs$Wilcoxon_p)
+  nonsig_pairs$Nemenyi_p <- sprintf("%.4f", nonsig_pairs$Nemenyi_p)
+  kable(nonsig_pairs,
+        caption = "Design pairs with no significant MSE difference (Wilcoxon).",
+        col.names = c("Design A", "Design B", "Wilcoxon p", "Nemenyi p"),
+        align = "c") %>%
+    kable_styling(full_width = FALSE, position = "center")
+} else {
+  cat("All pairwise comparisons are statistically significant.")
+}
+```
+
+## MSE Distribution with Significance
+
+The following boxplot shows the full distribution of scenario-level MSE values for each design, ordered by median MSE (best on the left). Brackets above the boxes with significance stars indicate pairwise comparisons from the Wilcoxon signed-rank test (Holm-adjusted). To avoid visual clutter, up to 8 key comparisons are shown, prioritizing those involving the best- and worst-performing designs.
+
+```{r boxplot-stars}
+#| fig-cap: "Boxplot of MSE by design (ordered by median MSE). Brackets with significance stars show Wilcoxon signed-rank test results (Holm-adjusted). Stars: *** p < 0.001, ** p < 0.01, * p < 0.05."
+#| fig-height: 6
+#| fig-width: 6.5
+plot_mse_boxplot_with_stars(mle_results, wil)
+```
+
+# Results: Conditional Analysis {#sec-conditional}
+
+To assess whether design rankings are **robust** across simulation conditions, we repeat the Friedman test within strata defined by individual parameters. If the Friedman test remains significant within every stratum and the best-ranked designs are consistent, the recommendation is robust.
+
+```{r conditional-setup}
+#| include: false
+# Pre-compute conditional summaries for each parameter
+all_cond_summary <- do.call(rbind, lapply(names(cond_summaries), function(param) {
+  df <- cond_summaries[[param]]
+  df$Parameter <- param
+  df
+}))
+```
+
+## Summary of Conditional Friedman Tests
+
+```{r conditional-summary-table}
+all_cond_summary$P_value_fmt <- ifelse(
+  all_cond_summary$P_value < 2.2e-16,
+  "< 2.2e-16",
+  sprintf("%.2e", all_cond_summary$P_value)
+)
+all_cond_summary$Significant <- ifelse(all_cond_summary$P_value < 0.05, "Yes", "No")
+
+display_df <- all_cond_summary %>%
+  select(Parameter, Stratum, Chi_squared, P_value_fmt, N_blocks, Best_Group, Significant)
+
+kable(display_df,
+      caption = "Friedman test results within each parameter stratum. 'Best Group' lists designs in the top equivalence group (statistically indistinguishable from the best).",
+      col.names = c("Parameter", "Stratum", "Chi-squared", "P-value",
+                     "N Blocks", "Best Group", "Significant"),
+      align = c("l", "l", "c", "c", "c", "l", "c")) %>%
+  kable_styling(full_width = FALSE, font_size = 11, latex_options = c("hold_position", "scale_down"))
+```
+
+The Friedman test is **significant in every stratum** ($p < 2.2 \times 10^{-16}$ in all cases), indicating that design differences are not an artifact of any particular parameter setting.
+
+## Conditional CD Diagrams
+
+The following CD diagrams show how design rankings shift (or remain stable) across levels of key simulation parameters.
+
+### By Outcome Spatial Autocorrelation ($\rho$)
+
+```{r cd-rho}
+#| fig-cap: "CD diagrams stratified by outcome spatial autocorrelation (Rho). Each panel shows one stratum."
+#| fig-height: 7
+#| fig-width: 6.5
+cd_plots_rho <- plot_conditional_cd_diagrams(cond_results[["Rho"]], "Rho")
+wrap_plots(cd_plots_rho, ncol = 2)
+```
+
+### By Spillover Magnitude ($\gamma$)
+
+```{r cd-gamma}
+#| fig-cap: "CD diagrams stratified by spillover magnitude (Gamma). Each panel shows one stratum."
+#| fig-height: 7
+#| fig-width: 6.5
+cd_plots_gamma <- plot_conditional_cd_diagrams(cond_results[["Gamma"]], "Gamma")
+wrap_plots(cd_plots_gamma, ncol = 2)
+```
+
+### By Spillover Type
+
+```{r cd-spillover}
+#| fig-cap: "CD diagrams stratified by spillover type."
+#| fig-height: 3.5
+#| fig-width: 6.5
+cd_plots_spill <- plot_conditional_cd_diagrams(cond_results[["Spillover_Type"]], "Spillover_Type")
+wrap_plots(cd_plots_spill, ncol = 2)
+```
+
+### By Neighbor Type
+
+```{r cd-neighbor}
+#| fig-cap: "CD diagrams stratified by neighbor type."
+#| fig-height: 3.5
+#| fig-width: 6.5
+cd_plots_nb <- plot_conditional_cd_diagrams(cond_results[["Neighbor_Type"]], "Neighbor_Type")
+wrap_plots(cd_plots_nb, ncol = 2)
+```
+
+### By Incidence Mode
+
+```{r cd-incidence}
+#| fig-cap: "CD diagrams stratified by incidence generation mode. Each panel shows one stratum."
+#| fig-height: 9
+#| fig-width: 6.5
+cd_plots_inc <- plot_conditional_cd_diagrams(cond_results[["Incidence_Mode"]], "Incidence_Mode")
+wrap_plots(cd_plots_inc, ncol = 2)
+```
+
+# Discussion
+
+## Key Findings
+
+```{r discussion-stats}
+#| include: false
+best_design <- names(fr$avg_ranks)[1]
+second_design <- names(fr$avg_ranks)[2]
+worst_design <- names(fr$avg_ranks)[length(fr$avg_ranks)]
+best_rank <- fr$avg_ranks[1]
+worst_rank <- fr$avg_ranks[length(fr$avg_ranks)]
+rank_gap <- worst_rank - best_rank
+
+# Check if best two are in same equivalence group
+best_two_equiv <- !nem$sig_matrix[best_design, second_design]
+best_worst_p <- wil$p_matrix[best_design, worst_design]
+```
+
+1. **Overwhelming evidence of design differences.** The Friedman test ($\chi^2 = `r sprintf("%.2f", fr$statistic)`$, $p `r ifelse(fr$p_value < 2.2e-16, "< 2.2 \\times 10^{-16}", sprintf("= %.4f", fr$p_value))`$) decisively rejects the null hypothesis that all designs perform equally. The average rank gap between the best (`r best_design`, rank `r sprintf("%.2f", best_rank)`) and worst (`r worst_design`, rank `r sprintf("%.2f", worst_rank)`) design is `r sprintf("%.2f", rank_gap)` on an 8-point scale.
+
+2. **`r best_design` and `r second_design` are the top performers.** These two designs `r ifelse(best_two_equiv, "are statistically indistinguishable from each other (Nemenyi $p > 0.05$) and form", "together form")` the top equivalence group in the CD diagram. Both employ quadrant-based saturation strategies, with `r best_design` using random saturation assignment and `r second_design` guiding saturation by observed incidence.
+
+3. **`r worst_design` (Checkerboard) is significantly worse than all other designs.** The pairwise comparison between `r best_design` and `r worst_design` yields $p `r ifelse(best_worst_p < 0.001, "< 0.001", sprintf("= %.4f", best_worst_p))`$ (Wilcoxon, Holm-adjusted). The checkerboard pattern, while intuitive, fails to account for spatial heterogeneity in outcomes.
+
+4. **Rankings are robust across all simulation parameters.** The Friedman test is significant within every stratum tested (all $p < 2.2 \times 10^{-16}$), and the top designs remain consistent regardless of the level of spatial autocorrelation, spillover magnitude, spillover type, neighbor contiguity, or incidence generation mode.
+
+## Implications for Study Design
+
+For investigators planning a spatial CRT with spatially heterogeneous outcomes, these results provide strong statistical evidence to recommend **saturation quadrant designs** (`r best_design` or `r second_design`) over alternative strategies. The recommendation is not sensitive to specific assumptions about the data-generating process within the range of parameters explored.
+
+In particular:
+
+- **Avoid the Checkerboard design** (`r worst_design`) — it performs significantly worse than all alternatives under MLE estimation.
+- **Saturation quadrant designs** leverage spatial structure by assigning different treatment saturation levels to different regions, which provides better identification of the treatment effect under spatial dependence.
+- When prior incidence data is available, `r second_design` (Incidence-Guided) may offer a slight advantage by directing higher saturation to higher-incidence areas, though the improvement over `r best_design` is not statistically significant.
+
+## Limitations
+
+- **Fixed $\tau = 1.0$**: All tests condition on a single true treatment effect size. A planned sensitivity analysis varying $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ will assess robustness to effect size.
+- **Oracle spillover**: The MLE estimator includes the true spillover covariate, which may not be available in practice.
+- **Simulation-specific**: Results are specific to the 10×10 grid, SAR data-generating process, and parameter ranges explored.
+
+# Conclusion
+
+```{r conclusion-counts}
+#| include: false
+n_sig_nem <- sum(nem$sig_matrix[upper.tri(nem$sig_matrix)])
+```
+
+Using a Friedman test with Nemenyi post-hoc comparisons and corroborated by pairwise Wilcoxon signed-rank tests, we find:
+
+- **`r n_sig_nem` of `r choose(n_designs, 2)` design pairs** are significantly different at the $\alpha = 0.05$ level (Nemenyi post-hoc), and **`r n_sig_wil` of `r choose(n_designs, 2)`** under the Wilcoxon signed-rank test with Holm correction.
+- **`r best_design`** (Saturation Quadrants) and **`r second_design`** (Incidence-Guided Saturation Quadrants) are the recommended designs, forming the top equivalence group with average ranks of `r sprintf("%.2f", fr$avg_ranks[1])` and `r sprintf("%.2f", fr$avg_ranks[2])`.
+- These findings are **robust** across all tested levels of spatial autocorrelation, spillover magnitude, spillover type, neighbor contiguity, and incidence generation mode.
+
+This analysis provides the statistical foundation for recommending specific treatment assignment designs for future spatial CRT studies.
+
+# Appendix: Test Details {.appendix}
+
+## Software and Packages
+
+- **R** version `r paste(R.version$major, R.version$minor, sep = ".")`
+- **PMCMRplus** `r packageVersion("PMCMRplus")`: Friedman test, Nemenyi post-hoc
+- **stats** (base R): Wilcoxon signed-rank test, Holm p-value adjustment
+- **Simulation results**: `r basename(attr(mle_results, "source") %||% "sim_results_MLE_combined_20260322_151030.rds")`
+
+## Nemenyi P-value Matrix
+
+```{r nemenyi-full-table}
+nem_p_display <- nem$p_matrix
+nem_p_display[is.na(nem_p_display)] <- NA
+for (i in 1:nrow(nem_p_display)) {
+  for (j in 1:ncol(nem_p_display)) {
+    if (!is.na(nem_p_display[i, j])) {
+      nem_p_display[i, j] <- sprintf("%.4f", as.numeric(nem_p_display[i, j]))
+    }
+  }
+}
+diag(nem_p_display) <- "—"
+kable(nem_p_display,
+      caption = "Full Nemenyi post-hoc p-value matrix.",
+      align = "c") %>%
+  kable_styling(font_size = 9, full_width = FALSE, latex_options = c("hold_position", "scale_down"))
+```
+
+## Wilcoxon P-value Matrix (Holm-adjusted)
+
+```{r wilcoxon-full-table}
+wil_p_display <- wil$p_matrix
+for (i in 1:nrow(wil_p_display)) {
+  for (j in 1:ncol(wil_p_display)) {
+    if (!is.na(wil_p_display[i, j])) {
+      wil_p_display[i, j] <- sprintf("%.4f", as.numeric(wil_p_display[i, j]))
+    }
+  }
+}
+diag(wil_p_display) <- "—"
+kable(wil_p_display,
+      caption = "Full pairwise Wilcoxon signed-rank p-value matrix (Holm-adjusted).",
+      align = "c") %>%
+  kable_styling(font_size = 9, full_width = FALSE, latex_options = c("hold_position", "scale_down"))
+```
