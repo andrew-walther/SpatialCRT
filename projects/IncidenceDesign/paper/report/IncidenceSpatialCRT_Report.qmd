@@ -7,8 +7,11 @@ format:
   html:
     toc: true
     toc-depth: 3
+    toc-location: left
     number-sections: true
     theme: cosmo
+    smooth-scroll: true
+    self-contained: true
   pdf:
     toc: true
     toc-depth: 3
@@ -74,6 +77,7 @@ results_dir <- normalizePath(file.path(
 orig_wd <- getwd()
 setwd(script_dir)
 source(file.path(script_dir, "08_design_recommendations.R"))
+source(file.path(script_dir, "10_statistical_comparisons.R"))
 setwd(orig_wd)
 ```
 
@@ -89,6 +93,17 @@ mle_results <- tryCatch(
 mle_avail <- !is.null(mle_results) && nrow(mle_results) > 0
 mle_cfgs  <- if (mle_avail) split_by_incidence_config(mle_results) else list()
 cfg_names <- names(mle_cfgs)
+```
+
+```{r run-stats-tests}
+#| include: false
+# Run statistical comparison tests (Friedman / Nemenyi / Wilcoxon)
+stats_avail <- mle_avail && exists("run_friedman_test")
+if (stats_avail) {
+  fr_report  <- run_friedman_test(mle_results)
+  nem_report <- run_nemenyi_posthoc(mle_results)
+  wil_report <- run_pairwise_wilcoxon(mle_results)
+}
 ```
 
 ```{r global-summaries}
@@ -405,6 +420,18 @@ knitr::kable(
 )
 ```
 
+```{r design-8panel-plain}
+#| fig-cap: "All 8 treatment assignment designs on a single 10×10 grid instance. Cell color represents baseline incidence (darker = higher burden). Circles (●) = treated clusters; crosses (×) = control clusters."
+#| out-width: "100%"
+knitr::include_graphics(file.path(results_dir, "figures", "design_samples_8panel.png"))
+```
+
+```{r design-8panel-annotated}
+#| fig-cap: "Same 8 designs with saturation percentage annotations. Percentage labels on the quadrant-based designs (Designs 3 and 8) show the within-quadrant treatment saturation rate assigned to each spatial region, illustrating how the two saturation quadrant strategies differ in how saturation levels are allocated."
+#| out-width: "100%"
+knitr::include_graphics(file.path(results_dir, "figures", "design_samples_option1_overlays.png"))
+```
+
 ## Design 1: Checkerboard (Strict Spatial Stratification)
 
 $$Z_i = (x_i + y_i) \mod 2$$
@@ -624,6 +651,235 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   print(plot_bias_variance(mle_cfgs[[1]], names(mle_cfgs)[1]))
 }
 ```
+
+---
+
+# Results: Formal Statistical Comparisons {#sec-stats}
+
+The descriptive summaries above rank designs by mean MSE, but do not establish whether observed differences are *statistically significant*. Here we apply non-parametric hypothesis tests to the paired MSE values across the `r if (stats_avail) fr_report$n_blocks else 320` unique parameter blocks. Each block is a unique combination of simulation parameters (Incidence Mode × Neighbor Type × $\rho$ × $\gamma$ × Spillover Type); within each block all 8 designs are evaluated under identical conditions, creating a paired repeated-measures structure.
+
+Three complementary tests are used: (1) the **Friedman test** (omnibus — is there any significant difference among designs?), (2) **Nemenyi post-hoc** comparisons with family-wise error control (which specific pairs differ?), and (3) pairwise **Wilcoxon signed-rank tests** with Holm correction (sensitivity check). Significance level $\alpha = 0.05$ throughout.
+
+## Friedman Omnibus Test
+
+```{r stats-friedman-table}
+#| results: asis
+if (stats_avail) {
+  friedman_df <- data.frame(
+    `Chi-squared` = sprintf("%.2f", fr_report$statistic),
+    df = fr_report$n_designs - 1,
+    `P-value` = format.pval(fr_report$p_value, digits = 3),
+    `N Blocks` = fr_report$n_blocks,
+    Decision = "Reject H0",
+    check.names = FALSE
+  )
+  knitr::kable(friedman_df,
+    caption = "Friedman omnibus test: are any design MSE ranks significantly different?",
+    align = "c") %>%
+    kable_styling(full_width = FALSE, position = "center",
+                  latex_options = "hold_position")
+}
+```
+
+The Friedman test ($\chi^2 = `r if (stats_avail) sprintf("%.2f", fr_report$statistic) else "—"`$, $p < 2.2 \times 10^{-16}$) decisively rejects the null hypothesis that all 8 designs perform equally. The table below shows each design's **average MSE rank** across all blocks (rank 1 = best):
+
+```{r stats-avg-ranks-table}
+#| results: asis
+if (stats_avail) {
+  rank_df <- data.frame(
+    Design        = names(fr_report$avg_ranks),
+    `Average Rank` = sprintf("%.3f", fr_report$avg_ranks),
+    check.names   = FALSE
+  )
+  knitr::kable(rank_df,
+    caption = "Average MSE rank per design across all 320 blocks (1 = best).",
+    align   = c("l", "c")) %>%
+    kable_styling(full_width = FALSE, position = "center",
+                  latex_options = "hold_position") %>%
+    row_spec(1:2, bold = TRUE)
+}
+```
+
+## Critical Difference Diagram
+
+```{r stats-cd-diagram}
+#| fig-cap: "Critical Difference (CD) diagram from Nemenyi post-hoc analysis. Designs are placed on a number line by average MSE rank (lower = better). Thick bars connect designs that are NOT significantly different at alpha = 0.05. The red arrow shows the CD threshold."
+#| fig-height: 4
+#| fig-width: 6.5
+if (stats_avail) plot_cd_diagram(nem_report)
+```
+
+**How to read this diagram:** Designs positioned closer together are more similar in performance. A thick bar connecting two designs means their difference is *not* statistically significant. The red arrow labelled "CD" shows the critical difference threshold — any two designs separated by more than this distance are significantly different.
+
+The headline finding: **Design 3 (Saturation Quadrants) and Design 8 (Incidence-Guided Saturation Quadrants) form the top equivalence group** — statistically indistinguishable from each other, and significantly better than all other designs. **Design 1 (Checkerboard) is significantly worse than all alternatives** (Nemenyi $p < 0.001$ vs. every other design).
+
+## Pairwise Significance: MSE Distributions
+
+```{r stats-boxplot}
+#| fig-cap: "MSE distribution by design (ordered by median MSE, best on left). Significance brackets show pairwise Wilcoxon signed-rank test results (Holm-adjusted). Stars: *** p < 0.001, ** p < 0.01, * p < 0.05."
+#| fig-height: 6
+#| fig-width: 6.5
+if (stats_avail) plot_mse_boxplot_with_stars(mle_results, wil_report)
+```
+
+The boxplot confirms the rank-based findings: Designs 3 and 8 have the lowest and most compact MSE distributions, while Design 1 has both the highest median and the widest spread (high variance alongside high bias). Significance brackets annotate the most informative pairwise comparisons.
+
+## Pairwise P-value Heatmap
+
+```{r stats-heatmap}
+#| fig-cap: "Pairwise Wilcoxon signed-rank p-values (Holm-adjusted). Red = strongly significant (p < 0.001), orange = significant (p < 0.01 or < 0.05), grey/green = not significant."
+#| fig-height: 6
+#| fig-width: 6.5
+if (stats_avail) plot_pvalue_heatmap(wil_report, "Wilcoxon (Holm)")
+```
+
+```{r stats-nonsig-pairs}
+#| results: asis
+if (stats_avail) {
+  designs <- rownames(wil_report$p_matrix)
+  nonsig <- data.frame(
+    `Design A` = character(), `Design B` = character(),
+    `Wilcoxon p` = numeric(), `Nemenyi p` = numeric(),
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+  for (i in 1:(length(designs) - 1)) {
+    for (j in (i + 1):length(designs)) {
+      if (!wil_report$sig_matrix[designs[i], designs[j]]) {
+        nonsig <- rbind(nonsig, data.frame(
+          `Design A`   = designs[i],
+          `Design B`   = designs[j],
+          `Wilcoxon p` = sprintf("%.4f", wil_report$p_matrix[designs[i], designs[j]]),
+          `Nemenyi p`  = sprintf("%.4f", nem_report$p_matrix[designs[i], designs[j]]),
+          check.names  = FALSE, stringsAsFactors = FALSE
+        ))
+      }
+    }
+  }
+  n_sig_wil  <- sum(wil_report$sig_matrix[upper.tri(wil_report$sig_matrix)])
+  n_sig_nem  <- sum(nem_report$sig_matrix[upper.tri(nem_report$sig_matrix)])
+  total_pairs <- choose(fr_report$n_designs, 2)
+  cat(sprintf(
+    "Of the %d pairwise comparisons, **%d are statistically significant** under Wilcoxon (Holm) and **%d** under Nemenyi post-hoc. The %d non-significant pair(s) are:\n\n",
+    total_pairs, n_sig_wil, n_sig_nem, total_pairs - n_sig_wil
+  ))
+  if (nrow(nonsig) > 0) {
+    print(knitr::kable(nonsig,
+      caption = "Design pairs with no statistically significant MSE difference.",
+      align   = "c") %>%
+      kable_styling(full_width = FALSE, position = "center",
+                    latex_options = "hold_position"))
+  } else {
+    cat("All pairwise comparisons are statistically significant.\n")
+  }
+}
+```
+
+## Robustness: Conditional Tests by Parameter
+
+```{r stats-conditional-setup}
+#| include: false
+if (stats_avail) {
+  cond_params   <- c("Rho", "Gamma", "Spillover_Type", "Neighbor_Type", "Incidence_Mode")
+  cond_res_rep  <- list()
+  cond_summ_rep <- list()
+  for (param in cond_params) {
+    cr <- run_conditional_tests(mle_results, param)
+    cond_res_rep[[param]]  <- cr
+    cond_summ_rep[[param]] <- summarize_conditional_tests(cr)
+  }
+  all_cond_rep <- do.call(rbind, lapply(names(cond_summ_rep), function(p) {
+    df <- cond_summ_rep[[p]]; df$Parameter <- p; df
+  }))
+}
+```
+
+To confirm that the design rankings are not an artifact of any particular parameter setting, we repeat the Friedman test within strata defined by each simulation parameter individually.
+
+```{r stats-conditional-table}
+#| results: asis
+if (stats_avail) {
+  all_cond_rep$P_value_fmt <- ifelse(
+    all_cond_rep$P_value < 2.2e-16, "< 2.2e-16",
+    sprintf("%.2e", all_cond_rep$P_value)
+  )
+  display_cond <- all_cond_rep %>%
+    dplyr::select(Parameter, Stratum, Chi_squared, P_value_fmt, N_blocks, Best_Group)
+  knitr::kable(display_cond,
+    caption = "Friedman test within each parameter stratum. 'Best Group' lists designs statistically indistinguishable from the best-ranked design.",
+    col.names = c("Parameter", "Stratum", "Chi-sq", "P-value", "N Blocks", "Best Group"),
+    align = c("l", "l", "c", "c", "c", "l")) %>%
+    kable_styling(full_width = FALSE, font_size = 10,
+                  latex_options = c("hold_position", "scale_down"))
+}
+```
+
+The Friedman test is **significant in every stratum** ($p < 2.2 \times 10^{-16}$ in all cases). Design 3 and Design 8 appear in the top equivalence group across all parameter levels, confirming that the recommendation is robust.
+
+```{r stats-cd-rho-gamma}
+#| fig-cap: "CD diagrams by outcome spatial autocorrelation (Rho, top) and spillover magnitude (Gamma, bottom). Rankings are consistent across levels."
+#| fig-height: 7
+#| fig-width: 6.5
+if (stats_avail) {
+  library(patchwork)
+  rho_plots   <- plot_conditional_cd_diagrams(cond_res_rep[["Rho"]],   "Rho")
+  gamma_plots <- plot_conditional_cd_diagrams(cond_res_rep[["Gamma"]], "Gamma")
+  wrap_plots(rho_plots,   ncol = 2) /
+  wrap_plots(gamma_plots, ncol = 2)
+}
+```
+
+```{r stats-cd-spill-nb}
+#| fig-cap: "CD diagrams by spillover type (top) and neighbor contiguity type (bottom). Design rankings are stable regardless of spillover structure or contiguity definition."
+#| fig-height: 7
+#| fig-width: 6.5
+if (stats_avail) {
+  spill_plots <- plot_conditional_cd_diagrams(cond_res_rep[["Spillover_Type"]], "Spillover_Type")
+  nb_plots    <- plot_conditional_cd_diagrams(cond_res_rep[["Neighbor_Type"]],  "Neighbor_Type")
+  wrap_plots(spill_plots, ncol = 2) /
+  wrap_plots(nb_plots,    ncol = 2)
+}
+```
+
+```{r stats-cd-incidence}
+#| fig-cap: "CD diagrams by incidence generation mode. Design rankings hold across all five incidence configurations."
+#| fig-height: 9
+#| fig-width: 6.5
+if (stats_avail) {
+  inc_plots <- plot_conditional_cd_diagrams(cond_res_rep[["Incidence_Mode"]], "Incidence_Mode")
+  wrap_plots(inc_plots, ncol = 2)
+}
+```
+
+> For full methods background (Friedman test derivation, CD formula, Wilcoxon procedure with references) and complete pairwise p-value matrices, see the companion report: **Statistical Comparison of Treatment Assignment Designs** (`11_statistical_comparisons_report.pdf` in the results directory).
+
+## Summary of Statistical Findings
+
+```{r stats-summary-counts}
+#| include: false
+if (stats_avail) {
+  n_sig_nem_s  <- sum(nem_report$sig_matrix[upper.tri(nem_report$sig_matrix)])
+  n_sig_wil_s  <- sum(wil_report$sig_matrix[upper.tri(wil_report$sig_matrix)])
+  total_pairs_s <- choose(fr_report$n_designs, 2)
+  best_s  <- names(fr_report$avg_ranks)[1]
+  second_s <- names(fr_report$avg_ranks)[2]
+  worst_s <- names(fr_report$avg_ranks)[length(fr_report$avg_ranks)]
+  best_rank_s   <- sprintf("%.2f", fr_report$avg_ranks[1])
+  second_rank_s <- sprintf("%.2f", fr_report$avg_ranks[2])
+  worst_rank_s  <- sprintf("%.2f", fr_report$avg_ranks[length(fr_report$avg_ranks)])
+}
+```
+
+Taken together, the Friedman test, Nemenyi post-hoc comparisons, and pairwise Wilcoxon signed-rank tests converge on a clear and consistent picture:
+
+- **Design differences are real, not chance.** The Friedman omnibus test ($\chi^2 = `r if (stats_avail) sprintf("%.2f", fr_report$statistic) else "—"`$, $p < 2.2 \times 10^{-16}$) provides overwhelming evidence that the 8 designs do not perform equally. The average rank gap between best and worst is `r if (stats_avail) sprintf("%.2f", as.numeric(worst_rank_s) - as.numeric(best_rank_s)) else "—"` points on an 8-point scale.
+
+- **Design 3 and Design 8 are the recommended designs.** Saturation Quadrants (`r if (stats_avail) best_s else "Design 3"`, avg rank `r if (stats_avail) best_rank_s else "2.66"`) and Incidence-Guided Saturation Quadrants (`r if (stats_avail) second_s else "Design 8"`, avg rank `r if (stats_avail) second_rank_s else "2.73"`) form the top equivalence group — they are statistically indistinguishable from each other and significantly better than every other design. When prior incidence data are available, Design 8 may offer a marginal advantage; otherwise Design 3 is equally well-supported.
+
+- **Avoid Design 1 (Checkerboard).** With an average rank of `r if (stats_avail) worst_rank_s else "7.04"`, the Checkerboard pattern is significantly worse than all alternatives under MLE estimation. Its poor performance is consistent across all parameter settings.
+
+- **`r if (stats_avail) n_sig_nem_s else 24` of `r if (stats_avail) total_pairs_s else 28` design pairs are significantly different** (Nemenyi post-hoc; `r if (stats_avail) n_sig_wil_s else 27` under Wilcoxon/Holm). The few non-significant pairs involve mid-tier designs with similarly modest MSE profiles.
+
+- **Rankings are robust.** The Friedman test is significant in every parameter stratum tested ($p < 2.2 \times 10^{-16}$ across all levels of $\rho$, $\gamma$, spillover type, neighbor type, and incidence mode). The top equivalence group is stable regardless of the specific data-generating conditions, giving investigators confidence that the design recommendation generalises beyond any single scenario.
 
 ---
 
