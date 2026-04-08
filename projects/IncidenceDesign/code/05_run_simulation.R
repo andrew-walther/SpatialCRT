@@ -18,14 +18,21 @@ library(digest)
 library(parallel)
 
 # --- Source Module Scripts ---
-# Detect script directory: works via Rscript, source(), or interactive
-script_dir <- tryCatch(
-  dirname(sys.frame(1)$ofile),
-  error = function(e) {
-    if (exists("ofile", envir = sys.frame(1))) dirname(sys.frame(1)$ofile)
-    else getwd()
+# Detect script directory: works via Rscript --file=, source(), or interactive.
+# Priority: (1) --file= argument from Rscript invocation, (2) sys.frame ofile
+# for source(), (3) getwd() as last resort.
+script_dir <- local({
+  args     <- commandArgs(trailingOnly = FALSE)
+  file_arg <- grep("--file=", args, value = TRUE)
+  if (length(file_arg) > 0) {
+    normalizePath(dirname(sub("--file=", "", file_arg[1])))
+  } else {
+    tryCatch(
+      normalizePath(dirname(sys.frame(1)$ofile)),
+      error = function(e) normalizePath(getwd())
+    )
   }
-)
+})
 
 source(file.path(script_dir, "01_spatial_setup.R"))
 source(file.path(script_dir, "02_incidence_generation.R"))

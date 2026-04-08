@@ -148,11 +148,14 @@ echo "  Updates every ${INTERVAL_MINS} minutes. Ctrl+C stops monitoring;"
 echo "  R continues running in background."
 echo ""
 
+# cd into code/ so getwd() is also correct as a fallback inside the R script
+cd "${CODE_DIR}"
 nohup caffeinate -i -s \
   Rscript "${CODE_DIR}/05_run_simulation.R" \
   > "${LOG_FILE}" 2>&1 &
 
 R_PID=$!
+cd "${SCRIPT_DIR}"   # restore for any subsequent shell operations
 START_EPOCH=$(date +%s)
 
 # Save state for reconnection
