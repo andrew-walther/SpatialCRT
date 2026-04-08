@@ -148,13 +148,22 @@ Incidence-Guided Saturation Quadrants.
 
 **Estimation:** MLE via spatial autoregressive model `lagsarlm(Y ~ Z + Spill + X)` using oracle Spill covariate (250 iterations/scenario).
 
-**Total scenarios:** 5 incidence configs x 2 neighbor types x 4 rho x 4 gamma x 2 spillover types x 8 designs = **2,560 scenarios**
+**True tau (tau-sweep):** τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} — swept to assess design robustness across effect sizes and estimate power curves.
+
+**Total scenarios:** 5 tau × 5 incidence configs × 2 neighbor types × 4 rho × 4 gamma × 2 spillover types × 8 designs = **12,800 scenarios**
+(Baseline τ=1.0 slice = 2,560 scenarios, completed 2026-03-22)
 
 ---
 
 ## Results Summary
 
-### MLE (full 8-design sweep, completed 2026-03-22)
+### Tau-sweep (code complete 2026-04-08, Longleaf run pending)
+
+- 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} — ready to submit
+- New metrics recorded: `Power` (P(reject H₀: τ=0)), `N_Valid_Est` (MC SE denominator)
+- Output: `sim_results_MLE_tau_sweep_combined_*.rds` — baseline file untouched
+
+### MLE baseline (tau=1.0, completed 2026-03-22)
 
 - **2,560 scenarios** (designs 1–8, all incidence configs) | Fail_Rate = 0.0
 - **Best: Design 8 (Incidence-Guided Saturation Quadrants)** MSE=0.079 ≈ **Design 3 (Saturation Quadrants)** MSE=0.080

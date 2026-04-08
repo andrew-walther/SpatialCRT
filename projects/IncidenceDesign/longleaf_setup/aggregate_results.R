@@ -1,8 +1,10 @@
 # =============================================================================
 # aggregate_results.R — Combine per-scenario outputs from SLURM job array
 #
-# Run this AFTER all 2,560 array tasks have completed.
+# Run this AFTER all 12,800 array tasks have completed.
 # Produces the same output format that 06_visualizations.R expects.
+# Output files use the "MLE_tau_sweep" mode tag to avoid overwriting the
+# existing MLE_combined baseline (tau = 1.0 only).
 #
 # Usage (on Longleaf):
 #   module add r/4.4.0
@@ -39,7 +41,7 @@ cat("Combined data frame:", nrow(all_results), "rows\n")
 # 2. CHECK FOR MISSING TASKS
 # =============================================================================
 
-expected_total <- 2560  # 5 configs x 2 nb x 4 rho x 4 gamma x 2 spill x 8 designs
+expected_total <- 12800  # 5 tau x 5 configs x 2 nb x 4 rho x 4 gamma x 2 spill x 8 designs
 
 # Extract task IDs from filenames
 completed_ids <- sort(as.integer(
@@ -75,9 +77,9 @@ dir.create(reports_dir,  showWarnings = FALSE, recursive = TRUE)
 
 timestamp_str <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
-# Combined file
+# Combined file — use MLE_tau_sweep tag to preserve existing MLE_combined baseline
 combined_file <- file.path(sim_data_dir,
-                           sprintf("sim_results_MLE_combined_%s.rds", timestamp_str))
+                           sprintf("sim_results_MLE_tau_sweep_combined_%s.rds", timestamp_str))
 saveRDS(all_results, combined_file)
 cat("Saved combined:", combined_file, "\n")
 
@@ -85,7 +87,7 @@ cat("Saved combined:", combined_file, "\n")
 mode_groups <- split(all_results, all_results$Incidence_Mode)
 for (mode_name in names(mode_groups)) {
   split_file <- file.path(sim_data_dir,
-                          sprintf("sim_results_MLE_%s_%s.rds", mode_name, timestamp_str))
+                          sprintf("sim_results_MLE_tau_sweep_%s_%s.rds", mode_name, timestamp_str))
   saveRDS(mode_groups[[mode_name]], split_file)
   cat(sprintf("  Split saved: %s (%d rows)\n", basename(split_file), nrow(mode_groups[[mode_name]])))
 }
@@ -118,7 +120,10 @@ cat("Results saved to:", normalizePath(sim_data_dir, mustWork = FALSE), "\n")
 cat("Reports directory:", normalizePath(reports_dir, mustWork = FALSE), "\n")
 cat("\nTo generate reports from these results, run in R:\n")
 cat('  source("code/06_visualizations.R")\n')
-cat('  results <- load_latest_results(results_dir = "results/longleaf/sim_data")\n')
-cat('  run_all_visualizations(results=results, results_dir="results/longleaf", estimation_mode="MLE_combined")\n')
+cat('  results <- load_latest_results(results_dir = "results/longleaf/sim_data",\n')
+cat('                                 estimation_mode = "MLE_tau_sweep_combined")\n')
+cat('  run_all_visualizations(results=results, results_dir="results/longleaf",\n')
+cat('                         estimation_mode="MLE_tau_sweep")\n')
 cat('\n  source("code/08_design_recommendations.R")\n')
-cat('  run_recommendation_report(results=results, estimation_mode="MLE_combined", results_dir="results/longleaf")\n')
+cat('  run_recommendation_report(results=results, estimation_mode="MLE_tau_sweep",\n')
+cat('                            results_dir="results/longleaf")\n')

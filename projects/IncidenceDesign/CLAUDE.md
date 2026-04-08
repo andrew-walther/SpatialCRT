@@ -13,14 +13,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A modular simulation study evaluating **8 treatment assignment designs** for Spatial
 Cluster Randomized Trials (CRTs) under heterogeneous outcome incidence and spatial
-spillover. The estimand is **tau = 1.0** (direct treatment effect). Two estimators
-(DIM, MLE) are run across 2,560 parameter scenarios with 3 incidence generation
+spillover. **tau is swept across {0.8, 1.0, 1.5, 2.0, 3.0}** (direct treatment effect)
+for 12,800 total scenarios. Two estimators (DIM, MLE) with 3 incidence generation
 modes that are always reported **separately** — never aggregated.
 
 **Application context:** Sudden Unexpected Death (SUD) in NC counties.
 Poisson base rate 35/100,000 (Mirzaei et al.).
 
-**Metrics tracked per scenario:** Bias, SD, MSE, Coverage (95% CI), Fail_Rate.
+**Metrics tracked per scenario:** Bias, SD, MSE, Coverage (95% CI), Fail_Rate,
+N_Valid_Est (Monte Carlo SE denominator), Power (P(reject H₀: τ=0)).
 
 ---
 
@@ -118,29 +119,34 @@ results data frame — 1 row per scenario:
   Rho             | 0.00, 0.01, 0.20, 0.50
   Gamma           | 0.5, 0.6, 0.7, 0.8
   Spillover_Type  | "control_only" / "both"
+  True_Tau        | 0.8, 1.0, 1.5, 2.0, or 3.0 (swept parameter)
   Mean_Estimate   | mean(tau-hat across iterations)
-  Bias            | Mean_Estimate - true_tau (1.0)
+  Bias            | Mean_Estimate - true_tau
   SD              | sd(tau-hat)
   MSE             | Bias^2 + SD^2
   Coverage        | fraction of CIs containing true_tau
   Fail_Rate       | fraction of MLE iterations that failed to converge
+  N_Valid_Est     | count of non-NA estimates (denominator for MC SEs)
+  Power           | fraction of CIs excluding zero (P(reject H0: tau=0))
 ```
 
 ---
 
-## Parameter Grid (2,560 total scenarios)
+## Parameter Grid (12,800 total scenarios — tau-sweep)
 
 | Parameter | Values | Levels |
 |-----------|--------|:------:|
+| `true_tau` (treatment effect) | 0.8, 1.0, 1.5, 2.0, 3.0 | **5** |
 | Incidence config | iid (x1) + spatial (x2) + poisson (x2) | 5 |
 | `nb_type` | rook, queen | 2 |
 | `rho` (outcome spatial autocorrelation) | 0.00, 0.01, 0.20, 0.50 | 4 |
 | `gamma` (spillover magnitude) | 0.5, 0.6, 0.7, 0.8 | 4 |
 | `spill_type` | control_only, both | 2 |
 | `design_id` | 1, 2, 3, 4, 5, 6, 7, 8 | 8 |
-| **Total** | 5 x 2 x 4 x 4 x 2 x 8 | **2,560** |
+| **Total** | 5 x 5 x 2 x 4 x 4 x 2 x 8 | **12,800** |
 
-Scenarios per incidence config: 512 (= 2x4x4x2x8)
+Scenarios per (tau × incidence config): 512 (= 2x4x4x2x8).
+Baseline tau=1.0 slice (2,560 scenarios) reproduces the existing MLE_combined results.
 
 ---
 
@@ -162,10 +168,15 @@ Deterministic designs (1, 2) generate **one** assignment and replicate it across
 
 ---
 
+## Swept Parameters
+
+```r
+true_tau_vals <- c(0.8, 1.0, 1.5, 2.0, 3.0)  # Direct treatment effect
+```
+
 ## Fixed DGP Parameters
 
 ```r
-true_tau        <- 1.0          # Target estimand
 beta            <- 1.0          # Incidence coefficient in outcome model
 sigma           <- 1.0          # Residual SD
 grid_dim        <- 10           # 10x10 = 100 clusters
@@ -184,9 +195,17 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-03-25)
+## Current State (as of 2026-04-08)
 
-**MLE simulation:** COMPLETE — full 8-design, 2,560-scenario sweep (primary estimator)
+**Tau-sweep simulation:** IMPLEMENTATION COMPLETE — code ready, awaiting Longleaf run
+- Scripts updated: `05_run_simulation.R`, `longleaf_setup/simulation.R`,
+  `longleaf_setup/aggregate_results.R`, `longleaf_setup/submit_array.sl`
+- New result columns: `True_Tau`, `N_Valid_Est`, `Power`
+- Output tag: `MLE_tau_sweep` — does NOT overwrite existing `MLE_combined` baseline
+- Smoke test: set `true_tau_vals <- c(1.0)` → results should reproduce baseline
+- Longleaf dry run: `sbatch --array=1-10 submit_array.sl` before `--array=1-12800%100`
+
+**MLE simulation (baseline tau=1.0):** COMPLETE — full 8-design, 2,560-scenario sweep
 - Data: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
 - Splits: `results/sim_data/sim_results_MLE_{iid|spatial|poisson}_20260322_151030.rds`
 - Stats: 2,560 scenarios | Best: D8 MSE=0.079, D3 MSE=0.080 | Worst: D1 MSE=0.744, coverage=55% | Fail_Rate = 0.0
@@ -201,9 +220,7 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 - Full report: `results/11_statistical_comparisons_report.{html,pdf}`
 
 **Comprehensive report:** `paper/report/IncidenceSpatialCRT_Report.{html,pdf}` — 50+ pages
-- Section 10 contains the complete formal statistical comparisons analysis (Friedman table,
-  average ranks, CD diagram, MSE boxplot with stars, Wilcoxon heatmap, conditional Friedman
-  table, all conditional CD diagrams by parameter, summary bullet-point subsection).
+- Section 10 contains the complete formal statistical comparisons analysis.
 
 **DIM simulation:** COMPLETE for prior 6-design sweep (naive baseline only)
 - Data: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
@@ -233,6 +250,7 @@ paper/
 **Git:** Original work on `claude/gallant-buck` → `main` 2026-03-05.
 Reorganized into `projects/IncidenceDesign/` on `claude/dreamy-wiles`.
 Statistical comparisons + report expansions on `claude/elated-lederberg`.
+Tau-sweep + MC SEs + Power implementation on `main` 2026-04-08.
 
 ---
 
@@ -359,25 +377,21 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 ## Planned Extensions (not yet implemented)
 
-### HIGH PRIORITY: Tau Sensitivity Analysis
-Vary `true_tau` ∈ {0.8, 1.0, 1.5, 2.0, 3.0} to assess whether design rankings hold across effect sizes. Requires ~12,800 scenarios — recommended for Longleaf HPC.
+### Tau-sweep Longleaf run
+Code is implemented (2026-04-08). Next step: submit to Longleaf.
+```bash
+# Dry run (10 tasks)
+sbatch --array=1-10 longleaf_setup/submit_array.sl
 
-**Implementation checklist for `05_run_simulation.R`:**
-1. Replace `true_tau <- 1.0` with `true_tau_vals <- c(0.8, 1.0, 1.5, 2.0, 3.0)` and add outer loop over tau values
-2. Pass `true_tau` into the outcome DGP computation (`true_tau * Z` at ~line 222)
-3. Update `Bias` calculation: `Mean_Estimate - true_tau` (not hardcoded 1.0)
-4. Update `Coverage` check: CI contains actual `true_tau`, not 1.0
-5. Add `True_Tau` column to results dataframe
-6. Include `true_tau` in the per-scenario digest seed string
+# Full run (12,800 tasks)
+sbatch longleaf_setup/submit_array.sl
 
-**Downstream changes needed:**
-- `06_visualizations.R` — add tau as faceting variable; new MSE-vs-tau trajectory plot
-- `10_statistical_comparisons.R` — add `True_Tau` as a conditional stratification dimension
-- Reports (07, 09, 11, comprehensive) — incorporate tau dimension
-
-**Tau values rationale:** 0.8 tests boundary where τ ≈ γ (max spillover); 1.0 is current baseline; 1.5/2.0/3.0 test larger effects.
+# After completion:
+Rscript longleaf_setup/aggregate_results.R
+```
 
 ### Other extensions
+- Incorporate `True_Tau` dimension into Quarto reports (07, 09, 11, comprehensive)
 - Heterogeneous population mode for Poisson (`pop_mode = "heterogeneous"`)
 - Non-oracle MLE runs (`include_spill_covariate = FALSE`) for realistic estimation
 - Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`

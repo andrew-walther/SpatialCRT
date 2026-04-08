@@ -116,6 +116,24 @@ dim_pdfs  <- list.files(results_dir, "DIM_.*\\.pdf$")
 
 cat("MLE PDFs generated:\n"); cat(" ", paste(mle_pdfs, collapse = "\n  "), "\n\n")
 
+# --- Tau-stratified summary (present only in tau-sweep results) ---
+if ("True_Tau" %in% names(mle_results)) {
+  cat("=== MLE Summary Stratified by True_Tau ===\n")
+  tau_summary <- mle_results %>%
+    group_by(True_Tau) %>%
+    summarise(
+      N_Scenarios  = n(),
+      Mean_Bias    = mean(Bias, na.rm = TRUE),
+      Mean_MSE     = mean(MSE, na.rm = TRUE),
+      Mean_Coverage= mean(Coverage, na.rm = TRUE),
+      Mean_Power   = if ("Power" %in% names(mle_results)) mean(Power, na.rm = TRUE) else NA_real_,
+      Fail_Rate    = mean(Fail_Rate, na.rm = TRUE),
+      .groups      = "drop"
+    )
+  print(as.data.frame(round(tau_summary, 4)))
+  cat("\n")
+}
+
 # ==============================================================================
 # STEP 5: Write CLAUDE.md
 # ==============================================================================
@@ -136,14 +154,16 @@ claude_md <- sprintf(
 
 A modular simulation study evaluating **8 treatment assignment designs** for Spatial
 Cluster Randomized Trials (CRTs) under heterogeneous outcome incidence and spatial
-spillover. The estimand is **tau = 1.0** (direct treatment effect). We compare two
-estimators (DIM, MLE) across 2,560 parameter scenarios and 3 incidence generation
-modes that are always reported **separately** (never aggregated).
+spillover. The estimand **tau is swept across {0.8, 1.0, 1.5, 2.0, 3.0}** (direct
+treatment effect) to assess design robustness across effect sizes. We compare two
+estimators (DIM, MLE) across 12,800 parameter scenarios (5 tau x 2,560 base) and
+3 incidence generation modes that are always reported **separately** (never aggregated).
 
 **Application context:** Sudden Unexpected Death (SUD) in NC counties. Poisson
 incidence base rate 35/100,000 (Mirzaei et al.).
 
-**Metrics tracked per scenario:** Bias, SD, MSE, Coverage (95%% CI), Fail_Rate.
+**Metrics tracked per scenario:** Bias, SD, MSE, Coverage (95%% CI), Fail_Rate,
+N_Valid_Est (for Monte Carlo SEs), Power (P(reject H0: tau=0)).
 
 ---
 
@@ -205,11 +225,14 @@ results data frame: 1 row per scenario, columns:
   Gamma           | 0.5, 0.6, 0.7, 0.8
   Spillover_Type  | "control_only" / "both"
   Mean_Estimate   | mean(tau-hat across iterations)
-  Bias            | Mean_Estimate - true_tau (1.0)
+  True_Tau        | true treatment effect for this scenario (swept over {0.8,1.0,1.5,2.0,3.0})
+  Bias            | Mean_Estimate - true_tau
   SD              | sd(tau-hat)
   MSE             | Bias^2 + SD^2
   Coverage        | fraction of CIs containing true_tau
   Fail_Rate       | fraction of MLE iterations that failed to converge
+  N_Valid_Est     | count of valid (non-NA) estimates — enables SE computation
+  Power           | fraction of CIs excluding zero (P(reject H0: tau=0))
 ```
 
 ---
@@ -254,10 +277,15 @@ all `n_design_resamples` to avoid redundant computation. This is enforced via
 
 ---
 
+## Swept Parameters
+
+```r
+true_tau_vals <- c(0.8, 1.0, 1.5, 2.0, 3.0)  # Direct treatment effect
+```
+
 ## Fixed DGP Parameters
 
 ```r
-true_tau        <- 1.0         # Target estimand
 beta            <- 1.0         # Incidence coefficient in outcome model
 sigma           <- 1.0         # Residual SD
 grid_dim        <- 10          # 10x10 = 100 clusters

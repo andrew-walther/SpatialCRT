@@ -1,8 +1,9 @@
 # =============================================================================
 # simulation.R — Per-scenario HPC script for Longleaf SLURM job arrays
 #
-# Each SLURM array task runs this script with a task_id (1-2560).
-# The task_id indexes into a flat parameter grid of all 2,560 scenarios.
+# Each SLURM array task runs this script with a task_id (1-12800).
+# The task_id indexes into a flat parameter grid of all 12,800 scenarios
+# (5 tau values x 2,560 existing scenarios).
 # Each task independently rebuilds the spatial grid, generates incidence/epsilon
 # with deterministic seeding, runs one scenario, and saves one .rds file.
 #
@@ -86,10 +87,9 @@ grid_dim <- 10  # 10x10 = 100 clusters
 n_design_resamples  <- 25    # Phase 2: increase to 50
 n_outcome_resamples <- 10    # Phase 2: increase to 50
 
-# SDM true parameters
-true_tau <- 1.0
-beta     <- 1.0
-sigma    <- 1.0
+# SDM true parameters — true_tau extracted from param_grid below
+beta  <- 1.0
+sigma <- 1.0
 
 # Poisson-specific
 base_rate       <- 35 / 100000
@@ -111,7 +111,7 @@ inc_configs <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Full factorial parameter grid
+# Full factorial parameter grid — 12,800 scenarios (5 tau x 2,560 base)
 param_grid <- expand.grid(
   inc_config_id = 1:5,
   nb_type       = c("rook", "queen"),
@@ -119,6 +119,7 @@ param_grid <- expand.grid(
   gamma_val     = c(0.5, 0.6, 0.7, 0.8),
   spill_type    = c("control_only", "both"),
   design_id     = 1:8,
+  true_tau      = c(0.8, 1.0, 1.5, 2.0, 3.0),  # NEW: tau sensitivity sweep
   stringsAsFactors = FALSE
 )
 
@@ -141,9 +142,10 @@ rho        <- params$rho
 gamma_val  <- params$gamma_val
 spill_type <- params$spill_type
 d_id       <- params$design_id
+true_tau   <- params$true_tau  # extracted from grid; no hardcoded value
 
-cat(sprintf("Scenario: %s(rho_x=%.2f) | nb=%s | rho=%.2f | gamma=%.2f | spill=%s | D%d\n",
-            inc_mode, rho_x, nb_type, rho, gamma_val, spill_type, d_id))
+cat(sprintf("Scenario: %s(rho_x=%.2f) | nb=%s | rho=%.2f | gamma=%.2f | spill=%s | D%d | tau=%.2f\n",
+            inc_mode, rho_x, nb_type, rho, gamma_val, spill_type, d_id, true_tau))
 
 # =============================================================================
 # 5. BUILD SPATIAL GRID
@@ -209,7 +211,7 @@ baseline_part <- inv_mat %*% (X_matrix * beta + Epsilon_matrix)
 # =============================================================================
 
 scenario_seed <- digest2int(paste(inc_mode, rho_x, nb_type, rho,
-                                  gamma_val, spill_type, d_id, sep = "|"))
+                                  gamma_val, spill_type, d_id, true_tau, sep = "|"))
 set.seed(scenario_seed)
 
 if (is_design_deterministic(d_id)) {
@@ -279,6 +281,11 @@ if (length(valid_est) > 0) {
          (all_ci_upper[valid_ci] >= true_tau))
   } else NA
 
+  # Power: P(reject H0: tau=0) — fraction of CIs that exclude zero
+  power_val <- if (sum(valid_ci) > 0) {
+    mean(all_ci_lower[valid_ci] > 0, na.rm = TRUE)
+  } else NA
+
   result <- data.frame(
     Incidence_Mode  = inc_mode,
     Rho_Incidence   = rho_x,
@@ -287,12 +294,15 @@ if (length(valid_est) > 0) {
     Rho             = rho,
     Gamma           = gamma_val,
     Spillover_Type  = spill_type,
+    True_Tau        = true_tau,
     Mean_Estimate   = mean(valid_est),
     Bias            = mean(valid_est) - true_tau,
     SD              = sd(valid_est),
     MSE             = mean((valid_est - true_tau)^2),
     Coverage        = coverage_val,
     Fail_Rate       = fail_rate,
+    N_Valid_Est     = sum(valid_idx),
+    Power           = power_val,
     stringsAsFactors = FALSE
   )
 } else {
@@ -304,8 +314,10 @@ if (length(valid_est) > 0) {
     Rho             = rho,
     Gamma           = gamma_val,
     Spillover_Type  = spill_type,
+    True_Tau        = true_tau,
     Mean_Estimate   = NA, Bias = NA, SD = NA, MSE = NA,
     Coverage        = NA, Fail_Rate = fail_rate,
+    N_Valid_Est     = 0L, Power = NA,
     stringsAsFactors = FALSE
   )
 }

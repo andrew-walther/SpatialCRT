@@ -707,6 +707,263 @@ run_standard_tables <- function(results, inc_label = "") {
 }
 
 # ==============================================================================
+# TAU-SWEEP EXTENSIONS
+# Functions for the combined tau sensitivity + Monte Carlo SE + Power analysis.
+# These are only meaningful when results contain a True_Tau column (i.e.,
+# produced by the updated 05_run_simulation.R or longleaf_setup/simulation.R).
+# ==============================================================================
+
+#' Append Monte Carlo standard error columns to a results data frame.
+#'
+#' Computes exact SEs from the stored simulation counts and summary statistics.
+#' The formulas assume approximately normal estimator distributions (valid for
+#' large Monte Carlo sample sizes) and require a True_Tau column and N_Valid_Est
+#' column — both added by the updated simulation scripts.
+#'
+#'   SE_Bias     = SD / sqrt(N_Valid_Est)
+#'   SE_Coverage = sqrt(Coverage * (1 - Coverage) / N_Valid_Est)    [binomial]
+#'   SE_MSE      = sqrt(2*SD^4 + 4*Bias^2*SD^2) / sqrt(N_Valid_Est) [normal DGP]
+#'
+#' @param results Data frame containing columns: SD, Bias, Coverage, N_Valid_Est.
+#' @return Data frame with three new columns: SE_Bias, SE_Coverage, SE_MSE.
+#'   Rows where N_Valid_Est is 0 or NA will produce NA SEs.
+#' @family tau-sweep
+add_mc_ses <- function(results) {
+  required <- c("SD", "Bias", "Coverage", "N_Valid_Est")
+  missing  <- setdiff(required, names(results))
+  if (length(missing) > 0) {
+    warning("add_mc_ses: missing columns ", paste(missing, collapse = ", "),
+            ". Returning results unchanged.")
+    return(results)
+  }
+  n   <- results$N_Valid_Est
+  sd_ <- results$SD
+  b   <- results$Bias
+  cv  <- results$Coverage
+
+  results$SE_Bias     <- sd_ / sqrt(n)
+  results$SE_Coverage <- sqrt(cv * (1 - cv) / n)
+  results$SE_MSE      <- sqrt(2 * sd_^4 + 4 * b^2 * sd_^2) / sqrt(n)
+  results
+}
+
+#' Plot MSE versus tau for each design, with Monte Carlo SE bands.
+#'
+#' Each design is shown as a line; shaded ribbons show +/- 1 SE_MSE.
+#' Requires results to have True_Tau and N_Valid_Est columns; calls
+#' add_mc_ses() internally.
+#'
+#' @param results Data frame. Must contain True_Tau and N_Valid_Est columns.
+#' @param inc_label Character. Incidence config label for the plot subtitle.
+#' @return ggplot object.
+#' @family tau-sweep
+plot_mse_vs_tau <- function(results, inc_label = "") {
+  if (!"True_Tau" %in% names(results)) {
+    warning("plot_mse_vs_tau: True_Tau column not found — is this a tau-sweep result?")
+    return(invisible(NULL))
+  }
+  results <- add_mc_ses(results)
+
+  # Average MSE and SE_MSE across all other parameters, within Design x True_Tau
+  plot_data <- results %>%
+    group_by(Design, True_Tau) %>%
+    summarise(
+      Mean_MSE = mean(MSE, na.rm = TRUE),
+      Mean_SE  = mean(SE_MSE, na.rm = TRUE),
+      .groups  = "drop"
+    ) %>%
+    mutate(
+      lo = Mean_MSE - Mean_SE,
+      hi = Mean_MSE + Mean_SE
+    )
+
+  ggplot(plot_data, aes(x = True_Tau, y = Mean_MSE, color = Design, fill = Design)) +
+    geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.15, color = NA) +
+    geom_line(linewidth = 0.9) +
+    geom_point(size = 2) +
+    scale_color_viridis_d(option = "D") +
+    scale_fill_viridis_d(option = "D") +
+    labs(
+      title    = "MSE vs. True Tau by Design",
+      subtitle = if (nchar(inc_label) > 0) inc_label else NULL,
+      x        = "True tau",
+      y        = "Mean MSE (+/- 1 Monte Carlo SE)",
+      color    = "Design", fill = "Design"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+#' Plot the best-performing design at each tau level, per incidence config.
+#'
+#' For each True_Tau value, identifies the design with the lowest average MSE
+#' and displays it as a labeled bar chart.
+#'
+#' @param results Data frame. Must contain True_Tau.
+#' @param inc_label Character. Incidence config label for plot subtitle.
+#' @return ggplot object.
+#' @family tau-sweep
+plot_best_design_per_tau <- function(results, inc_label = "") {
+  if (!"True_Tau" %in% names(results)) {
+    warning("plot_best_design_per_tau: True_Tau column not found.")
+    return(invisible(NULL))
+  }
+
+  best_data <- results %>%
+    group_by(True_Tau, Design) %>%
+    summarise(Mean_MSE = mean(MSE, na.rm = TRUE), .groups = "drop") %>%
+    group_by(True_Tau) %>%
+    slice_min(Mean_MSE, n = 1, with_ties = FALSE) %>%
+    ungroup()
+
+  ggplot(best_data, aes(x = factor(True_Tau), y = Mean_MSE, fill = Design)) +
+    geom_col(width = 0.6, alpha = 0.85) +
+    geom_text(aes(label = Design), vjust = -0.4, size = 3.5) +
+    scale_fill_viridis_d(option = "D") +
+    labs(
+      title    = "Best Design (Lowest MSE) at Each Tau Value",
+      subtitle = if (nchar(inc_label) > 0) inc_label else NULL,
+      x        = "True tau",
+      y        = "Mean MSE of Best Design",
+      fill     = "Design"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+#' Plot design rank trajectories with tau on the x-axis.
+#'
+#' Rank 1 = lowest MSE = best design. The y-axis is inverted so rank 1
+#' appears at the top, matching the CD diagram convention.
+#'
+#' @param results Data frame. Must contain True_Tau.
+#' @param inc_label Character. Incidence config label for plot subtitle.
+#' @return ggplot object.
+#' @family tau-sweep
+plot_rank_trajectories_by_tau <- function(results, inc_label = "") {
+  if (!"True_Tau" %in% names(results)) {
+    warning("plot_rank_trajectories_by_tau: True_Tau column not found.")
+    return(invisible(NULL))
+  }
+
+  rank_data <- results %>%
+    group_by(True_Tau, Design) %>%
+    summarise(Mean_MSE = mean(MSE, na.rm = TRUE), .groups = "drop") %>%
+    group_by(True_Tau) %>%
+    mutate(Rank = rank(Mean_MSE, ties.method = "average")) %>%
+    ungroup()
+
+  ggplot(rank_data, aes(x = True_Tau, y = Rank, color = Design, group = Design)) +
+    geom_line(linewidth = 0.9) +
+    geom_point(size = 2.5) +
+    scale_y_reverse(breaks = 1:8) +   # rank 1 at top
+    scale_color_viridis_d(option = "D") +
+    labs(
+      title    = "Design Rank Trajectory Across Tau Values",
+      subtitle = if (nchar(inc_label) > 0) inc_label else NULL,
+      x        = "True tau",
+      y        = "Rank (1 = best / lowest MSE)",
+      color    = "Design"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+#' Plot coverage versus tau for each design, with Monte Carlo SE bands.
+#'
+#' A horizontal dashed reference line is drawn at the nominal 0.95 level.
+#' Coverage SE is computed from the binomial formula: sqrt(p*(1-p)/n).
+#'
+#' @param results Data frame. Must contain True_Tau and N_Valid_Est.
+#' @param inc_label Character. Incidence config label for plot subtitle.
+#' @return ggplot object.
+#' @family tau-sweep
+plot_coverage_vs_tau <- function(results, inc_label = "") {
+  if (!"True_Tau" %in% names(results)) {
+    warning("plot_coverage_vs_tau: True_Tau column not found.")
+    return(invisible(NULL))
+  }
+  results <- add_mc_ses(results)
+
+  cov_data <- results %>%
+    group_by(Design, True_Tau) %>%
+    summarise(
+      Mean_Coverage = mean(Coverage, na.rm = TRUE),
+      Mean_SE_Cov   = mean(SE_Coverage, na.rm = TRUE),
+      .groups       = "drop"
+    ) %>%
+    mutate(
+      lo = Mean_Coverage - Mean_SE_Cov,
+      hi = Mean_Coverage + Mean_SE_Cov
+    )
+
+  ggplot(cov_data, aes(x = True_Tau, y = Mean_Coverage,
+                       color = Design, fill = Design)) +
+    geom_hline(yintercept = 0.95, linetype = "dashed", color = "red", linewidth = 0.7) +
+    geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.15, color = NA) +
+    geom_line(linewidth = 0.9) +
+    geom_point(size = 2) +
+    scale_color_viridis_d(option = "D") +
+    scale_fill_viridis_d(option = "D") +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.1)) +
+    labs(
+      title    = "Coverage vs. True Tau by Design",
+      subtitle = if (nchar(inc_label) > 0) inc_label else NULL,
+      x        = "True tau",
+      y        = "Coverage (+/- 1 Monte Carlo SE)",
+      color    = "Design", fill = "Design"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+#' Plot statistical power (P(reject H0: tau=0)) versus tau for each design.
+#'
+#' Power should increase monotonically with tau. At tau = 3.0, all designs
+#' should approach 1.0. At tau = 0.8 (where tau ≈ gamma_max), design
+#' differences in power reveal sensitivity to spillover confounding.
+#'
+#' @param results Data frame. Must contain True_Tau and Power columns.
+#' @param inc_label Character. Incidence config label for plot subtitle.
+#' @return ggplot object.
+#' @family tau-sweep
+plot_power_curves <- function(results, inc_label = "") {
+  if (!"True_Tau" %in% names(results)) {
+    warning("plot_power_curves: True_Tau column not found.")
+    return(invisible(NULL))
+  }
+  if (!"Power" %in% names(results)) {
+    warning("plot_power_curves: Power column not found. Was the simulation run with the updated script?")
+    return(invisible(NULL))
+  }
+
+  power_data <- results %>%
+    group_by(Design, True_Tau) %>%
+    summarise(Mean_Power = mean(Power, na.rm = TRUE), .groups = "drop")
+
+  ggplot(power_data, aes(x = True_Tau, y = Mean_Power,
+                         color = Design, group = Design)) +
+    geom_hline(yintercept = 0.80, linetype = "dashed",
+               color = "gray40", linewidth = 0.6) +
+    geom_line(linewidth = 0.9) +
+    geom_point(size = 2.5) +
+    scale_color_viridis_d(option = "D") +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.1)) +
+    annotate("text", x = min(results$True_Tau), y = 0.81,
+             label = "80% power", hjust = 0, vjust = 0,
+             color = "gray40", size = 3.5) +
+    labs(
+      title    = "Statistical Power by Design Across Tau Values",
+      subtitle = if (nchar(inc_label) > 0) inc_label else NULL,
+      x        = "True tau",
+      y        = "Power P(reject H0: tau = 0)",
+      color    = "Design"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+# ==============================================================================
 # MAIN: Run all visualizations — per incidence config, never aggregated
 # ==============================================================================
 

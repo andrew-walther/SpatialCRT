@@ -1,20 +1,22 @@
 #!/bin/bash
 
 # =============================================================================
-# submit_array.sl — SLURM job array for IncidenceDesign MLE simulation
+# submit_array.sl — SLURM job array for IncidenceDesign MLE tau-sweep simulation
 #
-# Runs 2,560 scenarios in parallel (one per array task).
+# Runs 12,800 scenarios in parallel (one per array task).
+# 12,800 = 5 tau values x 2,560 base scenarios (25 x 10 resamples each).
 # Each task takes ~1-5 min with default resamples (25 x 10).
 #
 # Usage:
-#   sbatch submit_array.sl                   # submit all 2,560 tasks
-#   sbatch --array=1-1 submit_array.sl       # test with task 1 only
-#   sbatch --array=5,12,47 submit_array.sl   # resubmit specific failed tasks
+#   sbatch submit_array.sl                    # submit all 12,800 tasks
+#   sbatch --array=1-10 submit_array.sl       # dry run with first 10 tasks only
+#   sbatch --array=1-1 submit_array.sl        # test with task 1 only
+#   sbatch --array=5,12,47 submit_array.sl    # resubmit specific failed tasks
 # =============================================================================
 
 # --- SLURM Resource Request ---
-#SBATCH --job-name=spatialcrt_mle
-#SBATCH --array=1-2560%100              # 2,560 tasks, max 100 concurrent
+#SBATCH --job-name=spatialcrt_tau_sweep
+#SBATCH --array=1-12800%100             # 12,800 tasks, max 100 concurrent
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4g                        # tune with seff after first run

@@ -61,10 +61,10 @@ gamma_vals     <- c(0.5, 0.6, 0.7, 0.8)
 spill_types    <- c("control_only", "both")
 neighbor_types <- c("rook", "queen")
 
-# SDM true parameters
-true_tau <- 1.0
-beta     <- 1.0
-sigma    <- 1.0
+# SDM true parameters — tau is now swept; beta and sigma are fixed
+true_tau_vals <- c(0.8, 1.0, 1.5, 2.0, 3.0)
+beta          <- 1.0
+sigma         <- 1.0
 
 # Resample counts (mode-dependent)
 if (estimation_mode == "MLE") {
@@ -105,12 +105,15 @@ for (inc_mode in incidence_modes) {
 
 scenarios_per_config <- length(neighbor_types) * length(rho_vals) *
                         length(gamma_vals) * length(spill_types) * length(design_ids)
-total_scenarios <- length(inc_configs) * scenarios_per_config
+total_scenarios <- length(inc_configs) * scenarios_per_config * length(true_tau_vals)
 
 cat(sprintf("\n=== Simulation Configuration ===\n"))
 cat(sprintf("Estimation mode:      %s\n", estimation_mode))
+cat(sprintf("Tau values:           %s\n", paste(true_tau_vals, collapse = ", ")))
 cat(sprintf("Incidence configs:    %d\n", length(inc_configs)))
-cat(sprintf("Scenarios per config: %d\n", scenarios_per_config))
+cat(sprintf("Scenarios per config: %d (x %d tau = %d total)\n",
+            scenarios_per_config, length(true_tau_vals),
+            scenarios_per_config * length(true_tau_vals)))
 cat(sprintf("Total scenarios:      %d\n", total_scenarios))
 cat(sprintf("Iterations/scenario:  %d (%d design x %d outcome)\n",
             n_designs_resamples * n_outcome_resamples,
@@ -123,7 +126,7 @@ cat(sprintf("================================\n\n"))
 # ==============================================================================
 
 run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
-                                  verbose = TRUE) {
+                                  true_tau, verbose = TRUE) {
   inc_mode <- ic_config$mode
   rho_x    <- ic_config$rho_x
   inc_label <- if (inc_mode == "iid") "iid" else sprintf("%s(rho_X=%.2f)", inc_mode, rho_x)
@@ -172,9 +175,10 @@ run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
 
             scenario_start <- Sys.time()
 
-            # Per-scenario deterministic seed
+            # Per-scenario deterministic seed — includes true_tau for independent
+            # randomization across tau values
             seed_string <- paste(inc_mode, rho_x, nb_type, rho,
-                                 gamma_val, spill_type, d_id, sep = "|")
+                                 gamma_val, spill_type, d_id, true_tau, sep = "|")
             scenario_seed <- digest2int(seed_string)
             set.seed(scenario_seed)
 
@@ -250,6 +254,11 @@ run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
                      (all_ci_upper[valid_ci] >= true_tau))
               } else NA
 
+              # Power: fraction of iterations where CI excludes zero (H0: tau=0 rejected)
+              power_val <- if (sum(valid_ci) > 0) {
+                mean(all_ci_lower[valid_ci] > 0, na.rm = TRUE)
+              } else NA
+
               config_results[[config_idx]] <- data.frame(
                 Incidence_Mode  = inc_mode,
                 Rho_Incidence   = rho_x,
@@ -258,12 +267,15 @@ run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
                 Rho             = rho,
                 Gamma           = gamma_val,
                 Spillover_Type  = spill_type,
+                True_Tau        = true_tau,
                 Mean_Estimate   = mean(valid_est),
                 Bias            = mean(valid_est) - true_tau,
                 SD              = sd(valid_est),
                 MSE             = mean((valid_est - true_tau)^2),
                 Coverage        = coverage_val,
                 Fail_Rate       = fail_rate,
+                N_Valid_Est     = sum(valid_idx),
+                Power           = power_val,
                 stringsAsFactors = FALSE
               )
             } else {
@@ -275,8 +287,10 @@ run_incidence_config <- function(ic_index, ic_config, grid_obj, coords, I_mat,
                 Rho             = rho,
                 Gamma           = gamma_val,
                 Spillover_Type  = spill_type,
+                True_Tau        = true_tau,
                 Mean_Estimate   = NA, Bias = NA, SD = NA, MSE = NA,
                 Coverage        = NA, Fail_Rate = fail_rate,
+                N_Valid_Est     = 0L, Power = NA,
                 stringsAsFactors = FALSE
               )
             }
@@ -318,70 +332,85 @@ if (!dir.exists(sim_data_dir)) dir.create(sim_data_dir, recursive = TRUE)
 checkpoint_dir <- file.path(results_dir, "checkpoints")
 if (!dir.exists(checkpoint_dir)) dir.create(checkpoint_dir, recursive = TRUE)
 
-# Helper: canonical checkpoint filename for a config
-config_checkpoint_file <- function(ic_config) {
-  label <- paste0(ic_config$mode, "_rhoX", sprintf("%.2f", ic_config$rho_x))
+# Helper: canonical checkpoint filename for a config + tau value
+config_checkpoint_file <- function(ic_config, true_tau) {
+  label <- paste0(ic_config$mode, "_rhoX", sprintf("%.2f", ic_config$rho_x),
+                  "_tau", gsub("\\.", "p", sprintf("%.2f", true_tau)))
   file.path(checkpoint_dir,
             sprintf("checkpoint_%s_%s.rds", estimation_mode, label))
 }
 
 # ==============================================================================
-# EXECUTE SIMULATION (sequential or parallel)
+# EXECUTE SIMULATION — outer loop over tau values
 # ==============================================================================
 
 global_start <- Sys.time()
 
-if (n_cores > 1 && length(inc_configs) > 1) {
-  cat(sprintf("Running %d incidence configs in parallel across %d cores...\n",
-              length(inc_configs), min(n_cores, length(inc_configs))))
+# Collect all results across all tau values
+all_tau_results <- list()
 
-  results_by_config <- mclapply(
-    seq_along(inc_configs),
-    function(i) {
-      cp_file <- config_checkpoint_file(inc_configs[[i]])
-      if (file.exists(cp_file)) {
-        cat(sprintf("  Config %d: loading checkpoint (skipping)\n", i))
-        return(readRDS(cp_file))
+for (true_tau in true_tau_vals) {
+  cat(sprintf("\n########## tau = %.2f ##########\n", true_tau))
+
+  if (n_cores > 1 && length(inc_configs) > 1) {
+    cat(sprintf("Running %d incidence configs in parallel across %d cores...\n",
+                length(inc_configs), min(n_cores, length(inc_configs))))
+
+    # Capture true_tau in a local variable for mclapply closure
+    local_tau <- true_tau
+
+    results_by_config <- mclapply(
+      seq_along(inc_configs),
+      function(i) {
+        cp_file <- config_checkpoint_file(inc_configs[[i]], local_tau)
+        if (file.exists(cp_file)) {
+          cat(sprintf("  Config %d (tau=%.2f): loading checkpoint\n", i, local_tau))
+          return(readRDS(cp_file))
+        }
+        result <- run_incidence_config(i, inc_configs[[i]], grid_obj, coords, I_mat,
+                                       true_tau = local_tau, verbose = FALSE)
+        saveRDS(result, cp_file)
+        result
+      },
+      mc.cores = min(n_cores, length(inc_configs))
+    )
+
+    # Check for errors
+    errors <- sapply(results_by_config, inherits, "try-error")
+    if (any(errors)) {
+      cat("WARNING: Some configs failed:\n")
+      for (i in which(errors)) {
+        cat(sprintf("  Config %d: %s\n", i, as.character(results_by_config[[i]])))
       }
-      result <- run_incidence_config(i, inc_configs[[i]], grid_obj, coords, I_mat,
-                                     verbose = FALSE)
-      saveRDS(result, cp_file)
-      result
-    },
-    mc.cores = min(n_cores, length(inc_configs))
-  )
+      results_by_config <- results_by_config[!errors]
+    }
+  } else {
+    cat("Running sequentially...\n")
+    results_by_config <- vector("list", length(inc_configs))
+    for (i in seq_along(inc_configs)) {
+      cp_file <- config_checkpoint_file(inc_configs[[i]], true_tau)
+      if (file.exists(cp_file)) {
+        cat(sprintf("\n--- [Config %d, tau=%.2f] checkpoint found, loading ---\n",
+                    i, true_tau))
+        results_by_config[[i]] <- readRDS(cp_file)
+      } else {
+        results_by_config[[i]] <- run_incidence_config(
+          i, inc_configs[[i]], grid_obj, coords, I_mat,
+          true_tau = true_tau, verbose = TRUE)
+        saveRDS(results_by_config[[i]], cp_file)
+        cat(sprintf("  Checkpoint saved: %s\n", basename(cp_file)))
+      }
+    }
+  }
 
-  # Check for errors
-  errors <- sapply(results_by_config, inherits, "try-error")
-  if (any(errors)) {
-    cat("WARNING: Some configs failed:\n")
-    for (i in which(errors)) {
-      cat(sprintf("  Config %d: %s\n", i, as.character(results_by_config[[i]])))
-    }
-    results_by_config <- results_by_config[!errors]
-  }
-} else {
-  cat("Running sequentially...\n")
-  results_by_config <- vector("list", length(inc_configs))
-  for (i in seq_along(inc_configs)) {
-    cp_file <- config_checkpoint_file(inc_configs[[i]])
-    if (file.exists(cp_file)) {
-      cat(sprintf("\n--- [Config %d] checkpoint found, loading and skipping ---\n", i))
-      results_by_config[[i]] <- readRDS(cp_file)
-    } else {
-      results_by_config[[i]] <- run_incidence_config(
-        i, inc_configs[[i]], grid_obj, coords, I_mat, verbose = TRUE)
-      saveRDS(results_by_config[[i]], cp_file)
-      cat(sprintf("  Checkpoint saved: %s\n", basename(cp_file)))
-    }
-  }
+  all_tau_results[[as.character(true_tau)]] <- bind_rows(results_by_config)
 }
 
 # ==============================================================================
 # COMBINE & SAVE RESULTS
 # ==============================================================================
 
-granular_results <- bind_rows(results_by_config)
+granular_results <- bind_rows(all_tau_results)
 
 total_elapsed <- as.numeric(difftime(Sys.time(), global_start, units = "mins"))
 cat(sprintf("\n=== Simulation Complete ===\n"))
@@ -389,11 +418,14 @@ cat(sprintf("Total time: %.1f minutes\n", total_elapsed))
 cat(sprintf("Scenarios completed: %d\n", nrow(granular_results)))
 
 # --- Save combined results ---
-timestamp_str <- format(Sys.time(), "%Y%m%d_%H%M%S")
+# Use "MLE_tau_sweep" (or "DIM_tau_sweep") so output does not overwrite the
+# existing MLE_combined baseline file (tau = 1.0 only).
+timestamp_str  <- format(Sys.time(), "%Y%m%d_%H%M%S")
+output_mode_tag <- paste0(estimation_mode, "_tau_sweep")
 
 combined_file <- file.path(sim_data_dir,
                             sprintf("sim_results_%s_combined_%s.rds",
-                                    estimation_mode, timestamp_str))
+                                    output_mode_tag, timestamp_str))
 saveRDS(granular_results, combined_file)
 cat(sprintf("Combined results saved: %s\n", basename(combined_file)))
 
@@ -402,7 +434,7 @@ inc_mode_groups <- split(granular_results, granular_results$Incidence_Mode)
 for (mode_name in names(inc_mode_groups)) {
   split_file <- file.path(sim_data_dir,
                            sprintf("sim_results_%s_%s_%s.rds",
-                                   estimation_mode, mode_name, timestamp_str))
+                                   output_mode_tag, mode_name, timestamp_str))
   saveRDS(inc_mode_groups[[mode_name]], split_file)
   cat(sprintf("  Split results saved: %s (%d rows)\n",
               basename(split_file), nrow(inc_mode_groups[[mode_name]])))

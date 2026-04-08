@@ -930,6 +930,127 @@ summarize_conditional_tests <- function(conditional_results) {
 }
 
 # ==============================================================================
+# TAU-SWEEP EXTENSIONS
+# ==============================================================================
+
+#' Compute relative efficiency of each design versus the best design at each tau.
+#'
+#' Relative efficiency (RE) = MSE(Design X, tau) / MSE(Best Design, tau).
+#' RE = 1.0 means the design is as good as the best. RE > 1 means it has
+#' higher MSE than the best. Useful for assessing whether the cost of using
+#' a suboptimal design changes with effect size.
+#'
+#' @param results Data frame. Must contain True_Tau, Design, and MSE columns.
+#' @param inc_label Character. Optional incidence config label for output.
+#' @return Data frame with columns: True_Tau, Design, Mean_MSE, Best_MSE,
+#'   Rel_Efficiency (= Mean_MSE / Best_MSE).
+#' @family tau-sweep
+compute_relative_efficiency <- function(results, inc_label = "") {
+  if (!"True_Tau" %in% names(results)) {
+    warning("compute_relative_efficiency: True_Tau column not found.")
+    return(invisible(NULL))
+  }
+
+  re_data <- results %>%
+    group_by(True_Tau, Design) %>%
+    summarise(Mean_MSE = mean(MSE, na.rm = TRUE), .groups = "drop") %>%
+    group_by(True_Tau) %>%
+    mutate(
+      Best_MSE        = min(Mean_MSE, na.rm = TRUE),
+      Rel_Efficiency  = Mean_MSE / Best_MSE
+    ) %>%
+    ungroup()
+
+  if (nchar(inc_label) > 0) {
+    cat(sprintf("\n=== Relative Efficiency: %s ===\n", inc_label))
+  } else {
+    cat("\n=== Relative Efficiency (MSE ratio vs. best design at each tau) ===\n")
+  }
+
+  re_wide <- re_data %>%
+    select(True_Tau, Design, Rel_Efficiency) %>%
+    pivot_wider(names_from = Design, values_from = Rel_Efficiency) %>%
+    arrange(True_Tau)
+  print(as.data.frame(round(re_wide, 3)))
+
+  invisible(re_data)
+}
+
+#' Plot relative efficiency as lines across tau values.
+#'
+#' A horizontal reference line at RE = 1.0 marks the best design at each tau.
+#' Designs close to 1.0 at all tau values are robust; designs far from 1.0
+#' are strongly dominated.
+#'
+#' @param results Data frame. Must contain True_Tau, Design, MSE.
+#' @param inc_label Character. Incidence config label for plot subtitle.
+#' @return ggplot object.
+#' @family tau-sweep
+plot_relative_efficiency <- function(results, inc_label = "") {
+  re_data <- compute_relative_efficiency(results, inc_label)
+  if (is.null(re_data)) return(invisible(NULL))
+
+  ggplot(re_data, aes(x = True_Tau, y = Rel_Efficiency,
+                      color = Design, group = Design)) +
+    geom_hline(yintercept = 1.0, linetype = "dashed",
+               color = "black", linewidth = 0.6) +
+    geom_line(linewidth = 0.9) +
+    geom_point(size = 2.5) +
+    scale_color_viridis_d(option = "D") +
+    scale_y_log10() +
+    labs(
+      title    = "Relative Efficiency vs. True Tau",
+      subtitle = if (nchar(inc_label) > 0) inc_label else NULL,
+      x        = "True tau",
+      y        = "MSE / MSE(best design)  [log scale]",
+      color    = "Design"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+#' Plot mean Bias per design across tau values (bias decomposition).
+#'
+#' Under a correctly-specified MLE, bias should be near zero regardless of tau.
+#' A bias spike at tau = 0.8 (where tau ≈ gamma_max) indicates that the MLE
+#' cannot cleanly separate the treatment effect from spillover at that boundary.
+#' Design differences in bias across tau reveal which designs mitigate
+#' spillover confounding at low signal-to-noise conditions.
+#'
+#' @param results Data frame. Must contain True_Tau, Design, Bias.
+#' @param inc_label Character. Incidence config label for plot subtitle.
+#' @return ggplot object.
+#' @family tau-sweep
+plot_bias_decomposition <- function(results, inc_label = "") {
+  if (!"True_Tau" %in% names(results)) {
+    warning("plot_bias_decomposition: True_Tau column not found.")
+    return(invisible(NULL))
+  }
+
+  bias_data <- results %>%
+    group_by(Design, True_Tau) %>%
+    summarise(Mean_Bias = mean(Bias, na.rm = TRUE), .groups = "drop")
+
+  ggplot(bias_data, aes(x = True_Tau, y = Mean_Bias,
+                        color = Design, group = Design)) +
+    geom_hline(yintercept = 0, linetype = "dashed",
+               color = "black", linewidth = 0.6) +
+    geom_line(linewidth = 0.9) +
+    geom_point(size = 2.5) +
+    scale_color_viridis_d(option = "D") +
+    labs(
+      title    = "Bias Decomposition Across Tau Values",
+      subtitle = if (nchar(inc_label) > 0) inc_label else NULL,
+      caption  = "Near-zero bias across all tau values confirms MLE consistency",
+      x        = "True tau",
+      y        = "Mean Bias (tau-hat - tau)",
+      color    = "Design"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "right")
+}
+
+# ==============================================================================
 # REPORT GENERATION
 # ==============================================================================
 
@@ -1014,8 +1135,10 @@ generate_comparison_report <- function(results,
   # 4. Conditional / Stratified Tests
   # -------------------------------------------------------------------------
   cat("\n--- Conditional Tests (single-parameter stratification) ---\n")
+  # True_Tau included when present (tau-sweep results only; gracefully absent
+  # from baseline MLE_combined results that fix tau = 1.0)
   cond_params <- c("Rho", "Gamma", "Spillover_Type", "Neighbor_Type",
-                    "Incidence_Mode")
+                    "Incidence_Mode", "True_Tau")
   cond_params <- intersect(cond_params, names(results))
 
   cond_results <- list()

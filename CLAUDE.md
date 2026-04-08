@@ -43,10 +43,11 @@ Incidence-Guided Saturation Quadrants (8).
 
 **MLE (lagsarlm oracle) is the primary estimator.** DIM is a naive baseline only.
 
-Key results (2,560-scenario MLE run, 2026-03-22):
+Key results (2,560-scenario MLE baseline, 2026-03-22; tau-sweep code complete 2026-04-08):
 - **Best designs: Design 8 (Incidence-Guided Saturation Quadrants) ≈ Design 3 (Saturation Quadrants)** under MLE (MSE 0.079 vs 0.080)
 - **Worst design: Design 1 (Checkerboard)** — MSE 0.744, coverage ~55%
 - MLE coverage ~0.94 for all designs except D1; DIM coverage ~0.72
+- Tau-sweep (12,800 scenarios, τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}) implemented; Longleaf run pending
 
 ---
 
