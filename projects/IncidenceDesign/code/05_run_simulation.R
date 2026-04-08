@@ -40,8 +40,10 @@ source(file.path(script_dir, "04_estimation.R"))
 estimation_mode <- "MLE"      # "MLE" or "DIM"
 
 # Parallelization: number of cores for parallel incidence config processing
-# Set to 1 for sequential, or detectCores() - 1 for max parallelism
-n_cores <- 1
+# Set to 1 for sequential. 5 cores maps perfectly to the 5 incidence configs
+# (iid, spatial x2, poisson x2), giving ~5x speedup on the config-parallel work.
+# Note: each tau value runs its 5 configs in parallel, then moves to the next tau.
+n_cores <- 5
 
 # Grid
 grid_dim <- 10                 # 10x10 = 100 clusters
