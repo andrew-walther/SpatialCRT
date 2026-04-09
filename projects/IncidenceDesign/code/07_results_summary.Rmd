@@ -264,7 +264,7 @@ param_df <- data.frame(
                        "0.00, 0.01, 0.20, 0.50",
                        "0.5, 0.6, 0.7, 0.8",
                        "control_only, both",
-                       "1, 2, 3, 4, 5, 7",
+                       "1, 2, 3, 4, 5, 6, 7, 8",
                        ""),
   Levels           = c("5 configs (1 iid + 2 spatial + 2 poisson)",
                        "—",
@@ -272,12 +272,12 @@ param_df <- data.frame(
                        "4",
                        "4",
                        "2",
-                       "6",
-                       "1,920 scenarios")
+                       "8",
+                       "2,560 scenarios (primary tau=1.0 slice; 12,800 across tau-sweep)")
 )
 
 kable(param_df, booktabs = TRUE, linesep = "",
-      caption = "Simulation parameter grid (1,920 total scenarios per estimator)") %>%
+      caption = "Simulation parameter grid. Primary tau=1.0 slice: 2,560 scenarios. Full tau-sweep (tau in {0.8, 1.0, 1.5, 2.0, 3.0}): 12,800 total scenarios.") %>%
   kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
   row_spec(nrow(param_df), bold = TRUE)
 ```
@@ -789,34 +789,36 @@ $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
 files_df <- data.frame(
   File = c(
     "sim_results_DIM_combined_20260304_195321.rds",
-    "sim_results_MLE_combined_20260305_150742.rds",
-    "sim_results_DIM_iid_*.rds / _spatial_*.rds / _poisson_*.rds",
-    "sim_results_MLE_iid_*.rds / _spatial_*.rds / _poisson_*.rds",
-    "DIM_combined_*.pdf (5 files)",
-    "MLE_combined_*.pdf (5 files)",
-    "DIM_combined_incidence_overview.pdf",
-    "MLE_combined_incidence_overview.pdf",
-    "00_mathematical_specification.pdf",
+    "sim_results_MLE_tau_sweep_combined_20260408_191916.rds",
+    "sim_results_MLE_combined_20260322_151030.rds",
+    "sim_results_MLE_tau_sweep_{iid,spatial,poisson}_*.rds",
+    "MLE_tau_sweep_design_recommendations.pdf",
+    "MLE_tau_sweep_incidence_overview.pdf",
+    "MLE_tau_sweep_*.pdf (5 files, per incidence config)",
+    "MLE_tau_sweep_*_tau_sensitivity.pdf (5 files)",
+    "11_statistical_comparisons_report.{html,pdf}",
+    "00_mathematical_specification.html",
     "07_results_summary.pdf"
   ),
   Contents = c(
-    "All 1,920 DIM scenarios",
-    "All 1,920 MLE scenarios",
-    "Per-incidence-mode DIM splits",
-    "Per-incidence-mode MLE splits",
-    "Per-config 8-plot PDFs (DIM)",
-    "Per-config 8-plot PDFs (MLE)",
-    "Incidence heatmaps + distributions",
-    "Incidence heatmaps + distributions (MLE)",
+    "DIM baseline: 1,920 scenarios (6-design sweep, archived)",
+    "PRIMARY: 12,800 MLE tau-sweep scenarios (tau in {0.8,1.0,1.5,2.0,3.0})",
+    "Archived MLE baseline: 2,560 scenarios at tau=1.0 (8 designs)",
+    "Per-incidence-mode MLE tau-sweep splits",
+    "Design recommendation figures + tables (primary tau=1.0)",
+    "Incidence heatmaps and distributions",
+    "Per-config 8-plot PDFs (primary tau=1.0 slice)",
+    "Per-config tau sensitivity PDFs (MSE/power/coverage vs tau)",
+    "Formal statistical comparisons (Friedman, Nemenyi, Wilcoxon)",
     "Mathematical theory document",
     "This report"
   )
 )
 kable(files_df, booktabs = TRUE, linesep = "",
-      caption = "Output files in results/ directory") %>%
+      caption = "Key output files in results/sim\\_data/ and results/ directories.") %>%
   kable_styling(latex_options = c("striped", "hold_position", "scale_down"),
                 font_size = 8)
 ```
 
-All files are located in:
-`code/OutcomeIncidenceDesign/ModularIncidenceSim/results/`
+All simulation data files are located in `results/sim_data/`.
+All rendered reports and PDFs are in `results/` and `paper/report/`.
