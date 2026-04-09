@@ -372,18 +372,40 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 ---
 
-## Planned Extensions (not yet implemented)
+## Extensions & Future Work Roadmap
 
-### Completed extensions
-- **Tau-sweep:** COMPLETE — 12,800 scenarios, all reports integrated (2026-04-08)
-- **True_Tau dimension in Quarto reports:** COMPLETE — all 6 report files updated (2026-04-08)
+### Completed (as of 2026-04-08)
+- **Tau-sweep:** COMPLETE — 12,800 scenarios, τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}, all reports integrated
+- **True_Tau dimension in Quarto reports:** COMPLETE — all 6 report files updated
+- **Power metric:** COMPLETE — P(reject H₀: τ=0) tracked per scenario
+- **Monte Carlo SEs:** COMPLETE — N_Valid_Est, SE_MSE columns; delta-method SE_MSE = √(2SD⁴ + 4Bias²SD²)/√N
 
-### Remaining extensions
-- Heterogeneous population mode for Poisson (`pop_mode = "heterogeneous"`)
-- Non-oracle MLE runs (`include_spill_covariate = FALSE`) for realistic estimation
-- Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
-- Populate `paper/manuscript/` QMD sections with live figures and results
-- Develop Application section (SUD in NC context)
+### Simulation Extensions (open)
+
+| Priority | Extension | Implementation Note |
+|----------|-----------|---------------------|
+| High | **Non-oracle MLE** (`include_spill_covariate = FALSE`) | Toggle already in `estimate_tau()`; run `05_run_simulation.R` with `include_spill_covariate = FALSE` |
+| Medium | **Heterogeneous population** Poisson mode | `pop_mode = "heterogeneous"` in `05`; extend `generate_incidence_poisson()` for unequal cluster sizes |
+| Medium | **Grid sensitivity** | Change `grid_dim` to 8 or 15 in `05`; tests D3/D8 dominance at different spatial scales |
+| Low | **DIM tau-sweep** | Re-run DIM across all τ levels for power curve comparison (DIM is confirmed naive baseline) |
+| Low | **Heterogeneous beta** | Vary `beta` coefficient across simulation configs |
+
+### Manuscript Development (open)
+
+| Priority | Task | File |
+|----------|------|------|
+| High | Populate simulation results section with live R chunks | `paper/manuscript/_simulation.qmd` |
+| High | Prose review and polish of all sections | `_introduction.qmd`, `_methods.qmd` |
+| Medium | Develop Application section (SUD in NC, policy implications) | `paper/manuscript/_application.qmd` |
+| Medium | Develop Discussion section (oracle MLE limitations, future work) | `paper/manuscript/_discussion.qmd` |
+| Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |
+
+### Known Minor Issues (low-priority cleanup)
+
+- `add_mc_ses()` Roxygen doc: says N_Valid_Est=0 → NA but actually produces Inf
+- `load_latest_results()` comment (line ~87 of `06_visualizations.R`): clarify `_combined_` preference applies per estimation-mode, not globally
+- `07_results_summary.Rmd` compare-table caption: should note that DIM only ran 6 designs (D7/D8 NAs are expected)
+- `IncidenceSpatialCRT_Report.qmd` caption/text alignment: MC SEs table uses tau=1.0 slice (2,560 rows), not full 12,800 — prose now correctly clarifies this distinction
 
 ---
 

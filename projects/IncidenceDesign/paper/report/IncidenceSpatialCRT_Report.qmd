@@ -1354,8 +1354,9 @@ if (tau_sweep_available) {
 ## Monte Carlo Standard Errors
 
 The `N_Valid_Est` column records the number of non-NA MLE estimates per scenario,
-serving as the denominator for Monte Carlo (MC) standard errors. All 12,800 scenarios
-have `N_Valid_Est = 250` (full convergence), confirming that reported MSE and coverage
+serving as the denominator for Monte Carlo (MC) standard errors. All 2,560 primary-scenario
+(τ=1.0) rows have `N_Valid_Est = 250` (full convergence), and this holds across all 12,800
+tau-sweep scenarios (Fail_Rate = 0.0 everywhere), confirming that reported MSE and coverage
 differences reflect genuine design properties rather than MLE instability.
 
 ```{r mc-ses-table, eval=mle_avail, results='asis'}

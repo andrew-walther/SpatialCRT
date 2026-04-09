@@ -162,7 +162,7 @@ Incidence-Guided Saturation Quadrants.
 - **12,800 scenarios** across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} | Fail_Rate = 0.0 | N_Valid_Est = 250 (all)
 - Primary scenario (τ=1.0): **Best: D8** MSE=0.079 ≈ **D3** MSE=0.080 | **Worst: D1** MSE=0.802, coverage ~55%
 - D3/D8 dominance holds across **all τ levels** (Friedman p < 2.2×10⁻¹⁶ at each τ)
-- Power curves: 80% power threshold reached at τ ≈ 1.5 for D3/D8; much higher for D1
+- Power curves: D3/D8 reach 80% power already at τ=0.8 (smallest tested effect); D1 requires τ≥2.0
 - Files: `results/sim_data/sim_results_MLE_tau_sweep_combined_20260408_191916.rds` (12,800 rows)
 - All reports regenerated with tau sensitivity sections (2026-04-08)
 
@@ -293,7 +293,7 @@ Figures available in `paper/manuscript/figures/`:
 ## Status & Next Steps
 
 **Completed:**
-- [x] All code files (00–09) written and tested
+- [x] All code files (00–11) written and tested
 - [x] Mathematical specification document (00) rendered to HTML
 - [x] DIM simulation: 1,920 scenarios (prior 6-design sweep), visualizations generated (baseline)
 - [x] MLE simulation: 1,920 scenarios (prior 6-design sweep), visualizations generated, zero convergence failures
@@ -307,19 +307,45 @@ Figures available in `paper/manuscript/figures/`:
 - [x] Modular manuscript framework with converted LaTeX section drafts — completed 2026-03-23
 - [x] Statistical comparisons module (10) + report (11): Friedman/Nemenyi/Wilcoxon tests — completed 2026-03-25
 - [x] Comprehensive report (`paper/report/`) expanded with full statistical section, design figures
+- [x] **Tau-sweep simulation: 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}** — completed 2026-04-08
+- [x] Power metric added (P(reject H₀: τ=0)) and Monte Carlo SEs via delta-method (N_Valid_Est, SE_MSE)
+- [x] All reports regenerated with tau sensitivity sections (MSE vs τ, power curves, coverage, rank stability)
+- [x] Statistical comparisons updated for tau-sweep; conditional Friedman/Nemenyi across all τ levels
+- [x] Pre-sweep deliverables archived: `results/archive/pre_tau_sweep_20260408/`
 
-**Pending simulation extensions:**
-- [ ] **Tau sensitivity analysis** — re-run simulation varying `true_tau` ∈ {0.8, 1.0, 1.5, 2.0, 3.0}; requires ~12,800 scenarios, recommended for Longleaf HPC. See `CLAUDE.md` for implementation notes.
-- [ ] Re-run DIM simulation: 2,560 scenarios (baseline, optional — DIM is naive reference only)
-- [ ] Heterogeneous population — Poisson mode with `pop_mode = "heterogeneous"`
-- [ ] Non-oracle MLE — run without the true Spill covariate for realistic comparison
-- [ ] Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`
+---
 
-**Manuscript development (in progress):**
-- [ ] Populate simulation results section with live R figures/tables
-- [ ] Develop Application section (SUD in NC context)
-- [ ] Develop Discussion section (relevance, limitations, future work)
-- [ ] Careful prose review and revision of all drafted sections
+## Open To-Dos / Future Work Roadmap
+
+The core simulation is complete. The following extensions would strengthen the study:
+
+### Simulation Extensions
+
+| Priority | Extension | Description | Notes |
+|----------|-----------|-------------|-------|
+| High | **Non-oracle MLE** | Re-run MLE without true Spill covariate (`include_spill_covariate = FALSE`) | Toggle already exists in `estimate_tau()`; reveals realistic vs. oracle performance gap |
+| Medium | **Heterogeneous population** | Poisson mode with `pop_mode = "heterogeneous"` (unequal cluster sizes) | `pop_mode` parameter exists in `05`; needs `generate_incidence_poisson()` extension |
+| Medium | **Grid sensitivity** | Rerun with `grid_dim = 8` (64 clusters) or `grid_dim = 15` (225 clusters) | Tests whether D3/D8 dominance holds at different spatial scales |
+| Low | **DIM tau-sweep** | Re-run DIM across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} to compute DIM power curves | Low priority — DIM is confirmed naive baseline; MLE results are primary |
+| Low | **Heterogeneous beta** | Vary `beta` (incidence coefficient) across incidence modes | Would test robustness to signal strength of incidence covariate |
+
+### Manuscript Development
+
+| Priority | Task | Description |
+|----------|------|-------------|
+| High | **Simulation results section** | Populate `paper/manuscript/_simulation.qmd` with live R code chunks (figures + tables from `06_visualizations.R` and `08_design_recommendations.R`) |
+| High | **Prose review** | Careful editing of `_introduction.qmd` and `_methods.qmd` (converted from LaTeX, not yet polished) |
+| Medium | **Application section** | Develop `_application.qmd` — SUD in NC counties context, policy implications, connection to NC DOC work in SpillSpatialDepSim |
+| Medium | **Discussion section** | Develop `_discussion.qmd` — limitations (oracle MLE, 50% treated, homogeneous population), future work, recommendations for practitioners |
+| Low | **Presentation slides** | Expand `SpatialCRT_IncidenceDesign_Presentation.qmd` scaffold into full conference slides |
+
+### Code Quality / Infrastructure
+
+| Priority | Task | Description |
+|----------|------|-------------|
+| Low | **`add_mc_ses()` doc fix** | The Roxygen comment says N_Valid_Est=0 produces NA but actually produces Inf; minor documentation inaccuracy |
+| Low | **`06_visualizations.R` comment** | Clarify that `_combined_` preference in `load_latest_results()` applies per estimation-mode (not globally) — no behavior change needed, just comment clarity |
+| Low | **DIM/MLE join note** | The compare-table in `07_results_summary.Rmd` left-joins DIM (6 designs) onto MLE (8 designs); D7/D8 DIM columns show NA. Caption should mention this asymmetry explicitly. |
 
 ---
 
