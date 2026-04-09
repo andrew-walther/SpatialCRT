@@ -105,7 +105,7 @@ cfg_names <- names(dim_cfgs)
 
 # Introduction
 
-This report summarizes a simulation study evaluating **six treatment assignment designs**
+This report summarizes a simulation study evaluating **eight treatment assignment designs**
 for Spatial Cluster Randomized Trials (CRTs) when outcome incidence is heterogeneous
 and spatially structured. The central research question is:
 
@@ -118,8 +118,10 @@ The Poisson incidence mode uses an SUD base rate of 35 per 100,000 (Mirzaei et a
 consistent with county-level analyses by Gan et al. and Watson et al.
 
 The study compares two estimation methods — Difference in Means (DIM) and Maximum
-Likelihood Estimation via a spatial autoregressive model (MLE) — across 1,920 parameter
-scenarios per estimator.
+Likelihood Estimation via a spatial autoregressive model (MLE). The primary MLE results
+use the $\tau = 1.0$ scenario (2,560 parameter scenarios); a tau sensitivity analysis
+across $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ (12,800 total scenarios) is presented
+in Section \ref{sec:tau-sensitivity}.
 
 ---
 
@@ -440,7 +442,7 @@ mle_avail <- !is.null(mle_results) && nrow(mle_results) > 0
 ```
 
 ```{r mle-overall-stats, eval=mle_avail}
-mle_summary <- mle_results %>%
+mle_summary <- mle_results_tau1 %>%
   summarise(
     N_scenarios   = n(),
     Bias_min      = round(min(Bias, na.rm=TRUE), 3),
@@ -474,7 +476,7 @@ kable(mle_stats_disp, booktabs = TRUE, linesep = "", digits = 3, na = "—",
 ## MLE Design Comparison by MSE
 
 ```{r mle-design-summary, eval=mle_avail, results='asis'}
-mle_by_design <- mle_results %>%
+mle_by_design <- mle_results_tau1 %>%
   group_by(Design) %>%
   summarise(
     Mean_Bias     = round(mean(Bias, na.rm=TRUE), 3),
@@ -559,7 +561,7 @@ dim_agg <- dim_results %>%
             DIM_Cov = round(mean(Coverage, na.rm=TRUE), 3),
             .groups = "drop")
 
-mle_agg <- mle_results %>%
+mle_agg <- mle_results_tau1 %>%
   group_by(Design) %>%
   summarise(MLE_MSE = round(mean(MSE, na.rm=TRUE), 3),
             MLE_Cov = round(mean(Coverage, na.rm=TRUE), 3),
@@ -723,10 +725,11 @@ if ("iid Uniform" %in% names(tau_cfgs)) {
 
 ## Summary of Findings
 
-The simulation study evaluated 6 treatment assignment designs across 1,920 parameter
-scenarios per estimator, spanning three incidence generation modes, two contiguity
-structures, four spatial autocorrelation levels, four spillover magnitudes, and two
-spillover types.
+The simulation study evaluated 8 treatment assignment designs across 2,560 MLE parameter
+scenarios (primary $\tau = 1.0$ slice), spanning three incidence generation modes,
+two contiguity structures, four spatial autocorrelation levels, four spillover magnitudes,
+and two spillover types. The full tau-sweep covers 12,800 scenarios across
+$\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
 
 **Key findings:**
 
