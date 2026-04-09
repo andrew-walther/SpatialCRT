@@ -28,8 +28,13 @@ cat("=======================================================\n\n")
 # STEP 1: Verify MLE results exist
 # ==============================================================================
 
+# Prefer tau-sweep results if present; fall back to MLE_combined baseline.
 mle_combined_files <- list.files(results_dir,
-  pattern = "sim_results_MLE_combined.*\\.rds$", full.names = TRUE)
+  pattern = "sim_results_MLE_tau_sweep_combined.*\\.rds$", full.names = TRUE)
+if (length(mle_combined_files) == 0) {
+  mle_combined_files <- list.files(results_dir,
+    pattern = "sim_results_MLE_combined.*\\.rds$", full.names = TRUE)
+}
 
 if (length(mle_combined_files) == 0) {
   stop("No MLE combined results file found in ", results_dir,
@@ -58,7 +63,7 @@ cat("DIM results loaded:", nrow(dim_results), "scenarios\n\n")
 
 cat("=== Generating MLE Visualizations ===\n")
 source(file.path(script_dir, "06_visualizations.R"))
-run_all_visualizations(results = mle_results, estimation_mode = "MLE_combined")
+run_all_visualizations(results = mle_results, estimation_mode = "MLE_tau_sweep")
 cat("MLE visualizations complete.\n\n")
 
 # ==============================================================================

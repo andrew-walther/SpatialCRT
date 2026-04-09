@@ -83,6 +83,11 @@ load_latest_results <- function(results_dir = file.path(dirname(script_dir), "re
   }
   if (length(files) == 0) stop("No results files found in ", search_dir)
 
+  # Prefer _combined_ files over per-incidence-mode splits when multiple matches exist.
+  # This prevents tau_sweep pattern from accidentally loading _spatial_ or _iid_ splits.
+  combined_files <- files[grepl("_combined_", files)]
+  if (length(combined_files) > 0) files <- combined_files
+
   # Pick the most recently modified
   latest <- files[which.max(file.mtime(files))]
   cat("Loading results from:", basename(latest), "\n")
@@ -982,8 +987,24 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
   per_config_dir <- file.path(out_dir, "mle_per_config")
   if (!dir.exists(per_config_dir)) dir.create(per_config_dir, recursive = TRUE)
 
-  # Split results by incidence config
-  config_list <- split_by_incidence_config(results)
+  # If this is tau-sweep data (True_Tau column present), split into:
+  #   results_tau1  — tau=1.0 slice only, for all existing non-tau-aware plots/tables
+  #   results_full  — full sweep, for tau-aware sensitivity plots
+  # This preserves backward compatibility: all standard figures remain conditioned
+  # on the primary scenario (tau=1.0) and are directly comparable to the baseline.
+  if ("True_Tau" %in% names(results)) {
+    results_tau1 <- results[results$True_Tau == 1.0, ]
+    results_full <- results
+    n_tau_levels <- length(unique(results$True_Tau))
+    cat(sprintf("Tau-sweep data detected (%d tau levels). Standard plots use tau=1.0 slice (%d scenarios).\n",
+                n_tau_levels, nrow(results_tau1)))
+  } else {
+    results_tau1 <- results
+    results_full <- results
+  }
+
+  # Split results by incidence config (tau=1.0 slice for standard per-config plots)
+  config_list <- split_by_incidence_config(results_tau1)
 
   cat(sprintf("\n=== Generating Visualizations for %d Incidence Configs ===\n",
               length(config_list)))
@@ -1061,6 +1082,56 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
     run_standard_tables(config_results, config_name)
 
     cat("\n")
+  }
+
+  # --- Tau sensitivity plots (only when True_Tau column is present) ---
+  # These use results_full (all tau levels). Produced as a separate PDF per config.
+  if ("True_Tau" %in% names(results_full) && length(unique(results_full$True_Tau)) > 1) {
+    cat("\n=== Generating Tau Sensitivity Plots ===\n")
+    config_list_full <- split_by_incidence_config(results_full)
+
+    for (config_name in names(config_list_full)) {
+      config_full <- config_list_full[[config_name]]
+
+      safe_name <- gsub("[^a-zA-Z0-9_]", "_", config_name)
+      safe_name <- gsub("_+", "_", safe_name)
+      safe_name <- gsub("_$", "", safe_name)
+
+      cat(sprintf("--- Tau sensitivity [%s] ---\n", config_name))
+
+      if (output_pdf) {
+        tau_pdf_file <- file.path(per_config_dir,
+                                  sprintf("%s_%s_tau_sensitivity.pdf", est_label, safe_name))
+        pdf(tau_pdf_file, width = 14, height = 10)
+      }
+
+      cat("  Plot T1: MSE vs Tau...\n")
+      p <- plot_mse_vs_tau(config_full, config_name)
+      if (!is.null(p)) print(p)
+
+      cat("  Plot T2: Power Curves...\n")
+      p <- plot_power_curves(config_full, config_name)
+      if (!is.null(p)) print(p)
+
+      cat("  Plot T3: Coverage vs Tau...\n")
+      p <- plot_coverage_vs_tau(config_full, config_name)
+      if (!is.null(p)) print(p)
+
+      cat("  Plot T4: Best Design per Tau...\n")
+      p <- plot_best_design_per_tau(config_full, config_name)
+      if (!is.null(p)) print(p)
+
+      cat("  Plot T5: Rank Trajectories by Tau...\n")
+      p <- plot_rank_trajectories_by_tau(config_full, config_name)
+      if (!is.null(p)) print(p)
+
+      if (output_pdf) {
+        dev.off()
+        cat(sprintf("  Saved: %s\n", basename(tau_pdf_file)))
+      }
+
+      cat("\n")
+    }
   }
 
   cat("=== All visualizations complete ===\n")

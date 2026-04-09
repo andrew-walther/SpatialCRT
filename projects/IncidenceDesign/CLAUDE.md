@@ -197,30 +197,25 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ## Current State (as of 2026-04-08)
 
-**Tau-sweep simulation:** IMPLEMENTATION COMPLETE — code ready, awaiting Longleaf run
-- Scripts updated: `05_run_simulation.R`, `longleaf_setup/simulation.R`,
-  `longleaf_setup/aggregate_results.R`, `longleaf_setup/submit_array.sl`
-- New result columns: `True_Tau`, `N_Valid_Est`, `Power`
-- Output tag: `MLE_tau_sweep` — does NOT overwrite existing `MLE_combined` baseline
-- Smoke test: set `true_tau_vals <- c(1.0)` → results should reproduce baseline
-- Longleaf dry run: `sbatch --array=1-10 submit_array.sl` before `--array=1-12800%100`
+**Tau-sweep simulation:** COMPLETE — 12,800 scenarios, τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}
+- Data: `results/sim_data/sim_results_MLE_tau_sweep_combined_20260408_191916.rds`
+- Splits: `results/sim_data/sim_results_MLE_tau_sweep_{iid|spatial|poisson}_20260408_191916.rds`
+- Stats: 12,800 scenarios | 2,560 per tau level | N_Valid_Est = 250 (all converged) | Fail_Rate = 0.0
+- Primary scenario (tau=1.0): D8 MSE=0.079, D3 MSE=0.080 | Worst: D1 MSE=0.802, coverage=55%
+- All reports regenerated and integrated with tau sensitivity sections (2026-04-08)
 
-**MLE simulation (baseline tau=1.0):** COMPLETE — full 8-design, 2,560-scenario sweep
-- Data: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
-- Splits: `results/sim_data/sim_results_MLE_{iid|spatial|poisson}_20260322_151030.rds`
-- Stats: 2,560 scenarios | Best: D8 MSE=0.079, D3 MSE=0.080 | Worst: D1 MSE=0.744, coverage=55% | Fail_Rate = 0.0
-- Visualizations: `results/mle_per_config/` (5 per-config PDFs + incidence overview)
-- Design recommendations: `results/MLE_combined_design_recommendations.pdf`
-- Companion narrative: `results/MLE_design_recommendation_report.pdf`
+**MLE simulation (baseline tau=1.0):** ARCHIVED — superseded by tau-sweep
+- Data preserved: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
+- Pre-sweep deliverables archived: `results/archive/pre_tau_sweep_20260408/`
 
-**Statistical comparisons:** COMPLETE — Friedman + Nemenyi + Wilcoxon on 320 blocks × 8 designs
-- χ² = 993.38 (p < 2.2×10⁻¹⁶). Top group: D3 (rank 2.663) & D8 (rank 2.731). Worst: D1 (rank 7.037).
-- 24/28 Nemenyi pairs significant; 27/28 Wilcoxon (Holm) pairs significant.
-- Rankings robust across all parameter strata (all conditional Friedman p < 2.2×10⁻¹⁶).
+**Statistical comparisons (tau-sweep, primary tau=1.0):** UPDATED
+- χ² by tau level: τ=0.8: 1052.77, τ=1.0: 1091.90, τ=1.5: 964.05, τ=2.0: 909.95, τ=3.0: 743.41
+- All tau levels p < 2.2×10⁻¹⁶ — D3/D8 dominance holds across all effect sizes
 - Full report: `results/11_statistical_comparisons_report.{html,pdf}`
 
 **Comprehensive report:** `paper/report/IncidenceSpatialCRT_Report.{html,pdf}` — 50+ pages
-- Section 10 contains the complete formal statistical comparisons analysis.
+- Now includes: Tau Sensitivity section (MSE vs τ, power curves, coverage, rank stability)
+- Monte Carlo SEs section (N_Valid_Est, SE_MSE per design at primary tau=1.0)
 
 **DIM simulation:** COMPLETE for prior 6-design sweep (naive baseline only)
 - Data: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
@@ -229,19 +224,20 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 **Results directory layout:**
 ```
 results/
-  MLE_design_recommendation_report.pdf        # PRIMARY narrative report (26 pages)
-  MLE_combined_design_recommendations.pdf     # PRIMARY figures/tables PDF (27 pages)
-  11_statistical_comparisons_report.{html,pdf} # Formal hypothesis testing (17 pages)
+  MLE_tau_sweep_design_recommendations.pdf    # PRIMARY figures/tables PDF
+  MLE_tau_sweep_incidence_overview.pdf        # Incidence overview
+  11_statistical_comparisons_report.{html,pdf} # Formal hypothesis testing + tau-strata
   00_mathematical_specification.pdf
   07_results_summary.pdf
-  09_MLE_design_recommendation_report.pdf
+  09_MLE_design_recommendation_report.{html,pdf}
   sim_data/          # All .rds files (load_latest_results() auto-detects this)
-  mle_per_config/    # MLE per-config PDFs
+  mle_per_config/    # MLE per-config PDFs (tau_sweep_* + tau_sweep_*_tau_sensitivity)
   figures/           # design_samples_8panel + design_samples_option1_overlays
   archive/
+    pre_tau_sweep_20260408/  # Archived pre-sweep deliverables
 paper/
   report/
-    IncidenceSpatialCRT_Report.{qmd,html,pdf}  # Unified report (50+ pages, sources all modules)
+    IncidenceSpatialCRT_Report.{qmd,html,pdf}  # Unified report (now 50+ pages with tau section)
   manuscript/
     figures/   # design_samples_8panel + design_samples_option1_overlays (for manuscript use)
     *.qmd      # Modular manuscript sections
@@ -251,6 +247,7 @@ paper/
 Reorganized into `projects/IncidenceDesign/` on `claude/dreamy-wiles`.
 Statistical comparisons + report expansions on `claude/elated-lederberg`.
 Tau-sweep + MC SEs + Power implementation on `main` 2026-04-08.
+Tau-sweep results integrated, all reports regenerated on `main` 2026-04-08.
 
 ---
 
@@ -377,21 +374,11 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 ## Planned Extensions (not yet implemented)
 
-### Tau-sweep Longleaf run
-Code is implemented (2026-04-08). Next step: submit to Longleaf.
-```bash
-# Dry run (10 tasks)
-sbatch --array=1-10 longleaf_setup/submit_array.sl
+### Completed extensions
+- **Tau-sweep:** COMPLETE — 12,800 scenarios, all reports integrated (2026-04-08)
+- **True_Tau dimension in Quarto reports:** COMPLETE — all 6 report files updated (2026-04-08)
 
-# Full run (12,800 tasks)
-sbatch longleaf_setup/submit_array.sl
-
-# After completion:
-Rscript longleaf_setup/aggregate_results.R
-```
-
-### Other extensions
-- Incorporate `True_Tau` dimension into Quarto reports (07, 09, 11, comprehensive)
+### Remaining extensions
 - Heterogeneous population mode for Poisson (`pop_mode = "heterogeneous"`)
 - Non-oracle MLE runs (`include_spill_covariate = FALSE`) for realistic estimation
 - Grid sensitivity — rerun with `grid_dim = 8` or `grid_dim = 15`

@@ -621,7 +621,8 @@ generate_commentary <- function(results, inc_label = "") {
 #' @return Invisible combined results data frame
 run_recommendation_report <- function(results = NULL, results_dir = NULL,
                                       estimation_mode = "MLE_combined",
-                                      output_pdf = TRUE) {
+                                      output_pdf = TRUE,
+                                      default_tau = 1.0) {
   # Load results if needed
   if (is.null(results)) {
     rd <- if (!is.null(results_dir)) {
@@ -630,6 +631,18 @@ run_recommendation_report <- function(results = NULL, results_dir = NULL,
       file.path(dirname(script_dir_07), "results")
     }
     results <- load_latest_results(rd, estimation_mode)
+  }
+
+  # If tau-sweep data: filter to primary tau before all downstream ranking functions.
+  # All design comparisons and recommendations are conditioned on tau=default_tau
+  # (primary scenario). Tau sensitivity analysis lives in separate sections of the
+  # narrative reports (09, 11, comprehensive).
+  if ("True_Tau" %in% names(results)) {
+    results <- results[results$True_Tau == default_tau, ]
+    message(sprintf(
+      "run_recommendation_report: filtered to True_Tau = %.1f (%d scenarios)",
+      default_tau, nrow(results)
+    ))
   }
 
   est_label <- if (!is.null(estimation_mode)) estimation_mode else "MLE"

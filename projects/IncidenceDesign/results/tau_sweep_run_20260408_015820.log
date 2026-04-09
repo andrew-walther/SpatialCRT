@@ -1,0 +1,65 @@
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Loading required package: sf
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+Loading required package: Matrix
+
+Attaching package: ‘spatialreg’
+
+The following objects are masked from ‘package:spdep’:
+
+    get.ClusterOption, get.coresOption, get.mcOption,
+    get.VerboseOption, get.ZeroPolicyOption, set.ClusterOption,
+    set.coresOption, set.mcOption, set.VerboseOption,
+    set.ZeroPolicyOption
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Building spatial grid...
+
+=== Simulation Configuration ===
+Estimation mode:      MLE
+Tau values:           0.8, 1, 1.5, 2, 3
+Incidence configs:    5
+Scenarios per config: 512 (x 5 tau = 2560 total)
+Total scenarios:      12800
+Iterations/scenario:  250 (25 design x 10 outcome)
+Parallel cores:       5
+================================
+
+
+########## tau = 0.80 ##########
+Running 5 incidence configs in parallel across 5 cores...
+
+########## tau = 1.00 ##########
+Running 5 incidence configs in parallel across 5 cores...
+
+########## tau = 1.50 ##########
+Running 5 incidence configs in parallel across 5 cores...
+
+########## tau = 2.00 ##########
+Running 5 incidence configs in parallel across 5 cores...
+
+########## tau = 3.00 ##########
+Running 5 incidence configs in parallel across 5 cores...
+
+=== Simulation Complete ===
+Total time: 1040.9 minutes
+Scenarios completed: 12800
+Combined results saved: sim_results_MLE_tau_sweep_combined_20260408_191916.rds
+  Split results saved: sim_results_MLE_tau_sweep_iid_20260408_191916.rds (2560 rows)
+  Split results saved: sim_results_MLE_tau_sweep_poisson_20260408_191916.rds (5120 rows)
+  Split results saved: sim_results_MLE_tau_sweep_spatial_20260408_191916.rds (5120 rows)
+
+Total files saved: 4 (1 combined + 3 per incidence mode)

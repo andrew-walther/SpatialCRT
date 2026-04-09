@@ -92,10 +92,10 @@ Optionally set `n_cores > 1` (line 44) for parallel execution across incidence c
 source("06_visualizations.R")
 
 # All configs, most recent MLE results (primary estimator):
-run_all_visualizations(estimation_mode = "MLE_combined")
+run_all_visualizations(estimation_mode = "MLE_tau_sweep")
 
 # Single incidence config with all tables:
-r <- load_latest_results(estimation_mode = "MLE_combined")
+r <- load_latest_results(estimation_mode = "MLE_tau_sweep")
 cfgs <- split_by_incidence_config(r)
 run_standard_tables(cfgs[["iid Uniform"]], "iid Uniform")
 ```
@@ -106,10 +106,10 @@ run_standard_tables(cfgs[["iid Uniform"]], "iid Uniform")
 source("08_design_recommendations.R")
 
 # Full recommendation report (PDF + console output):
-run_recommendation_report(estimation_mode = "MLE_combined")
+run_recommendation_report(estimation_mode = "MLE_tau_sweep")
 
 # Specific scenario lookup:
-r <- load_latest_results(estimation_mode = "MLE_combined")
+r <- load_latest_results(estimation_mode = "MLE_tau_sweep")
 cfgs <- split_by_incidence_config(r)
 table_scenario_lookup(cfgs[["iid Uniform"]], rho = 0.2, gamma = 0.7,
                       spill_type = "both", nb_type = "queen")
@@ -157,48 +157,47 @@ Incidence-Guided Saturation Quadrants.
 
 ## Results Summary
 
-### Tau-sweep (code complete 2026-04-08, Longleaf run pending)
+### Tau-sweep (COMPLETE — 2026-04-08, 12,800 scenarios)
 
-- 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} — ready to submit
-- New metrics recorded: `Power` (P(reject H₀: τ=0)), `N_Valid_Est` (MC SE denominator)
-- Output: `sim_results_MLE_tau_sweep_combined_*.rds` — baseline file untouched
+- **12,800 scenarios** across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} | Fail_Rate = 0.0 | N_Valid_Est = 250 (all)
+- Primary scenario (τ=1.0): **Best: D8** MSE=0.079 ≈ **D3** MSE=0.080 | **Worst: D1** MSE=0.802, coverage ~55%
+- D3/D8 dominance holds across **all τ levels** (Friedman p < 2.2×10⁻¹⁶ at each τ)
+- Power curves: 80% power threshold reached at τ ≈ 1.5 for D3/D8; much higher for D1
+- Files: `results/sim_data/sim_results_MLE_tau_sweep_combined_20260408_191916.rds` (12,800 rows)
+- All reports regenerated with tau sensitivity sections (2026-04-08)
 
-### MLE baseline (tau=1.0, completed 2026-03-22)
+### MLE baseline (tau=1.0, archived — superseded by tau-sweep)
 
-- **2,560 scenarios** (designs 1–8, all incidence configs) | Fail_Rate = 0.0
-- **Best: Design 8 (Incidence-Guided Saturation Quadrants)** MSE=0.079 ≈ **Design 3 (Saturation Quadrants)** MSE=0.080
-- **Worst: Design 1 (Checkerboard)** MSE=0.744, coverage ~55%
-- Mean coverage ~0.94 for all designs except D1
-- File: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
+- `results/sim_data/sim_results_MLE_combined_20260322_151030.rds` (2,560 rows, preserved)
+- Pre-sweep deliverables: `results/archive/pre_tau_sweep_20260408/`
 
-### Statistical Comparisons (completed 2026-03-25)
+### Statistical Comparisons (updated for tau-sweep, 2026-04-08)
 
-- **Friedman test:** χ² = 993.38 (df=7), p < 2.2×10⁻¹⁶ — overwhelming evidence that designs differ
-- **Top equivalence group (Nemenyi post-hoc):** Design 3 (avg rank 2.663) and Design 8 (avg rank 2.731) — not significantly different from each other, significantly better than all others
-- **Design 1 (Checkerboard) is significantly worse than all alternatives** (avg rank 7.037)
-- **24/28 Nemenyi pairs** and **27/28 Wilcoxon pairs** are statistically significant (α = 0.05)
-- Rankings are **robust across all parameter strata** (p < 2.2×10⁻¹⁶ in every conditional test)
-- Full report: `results/11_statistical_comparisons_report.pdf`
+- **Friedman test by tau level:** χ²=1052.77 (τ=0.8) through χ²=743.41 (τ=3.0), all p < 2.2×10⁻¹⁶
+- **Top equivalence group:** Design 3 and Design 8 — not significantly different from each other, significantly better than all others at all tau levels
+- **Design 1 (Checkerboard) is significantly worse than all alternatives** at every τ
+- Full report (with tau-stratified tests + power analysis): `results/11_statistical_comparisons_report.pdf`
 
 ### Results Directory Structure
 
 ```
 results/
-  MLE_design_recommendation_report.pdf        # PRIMARY — narrative report (26 pages)
-  MLE_combined_design_recommendations.pdf     # PRIMARY — figures/tables PDF (27 pages)
-  11_statistical_comparisons_report.pdf       # PRIMARY — formal hypothesis testing report
-  11_statistical_comparisons_report.html      # HTML version (self-contained)
+  MLE_tau_sweep_design_recommendations.pdf    # PRIMARY — figures/tables PDF
+  MLE_tau_sweep_incidence_overview.pdf        # Incidence heatmaps + distributions
+  09_MLE_design_recommendation_report.{html,pdf}  # Narrative rec report with tau sensitivity
+  11_statistical_comparisons_report.{html,pdf}    # PRIMARY — formal hypothesis testing
   00_mathematical_specification.pdf           # Theory document
-  07_results_summary.pdf                      # Results summary
-  09_MLE_design_recommendation_report.pdf     # MLE recommendation report
+  07_results_summary.pdf                      # Results summary (with tau sensitivity section)
   sim_data/
-    sim_results_MLE_combined_{timestamp}.rds   # All 2,560 MLE scenarios
-    sim_results_MLE_iid_{timestamp}.rds        # iid Uniform only (512 rows)
-    sim_results_MLE_spatial_{timestamp}.rds    # Spatial only (1,024 rows)
-    sim_results_MLE_poisson_{timestamp}.rds    # Poisson only (1,024 rows)
+    sim_results_MLE_tau_sweep_combined_20260408_191916.rds   # PRIMARY — 12,800 rows
+    sim_results_MLE_tau_sweep_{iid,spatial,poisson}_{ts}.rds # Per-incidence splits
+    sim_results_MLE_combined_20260322_151030.rds             # Archived baseline (2,560 rows)
   mle_per_config/
-    MLE_combined_{config_name}.pdf             # Per-config 8-plot PDF (5 configs)
-    MLE_combined_incidence_overview.pdf        # Incidence heatmaps + distributions
+    MLE_tau_sweep_{config_name}.pdf             # Per-config 8-plot PDF (5 configs, tau=1.0)
+    MLE_tau_sweep_{config_name}_tau_sensitivity.pdf  # Per-config tau sensitivity PDFs (5)
+    MLE_tau_sweep_incidence_overview.pdf        # Incidence heatmaps + distributions
+  archive/
+    pre_tau_sweep_20260408/                     # All pre-sweep deliverables (archived)
   figures/
     design_samples_8panel.{png,pdf}            # 8-panel design illustration (clean)
     design_samples_option1_overlays.{png,pdf}  # 8-panel with saturation % annotations

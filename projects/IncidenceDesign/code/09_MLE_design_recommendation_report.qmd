@@ -80,13 +80,28 @@ source(file.path(script_dir, "08_design_recommendations.R"))
 
 ```{r load-results}
 #| include: false
-mle_results <- tryCatch(
-  load_latest_results(results_dir, estimation_mode = "MLE_combined"),
+# Load tau-sweep results (prefer MLE_tau_sweep; fall back to MLE_combined)
+mle_results_full <- tryCatch(
+  load_latest_results(results_dir, estimation_mode = "MLE_tau_sweep"),
   error = function(e) {
-    message("MLE combined results not found: ", e$message)
-    NULL
+    message("MLE tau-sweep not found, falling back to MLE_combined: ", e$message)
+    tryCatch(
+      load_latest_results(results_dir, estimation_mode = "MLE_combined"),
+      error = function(e2) { message("MLE combined not found: ", e2$message); NULL }
+    )
   }
 )
+# Design recommendations conditioned on primary scenario (tau=1.0).
+# The run_recommendation_report() function also applies this filter; we replicate
+# it here so inline stats are consistent with the figures.
+mle_results <- if (!is.null(mle_results_full) && "True_Tau" %in% names(mle_results_full)) {
+  mle_results_full[mle_results_full$True_Tau == 1.0, ]
+} else {
+  mle_results_full
+}
+tau_sweep_available <- !is.null(mle_results_full) &&
+                       "True_Tau" %in% names(mle_results_full) &&
+                       length(unique(mle_results_full$True_Tau)) > 1
 mle_avail <- !is.null(mle_results) && nrow(mle_results) > 0
 mle_cfgs  <- if (mle_avail) split_by_incidence_config(mle_results) else list()
 cfg_names <- names(mle_cfgs)
@@ -237,7 +252,7 @@ researchers designing spatial cluster randomized trials (CRTs).
 The simulation evaluates **`r if(mle_avail) n_designs` treatment assignment designs**
 across **`r if(mle_avail) n_scenarios_total` parameter scenarios** using Maximum
 Likelihood Estimation (MLE) via a spatial autoregressive model (`lagsarlm`). The
-estimand is the direct treatment effect $\tau = 1.0$.
+estimand is the direct treatment effect $\tau$ (primary scenario: $\tau = 1.0$; sensitivity across $\tau \in \{0.8, 1.5, 2.0, 3.0\}$ in @sec-tau-sensitivity).
 
 Three analytical questions are addressed:
 
@@ -341,11 +356,11 @@ For each of the `r if(mle_avail) n_scenarios_total` scenarios, **250 simulation
 iterations** (25 design resamples $\times$ 10 outcome resamples) produce the
 following metrics:
 
-- **Bias** $= \bar{\hat{\tau}} - \tau$: average departure from true effect $\tau = 1.0$
+- **Bias** $= \bar{\hat{\tau}} - \tau$: average departure from true effect (primary $\tau = 1.0$)
 - **SD**: standard deviation of estimates across iterations
 - **MSE** $= \text{Bias}^2 + \text{SD}^2$: total estimation error; the **primary
   ranking criterion** throughout this report
-- **Coverage**: fraction of 95\% confidence intervals containing $\tau = 1.0$
+- **Coverage**: fraction of 95\% confidence intervals containing the true $\tau$
 
 Lower MSE is better. Coverage near 0.95 (the nominal level) indicates valid inference.
 
@@ -1411,6 +1426,40 @@ gamma_stability_str <- ifelse(gamma_stable_all,
    `r if(mle_avail) top4_cov_lo`--`r if(mle_avail) top4_cov_hi`\% coverage
    across the tested scenarios, confirming that MLE-based inference is valid
    when a well-chosen spatial design is used.
+
+# Sensitivity of Recommendations to τ {#sec-tau-sensitivity}
+
+```{r tau-sensitivity-available}
+#| results: asis
+#| echo: false
+if (!tau_sweep_available) {
+  cat("> *Tau-sweep data not loaded. This section requires MLE_tau_sweep results.*\n\n")
+}
+```
+
+The tau-sweep simulation swept $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
+The question here is whether the design recommendations made at $\tau = 1.0$ hold
+across other plausible effect sizes.
+
+```{r tau-best-design-heatmap, eval=tau_sweep_available, fig.cap="Winning design per (incidence config, tau level). If D3/D8 dominate the grid, recommendations are robust to effect size choice."}
+if (tau_sweep_available) {
+  tau_cfgs_full <- split_by_incidence_config(mle_results_full)
+  if ("iid Uniform" %in% names(tau_cfgs_full)) {
+    p <- plot_best_design_per_tau(tau_cfgs_full[["iid Uniform"]], "iid Uniform")
+    if (!is.null(p)) print(p)
+  }
+}
+```
+
+```{r tau-rank-trajectories, eval=tau_sweep_available, fig.cap="Design rank trajectories across tau values (rank 1 = best MSE). Stable lines confirm the primary-scenario recommendation."}
+if (tau_sweep_available) {
+  tau_cfgs_full <- split_by_incidence_config(mle_results_full)
+  if ("iid Uniform" %in% names(tau_cfgs_full)) {
+    p <- plot_rank_trajectories_by_tau(tau_cfgs_full[["iid Uniform"]], "iid Uniform")
+    if (!is.null(p)) print(p)
+  }
+}
+```
 
 ---
 

@@ -500,7 +500,7 @@ This captures the proportion of iterations where the MLE optimizer failed to con
 |:---|:---:|:---:|:---|:---:|
 | Grid dimension | $G$ | 10 | --- | Yes |
 | Number of clusters | $N$ | 100 | $G^2$ | Derived |
-| True treatment effect | $\tau$ | 1.0 | --- | Yes |
+| True treatment effect | $\tau$ | 1.0 (primary) | 0.8, 1.0, 1.5, 2.0, 3.0 | Yes |
 | Incidence coefficient | $\beta$ | 1.0 | --- | Yes |
 | Error std. deviation | $\sigma$ | 1.0 | --- | Yes |
 | Spatial autocorrelation | $\rho$ | --- | 0.00, 0.01, 0.20, 0.50 | Yes |

@@ -74,16 +74,28 @@ dim_results <- tryCatch(
 )
 
 mle_results <- tryCatch(
-  load_latest_results(results_dir, estimation_mode = "MLE_combined"),
+  load_latest_results(results_dir, estimation_mode = "MLE_tau_sweep"),
   error = function(e) {
-    message("MLE combined results not found: ", e$message)
-    NULL
+    message("MLE tau-sweep results not found, falling back to MLE_combined: ", e$message)
+    tryCatch(
+      load_latest_results(results_dir, estimation_mode = "MLE_combined"),
+      error = function(e2) { message("MLE combined not found either: ", e2$message); NULL }
+    )
   }
 )
 
+# For tau-sweep results: filter to primary scenario (tau=1.0) before splitting configs.
+# Existing plots/tables are not tau-aware; filtering ensures they summarize the primary
+# scenario rather than silently averaging across all 5 tau levels.
+mle_results_tau1 <- if (!is.null(mle_results) && "True_Tau" %in% names(mle_results)) {
+  mle_results[mle_results$True_Tau == 1.0, ]
+} else {
+  mle_results
+}
+
 # Split into per-incidence-config lists
-dim_cfgs <- if (!is.null(dim_results)) split_by_incidence_config(dim_results) else list()
-mle_cfgs <- if (!is.null(mle_results)) split_by_incidence_config(mle_results) else list()
+dim_cfgs  <- if (!is.null(dim_results))       split_by_incidence_config(dim_results)       else list()
+mle_cfgs  <- if (!is.null(mle_results_tau1))  split_by_incidence_config(mle_results_tau1)  else list()
 
 # Convenience labels
 cfg_names <- names(dim_cfgs)
@@ -140,7 +152,7 @@ $$\mathbf{Y} = (\mathbf{I} - \rho \mathbf{W})^{-1}
 
 | Symbol | Role | Value / Range |
 |--------|------|---------------|
-| $\tau$ | Direct treatment effect (estimand) | $1.0$ (fixed) |
+| $\tau$ | Direct treatment effect (estimand) | $\{0.8, 1.0, 1.5, 2.0, 3.0\}$; primary: $1.0$ |
 | $\rho$ | Outcome spatial autocorrelation | $\{0.00, 0.01, 0.20, 0.50\}$ |
 | $\gamma$ | Spillover magnitude | $\{0.5, 0.6, 0.7, 0.8\}$ |
 | $\beta$ | Incidence effect on outcome | $1.0$ (fixed) |
@@ -663,6 +675,50 @@ for (cfg_nm in names(dim_cfgs)) {
 
 ---
 
+# Tau Sensitivity Analysis {#sec:tau-sensitivity}
+
+The tau-sweep simulation (12,800 scenarios) swept the direct treatment effect $\tau$
+across $\{0.8, 1.0, 1.5, 2.0, 3.0\}$. The primary scenario is $\tau = 1.0$; all
+standard results above use this slice. This section examines whether design rankings
+and statistical power change across effect sizes.
+
+```{r tau-sensitivity-check}
+tau_avail <- !is.null(mle_results) &&
+             "True_Tau" %in% names(mle_results) &&
+             length(unique(mle_results$True_Tau)) > 1
+```
+
+```{r tau-mse-plots, eval=tau_avail, fig.cap="MLE MSE by design across tau values. Rankings should be stable across effect sizes; D1 (Checkerboard) is consistently worst."}
+tau_cfgs <- split_by_incidence_config(mle_results)
+if ("iid Uniform" %in% names(tau_cfgs)) {
+  p <- plot_mse_vs_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
+  if (!is.null(p)) print(p)
+}
+```
+
+```{r tau-power-plots, eval=tau_avail, fig.cap="Statistical power P(reject H0: tau=0) by design across tau values. 80% power reference line shown. Designs with higher MSE require larger tau to achieve adequate power."}
+if ("iid Uniform" %in% names(tau_cfgs)) {
+  p <- plot_power_curves(tau_cfgs[["iid Uniform"]], "iid Uniform")
+  if (!is.null(p)) print(p)
+}
+```
+
+```{r tau-coverage-plots, eval=tau_avail, fig.cap="MLE coverage by design across tau values. Nominal 95% reference line shown. Coverage should be near-nominal for all designs except D1."}
+if ("iid Uniform" %in% names(tau_cfgs)) {
+  p <- plot_coverage_vs_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
+  if (!is.null(p)) print(p)
+}
+```
+
+```{r tau-rank-stability, eval=tau_avail, fig.cap="Design rank trajectories across tau values. Rank 1 = best MSE. Stable trajectories indicate robust design recommendations across effect sizes."}
+if ("iid Uniform" %in% names(tau_cfgs)) {
+  p <- plot_rank_trajectories_by_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
+  if (!is.null(p)) print(p)
+}
+```
+
+---
+
 # Conclusions
 
 ## Summary of Findings
@@ -706,8 +762,9 @@ spillover types.
   Heterogeneous population sizes (log-normal) would more closely match NC county data.
 - **Grid sensitivity:** All results use $G = 10$ ($N = 100$). Sensitivity to
   $G = 8$ or $G = 15$ has not been evaluated.
-- **Design 6 (Center Hotspot):** Implemented in `03_designs.R` but excluded from
-  the parameter sweep pending evaluation.
+- **Tau sensitivity:** $\tau$ was swept across $\{0.8, 1.0, 1.5, 2.0, 3.0\}$ in the
+  completed tau-sweep run (12,800 scenarios). See Section \ref{sec:tau-sensitivity}
+  for power and rank-stability results across effect sizes.
 
 ---
 

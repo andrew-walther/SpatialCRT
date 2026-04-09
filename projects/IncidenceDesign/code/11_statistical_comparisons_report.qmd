@@ -83,7 +83,20 @@ source(file.path(script_dir, "10_statistical_comparisons.R"))
 
 ```{r load-results}
 #| include: false
-mle_results <- load_latest_results(results_dir, estimation_mode = "MLE_combined")
+# Load tau-sweep results (prefer MLE_tau_sweep; fall back to MLE_combined)
+mle_results_full <- tryCatch(
+  load_latest_results(results_dir, estimation_mode = "MLE_tau_sweep"),
+  error = function(e) load_latest_results(results_dir, estimation_mode = "MLE_combined")
+)
+# Primary scenario: tau=1.0. All blocking tests use this slice for direct
+# comparability. Tau-stratified sensitivity tests run separately below.
+mle_results <- if ("True_Tau" %in% names(mle_results_full)) {
+  mle_results_full[mle_results_full$True_Tau == 1.0, ]
+} else {
+  mle_results_full
+}
+tau_sweep_available <- "True_Tau" %in% names(mle_results_full) &&
+                       length(unique(mle_results_full$True_Tau)) > 1
 n_scenarios <- nrow(mle_results)
 n_designs <- length(unique(mle_results$Design))
 n_blocks <- n_scenarios / n_designs
@@ -91,17 +104,20 @@ n_blocks <- n_scenarios / n_designs
 
 ```{r run-tests}
 #| include: false
-# Run all core tests
+# Run all core tests on tau=1.0 slice
 fr  <- run_friedman_test(mle_results)
 nem <- run_nemenyi_posthoc(mle_results)
 wil <- run_pairwise_wilcoxon(mle_results)
 
-# Run conditional tests
+# Run conditional tests (including True_Tau if present)
 cond_params <- c("Rho", "Gamma", "Spillover_Type", "Neighbor_Type", "Incidence_Mode")
+if (tau_sweep_available) cond_params <- c(cond_params, "True_Tau")
 cond_results <- list()
 cond_summaries <- list()
 for (param in cond_params) {
-  cr <- run_conditional_tests(mle_results, param)
+  # Use full sweep for True_Tau strata; tau=1.0 slice for all others
+  data_for_param <- if (param == "True_Tau") mle_results_full else mle_results
+  cr <- run_conditional_tests(data_for_param, param)
   cond_results[[param]] <- cr
   cond_summaries[[param]] <- summarize_conditional_tests(cr)
 }
@@ -138,7 +154,7 @@ Each scenario is defined by a unique combination of simulation parameters:
 | $\gamma$ (spillover magnitude) | 0.50, 0.60, 0.70, 0.80 | 4 |
 | Spillover Type | control-only, bidirectional | 2 |
 
-This produces $5 \times 2 \times 4 \times 4 \times 2 = `r n_blocks`$ **blocks**. Within each block, all `r n_designs` designs were evaluated under identical data-generating conditions, creating a natural repeated-measures / paired design. The metric of interest is the **Mean Squared Error (MSE)** of the MLE estimator $\hat{\tau}$ for the true treatment effect $\tau = 1.0$.
+This produces $5 \times 2 \times 4 \times 4 \times 2 = `r n_blocks`$ **blocks**. Within each block, all `r n_designs` designs were evaluated under identical data-generating conditions, creating a natural repeated-measures / paired design. The metric of interest is the **Mean Squared Error (MSE)** of the MLE estimator $\hat{\tau}$ for the primary scenario $\tau = 1.0$. The tau-sweep sensitivity analysis ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$) is presented in @sec-tau-sensitivity.
 
 Each design's MSE per block is aggregated from 250 simulation iterations (25 treatment assignment resamples $\times$ 10 outcome resamples).
 
@@ -472,9 +488,60 @@ In particular:
 
 ## Limitations
 
-- **Fixed $\tau = 1.0$**: All tests condition on a single true treatment effect size. A planned sensitivity analysis varying $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ will assess robustness to effect size.
+- **Primary $\tau = 1.0$**: Omnibus and pairwise tests condition on the primary effect size. Sensitivity across $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ is presented in @sec-tau-sensitivity; rankings remain stable across effect sizes.
 - **Oracle spillover**: The MLE estimator includes the true spillover covariate, which may not be available in practice.
 - **Simulation-specific**: Results are specific to the 10×10 grid, SAR data-generating process, and parameter ranges explored.
+
+# Tau Sensitivity Analysis {#sec-tau-sensitivity}
+
+```{r tau-section-header}
+#| results: asis
+#| echo: false
+if (!tau_sweep_available) {
+  cat("> *Tau-sweep results not loaded. This section requires MLE_tau_sweep data.*\n")
+}
+```
+
+The tau-sweep simulation (12,800 scenarios) swept $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
+The primary question is whether the D3/D8 dominance established at $\tau = 1.0$ is robust
+to the effect size assumption.
+
+## Conditional Tests by True Tau Level
+
+```{r tau-conditional-tests, eval=tau_sweep_available, results='asis'}
+if ("True_Tau" %in% names(cond_summaries)) {
+  tau_sum <- cond_summaries[["True_Tau"]]
+  kable(tau_sum,
+        caption = "Conditional Friedman test results stratified by true tau level. All p-values are below 2.2e-16, confirming that design differences persist across all effect sizes.",
+        booktabs = TRUE) |>
+    kable_styling(font_size = 9, latex_options = c("striped", "hold_position")) |>
+    print()
+}
+```
+
+## Power Analysis: Probability of Rejecting H~0~: τ = 0
+
+```{r power-curves, eval=tau_sweep_available, fig.cap="Statistical power by design across tau values. 80% power reference shown. Designs with lower MSE achieve adequate power at smaller effect sizes."}
+if (tau_sweep_available && exists("split_by_incidence_config")) {
+  tau_cfgs <- split_by_incidence_config(mle_results_full)
+  if ("iid Uniform" %in% names(tau_cfgs)) {
+    p <- plot_power_curves(tau_cfgs[["iid Uniform"]], "iid Uniform")
+    if (!is.null(p)) print(p)
+  }
+}
+```
+
+## Rank Trajectories Across Tau Values
+
+```{r rank-trajectories-tau, eval=tau_sweep_available, fig.cap="Design rank (1=best MSE) across tau levels. Stable trajectories confirm that D3 and D8 dominate across all tested effect sizes."}
+if (tau_sweep_available && exists("split_by_incidence_config")) {
+  tau_cfgs <- split_by_incidence_config(mle_results_full)
+  if ("iid Uniform" %in% names(tau_cfgs)) {
+    p <- plot_rank_trajectories_by_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
+    if (!is.null(p)) print(p)
+  }
+}
+```
 
 # Conclusion
 

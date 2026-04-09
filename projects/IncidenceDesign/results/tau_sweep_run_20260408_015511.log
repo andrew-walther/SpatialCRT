@@ -1,0 +1,35 @@
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Loading required package: sf
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+Loading required package: Matrix
+
+Attaching package: ‘spatialreg’
+
+The following objects are masked from ‘package:spdep’:
+
+    get.ClusterOption, get.coresOption, get.mcOption,
+    get.VerboseOption, get.ZeroPolicyOption, set.ClusterOption,
+    set.coresOption, set.mcOption, set.VerboseOption,
+    set.ZeroPolicyOption
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Error in file(filename, "r", encoding = encoding) : 
+  cannot open the connection
+Calls: source -> file
+In addition: Warning message:
+In file(filename, "r", encoding = encoding) :
+  cannot open file '/Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/01_spatial_setup.R': No such file or directory
+Execution halted
