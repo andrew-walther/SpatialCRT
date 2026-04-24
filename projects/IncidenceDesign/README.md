@@ -220,6 +220,9 @@ paper/
     IncidenceSpatialCRT_Report.qmd            # Unified project report (sources R modules)
     IncidenceSpatialCRT_Report.pdf            # Rendered PDF
     IncidenceSpatialCRT_Report.html           # Rendered HTML
+    IncidenceDesign_ProjectSummary.qmd        # Brief project summary report
+    IncidenceDesign_ProjectSummary.pdf        # Rendered PDF summary
+    IncidenceDesign_ProjectSummary.html       # Rendered HTML summary
   manuscript/
     IncidenceSpatialCRT_Manuscript.qmd        # Master document (includes child sections)
     _abstract.qmd                             # Structured abstract
@@ -239,6 +242,10 @@ The **unified report** (`paper/report/`) consolidates all code-side reports into
 end-to-end reference (50+ pages): spatial setup, DGP, 8 design illustrations, estimation
 methods, simulation design, all MLE results, full statistical comparisons (Section 10 with
 Friedman/Nemenyi/Wilcoxon tests and conditional CD diagrams), and design recommendations.
+
+The **project summary report** (`paper/report/IncidenceDesign_ProjectSummary.{qmd,html,pdf}`)
+is a shorter companion document that presents the same core findings in a more concise format
+for quick review and sharing.
 
 The **manuscript** (`paper/manuscript/`) uses a modular Quarto structure with
 `{{< include >}}` directives. Each section is independently editable. The LaTeX
