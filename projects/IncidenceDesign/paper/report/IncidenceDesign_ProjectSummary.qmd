@@ -1,0 +1,472 @@
+---
+title: "Optimal Treatment Assignment Designs for Spatial Cluster Randomized Trials"
+subtitle: "Simulation Study — Project Summary"
+author: "Andrew Walther"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme: flatly
+    smooth-scroll: true
+    self-contained: true
+  pdf:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    latex-engine: xelatex
+    keep-tex: false
+    fig-pos: "H"
+    fig-height: 4
+    fig-width: 6.5
+    include-in-header:
+      text: |
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{float}
+        \usepackage{amsmath}
+        \usepackage{amssymb}
+        \usepackage{geometry}
+        \geometry{margin=1in}
+        \floatplacement{figure}{H}
+        \floatplacement{table}{H}
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+is_html_output <- knitr::is_html_output()
+fmt_output <- function(html, latex) {
+  if (is_html_output) html else latex
+}
+
+# Ensure kable uses the correct format for the current output target.
+# Without this, Quarto multi-format documents can emit markdown tables instead
+# of LaTeX, causing $...$ math in table cells to render as literal dollar signs.
+options(knitr.table.format = function() {
+  if (knitr::is_latex_output()) "latex" else "html"
+})
+```
+
+```{r load-packages}
+#| include: false
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(knitr)
+library(kableExtra)
+```
+
+```{r resolve-paths}
+#| include: false
+# This document lives in paper/report/; code modules are in ../../code/
+script_dir  <- normalizePath(file.path(
+  dirname(knitr::current_input(dir = TRUE)), "..", "..", "code"
+), mustWork = FALSE)
+results_dir <- normalizePath(file.path(
+  dirname(knitr::current_input(dir = TRUE)), "..", "..", "results"
+), mustWork = FALSE)
+```
+
+```{r source-modules}
+#| include: false
+# Source 08_design_recommendations.R (transitively pulls in 06 -> 01-03)
+# and 10_statistical_comparisons.R. setwd ensures internal path resolution works.
+orig_wd <- getwd()
+setwd(script_dir)
+source(file.path(script_dir, "08_design_recommendations.R"))
+source(file.path(script_dir, "10_statistical_comparisons.R"))
+setwd(orig_wd)
+```
+
+```{r load-results}
+#| include: false
+# Load tau-sweep results (12,800 scenarios across tau in {0.8,1.0,1.5,2.0,3.0})
+results_full <- load_latest_results(results_dir, estimation_mode = "MLE_tau_sweep")
+
+# Drop iid Uniform — unrealistic (no spatial dependence in incidence generation)
+# Retain only Spatial (rho_X in {0.20,0.50}) and Poisson (rho_X in {0.20,0.50})
+results_full <- results_full |>
+  filter(Incidence_Mode %in% c("spatial", "poisson"))
+
+tau_primary <- 1.0
+
+# Primary slice: tau = 1.0 (2,560 scenarios across 4 incidence configs)
+results_primary <- results_full |> filter(True_Tau == tau_primary)
+
+# Split primary results into named per-config list
+configs_primary <- split_by_incidence_config(results_primary)
+
+# Most SUD-realistic representative config: Poisson incidence, rho_X = 0.20
+rep_label   <- "Poisson (rho_X = 0.20)"
+results_rep <- configs_primary[[rep_label]]
+
+# Poisson rho_X=0.20 subset of full tau sweep (for Section 4.4 plots)
+results_poisson_sweep <- results_full |>
+  filter(Incidence_Mode == "poisson", Rho_Incidence == 0.20)
+
+# Design ordering for consistent plot axis (best to worst by primary MSE)
+design_order <- results_primary |>
+  group_by(Design) |>
+  summarize(MSE = mean(MSE), .groups = "drop") |>
+  arrange(MSE) |>
+  pull(Design)
+```
+
+# Executive Summary
+
+This report summarizes a completed simulation study that systematically compares eight treatment assignment strategies for Spatial Cluster Randomized Trials (CRTs). The study generated 12,800 scenarios by sweeping the direct treatment effect ($\tau$) and spatial DGP parameters across realistic ranges, using Maximum Likelihood Estimation (MLE) to evaluate each design. Key findings:
+
+- **Designs 3 and 8 are the clear winners** across all conditions tested. At the primary effect size ($\tau = 1.0$), Design 8 achieves MSE = 0.079 and Design 3 achieves MSE = 0.080 — approximately **ten times lower** than the worst-performing Design 1 (MSE = 0.802).
+
+- **Spatial separation is counterproductive.** Design 1 (Checkerboard), which maximizes spatial distance between treated and control clusters, performs dramatically worse than all alternatives. Its 95% confidence intervals contain the true effect only ~55% of the time — far below the nominal 95% target.
+
+- **Saturation-based designs are robust.** The D3/D8 ranking advantage holds across all tested levels of spatial autocorrelation ($\rho$), spillover magnitude ($\gamma$), spillover direction, and neighborhood structure. Two parameters — spillover direction and contiguity type — had no meaningful effect on rankings and are noted only briefly.
+
+- **Coverage and power are strong for recommended designs.** MLE achieves approximately 94% coverage for Designs 3–8 across the full effect size range ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$), with Design 1 remaining severely anti-conservative throughout.
+
+- **Path forward:** These results motivate applying Designs 3 and 8 to real-world NC county-level Sudden Unexpected Death (SUD) data, where spatial dependence in outcomes is well-established and design choice carries substantial practical consequence.
+
+# Background and Motivation
+
+## What Is a Spatial CRT?
+
+A Cluster Randomized Trial (CRT) assigns treatment at the level of groups — called clusters — rather than individuals. In a **spatial CRT**, clusters are geographically defined units (e.g., counties, census tracts, health districts), and outcomes may exhibit two forms of spatial structure:
+
+1. **Spatial autocorrelation:** Nearby clusters tend to have similar outcomes, independent of treatment, due to shared socioeconomic conditions, demographics, or infrastructure.
+2. **Spillover (interference):** Treatment applied to one cluster can affect outcomes in neighboring clusters — for example, when an intervention reduces disease transmission or shifts behavior across geographic boundaries.
+
+Standard CRT analysis assumes clusters are exchangeable and independent. When spatial structure is present, this assumption fails: a poorly chosen design can create systematic bias and grossly miscalibrated confidence intervals, even when estimation is carried out with a sophisticated spatial model.
+
+## Application Context
+
+This project is motivated by evaluating interventions targeting **Sudden Unexpected Death (SUD)** in North Carolina counties. SUD incidence in NC follows a Poisson process with a base rate of approximately 35 events per 100,000 person-years (Mirzaei et al.), and outcomes across neighboring counties are plausibly correlated through shared risk factors and service networks.
+
+Selecting a treatment assignment design that accounts for this spatial structure is critical. As shown below, choosing the wrong design — even when paired with a correct spatial estimator — can inflate the mean squared error of the treatment effect estimate by a factor of ten.
+
+## Why Eight Designs?
+
+Several intuitive strategies exist for assigning treatment in a spatial CRT: concentrate treatment in high-burden areas, separate treated and control clusters as widely as possible, randomize within geographic blocks, or vary treatment saturation across spatial regions. This study systematically compares eight such strategies under a common, realistic data-generating process, providing an empirical basis for principled design selection.
+
+# Methods
+
+## Study Region and Spatial Structure
+
+The simulated study region is a **10×10 regular lattice** of 100 clusters. Spatial adjacency is defined by either rook contiguity (shared edges; 4 neighbors per interior cluster) or queen contiguity (shared edges or corners; 8 neighbors per interior cluster), yielding a row-standardized spatial weight matrix $\mathbf{W}$. Results are robust to the choice of contiguity definition — this parameter had no meaningful effect on design rankings — and is not discussed further.
+
+## Outcome Data Generating Process
+
+Outcomes are generated by a **Spatial Durbin Model (SDM)**:
+
+$$
+\mathbf{Y} = \tau \mathbf{Z} + \gamma \mathbf{W}\mathbf{Z} + \beta \mathbf{X} + \rho \mathbf{W}\mathbf{Y} + \boldsymbol{\varepsilon}
+$$
+
+Each term is defined in @tbl-sdm. The term $\gamma\mathbf{WZ}$ captures **average treatment intensity among neighbors** — the mechanism by which treatment spills over into adjacent clusters. The term $\rho\mathbf{WY}$ induces spatial autocorrelation in the outcome itself, independent of treatment.
+
+```{r}
+#| label: tbl-sdm
+#| tbl-cap: "SDM parameter definitions."
+
+sdm_df <- data.frame(
+  Symbol = c("Y", "τ", "Z", "γ", "W", "β", "X", "ρ", "ε"),
+  Definition = c(
+    "N × 1 vector of cluster outcomes",
+    "Direct treatment effect (estimand of interest)",
+    "N × 1 binary treatment assignment vector",
+    "Spillover coefficient — effect of neighbors' treatment on own outcome",
+    "N × N row-standardized spatial weight matrix",
+    "Incidence loading coefficient (fixed at 1.0)",
+    "N × 1 baseline incidence vector",
+    "Outcome spatial autocorrelation",
+    "N × 1 i.i.d. residuals, ε_i ~ N(0, σ^2)"
+  )
+)
+knitr::kable(sdm_df, escape = TRUE, booktabs = TRUE,
+             col.names = c("Symbol", "Definition")) |>
+  kableExtra::kable_styling(latex_options = c("hold_position"),
+                            font_size = 10)
+```
+
+**Baseline incidence** ($\mathbf{X}$) is generated under two modes, representing realistic outcome distributions:
+
+- *Spatial:* Uniform marginal values with spatial autocorrelation ($\rho_X \in \{0.20, 0.50\}$)
+- *Poisson:* Count-based SUD-realistic incidence ($\lambda = 35/100{,}000$, $\rho_X \in \{0.20, 0.50\}$)
+
+The full parameter sweep covers **12,800 scenarios** across four incidence configurations, as summarized in @tbl-params.
+
+```{r}
+#| label: tbl-params
+#| tbl-cap: "Simulation parameter grid. Each combination of the five swept parameters was fully crossed, yielding 12,800 total scenarios."
+
+params_df <- data.frame(
+  Parameter = c(
+    "Direct treatment effect (τ)",
+    "Outcome spatial autocorrelation (ρ)",
+    "Spillover magnitude (γ)",
+    "Spillover direction",
+    "Incidence config (mode × rho X)"
+  ),
+  Values = c(
+    "0.8, 1.0, 1.5, 2.0, 3.0",
+    "0.00, 0.01, 0.20, 0.50",
+    "0.5, 0.6, 0.7, 0.8",
+    "Control only; both directions",
+    kableExtra::linebreak("Spatial × {0.20, 0.50}; Poisson × {0.20, 0.50}", align = "l")
+  ),
+  Levels = c("5", "4", "4", "2", "4")
+)
+knitr::kable(params_df, escape = FALSE, booktabs = TRUE,
+             col.names = c("Parameter", "Values", "Levels")) |>
+  kableExtra::column_spec(1, width = "4.8cm") |>
+  kableExtra::column_spec(2, width = "8.0cm") |>
+  kableExtra::column_spec(3, width = "1.1cm") |>
+  kableExtra::kable_styling(
+    full_width = FALSE,
+    latex_options = c("hold_position", "scale_down"),
+    font_size = 10
+  )
+```
+
+## The Eight Treatment Assignment Designs
+
+```{r}
+#| label: tbl-designs
+#| tbl-cap: "The eight treatment assignment strategies evaluated. All designs target approximately 50% treated clusters. Deterministic designs produce the same assignment for every replicate given fixed baseline incidence."
+
+designs_df <- data.frame(
+  ID = 1:8,
+  Name = c(
+    "Checkerboard",
+    "High Incidence Focus",
+    "Saturation Quadrants",
+    "Isolation Buffer",
+    "2x2 Blocking",
+    "Balanced Quartiles",
+    "Balanced Halves",
+    "Inc.-Guided Sat. Quadrants"
+  ),
+  Description = c(
+    "Alternating grid cells — maximizes spatial separation between treated and control",
+    "Treats all top-50% burden clusters by baseline incidence",
+    "Randomizes saturation rate (20-80%) independently within each geographic quadrant",
+    "Greedy assignment: no two treated clusters share a border",
+    "1:1 randomization within non-overlapping 2x2 spatial blocks",
+    "Stratified randomization within incidence quartile strata",
+    "2-strata median split; balanced 1:1 assignment within each half",
+    "Quadrant saturation rates guided by average incidence rank per quadrant"
+  ),
+  Det = c("Yes", "Yes", "No", "No", "No", "No", "No", "No")
+)
+knitr::kable(designs_df, escape = TRUE, booktabs = TRUE,
+             col.names = c("ID", "Name", "Description", "Det.")) |>
+  kableExtra::column_spec(3, width = "6cm") |>
+  kableExtra::kable_styling(latex_options = c("hold_position", "scale_down"),
+                            font_size = 9)
+```
+
+@fig-designs shows all eight designs applied to the same 10×10 grid instance, with cluster color indicating baseline incidence and within-quadrant saturation percentages annotated for Designs 3 and 8.
+
+```{r}
+#| label: fig-designs
+#| fig-cap: "All eight treatment assignment designs on a common 10x10 grid. Cell shading indicates baseline incidence; blue cells are treated, grey cells are control. Saturation percentages indicate the fraction of clusters treated within each quadrant for Designs 3 and 8."
+#| fig-width: 10
+#| fig-height: 4.5
+#| out-width: "100%"
+
+knitr::include_graphics(
+  file.path(results_dir, "figures", "design_samples_option1_overlays.png")
+)
+```
+
+The conceptual contrast across designs is important: Design 1 enforces **maximum spatial separation** between treated and control clusters. Designs 3 and 8 take the opposite approach — they vary **saturation intensity** within spatial regions, intentionally mixing treated and control units at a local level. This distinction directly determines how well each design accommodates spatial spillover in the outcome DGP.
+
+## Estimation and Evaluation Metrics
+
+All results use **Maximum Likelihood Estimation (MLE)** via the `lagsarlm` function from the `spatialreg` package. The model is fit as an oracle — the true spillover term ($\mathbf{WZ}$) is included as a covariate, so MLE has access to the correct spillover structure. Each scenario uses 25 design resamples × 10 outcome resamples = **250 Monte Carlo iterations**.
+
+Four metrics are tracked per scenario:
+
+$$
+\text{Bias} = \mathbb{E}[\hat{\tau}] - \tau \qquad
+\text{MSE} = \text{Bias}^2 + \text{Var}(\hat{\tau}) \qquad
+\text{Coverage} = \mathbb{P}\!\left(\tau \in \widehat{\mathrm{CI}}_{95\%}\right) \qquad
+\text{Power} = \mathbb{P}(\text{reject } H_0\!:\tau = 0)
+$$
+
+MSE is the primary criterion for design comparison. Coverage provides an inference diagnostic — a well-designed trial should achieve approximately 95% coverage regardless of the true effect size.
+
+# Results
+
+## Overall Design Performance
+
+@tbl-mse-rankings summarizes design performance at the primary effect size ($\tau = 1.0$), averaged across all four Spatial and Poisson incidence configurations.
+
+```{r}
+#| label: tbl-mse-rankings
+#| tbl-cap: "Mean MSE and coverage at the primary effect size (tau = 1.0), averaged across Spatial and Poisson incidence configurations. Designs are sorted by MSE (best to worst)."
+
+  results_primary |>
+  group_by(Design) |>
+  summarize(
+    `Mean MSE`      = round(mean(MSE), 3),
+    `Mean Coverage` = round(mean(Coverage), 3),
+    `Mean Power`    = round(mean(Power), 3),
+    .groups = "drop"
+  ) |>
+  arrange(`Mean MSE`) |>
+  knitr::kable(booktabs = TRUE, escape = TRUE) |>
+  kableExtra::kable_styling(latex_options = c("hold_position"),
+                            font_size = 10) |>
+  kableExtra::row_spec(1:2, bold = TRUE) |>
+  kableExtra::row_spec(8, color = "gray")
+```
+
+Designs 3 and 8 are the top performers by a substantial margin; Design 1 is dramatically inferior. To understand *why*, @fig-bv decomposes each design's MSE into its squared bias and variance components for the most SUD-realistic configuration (Poisson incidence, $\rho_X = 0.20$).
+
+```{r}
+#| label: fig-bv
+#| fig-cap: "Bias-squared and variance contributions to MSE for each design (Poisson incidence, rho_X = 0.20, tau = 1.0). Design 1's MSE is almost entirely variance; Designs 3 and 8 achieve low bias and low variance simultaneously."
+#| fig-width: 8
+#| fig-height: 3.8
+#| out-width: "95%"
+
+plot_bias_variance(results_rep, rep_label)
+```
+
+Design 1 (Checkerboard) fails because its rigid alternating structure creates near-perfect collinearity between treatment assignment ($\mathbf{Z}$) and average neighbor treatment ($\mathbf{WZ}$). MLE cannot disentangle the direct treatment effect from spillover, producing high-variance estimates. Design 4 (Isolation Buffer) suffers a similar problem — its greedy no-adjacency constraint produces sparse, fragmented treatment that is similarly misaligned with the spatial DGP.
+
+Designs 3 and 8 succeed precisely because their saturation-based approach distributes treated and control clusters heterogeneously within each quadrant, preserving contrast between $\mathbf{Z}$ and $\mathbf{WZ}$ and keeping both bias and variance low.
+
+## Formal Statistical Comparisons
+
+```{r friedman-nemenyi}
+#| include: false
+
+friedman_res <- run_friedman_test(results_primary)
+nemenyi_res  <- run_nemenyi_posthoc(results_primary)
+```
+
+A **Friedman test** — the non-parametric analogue of a repeated-measures ANOVA, with each simulation scenario treated as a block — confirms that design differences are highly significant: $\chi^2(7) = 1091.90$, $p < 2.2 \times 10^{-16}$. This finding is not specific to any particular parameter setting: stratifying the analysis by $\rho$, $\gamma$, spillover direction, neighbor type, or incidence mode produces statistically significant design differences in every stratum (all conditional Friedman $p < 2.2 \times 10^{-16}$).
+
+Post-hoc Nemenyi pairwise comparisons (@fig-cd) reveal the structure of these differences clearly. Designs 3 and 8 form a **statistically distinct top group**, well-separated from all other designs. Designs 5–7 occupy a middle tier that is statistically indistinguishable from each other but clearly worse than D3/D8. Design 1 stands alone at the bottom, separated from the next worst design by a larger critical-difference gap than separates any other adjacent pair.
+
+```{r}
+#| label: fig-cd
+#| fig-cap: "Nemenyi critical difference (CD) diagram at tau = 1.0. Designs connected by a horizontal bar are not statistically distinguishable at alpha = 0.05. Designs 3 and 8 form a top equivalence group clearly separated from all others; Design 1 is isolated at the bottom."
+#| fig-width: 7
+#| fig-height: 3.5
+#| out-width: "90%"
+
+plot_cd_diagram(nemenyi_res,
+  title = "Design Comparison (Nemenyi post-hoc, tau = 1.0)"
+)
+```
+
+## Sensitivity to Spatial Conditions
+
+```{r}
+#| label: fig-heatmap
+#| fig-cap: "Mean MSE by design and outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Higher rho increases absolute MSE across all designs, but rankings remain stable — Designs 3 and 8 consistently achieve the lowest MSE at every rho level."
+#| fig-width: 8
+#| fig-height: 3.8
+#| out-width: "95%"
+
+plot_mse_heatmap(results_rep, rep_label)
+```
+
+**Outcome spatial autocorrelation ($\rho$)** and **spillover magnitude ($\gamma$)** both increase absolute MSE — stronger spatial dependence and larger spillover make estimation more difficult for all designs (@fig-heatmap). However, neither parameter changes the design ranking. Notably, the advantage of Designs 3 and 8 over mid-tier designs **grows as $\gamma$ increases**: at $\gamma = 0.8$, the saturation designs' MSE advantage over Designs 5–7 is approximately 40% larger than at $\gamma = 0.5$. Saturation-based allocation provides increasing relative returns under stronger spillover — precisely the conditions most likely to occur in real-world spatial interventions.
+
+Two parameters showed **no meaningful impact on design rankings** and are not discussed further:
+
+- **Spillover direction** (`control_only` vs. `both`): both strata yield the same optimal designs (D8, D3), with modest shifts in absolute MSE magnitude (all conditional Friedman $p < 2.2 \times 10^{-16}$ in both strata).
+- **Neighbor type** (rook vs. queen): rankings are invariant; queen contiguity yields slightly lower absolute MSE owing to stronger spatial smoothing with 8 neighbors vs. 4.
+
+## Effect Size Sensitivity and Statistical Power
+
+```{r}
+#| label: fig-mse-tau
+#| fig-cap: "Mean MSE by design across effect sizes (tau in {0.8, 1.0, 1.5, 2.0, 3.0}), Poisson incidence (rho_X = 0.20), log scale. Design 1 diverges dramatically at small-to-moderate tau; Designs 3 and 8 maintain low MSE across the full range. At tau = 3.0, the large true signal compresses differences among designs."
+#| fig-width: 8
+#| fig-height: 3.8
+#| out-width: "95%"
+
+results_poisson_sweep |>
+  group_by(Design, True_Tau) |>
+  summarize(Mean_MSE = mean(MSE), .groups = "drop") |>
+  ggplot(aes(x = True_Tau, y = Mean_MSE, color = Design, group = Design)) +
+  geom_line(linewidth = 0.9) +
+  geom_point(size = 2.2) +
+  scale_y_log10(labels = scales::label_number(accuracy = 0.01)) +
+  scale_color_viridis_d(option = "D") +
+  labs(
+    x = expression("True treatment effect (" * tau * ")"),
+    y = "Mean MSE (log scale)",
+    color = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "right",
+        panel.grid.minor = element_blank())
+```
+
+```{r}
+#| label: fig-coverage-tau
+#| fig-cap: "Coverage of 95% confidence intervals by design across effect sizes, Poisson incidence (rho_X = 0.20). The dashed line marks nominal 95% coverage. Designs 3-8 maintain near-nominal coverage throughout; Design 1 is severely anti-conservative at all effect sizes (~55% coverage)."
+#| fig-width: 8
+#| fig-height: 3.8
+#| out-width: "95%"
+
+results_poisson_sweep |>
+  group_by(Design, True_Tau) |>
+  summarize(Coverage = mean(Coverage), .groups = "drop") |>
+  ggplot(aes(x = True_Tau, y = Coverage, color = Design, group = Design)) +
+  geom_line(linewidth = 0.9) +
+  geom_point(size = 2.2) +
+  geom_hline(yintercept = 0.95, linetype = "dashed",
+             color = "black", linewidth = 0.8) +
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1),
+                     limits = c(0.4, 1.0)) +
+  scale_color_viridis_d(option = "D") +
+  labs(
+    x = expression("True treatment effect (" * tau * ")"),
+    y = "Coverage (95% CI)",
+    color = NULL
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "right",
+        panel.grid.minor = element_blank())
+```
+
+Design rankings are **stable across the full effect size range** (@fig-mse-tau). At $\tau = 3.0$, a very large treatment signal compresses MSE differences among designs — all designs eventually become adequate when the effect is large enough to overwhelm spatial confounding. At the more practically relevant range $\tau \in \{0.8, 1.0, 1.5\}$, the D3/D8 advantage is most pronounced and most consequential for trial planning.
+
+Coverage (@fig-coverage-tau) tells a particularly striking story. Designs 3–8 maintain approximately 94–95% coverage under MLE across all tested effect sizes. **Design 1 never exceeds approximately 60% coverage**, regardless of $\tau$. A trial deployed with a Checkerboard assignment would produce nominal 95% confidence intervals that contain the true treatment effect less than 60% of the time. This is not simply a power deficit — it is a fundamental structural failure arising from the collinearity between $\mathbf{Z}$ and $\mathbf{WZ}$ under the alternating assignment pattern.
+
+# Design Recommendations and Next Steps
+
+## Recommended Designs
+
+**Design 8 (Incidence-Guided Saturation Quadrants)** is the primary recommendation when reliable baseline incidence data are available. Its quadrant-level saturation rates are set proportional to the observed incidence rank of each region, directly leveraging the spatial structure of the outcome to guide allocation.
+
+**Design 3 (Saturation Quadrants)** is the recommended alternative when baseline incidence estimates are uncertain or unavailable — it randomizes saturation rates across quadrants without requiring incidence data and achieves nearly identical performance (MSE 0.080 vs. 0.079 at $\tau = 1.0$, well within Monte Carlo standard error). Design 3 is simpler to implement and explain to stakeholders while sacrificing essentially nothing in estimation performance.
+
+**Design 1 should never be used** when spatial spillover is anticipated. Its intuitive appeal — spatially separating treated and control units — is precisely what makes it fail in the presence of spillover. Both designs should be preferred over blocking designs (D5–D7) in the SUD application context, where spillover across county lines is plausible.
+
+## Open Questions and Path to Real-World Application
+
+These simulation results establish the theoretical case for saturation-based designs under a regular lattice with uniform cluster populations. The next phase of this work will apply these findings to **non-regular NC county census tract geometries**, raising several methodological questions for the upcoming collaborator meeting:
+
+1. **Spatial weight matrix for irregular polygons:** How should adjacency be defined when clusters are irregular county tracts? Queen contiguity (shared border of any nonzero length) is the natural extension; alternative definitions (distance-based, shared border length-weighted) warrant consideration.
+
+2. **Generalizing the quadrant partition:** Designs 3 and 8 rely on rectangular geographic quadrants. For a non-rectangular study region like NC, analogous spatial partitions — k-means geographic clusters, administrative regions, or compass quadrant approximations — would need to replace the regular grid structure.
+
+3. **Relaxing the oracle MLE assumption:** The current estimator uses the true spillover term ($\mathbf{WZ}$) as a covariate. In practice, the spillover structure must be assumed or estimated. Non-oracle MLE — where the spillover term is either omitted or approximated — is a high-priority simulation extension before applying these methods to real data.
+
+4. **Heterogeneous cluster populations:** NC counties vary substantially in population size, which affects expected Poisson event counts per cluster. The current study assumes equal cluster populations ($n = 1{,}000$); variable population sizes may interact with incidence-guided design strategies in non-trivial ways.

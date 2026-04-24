@@ -111,6 +111,12 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 
 ## 📄 Manuscript & Dissemination
 
+- [ ] **Update the full-length report to match the summary-report rendering fixes** `[Priority: Low]` `[Effort: Small]`
+  The brief `IncidenceDesign_ProjectSummary.qmd` has been updated with safer table formatting and
+  multi-format output handling. Mirror those fixes in `IncidenceSpatialCRT_Report.qmd` later so the
+  full report renders cleanly in both HTML and PDF with consistent table widths and math rendering.
+  *Notes: lower priority than manuscript completion; defer until the next full-report refresh.*
+
 - [ ] **Complete `_application.qmd` (SUD in NC section)** `[Priority: High]` `[Effort: Medium]`
   Currently a skeleton (~15 lines). Needs: description of the NC SUD context, county-level
   data summary, justification for Poisson incidence mode, and a worked design recommendation
