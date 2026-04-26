@@ -350,8 +350,15 @@ Saturation Quadrants and Incidence-Guided Saturation Quadrants are the top perfo
 #| fig-height: 3.8
 #| out-width: "95%"
 
+# Compute MSE per design and sort by MSE (best to worst, left to right)
+mse_by_design <- results_rep |>
+  group_by(Design) |>
+  summarize(Avg_MSE = mean(MSE), .groups = "drop") |>
+  arrange(Avg_MSE) |>
+  pull(Design)
+
 plot_bias_variance(results_rep, rep_label) +
-  scale_x_discrete(limits = rev(DESIGN_DISPLAY_ORDER)) +
+  scale_x_discrete(limits = mse_by_design) +
   theme(axis.text.x = element_text(angle = 40, hjust = 1))
 ```
 
