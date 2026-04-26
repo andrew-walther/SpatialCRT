@@ -1169,17 +1169,10 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
   # Shared incidence surface
   dummy_incidence <- runif(N_clusters, 0, 1)
 
-  # Short facet labels
-  design_labels <- c(
-    "1" = "1: Checkerboard",
-    "2" = "2: High Incidence Focus",
-    "3" = "3: Saturation Quadrants",
-    "4" = "4: Isolation Buffer",
-    "5" = "5: 2\u00d72 Blocking",
-    "6" = "6: Balanced Quartiles",
-    "7" = "7: Balanced Halves",
-    "8" = "8: Guided Sat. Quadrants"
-  )
+  # Canonical full names, keyed by integer string "1"-"8"
+  # Requires 00_design_names.R to be sourced before calling this function.
+  design_labels <- setNames(unname(DESIGN_FULL_NAMES), as.character(1:8))
+  design_display_order_full <- unname(DESIGN_FULL_NAMES[paste("Design", c(1, 5, 4, 2, 7, 6, 3, 8))])
 
   # Generate one assignment per design
   sample_designs_list <- lapply(1:8, function(d) {
@@ -1198,7 +1191,7 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
       Incidence  = dummy_incidence,
       Assignment = as.factor(z),
       Design     = factor(design_labels[as.character(d)],
-                          levels = design_labels)
+                          levels = design_display_order_full)
     )
   })
 

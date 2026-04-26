@@ -1,6 +1,7 @@
 # Temporary script to generate Option 1 and Option 2 design figures
 # Run from projects/IncidenceDesign/
 
+source("code/00_design_names.R")
 source("code/06_visualizations.R")
 
 set.seed(2026)
@@ -10,16 +11,11 @@ N_clusters <- grid$N_clusters
 nb_queen   <- grid$nb_queen
 dummy_incidence <- runif(N_clusters, 0, 1)
 
-design_labels <- c(
-  "1" = "1: Checkerboard",
-  "2" = "2: High Incidence Focus",
-  "3" = "3: Saturation Quadrants",
-  "4" = "4: Isolation Buffer",
-  "5" = "5: 2\u00d72 Blocking",
-  "6" = "6: Balanced Quartiles",
-  "7" = "7: Balanced Halves",
-  "8" = "8: Guided Sat. Quadrants"
-)
+# Canonical full names keyed by integer string "1"-"8"
+design_labels <- setNames(unname(DESIGN_FULL_NAMES), as.character(1:8))
+
+# Facet display order: Blocking -> Stratified -> Saturation
+design_display_order_full <- unname(DESIGN_FULL_NAMES[paste("Design", c(1, 5, 4, 2, 7, 6, 3, 8))])
 
 # Generate assignments (same seed as main figure)
 # We need to track the random state for Design 3 to recover its saturation mapping
@@ -46,7 +42,7 @@ for (d in 1:8) {
     x = coords$x, y = coords$y,
     Incidence = dummy_incidence,
     Assignment = as.factor(z),
-    Design = factor(design_labels[as.character(d)], levels = design_labels)
+    Design = factor(design_labels[as.character(d)], levels = design_display_order_full)
   )
 }
 sample_designs_df <- do.call(rbind, sample_designs_list)
@@ -76,19 +72,19 @@ quad_sats[rank_order] <- sat_levels
 make_quad_lines <- function(design_label) {
   rbind(
     data.frame(x = 0.5, xend = 10.5, y = 5.5, yend = 5.5,
-               Design = factor(design_label, levels = design_labels)),
+               Design = factor(design_label, levels = design_display_order_full)),
     data.frame(x = 5.5, xend = 5.5, y = 0.5, yend = 10.5,
-               Design = factor(design_label, levels = design_labels))
+               Design = factor(design_label, levels = design_display_order_full))
   )
 }
 
 make_block_lines <- function(design_label) {
   h <- data.frame(x = 0.5, xend = 10.5,
                   y = seq(2.5, 8.5, by = 2), yend = seq(2.5, 8.5, by = 2),
-                  Design = factor(design_label, levels = design_labels))
+                  Design = factor(design_label, levels = design_display_order_full))
   v <- data.frame(x = seq(2.5, 8.5, by = 2), xend = seq(2.5, 8.5, by = 2),
                   y = 0.5, yend = 10.5,
-                  Design = factor(design_label, levels = design_labels))
+                  Design = factor(design_label, levels = design_display_order_full))
   rbind(h, v)
 }
 
@@ -105,7 +101,7 @@ block_line_data <- make_block_lines(design_labels["5"])
 d2_stratum <- data.frame(
   x = coords$x, y = coords$y,
   stratum = ifelse(dummy_incidence > med_val, "H", "L"),
-  Design = factor(design_labels["2"], levels = design_labels)
+  Design = factor(design_labels["2"], levels = design_display_order_full)
 )
 
 # Saturation labels for Design 3 (quadrant centers)
@@ -113,34 +109,34 @@ d2_stratum <- data.frame(
 d3_sat_label_data <- data.frame(
   x = c(3, 8, 3, 8), y = c(3, 3, 8, 8),
   label = paste0(d3_sats * 100, "%"),
-  Design = factor(design_labels["3"], levels = design_labels)
+  Design = factor(design_labels["3"], levels = design_display_order_full)
 )
 
 # Saturation labels for Design 8 — include mean incidence to show link
 d8_sat_label_data <- data.frame(
   x = c(3, 8, 3, 8), y = c(3, 3, 8, 8),
   label = paste0(quad_sats * 100, "%"),
-  Design = factor(design_labels["8"], levels = design_labels)
+  Design = factor(design_labels["8"], levels = design_display_order_full)
 )
 
 # Mean incidence per quadrant (smaller, below the sat label) for Design 8
 d8_mean_label_data <- data.frame(
   x = c(3, 8, 3, 8), y = c(3, 3, 8, 8),
   label = paste0("\u0078\u0304=", sprintf("%.2f", quad_means)),
-  Design = factor(design_labels["8"], levels = design_labels)
+  Design = factor(design_labels["8"], levels = design_display_order_full)
 )
 
 # Quartile number per cell (Design 6)
 d6_stratum <- data.frame(
   x = coords$x, y = coords$y, stratum = quartiles,
-  Design = factor(design_labels["6"], levels = design_labels)
+  Design = factor(design_labels["6"], levels = design_display_order_full)
 )
 
 # Half label per cell (Design 7)
 d7_stratum <- data.frame(
   x = coords$x, y = coords$y,
   stratum = ifelse(dummy_incidence > med_val, "H", "L"),
-  Design = factor(design_labels["7"], levels = design_labels)
+  Design = factor(design_labels["7"], levels = design_display_order_full)
 )
 
 p1 <- ggplot(sample_designs_df, aes(x = x, y = y)) +
