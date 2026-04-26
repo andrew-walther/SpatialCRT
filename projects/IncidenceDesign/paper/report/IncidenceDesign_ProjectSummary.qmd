@@ -61,6 +61,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(viridis)
+library(patchwork)
 library(knitr)
 library(kableExtra)
 ```
@@ -82,6 +83,7 @@ results_dir <- normalizePath(file.path(
 # and 10_statistical_comparisons.R. setwd ensures internal path resolution works.
 orig_wd <- getwd()
 setwd(script_dir)
+source(file.path(script_dir, "00_design_names.R"))
 source(file.path(script_dir, "08_design_recommendations.R"))
 source(file.path(script_dir, "10_statistical_comparisons.R"))
 setwd(orig_wd)
@@ -96,6 +98,9 @@ results_full <- load_latest_results(results_dir, estimation_mode = "MLE_tau_swee
 # Retain only Spatial (rho_X in {0.20,0.50}) and Poisson (rho_X in {0.20,0.50})
 results_full <- results_full |>
   filter(Incidence_Mode %in% c("spatial", "poisson"))
+
+# Apply canonical short display names (Blocking -> Stratified -> Saturation order)
+results_full <- apply_design_names(results_full)
 
 tau_primary <- 1.0
 
@@ -113,27 +118,23 @@ results_rep <- configs_primary[[rep_label]]
 results_poisson_sweep <- results_full |>
   filter(Incidence_Mode == "poisson", Rho_Incidence == 0.20)
 
-# Design ordering for consistent plot axis (best to worst by primary MSE)
-design_order <- results_primary |>
-  group_by(Design) |>
-  summarize(MSE = mean(MSE), .groups = "drop") |>
-  arrange(MSE) |>
-  pull(Design)
+# Canonical display order (Blocking -> Stratified -> Saturation)
+design_order <- DESIGN_DISPLAY_ORDER
 ```
 
 # Executive Summary
 
 This report summarizes a completed simulation study that systematically compares eight treatment assignment strategies for Spatial Cluster Randomized Trials (CRTs). The study generated 12,800 scenarios by sweeping the direct treatment effect ($\tau$) and spatial DGP parameters across realistic ranges, using Maximum Likelihood Estimation (MLE) to evaluate each design. Key findings:
 
-- **Designs 3 and 8 are the clear winners** across all conditions tested. At the primary effect size ($\tau = 1.0$), Design 8 achieves MSE = 0.079 and Design 3 achieves MSE = 0.080 — approximately **ten times lower** than the worst-performing Design 1 (MSE = 0.802).
+- **Saturation Quadrants and Incidence-Guided Saturation Quadrants are the clear winners** across all conditions tested. At the primary effect size ($\tau = 1.0$), Incidence-Guided Saturation Quadrants achieves MSE = 0.079 and Saturation Quadrants achieves MSE = 0.080 — approximately **ten times lower** than the worst-performing Block Stratified Sampling (MSE = 0.802).
 
-- **Spatial separation is counterproductive.** Design 1 (Checkerboard), which maximizes spatial distance between treated and control clusters, performs dramatically worse than all alternatives. Its 95% confidence intervals contain the true effect only ~55% of the time — far below the nominal 95% target.
+- **Spatial separation is counterproductive.** Block Stratified Sampling, which maximizes spatial distance between treated and control clusters, performs dramatically worse than all alternatives. Its 95% confidence intervals contain the true effect only ~55% of the time — far below the nominal 95% target.
 
-- **Saturation-based designs are robust.** The D3/D8 ranking advantage holds across all tested levels of spatial autocorrelation ($\rho$), spillover magnitude ($\gamma$), spillover direction, and neighborhood structure. Two parameters — spillover direction and contiguity type — had no meaningful effect on rankings and are noted only briefly.
+- **Saturation-based designs are robust.** The saturation design ranking advantage holds across all tested levels of spatial autocorrelation ($\rho$), spillover magnitude ($\gamma$), spillover direction, and neighborhood structure. Two parameters — spillover direction and contiguity type — had no meaningful effect on rankings and are noted only briefly.
 
-- **Coverage and power are strong for recommended designs.** MLE achieves approximately 94% coverage for Designs 3–8 across the full effect size range ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$), with Design 1 remaining severely anti-conservative throughout.
+- **Coverage and power are strong for recommended designs.** MLE achieves approximately 94% coverage for all designs except Block Stratified Sampling across the full effect size range ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$), with Block Stratified Sampling remaining severely anti-conservative throughout.
 
-- **Path forward:** These results motivate applying Designs 3 and 8 to real-world NC county-level Sudden Unexpected Death (SUD) data, where spatial dependence in outcomes is well-established and design choice carries substantial practical consequence.
+- **Path forward:** These results motivate applying Saturation Quadrants and Incidence-Guided Saturation Quadrants to real-world NC county-level Sudden Unexpected Death (SUD) data, where spatial dependence in outcomes is well-established and design choice carries substantial practical consequence.
 
 # Background and Motivation
 
@@ -177,20 +178,21 @@ Each term is defined in @tbl-sdm. The term $\gamma\mathbf{WZ}$ captures **averag
 #| tbl-cap: "SDM parameter definitions."
 
 sdm_df <- data.frame(
-  Symbol = c("Y", "τ", "Z", "γ", "W", "β", "X", "ρ", "ε"),
+  Symbol = c("Y", "\\(\\tau\\)", "Z", "\\(\\gamma\\)", "W", "\\(\\beta\\)", "X", "\\(\\rho\\)", "\\(\\varepsilon\\)"),
   Definition = c(
-    "N × 1 vector of cluster outcomes",
+    "\\(N \\times 1\\) vector of cluster outcomes",
     "Direct treatment effect (estimand of interest)",
-    "N × 1 binary treatment assignment vector",
+    "\\(N \\times 1\\) binary treatment assignment vector",
     "Spillover coefficient — effect of neighbors' treatment on own outcome",
-    "N × N row-standardized spatial weight matrix",
+    "\\(N \\times N\\) row-standardized spatial weight matrix",
     "Incidence loading coefficient (fixed at 1.0)",
-    "N × 1 baseline incidence vector",
+    "\\(N \\times 1\\) baseline incidence vector",
     "Outcome spatial autocorrelation",
-    "N × 1 i.i.d. residuals, ε_i ~ N(0, σ^2)"
+    "\\(N \\times 1\\) i.i.d. residuals, \\(\\varepsilon_i \\sim N(0, \\sigma^2)\\)"
   )
 )
-knitr::kable(sdm_df, escape = TRUE, booktabs = TRUE,
+
+knitr::kable(sdm_df, escape = FALSE, booktabs = TRUE,
              col.names = c("Symbol", "Definition")) |>
   kableExtra::kable_styling(latex_options = c("hold_position"),
                             font_size = 10)
@@ -207,13 +209,18 @@ The full parameter sweep covers **12,800 scenarios** across four incidence confi
 #| label: tbl-params
 #| tbl-cap: "Simulation parameter grid. Each combination of the five swept parameters was fully crossed, yielding 12,800 total scenarios."
 
+greek <- if (knitr::is_latex_output()) {
+  list(tau = "$\\tau$", rho = "$\\rho$", gamma = "$\\gamma$", rhoX = "$\\rho_X$")
+} else {
+  list(tau = "τ", rho = "ρ", gamma = "γ", rhoX = "ρ_X")
+}
 params_df <- data.frame(
   Parameter = c(
-    "Direct treatment effect (τ)",
-    "Outcome spatial autocorrelation (ρ)",
-    "Spillover magnitude (γ)",
+    paste0("Direct treatment effect (", greek$tau, ")"),
+    paste0("Outcome spatial autocorrelation (", greek$rho, ")"),
+    paste0("Spillover magnitude (", greek$gamma, ")"),
     "Spillover direction",
-    "Incidence config (mode × rho X)"
+    paste0("Incidence config (mode × ", greek$rhoX, ")")
   ),
   Values = c(
     "0.8, 1.0, 1.5, 2.0, 3.0",
@@ -240,31 +247,31 @@ knitr::kable(params_df, escape = FALSE, booktabs = TRUE,
 
 ```{r}
 #| label: tbl-designs
-#| tbl-cap: "The eight treatment assignment strategies evaluated. All designs target approximately 50% treated clusters. Deterministic designs produce the same assignment for every replicate given fixed baseline incidence."
+#| tbl-cap: "The eight treatment assignment strategies evaluated, grouped by conceptual design type. The ID column shows simulation indices; display order reflects conceptual grouping (Blocking → Stratified → Saturation) rather than ID order. All designs target approximately 50% treated clusters. Deterministic designs produce the same assignment for every replicate given fixed baseline incidence."
 
 designs_df <- data.frame(
-  ID = 1:8,
+  ID = c(1, 5, 4, 2, 7, 6, 3, 8),
   Name = c(
-    "Checkerboard",
-    "High Incidence Focus",
-    "Saturation Quadrants",
-    "Isolation Buffer",
+    "Block Stratified Sampling",
     "2x2 Blocking",
-    "Balanced Quartiles",
+    "Isolation Buffer",
+    "High Incidence Focus",
     "Balanced Halves",
-    "Inc.-Guided Sat. Quadrants"
+    "Balanced Quartiles",
+    "Saturation Quadrants",
+    "Incidence-Guided Saturation Quadrants"
   ),
   Description = c(
     "Alternating grid cells — maximizes spatial separation between treated and control",
-    "Treats all top-50% burden clusters by baseline incidence",
-    "Randomizes saturation rate (20-80%) independently within each geographic quadrant",
-    "Greedy assignment: no two treated clusters share a border",
     "1:1 randomization within non-overlapping 2x2 spatial blocks",
-    "Stratified randomization within incidence quartile strata",
+    "Greedy assignment: no two treated clusters share a border",
+    "Treats all top-50% burden clusters by baseline incidence",
     "2-strata median split; balanced 1:1 assignment within each half",
+    "Stratified randomization within incidence quartile strata",
+    "Randomizes saturation rate (20-80%) independently within each geographic quadrant",
     "Quadrant saturation rates guided by average incidence rank per quadrant"
   ),
-  Det = c("Yes", "Yes", "No", "No", "No", "No", "No", "No")
+  Det = c("Yes", "No", "No", "Yes", "No", "No", "No", "No")
 )
 knitr::kable(designs_df, escape = TRUE, booktabs = TRUE,
              col.names = c("ID", "Name", "Description", "Det.")) |>
@@ -273,11 +280,11 @@ knitr::kable(designs_df, escape = TRUE, booktabs = TRUE,
                             font_size = 9)
 ```
 
-@fig-designs shows all eight designs applied to the same 10×10 grid instance, with cluster color indicating baseline incidence and within-quadrant saturation percentages annotated for Designs 3 and 8.
+@fig-designs shows all eight designs applied to the same 10×10 grid instance, with cluster color indicating baseline incidence and within-quadrant saturation percentages annotated for Saturation Quadrants and Incidence-Guided Saturation Quadrants.
 
 ```{r}
 #| label: fig-designs
-#| fig-cap: "All eight treatment assignment designs on a common 10x10 grid. Cell shading indicates baseline incidence; blue cells are treated, grey cells are control. Saturation percentages indicate the fraction of clusters treated within each quadrant for Designs 3 and 8."
+#| fig-cap: "All eight treatment assignment designs on a common 10x10 grid, grouped by conceptual type. Cell shading indicates baseline incidence; filled circles are treated clusters, X marks are control. Saturation percentages indicate the fraction of clusters treated within each geographic quadrant for Saturation Quadrants and Incidence-Guided Saturation Quadrants; mean quadrant incidence (x-bar) is also shown for the latter."
 #| fig-width: 10
 #| fig-height: 4.5
 #| out-width: "100%"
@@ -287,7 +294,7 @@ knitr::include_graphics(
 )
 ```
 
-The conceptual contrast across designs is important: Design 1 enforces **maximum spatial separation** between treated and control clusters. Designs 3 and 8 take the opposite approach — they vary **saturation intensity** within spatial regions, intentionally mixing treated and control units at a local level. This distinction directly determines how well each design accommodates spatial spillover in the outcome DGP.
+The conceptual contrast across designs is important: Block Stratified Sampling enforces **maximum spatial separation** between treated and control clusters. Saturation Quadrants and Incidence-Guided Saturation Quadrants take the opposite approach — they vary **saturation intensity** within spatial regions, intentionally mixing treated and control units at a local level. This distinction directly determines how well each design accommodates spatial spillover in the outcome DGP.
 
 ## Estimation and Evaluation Metrics
 
@@ -330,21 +337,27 @@ MSE is the primary criterion for design comparison. Coverage provides an inferen
   kableExtra::row_spec(8, color = "gray")
 ```
 
-Designs 3 and 8 are the top performers by a substantial margin; Design 1 is dramatically inferior. To understand *why*, @fig-bv decomposes each design's MSE into its squared bias and variance components for the most SUD-realistic configuration (Poisson incidence, $\rho_X = 0.20$).
+::: {.callout-note}
+**Note for manuscript development:** Saturation Quadrants and Incidence-Guided Saturation Quadrants perform similarly (MSE 0.079 vs. 0.080 at τ = 1.0), as do Balanced Quartiles and Balanced Halves. For final manuscript reporting, one member of each pair will be selected as the representative design to streamline presentation. This decision will be deferred until the application to NC county data is complete.
+:::
+
+Saturation Quadrants and Incidence-Guided Saturation Quadrants are the top performers by a substantial margin; Block Stratified Sampling is dramatically inferior. To understand *why*, @fig-bv decomposes each design's MSE into its squared bias and variance components for the most SUD-realistic configuration (Poisson incidence, $\rho_X = 0.20$).
 
 ```{r}
 #| label: fig-bv
-#| fig-cap: "Bias-squared and variance contributions to MSE for each design (Poisson incidence, rho_X = 0.20, tau = 1.0). Design 1's MSE is almost entirely variance; Designs 3 and 8 achieve low bias and low variance simultaneously."
+#| fig-cap: "Bias-squared and variance contributions to MSE for each design (Poisson incidence, rho_X = 0.20, tau = 1.0). Block Stratified Sampling's MSE is almost entirely variance; Saturation Quadrants and Incidence-Guided Saturation Quadrants achieve low bias and low variance simultaneously."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
 
-plot_bias_variance(results_rep, rep_label)
+plot_bias_variance(results_rep, rep_label) +
+  scale_x_discrete(limits = rev(DESIGN_DISPLAY_ORDER)) +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1))
 ```
 
-Design 1 (Checkerboard) fails because its rigid alternating structure creates near-perfect collinearity between treatment assignment ($\mathbf{Z}$) and average neighbor treatment ($\mathbf{WZ}$). MLE cannot disentangle the direct treatment effect from spillover, producing high-variance estimates. Design 4 (Isolation Buffer) suffers a similar problem — its greedy no-adjacency constraint produces sparse, fragmented treatment that is similarly misaligned with the spatial DGP.
+Block Stratified Sampling fails because its rigid alternating structure creates near-perfect collinearity between treatment assignment ($\mathbf{Z}$) and average neighbor treatment ($\mathbf{WZ}$). MLE cannot disentangle the direct treatment effect from spillover, producing high-variance estimates. Isolation Buffer suffers a similar problem — its greedy no-adjacency constraint produces sparse, fragmented treatment that is similarly misaligned with the spatial DGP.
 
-Designs 3 and 8 succeed precisely because their saturation-based approach distributes treated and control clusters heterogeneously within each quadrant, preserving contrast between $\mathbf{Z}$ and $\mathbf{WZ}$ and keeping both bias and variance low.
+Saturation Quadrants and Incidence-Guided Saturation Quadrants succeed precisely because their saturation-based approach distributes treated and control clusters heterogeneously within each quadrant, preserving contrast between $\mathbf{Z}$ and $\mathbf{WZ}$ and keeping both bias and variance low.
 
 ## Formal Statistical Comparisons
 
@@ -357,44 +370,216 @@ nemenyi_res  <- run_nemenyi_posthoc(results_primary)
 
 A **Friedman test** — the non-parametric analogue of a repeated-measures ANOVA, with each simulation scenario treated as a block — confirms that design differences are highly significant: $\chi^2(7) = 1091.90$, $p < 2.2 \times 10^{-16}$. This finding is not specific to any particular parameter setting: stratifying the analysis by $\rho$, $\gamma$, spillover direction, neighbor type, or incidence mode produces statistically significant design differences in every stratum (all conditional Friedman $p < 2.2 \times 10^{-16}$).
 
-Post-hoc Nemenyi pairwise comparisons (@fig-cd) reveal the structure of these differences clearly. Designs 3 and 8 form a **statistically distinct top group**, well-separated from all other designs. Designs 5–7 occupy a middle tier that is statistically indistinguishable from each other but clearly worse than D3/D8. Design 1 stands alone at the bottom, separated from the next worst design by a larger critical-difference gap than separates any other adjacent pair.
+Post-hoc Nemenyi pairwise comparisons (@fig-cd, @fig-cd-mse) reveal a **four-tier structure** among designs. Saturation Quadrants and Incidence-Guided Saturation Quadrants form a **statistically distinct top tier** — both are significantly different from all other designs ($p < 0.05$). Below them, Balanced Quartiles, High Incidence Focus, and Balanced Halves form a statistically equivalent second tier: the three designs are not significantly different from one another but are significantly worse than the saturation designs. Isolation Buffer and 2×2 Blocking form a third tier, equivalent to each other but significantly worse than the second tier. Block Stratified Sampling stands alone at the bottom, significantly different from every other design.
 
 ```{r}
 #| label: fig-cd
-#| fig-cap: "Nemenyi critical difference (CD) diagram at tau = 1.0. Designs connected by a horizontal bar are not statistically distinguishable at alpha = 0.05. Designs 3 and 8 form a top equivalence group clearly separated from all others; Design 1 is isolated at the bottom."
-#| fig-width: 7
+#| fig-cap: "Critical difference (CD) diagram by average rank ($\\tau = 1.0$, all incidence configurations). Designs are positioned by their average Friedman rank (lower = better). The red arrow marks the critical difference ($CD = 0.656$): designs whose average ranks differ by less than this threshold are connected by a bold segment and are not significantly different (Nemenyi, $\\alpha = 0.05$). Four distinct tiers are visible: Saturation Quadrants and Incidence-Guided Saturation Quadrants (top); Balanced Quartiles, High Incidence Focus, and Balanced Halves (second); Isolation Buffer and 2×2 Blocking (third); Block Stratified Sampling (bottom, isolated)."
+#| fig-width: 9
 #| fig-height: 3.5
-#| out-width: "90%"
+#| out-width: "95%"
 
-plot_cd_diagram(nemenyi_res,
-  title = "Design Comparison (Nemenyi post-hoc, tau = 1.0)"
-)
+plot_cd_diagram(nemenyi_res)
+```
+
+```{r}
+#| label: fig-cd-mse
+#| fig-cap: "CD diagram by mean MSE ($\\tau = 1.0$, all incidence configurations). Each point shows a design's mean MSE on a log scale; designs are sorted left-to-right by increasing MSE. Horizontal bars connect designs that are not significantly different from each other (Nemenyi, $\\alpha = 0.05$). This view conveys the practical magnitude of MSE differences alongside the statistical grouping. The four-tier structure from Figure 3 is preserved: the saturation designs achieve the lowest MSE and are clearly separated from all others."
+#| fig-width: 9
+#| fig-height: 5.5
+#| out-width: "95%"
+
+# CD diagram using MSE on x-axis (log scale). Labels at 90 degrees, aligned with dots.
+# Only designs within 0.05 log10 MSE units of each other are staggered vertically.
+plot_cd_diagram_mse <- function(nemenyi_result, results, alpha = 0.05, title = NULL) {
+  mse_vals <- results |>
+    group_by(Design) |>
+    summarize(Mean_MSE = mean(MSE), .groups = "drop") |>
+    tibble::deframe()
+
+  avg_ranks <- nemenyi_result$avg_ranks
+  p_mat     <- nemenyi_result$p_matrix
+  designs   <- names(avg_ranks)
+
+  groups <- find_cd_groups(avg_ranks, p_mat, alpha)
+
+  df_pts <- data.frame(
+    design = designs,
+    mse    = mse_vals[designs],
+    stringsAsFactors = FALSE
+  ) |> arrange(mse)
+
+  # With 90-degree labels, stagger designs that are close in log-MSE (< 0.10 log10 units).
+  # Five stagger levels (y = 0.15, 0.35, 0.55, 0.75, 0.95) ensure even nearby designs
+  # are spread out vertically and labels remain readable without overlap.
+  y_levels   <- c(0.15, 0.35, 0.55, 0.75, 0.95)
+  log_mse    <- log10(df_pts$mse)
+  label_y    <- numeric(nrow(df_pts))
+  label_y[1] <- y_levels[1]
+  for (i in seq_len(nrow(df_pts))[-1]) {
+    nearby_idx <- which((log_mse[i] - log_mse[seq_len(i - 1)]) < 0.10)
+    if (length(nearby_idx) == 0) {
+      label_y[i] <- y_levels[1]
+    } else {
+      used <- label_y[nearby_idx]
+      avail <- setdiff(y_levels, used)
+      label_y[i] <- if (length(avail) > 0) min(avail) else max(y_levels)
+    }
+  }
+  df_pts$label_y <- label_y
+
+  # Equivalence bars positioned above the tallest label column
+  bar_base <- 1.30
+  # Minimum bar half-width in log10 units so single-design groups show as a visible tick
+  min_half_log <- 0.03
+  df_bars <- do.call(rbind, lapply(seq_along(groups), function(g) {
+    grp_mse  <- mse_vals[groups[[g]]]
+    log_mid  <- mean(log10(c(min(grp_mse), max(grp_mse))))
+    log_xmin <- min(log10(min(grp_mse)), log_mid - min_half_log)
+    log_xmax <- max(log10(max(grp_mse)), log_mid + min_half_log)
+    data.frame(xmin = 10^log_xmin, xmax = 10^log_xmax,
+               y = bar_base + (g - 1) * 0.18)
+  }))
+
+  if (is.null(title)) title <- "Design MSE with Statistical Equivalence Groups (Nemenyi)"
+
+  ggplot() +
+    geom_hline(yintercept = 0, color = "grey60", linewidth = 0.5) +
+    # Short leader lines from axis point to label base
+    geom_segment(data = df_pts,
+                 aes(x = mse, xend = mse, y = 0.04, yend = label_y - 0.02),
+                 color = "grey55", linewidth = 0.35, linetype = "dotted") +
+    geom_point(data = df_pts, aes(x = mse, y = 0),
+               size = 3.5, color = "black") +
+    geom_text(data = df_pts,
+              aes(x = mse, y = label_y, label = design),
+              size = 2.9, fontface = "bold", angle = 90, hjust = 0, vjust = 0.5) +
+    {if (!is.null(df_bars) && nrow(df_bars) > 0)
+      geom_segment(data = df_bars,
+                   aes(x = xmin, xend = xmax, y = y, yend = y),
+                   linewidth = 3, color = "grey35", lineend = "round")
+    } +
+    scale_x_log10(name = "Mean MSE (log scale, tau = 1.0, all incidence configurations)",
+                  labels = scales::label_number(accuracy = 0.001),
+                  expand = expansion(mult = c(0.12, 0.12))) +
+    coord_cartesian(clip = "off",
+                    ylim = c(-0.10,
+                             max(if (!is.null(df_bars) && nrow(df_bars) > 0) df_bars$y else 0,
+                                 bar_base) + 0.35)) +
+    theme_minimal(base_size = 12) +
+    theme(
+      axis.text.y        = element_blank(),
+      axis.ticks.y       = element_blank(),
+      axis.title.y       = element_blank(),
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      plot.title         = element_text(hjust = 0.5, size = 12),
+      plot.margin        = margin(5, 10, 5, 10)
+    ) +
+    ggtitle(title)
+}
+
+plot_cd_diagram_mse(nemenyi_res, results_primary)
+```
+
+
+```{r}
+#| label: fig-cd-twopanel
+#| fig-cap: "Supplementary comparison of designs at tau = 1.0. Left: mean MSE per design (log scale) with error bars showing ± 1 standard error across scenarios; designs are colored by conceptual group (Blocking, Stratified, Saturation). Right: pairwise Nemenyi p-value heatmap — dark cells indicate statistically significant differences (p < 0.05) and light cells indicate non-significant differences. Together these panels show both the magnitude of MSE differences and their statistical significance."
+#| fig-width: 11
+#| fig-height: 4.5
+#| out-width: "100%"
+
+mse_bar_df <- results_primary |>
+  group_by(Design) |>
+  summarize(Mean_MSE = mean(MSE), SE = sd(MSE) / sqrt(n()), .groups = "drop")
+
+p_bar <- ggplot(mse_bar_df,
+                aes(x = Mean_MSE,
+                    y = factor(Design, levels = rev(DESIGN_DISPLAY_ORDER)))) +
+  geom_col(aes(fill = DESIGN_GROUPS[as.character(Design)]), alpha = 0.85) +
+  geom_errorbarh(aes(xmin = pmax(Mean_MSE - SE, 0.001),
+                     xmax = Mean_MSE + SE), height = 0.35) +
+  scale_x_log10(labels = scales::label_number(accuracy = 0.01)) +
+  scale_fill_manual(
+    values = c("Blocking" = "#D55E00", "Stratified" = "#0072B2",
+               "Saturation" = "#009E73"),
+    name = "Design type"
+  ) +
+  labs(x = "Mean MSE (log scale)", y = NULL, title = "Design Performance") +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "bottom")
+
+p_heat <- plot_pvalue_heatmap(nemenyi_res) +
+  theme(axis.text = element_text(size = 7.5),
+        plot.title = element_text(size = 11))
+
+p_bar + p_heat + plot_layout(widths = c(1, 1.4))
 ```
 
 ## Sensitivity to Spatial Conditions
 
 ```{r}
 #| label: fig-heatmap
-#| fig-cap: "Mean MSE by design and outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Higher rho increases absolute MSE across all designs, but rankings remain stable — Designs 3 and 8 consistently achieve the lowest MSE at every rho level."
+#| fig-cap: "Mean MSE by design and outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Color uses a log scale to distinguish designs in the low-MSE range; higher rho increases absolute MSE across all designs, but rankings remain stable — Saturation Quadrants and Incidence-Guided Saturation Quadrants consistently achieve the lowest MSE at every rho level."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
 
-plot_mse_heatmap(results_rep, rep_label)
+plot_mse_heatmap(results_rep, rep_label) +
+  scale_fill_viridis_c(option = "plasma", trans = "log10", name = "Avg MSE\n(log scale)") +
+  scale_y_discrete(limits = rev(DESIGN_DISPLAY_ORDER))
 ```
 
-**Outcome spatial autocorrelation ($\rho$)** and **spillover magnitude ($\gamma$)** both increase absolute MSE — stronger spatial dependence and larger spillover make estimation more difficult for all designs (@fig-heatmap). However, neither parameter changes the design ranking. Notably, the advantage of Designs 3 and 8 over mid-tier designs **grows as $\gamma$ increases**: at $\gamma = 0.8$, the saturation designs' MSE advantage over Designs 5–7 is approximately 40% larger than at $\gamma = 0.5$. Saturation-based allocation provides increasing relative returns under stronger spillover — precisely the conditions most likely to occur in real-world spatial interventions.
+```{r}
+#| label: fig-heatmap-rank
+#| fig-cap: "Design rank by outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Each cell shows the average rank of that design across gamma and spillover direction scenarios at the given rho level (rank 1 = lowest MSE = best). Green indicates top-ranked designs; red indicates the worst. Saturation Quadrants and Incidence-Guided Saturation Quadrants consistently rank 1st and 2nd; Block Stratified Sampling consistently ranks last."
+#| fig-width: 8
+#| fig-height: 3.8
+#| out-width: "95%"
+
+rank_heat_df <- results_rep |>
+  group_by(Rho, Neighbor_Type, Gamma, Spillover_Type) |>
+  mutate(Rank = rank(MSE, ties.method = "average")) |>
+  ungroup() |>
+  group_by(Design, Rho, Neighbor_Type) |>
+  summarize(Avg_Rank = mean(Rank), .groups = "drop")
+
+ggplot(rank_heat_df,
+       aes(x = as.factor(Rho),
+           y = factor(Design, levels = rev(DESIGN_DISPLAY_ORDER)),
+           fill = Avg_Rank)) +
+  geom_tile(color = "white", linewidth = 0.5) +
+  geom_text(aes(label = sprintf("%.1f", Avg_Rank)),
+            size = 3.5, fontface = "bold", color = "white") +
+  facet_wrap(~ Neighbor_Type,
+             labeller = as_labeller(c("queen" = "Queen Contiguity",
+                                      "rook"  = "Rook Contiguity"))) +
+  scale_fill_distiller(palette = "RdYlGn", direction = -1,
+                       limits = c(1, 8), name = "Avg Rank\n(1 = best)") +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = expression("Design Rank by Spatial Dependence (" * rho * ")"),
+    subtitle = paste0("Incidence: ", rep_label),
+    x = expression("Spatial Dependence (" * rho * ")"),
+    y = NULL
+  ) +
+  theme(panel.grid = element_blank())
+```
+
+**Outcome spatial autocorrelation ($\rho$)** and **spillover magnitude ($\gamma$)** both increase absolute MSE — stronger spatial dependence and larger spillover make estimation more difficult for all designs (@fig-heatmap, @fig-heatmap-rank). However, neither parameter changes the design ranking. Notably, the advantage of the saturation designs over mid-tier designs **grows as $\gamma$ increases**: at $\gamma = 0.8$, the saturation designs' MSE advantage over the stratified and blocking designs is approximately 40% larger than at $\gamma = 0.5$. Saturation-based allocation provides increasing relative returns under stronger spillover — precisely the conditions most likely to occur in real-world spatial interventions.
 
 Two parameters showed **no meaningful impact on design rankings** and are not discussed further:
 
-- **Spillover direction** (`control_only` vs. `both`): both strata yield the same optimal designs (D8, D3), with modest shifts in absolute MSE magnitude (all conditional Friedman $p < 2.2 \times 10^{-16}$ in both strata).
+- **Spillover direction** (`control_only` vs. `both`): both strata yield the same optimal designs (Saturation Quadrants, Incidence-Guided Saturation Quadrants), with modest shifts in absolute MSE magnitude (all conditional Friedman $p < 2.2 \times 10^{-16}$ in both strata).
 - **Neighbor type** (rook vs. queen): rankings are invariant; queen contiguity yields slightly lower absolute MSE owing to stronger spatial smoothing with 8 neighbors vs. 4.
 
 ## Effect Size Sensitivity and Statistical Power
 
 ```{r}
 #| label: fig-mse-tau
-#| fig-cap: "Mean MSE by design across effect sizes (tau in {0.8, 1.0, 1.5, 2.0, 3.0}), Poisson incidence (rho_X = 0.20), log scale. Design 1 diverges dramatically at small-to-moderate tau; Designs 3 and 8 maintain low MSE across the full range. At tau = 3.0, the large true signal compresses differences among designs."
+#| fig-cap: "Mean MSE by design across effect sizes (tau in {0.8, 1.0, 1.5, 2.0, 3.0}), Poisson incidence (rho_X = 0.20), log scale. Block Stratified Sampling diverges dramatically at small-to-moderate tau; Saturation Quadrants and Incidence-Guided Saturation Quadrants maintain low MSE across the full range. At tau = 3.0, the large true signal compresses differences among designs."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -414,12 +599,13 @@ results_poisson_sweep |>
   ) +
   theme_minimal(base_size = 11) +
   theme(legend.position = "right",
-        panel.grid.minor = element_blank())
+        panel.grid.minor = element_blank()) +
+  guides(color = guide_legend(ncol = 1))
 ```
 
 ```{r}
 #| label: fig-coverage-tau
-#| fig-cap: "Coverage of 95% confidence intervals by design across effect sizes, Poisson incidence (rho_X = 0.20). The dashed line marks nominal 95% coverage. Designs 3-8 maintain near-nominal coverage throughout; Design 1 is severely anti-conservative at all effect sizes (~55% coverage)."
+#| fig-cap: "Coverage of 95% confidence intervals by design across effect sizes, Poisson incidence (rho_X = 0.20). The dashed line marks nominal 95% coverage. All designs except Block Stratified Sampling maintain near-nominal coverage throughout; Block Stratified Sampling is severely anti-conservative at all effect sizes (~55% coverage)."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -442,22 +628,23 @@ results_poisson_sweep |>
   ) +
   theme_minimal(base_size = 11) +
   theme(legend.position = "right",
-        panel.grid.minor = element_blank())
+        panel.grid.minor = element_blank()) +
+  guides(color = guide_legend(ncol = 1))
 ```
 
-Design rankings are **stable across the full effect size range** (@fig-mse-tau). At $\tau = 3.0$, a very large treatment signal compresses MSE differences among designs — all designs eventually become adequate when the effect is large enough to overwhelm spatial confounding. At the more practically relevant range $\tau \in \{0.8, 1.0, 1.5\}$, the D3/D8 advantage is most pronounced and most consequential for trial planning.
+Design rankings are **stable across the full effect size range** (@fig-mse-tau). At $\tau = 3.0$, a very large treatment signal compresses MSE differences among designs — all designs eventually become adequate when the effect is large enough to overwhelm spatial confounding. At the more practically relevant range $\tau \in \{0.8, 1.0, 1.5\}$, the saturation design advantage is most pronounced and most consequential for trial planning.
 
-Coverage (@fig-coverage-tau) tells a particularly striking story. Designs 3–8 maintain approximately 94–95% coverage under MLE across all tested effect sizes. **Design 1 never exceeds approximately 60% coverage**, regardless of $\tau$. A trial deployed with a Checkerboard assignment would produce nominal 95% confidence intervals that contain the true treatment effect less than 60% of the time. This is not simply a power deficit — it is a fundamental structural failure arising from the collinearity between $\mathbf{Z}$ and $\mathbf{WZ}$ under the alternating assignment pattern.
+Coverage (@fig-coverage-tau) tells a particularly striking story. All designs except Block Stratified Sampling maintain approximately 94–95% coverage under MLE across all tested effect sizes. **Block Stratified Sampling never exceeds approximately 60% coverage**, regardless of $\tau$. A trial using the Block Stratified Sampling design would produce nominal 95% confidence intervals that contain the true treatment effect less than 60% of the time. This is not simply a power deficit — it is a fundamental structural failure arising from the collinearity between $\mathbf{Z}$ and $\mathbf{WZ}$ under the alternating assignment pattern.
 
 # Design Recommendations and Next Steps
 
 ## Recommended Designs
 
-**Design 8 (Incidence-Guided Saturation Quadrants)** is the primary recommendation when reliable baseline incidence data are available. Its quadrant-level saturation rates are set proportional to the observed incidence rank of each region, directly leveraging the spatial structure of the outcome to guide allocation.
+**Incidence-Guided Saturation Quadrants** is the primary recommendation when reliable baseline incidence data are available. Its quadrant-level saturation rates are set proportional to the observed incidence rank of each region, directly leveraging the spatial structure of the outcome to guide allocation.
 
-**Design 3 (Saturation Quadrants)** is the recommended alternative when baseline incidence estimates are uncertain or unavailable — it randomizes saturation rates across quadrants without requiring incidence data and achieves nearly identical performance (MSE 0.080 vs. 0.079 at $\tau = 1.0$, well within Monte Carlo standard error). Design 3 is simpler to implement and explain to stakeholders while sacrificing essentially nothing in estimation performance.
+**Saturation Quadrants** is the recommended alternative when baseline incidence estimates are uncertain or unavailable — it randomizes saturation rates across quadrants without requiring incidence data and achieves nearly identical performance (MSE 0.080 vs. 0.079 at $\tau = 1.0$, well within Monte Carlo standard error). Saturation Quadrants is simpler to implement and explain to stakeholders while sacrificing essentially nothing in estimation performance.
 
-**Design 1 should never be used** when spatial spillover is anticipated. Its intuitive appeal — spatially separating treated and control units — is precisely what makes it fail in the presence of spillover. Both designs should be preferred over blocking designs (D5–D7) in the SUD application context, where spillover across county lines is plausible.
+**Block Stratified Sampling should never be used** when spatial spillover is anticipated. Its intuitive appeal — spatially separating treated and control units — is precisely what makes it fail in the presence of spillover. Both saturation designs should be preferred over the blocking and stratified designs (2×2 Blocking, Isolation Buffer, High Incidence Focus, Balanced Halves, Balanced Quartiles) in the SUD application context, where spillover across county lines is plausible.
 
 ## Open Questions and Path to Real-World Application
 
@@ -465,7 +652,7 @@ These simulation results establish the theoretical case for saturation-based des
 
 1. **Spatial weight matrix for irregular polygons:** How should adjacency be defined when clusters are irregular county tracts? Queen contiguity (shared border of any nonzero length) is the natural extension; alternative definitions (distance-based, shared border length-weighted) warrant consideration.
 
-2. **Generalizing the quadrant partition:** Designs 3 and 8 rely on rectangular geographic quadrants. For a non-rectangular study region like NC, analogous spatial partitions — k-means geographic clusters, administrative regions, or compass quadrant approximations — would need to replace the regular grid structure.
+2. **Generalizing the quadrant partition:** Saturation Quadrants and Incidence-Guided Saturation Quadrants rely on rectangular geographic quadrants. For a non-rectangular study region like NC, analogous spatial partitions — k-means geographic clusters, administrative regions, or compass quadrant approximations — would need to replace the regular grid structure.
 
 3. **Relaxing the oracle MLE assumption:** The current estimator uses the true spillover term ($\mathbf{WZ}$) as a covariate. In practice, the spillover structure must be assumed or estimated. Non-oracle MLE — where the spillover term is either omitted or approximated — is a high-priority simulation extension before applying these methods to real data.
 
