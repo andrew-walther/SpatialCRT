@@ -383,7 +383,7 @@ Post-hoc Nemenyi pairwise comparisons (@fig-cd, @fig-cd-mse) reveal a **four-tie
 #| label: fig-cd
 #| fig-cap: "Critical difference (CD) diagram by average rank ($\\tau = 1.0$, all incidence configurations). Designs are positioned by their average Friedman rank (lower = better). The red arrow marks the critical difference ($CD = 0.656$): designs whose average ranks differ by less than this threshold are connected by a bold segment and are not significantly different (Nemenyi, $\\alpha = 0.05$). Four distinct tiers are visible: Saturation Quadrants and Incidence-Guided Saturation Quadrants (top); Balanced Quartiles, High Incidence Focus, and Balanced Halves (second); Isolation Buffer and 2×2 Blocking (third); Block Stratified Sampling (bottom, isolated)."
 #| fig-width: 9
-#| fig-height: 3.5
+#| fig-height: 2.8
 #| out-width: "95%"
 
 # Improved CD diagram with better label and rank value positioning
@@ -490,7 +490,7 @@ ggplot() +
 #| label: fig-cd-mse
 #| fig-cap: "CD diagram by mean MSE ($\\tau = 1.0$, all incidence configurations). Each point shows a design's mean MSE on a log scale; designs are sorted left-to-right by increasing MSE. Horizontal bars connect designs that are not significantly different from each other (Nemenyi, $\\alpha = 0.05$). This view conveys the practical magnitude of MSE differences alongside the statistical grouping. The four-tier structure from Figure 3 is preserved: the saturation designs achieve the lowest MSE and are clearly separated from all others."
 #| fig-width: 9
-#| fig-height: 5.5
+#| fig-height: 3.8
 #| out-width: "95%"
 
 # CD diagram using MSE on x-axis (log scale). Labels at 90 degrees, aligned with dots.
@@ -578,10 +578,10 @@ plot_cd_diagram_mse <- function(nemenyi_result, results, alpha = 0.05, title = N
                   labels = scales::label_number(accuracy = 0.001),
                   expand = expansion(mult = c(0.12, 0.12))) +
     coord_cartesian(clip = "off",
-                    ylim = c(-1.8,
+                    ylim = c(-1.5,
                              max(if (!is.null(df_bars) && nrow(df_bars) > 0) df_bars$y else 0,
-                                 bar_base) + 0.6)) +
-    theme_minimal(base_size = 11) +
+                                 bar_base) + 0.4)) +
+    theme_minimal(base_size = 10.5) +
     theme(
       axis.text.y        = element_blank(),
       axis.ticks.y       = element_blank(),
@@ -589,8 +589,8 @@ plot_cd_diagram_mse <- function(nemenyi_result, results, alpha = 0.05, title = N
       panel.grid.major.y = element_blank(),
       panel.grid.minor.y = element_blank(),
       panel.grid.minor.x = element_blank(),
-      plot.title         = element_text(hjust = 0.5, size = 12),
-      plot.margin        = margin(5, 10, 5, 10)
+      plot.title         = element_text(hjust = 0.5, size = 11),
+      plot.margin        = margin(3, 8, 2, 8)
     ) +
     ggtitle(title)
 }
