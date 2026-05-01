@@ -152,13 +152,15 @@ generate_dissolved_borders_map <- function(nc_cluster_map) {
   return(map_obj)
 }
 
-# ---------------------------------------------------------
-# Execution Block
-# ---------------------------------------------------------
-spatial_data <- get_nc_cc_data()
+if (sys.nframe() == 0) {
+  # ---------------------------------------------------------
+  # Execution Block
+  # ---------------------------------------------------------
+  spatial_data <- get_nc_cc_data()
 
-map_counties <- generate_county_borders_map(spatial_data)
-print(map_counties)
+  map_counties <- generate_county_borders_map(spatial_data)
+  print(map_counties)
 
-map_dissolved <- generate_dissolved_borders_map(spatial_data)
-print(map_dissolved)
+  map_dissolved <- generate_dissolved_borders_map(spatial_data)
+  print(map_dissolved)
+}
