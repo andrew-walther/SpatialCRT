@@ -10,3 +10,4 @@
 # Claude Code worktrees (internal tooling, not part of repo)
 .claude/worktrees/
 **/.claude/worktrees/
+.positai
