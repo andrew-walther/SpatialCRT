@@ -1,0 +1,9 @@
+"profile","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","mean_estimate","bias","sd","mse","coverage","power","fail_rate","n_valid_est"
+"smoke",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.6,0.2,"both",2,2,1.26426910909806,0.264269109098062,0.814971331971929,0.567971865975559,0.75,0.5,0,4
+"smoke",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.6,0.2,"both",2,2,1.20855042722717,0.208550427227166,0.331653116045856,0.125988622733828,1,0.75,0,4
+"smoke",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,0.903871037116606,-0.0961289628833936,0.45608160889611,0.165248602984985,0.75,0.75,0,4
+"smoke",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,0.997385069847864,-0.00261493015213565,0.736043288971648,0.406326630289851,1,0.5,0,4
+"smoke",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.6,0.2,"both",2,2,1.18644152496909,0.186441524969092,0.346807372113312,0.124966957246906,0.75,1,0,4
+"smoke",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.6,0.2,"both",2,2,1.04145354524986,0.0414535452498628,0.3327877279614,0.0847791503250655,1,1,0,4
+"smoke",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,1.01101304721327,0.0110130472132715,0.331833799473393,0.0827065400636326,1,1,0,4
+"smoke",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,1.07609957563084,0.076099575630837,0.436348369765648,0.148591070259048,0.75,1,0,4

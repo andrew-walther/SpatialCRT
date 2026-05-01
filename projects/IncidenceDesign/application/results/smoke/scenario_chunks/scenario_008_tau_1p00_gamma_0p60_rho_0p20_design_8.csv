@@ -1,0 +1,5 @@
+"outcome_resample","estimate","se","ci_lower","ci_upper","converged","profile","scenario_id","design_resample","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","n_treated","n_control"
+1,1.46115860680888,0.229310784891086,1.01171772715575,1.91059948646202,TRUE,"smoke",8,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+2,0.861245232863627,0.21419400002216,0.441432707115622,1.28105775861163,TRUE,"smoke",8,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+1,1.41660387805773,0.271338108317744,0.884790958121718,1.94841679799373,TRUE,"smoke",8,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+2,0.565390584793111,0.253375539021641,0.0687836537472719,1.06199751583895,TRUE,"smoke",8,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29

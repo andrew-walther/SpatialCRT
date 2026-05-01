@@ -1,0 +1,5 @@
+"outcome_resample","estimate","se","ci_lower","ci_upper","converged","profile","scenario_id","design_resample","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","n_treated","n_control"
+1,-0.0349857624524852,0.566561525985487,-1.14542594841009,1.07545442350512,TRUE,"smoke",4,1,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,16,42
+2,1.212345336176,0.596533294235652,0.0431615638950873,2.38152910845691,TRUE,"smoke",4,1,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,16,42
+1,1.70542436489634,0.522123412131447,0.682081281633545,2.72876744815914,TRUE,"smoke",4,2,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,18,40
+2,1.1067563407716,0.635284903939856,-0.138379190872509,2.3518918724157,TRUE,"smoke",4,2,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,18,40

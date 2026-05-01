@@ -1,0 +1,26 @@
+"outcome_resample","estimate","se","ci_lower","ci_upper","converged","profile","scenario_id","design_resample","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","n_treated","n_control"
+1,2.61618960045078,0.501311888965283,1.63363635305708,3.59874284784447,TRUE,"pilot",33,1,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+2,2.16175683923866,0.491284005893992,1.19885788150587,3.12465579697145,TRUE,"pilot",33,1,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+3,1.80921466885818,0.455239925576627,0.916960810403296,2.70146852731306,TRUE,"pilot",33,1,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+4,2.11610305628171,0.462791676101079,1.20904803877867,3.02315807378475,TRUE,"pilot",33,1,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+5,1.9135420480947,0.465886021020897,1.00042222599307,2.82666187019633,TRUE,"pilot",33,1,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+1,1.64311235388788,0.484025756533169,0.694439303493115,2.59178540428264,TRUE,"pilot",33,2,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+2,2.00334791904035,0.387881904370058,1.24311335622023,2.76358248186047,TRUE,"pilot",33,2,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+3,1.83309547455557,0.468015983196709,0.915801003300922,2.75038994581023,TRUE,"pilot",33,2,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+4,2.10466167801068,0.412704481054111,1.29577575888633,2.91354759713503,TRUE,"pilot",33,2,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+5,1.83399883038717,0.449839523270308,0.9523295659547,2.71566809481964,TRUE,"pilot",33,2,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+1,2.12029315557043,0.535131986463209,1.07145373512716,3.16913257601369,TRUE,"pilot",33,3,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+2,1.83802450749188,0.450083366575346,0.95587731896366,2.72017169602009,TRUE,"pilot",33,3,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+3,2.59660553654503,0.464056735973402,1.68707104725395,3.50614002583611,TRUE,"pilot",33,3,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+4,2.23001133769125,0.452905261849068,1.34233333605839,3.1176893393241,TRUE,"pilot",33,3,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+5,1.88976463355487,0.49659437092695,0.916457551612724,2.86307171549702,TRUE,"pilot",33,3,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+1,1.55133118581715,0.465070402929203,0.639809945800385,2.46285242583392,TRUE,"pilot",33,4,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+2,2.68385392509175,0.472723840226738,1.75733222361387,3.61037562656962,TRUE,"pilot",33,4,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+3,1.8192730255403,0.464093113213247,0.909667238169269,2.72887881291134,TRUE,"pilot",33,4,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+4,2.13389112735035,0.440034521876338,1.27143931251842,2.99634294218227,TRUE,"pilot",33,4,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+5,1.45681129869693,0.48499930055581,0.506230137080427,2.40739246031344,TRUE,"pilot",33,4,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+1,2.30278075078845,0.429531040602944,1.46091538096467,3.14464612061223,TRUE,"pilot",33,5,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+2,1.97018759262417,0.448107069521474,1.0919138751443,2.84846131010405,TRUE,"pilot",33,5,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+3,2.43566561043091,0.477369257438154,1.5000390585255,3.37129216233632,TRUE,"pilot",33,5,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+4,2.4443532355863,0.489322401713669,1.48529895139887,3.40340751977373,TRUE,"pilot",33,5,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30
+5,2.37772622562514,0.487771224965093,1.42171219199858,3.33374025925171,TRUE,"pilot",33,5,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,28,30

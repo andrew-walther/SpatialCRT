@@ -1,0 +1,26 @@
+"outcome_resample","estimate","se","ci_lower","ci_upper","converged","profile","scenario_id","design_resample","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","n_treated","n_control"
+1,1.64144418931848,0.224154411790797,1.20210961523276,2.08077876340421,TRUE,"pilot",56,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+2,1.82753073627539,0.233048698175062,1.37076368120832,2.28429779134246,TRUE,"pilot",56,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+3,2.16672608411719,0.228082436652351,1.71969272277244,2.61375944546193,TRUE,"pilot",56,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+4,1.6096131789106,0.246062270901358,1.1273399899898,2.0918863678314,TRUE,"pilot",56,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+5,1.93781224539104,0.247281248495695,1.45314990428738,2.42247458649471,TRUE,"pilot",56,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+1,2.03503338779483,0.221955100664529,1.60000938430739,2.47005739128227,TRUE,"pilot",56,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+2,1.83014475814893,0.259156560949646,1.32220723233036,2.33808228396749,TRUE,"pilot",56,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+3,2.11357052550556,0.307061123841806,1.51174178172323,2.7153992692879,TRUE,"pilot",56,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+4,2.13607282261631,0.218902395909661,1.70703201050385,2.56511363472877,TRUE,"pilot",56,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+5,1.64752396639088,0.253715724807008,1.15025028345767,2.1447976493241,TRUE,"pilot",56,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+1,2.13831079164885,0.230630223968261,1.68628385892465,2.59033772437304,TRUE,"pilot",56,3,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+2,2.05202068637679,0.287444928214754,1.48863897953717,2.6154023932164,TRUE,"pilot",56,3,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+3,1.95901624750048,0.270026587245553,1.42977386163093,2.48825863337003,TRUE,"pilot",56,3,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+4,2.20222817745032,0.249578343648927,1.71306361257726,2.69139274232338,TRUE,"pilot",56,3,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+5,2.0908979043129,0.214214039659756,1.67104610159695,2.51074970702886,TRUE,"pilot",56,3,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+1,1.7174434971602,0.275118194189784,1.17822174505653,2.25666524926388,TRUE,"pilot",56,4,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+2,1.97436437133088,0.311614555280394,1.36361106592284,2.58511767673892,TRUE,"pilot",56,4,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+3,2.41331990534467,0.238822430800168,1.94523654227603,2.8814032684133,TRUE,"pilot",56,4,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+4,1.90598314466859,0.28417325104587,1.34901380724902,2.46295248208815,TRUE,"pilot",56,4,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+5,2.3539661526934,0.255720722744482,1.85276274601367,2.85516955937314,TRUE,"pilot",56,4,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+1,1.94794982203516,0.254609940540146,1.44892350847059,2.44697613559973,TRUE,"pilot",56,5,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+2,2.36811188106825,0.25176496754561,1.87466161210996,2.86156215002654,TRUE,"pilot",56,5,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+3,1.70073689272361,0.213255825216302,1.28276315580629,2.11871062964093,TRUE,"pilot",56,5,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+4,1.86362213981412,0.275986377023071,1.32269878062521,2.40454549900303,TRUE,"pilot",56,5,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29
+5,2.22377826142021,0.250488175357728,1.73283045916591,2.71472606367451,TRUE,"pilot",56,5,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,29,29

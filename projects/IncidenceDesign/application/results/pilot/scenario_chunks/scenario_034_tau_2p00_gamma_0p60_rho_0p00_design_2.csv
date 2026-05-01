@@ -1,0 +1,26 @@
+"outcome_resample","estimate","se","ci_lower","ci_upper","converged","profile","scenario_id","design_resample","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","n_treated","n_control"
+1,2.23458375408367,0.488646356035745,1.27685449507688,3.19231301309047,TRUE,"pilot",34,1,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+2,1.70414860942724,0.544114384163006,0.637704012997553,2.77059320585692,TRUE,"pilot",34,1,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+3,0.839128407192797,0.541862506024148,-0.22290258918715,1.90115940357275,TRUE,"pilot",34,1,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+4,1.7227794952124,0.545160235488766,0.654285067851046,2.79127392257376,TRUE,"pilot",34,1,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+5,1.70475328182328,0.494651295658475,0.735254557426593,2.67425200621996,TRUE,"pilot",34,1,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+1,1.4944957104692,0.581900373382654,0.353991936048784,2.63499948488961,TRUE,"pilot",34,2,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+2,2.25864124372259,0.497706855431894,1.28315373221739,3.23412875522778,TRUE,"pilot",34,2,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+3,2.26633145477434,0.486928333568037,1.31196945792888,3.2206934516198,TRUE,"pilot",34,2,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+4,1.83115178732484,0.516480656428823,0.818868302012743,2.84343527263694,TRUE,"pilot",34,2,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+5,1.81877822761076,0.432075309525537,0.971926182331708,2.6656302728898,TRUE,"pilot",34,2,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+1,2.0628241813972,0.481475192153452,1.11915014532693,3.00649821746747,TRUE,"pilot",34,3,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+2,2.39336615671728,0.452587391855515,1.50631116882356,3.28042114461101,TRUE,"pilot",34,3,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+3,2.75962420319808,0.45672940386246,1.86445102094721,3.65479738544895,TRUE,"pilot",34,3,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+4,1.77033478961246,0.521871973759486,0.747484516503037,2.79318506272189,TRUE,"pilot",34,3,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+5,2.14350268078078,0.55266565989181,1.06029789190077,3.22670746966079,TRUE,"pilot",34,3,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+1,1.91766941018816,0.437478582791846,1.06022714390852,2.7751116764678,TRUE,"pilot",34,4,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+2,1.53365088431475,0.454170675501119,0.643492717498335,2.42380905113117,TRUE,"pilot",34,4,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+3,1.95244840613231,0.476040015903076,1.01942711976241,2.88546969250221,TRUE,"pilot",34,4,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+4,1.818735682595,0.459975150959562,0.917200952930888,2.72027041225912,TRUE,"pilot",34,4,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+5,1.18629172711007,0.496648732667478,0.212878098114348,2.15970535610579,TRUE,"pilot",34,4,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+1,1.95931915603123,0.503393768535558,0.972685499659648,2.94595281240282,TRUE,"pilot",34,5,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+2,1.99323065040865,0.493587229743965,1.02581745688158,2.96064384393571,TRUE,"pilot",34,5,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+3,1.23704509805627,0.465812253395659,0.324069857843339,2.15002033826921,TRUE,"pilot",34,5,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+4,2.56428044743414,0.506840369830836,1.57089157665473,3.55766931821354,TRUE,"pilot",34,5,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29
+5,1.57691005745152,0.527272209414769,0.543475516949712,2.61034459795333,TRUE,"pilot",34,5,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,29,29

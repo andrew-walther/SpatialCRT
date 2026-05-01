@@ -1,0 +1,5 @@
+"outcome_resample","estimate","se","ci_lower","ci_upper","converged","profile","scenario_id","design_resample","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","n_treated","n_control"
+1,1.39028717648438,0.302969575843318,0.796477719420102,1.98409663354866,TRUE,"smoke",7,1,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30
+2,1.00714919190162,0.265285980622044,0.487198224279021,1.52710015952421,TRUE,"smoke",7,1,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30
+1,1.06415099193765,0.284447561370485,0.506644016161248,1.62165796771404,TRUE,"smoke",7,2,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30
+2,0.582464828529441,0.226370402693672,0.138786992084015,1.02614266497487,TRUE,"smoke",7,2,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30

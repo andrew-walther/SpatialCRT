@@ -1,0 +1,157 @@
+---
+title: "NC SUD Application: Smoke and Pilot Evaluation"
+format:
+  html:
+    toc: true
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+app_dir <- dirname(knitr::current_input())
+source(file.path(app_dir, "application_designs.R"))
+result_dirs <- file.path(app_dir, "results", c("smoke", "pilot"))
+available <- result_dirs[file.exists(file.path(result_dirs, "summary_results.csv"))]
+
+read_profile <- function(dir, file) {
+  path <- file.path(dir, file)
+  if (file.exists(path)) read.csv(path, stringsAsFactors = FALSE) else NULL
+}
+
+summary_results <- bind_rows(lapply(available, read_profile, file = "summary_results.csv"))
+region_balance <- bind_rows(lapply(available, function(dir) {
+  x <- read_profile(dir, "region_balance_diagnostics.csv")
+  if (!is.null(x)) x$profile <- basename(dir)
+  x
+}))
+incidence_data <- bind_rows(lapply(available, function(dir) {
+  x <- read_profile(dir, "synthetic_incidence.csv")
+  if (!is.null(x)) x$profile <- basename(dir)
+  x
+}))
+```
+
+## Status
+
+This report is intentionally limited to the `smoke` and `pilot` profiles. The full profile is defined but was not run in this phase because it requires 160,000 MLE fits. Results below validate the application pipeline and provide preliminary ranking behavior only; they are not final study evidence.
+
+```{r}
+if (nrow(summary_results) == 0) {
+  cat("No smoke or pilot result files were found.")
+} else {
+  summary_results |>
+    count(profile, name = "scenario_rows") |>
+    kable()
+}
+```
+
+```{r}
+if (nrow(incidence_data) > 0 && "population_source" %in% names(incidence_data)) {
+  incidence_data |>
+    distinct(profile, population_source) |>
+    kable(col.names = c("Profile", "Population source"))
+}
+```
+
+## K-Means Region Balance
+
+```{r}
+if (nrow(region_balance) > 0) {
+  region_balance |>
+    select(profile, region_id, n_clusters, n_counties, population, population_share, mean_incidence_rank01) |>
+    kable(digits = 3)
+}
+```
+
+```{r}
+pilot_region_map <- file.path(app_dir, "results", "pilot", "figures", "kmeans_regions_map.png")
+smoke_region_map <- file.path(app_dir, "results", "smoke", "figures", "kmeans_regions_map.png")
+region_map <- if (file.exists(pilot_region_map)) pilot_region_map else smoke_region_map
+if (file.exists(region_map)) knitr::include_graphics(region_map)
+```
+
+## Synthetic Incidence
+
+```{r}
+pilot_incidence_map <- file.path(app_dir, "results", "pilot", "figures", "synthetic_incidence_map.png")
+smoke_incidence_map <- file.path(app_dir, "results", "smoke", "figures", "synthetic_incidence_map.png")
+incidence_map <- if (file.exists(pilot_incidence_map)) pilot_incidence_map else smoke_incidence_map
+if (file.exists(incidence_map)) knitr::include_graphics(incidence_map)
+```
+
+## Design Performance
+
+```{r}
+if (nrow(summary_results) > 0) {
+  summary_results |>
+    mutate(
+      design_short_name = factor(design_short_name, levels = APPLICATION_DESIGN_DISPLAY_ORDER),
+      design_group = factor(design_group, levels = c("Blocking", "Stratified", "Saturation"))
+    ) |>
+    group_by(profile, design_id, design_short_name, design_group) |>
+    summarise(
+      mean_mse = mean(mse, na.rm = TRUE),
+      mean_bias = mean(bias, na.rm = TRUE),
+      mean_coverage = mean(coverage, na.rm = TRUE),
+      mean_fail_rate = mean(fail_rate, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    arrange(profile, design_group, design_short_name) |>
+    kable(digits = 4)
+}
+```
+
+```{r}
+if (nrow(summary_results) > 0) {
+  plot_results <- summary_results |>
+    mutate(
+      design_short_name = factor(design_short_name, levels = APPLICATION_DESIGN_DISPLAY_ORDER),
+      design_group = factor(design_group, levels = c("Blocking", "Stratified", "Saturation"))
+    )
+
+  ggplot(plot_results, aes(x = design_short_name, y = mse, fill = design_group)) +
+    geom_boxplot() +
+    coord_flip() +
+    facet_wrap(~ profile, scales = "free_x") +
+    scale_fill_manual(values = c("Blocking" = "#D55E00", "Stratified" = "#0072B2", "Saturation" = "#009E73")) +
+    labs(x = NULL, y = "MSE", fill = "Design group", title = "Smoke/Pilot MSE by Design") +
+    theme_minimal(base_size = 11)
+}
+```
+
+## Pilot Ranking
+
+```{r}
+if (nrow(summary_results) > 0 && "pilot" %in% summary_results$profile) {
+  summary_results |>
+    filter(profile == "pilot") |>
+    group_by(design_id, design_short_name, design_group) |>
+    summarise(
+      mean_mse = mean(mse, na.rm = TRUE),
+      mean_bias = mean(bias, na.rm = TRUE),
+      mean_coverage = mean(coverage, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    arrange(mean_mse) |>
+    kable(digits = 4)
+}
+```
+
+## Deferred Full Run
+
+The full profile remains reserved for later execution:
+
+- `tau = c(0.8, 1.0, 1.5, 2.0, 3.0)`
+- `gamma = c(0.5, 0.6, 0.7, 0.8)`
+- `rho = c(0, 0.01, 0.20, 0.50)`
+- Queen neighbors only
+- `spillover_type = "both"`
+- 25 design resamples and 10 outcome resamples
+- 160,000 MLE fits total

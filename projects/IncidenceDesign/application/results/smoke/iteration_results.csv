@@ -1,0 +1,33 @@
+"outcome_resample","estimate","se","ci_lower","ci_upper","converged","profile","scenario_id","design_resample","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","n_treated","n_control"
+1,0.421976220124498,0.415611821699493,-0.392607981955589,1.23656042220459,TRUE,"smoke",1,1,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.6,0.2,"both",2,2,28,30
+2,1.4983474975714,0.44128857846146,0.633437776998061,2.36325721814474,TRUE,"smoke",1,1,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.6,0.2,"both",2,2,28,30
+1,0.846115196840725,0.49979635325184,-0.13346765513734,1.82569804881879,TRUE,"smoke",1,2,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.6,0.2,"both",2,2,28,30
+2,2.29063752185563,0.481391038168457,1.3471284245651,3.23414661914615,TRUE,"smoke",1,2,1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.6,0.2,"both",2,2,28,30
+1,1.29145173569661,0.449353507395384,0.410735044874908,2.17216842651832,TRUE,"smoke",2,1,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.6,0.2,"both",2,2,29,29
+2,1.52345298111033,0.662007467748077,0.225942186827541,2.82096377539313,TRUE,"smoke",2,1,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.6,0.2,"both",2,2,29,29
+1,0.740556349835699,0.516670467828841,-0.27209915898429,1.75321185865569,TRUE,"smoke",2,2,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.6,0.2,"both",2,2,29,29
+2,1.27874064226602,0.425194349983898,0.445375029867659,2.11210625466438,TRUE,"smoke",2,2,2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.6,0.2,"both",2,2,29,29
+1,0.908021895985626,0.271146915038453,0.376583707991116,1.43946008398014,TRUE,"smoke",3,1,3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+2,1.35385742349045,0.278022216585243,0.808943892081376,1.89877095489952,TRUE,"smoke",3,1,3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+1,1.07580492426815,0.292744434380746,0.502036376207342,1.64957347232896,TRUE,"smoke",3,2,3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+2,0.2777999047222,0.29827776558211,-0.306813773207815,0.862413582652216,TRUE,"smoke",3,2,3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+1,-0.0349857624524852,0.566561525985487,-1.14542594841009,1.07545442350512,TRUE,"smoke",4,1,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,16,42
+2,1.212345336176,0.596533294235652,0.0431615638950873,2.38152910845691,TRUE,"smoke",4,1,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,16,42
+1,1.70542436489634,0.522123412131447,0.682081281633545,2.72876744815914,TRUE,"smoke",4,2,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,18,40
+2,1.1067563407716,0.635284903939856,-0.138379190872509,2.3518918724157,TRUE,"smoke",4,2,4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",2,2,18,40
+1,1.01151526444129,0.253726452542105,0.514220555533649,1.50880997334892,TRUE,"smoke",5,1,5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.6,0.2,"both",2,2,28,30
+2,0.983337077006422,0.270497720111126,0.453171287688421,1.51350286632442,TRUE,"smoke",5,1,5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.6,0.2,"both",2,2,28,30
+1,1.70524608338197,0.255024553746875,1.2054071428647,2.20508502389925,TRUE,"smoke",5,2,5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.6,0.2,"both",2,2,28,30
+2,1.04566767504669,0.233871459016263,0.587288038362977,1.5040473117304,TRUE,"smoke",5,2,5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.6,0.2,"both",2,2,28,30
+1,0.783439849503435,0.214711029297422,0.362613964996964,1.20426573400991,TRUE,"smoke",6,1,6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.6,0.2,"both",2,2,30,28
+2,1.49493739875974,0.268784413264238,0.968129629156102,2.02174516836337,TRUE,"smoke",6,1,6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.6,0.2,"both",2,2,30,28
+1,1.08675701321863,0.251296111026339,0.594225686152031,1.57928834028524,TRUE,"smoke",6,2,6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.6,0.2,"both",2,2,30,28
+2,0.800679919517644,0.178775111404838,0.450287139832027,1.15107269920326,TRUE,"smoke",6,2,6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.6,0.2,"both",2,2,30,28
+1,1.39028717648438,0.302969575843318,0.796477719420102,1.98409663354866,TRUE,"smoke",7,1,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30
+2,1.00714919190162,0.265285980622044,0.487198224279021,1.52710015952421,TRUE,"smoke",7,1,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30
+1,1.06415099193765,0.284447561370485,0.506644016161248,1.62165796771404,TRUE,"smoke",7,2,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30
+2,0.582464828529441,0.226370402693672,0.138786992084015,1.02614266497487,TRUE,"smoke",7,2,7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",2,2,28,30
+1,1.46115860680888,0.229310784891086,1.01171772715575,1.91059948646202,TRUE,"smoke",8,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+2,0.861245232863627,0.21419400002216,0.441432707115622,1.28105775861163,TRUE,"smoke",8,1,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+1,1.41660387805773,0.271338108317744,0.884790958121718,1.94841679799373,TRUE,"smoke",8,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29
+2,0.565390584793111,0.253375539021641,0.0687836537472719,1.06199751583895,TRUE,"smoke",8,2,8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",2,2,29,29

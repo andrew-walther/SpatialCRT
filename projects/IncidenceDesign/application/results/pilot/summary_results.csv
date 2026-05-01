@@ -1,0 +1,65 @@
+"profile","design_id","design_label","design_name","design_short_name","design_group","tau","gamma","rho","spillover_type","n_design_resamples","n_outcome_resamples","mean_estimate","bias","sd","mse","coverage","power","fail_rate","n_valid_est"
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.6,0,"both",5,5,1.1646581359013,0.164658135901305,0.514842542094891,0.281572631143193,0.92,0.76,0,25
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.6,0.2,"both",5,5,0.932000751046036,-0.0679992489539642,0.425659334280308,0.17856233196386,0.96,0.56,0,25
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.8,0,"both",5,5,0.849331781458468,-0.150668218541532,0.566942308300612,0.331267549782056,0.76,0.44,0,25
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",1,0.8,0.2,"both",5,5,0.932062342675878,-0.0679376573241221,0.421477653086006,0.175153200851542,0.96,0.48,0,25
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0,"both",5,5,2.07542382468842,0.0754238246884236,0.329996125173808,0.110230298255168,1,1,0,25
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.6,0.2,"both",5,5,1.93569668214944,-0.064303317850563,0.376530286563133,0.140238971117933,1,1,0,25
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.8,0,"both",5,5,2.17155481875426,0.171554818754264,0.450623959946241,0.224370530984334,0.92,1,0,25
+"pilot",1,"Design 1","Block Stratified Sampling","Block Stratified","Blocking",2,0.8,0.2,"both",5,5,1.71699071497635,-0.28300928502365,0.547409686753679,0.367765325955288,0.88,0.92,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.6,0,"both",5,5,1.06086141164751,0.0608614116475066,0.503455494491666,0.247032848964221,0.92,0.52,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.6,0.2,"both",5,5,0.888571714594302,-0.111428285405698,0.521765548657974,0.273765979044156,0.96,0.36,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.8,0,"both",5,5,1.05190477819122,0.0519047781912206,0.640057529798398,0.395980801792642,0.8,0.56,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",1,0.8,0.2,"both",5,5,0.902495990848691,-0.097504009151309,0.444619353677417,0.199285946678521,0.96,0.36,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0,"both",5,5,1.86976102012276,-0.130238979877239,0.432850535247924,0.196827394309302,0.96,0.96,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.6,0.2,"both",5,5,2.06334084555467,0.0633408455546669,0.575069234114448,0.321488501779559,0.88,1,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.8,0,"both",5,5,1.98461078143664,-0.0153892185633564,0.57098041528094,0.313214717297009,0.88,0.92,0,25
+"pilot",2,"Design 2","High Incidence Focus","Hi-Inc. Focus","Stratified",2,0.8,0.2,"both",5,5,1.98079330818681,-0.0192066918131872,0.509907113439877,0.249973950773531,0.88,1,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.6,0,"both",5,5,1.00652635503137,0.00652635503137343,0.261023298313991,0.0654504290822017,0.92,1,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.6,0.2,"both",5,5,1.00157621312495,0.00157621312494764,0.339472931456354,0.110634680791723,0.88,0.92,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.8,0,"both",5,5,0.980880257251135,-0.0191197427488652,0.293114092045136,0.0828448006800096,0.88,0.96,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",1,0.8,0.2,"both",5,5,0.976189187718779,-0.0238108122812213,0.23121909791647,0.0518907351731456,1,1,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",2,0.6,0,"both",5,5,1.97037864422395,-0.0296213557760457,0.302174673307545,0.0885345765789917,0.88,1,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",2,0.6,0.2,"both",5,5,2.00798165038753,0.00798165038753301,0.244939047274248,0.0576590381473402,0.96,1,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",2,0.8,0,"both",5,5,1.92203929127182,-0.0779607087281805,0.240585273481412,0.061643894968881,0.96,1,0,25
+"pilot",3,"Design 3","Saturation Regions","Sat. Regions","Saturation",2,0.8,0.2,"both",5,5,1.96700453471261,-0.0329954652873888,0.253238216052118,0.0626531110360202,0.96,1,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0,"both",5,5,1.02647681496104,0.0264768149610379,0.456601906879083,0.200846911041471,1,0.56,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.6,0.2,"both",5,5,1.12696453664147,0.126964536641474,0.581514251546608,0.340752465326324,0.96,0.56,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.8,0,"both",5,5,0.928055082230978,-0.0719449177690218,0.461174688195511,0.209350880503729,1,0.4,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",1,0.8,0.2,"both",5,5,1.04876282536799,0.0487628253679921,0.41083524684347,0.164411989184847,1,0.72,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",2,0.6,0,"both",5,5,1.93617993600164,-0.0638200639983571,0.548075250948172,0.29244402204258,0.92,0.96,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",2,0.6,0.2,"both",5,5,1.87780950563542,-0.122190494364579,0.626378372711481,0.391586388081716,0.84,0.92,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",2,0.8,0,"both",5,5,2.00507246977852,0.00507246977852035,0.410768400089266,0.162007181321074,1,1,0,25
+"pilot",4,"Design 4","Isolation Buffer","Iso. Buffer","Blocking",2,0.8,0.2,"both",5,5,1.98016131588181,-0.0198386841181932,0.546096146593714,0.286685734659064,0.88,0.96,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.6,0,"both",5,5,1.06185613314251,0.0618561331425131,0.234214209741989,0.0564882254106061,1,1,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.6,0.2,"both",5,5,1.07203483535467,0.0720348353546718,0.336338342125662,0.11378755867306,0.8,0.96,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.8,0,"both",5,5,0.952038725482911,-0.0479612745170891,0.256146481931399,0.0652868632509028,0.96,1,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",1,0.8,0.2,"both",5,5,1.03409650074999,0.0340965007499877,0.21680765126476,0.0462879067044582,1,1,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",2,0.6,0,"both",5,5,2.04257658751452,0.0425765875145173,0.295482353941588,0.0856301944356088,0.96,1,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",2,0.6,0.2,"both",5,5,2.08639970201574,0.08639970201574,0.29074835856366,0.088618132195573,0.96,1,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",2,0.8,0,"both",5,5,1.95569963613324,-0.0443003638667555,0.252913812678533,0.0633693030165755,0.92,1,0,25
+"pilot",5,"Design 5","2x2 Blocking","2x2 Blocking","Blocking",2,0.8,0.2,"both",5,5,2.05169715228649,0.0516971522864889,0.252754876600065,0.0640022220938418,1,1,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.6,0,"both",5,5,1.05528156725061,0.0552815672506096,0.255665287252793,0.0658062012194949,0.96,1,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.6,0.2,"both",5,5,1.00356271111112,0.00356271111112306,0.271397564770544,0.0707230655473076,0.88,0.92,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.8,0,"both",5,5,1.13139939755303,0.131399397553028,0.260386174265419,0.0823547230359368,0.96,0.96,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",1,0.8,0.2,"both",5,5,0.980167443517989,-0.019832556482011,0.288909332897583,0.0805231888265255,0.88,0.96,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",2,0.6,0,"both",5,5,2.05316412253335,0.0531641225333465,0.260123111414194,0.0677838956928696,0.92,1,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",2,0.6,0.2,"both",5,5,2.01724484236412,0.0172448423641234,0.281840884000792,0.0765542971267374,0.96,1,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",2,0.8,0,"both",5,5,2.03670539777484,0.0367053977748419,0.221009173610895,0.0482385388531731,0.96,1,0,25
+"pilot",6,"Design 6","Balanced Quartiles","Bal. Quartiles","Stratified",2,0.8,0.2,"both",5,5,2.08529429744878,0.0852942974487816,0.323855702642455,0.107962332665958,0.92,1,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0,"both",5,5,1.07329101427201,0.0732910142720078,0.279345669460213,0.0802842156973473,0.96,1,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.6,0.2,"both",5,5,1.02289825160594,0.0228982516059357,0.277912131680568,0.0746700767444368,0.88,0.96,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.8,0,"both",5,5,1.0424524215146,0.0424524215146014,0.251583343751716,0.0625646197916156,0.96,1,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",1,0.8,0.2,"both",5,5,1.01401604031215,0.0140160403121513,0.307703505996235,0.0910906390843119,0.88,1,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",2,0.6,0,"both",5,5,2.00123301102061,0.00123301102061242,0.272610273042248,0.0713452268456192,0.96,1,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",2,0.6,0.2,"both",5,5,1.96409519872403,-0.0359048012759676,0.208723287869996,0.0431119492179574,1,1,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",2,0.8,0,"both",5,5,2.00666289895499,0.0066628989549882,0.262362819148129,0.066125273138984,0.96,1,0,25
+"pilot",7,"Design 7","Balanced Halves","Bal. Halves","Stratified",2,0.8,0.2,"both",5,5,2.04835770830641,0.0483577083064059,0.320398189923599,0.100887268054713,0.96,1,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0,"both",5,5,1.04735658591865,0.0473565859186543,0.246447030166916,0.0605493393608398,0.96,1,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.6,0.2,"both",5,5,1.07310893384122,0.0731089338412234,0.344088409953301,0.119005876717024,0.92,0.96,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.8,0,"both",5,5,0.968418308676562,-0.0315816913234379,0.308554071303964,0.0923947935483703,0.96,0.96,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",1,0.8,0.2,"both",5,5,0.994162772593154,-0.00583722740684582,0.227393794496464,0.0496736934882794,1,0.96,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.6,0,"both",5,5,1.96678545618619,-0.0332145438138114,0.215503755448258,0.0456873997885702,1,1,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.6,0.2,"both",5,5,1.93093353285275,-0.0690664671472479,0.28331946744543,0.0818293006924215,0.92,1,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0,"both",5,5,1.99428887080071,-0.00571112919929359,0.231109166822233,0.0513076061064272,1,1,0,25
+"pilot",8,"Design 8","Incidence-Guided Saturation Regions","Incidence Sat. Regions","Saturation",2,0.8,0.2,"both",5,5,1.99769665080035,-0.00230334919964955,0.172497235306627,0.0285703897584283,1,1,0,25
