@@ -1,0 +1,411 @@
+---
+title: "NC SUD Application Study"
+subtitle: "Full synthetic-incidence evaluation of treatment assignment designs"
+format:
+  html:
+    toc: true
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+report_dir <- dirname(knitr::current_input())
+app_dir <- normalizePath(file.path(report_dir, ".."), mustWork = TRUE)
+source(file.path(app_dir, "code", "application_designs.R"))
+
+profiles <- c("smoke", "pilot", "full")
+result_dirs <- file.path(app_dir, "results", profiles)
+available <- result_dirs[file.exists(file.path(result_dirs, "summary_results.csv"))]
+
+read_profile <- function(dir, file) {
+  path <- file.path(dir, file)
+  if (file.exists(path)) read.csv(path, stringsAsFactors = FALSE) else NULL
+}
+
+summary_results <- bind_rows(lapply(available, read_profile, file = "summary_results.csv"))
+iteration_counts <- bind_rows(lapply(available, function(dir) {
+  path <- file.path(dir, "iteration_results.csv")
+  if (!file.exists(path)) return(NULL)
+  data.frame(profile = basename(dir), iteration_rows = nrow(read.csv(path)))
+}))
+region_balance <- bind_rows(lapply(available, function(dir) {
+  x <- read_profile(dir, "region_balance_diagnostics.csv")
+  if (!is.null(x)) x$profile <- basename(dir)
+  x
+}))
+incidence_data <- bind_rows(lapply(available, function(dir) {
+  x <- read_profile(dir, "synthetic_incidence.csv")
+  if (!is.null(x)) x$profile <- basename(dir)
+  x
+}))
+
+summary_results <- summary_results |>
+  mutate(
+    design_short_name = factor(design_short_name, levels = APPLICATION_DESIGN_DISPLAY_ORDER),
+    design_group = factor(design_group, levels = c("Blocking", "Stratified", "Saturation"))
+  )
+
+full_results <- summary_results |> filter(profile == "full")
+
+full_design_summary <- full_results |>
+  group_by(design_id, design_short_name, design_group) |>
+  summarise(
+    mean_mse = mean(mse, na.rm = TRUE),
+    mean_bias = mean(bias, na.rm = TRUE),
+    mean_coverage = mean(coverage, na.rm = TRUE),
+    mean_power = mean(power, na.rm = TRUE),
+    mean_fail_rate = mean(fail_rate, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(mean_mse)
+
+full_iteration_path <- file.path(app_dir, "results", "full", "iteration_results.csv")
+full_iteration_header <- if (file.exists(full_iteration_path)) read.csv(full_iteration_path, nrows = 1) else data.frame()
+
+full_incidence <- incidence_data |> filter(profile == "full")
+
+incidence_summary <- if (nrow(full_incidence) > 0) {
+  data.frame(
+    n_clusters = nrow(full_incidence),
+    total_population = sum(full_incidence$population, na.rm = TRUE),
+    total_synthetic_sud_count = sum(full_incidence$sud_count, na.rm = TRUE),
+    mean_rate_per_100k = mean(full_incidence$sud_rate_per_100k, na.rm = TRUE),
+    min_rate_per_100k = min(full_incidence$sud_rate_per_100k, na.rm = TRUE),
+    max_rate_per_100k = max(full_incidence$sud_rate_per_100k, na.rm = TRUE)
+  )
+} else {
+  data.frame()
+}
+
+scenario_summary <- if (nrow(full_results) > 0) {
+  full_results |>
+    summarise(
+      scenarios = n(),
+      tau_values = paste(sort(unique(tau)), collapse = ", "),
+      gamma_values = paste(sort(unique(gamma)), collapse = ", "),
+      rho_values = paste(sort(unique(rho)), collapse = ", "),
+      designs = n_distinct(design_id),
+      mean_fail_rate = mean(fail_rate, na.rm = TRUE),
+      total_valid_estimates = sum(n_valid_est, na.rm = TRUE)
+    )
+} else {
+  data.frame()
+}
+```
+
+## Executive Summary
+
+The full application run completed successfully for the synthetic placeholder SUD incidence surface. It evaluated all 8 assignment designs across 640 scenario-level combinations and 160,000 MLE fits.
+
+This application study is not the final study recommendation because the baseline incidence values are synthetic placeholders. The primary purpose is to test the NC Community College service-area geography, Queen-contiguity spillover structure, population-balanced saturation regions, and full SDM estimation pipeline before repeating the same analysis with true SUD incidence data.
+
+The full synthetic-incidence result is more nuanced than the prior 10x10 grid simulation. In the earlier grid study, Saturation Quadrants and Incidence-Guided Saturation Quadrants were clearly dominant. In this irregular 58-cluster NC application run, Balanced Quartiles and Balanced Halves have the lowest average MSE, while Saturation Regions, 2x2 Blocking, and Incidence-Guided Saturation Regions are close behind. Block Stratified Sampling, Isolation Buffer, and High-Incidence Focus remain clearly worse.
+
+The practical recommendation at this stage is therefore conditional: carry forward the saturation designs as the theoretically motivated designs supported by the prior simulation, but treat the incidence-stratified designs, especially Balanced Quartiles and Balanced Halves, as serious application-specific competitors when the true incidence data become available.
+
+## Run Status
+
+The full run was completed using the `full` profile. The `smoke` and `pilot` profiles remain in the results directory as implementation checks, but the substantive results below use the full profile.
+
+```{r}
+if (nrow(summary_results) == 0) {
+  cat("No result files were found.")
+} else {
+  summary_results |>
+    count(profile, name = "scenario_rows") |>
+    left_join(iteration_counts, by = "profile") |>
+    kable()
+}
+```
+
+```{r}
+if (nrow(incidence_data) > 0 && "population_source" %in% names(incidence_data)) {
+  incidence_data |>
+    distinct(profile, population_source) |>
+    kable(col.names = c("Profile", "Population source"))
+}
+```
+
+```{r}
+if (nrow(scenario_summary) > 0) {
+  scenario_summary |>
+    kable(col.names = c(
+      "Scenarios", "Tau values", "Gamma values", "Rho values", "Designs",
+      "Mean fail rate", "Valid MLE estimates"
+    ), digits = 4)
+}
+```
+
+## Study Design
+
+The application uses 58 dissolved North Carolina Community College service areas as the cluster units. County population comes from the NC OSBM `county-population-totals` API, using the 2024 Total Population Estimate. Spatial relationships use Queen contiguity only.
+
+Spatial weights are constructed from polygon contiguity. The binary adjacency matrix is row-standardized to form `W`, with diagonal entries set to zero. Under this convention, `WZ` is the average treatment exposure among neighboring clusters and `WY` is the average neighboring outcome.
+
+The outcome data-generating process matches the original SDM simulation structure:
+
+```text
+Y = (I - rho W)^-1 [tau Z + gamma WZ + beta X + epsilon]
+```
+
+where `Z` is treatment assignment, `WZ` is average neighbor treatment exposure under `spillover_type = "both"`, `X` is baseline incidence rank, `beta = 1`, and `epsilon` has standard deviation 1.
+
+The full profile used:
+
+- `tau = c(0.8, 1.0, 1.5, 2.0, 3.0)`
+- `gamma = c(0.5, 0.6, 0.7, 0.8)`
+- `rho = c(0, 0.01, 0.20, 0.50)`
+- all 8 designs
+- 25 design resamples
+- 10 outcome resamples
+- 160,000 total MLE fits
+
+```{r}
+model_spec <- data.frame(
+  Component = c(
+    "Cluster units", "Neighbors", "Spatial weights", "Spillover type",
+    "Direct effect", "Spillover effect", "Outcome spatial dependence",
+    "Incidence covariate", "Estimator", "Design resamples", "Outcome resamples"
+  ),
+  Specification = c(
+    "58 dissolved NC Community College service-area polygons",
+    "Queen contiguity only",
+    "Row-standardized W with W_ii = 0",
+    "both: gamma * WZ for treated and control clusters",
+    "tau in {0.8, 1.0, 1.5, 2.0, 3.0}",
+    "gamma in {0.5, 0.6, 0.7, 0.8}",
+    "rho in {0, 0.01, 0.20, 0.50}",
+    "Rank-normalized baseline incidence X",
+    "spatialreg::lagsarlm(Y ~ Z + Spill + X)",
+    "25 per design/scenario",
+    "10 per assignment"
+  )
+)
+kable(model_spec)
+```
+
+## Design Adaptations For Irregular Geography
+
+The eight original simulation designs were retained by ID and conceptual group, but grid-specific operations were adapted to the irregular NC map. The table below is important for interpreting the application results: Design 5 remains the 2x2 Blocking design conceptually, but its application implementation uses local spatial blocks because literal 2x2 grid cells do not exist on the NC service-area map.
+
+```{r}
+design_adaptations <- data.frame(
+  ID = paste0("D", 1:8),
+  Display_Name = unname(application_design_names(1:8, style = "short")),
+  Group = unname(APPLICATION_DESIGN_GROUPS[unname(application_design_names(1:8, style = "short"))]),
+  Application_Implementation = c(
+    "Graph checkerboard / block-stratified analog over the Queen-contiguity graph",
+    "Treat the top 50 percent of clusters by incidence rank",
+    "Four population-balanced centroid k-means regions with randomized 20/40/60/80 percent saturation",
+    "Greedy no-adjacent-treated assignment using Queen neighbors where feasible",
+    "Local spatial blocking analog using centroid, incidence, and population features; randomized 1:1 within blocks",
+    "Randomized 1:1 within incidence quartiles",
+    "Randomized 1:1 within incidence halves",
+    "Same k-means regions as D3, assigning higher saturation to higher-incidence regions"
+  )
+)
+design_adaptations |>
+  arrange(factor(Display_Name, levels = APPLICATION_DESIGN_DISPLAY_ORDER)) |>
+  kable()
+```
+
+## Synthetic Incidence
+
+The current baseline incidence field is a placeholder generated from a Poisson SAR process over the 58 service-area polygons. It is useful for verifying the pipeline and stress-testing design behavior under clustered baseline risk, but it should be replaced by true observed incidence before the applied recommendation is finalized.
+
+The synthetic incidence generation is deliberately separated from the outcome simulation. First, a spatially clustered baseline risk surface is generated. Second, treatment assignment designs and SDM outcomes are evaluated conditional on that baseline surface. This mirrors the planned real-data workflow, where observed pre-intervention incidence will replace the synthetic surface but the assignment and outcome evaluation code will remain the same.
+
+The placeholder incidence data-generating process is:
+
+```text
+eta = (I - rho_incidence W)^-1 [log(mu) + u]
+u_i ~ Normal(0, sigma_incidence^2)
+lambda_i = exp(eta_i) * population_i
+SUD_count_i ~ Poisson(lambda_i)
+SUD_rate_i = 100000 * SUD_count_i / population_i
+X_i = rank(SUD_rate_i) / N
+```
+
+The default values are `mu = 35 / 100000`, `rho_incidence = 0.20`, and `sigma_incidence = 0.35`. This produces positive count-based rates while inducing spatial clustering through the SAR multiplier. These values are placeholders, not claims about the final empirical SUD incidence process.
+
+```{r}
+if (nrow(incidence_summary) > 0) {
+  incidence_summary |>
+    kable(col.names = c(
+      "Clusters", "Total population", "Synthetic SUD count",
+      "Mean rate per 100k", "Min rate per 100k", "Max rate per 100k"
+    ), digits = 2)
+}
+```
+
+```{r}
+full_incidence_map <- file.path(app_dir, "results", "full", "figures", "synthetic_incidence_map.png")
+pilot_incidence_map <- file.path(app_dir, "results", "pilot", "figures", "synthetic_incidence_map.png")
+smoke_incidence_map <- file.path(app_dir, "results", "smoke", "figures", "synthetic_incidence_map.png")
+incidence_map <- if (file.exists(full_incidence_map)) full_incidence_map else if (file.exists(pilot_incidence_map)) pilot_incidence_map else smoke_incidence_map
+if (file.exists(incidence_map)) knitr::include_graphics(incidence_map)
+```
+
+## K-Means Region Balance
+
+The saturation designs use four centroid k-means regions. Candidate region partitions are scored for population balance, cluster-count balance, county-count balance, and compactness.
+
+```{r}
+if (nrow(region_balance) > 0) {
+  region_balance |>
+    filter(profile == ifelse("full" %in% region_balance$profile, "full", max(profile))) |>
+    select(region_id, n_clusters, n_counties, population, population_share, mean_incidence_rank01) |>
+    kable(digits = 3)
+}
+```
+
+```{r}
+full_region_map <- file.path(app_dir, "results", "full", "figures", "kmeans_regions_map.png")
+pilot_region_map <- file.path(app_dir, "results", "pilot", "figures", "kmeans_regions_map.png")
+smoke_region_map <- file.path(app_dir, "results", "smoke", "figures", "kmeans_regions_map.png")
+region_map <- if (file.exists(full_region_map)) full_region_map else if (file.exists(pilot_region_map)) pilot_region_map else smoke_region_map
+if (file.exists(region_map)) knitr::include_graphics(region_map)
+```
+
+## Full Results
+
+All 160,000 MLE fits converged in the full run. Coverage is close to nominal across designs, so the primary ranking differences are driven by MSE rather than outright model failure.
+
+```{r}
+if (nrow(full_design_summary) > 0) {
+  full_design_summary |>
+    mutate(rank = row_number()) |>
+    select(rank, design_id, design_short_name, design_group, mean_mse, mean_bias, mean_coverage, mean_power, mean_fail_rate) |>
+    kable(digits = 4)
+}
+```
+
+```{r}
+if (nrow(full_results) > 0) {
+  ggplot(full_results, aes(x = design_short_name, y = mse, fill = design_group)) +
+    geom_boxplot(outlier.alpha = 0.25) +
+    coord_flip() +
+    scale_fill_manual(values = c("Blocking" = "#D55E00", "Stratified" = "#0072B2", "Saturation" = "#009E73")) +
+    labs(x = NULL, y = "Scenario-level MSE", fill = "Design group", title = "Full synthetic-incidence application MSE by design") +
+    theme_minimal(base_size = 11)
+}
+```
+
+```{r}
+if (nrow(full_results) > 0) {
+  full_results |>
+    mutate(
+      mse_rank = rank(mse, ties.method = "average")
+    ) |>
+    group_by(design_id, design_short_name, design_group) |>
+    summarise(
+      average_scenario_rank = mean(mse_rank, na.rm = TRUE),
+      scenarios_ranked_first = sum(mse == min(mse), na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    arrange(average_scenario_rank) |>
+    kable(digits = 3)
+}
+```
+
+## Sensitivity Across Parameters
+
+```{r}
+if (nrow(full_results) > 0) {
+  full_results |>
+    group_by(tau, design_short_name, design_group) |>
+    summarise(mean_mse = mean(mse, na.rm = TRUE), .groups = "drop") |>
+    arrange(tau, mean_mse) |>
+    group_by(tau) |>
+    mutate(rank = row_number()) |>
+    filter(rank <= 3) |>
+    select(tau, rank, design_short_name, design_group, mean_mse) |>
+    kable(digits = 4)
+}
+```
+
+```{r}
+if (nrow(full_results) > 0) {
+  ggplot(full_results, aes(x = factor(rho), y = mse, color = design_short_name, group = design_short_name)) +
+    stat_summary(fun = mean, geom = "line") +
+    stat_summary(fun = mean, geom = "point") +
+    facet_wrap(~ tau, scales = "free_y") +
+    labs(x = "Outcome spatial dependence rho", y = "Mean MSE", color = "Design", title = "MSE by rho and tau") +
+    theme_minimal(base_size = 10) +
+    theme(legend.position = "bottom")
+}
+```
+
+```{r}
+if (nrow(full_results) > 0) {
+  full_results |>
+    group_by(gamma, design_short_name, design_group) |>
+    summarise(mean_mse = mean(mse, na.rm = TRUE), .groups = "drop") |>
+    arrange(gamma, mean_mse) |>
+    group_by(gamma) |>
+    mutate(rank = row_number()) |>
+    filter(rank <= 3) |>
+    select(gamma, rank, design_short_name, design_group, mean_mse) |>
+    kable(digits = 4)
+}
+```
+
+```{r}
+if (nrow(full_results) > 0) {
+  full_results |>
+    group_by(rho, design_short_name, design_group) |>
+    summarise(mean_mse = mean(mse, na.rm = TRUE), .groups = "drop") |>
+    arrange(rho, mean_mse) |>
+    group_by(rho) |>
+    mutate(rank = row_number()) |>
+    filter(rank <= 3) |>
+    select(rho, rank, design_short_name, design_group, mean_mse) |>
+    kable(digits = 4)
+}
+```
+
+## Comparison With The Previous Simulation Study
+
+The previous regular-grid simulation found a clear top tier: Saturation Quadrants and Incidence-Guided Saturation Quadrants were consistently best, while Block Stratified Sampling was the worst design. The NC application run preserves part of that conclusion but not all of it.
+
+The preserved finding is that designs designed around rigid separation or extreme targeting are unattractive under spillover. Block Stratified Sampling, Isolation Buffer, and High-Incidence Focus remain the three worst designs in this synthetic application run.
+
+The changed finding is the top tier. On the irregular NC map with one fixed synthetic incidence surface, incidence-stratified randomization is slightly better than saturation-region randomization. Balanced Quartiles and Balanced Halves have the lowest mean MSE, but their advantage over Saturation Regions, 2x2 Blocking, and Incidence-Guided Saturation Regions is modest. This suggests the irregular geometry and the specific synthetic incidence realization make direct incidence balance more valuable than the regional saturation gradient in this placeholder analysis.
+
+This difference should not be overinterpreted as a rejection of the prior simulation result. The grid study averaged over many incidence configurations on a regular lattice, while this application run uses one irregular NC geography and one placeholder incidence realization. The most stable conclusion across both studies is negative: rigid spatial separation and high-incidence-only targeting are poor choices when spillover is expected.
+
+## Recommendation
+
+For the synthetic-incidence application run, the best empirical performers are Balanced Quartiles and Balanced Halves. These should be included as leading candidates in stakeholder-facing application results.
+
+However, the prior grid simulation and the current applied theory still support retaining Saturation Regions and Incidence-Guided Saturation Regions as core candidates. They are close in MSE, are robustly motivated under spillover, and were the dominant designs in the broader theoretical grid simulation.
+
+The current recommendation is:
+
+1. Treat Balanced Quartiles and Balanced Halves as the strongest synthetic-application performers.
+2. Retain Saturation Regions and Incidence-Guided Saturation Regions as primary comparators and likely robust choices under spatial spillover.
+3. Avoid Block Stratified Sampling, Isolation Buffer, and High-Incidence Focus for this application unless there are non-statistical implementation constraints that dominate the statistical design objective.
+
+## Required Next Step With True Incidence Data
+
+This study must be repeated after true SUD incidence data are available. The code is already structured for that replacement: true incidence should be joined to the 58 service-area clusters using the same fields currently produced by the placeholder generator, especially `cluster_id`, `population`, `sud_count`, `sud_rate_per_100k`, and `incidence_rank01`.
+
+The true-incidence analysis should be considered the definitive application analysis. Synthetic incidence is only a bridge for checking that the geography, weights matrix, design generators, SDM estimator, output schema, and reporting workflow function end to end.
+
+The true-incidence rerun should use the same full profile so the design recommendation is directly comparable:
+
+- same 58 clusters
+- same Queen-contiguity spatial weights
+- same population-balanced k-means regions
+- same full `tau`, `gamma`, and `rho` grid
+- same 25 design resamples and 10 outcome resamples
+- same SDM/MLE estimator
+
+The final applied design recommendation should be based on the true-incidence rerun, with this synthetic run serving as pipeline validation and a prior expectation for design behavior.
