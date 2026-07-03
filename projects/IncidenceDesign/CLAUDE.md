@@ -238,6 +238,27 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
   except S6, no DIM-vs-MLE comparison, no design shorthand, numeric accuracy,
   S-numbering) — one gap found and fixed (two generated CD-diagram figures
   were missing from the SI; added to S7 as Figures S1-S2).
+- Added the three NC application maps already produced by the application
+  study (`application/report/figures/community_college_service_area_clusters.png`,
+  `application/results/full/figures/{synthetic_incidence_map,kmeans_regions_map}.png`)
+  to SI Section S11 as Figures S8-S10, and the incidence map alone to the main
+  text's Application section (Figure 4) to visually motivate the study. These
+  are the "full" profile placeholder maps and **will need to be swapped for
+  updated maps once the real SUDDEN-derived county data is finalized** —
+  same caveat as the numeric placeholder results.
+- To make room for the new main-text Figure 4 (NC incidence map) without
+  exceeding the 6-exhibit cap, merged the separate coverage and
+  tau-sensitivity figures into one 2-panel `fig_coverage_tau_6design.pdf`
+  (built manually in `code/14_manuscript_supplement_figures.R` rather than
+  via `plot_coverage_by_design()`, which hardcodes its own
+  `reorder(Design, Coverage)` and would ignore the best-to-worst factor
+  ordering used everywhere else). Exhibits are still exactly 6 (2 tables + 4
+  figures: MSE, bias-variance, coverage+tau combined, NC incidence map).
+- **Open per user request:** do a full review of the manuscript's figure list
+  (main text + SI) to decide what to keep, drop, or further combine, now that
+  the exhibit budget is being actively traded off between figures rather than
+  fixed — this was a quick swap to fit the incidence map in, not a
+  considered final selection.
 - **Not yet done:** the application-table naming wrinkle extends beyond the
   single relabeling the original plan anticipated — the application study
   also calls design 8 "Incidence-Guided Saturation Regions" (not "...
@@ -501,7 +522,8 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 | Priority | Task | File |
 |----------|------|------|
 | High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
-| High | Replace placeholder Application-section numbers with real SUDDEN-derived data once finalized | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| High | Full review of the main-text + SI figure list to deliberately decide what to keep/drop/combine (the coverage+tau merge done 2026-07-03 was a quick fit for the new NC incidence map, not a considered final selection) | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` |
+| High | Replace placeholder Application-section numbers AND maps (community-college service-area/incidence/k-means-region maps) with real SUDDEN-derived data once finalized | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | Medium | Apply UNC Graduate School dissertation template/formatting | `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | Medium | Fix the pre-existing `plot_cd_diagram()` label-collision bug (designs with adjacent ranks overlap regardless of image width) — currently worked around by omitting the CD diagram from the dissertation chapter's inline exhibits | `code/10_statistical_comparisons.R` |
 | Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |

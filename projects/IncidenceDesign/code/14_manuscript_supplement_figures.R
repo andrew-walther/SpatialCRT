@@ -215,6 +215,38 @@ p_biasvar <- plot_bias_variance(results_rep_6, rep_label_6) +
   labs(title = "Bias-Variance Decomposition of MSE (ranked best to worst)")
 ggsave(file.path(six_dir, "fig_biasvar_6design.pdf"), p_biasvar, width = 9, height = 6)
 
+# Combined coverage + tau-sensitivity 2-panel figure (frees an exhibit slot in
+# the main text -- see CTJ_Manuscript.tex Figure 3 -- to make room for the NC
+# application incidence map without exceeding the journal's 6-exhibit cap).
+# Both panels use the same best-to-worst Design factor levels/colors. Built
+# manually rather than via plot_coverage_by_design(), which hardcodes its own
+# reorder(Design, Coverage) internally and would ignore our factor levels;
+# stacked vertically (not side-by-side) because the coverage panel is faceted
+# by neighbor type and does not compress well to half width.
+mle_tau1_6_leveled <- mle_tau1_6
+mle_tau1_6_leveled$Design <- factor(mle_tau1_6_leveled$Design, levels = best_to_worst_6)
+mle_full_6_leveled <- mle_full_6
+mle_full_6_leveled$Design <- factor(mle_full_6_leveled$Design, levels = best_to_worst_6)
+
+p_coverage_panel <- ggplot(mle_tau1_6_leveled, aes(x = Design, y = Coverage, fill = Design)) +
+  geom_boxplot(alpha = 0.8, outlier.alpha = 0.5) +
+  geom_hline(yintercept = 0.95, linetype = "dashed", color = "red", linewidth = 0.8) +
+  facet_wrap(~ Neighbor_Type,
+             labeller = as_labeller(c("queen" = "Queen Contiguity", "rook" = "Rook Contiguity"))) +
+  scale_fill_viridis_d(option = "turbo") +
+  theme_minimal(base_size = 14) +
+  labs(x = "Sampling Design", y = "Coverage Probability") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  ylim(0, 1)
+
+p_tau_panel <- plot_mse_vs_tau(mle_full_6_leveled) +
+  labs(title = NULL, subtitle = NULL)
+
+p_coverage_tau <- (p_coverage_panel / p_tau_panel) +
+  plot_annotation(tag_levels = "a")
+ggsave(file.path(six_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width = 9, height = 11)
+
 # ==============================================================================
 # (c) SI FIGURES (6 designs, full names, ranking-oriented)
 # ==============================================================================
@@ -437,9 +469,7 @@ ggsave(file.path(si_dir, "si_fig_performance_pvalue_twopanel.pdf"), p_twopanel,
        width = 11, height = 4.5)
 
 # --- SI Fig 6: tau-sweep mean-MSE line + 95% coverage line (6 designs) ---
-mle_full_6_leveled <- mle_full_6
-mle_full_6_leveled$Design <- factor(mle_full_6_leveled$Design, levels = best_to_worst_6)
-
+# (mle_full_6_leveled already built above, ahead of the main-text combined figure)
 p_tau_mse <- plot_mse_vs_tau(mle_full_6_leveled) +
   labs(title = "MSE vs. True Tau by Design (6-design set)")
 p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
