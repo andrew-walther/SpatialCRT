@@ -10,6 +10,7 @@ format:
     cite-method: natbib
     biblio-style: unsrt
     header-includes: |
+      \usepackage{lineno}
       \AtBeginDocument{
         \author{Andrew Walther$^1$, Ross Joseph Simpson, Jr.$^2$, Ashkan Habib$^1$, and Feng-Chang Lin$^1$}
         \date{
@@ -17,6 +18,7 @@ format:
             $^2$Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA\\
             $^*$Corresponding author: Feng-Chang Lin, flin33@email.unc.edu
         }
+        \linenumbers
       }
 bibliography: shared-refs.bib
 ---
