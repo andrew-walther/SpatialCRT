@@ -1,0 +1,292 @@
+---
+title: "Design-Stage Mitigation of Spatial Spillover in Cluster Randomized Trials: A Simulation Study of Treatment Assignment Strategies Under Heterogeneous Outcome Incidence"
+author: "Andrew J. Walther"
+format:
+  pdf:
+    documentclass: article
+    geometry: "a4paper, margin=1in"
+    linestretch: 2
+    fontsize: 11pt
+    keep-tex: true
+    cite-method: natbib
+    biblio-style: unsrt
+bibliography: shared-refs.bib
+---
+
+\begin{abstract}
+\noindent Cluster randomized trials (CRTs) are the standard design when an intervention must be delivered at the group level, but they are vulnerable to two closely related threats when clusters are spatially arranged: spatial spillover, in which a treatment effect diffuses from treated to nearby control clusters, and spatial dependence, in which a cluster's outcome is correlated with its neighbors' outcomes independent of treatment. The existing methodological literature on spatial interference is concentrated almost entirely on analysis-stage correction, detecting and modeling spillover after outcomes are observed, and has largely neglected design-stage mitigation: choosing a treatment assignment strategy, before randomization, that limits spillover's ability to bias estimation in the first place. This chapter extends an earlier proof-of-concept study of a single block-stratified design on small, exhaustively enumerable grids to a substantially larger and more realistic setting: a 100-cluster spatial grid, six conceptually distinct treatment assignment strategies, and three mechanisms of heterogeneous baseline outcome incidence, so that some designs can exploit prior knowledge of spatial risk while others cannot. Outcomes were generated from a spatial Durbin model and estimated with maximum likelihood spatial regression across 9,600 simulated scenarios spanning five magnitudes of the true treatment effect. An incidence-guided saturation design, which varies treatment intensity across spatial regions in proportion to historical incidence, achieved the lowest mean squared error (MSE = 0.079) with near-nominal 95\% confidence interval coverage (94\%), while a design that maximizes spatial separation between treated and control clusters (checkerboard-style alternation) performed worst by a wide margin (MSE = 0.802) with coverage collapsing to 53\%. This ranking was stable across all five tested effect magnitudes (Friedman $\chi^2$ range 557.3--800.9, all $p < 2.2\times10^{-16}$) and across all three incidence-heterogeneity mechanisms, though the second-best design's advantage depended heavily on how informative the observed incidence surface was. A preliminary, explicitly placeholder application to a planned sudden unexpected death prevention pilot in North Carolina, delivered through the state's community college network, illustrated the same qualitative pattern on a real, irregular geography. These findings support incorporating spatial spillover structure into the design stage of cluster randomized trials as an actionable complement to, rather than a substitute for, analysis-stage correction.
+\end{abstract}
+
+\newpage
+
+# Introduction
+
+Cluster randomized trials (CRTs) randomize intact groups, such as clinics, schools, or geographic areas, rather than individuals, and are the standard design when an intervention is delivered at the group level or when individual randomization would create unacceptable contamination between arms [@donner_design_2000; @hayes_cluster_2017]. A central assumption underlying standard CRT analysis is the stable unit treatment value assumption (SUTVA): a control cluster's outcome must not depend on which other clusters were assigned to treatment [@hudgens_toward_2008]. This assumption, borrowed from individually randomized trial theory, is routinely violated once clusters are spatially arranged. Tobler's first law of geography, "everything is related to everything else, but near things are more related than distant things" [@tobler_computer_1970], implies that an intervention delivered in one location can plausibly influence outcomes in geographically adjacent locations through shared populations, service networks, information diffusion, or environmental pathways. Documented examples of this kind of spatial spillover span public health and development economics: distributing insecticide-treated bed nets in one Ghanaian village reduced child mortality in neighboring villages that did not themselves receive nets [@binka_impact_1998], and deworming interventions delivered in treated Kenyan schools reduced infection prevalence in nearby untreated schools through reduced transmission [@miguel_worms_2004]. When spillover of this kind is present but unmodeled, standard CRT estimators are biased, and both the direction and the magnitude of that bias depend on the spatial arrangement of treated and control clusters relative to one another, not merely on the number of clusters allocated to each arm.
+
+## The design-stage gap in the spatial interference literature
+
+The methodological literature addressing spatial interference in CRTs has concentrated overwhelmingly on analysis-stage correction. Spatial autocorrelation statistics such as Moran's $I$ [@moran_interpretation_1948] and Geary's $C$ [@geary_contiguity_1954] provide tools for detecting residual spatial dependence once outcomes have been observed, and spatial regression models, including the spatial Durbin model formalized by Ord [@ord_estimation_1975] and implemented in modern software by Bivand and others [@bivand_r_2022], allow an analyst to separate a direct treatment effect from a spillover effect after the fact. Jarvis and colleagues conducted a systematic review of spatial analysis methods for cluster randomized trials and found that the available methodological toolkit is heavily weighted toward exactly this kind of post-hoc correction, with comparatively little guidance on how the choice of treatment assignment itself, made before any data are collected, might limit the problem at its source [@jarvis_spatial_2017].
+
+Design-stage tools do exist, but they were largely developed for a different purpose. Covariate-constrained randomization balances measured covariates across trial arms to reduce confounding and improve precision [@crisp_covariate-constrained_2023], building on foundational work on balance in cluster randomized trials more generally [@raab_balance_2001], but neither was developed with spatial spillover specifically in mind; balancing a covariate across arms says nothing about whether treated and control clusters are spatially interspersed in a way that induces contamination. A more targeted, and more recent, body of work has begun to converge on the exact problem addressed in this chapter. Randomized saturation designs deliberately vary the intensity of treatment across experimental units, which allows direct and spillover effects to be jointly identified rather than merely controlled for [@baird_optimal_2018]. In the malaria control literature, "fried-egg" and buffer-zone designs leave a ring of untreated units around each treated cluster specifically to absorb contamination before it reaches the control arm [@mccann_spatial_2018]. Most recently, a cluster of theoretical papers published between 2022 and 2025 has derived rate-optimal cluster-randomized designs under spatial interference [@leung_rateoptimal_2022], independent-set designs under network interference [@cai_independentset_2023], designs that explicitly account for cross-cluster interference [@leung_clusterrandomized_2025], and designs for spatio-temporally heterogeneous treatment effects [@watson_design_2025]. Taken together, this recent work signals that the field is actively moving toward design-stage solutions to spatial interference, but it has not yet produced a systematic, simulation-based comparison of concrete design strategies under realistic, heterogeneous spatial conditions of the kind a trial team would actually face when planning a study.
+
+## Extending a small-grid proof of concept
+
+This chapter extends an earlier proof-of-concept study (Project 1 of this dissertation) that asked a narrower version of the same question: how does a priori treatment-assignment strategy affect estimation under spatial spillover and spatial dependence? That study compared simple random assignment against a single block-stratified design, on small, exhaustively enumerable grids of 8 to 12 spatial units arranged in $2\times4$, $3\times3$, and $3\times4$ configurations, and estimated a structural spatial Durbin model with separate parameters for a baseline effect, a direct treatment effect, a spillover effect, and a spatial dependence parameter, all fit via maximum likelihood spatial regression. That prior work's own discussion explicitly anticipated two natural extensions: a substantially larger design space than a single alternative to simple random assignment, and heterogeneous, rather than spatially uniform, baseline outcome risk. This chapter answers both. We scale from 8--12 clusters to a 100-cluster grid, from two designs to six conceptually distinct treatment assignment strategies (with two additional statistically redundant variants reported in the supplementary material for completeness), and from a single, uniform baseline risk surface to three distinct mechanisms of heterogeneous baseline incidence, so that some of the designs under study can exploit prior knowledge of spatial risk patterns while others cannot.
+
+## Aims
+
+This chapter has three aims. First, to rank the six treatment assignment designs by estimation accuracy, measured by mean squared error (MSE), and by inferential validity, measured by 95\% confidence interval coverage, separately within each of the three incidence-heterogeneity mechanisms, since a design that performs well under one mechanism may not generalize to another. Second, to test whether that ranking is stable across the spatial and spillover parameters that a real trial team cannot control or know in advance, including the magnitude of the true treatment effect itself, the strength of residual spatial dependence in the outcome, and the magnitude of the spillover effect. Third, to translate the resulting ranking into concrete, actionable design guidance, illustrated using a real and currently developing application: a planned sudden unexpected death (SUD) prevention pilot to be delivered through North Carolina's community college network. The remainder of this chapter describes the simulation methods in full detail, reports the design comparison results comprehensively across all three aims, presents the SUD application context, and discusses implications, limitations, and directions for future work.
+
+# Methods
+
+## Spatial structure and outcome model
+
+We simulated a $10\times10$ regular grid of 100 clusters, with spatial adjacency defined by queen contiguity, under which two clusters are neighbors if they share an edge or a corner. A binary adjacency matrix was constructed from this contiguity structure and row-standardized to form the spatial weights matrix $W$, so that $WZ$ represents, for each cluster, the proportion of its neighbors that are treated, and $WY$ represents the average outcome among its neighbors. Row-standardization ensures that each cluster's spillover exposure is expressed as an average over its own neighborhood rather than a raw sum, which would otherwise depend mechanically on how many neighbors a cluster happens to have.
+
+Cluster-level outcomes $Y$ were generated from a spatial Durbin model (SDM),
+$$
+Y = (I - \rho W)^{-1}\left[\tau Z + \gamma W Z + \beta X + \epsilon\right], \qquad \epsilon \sim N(0, \sigma^2 I), \tag{1}
+$$
+where $Z \in \{0,1\}^{100}$ is the binary treatment assignment vector determined by the design under evaluation, $\tau$ is the direct treatment effect of scientific interest, $\gamma$ is the spillover coefficient governing how strongly a cluster's outcome responds to the treatment status of its neighbors through the term $WZ$, $\rho$ is the spatial autoregressive coefficient governing residual dependence in the outcome that is not explained by treatment or spillover, $X$ is a baseline incidence covariate with fixed coefficient $\beta = 1$, and $\sigma = 1$. The matrix inverse $(I-\rho W)^{-1}$, sometimes called the spatial multiplier, propagates local shocks through the network of neighbors and is the standard reduced-form representation of a simultaneous spatial autoregressive process. When $\rho = 0$ the model reduces to a spatial lag-of-$X$ model with no residual dependence; larger values of $\rho$ (we tested $\rho \in \{0, 0.01, 0.20, 0.50\}$) induce progressively stronger spatial clustering in the outcome independent of treatment.
+
+Spillover exposure was evaluated under two distinct regimes, motivated by different substantive mechanisms. Under the "control only" regime, the spillover term $\gamma WZ$ is added only to control clusters' outcomes, representing classical contamination in which treatment effects leak specifically into untreated neighbors, biasing the control mean upward and attenuating the apparent treatment effect. Under the "both" regime, the spillover term is added to treated and control clusters alike, representing a setting in which neighboring treatment reinforces a cluster's own outcome regardless of that cluster's own assignment. We tested four levels of spillover magnitude, $\gamma \in \{0.5, 0.6, 0.7, 0.8\}$, and five magnitudes of the true direct effect, $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$, with $\tau = 1.0$ treated as the primary scenario throughout.
+
+## Heterogeneous baseline incidence
+
+The earlier proof-of-concept study assumed a spatially uniform baseline outcome risk. Real cluster-level health and social outcomes, by contrast, typically vary across space in ways that a trial team may or may not be able to observe in advance, and some treatment assignment strategies are specifically designed to exploit that variation while others ignore it entirely. To capture this, we generated the baseline incidence covariate $X$ under three distinct mechanisms. Under the independent (iid) mechanism, incidence was drawn as independent noise with no spatial structure at all. Under the spatially autocorrelated mechanism, incidence was generated from the same spatial autoregressive process used for the outcome model, at two autocorrelation strengths, $\rho_X \in \{0.20, 0.50\}$. Under the Poisson mechanism, a spatially autocorrelated log-relative-risk surface (again at $\rho_X \in \{0.20, 0.50\}$) was exponentiated and used to generate cluster-level Poisson death counts calibrated to a sudden-death base rate of 35 per 100,000 population, motivated directly by the applied setting described later in this chapter, with equal population size assumed across clusters. Incidence rates were then computed from the simulated counts and populations in the usual way.
+
+Critically, incidence was generated once per (mechanism, $\rho_X$) configuration and then held fixed across every replication of every design and every outcome-model parameter combination evaluated under that configuration; only the outcome-generating parameters ($\rho$, $\gamma$, spillover regime, $\tau$) varied within a configuration. Furthermore, only the first replication's realized incidence surface was exposed to the incidence-aware designs described below, mirroring how a real trial team would use a single historical surveillance snapshot to inform its design rather than having access to the full underlying risk distribution.
+
+## Treatment assignment designs
+
+Eight treatment assignment designs were implemented and simulated in total, representing distinct conceptual strategies for limiting spillover-induced bias, targeting high-burden clusters, or balancing incidence across arms. For the purposes of design comparison and recommendation in this chapter, six of these eight are presented as the primary comparison set; two are excluded because they were found to be statistically indistinguishable from a retained design implementing the identical underlying mechanism with an incidence-informed refinement. Specifically, a plain "Saturation Quadrants" design, which randomizes the treated fraction within each spatial quadrant without reference to incidence, was excluded in favor of its incidence-guided counterpart (Nemenyi post-hoc $p = 1.00$ between the two at the primary scenario, i.e., no detectable difference; the incidence-guided version additionally aligns with this chapter's incidence-informed thesis). A "Balanced Halves" design, which stratifies clusters into two strata by a median incidence split before 1:1 randomization within each half, was excluded in favor of "Balanced Quartiles," a finer four-stratum version of the identical balancing mechanism that achieved both a lower mean MSE (0.102 versus 0.110 at the primary scenario) and a better average rank. Both excluded designs, together with the full eight-design statistical comparison, are reported in the supplementary material for transparency; their exclusion here reflects redundancy with a retained design, not poor performance in an absolute sense.
+
+The six retained designs are summarized in Table 1, ordered by mean squared error at the primary scenario (reported fully in the Results section below). Two of the six, Checkerboard and High Incidence Focus, are deterministic given the realized incidence surface: a single assignment was generated for each and held fixed across all replications within a scenario, since re-randomizing a deterministic rule would simply reproduce the identical assignment. The remaining four designs were independently re-randomized for each of the 25 design replications drawn per scenario.
+
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{The six treatment assignment designs retained for the primary comparison in this chapter, ordered by mean squared error at the primary scenario (see Table 2).}
+\begin{tabular}{p{3.4cm}p{8.2cm}p{1.4cm}p{1.7cm}}
+\toprule
+Design & Targeting logic & \% treated & Deterministic \\
+\midrule
+Incidence-Guided Saturation Quadrants & The grid is partitioned into four spatial quadrants using population-balanced k-means-style regions; each quadrant receives a randomized saturation level between 20\% and 80\% treated, assigned in rank order of the quadrant's average incidence so that higher-burden quadrants receive higher saturation & $\sim$50 & No \\
+Balanced Quartiles & Clusters are stratified into incidence quartiles based on the observed baseline incidence surface; within each quartile, clusters are 1:1 randomized to treatment and control & $\sim$50 & No \\
+High Incidence Focus & The top 50\% of clusters ranked by observed baseline incidence are assigned to treatment; the bottom 50\% serve as control & 50 & Yes \\
+Isolation Buffer & Clusters are greedily assigned to treatment such that no two treated clusters are spatially adjacent, creating an untreated buffer around every treated unit & 20--30 & No \\
+2$\times$2 Blocking & The grid is partitioned into non-overlapping 2$\times$2 spatial blocks; within each block, two of the four clusters are randomly assigned to treatment (1:1 randomization within block) & 50 & No \\
+Checkerboard & Treatment alternates across the grid in a checkerboard pattern, maximizing the spatial separation between every treated cluster and its nearest treated neighbor & 50 & Yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+## Estimation
+
+The direct treatment effect $\tau$ was estimated in every scenario using maximum likelihood spatial regression (the `lagsarlm` function from the `spatialreg` package in R), fit to a spatial Durbin specification matching the true outcome-generating model in Equation 1, including the true spillover exposure term $WZ$ as a covariate. This is an oracle specification: the analyst is assumed to know the correct functional form of the spillover mechanism and to have the correct exposure term available for inclusion in the model. This represents a best-case bound on estimation performance under each design, rather than a claim about what an analyst without this knowledge could achieve in practice; the implications of this assumption are discussed as a limitation below. A degenerate-assignment guard returns all estimates as missing for any replication in which a design happens to produce a treatment vector that is entirely 0 or entirely 1, since a spatial regression model cannot separately identify a treatment effect under complete confounding with the intercept.
+
+## Simulation design, resampling, and metrics
+
+The full parameter space combined five incidence configurations (independent; two spatial-incidence strengths; two Poisson strengths), two neighbor definitions (queen and rook contiguity), four levels of outcome spatial dependence $\rho$, four levels of spillover magnitude $\gamma$, two spillover exposure regimes, the six retained designs, and five true treatment-effect magnitudes $\tau$, for a total of $5 \times 2 \times 4 \times 4 \times 2 \times 6 \times 5 = 9{,}600$ scenarios in the six-design comparison (equivalently $12{,}800$ scenarios across all eight implemented designs). At the primary scenario, $\tau = 1.0$, this reduces to $2 \times 4 \times 4 \times 2 \times 6 = 384$ scenarios; the statistical comparisons reported below, however, treat each unique combination of (Incidence\_Mode, Rho\_Incidence, Neighbor\_Type, Rho, Gamma, Spillover\_Type) as a single repeated-measures block across the six designs, yielding 320 blocks at the primary scenario (the six-design comparison necessarily has fewer blocks with complete design coverage than the raw scenario count, since blocks are defined independent of the design dimension itself).
+
+Each scenario was replicated 25 times over independent draws of the treatment assignment and 10 times over independent draws of the outcome noise $\epsilon$, for 250 total Monte Carlo iterations per scenario, with the exception of the two deterministic designs (Checkerboard and High Incidence Focus), which were replicated only over the 10 outcome draws, since re-randomizing a deterministic assignment rule produces no additional variation. Each scenario was assigned a fixed pseudo-random seed derived deterministically from a digest of its full parameter tuple, ensuring exact reproducibility of any individual scenario's results independent of execution order or parallelization.
+
+For each scenario, we report five metrics computed across the valid (non-degenerate) Monte Carlo iterations: bias, defined as the mean of $\hat\tau - \tau$; standard deviation of $\hat\tau$; mean squared error, $\text{MSE} = \text{Bias}^2 + \text{SD}^2$; empirical 95\% confidence interval coverage, the fraction of iterations whose Wald confidence interval for $\tau$ contained the true value; and statistical power, the fraction of iterations whose 95\% confidence interval excluded zero. All 12,800 iterations across the full eight-design tau-sweep converged with zero convergence failures (fail rate = 0.0), so no scenario's metrics were computed from a materially reduced effective sample size.
+
+# Results
+
+## Overall design performance at the primary scenario
+
+At the primary scenario ($\tau = 1.0$), averaged across all 320 spatial and spillover parameter configurations, Incidence-Guided Saturation Quadrants achieved the lowest mean squared error (MSE = 0.079) with 95\% confidence interval coverage close to the nominal level (94.1\%), followed in order by Balanced Quartiles (MSE = 0.102, coverage 93.8\%), High Incidence Focus (MSE = 0.133, coverage 96.6\%), Isolation Buffer (MSE = 0.148, coverage 93.9\%), and 2$\times$2 Blocking (MSE = 0.228, coverage 93.7\%); all five maintained coverage within a few percentage points of the nominal 95\% level (Table 2, Figure 1). Checkerboard performed worst by a wide margin on both criteria (MSE = 0.802) and its coverage collapsed to 52.7\% (Figure 2), meaning the nominal 95\% confidence interval failed to contain the true treatment effect roughly half the time. This magnitude of coverage failure is not merely a loss of precision; it represents a design-induced inferential failure in which a trial analyst using this design and estimator combination would draw a systematically overconfident and frequently wrong conclusion about the treatment effect.
+
+```{r}
+#| echo: false
+#| results: asis
+results_tbl <- data.frame(
+  Design = c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+             "High Incidence Focus", "Isolation Buffer", "2x2 Blocking", "Checkerboard"),
+  MSE = c(0.079, 0.102, 0.133, 0.148, 0.228, 0.802),
+  Coverage = c(0.941, 0.938, 0.966, 0.939, 0.937, 0.527),
+  `Avg. Friedman Rank` = c(1.881, 2.534, 2.756, 4.144, 4.278, 5.406),
+  check.names = FALSE
+)
+knitr::kable(results_tbl, digits = 3, caption = "Mean squared error, 95% confidence interval coverage, and average Friedman rank (lower is better) by design at the primary scenario (tau = 1.0), averaged over 320 spatial and spillover parameter configurations.")
+```
+
+## Formal statistical comparison
+
+An omnibus Friedman rank-sum test, treating each of the 320 parameter configurations as a repeated-measures block across the six designs, strongly rejected the null hypothesis of equal average MSE ranks at the primary scenario ($\chi^2 = 800.9$, $\text{df} = 5$, $p < 2.2\times10^{-16}$). Nemenyi post-hoc pairwise comparisons, which control the family-wise error rate across all $\binom{6}{2}=15$ pairwise comparisons, found 13 of these 15 comparisons statistically significant at $\alpha = 0.05$; pairwise Wilcoxon signed-rank tests with Holm correction for multiple comparisons agreed on the identical 13 of 15 significant pairs. The two non-significant pairs were Isolation Buffer versus 2$\times$2 Blocking (Nemenyi $p = 0.945$) and High Incidence Focus versus Balanced Quartiles (Nemenyi $p = 0.664$), indicating that these two pairs of designs, while distinct in average rank and mean MSE, are not reliably distinguishable at this sample size, whereas Checkerboard is significantly worse than every other design and Incidence-Guided Saturation Quadrants is significantly better than every design except Balanced Quartiles.
+
+## Design rankings by incidence-generating mechanism
+
+Because the incidence-aware designs' performance depends on how informative the observed incidence surface actually is, we next examine the design ranking separately within each of the five incidence configurations (independent; two spatial strengths; two Poisson strengths) rather than pooling across them. Two patterns are notable. First, Incidence-Guided Saturation Quadrants ranked first or effectively tied for first in every configuration, with MSE ranging narrowly from 0.077 (spatial, $\rho_X=0.20$) to 0.081 (Poisson, $\rho_X=0.50$); its performance is remarkably stable regardless of how the underlying incidence heterogeneity was generated. Second, and in contrast, High Incidence Focus is highly sensitive to the incidence-generating mechanism: it is essentially tied for best under the independent (iid) mechanism (MSE = 0.080, indistinguishable from Incidence-Guided Saturation Quadrants at 0.080) and under the higher-autocorrelation spatial mechanism (MSE = 0.078), but degrades substantially under both Poisson mechanisms (MSE = 0.202 and 0.207), where it falls behind Balanced Quartiles and Isolation Buffer and approaches the range separating the top tier from Checkerboard. This is because High Incidence Focus commits fully to a single deterministic binary split of the grid based on the observed incidence surface; when that surface is a noisy realization of a Poisson count process rather than a smooth, spatially coherent risk surface, the resulting split can meaningfully diverge from the true underlying risk pattern, and unlike the saturation and quartile-stratification designs, there is no randomization within the design to average out that misclassification. This finding, more than any single aggregate MSE number, is the clearest evidence that incidence-informed designs must be evaluated against a plausible incidence-generating mechanism for the target application, not assumed to perform uniformly well simply because they use observed incidence data.
+
+Checkerboard's degradation is similarly mechanism-dependent, but in the opposite direction: its MSE is worst under the independent mechanism (1.059) and improves, while remaining far worse than every other design, as the incidence surface becomes more spatially autocorrelated (0.791 at spatial $\rho_X=0.20$, falling to 0.546 at spatial $\rho_X=0.50$). Because Checkerboard's assignment does not use the incidence surface at all, this pattern reflects an interaction between the incidence covariate's own spatial structure and the outcome model's spatial dependence term, rather than any property of the design itself; a full account of that interaction is left to future work.
+
+## Parameter sensitivity
+
+Table 3 examines mean MSE by design across the four tested levels of outcome spatial dependence, $\rho \in \{0, 0.01, 0.20, 0.50\}$. Five of the six designs are essentially flat across this range, varying by less than 0.03 MSE units from lowest to highest $\rho$. Checkerboard, by contrast, is highly sensitive: its MSE rises from 0.715 at $\rho=0$ to a peak of 0.992 at $\rho=0.20$ before falling back to 0.757 at $\rho=0.50$, a pattern that is not monotonic and that we do not attempt to fully explain mechanistically here, but that stands in sharp contrast to the near-total insensitivity of the other five designs to this parameter.
+
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{Mean squared error by design across the four tested levels of outcome spatial dependence $\rho$, at the primary scenario ($\tau=1.0$).}
+\begin{tabular}{lcccc}
+\toprule
+Design & $\rho=0$ & $\rho=0.01$ & $\rho=0.20$ & $\rho=0.50$ \\
+\midrule
+Incidence-Guided Saturation Quadrants & 0.082 & 0.077 & 0.075 & 0.081 \\
+Balanced Quartiles & 0.100 & 0.101 & 0.101 & 0.107 \\
+High Incidence Focus & 0.110 & 0.118 & 0.148 & 0.157 \\
+Isolation Buffer & 0.148 & 0.143 & 0.150 & 0.150 \\
+2$\times$2 Blocking & 0.231 & 0.222 & 0.228 & 0.230 \\
+Checkerboard & 0.715 & 0.746 & 0.992 & 0.757 \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+A clearer and more interpretable pattern emerges from spillover magnitude $\gamma \in \{0.5, 0.6, 0.7, 0.8\}$ (Table 4). Checkerboard's MSE rises monotonically and substantially with spillover magnitude, from 0.710 at $\gamma=0.5$ to 0.905 at $\gamma=0.8$, a nearly 30\% relative increase, while every other design's MSE changes by less than 0.02 units across the same range. This monotonic relationship directly implicates the spillover mechanism, rather than outcome spatial dependence generally, as the specific driver of Checkerboard's failure: a design built to maximize the physical separation between treated and control clusters is, mechanically, a design that maximizes the number of treated-control neighbor pairs across which spillover can operate, and the resulting bias grows worse precisely as the spillover coefficient governing that leakage grows larger.
+
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{Mean squared error by design across the four tested levels of spillover magnitude $\gamma$, at the primary scenario ($\tau=1.0$).}
+\begin{tabular}{lcccc}
+\toprule
+Design & $\gamma=0.5$ & $\gamma=0.6$ & $\gamma=0.7$ & $\gamma=0.8$ \\
+\midrule
+Incidence-Guided Saturation Quadrants & 0.079 & 0.079 & 0.078 & 0.079 \\
+Balanced Quartiles & 0.101 & 0.103 & 0.105 & 0.101 \\
+High Incidence Focus & 0.133 & 0.133 & 0.133 & 0.133 \\
+Isolation Buffer & 0.145 & 0.148 & 0.149 & 0.149 \\
+2$\times$2 Blocking & 0.231 & 0.229 & 0.223 & 0.228 \\
+Checkerboard & 0.710 & 0.765 & 0.830 & 0.905 \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+The spillover exposure regime (Table 5) also matters substantially for every design, though in a way that runs counter to a naive intuition. Every design's MSE is markedly higher under the "control only" spillover regime than under the "both" regime; for Checkerboard specifically, MSE under "control only" (1.323) is more than four times its MSE under "both" (0.282). This is consistent with the "control only" regime inducing a purely asymmetric bias, in which spillover systematically inflates control-cluster outcomes without any corresponding change in treated-cluster outcomes, shrinking the apparent treatment effect in a way that a maximum likelihood spatial model estimating a single global $\tau$ cannot fully separate from the true effect. Under the "both" regime, by contrast, spillover raises treated and control outcomes together to some degree, partially canceling in the difference that identifies $\tau$. This pattern held for every design tested and is a substantive finding independent of the specific design comparison: classical one-sided contamination, in which only the control arm is exposed to spillover, appears to be a materially harder estimation problem than reciprocal, symmetric spillover exposure, regardless of which treatment assignment strategy is used.
+
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{Mean squared error by design under each spillover exposure regime, at the primary scenario ($\tau=1.0$).}
+\begin{tabular}{lcc}
+\toprule
+Design & Both arms exposed & Control-only exposed \\
+\midrule
+Incidence-Guided Saturation Quadrants & 0.044 & 0.113 \\
+Balanced Quartiles & 0.044 & 0.161 \\
+High Incidence Focus & 0.104 & 0.162 \\
+Isolation Buffer & 0.148 & 0.148 \\
+2$\times$2 Blocking & 0.057 & 0.398 \\
+Checkerboard & 0.282 & 1.323 \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+## Tau sensitivity and rank stability
+
+The design ranking established at the primary scenario was stable across all five tested magnitudes of the true treatment effect. The omnibus Friedman test rejected the null of equal design ranks at every tested level of $\tau$ (Figure 3; $\chi^2 = 730.6$, $800.9$, $705.7$, $658.5$, and $557.3$ for $\tau = 0.8, 1.0, 1.5, 2.0, 3.0$ respectively, all $p < 2.2\times10^{-16}$), and Checkerboard's coverage failure was equally severe across all tested levels of outcome spatial dependence, remaining between 51.3\% and 54.3\% at every level of $\rho$ (Table 6) even as $\rho$ itself varied fourfold. Taken together, these results indicate that the relative advantage of incidence-informed and buffering designs over Checkerboard does not depend on the size of the true effect a trial is powered to detect, nor on the underlying strength of spatial dependence in the outcome.
+
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{Checkerboard's 95\% confidence interval coverage across the four tested levels of outcome spatial dependence $\rho$, at the primary scenario ($\tau=1.0$). The nominal level is 0.95.}
+\begin{tabular}{lcccc}
+\toprule
+& $\rho=0$ & $\rho=0.01$ & $\rho=0.20$ & $\rho=0.50$ \\
+\midrule
+Coverage & 0.513 & 0.535 & 0.518 & 0.543 \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+## Subgroup robustness and win-rate
+
+Beyond the average MSE reported above, it is useful to ask how consistently each design performs across the full range of 320 tested parameter configurations, since a design with a good average but highly variable performance carries different practical risk than one that is consistently mediocre. Table 7 reports the full MSE distribution (minimum, first quartile, median, third quartile, and maximum) by design at the primary scenario. Incidence-Guided Saturation Quadrants and Balanced Quartiles both show tight, low distributions (medians of 0.059 and 0.076 respectively, with maxima below 0.28), consistent with their low average MSE reflecting genuinely consistent performance rather than a few very good configurations offsetting many poor ones. Checkerboard, by contrast, has both the highest median (0.456) and by far the widest spread (maximum MSE of 4.81, an order of magnitude above its own median), indicating that its poor average performance understates just how badly it can fail in its worst-case configurations.
+
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{Distribution of MSE by design across the 320 tested parameter configurations at the primary scenario ($\tau=1.0$), sorted by median.}
+\begin{tabular}{lccccc}
+\toprule
+Design & Best & Q25 & Median & Q75 & Worst \\
+\midrule
+Incidence-Guided Saturation Quadrants & 0.034 & 0.044 & 0.059 & 0.109 & 0.189 \\
+Balanced Quartiles & 0.033 & 0.043 & 0.076 & 0.166 & 0.274 \\
+High Incidence Focus & 0.012 & 0.051 & 0.086 & 0.166 & 0.504 \\
+2$\times$2 Blocking & 0.039 & 0.057 & 0.120 & 0.311 & 0.821 \\
+Isolation Buffer & 0.102 & 0.131 & 0.146 & 0.164 & 0.206 \\
+Checkerboard & 0.033 & 0.190 & 0.456 & 0.817 & 4.812 \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+A complementary "win-rate" analysis, which asks how often each design achieves the single lowest MSE among all six designs within a given parameter configuration rather than simply averaging across configurations, surfaces a more nuanced picture. High Incidence Focus wins outright in 36.6\% of the 320 configurations, marginally more often than Incidence-Guided Saturation Quadrants (35.9\%), despite having a substantially higher average MSE (0.133 versus 0.079). This apparent contradiction is resolved by the incidence-mechanism-dependent pattern already described above: High Incidence Focus wins decisively when the incidence surface is smooth and informative (the iid and higher-autocorrelation spatial mechanisms), but loses badly enough under the Poisson mechanisms to pull its average down without ever becoming the single worst design in any individual configuration. Balanced Quartiles wins 19.1\% of configurations, and Checkerboard, Isolation Buffer, and 2$\times$2 Blocking together account for the remaining 8.4\%. This win-rate pattern reinforces a central practical implication of this chapter: a single point estimate of average MSE can obscure meaningfully different risk profiles across designs, and the choice between a consistently good design (Incidence-Guided Saturation Quadrants) and a design that is excellent under favorable conditions but degrades sharply under others (High Incidence Focus) should be informed by how confident a trial team is in the quality of its own historical incidence data.
+
+```{=latex}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_mse_by_design_6design.pdf}
+\caption{Mean squared error by design and spillover exposure regime, at the primary scenario ($\tau=1.0$), faceted by outcome spatial dependence $\rho$ and spillover exposure regime.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\linewidth]{figures/fig_coverage_by_design_6design.pdf}
+\caption{95\% confidence interval coverage by design at $\tau=1.0$. The dashed red line marks the nominal 95\% level.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\linewidth]{figures/fig_tau_sensitivity_6design.pdf}
+\caption{Mean squared error by design across the five tested treatment-effect magnitudes.}
+\end{figure}
+
+```
+
+A critical difference diagram summarizing these Nemenyi post-hoc comparisons graphically is archived with the supplementary six-design results bundle; the same information is reported numerically above and in Table 2.
+
+# Application: A Planned Sudden Unexpected Death Prevention Pilot in North Carolina
+
+## Background
+
+Sudden unexpected death (SUD) in adults is a substantial and incompletely understood cause of premature mortality. The SUDDEN (Sudden Unexpected Death in North Carolina) methodology, a validated algorithm for classifying deaths as sudden and unexpected from death certificate and medical record data, was developed and screened against expert physician panel review by Nanavati and colleagues [@nanavati_sudden_2014]. Using this methodology, Mirzaei and colleagues estimated a North Carolina SUD base rate of approximately 35 per 100,000 among adults aged 20--64 and found that the resulting years of life lost and productivity loss from SUD exceed that of any individual cancer, underscoring SUD's substantial and under-recognized public health burden [@mirzaei_years_2019]. Subsequent work has documented substantial geographic and socioeconomic gradients in SUD incidence within North Carolina specifically: Gan and colleagues found elevated SUD incidence in rural counties relative to urban counties [@gan_factors_2019], and Mounsey and colleagues found an inverse relationship between household income and SUD incidence in Wake County [@mounsey_relation_2017]. Together, this literature establishes both that SUD is a meaningful and measurable outcome in North Carolina and that its incidence varies spatially and socioeconomically in ways that are directly relevant to the incidence-informed designs evaluated in this chapter.
+
+## The planned pilot design
+
+A pilot intervention is being planned in collaboration with North Carolina's community college (CC) system, which offers a natural spatial and organizational unit for the design framework developed in this chapter. North Carolina's 58 community colleges collectively serve all 100 counties in the state; each college has a primary campus in one county and, in many cases, satellite campuses in neighboring counties (for example, Durham Technical Community College operates a satellite campus in Orange County in addition to its primary Durham County campus). This network structure is a direct, real-world analog of the spillover mechanism modeled throughout this chapter, because community colleges within a shared service network communicate and coordinate programmatic activity with one another; an intervention delivered at one college plausibly influences outcomes at a neighboring college's service area even without any formal expansion of the intervention itself, exactly as the spillover term $\gamma WZ$ in Equation 1 models diffusion between spatially adjacent clusters.
+
+The planned pilot site is Lenoir County Community College, with anticipated spillover to its Kinston and Jones County satellite sites; the pilot intervention involves workforce development and disaster-response-style training intended to empower CC students and staff to recognize signs of medical distress, connect at-risk individuals to care, and support timely follow-up. Because the teaching intervention under consideration is delivered county-wide by design, rather than at finer spatial resolution such as the census tract level, the natural treatment unit for this application is the CC service area (equivalently, a group of one or more counties) rather than the census tract, notwithstanding that individual-level incidence data may still be collected at finer resolution to inform the incidence-aware design components. The eventual evaluation plan anticipates that the intervention's effect will be visible first in intermediate process measures, such as medication adherence and the timeliness of clinic visits following an at-risk event, since meaningful shifts in the SUD incidence rate itself are not expected to be detectable on the timescale of an initial pilot; this expected measurement lag between process outcomes and the ultimate incidence outcome modeled throughout this chapter is discussed further as a limitation below.
+
+Real SUD incidence data for this eventual application is currently being finalized, not yet available for use in this dissertation chapter. In collaboration with an epidemiology co-investigator, approximately 100,000 North Carolina death certificates from 2018--2021 have been classified as SUD or non-SUD using the SUDDEN algorithm, restricted to individuals aged 18--64, with cases pooled to the county level using death-certificate zip codes and population-at-risk denominators estimated from Surveillance, Epidemiology, and End Results (SEER) data for the corresponding years. Access to the underlying data requires joining an active institutional review board protocol governing the SUDDEN dataset, a process that is underway at the time of this writing. Planned covariates for the eventual real-data application, once finalized, include county-level median income, food-desert status, physician access, and average driving distance to the nearest hospital, none of which are incorporated into the placeholder illustration below.
+
+## A preliminary, explicitly placeholder illustration
+
+As a preliminary illustration only, and not as a finalized design recommendation, we re-ran the six-design comparison pipeline over the actual 58-cluster CC service-area geography, using dissolved county-level service boundaries and Queen contiguity, rather than the abstract $10\times10$ regular grid used in the primary comparison above. Because real SUD incidence data is not yet available, the baseline incidence surface used in this application run is a synthetic placeholder, generated from a Poisson spatial autoregressive process calibrated to the same 35-per-100,000 base rate reported above, with population drawn from 2024 North Carolina Office of State Budget and Management county population estimates. \textbf{The numeric results reported in this subsection are a simulated placeholder and must not be interpreted as a design recommendation for the real application}; they will be superseded once the real SUDDEN-derived county dataset described above is finalized and substituted for the synthetic incidence surface.
+
+With that caveat stated clearly, the qualitative pattern observed on this real, irregular geography was consistent with the primary grid-based comparison reported above: designs that stratify or saturate treatment according to incidence (Balanced Quartiles and the saturation-family designs) again achieved the lowest average MSE, in the range of 0.075--0.078, while a design adapted from the grid-based Checkerboard concept and a design that ignores incidence entirely (High Incidence Focus, applied without a reliable real incidence signal) performed markedly worse, with average MSE above 0.23. This qualitative consistency across a substantially different, irregular real-world geography is reassuring evidence that the primary comparison's conclusions are not an artifact specific to the regular $10\times10$ grid, though it is not a substitute for repeating the full comparison once real incidence data replace the synthetic placeholder.
+
+# Discussion
+
+## Summary and relevance
+
+This chapter provides, to our knowledge, the first systematic, simulation-based comparison of multiple conceptually distinct treatment assignment strategies for spatial cluster randomized trials under heterogeneous, rather than uniform, baseline outcome incidence. Its central finding is that treatment assignment design, chosen before a trial begins, can materially reduce estimation error and preserve valid statistical inference under spatial spillover, without requiring any change to the analysis-stage estimator. This finding is directly actionable: it suggests that a trial team choosing among a small number of concrete assignment strategies, at the pre-registration stage of a spatial CRT, can substantially improve their study's expected performance by preferring incidence-informed saturation or stratification designs and by explicitly avoiding a design intuition imported from non-spatial CRT practice, namely that maximizing physical separation between treatment arms is a conservative, safe default. In this simulation, that intuition was actively harmful: Checkerboard's maximal spatial separation between treated and control clusters was the single worst-performing strategy on both estimation accuracy and inferential validity, and its failure was shown, through the parameter sensitivity analysis above, to be specifically and monotonically driven by the magnitude of the spillover coefficient rather than by outcome spatial dependence more broadly. This is a design-stage complement to the existing analysis-stage literature reviewed in the Introduction, not a substitute for it; a well-chosen design reduces the burden placed on post-hoc statistical correction, but does not eliminate the value of spatial regression modeling, which was used as the estimator for every design compared in this chapter.
+
+## Limitations
+
+Several limitations bound the conclusions drawn here and motivate the future work outlined below. First, and most significantly, estimation throughout this chapter used an oracle maximum likelihood specification, in which the true spillover exposure term was supplied to the estimator as a known covariate. This represents a best-case bound on estimation performance under each design; a non-oracle specification, in which an analyst must estimate or approximate the spillover structure without knowing it in advance, would be expected to show more uniformly degraded performance across all designs, and the relative ranking among designs under a realistic, non-oracle estimation strategy remains an open empirical question. Second, the outcome model held the incidence coefficient $\beta$ fixed at 1 throughout and assumed equal population size across all clusters in the Poisson incidence mode; the real North Carolina application described above, by contrast, involves substantially heterogeneous county and CC-service-area populations, and heterogeneous population sizes may alter the relative performance of incidence-informed designs in ways not captured by the equal-population simulation reported here. Third, the primary comparison used a regular $10\times10$ lattice with queen contiguity, a geometry chosen for computational tractability and ease of interpretation rather than realism; the preliminary application-scale illustration on the actual 58-cluster CC network geography, reported above, suggests the qualitative design ranking is at least broadly robust to this simplification, but the grid size and regularity were not themselves systematically varied as an experimental factor. Fourth, and specific to the applied setting, the process-versus-incidence outcome measurement lag noted above, in which meaningful SUD rate changes are not expected to be detectable on the timescale of an initial pilot, means that the eventual real-data evaluation of the design framework developed in this chapter will need to rely on intermediate process outcomes (medication adherence, timely clinic visits) as a proxy for the incidence-based outcome modeled throughout the simulation study, and the relationship between design performance on an incidence outcome and design performance on a process-outcome proxy has not been separately established.
+
+## Future work
+
+Several extensions follow directly from the limitations above and are natural next steps for this line of work. Relaxing the oracle estimation assumption, by evaluating design performance under a non-oracle spatial regression specification that does not assume the analyst knows the true spillover exposure term, is the highest-priority extension, since it would test whether the design-stage advantages documented here survive under estimation conditions a real analyst would actually face. Incorporating heterogeneous cluster population sizes into the Poisson incidence-generating mechanism would bring the simulation closer to the real North Carolina application, where county and CC-service-area populations vary substantially. Evaluating design performance directly and systematically on irregular, real-world geographies at multiple scales, rather than treating the CC-network application as a single confirmatory check, would clarify how much of the grid-based ranking generalizes broadly versus reflecting properties specific to a regular lattice. Finally, and most immediately, applying the design-selection framework developed in this chapter to the real SUDDEN-derived North Carolina county dataset, once data access and IRB processes described above are finalized, is the natural culmination of this work and the step that will determine whether the design recommendations illustrated here as a simulated placeholder hold under real, observed incidence heterogeneity.
+
+# References
