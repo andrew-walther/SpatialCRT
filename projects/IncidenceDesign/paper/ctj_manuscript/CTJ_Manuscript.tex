@@ -113,7 +113,9 @@ Checkerboard & 0.802 & 0.527 \\
 \end{tabular}
 \end{table}
 
-Incidence-Guided Saturation Quadrants achieved the lowest MSE (0.079) with coverage close to the nominal 95\% level (94\%), followed by Balanced Quartiles (MSE 0.102), High Incidence Focus (MSE 0.133), Isolation Buffer (MSE 0.148), and 2$\times$2 Blocking (MSE 0.228); all four maintained coverage between 93\% and 97\% (Table~\ref{tab:results}, Figure~\ref{fig:mse}). Checkerboard, the design that maximizes spatial separation between treated and control clusters, performed worst by a wide margin (MSE 0.802) and its confidence interval coverage collapsed to 53\% (Figure~\ref{fig:coverage}), meaning the nominal 95\% interval failed to contain the true treatment effect roughly half the time. This is a design-induced inferential failure, not merely a loss of precision: maximizing distance between treated and control units, an intuition carried over from non-spatial CRT practice, concentrates spillover exposure asymmetrically across the grid in a way that a maximum likelihood spatial model estimating a single global $\tau$ cannot fully correct.
+Incidence-Guided Saturation Quadrants achieved the lowest MSE (0.079) with coverage close to the nominal 95\% level (94\%), followed by Balanced Quartiles (MSE 0.102), High Incidence Focus (MSE 0.133), Isolation Buffer (MSE 0.148), and 2$\times$2 Blocking (MSE 0.228); all four maintained coverage between 93\% and 97\% (Table~\ref{tab:results}, Figure~\ref{fig:mse}). Checkerboard, the design that maximizes spatial separation between treated and control clusters, performed worst by a wide margin (MSE 0.802) and its confidence interval coverage collapsed to 53\% (Figure~\ref{fig:coverage}), meaning the nominal 95\% interval failed to contain the true treatment effect roughly half the time. This is a design-induced inferential failure, not merely a loss of precision: maximizing distance between treated and control units, an intuition carried over from non-spatial CRT practice, concentrates spillover exposure asymmetrically across the grid in a way that a maximum likelihood spatial model estimating a single global $\tau$ cannot fully correct. The complete eight-design comparison, full parameter-sensitivity breakdowns, and reproducibility details are provided in the online supplementary material.
+
+Decomposing MSE into its squared-bias and variance components clarifies why the designs differ so sharply (Figure~\ref{fig:biasvar}). Checkerboard's error is almost entirely variance, not bias: its rigid alternating pattern creates near-perfect collinearity between the treatment vector $Z$ and the average-neighbor-treatment vector $WZ$, so the spatial model cannot stably separate the direct effect from the spillover effect, inflating estimator variance without necessarily shifting its center. Incidence-Guided Saturation Quadrants and Balanced Quartiles, in contrast, achieve low bias and low variance simultaneously, because their heterogeneous, incidence-informed saturation levels preserve contrast between $Z$ and $WZ$ rather than collapsing it.
 
 High Incidence Focus, while competitive in mean MSE, showed the largest cross-configuration variability of the top five designs (MSE ranging from 0.078 to 0.207 depending on the incidence-generating mechanism), because its performance is entirely contingent on how informative the observed incidence surface is; when historical incidence poorly reflects the true underlying risk surface, targeting the wrong half of the grid can approach the separation problem that degrades Checkerboard.
 
@@ -122,7 +124,13 @@ This ranking was stable across all five tested treatment-effect magnitudes. The 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.95\linewidth]{figures/fig_mse_by_design_6design.pdf}
-\caption{Mean squared error by design and spillover exposure regime, at the primary treatment-effect magnitude ($\tau=1.0$), faceted by outcome spatial dependence $\rho$ and spillover exposure regime.\label{fig:mse}}
+\caption{Mean squared error by design and spillover exposure regime, at the primary treatment-effect magnitude ($\tau=1.0$), faceted by outcome spatial dependence $\rho$ and spillover exposure regime. Designs are ordered best to worst (left to right) by pooled mean MSE, matching Table~\ref{tab:results}.\label{fig:mse}}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_biasvar_6design.pdf}
+\caption{Bias-squared and variance contributions to MSE for each design (Poisson incidence, $\rho_X=0.20$, $\tau=1.0$), ordered best to worst. Checkerboard's MSE is almost entirely variance; Incidence-Guided Saturation Quadrants and Balanced Quartiles achieve low bias and low variance simultaneously.\label{fig:biasvar}}
 \end{figure}
 
 \begin{figure}[h]

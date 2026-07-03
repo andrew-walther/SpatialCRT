@@ -1,0 +1,23 @@
+======================================================================
+6-DESIGN APPLICATION-SCALE TABLE (NC 58-cluster community college network)
+Source: application/results/full/application_full_results.rds$summary_results
+Filtered to design_id in {1,2,4,5,6,8} (the 6 retained manuscript designs),
+tau = 1.0, averaged over gamma/rho/spillover_type.
+
+NOTE (relabeling): the application study's design_id 1 is named
+'Block Stratified Sampling' (application_designs.R), not 'Checkerboard' --
+the Checkerboard concept was adapted to a block-stratified analog for the
+irregular NC geography. Design_id 8 is similarly named 'Incidence-Guided
+Saturation Regions' in the application code (vs. 'Incidence-Guided
+Saturation Quadrants' in the grid study) for the same reason -- 'regions'
+(k-means clusters) replace the literal 2x2 grid quadrants on the irregular
+map. Both are the application study's own names, used verbatim below.
+======================================================================
+
+                         design_name        mse coverage   power
+                  Balanced Quartiles 0.07010799  0.93775 0.97050
+ Incidence-Guided Saturation Regions 0.07782345  0.93375 0.96600
+                        2x2 Blocking 0.07815068  0.92800 0.96125
+           Block Stratified Sampling 0.23225578  0.93025 0.59200
+                    Isolation Buffer 0.26489664  0.93825 0.55325
+                High Incidence Focus 0.26858947  0.93850 0.53450
