@@ -39,6 +39,14 @@ the outcome DGP. DIM ignores both and produces systematically poor coverage (~72
 sanity-check simulation mechanics and as a secondary comparator. All substantive
 design recommendations should be based on MLE results.
 
+**Manuscript prose rule (both `paper/ctj_manuscript/` and `paper/dissertation_chapter/`):
+no DIM-vs-MLE comparison, ever.** DIM was always an internal validation baseline,
+never a scientific comparator — MLE (`lagsarlm`) is simply presented as *the*
+estimator. This is a stricter rule than the codebase/report language above, which is
+allowed to mention DIM as a baseline; manuscript prose should not mention DIM at all.
+See `feedback_no_dim_comparison_no_shorthand` in the Claude Code memory system for
+the reasoning behind this distinction.
+
 ---
 
 ## File Map
@@ -57,22 +65,21 @@ design recommendations should be based on MLE results.
 | `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative report | Knitted to `results/MLE_design_recommendation_report.pdf` |
 | `10_statistical_comparisons.R` | ~1050 | Formal hypothesis tests on design MSE | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()`, `plot_conditional_cd_diagrams()`, `generate_comparison_report()` |
 | `11_statistical_comparisons_report.qmd` | ~543 | Narrative statistical comparisons report | Renders to `results/11_statistical_comparisons_report.{html,pdf}` |
+| `12_six_design_statistical_comparisons.R` | ~180 | Re-run Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs + named-label figures | Outputs to `results/six_design_manuscript/` |
+| `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **paper/report/** | | | |
-| `IncidenceSpatialCRT_Report.qmd` | ~1100 | Unified project report (50+ pages) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
-| **paper/manuscript/** | | | |
-| `IncidenceSpatialCRT_Manuscript.qmd` | ~80 | Master manuscript | Assembles child sections via `{{< include >}}` |
-| `_abstract.qmd` | ~20 | Structured abstract | Background, Methods, Results, Conclusion |
-| `_introduction.qmd` | ~40 | Introduction | Lit review, motivation, aims (converted from LaTeX draft) |
-| `_methods.qmd` | ~150 | Theoretical methods | Spatial structure, SDM, incidence modes, 8 designs, MLE |
-| `_simulation.qmd` | ~80 | Simulation study | Parameter space, metrics, results (placeholders for figures) |
-| `_application.qmd` | ~15 | Application | SUD in NC (skeleton — content TBD) |
-| `_discussion.qmd` | ~30 | Discussion | Relevance, limitations, future work (skeleton — content TBD) |
-| **paper/section_drafts/** | | | |
-| `*.tex` | varies | Archival LaTeX drafts | Original Gemini-drafted sections (6-design era) |
-| `references.bib` | ~113K | Canonical bibliography | Comprehensive Zotero export |
+| `IncidenceSpatialCRT_Report.qmd` | ~1100 | Unified project report (50+ pages, 8-design) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
+| **paper/archive_manuscript/** | | | |
+| (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
+| **paper/ctj_manuscript/** | | | |
+| `CTJ_Manuscript.tex` | ~215 | *Clinical Trials* (SAGE) submission draft, 6 designs, condensed | Compiles via `sagej.cls` — see Current State section for `TEXINPUTS`/`BSTINPUTS` setup |
+| **paper/dissertation_chapter/** | | | |
+| `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, 6 designs, full detail, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
 | **paper/** | | | |
-| `spatialCRT.bib` | ~86K | Secondary bibliography | Zotero export (subset) |
+| `spatialCRT.bib` | ~86K | Base bibliography (Zotero export) | Included in `IncidenceDesign_shared.bib` |
+| `IncidenceDesign_shared.bib` | ~99K, 79 entries | Single shared bibliography for both manuscripts | `spatialCRT.bib` + SUD/SUDDEN citations + design-theory citations |
+| `SAGE_Journal_Template/` | — | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
 | `SpatialCRT_IncidenceDesign_Presentation.qmd` | ~26 | Presentation template | Quarto revealjs slides (scaffold) |
 
 ---
@@ -195,7 +202,49 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-04-08)
+## Current State (as of 2026-07-02)
+
+**Manuscripts (CTJ + dissertation chapter):** First full drafts COMPLETE
+- Two documents, both written fresh (not edits of the retired `paper/archive_manuscript/`
+  files): a short manuscript targeting *Clinical Trials* (SAGE) and a longer-form
+  dissertation chapter, sharing a bibliography and verified facts but not prose files.
+- `paper/ctj_manuscript/CTJ_Manuscript.tex` — compiles via `sagej.cls` (Sage Vancouver
+  style). 7 pages, ~2,255-word body (limit 3,500), ~398-word abstract (limit 425), 6
+  exhibits (limit 6). Requires TinyTeX on `PATH` plus
+  `TEXINPUTS`/`BSTINPUTS=".:../SAGE_Journal_Template:"` to find `sagej.cls`/`SageV.bst`.
+- `paper/dissertation_chapter/Dissertation_Chapter.qmd` — Quarto, renders to a
+  simple double-spaced `article`-class PDF (`linestretch: 2`, `unsrt` numbered
+  citations) matching the format of the SpillSpatialDepSim (Project 1) manuscript,
+  per user direction — not the UNC Graduate School template yet (to be applied in a
+  later pass once all dissertation chapters are ready to merge). 28 pages, no length
+  ceiling, full theory + full simulation detail + a fuller Results section (per-
+  incidence-mode rankings, Rho/Gamma/spillover-regime sensitivity, subgroup
+  robustness/win-rate) than the CTJ version. Bibliography must be referenced via the
+  `shared-refs.bib` symlink in that directory, not the `../IncidenceDesign_shared.bib`
+  path directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib
+  filenames referenced from YAML.
+- **Both manuscripts present 6 designs, not 8** (Checkerboard, High Incidence Focus,
+  Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Incidence-Guided Saturation
+  Quadrants), dropping Saturation Quadrants and Balanced Halves as statistically
+  redundant with a retained design (see `code/12_six_design_statistical_comparisons.R`
+  and `results/six_design_manuscript/`). **This is unrelated to the older "6-design
+  era" mentioned elsewhere in this file** (the pre-Balanced-Halves/pre-Incidence-
+  Guided-Saturation-Quadrants phase, before those two designs existed) — the overlap
+  in count is coincidental.
+- Shared bibliography: `paper/IncidenceDesign_shared.bib` (79 entries) — base
+  `paper/spatialCRT.bib` plus 13 new SUD/SUDDEN citations (converted from
+  `application/Bibliography_Sudden_Death.html`), 1 Project-1 carryover citation, and
+  6 new 2001–2025 design-theory citations, all verified against CrossRef/arXiv.
+- Both manuscripts reviewed by fresh agents against the plan's decisions (6 designs,
+  no DIM comparison, no design shorthand, accurate Project-1/meeting-notes grounding,
+  numeric accuracy against `results/six_design_manuscript/`) — all checks passed
+  after two small fixes (a table-layout bug and a swapped rho_X label).
+- **Not yet done:** actual journal/advisor submission (waiting on Ashkan Habib's real
+  SUDDEN-derived county dataset — current Application-section numbers are an
+  explicitly labeled simulated placeholder), UNC dissertation template formatting,
+  and a consolidated user review/revision pass on both documents together.
+
+## Prior Simulation State (as of 2026-04-08)
 
 **Tau-sweep simulation:** COMPLETE — 12,800 scenarios, τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}
 - Data: `results/sim_data/sim_results_MLE_tau_sweep_combined_20260408_191916.rds`
@@ -233,14 +282,23 @@ results/
   sim_data/          # All .rds files (load_latest_results() auto-detects this)
   mle_per_config/    # MLE per-config PDFs (tau_sweep_* + tau_sweep_*_tau_sensitivity)
   figures/           # design_samples_8panel + design_samples_option1_overlays
+  six_design_manuscript/  # 6-design stats re-run + named-label figures (both manuscripts pull from here)
   archive/
     pre_tau_sweep_20260408/  # Archived pre-sweep deliverables
 paper/
   report/
     IncidenceSpatialCRT_Report.{qmd,html,pdf}  # Unified report (now 50+ pages with tau section)
-  manuscript/
-    figures/   # design_samples_8panel + design_samples_option1_overlays (for manuscript use)
-    *.qmd      # Modular manuscript sections
+  archive_manuscript/  # Retired paper/manuscript/ + paper/section_drafts/ content (reference only,
+                        # byte-identical to last commit before this location was retired 2026-07-02)
+  ctj_manuscript/
+    CTJ_Manuscript.{tex,pdf}  # Clinical Trials (SAGE) submission draft
+    figures/
+  dissertation_chapter/
+    Dissertation_Chapter.{qmd,pdf}  # Longer-form dissertation chapter draft
+    figures/
+    shared-refs.bib -> ../IncidenceDesign_shared.bib  # symlink, see note above
+  IncidenceDesign_shared.bib  # Single bibliography shared by both manuscripts
+  SAGE_Journal_Template/      # sagej.cls, SageH.bst, SageV.bst (CTJ render dependency)
 ```
 
 **Git:** Original work on `claude/gallant-buck` → `main` 2026-03-05.
@@ -248,6 +306,7 @@ Reorganized into `projects/IncidenceDesign/` on `claude/dreamy-wiles`.
 Statistical comparisons + report expansions on `claude/elated-lederberg`.
 Tau-sweep + MC SEs + Power implementation on `main` 2026-04-08.
 Tau-sweep results integrated, all reports regenerated on `main` 2026-04-08.
+CTJ + dissertation-chapter manuscript first drafts on `main` 2026-07-02.
 
 ---
 
@@ -392,12 +451,15 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 ### Manuscript Development (open)
 
+First full drafts of both manuscripts are complete (see Current State above:
+`paper/ctj_manuscript/`, `paper/dissertation_chapter/`). Remaining work:
+
 | Priority | Task | File |
 |----------|------|------|
-| High | Populate simulation results section with live R chunks | `paper/manuscript/_simulation.qmd` |
-| High | Prose review and polish of all sections | `_introduction.qmd`, `_methods.qmd` |
-| Medium | Develop Application section (SUD in NC, policy implications) | `paper/manuscript/_application.qmd` |
-| Medium | Develop Discussion section (oracle MLE limitations, future work) | `paper/manuscript/_discussion.qmd` |
+| High | Consolidated user review/revision pass on both documents together | Both |
+| High | Replace placeholder Application-section numbers with real SUDDEN-derived data once finalized | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| Medium | Apply UNC Graduate School dissertation template/formatting | `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| Medium | Fix the pre-existing `plot_cd_diagram()` label-collision bug (designs with adjacent ranks overlap regardless of image width) — currently worked around by omitting the CD diagram from the dissertation chapter's inline exhibits | `code/10_statistical_comparisons.R` |
 | Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |
 
 ### Known Minor Issues (low-priority cleanup)

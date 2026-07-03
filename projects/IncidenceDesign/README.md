@@ -50,6 +50,8 @@ The predecessor Rmd is preserved untouched.
 | `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative PDF report | Knitted to `results/MLE_design_recommendation_report.pdf` |
 | `10_statistical_comparisons.R` | ~1050 | Formal statistical hypothesis tests | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()` |
 | `11_statistical_comparisons_report.qmd` | ~543 | Statistical comparisons narrative report | Rendered to `results/11_statistical_comparisons_report.{html,pdf}` |
+| `12_six_design_statistical_comparisons.R` | ~180 | Re-runs Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs, regenerates named-label figures | Outputs to `results/six_design_manuscript/` |
+| `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode/per-parameter/robustness numbers for the dissertation chapter | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
 
 ---
@@ -319,6 +321,15 @@ Figures available in `paper/manuscript/figures/`:
 - [x] All reports regenerated with tau sensitivity sections (MSE vs τ, power curves, coverage, rank stability)
 - [x] Statistical comparisons updated for tau-sweep; conditional Friedman/Nemenyi across all τ levels
 - [x] Pre-sweep deliverables archived: `results/archive/pre_tau_sweep_20260408/`
+- [x] **Two manuscripts drafted (first full pass): a short *Clinical Trials* (SAGE)
+      submission and a longer-form dissertation chapter** — completed 2026-07-02.
+      Both written fresh, sharing a bibliography (`paper/IncidenceDesign_shared.bib`)
+      but not prose files. Both present 6 designs (dropping Saturation Quadrants and
+      Balanced Halves as statistically redundant), have no DIM-vs-MLE comparison
+      anywhere, and use full design names throughout (no numbered shorthand). See
+      `paper/ctj_manuscript/` and `paper/dissertation_chapter/`. Application-section
+      numbers are an explicitly labeled simulated placeholder pending real
+      SUDDEN-derived NC county data (in progress with an epidemiology collaborator).
 
 ---
 
@@ -338,12 +349,15 @@ The core simulation is complete. The following extensions would strengthen the s
 
 ### Manuscript Development
 
+Both manuscripts (`paper/ctj_manuscript/`, `paper/dissertation_chapter/`) now have
+complete first drafts — see Status & Next Steps above. Remaining work:
+
 | Priority | Task | Description |
 |----------|------|-------------|
-| High | **Simulation results section** | Populate `paper/manuscript/_simulation.qmd` with live R code chunks (figures + tables from `06_visualizations.R` and `08_design_recommendations.R`) |
-| High | **Prose review** | Careful editing of `_introduction.qmd` and `_methods.qmd` (converted from LaTeX, not yet polished) |
-| Medium | **Application section** | Develop `_application.qmd` — SUD in NC counties context, policy implications, connection to NC DOC work in SpillSpatialDepSim |
-| Medium | **Discussion section** | Develop `_discussion.qmd` — limitations (oracle MLE, 50% treated, homogeneous population), future work, recommendations for practitioners |
+| High | **Consolidated review** | Bring both documents to the user for one combined review/revision cycle |
+| High | **Real application data** | Replace the explicitly-labeled placeholder Application-section numbers with results from the real SUDDEN-derived NC county dataset once Ashkan Habib's data and IRB access are finalized |
+| Medium | **UNC dissertation template** | Reformat `Dissertation_Chapter.qmd` to the UNC Graduate School template once all dissertation chapters are ready to merge (currently a simple double-spaced format matching Project 1's manuscript, per user direction) |
+| Medium | **CD diagram bug** | `plot_cd_diagram()` in `10_statistical_comparisons.R` has a label-collision bug for designs with adjacent ranks, independent of image width — worked around by omitting it from the dissertation chapter's inline exhibits; worth fixing upstream |
 | Low | **Presentation slides** | Expand `SpatialCRT_IncidenceDesign_Presentation.qmd` scaffold into full conference slides |
 
 ### Code Quality / Infrastructure
