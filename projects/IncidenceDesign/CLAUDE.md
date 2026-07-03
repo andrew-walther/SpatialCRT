@@ -67,13 +67,15 @@ the reasoning behind this distinction.
 | `11_statistical_comparisons_report.qmd` | ~543 | Narrative statistical comparisons report | Renders to `results/11_statistical_comparisons_report.{html,pdf}` |
 | `12_six_design_statistical_comparisons.R` | ~180 | Re-run Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs + named-label figures | Outputs to `results/six_design_manuscript/` |
 | `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
+| `14_manuscript_supplement_figures.R` | ~400 | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **paper/report/** | | | |
 | `IncidenceSpatialCRT_Report.qmd` | ~1100 | Unified project report (50+ pages, 8-design) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
 | **paper/archive_manuscript/** | | | |
 | (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
 | **paper/ctj_manuscript/** | | | |
-| `CTJ_Manuscript.tex` | ~215 | *Clinical Trials* (SAGE) submission draft, 6 designs, condensed | Compiles via `sagej.cls` — see Current State section for `TEXINPUTS`/`BSTINPUTS` setup |
+| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, 6 designs, condensed, exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Current State section for `TEXINPUTS`/`BSTINPUTS` setup |
+| `Supplementary_Information.tex` | ~400 | SI: reproducibility/seeding (S1), parameter grid (S2), metric formulas (S3), estimation model (S4), full 8-design table (S5), 8-design consolidation justification (S6, only 8-design section), 6-design rankings/sensitivity/robustness/application (S7-S11) | Plain `article` class, S-prefixed numbering, no bibtex needed |
 | **paper/dissertation_chapter/** | | | |
 | `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, 6 designs, full detail, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
 | **paper/** | | | |
@@ -202,7 +204,47 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-07-02)
+## Current State (as of 2026-07-03)
+
+**CTJ Supplementary Information:** COMPLETE
+- `paper/ctj_manuscript/Supplementary_Information.tex` (+ compiled PDF, 14 pages,
+  S-prefixed numbering: Tables S1-S12, Figures S1-S7) fulfills the three items
+  the main text defers to "online supplementary material": reproducibility/
+  seeding/code pipeline (S1), full parameter grid + resample counts (S2),
+  metric formulas (S3), estimation model incl. non-oracle variant (S4), the
+  full 8-design table (S5), and the complete eight-design comparison (S6) —
+  the only section anywhere in either document that presents all 8 designs.
+  Sections S7-S11 cover the 6 retained designs only: per-incidence-mode
+  rankings, Rho/Gamma/spillover-regime sensitivity (with CD-diagram, heatmap,
+  and two-panel figures), tau sensitivity, robustness/win-rate, and a
+  6-design application-scale table.
+- New `code/14_manuscript_supplement_figures.R` generates all of this: a
+  fresh 8-design Friedman/Nemenyi/Wilcoxon run (`choose(8,2)=28` Nemenyi
+  denominator, `results/eight_design_supplementary/`) confirming the main
+  text's consolidation claims (Nemenyi p=1.0000 for Saturation Quadrants vs.
+  Incidence-Guided Saturation Quadrants; MSE 0.1024 vs 0.1095, Wilcoxon
+  p=1.34e-6, for Balanced Quartiles vs. Balanced Halves); the SI figure suite
+  (clean CD diagrams lifted from `paper/report/IncidenceDesign_ProjectSummary.qmd`'s
+  inline code, not the buggy short-label `plot_cd_diagram()` in
+  `10_statistical_comparisons.R`); a reordered (best-to-worst) main-text
+  `fig_mse_by_design_6design.pdf`; and a new ranked bias-variance
+  `fig_biasvar_6design.pdf`.
+- `CTJ_Manuscript.tex` updated: swapped in the reordered Figure 1, added the
+  new bias-variance Figure 2 (explains *why* designs differ — Checkerboard's
+  MSE is nearly all variance from Z/WZ collinearity), added an SI pointer
+  sentence. Now exactly 6 exhibits (2 tables + 4 figures, at the CTJ cap);
+  body ~2,540 words incl. captions (limit 3,500), abstract 400 words (limit 425).
+- Reviewed by a fresh agent against the plan's decisions (6-design scope
+  except S6, no DIM-vs-MLE comparison, no design shorthand, numeric accuracy,
+  S-numbering) — one gap found and fixed (two generated CD-diagram figures
+  were missing from the SI; added to S7 as Figures S1-S2).
+- **Not yet done:** the application-table naming wrinkle extends beyond the
+  single relabeling the original plan anticipated — the application study
+  also calls design 8 "Incidence-Guided Saturation Regions" (not "...
+  Quadrants"), both noted with a footnote in SI Section S11; consolidated
+  user review pass on the SI still pending.
+
+## Prior State (as of 2026-07-02)
 
 **Manuscripts (CTJ + dissertation chapter):** First full drafts COMPLETE
 - Two documents, both written fresh (not edits of the retired `paper/archive_manuscript/`
@@ -307,6 +349,7 @@ Statistical comparisons + report expansions on `claude/elated-lederberg`.
 Tau-sweep + MC SEs + Power implementation on `main` 2026-04-08.
 Tau-sweep results integrated, all reports regenerated on `main` 2026-04-08.
 CTJ + dissertation-chapter manuscript first drafts on `main` 2026-07-02.
+CTJ Supplementary Information + ranked figures on `main` 2026-07-03.
 
 ---
 
@@ -451,13 +494,14 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 ### Manuscript Development (open)
 
-First full drafts of both manuscripts are complete (see Current State above:
-`paper/ctj_manuscript/`, `paper/dissertation_chapter/`). Remaining work:
+First full drafts of both manuscripts, plus the CTJ Supplementary Information,
+are complete (see Current State above: `paper/ctj_manuscript/`,
+`paper/dissertation_chapter/`). Remaining work:
 
 | Priority | Task | File |
 |----------|------|------|
-| High | Consolidated user review/revision pass on both documents together | Both |
-| High | Replace placeholder Application-section numbers with real SUDDEN-derived data once finalized | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
+| High | Replace placeholder Application-section numbers with real SUDDEN-derived data once finalized | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | Medium | Apply UNC Graduate School dissertation template/formatting | `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | Medium | Fix the pre-existing `plot_cd_diagram()` label-collision bug (designs with adjacent ranks overlap regardless of image width) — currently worked around by omitting the CD diagram from the dissertation chapter's inline exhibits | `code/10_statistical_comparisons.R` |
 | Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |
