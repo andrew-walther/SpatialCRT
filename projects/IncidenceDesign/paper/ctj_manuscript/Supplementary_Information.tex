@@ -644,6 +644,40 @@ incidence surface and must not be interpreted as a design recommendation for
 the real SUD application}; they will be superseded once the real
 SUDDEN-derived North Carolina county dataset is finalized.
 
+Figures~\ref{fig:si-cc-service-areas}--\ref{fig:si-kmeans-regions} show the
+application geography itself: the 58 community-college service-area clusters
+used as the treatment-assignment units, the synthetic placeholder incidence
+surface used to inform incidence-aware designs, and the population-balanced
+$k$-means regions used by the saturation-based designs in place of the grid
+study's literal $2\times2$ quadrants.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\linewidth]{figures/application_maps/community_college_service_area_clusters.png}
+\caption{North Carolina Community College service-area clusters, numbered by
+primary serving college. This 58-cluster irregular geography replaces the
+grid study's regular $10\times10$ lattice for the application illustration.}
+\label{fig:si-cc-service-areas}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{figures/application_maps/synthetic_incidence_map.png}
+\caption{Synthetic placeholder SUD incidence surface (Poisson SAR process)
+used to inform incidence-aware designs for this illustration. This is not
+real surveillance data; see the placeholder caveat above.}
+\label{fig:si-synthetic-incidence}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\linewidth]{figures/application_maps/kmeans_regions_map.png}
+\caption{Population-balanced $k$-means regions used by Saturation Regions and
+Incidence-Guided Saturation Regions in place of the grid study's literal
+$2\times2$ quadrants (see the design-relabeling note below).}
+\label{fig:si-kmeans-regions}
+\end{figure}
+
 \begin{table}[h]
 \centering
 \caption{Mean MSE, coverage, and power for the six retained designs on the
