@@ -1,0 +1,65 @@
+======================================================================
+SIX-DESIGN STATISTICAL COMPARISONS (manuscript design set)
+Retained:  Checkerboard, High Incidence Focus, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Incidence-Guided Saturation Quadrants 
+Dropped:  Saturation Quadrants, Balanced Halves (redundant, see plan)
+======================================================================
+
+--- Primary scenario: True_Tau = 1.0 ---
+Friedman chi-sq = 800.88, df = 5, p = <2e-16, n_blocks = 320
+Average ranks (lower = better MSE):
+Incidence-Guided Saturation Quadrants                    Balanced Quartiles 
+                                1.881                                 2.534 
+                 High Incidence Focus                      Isolation Buffer 
+                                2.756                                 4.144 
+                         2x2 Blocking                          Checkerboard 
+                                4.278                                 5.406 
+
+Nemenyi critical difference (alpha=0.05) = 0.421
+13 of 15 pairs significantly different (Nemenyi)
+Nemenyi p-value matrix:
+                                      2x2 Blocking Balanced Quartiles
+2x2 Blocking                                    NA             0.0000
+Balanced Quartiles                          0.0000                 NA
+Checkerboard                                0.0000             0.0000
+High Incidence Focus                        0.0000             0.6642
+Incidence-Guided Saturation Quadrants       0.0000             0.0001
+Isolation Buffer                            0.9445             0.0000
+                                      Checkerboard High Incidence Focus
+2x2 Blocking                                     0               0.0000
+Balanced Quartiles                               0               0.6642
+Checkerboard                                    NA               0.0000
+High Incidence Focus                             0                   NA
+Incidence-Guided Saturation Quadrants            0               0.0000
+Isolation Buffer                                 0               0.0000
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                          0e+00
+Balanced Quartiles                                                    1e-04
+Checkerboard                                                          0e+00
+High Incidence Focus                                                  0e+00
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                      0e+00
+                                      Isolation Buffer
+2x2 Blocking                                    0.9445
+Balanced Quartiles                              0.0000
+Checkerboard                                    0.0000
+High Incidence Focus                            0.0000
+Incidence-Guided Saturation Quadrants           0.0000
+Isolation Buffer                                    NA
+
+13 of 15 pairs significantly different (Wilcoxon, Holm-adjusted)
+
+Mean MSE / Coverage by design (tau=1.0, primary scenario):
+                                Design        MSE  Coverage
+ Incidence-Guided Saturation Quadrants 0.07882323 0.9408250
+                    Balanced Quartiles 0.10238862 0.9383500
+                  High Incidence Focus 0.13304774 0.9659375
+                      Isolation Buffer 0.14778453 0.9390500
+                          2x2 Blocking 0.22768964 0.9372625
+                          Checkerboard 0.80228506 0.5268750
+
+--- Conditional test: stratify by True_Tau (full tau-sweep, 6 designs) ---
+  True_Tau = True_Tau = 0.8: Friedman chi-sq = 730.60, p = <2e-16, n_blocks = 320
+  True_Tau = True_Tau = 1: Friedman chi-sq = 800.88, p = <2e-16, n_blocks = 320
+  True_Tau = True_Tau = 1.5: Friedman chi-sq = 705.71, p = <2e-16, n_blocks = 320
+  True_Tau = True_Tau = 2: Friedman chi-sq = 658.46, p = <2e-16, n_blocks = 320
+  True_Tau = True_Tau = 3: Friedman chi-sq = 557.29, p = <2e-16, n_blocks = 320
