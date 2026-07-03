@@ -1,6 +1,5 @@
 ---
-title: "Design-Stage Mitigation of Spatial Spillover in Cluster Randomized Trials: A Simulation Study of Treatment Assignment Strategies Under Heterogeneous Outcome Incidence"
-author: "Andrew J. Walther"
+title: "Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence"
 format:
   pdf:
     documentclass: article
@@ -10,6 +9,15 @@ format:
     keep-tex: true
     cite-method: natbib
     biblio-style: unsrt
+    header-includes: |
+      \AtBeginDocument{
+        \author{Andrew Walther$^1$, Ross Joseph Simpson, Jr.$^2$, Ashkan Habib$^1$, and Feng-Chang Lin$^1$}
+        \date{
+            $^1$Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC, USA\\
+            $^2$Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA\\
+            $^*$Corresponding author: Andrew Walther, awalther@unc.edu
+        }
+      }
 bibliography: shared-refs.bib
 ---
 
