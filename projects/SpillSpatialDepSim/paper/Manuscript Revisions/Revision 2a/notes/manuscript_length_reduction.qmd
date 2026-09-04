@@ -1,0 +1,179 @@
+---
+title: "Manuscript Length Reduction — Notes & Plan"
+subtitle: "Spatial CRT Manuscript (BMC Medical Research Methodology) — Revision 2a"
+author: "Andrew Walther (with Claude Code)"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme: cosmo
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+---
+
+::: {.callout-note}
+## Purpose of this document
+A working reference for producing a **shortened** copy of the manuscript that retains the full
+strength of message, clarity of method, and impact of findings while removing clutter, repeated
+tables/findings, and tangential context.
+
+**Updated for Revision 2a.** The earlier version of these notes was written against the original
+`Revisions_V2.tex` (46 pages). Since then, the six reviewer comments (C1–C6) were fully addressed in
+`Revision 2a/Walther_SpatialCRT_LaTeX_Revisions_V2/Revisions_V2.tex`, which **added** substantive
+content (estimands paragraph, collinearity/identifiability derivation, severity quantification,
+conditional-recommendation framing, buffer-zone future work). The manuscript is therefore now
+**longer**, and the reduction plan below is re-baselined to that current state.
+:::
+
+::: {.callout-important}
+## Non-negotiable preservation constraint
+The shortened manuscript (`Revisions_short_V2.tex`) is produced **on top of** the fully revised long
+version and **must retain every reviewer-response element** verbatim or near-verbatim:
+
+- **C1** — the "Estimands and Interpretation" paragraph (structural coefficients vs. potential-outcome
+  contrasts; reduced form with the $(\mathbf{I}-\rho\mathbf{W})^{-1}$ multiplier); deletion of the old
+  "$\hat\beta+\hat\psi$" claim.
+- **C2/C4** — the exact-collinearity derivation ($z_i = 1-x_i$ under BSS/TrtNoSpill $\Rightarrow
+  \hat\beta = \beta-\psi$, bias $=-\psi$) and its Table 1 confirmation; the "subject coordinates do not
+  enter the SAR fit" note.
+- **C3** — all notation fixes ($w_{ij}$ definition, $ik$ indexing, cluster-level $\mathbf{W}$).
+- **C5** — design-selection / model-based-inference framing and the near-deterministic-allocation limitation.
+- **C6** — quantified "severe" (50–80% of $\beta$), the **conditional** BSS recommendation, and the
+  buffer-zone future-work paragraph.
+
+Length reduction targets **repetition and tangential prose only**, never these elements.
+:::
+
+---
+
+# Current State (Revision 2a, long version)
+
+| Metric | Value |
+|--------|-------|
+| Source file | `Walther_SpatialCRT_LaTeX_Revisions_V2/Revisions_V2.tex` |
+| TeX lines | 1,475 (≈ 812 non-comment) |
+| Compiled pages (double-spaced) | 49 |
+| Word count (`texcount -inc -sum`) | ~12,851 |
+
+A typical BMC Medical Research Methodology methods paper runs 20–30 double-spaced pages. Target for the
+short version: **~34–38 pages** (a meaningful reduction that does not sacrifice rigor or the reviewer
+responses).
+
+## Where the length lives
+
+| Block | Character | Reduction lever |
+|-------|-----------|-----------------|
+| Introduction (§1) | Two long literature paragraphs | Light trim of tangential review prose |
+| §2.4 SRS vs. BSS | **Three** per-grid allocation subsections sharing **one** combined figure | Merge to one subsection + a 1-row-per-grid count table |
+| §3.2 Simulation Procedure | ~1 page of prose re-describing the 8-step algorithm already in Appendix C | Compress to a short pointer + parameter rationale |
+| §3.4–3.6 Results | **Three** near-parallel per-grid subsections, **three** 16-row tables, **three** grouped MSE figures | Merge prose → thematic; **three tables → one stacked table**; **three figures → one multi-panel** |
+| §4 Application | Two NC probation cases, Case 1 thin | Streamline; keep both but tighten |
+| §5 Future Considerations | Long, partly restates what the paper did | Condense to focused paragraphs |
+| Appendices D & E | Two short appendices | Merge into one "Supporting Methods" appendix |
+| Throughout | ~200+ lines of commented-out LaTeX | Delete (zero PDF impact) |
+
+---
+
+# Reduction Plan (re-baselined) and what was implemented
+
+Each action notes its status in `Revisions_short_V2.tex`.
+
+## Tier 1 — High impact, low risk
+
+### A. Consolidate per-grid SRS/BSS allocation subsections (§2.4) — *implemented*
+Three subsections (2×4, 3×3, 3×4) already share the single `GridsCombined` figure. Merged into one
+subsection: a compact table (Grid | total allocations | BSS-valid allocations | balance) + the combined
+figure + one paragraph on the key pattern (BSS collapses the allocation space; near-determinism is both
+a variance-control strength and an inference limitation — forward-referencing C5).
+
+### B. Consolidate the three per-grid results subsections (§3.4–3.6) — *implemented*
+Collapsed into a single **Results** section organized by theme:
+
+1. **TrtNoSpill across grids** — BSS bounds worst-case error; the 2×4 $\rho=0$ reversal; the exact
+   $z_i=1-x_i$ collinearity making BSS bias $=-\psi$ (kept, with the Table evidence).
+2. **TrtSpill across grids** — the 3×4 checkerboard paradox (BSS > SRS at $\rho=0.01$) as the key finding.
+
+Per-scenario numbers move to the tables/figures; prose is 2–3 sentences per theme.
+
+### B'. Tables → two thematic tables, relocated to an appendix — *implemented (as built)*
+The three 16-row per-grid tables were consolidated into **two** thematic tables split by spillover
+regime (TrtNoSpill, TrtSpill), each spanning all three grids (~24 rows) with a per-grid scaling banner.
+**No numeric values are dropped** — verified by a multiset comparison against the original three tables
+(48 active data rows match exactly), including the Bias column carrying the bias $=-\psi$ evidence (C4).
+A single 48-row table overflowed the page and broke up the body, so on author preference **both tables
+were moved to a new appendix, "Detailed Simulation Results" (`appendix:Results`)**, referenced from the
+results prose. The body therefore carries figures + prose only.
+
+### B''. Figures: kept as three separate floats — *consolidation reverted*
+A single full-page 3-panel float proved fragile (oversized-float warning / dropped `\label`), so the
+three `MSE_Estimates_*` plots were **kept as three separate `[!ht]` figures** (as in the long version).
+This was the lowest-value cut, and three distinct-data plots are not genuinely "repetitive."
+
+### C. Trim Future Considerations — *implemented*
+Condensed to focused paragraphs (distance/decay spillover; additive spillover; other neighbor
+structures; density weighting / broader parameter sweep; model misspecification). The **buffer-zone
+paragraph is retained in full** (C6).
+
+## Tier 2 — Moderate impact, requires judgment
+
+### D. Streamline the Application (§4) — *deferred*
+Both NC cases retained with their conditional-recommendation framing (C6). Length-focused prose
+tightening of this section was **not** applied this round (left for author review, as it trades against
+the real-world motivation the cases provide).
+
+### E. Compress Simulation Procedure prose (§3.2) — *implemented*
+Reduced to a short paragraph pointing to Appendix C, retaining only the parameter-choice rationale and
+the exhaustive-enumeration point (which feeds C5).
+
+## Tier 3 — Housekeeping (no PDF impact)
+
+### F. Prune commented-out LaTeX — *implemented in short version only*
+The ~200+ lines of commented alternative-spillover equations, old minipage figure blocks, and the
+placeholder algorithm are deleted from `Revisions_short_V2.tex` (the long version keeps them).
+
+### G. Merge Appendices D & E — *implemented*
+Moran's I / Geary's C (D) and Distance-Based Neighbor Construction (E) merged into one "Supporting
+Methods" appendix.
+
+---
+
+# Files & diffs
+
+| File | Role |
+|------|------|
+| `Walther_SpatialCRT_LaTeX_Revisions_V2/Revisions_V2.tex` | **Long** revised manuscript (all C1–C6) |
+| `Walther_SpatialCRT_LaTeX_Revisions_V2/Revisions_short_V2.tex` | **Short** revised manuscript (this plan) |
+| `Revisions_Annotated_V2.tex` | Annotated diff **Revisions_V1 → long V2** |
+| `Revisions_short_Annotated_V2.tex` | Annotated diff **Revisions_V1 → short V2** |
+
+Both annotated diffs use **`Revisions_V1` as the baseline** (per author instruction) and are generated
+with `latexdiff` (installed via TinyTeX `tlmgr`; v1.4.0).
+
+---
+
+# Verification checklist — final outcome
+
+- [x] Short manuscript compiles with **0 undefined references, 0 errors, 0 overfull/float warnings**.
+- [~] Page/word reduction: **49 → 44 pages, 12,851 → 11,744 words (~9%)**. Modest because the page count
+  is now **figure-dominated** (10 figures + 3 tables); the *body prose* is substantially decluttered.
+  The original ~34–38 pp target is not reached without cutting/relocating figures or deeper prose cuts.
+- [x] All C1–C6 reviewer-response elements present in the short version (grep-verified).
+- [x] **No data values dropped** — multiset of 48 active table rows identical between short and long.
+- [x] Both annotated-diff PDFs compile against the V1 baseline (long 49 pp clean; short 57 pp, 3 benign
+  "??" refs inside struck-through deleted tables).
+
+## What actually moved the length vs. what didn't
+- **Real declutter:** 663 commented-out source lines removed; 3 results subsections → 1 thematic
+  section; 3 allocation subsections → 1 + counts table; 3 results tables → 2 (in appendix); Discussion
+  result-restatement (3 paragraphs → 1) and Introduction method-catalog compressed; Future Considerations
+  condensed; Appendices D+E merged.
+- **Did not move pages much:** comment stripping (0 pp by definition) and table relocation (pages shift
+  to appendix). The binding constraint on total pages is the **figure set**, which was left intact.
+- **Further options if a shorter page count is required:** relocate or down-size some figures (e.g., the
+  two NC application maps, or the sampled-points illustration), or deeper prose cuts in §2.1, the
+  Application cases, and Limitations. These trade against detail/context and were left for author review.

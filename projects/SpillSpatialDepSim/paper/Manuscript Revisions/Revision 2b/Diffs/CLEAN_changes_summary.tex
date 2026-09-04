@@ -1,0 +1,184 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage[normalem]{ulem}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{parskip}
+\usepackage{changebar}
+
+\newcommand{\DEL}[1]{{\color{red}\sout{#1}}}
+\newcommand{\ADD}[1]{{\color{blue}#1}}
+
+\title{\textbf{CLEAN-1 through CLEAN-5: Summary of Changes}\\
+\large Revision 2b --- GATE 2 Review}
+\author{Manuscript: Spatial CRT}
+\date{GATE 2 diff — C6 snapshot $\to$ CLEAN state}
+
+\begin{document}
+\maketitle
+
+\noindent This document summarizes all visible changes made in the CLEAN-1 through CLEAN-5 pass.
+CLEAN-1 (comment deletion: 601 lines of commented-out draft text) is not shown here because
+all deleted content was invisible to readers (\% prefixed). CLEAN-5 was a no-op (no
+reviewer-attribution language found in the manuscript body).
+
+\hrule
+\bigskip
+
+% =========================================================
+\section*{CLEAN-2: Remove Redundant $\rho=0.01$ Sentences}
+% =========================================================
+
+\textbf{Rule:} The closing ``$\rho=0.01$ increases MSE'' generalizing sentence was kept only
+in \S3.4 (2$\times$4 grid section). The equivalent sentences in \S3.5 and \S3.6 were removed
+as redundant cross-grid repetition.
+
+\medskip
+\textbf{Change 2a --- \S3.5 (3$\times$3 grid), end of main paragraph:}
+
+\DEL{Similar to the 2$\times$4 grid, the presence of spatial dependence ($\rho=0.01$)
+generally increased MSE for both sampling methods across both spillover application types
+for the 3$\times$3 grid.}
+
+$\to$ \textit{[sentence deleted]}
+
+\medskip
+\textbf{Change 2b --- \S3.6 (3$\times$4 grid), opening of concluding paragraph:}
+
+\DEL{Across all grid sizes, increasing $\psi$ consistently raises MSE for both methods,
+and the presence of spatial dependence ($\rho = 0.01$) further inflates MSE relative
+to the $\rho = 0$ setting.} The 3$\times$4 results reinforce the broader conclusion:
+BSS reliably bounds worst-case estimation error under TrtNoSpill, while the TrtSpill
+regime with spatial dependence represents the primary scenario in which a practitioner
+should carefully weigh the risk-management benefits of BSS against its potential for
+amplified bias.
+
+$\to$ \textit{[red sentence deleted; blue sentence retained]}
+
+\bigskip
+\hrule
+\bigskip
+
+% =========================================================
+\section*{CLEAN-3: Remove Appendix D (Moran's / Geary's)}
+% =========================================================
+
+\textbf{Rule:} Appendix D (Moran's $I$ / Geary's $C$ formulas) was a supplementary
+appendix that added length without being needed in the results. The cross-reference in
+\S2.6 was replaced with an inline \textbf{spdep} citation.
+
+\medskip
+\textbf{Change 3a --- \S2.6 (Spatial Dependence), last sentence:}
+
+\DEL{Formal expressions for both statistics are provided in Appendix~D.}
+
+\ADD{Both can be computed in R via the \textbf{spdep} package [Bivand 2018].}
+
+\medskip
+\textbf{Change 3b --- Appendix D (entire section) deleted:}
+
+\cbstart
+\color{red}
+\begin{quote}
+\textit{[DELETED: ``\S Appendix D: Tests of Spatial Dependence: Moran's $I$ and Geary's $C$''
+---approx.\ 25 lines including Moran's $I$ formula, Geary's $C$ formula, and two R function
+references. Appendix E (Distance-Based Neighbor Construction) auto-renumbers to Appendix D.]}
+\end{quote}
+\color{black}
+\cbend
+
+\bigskip
+\hrule
+\bigskip
+
+% =========================================================
+\section*{CLEAN-4: Appendix A Notation Fixes}
+% =========================================================
+
+\textbf{Rule:} Raw weights renamed $w_{ij} \to \tilde{w}_{ij}$ to distinguish from
+row-normalized $W_{ij}$; ``subjects'' corrected to ``clusters''; row-normalization
+denominator corrected to $\sum_{j \neq i}$ (self-exclusion).
+
+\medskip
+\textbf{Change 4a --- Indicator-based weight definition:}
+
+\cbstart
+\[
+  \DEL{w_{ij}} \ADD{\tilde{w}_{ij}} =
+  \begin{cases}
+    1, & \text{if \DEL{subjects} \ADD{clusters} $i$ and $j$ are Rook neighbors}\\
+    0, & \text{otherwise}
+  \end{cases}
+\]
+\cbend
+
+\medskip
+\textbf{Change 4b --- Indicator-based row normalization:}
+
+\cbstart
+\[
+  W_{ij} = \frac{\DEL{w_{ij}} \ADD{\tilde{w}_{ij}}}
+                {\displaystyle\sum_{\DEL{j} \ADD{j \neq i}} \DEL{w_{ij}} \ADD{\tilde{w}_{ij}}}
+\]
+\cbend
+
+\medskip
+\textbf{Change 4c --- Distance-based weight definition:}
+
+\cbstart
+\[
+  \DEL{w_{ij}} \ADD{\tilde{w}_{ij}} =
+  \begin{cases}
+    \dfrac{1}{d_{ij}}, & \text{if } 0 < d_{ij} < d_{\max}\\[4pt]
+    0, & \text{otherwise}
+  \end{cases}
+\]
+\cbend
+
+\quad where $d_{ij}$ is the distance between \DEL{subjects} \ADD{clusters} $i$ and $j$.
+
+\medskip
+\textbf{Change 4d --- Distance-based row normalization:}
+
+\cbstart
+\[
+  W_{ij} = \frac{\DEL{1/d_{ij}} \ADD{\tilde{w}_{ij}}}
+                {\displaystyle\sum_{\DEL{j} \ADD{j \neq i}} \DEL{1/d_{ij}} \ADD{\tilde{w}_{ij}}}
+\]
+\cbend
+
+\bigskip
+\hrule
+\bigskip
+
+% =========================================================
+\section*{CLEAN-5: Reviewer Attribution Audit}
+% =========================================================
+
+\textbf{Result: Verified clean.} Grep for ``Reviewer'' in manuscript body found only one
+hit (line 707): ``The authors thank the Editor and both Reviewers for their thorough and
+constructive feedback\ldots'' This is in the Declarations / Acknowledgements section ---
+appropriate academic acknowledgment, not manuscript-body attribution. No edits required.
+
+\bigskip
+\hrule
+
+\section*{Page Count}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+State & Pages & Lines \\
+\midrule
+V2b after C6 (baseline) & 48 & 1472 \\
+After CLEAN-1 (comment deletion) & --- & 871 \\
+After CLEAN-2--5 (current) & 42 & 844 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent \textit{Six page reduction (48$\to$42) primarily from removal of Appendix D and
+elimination of the overly wide double-spaced table formatting (already applied in C4).}
+
+\end{document}

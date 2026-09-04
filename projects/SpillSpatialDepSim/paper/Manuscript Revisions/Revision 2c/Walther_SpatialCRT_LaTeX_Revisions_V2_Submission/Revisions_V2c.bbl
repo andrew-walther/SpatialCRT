@@ -1,0 +1,233 @@
+\begin{thebibliography}{10}
+
+\bibitem{pocock_clinical_1983}
+Stuart~J. Pocock.
+\newblock {\em Clinical trials: a practical approach}.
+\newblock A {Wiley} medical publication. Wiley, Chichester [West Sussex] ; New York, 1983.
+
+\bibitem{smith_field_2015}
+Peter~G. Smith, Richard~H. Morrow, and David~A. Ross, editors.
+\newblock {\em Field {Trials} of {Health} {Interventions}: {A} {Toolbox}}.
+\newblock Wellcome {Trust}–{Funded} {Monographs} and {Book} {Chapters}. OUP Oxford, Oxford (UK), 3rd edition, 2015.
+
+\bibitem{hayes_cluster_2017}
+Richard~J. Hayes and Lawrence~H. Moulton.
+\newblock {\em Cluster {Randomised} {Trials}, {Second} {Edition}}.
+\newblock Chapman and Hall/CRC, July 2017.
+
+\bibitem{donner_design_2000}
+Allan Donner and Neil Klar.
+\newblock {\em Design and analysis of cluster randomization trials in health research}.
+\newblock Arnold, London, 1. publ edition, 2000.
+
+\bibitem{hudgens_toward_2008}
+Michael~G Hudgens and M.~Elizabeth Halloran.
+\newblock Toward {Causal} {Inference} {With} {Interference}.
+\newblock {\em Journal of the American Statistical Association}, 103(482):832--842, June 2008.
+
+\bibitem{hayes_design_2000}
+R~J Hayes, N~De Alexander, S~Bennett, and S~N Cousens.
+\newblock Design and analysis issues in cluster-randomized trials of interventions against infectious diseases.
+\newblock {\em Statistical Methods in Medical Research}, 9(2):95--116, April 2000.
+
+\bibitem{anayaizquierdo_spatial_2021}
+Karim Anaya‐Izquierdo and Neal Alexander.
+\newblock Spatial regression and spillover effects in cluster randomized trials with count outcomes.
+\newblock {\em Biometrics}, 77(2):490--505, June 2021.
+
+\bibitem{jarvis_spatial_2017}
+Christopher Jarvis, Gian~Luca Di~Tanna, Daniel Lewis, Neal Alexander, and W.~John Edmunds.
+\newblock Spatial analysis of cluster randomised trials: a systematic review of analysis methods.
+\newblock {\em Emerging Themes in Epidemiology}, 14(1):12, September 2017.
+
+\bibitem{binka_impact_1998}
+F.~N. Binka, F.~Indome, and T.~Smith.
+\newblock Impact of spatial distribution of permethrin-impregnated bed nets on child mortality in rural northern {Ghana}.
+\newblock {\em The American Journal of Tropical Medicine and Hygiene}, 59(1):80--85, July 1998.
+
+\bibitem{gimnig_effect_2003}
+John~E. Gimnig, Margarette~S. Kolczak, Allen~W. Hightower, John~M. Vulule, Erik Schoute, Luna Kamau, Penelope~A. Phillips-Howard, Feiko~O. ter Kuile, Bernard~L. Nahlen, and William~A. Hawley.
+\newblock Effect of permethrin-treated bed nets on the spatial distribution of malaria vectors in western {Kenya}.
+\newblock {\em The American Journal of Tropical Medicine and Hygiene}, 68(4 Suppl):115--120, April 2003.
+
+\bibitem{hawley_community-wide_2003}
+William~A. Hawley, Penelope~A. Phillips-Howard, Feiko~O. ter Kuile, Dianne~J. Terlouw, John~M. Vulule, Maurice Ombok, Bernard~L. Nahlen, John~E. Gimnig, Simon~K. Kariuki, Margarette~S. Kolczak, and Allen~W. Hightower.
+\newblock Community-wide effects of permethrin-treated bed nets on child mortality and malaria morbidity in western {Kenya}.
+\newblock {\em The American Journal of Tropical Medicine and Hygiene}, 68(4 Suppl):121--127, April 2003.
+
+\bibitem{miguel_worms_2004}
+Edward Miguel and Michael Kremer.
+\newblock Worms: {Identifying} {Impacts} on {Education} and {Health} in the {Presence} of {Treatment} {Externalities}.
+\newblock {\em Econometrica}, 72(1):159--217, January 2004.
+
+\bibitem{tobler_computer_1970}
+W.~R. Tobler.
+\newblock A {Computer} {Movie} {Simulating} {Urban} {Growth} in the {Detroit} {Region}.
+\newblock {\em Economic Geography}, 46:234, June 1970.
+
+\bibitem{getis_history_2008}
+Arthur Getis.
+\newblock A {History} of the {Concept} of {Spatial} {Autocorrelation}: {A} {Geographer}'s {Perspective}.
+\newblock {\em Geographical Analysis}, 40(3):297--309, July 2008.
+
+\bibitem{cressie_statistics_1993}
+Noel A.~C. Cressie.
+\newblock {\em Statistics for {Spatial} {Data}}.
+\newblock Wiley {Series} in {Probability} and {Statistics}. Wiley, 1 edition, September 1993.
+
+\bibitem{lenhart_insecticidetreated_2008}
+Audrey Lenhart, Nicolas Orelus, Rachael Maskill, Neal Alexander, Thomas Streit, and P.~J. McCall.
+\newblock Insecticide‐treated bednets to control dengue vectors: preliminary evidence from a controlled trial in {Haiti}.
+\newblock {\em Tropical Medicine \& International Health}, 13(1):56--67, January 2008.
+
+\bibitem{chao_contribution_2015}
+D.~L. Chao, J.~K. Park, F.~Marks, R.~L. Ochiai, I.~M. Longini, and M.~E. Halloran.
+\newblock The contribution of neighbours to an individual's risk of typhoid outcome.
+\newblock {\em Epidemiology and Infection}, 143(16):3520--3527, December 2015.
+
+\bibitem{alexander_spatial_2003}
+Neal~D Alexander, Rana~A Moyeed, Phil~J Hyun, Zachary~B Dimber, Moses~J Bockarie, Julian Stander, Bryan~T Grenfell, James~W Kazura, and Michael~P Alpers.
+\newblock Spatial variation of {Anopheles}-transmitted {Wuchereria} bancrofti and {Plasmodium} falciparuminfection densities in {Papua} {New} {Guinea}.
+\newblock {\em Filaria Journal}, 2(1):14, September 2003.
+
+\bibitem{silcocks_spatial_2010}
+Paul Silcocks and Denise Kendrick.
+\newblock Spatial effects should be allowed for in primary care and other community-based cluster {RCTS}.
+\newblock {\em Trials}, 11(1):55, December 2010.
+
+\bibitem{watson_design_2025}
+Samuel~I. Watson and Thomas~A. Smith.
+\newblock Design and {Analysis} of {Randomized} {Trials} to {Estimate} {Spatio}-{Temporally} {Heterogeneous} {Treatment} {Effects}.
+\newblock {\em Journal of the American Statistical Association}, pages 1--11, September 2025.
+
+\bibitem{kim_handbook_2021}
+KyungMann Kim, Frank Bretz, Ying Kuen~K. Cheung, and Lisa~V. Hampson.
+\newblock {\em Handbook of {Statistical} {Methods} for {Randomized} {Controlled} {Trials}}.
+\newblock Chapman and Hall/CRC, Boca Raton, 1 edition, July 2021.
+
+\bibitem{matthews_introduction_2006}
+John~N.S. Matthews.
+\newblock {\em Introduction to {Randomized} {Controlled} {Clinical} {Trials}}.
+\newblock Chapman and Hall/CRC, 0 edition, June 2006.
+
+\bibitem{murray_design_1998}
+David~M. Murray.
+\newblock {\em Design and analysis of group-randomized trials}.
+\newblock Number v. 27 [i.e. 29] in Monographs in epidemiology and biostatistics. Oxford University Press, New York, 1998.
+
+\bibitem{hemming_how_2017}
+K~Hemming, S~Eldridge, G~Forbes, C~Weijer, and M~Taljaard.
+\newblock How to design efficient cluster randomised trials.
+\newblock {\em BMJ}, page j3064, July 2017.
+
+\bibitem{campbell_how_2014}
+Michael~J. Campbell and Stephen~John Walters.
+\newblock {\em How to design, analyse and report cluster randomised trials in medicine and health related research}.
+\newblock John Wiley \& Sons, Chichester, West Sussex, 2014.
+
+\bibitem{ntani_consequences_2021}
+Georgia Ntani, Hazel Inskip, Clive Osmond, and David Coggon.
+\newblock Consequences of ignoring clustering in linear regression.
+\newblock {\em BMC Medical Research Methodology}, 21(1):139, December 2021.
+
+\bibitem{fotheringham_sage_2009}
+A.~Stewart Fotheringham and Peter Rogerson.
+\newblock {\em The {Sage} handbook of spatial analysis}.
+\newblock The {Sage} handbook of. Sage, London, 2009.
+
+\bibitem{bivand_r_2022}
+Roger Bivand.
+\newblock R {Packages} for {Analyzing} {Spatial} {Data}: {A} {Comparative} {Case} {Study} with {Areal} {Data}.
+\newblock {\em Geographical Analysis}, 54(3):488--518, July 2022.
+
+\bibitem{bivand_comparing_2018}
+Roger~S. Bivand and David W.~S. Wong.
+\newblock Comparing implementations of global and local indicators of spatial association.
+\newblock {\em TEST}, 27(3):716--748, September 2018.
+
+\bibitem{pebesma_spatial_2023}
+Edzer Pebesma and Roger Bivand.
+\newblock {\em Spatial {Data} {Science}: {With} {Applications} in {R}}.
+\newblock Chapman and Hall/CRC, New York, 1 edition, May 2023.
+
+\bibitem{bivand_applied_2008}
+Roger Bivand, Edzer~J. Pebesma, and Virgilio Gómez-Rubio.
+\newblock {\em Applied {Spatial} {Data} {Analysis} with {R}}.
+\newblock Use {R}! Springer New York, New York, NY, 2008.
+
+\bibitem{moraga_spatial_2024}
+Paula Moraga.
+\newblock {\em Spatial statistics for data science: theory and practice with {R}}.
+\newblock Chapman and {Hall}/{CRC} {Data} {Science} {Series}. CRC Press, Boca Raton London New York, first edition edition, 2024.
+
+\bibitem{benjamin-chung_spillover_2017}
+Jade Benjamin-Chung, Jaynal Abedin, David Berger, Ashley Clark, Veronica Jimenez, Eugene Konagaya, Diana Tran, Benjamin~F Arnold, Alan~E Hubbard, Stephen~P Luby, Edward Miguel, and John~M Colford.
+\newblock Spillover effects on health outcomes in low- and middle-income countries: a systematic review.
+\newblock {\em International Journal of Epidemiology}, 46(4):1251--1276, August 2017.
+
+\bibitem{benjamin-chung_extension_2024}
+Jade Benjamin-Chung, Haodong Li, Anna Nguyen, Gabriella Barratt~Heitmann, Adam Bennett, Henry Ntuku, Lisa~M. Prach, Munyaradzi Tambo, Lindsey Wu, Chris Drakeley, Roly Gosling, Davis Mumbengegwi, Immo Kleinschmidt, Jennifer~L. Smith, Alan Hubbard, Mark Van Der~Laan, and Michelle~S. Hsiang.
+\newblock Extension of efficacy range for targeted malaria-elimination interventions due to spillover effects.
+\newblock {\em Nature Medicine}, 30(10):2813--2820, October 2024.
+
+\bibitem{mccann_spatial_2018}
+Robert~S. McCann, Henk van~den Berg, Willem Takken, Andrew~G. Chetwynd, Emanuele Giorgi, Dianne~J. Terlouw, and Peter~J. Diggle.
+\newblock Reducing contamination risk in cluster-randomized infectious disease-intervention trials.
+\newblock {\em International Journal of Epidemiology}, 47(6):2015--2024, December 2018.
+
+\bibitem{crisp_covariate-constrained_2023}
+Amy~M Crisp, M~Elizabeth Halloran, Ira~M Longini, Gonzalo Vazquez-Prokopec, and Natalie~E Dean.
+\newblock Covariate-constrained randomization with cluster selection and substitution.
+\newblock {\em Clinical Trials}, 20(3):284--292, June 2023.
+
+\bibitem{pebesma_simple_2018}
+Edzer Pebesma.
+\newblock Simple {Features} for {R}: {Standardized} {Support} for {Spatial} {Vector} {Data}.
+\newblock {\em The R Journal}, 10(1):439, 2018.
+
+\bibitem{waller_applied_2004}
+Lance~A. Waller.
+\newblock {\em Applied {Spatial} {Statistics} for {Public} {Health} {Data}}.
+\newblock Number v.368 in Wiley {Series} in {Probability} and {Statistics} {Ser}. John Wiley \& Sons, Incorporated, Hoboken, 1st ed edition, 2004.
+
+\bibitem{ullah_handbook_1998}
+Aman Ullah and David E.~A. Giles.
+\newblock {\em Handbook of {Applied} {Economic} {Statistics}}.
+\newblock Number v.Vol. 155 in Statistics: a {Series} of {Textbooks} and {Monographs}. Chapman and Hall/CRC, Boca Raton, 1998.
+
+\bibitem{moran_interpretation_1948}
+P.~A.~P. Moran.
+\newblock The {Interpretation} of {Statistical} {Maps}.
+\newblock {\em Journal of the Royal Statistical Society Series B: Statistical Methodology}, 10(2):243--251, July 1948.
+
+\bibitem{moran_notes_1950}
+P.~A.~P. Moran.
+\newblock Notes on {Continuous} {Stochastic} {Phenomena}.
+\newblock {\em Biometrika}, 37(1/2):17, June 1950.
+
+\bibitem{geary_contiguity_1954}
+R.~C. Geary.
+\newblock The {Contiguity} {Ratio} and {Statistical} {Mapping}.
+\newblock {\em The Incorporated Statistician}, 5(3):115, November 1954.
+
+\bibitem{ord_estimation_1975}
+Keith Ord.
+\newblock Estimation {Methods} for {Models} of {Spatial} {Interaction}.
+\newblock {\em Journal of the American Statistical Association}, 70(349):120--126, March 1975.
+
+\bibitem{bivand_comparing_2015}
+Roger Bivand and Gianfranco Piras.
+\newblock Comparing {Implementations} of {Estimation} {Methods} for {Spatial} {Econometrics}.
+\newblock {\em Journal of Statistical Software}, 63(18), 2015.
+
+\bibitem{bivand_computing_2013}
+Roger Bivand, Jan Hauke, and Tomasz Kossowski.
+\newblock Computing the {Jacobian} in {Gaussian} spatial autoregressive models: {An} illustrated comparison of available methods.
+\newblock {\em Geographical Analysis}, 45(2):150--179, April 2013.
+
+\bibitem{baltagi_spatial_2003}
+Luc Anselin.
+\newblock Spatial {Econometrics}.
+\newblock In Badi~H. Baltagi, editor, {\em A {Companion} to {Theoretical} {Econometrics}}, pages 310--330. Wiley, 1 edition, January 2003.
+
+\end{thebibliography}

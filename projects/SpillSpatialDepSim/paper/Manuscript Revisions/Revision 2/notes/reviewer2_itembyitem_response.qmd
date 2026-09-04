@@ -1,0 +1,228 @@
+---
+title: "Revision 2 — Reviewer Comments, Item-by-Item Working Response"
+subtitle: "Spatial CRT Manuscript (BMC Medical Research Methodology)"
+author: "Andrew Walther (with Claude Code)"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme: cosmo
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+---
+
+::: {.callout-important}
+## How to use this document
+This is a **working reference**, not the final response letter. For each of the six major reviewer comments it gives:
+
+1. **Stated issue** — what the reviewer actually said (paraphrased faithfully).
+2. **Robust response** — the substantive statistical answer.
+3. **Alternatives** — ranging from *simple explanation* (no re-run) to *project restructuring* (re-run code/results).
+4. **How our revision addresses it** — the concrete change made or planned, across the three files (manuscript / response letter / plan).
+
+Work through these **one at a time** (see project memory: three-file update rule). Detailed treatment of Comment 3 (notation) and the identifiability thread live in the companion document, `comment3_and_identifiability_notes.qmd`.
+:::
+
+# Context: where the documents live
+
+- **Original submission:** `Revision 1/Original & Annotated Manuscripts/main.tex`
+- **Revision 1 (annotated):** `Revision 1/Original & Annotated Manuscripts/Revisions_Annotated_V1.tex`
+- **Revision 2 (current working manuscript):** `Revision 2/Walther_SpatialCRT_LaTeX_Revisions_V2/Revisions_V2.tex`
+- **Response letter (current):** `Revision 2/revision response/response_letter_V4.docx`
+- **Plan:** `Revision 2/revision response/planning/Revision_Plan_Item_by_Item_V2.docx`
+
+The reviewer's overarching note: *"I still have several critical comments … I do not think were fully addressed … and I think other issues may have been introduced."* Several Comment-3 sub-issues were in fact **introduced or made visible** by the Revision-1 edits (e.g., the $x_{ik}$/$z_{ik}$ indexing), so careful regression-checking against `main.tex` matters.
+
+---
+
+# Comment 1 — Estimands are not clearly defined
+
+## Stated issue
+The authors label $\rho$ a nuisance parameter and $\psi$ the "causal design-level" indirect effect. **But in the autoregressive model, $\psi$ does not equal the indirect effect.** Using potential-outcome notation, an indirect effect such as $E[Y(0,\mathbf{1})] - E[Y(0,\mathbf{0})]$ would, under the SAR model, include a contribution from $\rho$ (through the spatial autoregression) *as well as* $\psi$. With $\rho \neq 0$, even "control-only" spillover includes a treated→treated mechanism. Also, $\beta$ is inconsistently called "the treatment effect" and, in §2.3.1, "$\hat\beta$ is more precisely interpreted as a total treatment effect" — which is wrong, since in this model $\beta$ is the **direct** effect. The equilibrium form (Eq. 6) shows $E[y_{ik}]$ depends on the whole mean vector and $\rho$, so no single parameter equals the potential-outcome contrast.
+
+## Robust response
+The reviewer is **correct on the mathematics.** In a spatial-lag (SAR) model, the reduced form is
+$$\mathbf{y} = (\mathbf{I} - \rho\mathbf{W})^{-1}(\alpha\mathbf{1} + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon),$$
+so the marginal effect of changing any cluster's treatment status propagates through the multiplier matrix $(\mathbf{I}-\rho\mathbf{W})^{-1}$. Consequently:
+
+- $\beta$ is a **structural / direct** coefficient, **not** a potential-outcome contrast.
+- The potential-outcome indirect effect $E[Y(0,\mathbf{1})]-E[Y(0,\mathbf{0})]$ is a **function of $\beta$, $\psi$, $\rho$, and $\mathbf{W}$** jointly — it is not any single coefficient.
+- The "total treatment effect" language in §2.3.1 was loose and should be removed/corrected.
+
+The honest framing: this paper estimates **structural SAR coefficients** ($\beta$, $\psi$, $\rho$), not nonparametric potential-outcome estimands. The simulation evaluates how well $\hat\beta$ (the structural direct coefficient) recovers the true $\beta$ used in the DGP, under different designs.
+
+## Alternatives
+- **(Simple — recommended)** Add a short "Estimands and interpretation" paragraph that (i) defines $\beta$ as the structural direct coefficient, (ii) defines $\psi$ as the structural spillover coefficient, (iii) states explicitly that potential-outcome contrasts are *derived* quantities involving $(\mathbf{I}-\rho\mathbf{W})^{-1}$, and (iv) deletes the "total treatment effect" sentence (or recasts it as: when spillover propagates back to treated clusters, the *naïve* estimate that omits $z$ conflates direct and indirect effects — which is the omitted-variable point, not a redefinition of $\beta$).
+- **(Moderate)** Add an appendix deriving $E[Y(0,\mathbf 1)]-E[Y(0,\mathbf 0)]$ explicitly in terms of the multiplier matrix, to show transparently why it is not a single coefficient.
+- **(Restructure)** Re-cast the entire paper in a potential-outcomes framework and report design-based estimands. This is a major rewrite and is **not recommended** for this revision round.
+
+## How our revision addresses it
+- **Manuscript:** Remove the "$\hat\beta$ … total treatment effect" sentence in §2.3.1 (currently ~line 283). Add an estimands paragraph after the SAR model definition clarifying structural vs. potential-outcome quantities. Keep $\beta$ labeled "direct intervention effect" consistently (already done in Eq. 3 description, line 529).
+- **Response letter:** Concede the point, state the structural-coefficient framing, and note that the over-reaching causal language has been removed.
+- **Plan:** Mark C1 as requiring a new paragraph + one deletion.
+
+::: {.callout-warning}
+**Regression check:** the "total treatment effect" phrasing was *added in Revision 1* (R2.M2), so this is partly a self-inflicted issue. Confirm against `main.tex` (it was not present originally).
+:::
+
+---
+
+# Comment 2 — The spillover effect is unclear (distance vs. neighbor; identifiability)
+
+## Stated issue
+The paper references **both** distance and neighbor functions. $\psi$ is written $\psi(d_i)$ with $d_i$ = "distance from the nearest intervention source," but **"intervention source" is never defined** (cluster boundary? another treated unit?). If spillover is at the individual level it is heterogeneous across individuals; but later it is treated as a binary 1/0 at the **cluster** level. Then in Eq. (6), $\psi$ is a scalar parameter, not a function. **If so, for almost all allocations on the small grids the treatment indicator and spillover indicator are exactly collinear and the effect is not identifiable.** Also: Fig. 4 simulates random observation locations, but if everything is cluster-level and not distance-based, that location information is discarded — correct?
+
+## Robust response
+Three sub-points, all answerable:
+
+1. **Distance vs. neighbor.** The implemented spillover is **binary and neighbor-based**, *not* distance-based. The $\psi(d_i)$ notation is vestigial (see Comment 3e). There is no distance decay; $d_i$ and "intervention source" should be removed entirely.
+2. **Level.** Spillover is **cluster-level**: $z_i = 1$ if cluster $i$ Rook-borders ≥1 treated cluster (and the spillover type permits it), else 0. It is *not* individual-heterogeneous.
+3. **Identifiability — the reviewer is right.** For BSS allocations under TrtNoSpill, $z_i = 1 - x_i$ exactly, so $\beta$ and $\psi$ are not separately identifiable. (Full treatment in companion doc.) This is the mechanism behind the BSS-bias ≈ $\psi$ result.
+4. **Random locations.** Yes — for the **SAR fit**, individual within-cluster coordinates are discarded; only cluster membership enters $\mathbf{W}$. Locations affect only the cosmetic rendering of Fig. 4 and the per-cluster sampling, not the estimator.
+
+## Alternatives
+- **(Simple)** Purge all distance language; state spillover is binary cluster-level; explicitly acknowledge the collinearity and its consequence (reframe per companion doc, Option 1).
+- **(Cheap diagnostic)** Report $\mathrm{cor}(x,z)$ per allocation (companion Option 2).
+- **(Restructure — re-run)** Adopt proportional $z_i \in [0,1]$ (= fraction of treated Rook neighbors) to break exact collinearity and genuinely use spatial structure (companion Option 4). Requires re-running the simulation.
+
+## How our revision addresses it
+- **Manuscript:** Delete $\psi(d_i)$ / "intervention source" / "distance from nearest" wording wherever it survives. Add one paragraph stating spillover is binary, cluster-level, and that $z_i$ is collinear with $x_i$ under BSS (→ non-identifiability of $\psi$, conflation in $\hat\beta$). Add a sentence noting subject coordinates do not enter the SAR fit.
+- **Response letter:** Confirm binary/cluster-level definition; concede and embrace the collinearity point as a stated finding; confirm locations are not used by the estimator.
+- **Plan:** C2 ties tightly to C1, C3e, and C4 — handle together for consistency.
+
+---
+
+# Comment 3 — Several notation issues (a–g)
+
+## Stated issue
+Seven sub-items: (a) $w_{ij}$ undefined; (b) inconsistent $i$/$k$ indexing on $y$ vs. $x,\varepsilon$, then $x,z$ gain $i,k$; (c) cluster index dropped in Eqs. (4)–(6); (d) $\mathbf{W}$ mixes individual/cluster levels; (e) $\psi$ used as both function and scalar; (f) redundant $\mathcal{N}(i)$ indexing; (g) Eq. (5) differs from Eq. (4).
+
+## Robust response & how addressed
+**Fully detailed in the companion document** (`comment3_and_identifiability_notes.qmd`). Summary of resolutions:
+
+| Sub-item | Resolution |
+|----------|------------|
+| 3a | Define $w_{ij}$ inline after Eq. (1) (row-normalized Rook indicator) |
+| 3b | $\varepsilon_i\to\varepsilon_{ik}$; revert $x_{ik}\to x_i$, $z_{ik}\to z_i$ |
+| 3c | Keep $ik$ indices throughout + explain within-cluster variation is only $\varepsilon_{ik}$ |
+| 3d | Declare $\mathbf{W}$ a cluster-level $n\times n$ adjacency matrix |
+| 3e | Replace $\psi(d_i)$ with scalar $\psi$ |
+| 3f | Drop $\mathcal{N}(i)$ restriction; sum over $j\neq i$ |
+| 3g | Unify summation form across Eqs. (4)/(5) |
+
+::: {.callout-note}
+**Regression note:** 3b and 3e were *introduced or worsened* by Revision-1 edits relative to `main.tex`. Worth flagging in the response letter that these have now been reconciled.
+:::
+
+## Alternatives
+All Comment-3 fixes are **simple notational corrections — no re-run required.** The only judgment call (3c) was resolved in favor of *keeping indices for readability* per author preference.
+
+---
+
+# Comment 4 — The simulation study / estimated model is unclear
+
+## Stated issue
+"What model is being estimated?" Eq. (6) gives the DGP, but the **results suggest the fitted models may omit the spillover indicator** while including the autoregressive term. For control-only BSS, the bias ≈ $\psi$ — "which is what you'd expect with perfect collinearity and omitted-variable bias. The estimated model should be explained."
+
+## Robust response
+The reviewer has reverse-engineered the mechanism correctly. The intended fitted model **does** include $z$ (it is the spatial-lag model with $\alpha,\beta,\psi,\rho$). **But** when $x$ and $z$ are exactly collinear (BSS/TrtNoSpill), `lagsarlm()` cannot separate them, so effectively $z$ is dropped or absorbed, and $\hat\beta$ carries the omitted-variable bias ≈ $\psi$. So both readings are reconciled: the model is *specified* with $z$, but $z$ is *not identifiable* in the collinear designs, producing exactly the bias pattern observed.
+
+## Alternatives
+- **(Simple — already partly done)** The V2 manuscript added an explicit DGP-vs-estimation-model statement (Eq. `Equation:EstModel`, line 610) noting the shared structural form and the two bias sources (collinearity; $\rho\times$configuration interaction). **Extend** this to state plainly that under exact collinearity the spillover term is not separately estimable, hence bias ≈ $\psi$.
+- **(Cheap)** Report, per scenario, whether $z$ was estimable (tie to the $\mathrm{cor}(x,z)$ diagnostic).
+- **(Restructure)** Verify empirically in the SpatialCRT code what `lagsarlm()` returns under rank deficiency (drops column? error? rank-deficient fit?) and document it precisely.
+
+## How our revision addresses it
+- **Manuscript:** Build on the existing DGP/estimation paragraph (line 608–613). Add: "In allocations where $z_i$ is collinear with $x_i$ (all BSS/TrtNoSpill configurations), $\psi$ is not separately estimable; $\hat\beta$ then absorbs the spillover contribution, yielding bias $\approx \psi$ — consistent with the observed BSS results."
+- **Response letter:** Confirm the fitted model and explain the collinearity→omitted-variable-bias mechanism explicitly (this is the reviewer's own hypothesis — agree with it).
+- **Plan:** C4 depends on C2's identifiability paragraph; write C2 first, then reference it here.
+
+::: {.callout-tip}
+**Verification TODO:** Confirm in the actual SpatialCRT R code exactly how the estimation handles the collinear case, so the manuscript statement matches behavior (not an assumption).
+:::
+
+---
+
+# Comment 5 — Lack of permutations / frequentist inference under BSS
+
+## Stated issue
+In round 1 the reviewer queried whether the absence of treatment-allocation permutations made sense for an RCT. The authors replied that BSS is a design-stage tool evaluated by exhaustive enumeration, not a randomization distribution for permutation inference. The reviewer counters: this **does not address frequentist inference**, which relies on the sampling distribution under the null. **The BSS sampling distribution has only 1–2 values**, so the allocation is almost deterministic. "If it's only a design-stage tool, what purpose does it serve if it's not the actual allocation mechanism?"
+
+## Robust response
+This is the deepest conceptual challenge. The tension is real:
+
+- With only **2 valid BSS allocations** (2×4 and 3×4) or **6** (3×3), BSS is **not a randomization mechanism** in any meaningful frequentist sense — there is almost no randomization distribution.
+- Two coherent positions are available:
+  1. **BSS as a near-deterministic *constrained* design.** Its value is **bias/variance control**, not randomization-based inference. Inference proceeds **model-based** (SAR MLE), and the simulation characterizes the *estimator's* sampling behavior over Monte Carlo replications (data noise), **not** over allocations. This must be stated cleanly: the randomness providing the sampling distribution is the **outcome error $\varepsilon$**, not the allocation.
+  2. **Concede BSS's practical limitation:** with so few valid allocations, BSS sacrifices randomization-based inference and cannot protect against confounding the way randomization does. This is an honest limitation feeding into Comment 6 and the buffer-zone discussion.
+
+The cleanest revision states **both**: BSS is a constrained design whose inference is model-based; with very few valid allocations it provides essentially no randomization distribution, so its justification rests entirely on the bias-variance properties demonstrated here (and it should be paired with model-based inference, never permutation inference).
+
+## Alternatives
+- **(Simple)** Clarify the source of the sampling distribution (outcome error, via Monte Carlo) and that inference is model-based, not randomization-based. Explicitly acknowledge the near-deterministic allocation as a limitation.
+- **(Moderate)** Add a constrained-randomization perspective: cite covariate-constrained randomization (already cited: `crisp_covariate-constrained_2023`, `mccann_spatial_2018`) and position BSS as an extreme (spatially) constrained scheme.
+- **(Restructure)** Introduce a randomization-inference procedure over the available BSS allocations (only meaningful where ≥6 exist, i.e., 3×3) — likely underpowered and probably **not worth it**.
+
+## How our revision addresses it
+- **Manuscript:** In the inferential-scope paragraph (R1.3 region, ~line 663 in V2), add: the simulation's sampling distribution arises from outcome-level Monte Carlo error, not from allocation randomization; with only 2–6 valid BSS allocations, BSS does not support randomization-based frequentist inference and must be paired with model-based (SAR MLE) inference. Acknowledge as a limitation.
+- **Response letter:** Engage the reviewer's pushback directly — agree that the round-1 reply did not address frequentist sampling-distribution concerns; clarify the model-based stance and concede the near-deterministic limitation.
+- **Plan:** C5 is mostly prose; ensure it is consistent with the Discussion/limitations and with C6.
+
+---
+
+# Comment 6 — Interpretation: is the bias catastrophic?
+
+## Stated issue
+"The results suggest the bias might be potentially catastrophic, so none of these designs should be used. BSS might be slightly better in some scenarios but it's so severe that 'fried egg' or 'buffer zone' designs should be the preferred approach." *(Handwritten margin note: "'It's so severe'??? — what is severe")*
+
+## Robust response
+Two things to separate:
+
+1. **The handwritten "what is severe" note** suggests even the reviewer is uncertain how to quantify severity — an opening to **define severity concretely**. With $\beta = 1.0$, a bias on the order of $\psi$ (0.5–0.8) is **50–80% of the true effect** — that *is* severe and should be stated plainly rather than buried in MSE tables.
+2. **But the severity is conditional**, not universal: it is worst exactly where $x$–$z$ collinearity is exact (BSS/TrtNoSpill) and shrinks where designs permit identification. So the correct interpretation is **not** "no design works," but "**naïve estimation under spatial confounding is dangerous, and design choice interacts strongly with identifiability.**"
+
+The buffer-zone / fried-egg suggestion is well-taken and should be embraced as the natural next step: a buffer ring restores $z_i = 0$ for analyzed controls, breaking the collinearity *by design* (companion Option 5).
+
+## Alternatives
+- **(Simple)** Add an interpretation paragraph that (i) quantifies severity in effect-size units (bias as % of $\beta$), (ii) attributes it to identifiability/collinearity rather than to the designs being uniformly useless, and (iii) endorses buffer-zone designs as future work.
+- **(Moderate)** Add a small comparison/discussion of buffer-zone logic and why it mitigates the collinearity, without simulating it.
+- **(Restructure — re-run)** Actually simulate a buffer-zone / fried-egg design on one grid as a proof-of-concept showing reduced bias. Strongest rebuttal, but requires new code/results.
+
+## How our revision addresses it
+- **Manuscript:** In Discussion/limitations, add a quantified-severity paragraph (bias as fraction of $\beta$), reattribute severity to collinearity/identifiability, and add buffer-zone/fried-egg designs to future work (responding to the reviewer directly). Soften any over-claim that BSS is broadly recommended.
+- **Response letter:** Thank the reviewer for the buffer-zone suggestion; define "severe" quantitatively; clarify the conditional nature of the bias.
+- **Plan:** Decide whether to attempt the Option-6/restructure proof-of-concept buffer-zone simulation (flagged as the one item that could require re-running results).
+
+::: {.callout-important}
+**Biggest open decision for Revision 2:** whether to add a *proof-of-concept buffer-zone simulation* (addresses Comments 2, 4, 5, 6 forcefully) or to handle everything via explanation + diagnostics + reframing (no re-run). The companion document recommends the no-re-run path for this round, with buffer-zone as future work.
+:::
+
+---
+
+# Cross-cutting summary
+
+| Comment | Core issue | Path | Re-run needed? |
+|---------|-----------|------|----------------|
+| 1 | Estimands / $\beta$ mislabeled | Estimands paragraph; delete "total treatment effect" | No |
+| 2 | Spillover def'n + collinearity | Binary cluster-level; embrace collinearity finding | No (Option 4 optional) |
+| 3 | Notation (a–g) | Consistent $ik$/cluster convention | No |
+| 4 | Estimated model unclear | Explain DGP=fit + collinearity→OVB | No (verify code) |
+| 5 | Frequentist inference / few allocations | Model-based inference; concede limitation | No |
+| 6 | Severity / buffer zones | Quantify severity; buffer zone as future work | Optional PoC |
+
+**Recommended sequencing:** C3 (done) → C1 → C2 → C4 → C5 → C6, because C2's identifiability statement is referenced by C4 and C6, and C1's estimand clarification underpins C2.
+
+# Running TODO
+
+- [ ] C1: write estimands paragraph; delete §2.3.1 "total treatment effect" sentence; regression-check vs. `main.tex`.
+- [ ] C2: purge distance/$d_i$ language; add binary cluster-level + collinearity paragraph.
+- [ ] C3: confirm all 7 sub-item fixes landed in both main text and appendix likelihood.
+- [ ] C4: extend DGP/estimation paragraph with collinearity→OVB; verify `lagsarlm()` rank-deficient behavior in code.
+- [ ] C5: clarify sampling-distribution source; concede near-deterministic allocation limitation.
+- [ ] C6: quantify "severe" in effect-size units; add buffer-zone future-work paragraph; decide on PoC simulation.
+- [ ] For every item above: update **manuscript + response letter + plan** together.

@@ -1,0 +1,191 @@
+---
+title: "Manuscript Length Reduction — Notes & Plan"
+subtitle: "Spatial CRT Manuscript (BMC Medical Research Methodology)"
+author: "Andrew Walther (with Claude Code)"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme: cosmo
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+---
+
+::: {.callout-note}
+## Purpose of this document
+This is a **working reference** for reducing the manuscript to a more submission-appropriate length.
+The current draft (`Revisions_V2.tex`) compiles to **46 double-spaced pages (~15,274 words)**.
+A typical BMC Medical Research Methodology methods paper runs 20–30 pages at double spacing (~10,000–14,000 words).
+
+Notes here were generated after completing Revision 2 (all 6 reviewer comments addressed), as a planning
+document for a possible Revision 3 pass or standalone editorial cleanup.
+:::
+
+---
+
+# Current State
+
+| Metric | Value |
+|--------|-------|
+| Source file | `Walther_SpatialCRT_LaTeX_Revisions_V2/Revisions_V2.tex` |
+| TeX lines | 1,462 |
+| Compiled pages (double-spaced) | 46 |
+| Approximate word count | ~15,274 |
+
+## Section-by-section line footprint
+
+The table below shows where the length actually lives (lines between section markers, as a proxy for content volume):
+
+| Section | Lines (approx.) | Notes |
+|---------|----------------|-------|
+| Introduction | 55 | Two subsections; reasonable |
+| §2 Design of Spatial CRTs | 393 | Contains the heaviest methods prose |
+| — §2.4 SRS vs. BSS (per-grid subsections) | 161 | Three separate subsections, one per grid |
+| §3 Simulation Study | 552 | Dominant section overall |
+| — §3.4–3.6 Results (three grids) | 384 | Largest single block of content |
+| §4 Application | 53 | Two NC probation cases |
+| §5 Discussion | 78 | Includes a long Future Considerations (87 lines) |
+| Appendices A–E | 147 | Five appendices |
+
+---
+
+# Reduction Plan
+
+Recommendations are organized by estimated impact and implementation risk.
+
+## Tier 1 — High impact, low risk
+
+### A. Consolidate per-grid SRS/BSS allocation subsections (§2.4)
+
+**Current structure:** Three separate subsections (§2.4.1 2×4, §2.4.2 3×3, §2.4.3 3×4), each
+narrating the enumeration of valid allocations with accompanying figures. Total: ~161 lines.
+
+**Proposed change:** Replace with a single unified subsection containing:
+
+- One summary table: Grid | SRS allocation count | BSS allocation count | Example valid BSS allocations
+- One multi-panel figure showing all three grids side-by-side (figures already exist; they can be
+  combined into a subfigure environment)
+- A short paragraph (~4–6 sentences) noting the key pattern: BSS drastically reduces the allocation
+  space, and this near-determinism is both a strength (variance control) and a limitation (inference)
+
+**Estimated savings:** 3–4 pages
+
+---
+
+### B. Consolidate the three per-grid results subsections (§3.4–3.6)
+
+**Current structure:** Three nearly parallel subsections (~384 lines total), each walking through
+the same TrtNoSpill/TrtSpill × ρ narrative for a different grid geometry.
+
+**Proposed change:** Collapse into a single unified results section organized **by theme** rather
+than by grid:
+
+1. **TrtNoSpill results** — cross-grid comparison in a master summary table (BSS MSE vs. SRS MSE
+   per grid/ρ combination), with prose highlighting the 3×3 and 3×4 BSS advantage and the
+   2×4 ρ=0 reversal
+2. **TrtSpill results** — same structure; call out the checkerboard paradox (3×4 BSS > SRS at ρ=0.01)
+   as the key finding
+
+Retain all figures but reduce per-scenario prose to 2–3 sentences each, letting the table and figures
+carry the repetitive detail.
+
+**Estimated savings:** 4–6 pages
+
+::: {.callout-tip}
+This is the single highest-leverage change. The three results sections currently repeat essentially
+the same sentence structure six times (once per grid × spillover-type combination). A master table
+makes cross-grid comparisons far clearer to the reader.
+:::
+
+---
+
+### C. Trim Future Considerations (§4.3)
+
+**Current state:** 87 lines — unusually long for a forward-looking section.
+
+**Proposed change:** Condense to 4–5 focused paragraphs (one per theme):
+distance-based spillover, other grid geometries, Queen/higher-order neighbors,
+continuous outcomes/non-Gaussian models, and buffer-zone designs. Each should be 2–4 sentences.
+Cut any sentences that restate what the paper already did.
+
+**Estimated savings:** 1–2 pages
+
+---
+
+## Tier 2 — Moderate impact, requires judgment
+
+### D. Shorten the Application section (§4)
+
+**Current state:** ~53 lines across two NC probation cases. Case 1 (TIES) is only 4 lines of substance,
+while Case 2 (SMHP) and the Recommendations subsection are denser.
+
+**Proposed change:** Either (a) merge the two cases into a single motivating example with shared
+background prose, or (b) drop Case 1 entirely (it adds little beyond what Case 2 demonstrates)
+and present a single, richer case study.
+
+**Estimated savings:** 1–2 pages
+
+---
+
+### E. Compress the Simulation Procedure prose (§3.2)
+
+**Current state:** ~68 lines of prose re-describing the 8-step simulation algorithm that was already
+moved to Appendix C in Revision 1.
+
+**Proposed change:** Reduce §3.2 to 3–5 sentences referencing Appendix C, plus any narrative context
+that cannot be conveyed in algorithmic form (e.g., the rationale for chosen parameter values).
+
+**Estimated savings:** 1–2 pages
+
+---
+
+## Tier 3 — Low-risk housekeeping (no page impact)
+
+### F. Prune commented-out LaTeX source
+
+The `.tex` file contains ~200+ lines of commented-out content: alternative spillover method equations
+(linear, categorical, exponential), old equation blocks, and structural scaffolding from early drafts.
+Removing these has **zero effect on the compiled PDF** but substantially improves source readability
+and reduces the risk of accidentally un-commenting something.
+
+### G. Merge Appendices D and E
+
+Appendix D (Moran's I / Geary's C, ~25 lines) and Appendix E (Distance-Based Neighbor Construction,
+~12 lines) are lightly cited in the main text and together total ~37 lines. They could be merged into
+a single "Supporting Methods" appendix without loss of content, reducing the appendix count from 5 to 4.
+
+---
+
+# Summary Table
+
+| Action | Section | Est. savings | Risk |
+|--------|---------|-------------|------|
+| A. Consolidate SRS/BSS per-grid subsections | §2.4 | 3–4 pages | Low |
+| B. Consolidate per-grid results | §3.4–3.6 | 4–6 pages | Low–Med |
+| C. Trim Future Considerations | §4.3 | 1–2 pages | Low |
+| D. Shorten Application section | §4 | 1–2 pages | Med |
+| E. Compress Simulation Procedure prose | §3.2 | 1–2 pages | Low |
+| F. Prune commented-out source | — | 0 pages | None |
+| G. Merge Appendices D & E | Appendix | ~0 pages | None |
+| **Total (Tiers 1–2)** | | **~10–14 pages** | |
+
+Implementing Tiers 1–2 would bring the manuscript to approximately **32–36 double-spaced pages**,
+which is a more typical length for a methods paper in this journal.
+
+---
+
+# Recommended Sequencing
+
+If revising, tackle in this order to minimize downstream conflicts:
+
+1. **B** (results consolidation) — biggest structural change; do first so section references don't shift twice
+2. **A** (SRS/BSS allocation consolidation) — self-contained §2.4 rewrite
+3. **C** (Future Considerations trim) — simple prose edit
+4. **E** (Simulation Procedure compression) — straightforward, references Appendix C
+5. **D** (Application shortening) — requires judgment call on which case to keep or merge
+6. **F + G** (housekeeping) — anytime, no order dependency

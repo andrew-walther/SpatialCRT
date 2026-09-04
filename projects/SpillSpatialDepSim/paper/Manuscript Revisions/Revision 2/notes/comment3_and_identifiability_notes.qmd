@@ -1,0 +1,196 @@
+---
+title: "Revision 2 Notes — Notation (Comment 3) & Identifiability"
+subtitle: "Spatial CRT Manuscript — Working Reference Document"
+author: "Andrew Walther (with Claude Code)"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme: cosmo
+    code-fold: false
+    self-contained: true
+    fig-cap-location: bottom
+execute:
+  echo: false
+  warning: false
+---
+
+::: {.callout-note}
+## Purpose of this document
+This is a **living reference** capturing two threads from the Revision 2 review:
+
+1. The **item-by-item resolution of Reviewer Comment 3** (notation), explaining what was confusing, what the correct answer is, and what the manuscript fix does.
+2. The **identifiability / collinearity discussion** prompted by Reviewer Comment 2 — why $\beta$ and $\psi$ are not separately identifiable for many allocations, and the realistic options to mitigate or reframe this.
+
+Add notes over time as the revision proceeds. This document is **not** the response letter — it is a private working reference.
+:::
+
+# Comment 3 — Notation, Item-by-Item
+
+> **Reviewer's framing:** "There are several issues with the notation." (sub-items a–g)
+
+The unifying problem across all seven sub-items is that the manuscript **inconsistently mixes individual-level and cluster-level indexing**. Once a single consistent convention is enforced, all seven sub-items resolve.
+
+**The convention being enforced:**
+
+| Quantity | Level | Subscript |
+|----------|-------|-----------|
+| Outcome $y$ | individual | $y_{ik}$ (subject $k$ in cluster $i$) |
+| Error $\varepsilon$ | individual | $\varepsilon_{ik}$ |
+| Treatment indicator $x$ | cluster | $x_i$ (shared by all $k$ in cluster $i$) |
+| Spillover indicator $z$ | cluster | $z_i$ |
+| Spatial weight $w_{ij}$ | cluster-to-cluster | $w_{ij}$ ($i, j$ index clusters) |
+
+---
+
+## 3a — $w_{ij}$ is not defined at Equation (1)
+
+**Stated issue:** $w_{ij}$ appears in the general SAR model (Eq. 1) with no definition.
+
+**The correct answer:** $w_{ij}$ is the spatial weight between **cluster** $i$ and **cluster** $j$. It equals 1 if the two clusters share a Rook (shared-edge) boundary and 0 otherwise. The raw 0/1 values are then **row-normalized** — each entry is divided by the number of Rook neighbors cluster $i$ has — so each row of $\mathbf{W}$ sums to 1. After normalization, $w_{ij}$ represents the *fraction* of neighbor influence on cluster $i$ that comes from cluster $j$.
+
+**Fix in manuscript:** Inline definition added immediately after Eq. (1): $w_{ij} = 1/|\mathcal{N}(i)|$ if clusters $i$ and $j$ share a Rook edge, 0 otherwise; full construction in Appendix (Spatial Weights).
+
+---
+
+## 3b — $y$ indexed by $i$ and $k$ in Eq. (1), but $x$ and $\varepsilon$ are not; then $x$ and $z$ gain $i,k$ in Eq. (3)
+
+**Stated issue:** Why is $y_{ik}$ double-indexed while $x_i$, $\varepsilon_i$ are single-indexed? Then in Eq. (3), $x_{ik}$ and $z_{ik}$ suddenly appear double-indexed.
+
+**The correct answer (two distinct problems):**
+
+- **Eq. (1):** $y_{ik}$ correctly varies by individual. $x_i$ correctly carries only the cluster index because **treatment is assigned at the cluster level** — all 20 subjects in cluster $i$ share it. The error $\varepsilon_i$, however, *should* be individual-level — each subject has idiosyncratic noise — so it should be $\varepsilon_{ik}$.
+- **Eq. (3):** Writing $x_{ik}$ and $z_{ik}$ wrongly implies treatment and spillover status vary *within* a cluster. They do not — a whole cluster is or is not treated, and is or is not spillover-exposed.
+
+**Fix in manuscript:**
+
+- Eq. (1): $\varepsilon_i \to \varepsilon_{ik}$
+- Eq. (3): $x_{ik} \to x_i$, $z_{ik} \to z_i$, $\epsilon_i \to \epsilon_{ik}$
+
+---
+
+## 3c — Cluster index dropped entirely in Eqs. (4)–(6)
+
+**Stated issue:** The later equations switch to $y_i$, $x_i$, $\varepsilon_i$ — dropping $k$ — without explanation.
+
+**The correct answer:** Nothing structural changes. Because $x_i$, $z_i$, and the spatial lag $(\mathbf{Wy})_i$ are all **constant for every subject in cluster $i$**, the *only* source of within-cluster variation in $y_{ik}$ is the individual error $\varepsilon_{ik}$. So the equations *could* legitimately be written at cluster level — but dropping $k$ silently creates confusion.
+
+**Decision (user preference, 2026-05-31):** **Keep the indices for readability.** Equations (4)–(6) and the appendix likelihood now consistently use $y_{ik}$, $y_{jk'}$, $\varepsilon_{ik}$. A sentence in the Eq. (3) description states explicitly that individual responses differ only through $\varepsilon_{ik}$, preempting the "why bother with $k$?" question.
+
+---
+
+## 3d — $\mathbf{W}$ appears individual-level, but neighbor status is cluster-level
+
+**Stated issue:** The entries appear to be at individual level, but neighbor status is cluster-level. If rows are row-normalized, this is really a spillover of the *cluster mean* from cluster to cluster, not individual observations.
+
+**The correct answer:** Exactly right — $\mathbf{W}$ is a **cluster-level $n \times n$ adjacency matrix** ($n = 8, 9, 12$). The subscripts $i, j$ in $w_{ij}$ index **clusters, not individuals**. The spatial lag $\rho\mathbf{Wy}$ for any individual in cluster $i$ depends only on *which clusters neighbor cluster $i$* — it is identical for all subjects in that cluster. This is the structural reason the individual subject locations within a cluster (the random points in Fig. 4) **do not enter the model** — only cluster membership matters.
+
+**Fix in manuscript:** Description explicitly calls $\mathbf{W}$ a "cluster-level $n \times n$ adjacency matrix" and states $i, j$ refer to clusters. This also directly addresses Comment 2's "are random locations discarded?" — yes, for the SAR fit they are.
+
+---
+
+## 3e — $\psi$ used both as a function $\psi(d_i)$ and as a scalar
+
+**Stated issue:** $\psi(d_i)$ in the description (distance function) contradicts the bare scalar $\psi$ in the equation.
+
+**The correct answer:** Spillover in this study is **purely binary**. $\psi$ is a single fixed scalar (0.5, 0.6, 0.7, or 0.8). A cluster receives the full $\psi$ if it Rook-neighbors a treated cluster, and 0 otherwise — **no distance decay**. The $\psi(d_i)$ language was a leftover from an early draft that described linear / exponential / Gaussian decay variants that were never implemented.
+
+**Fix in manuscript:** $\psi(d_i)$ replaced with scalar $\psi$ throughout; described as "the scalar spillover effect parameter." (Already corrected in V2 before the 2026-05-31 session.)
+
+---
+
+## 3f — The $\mathcal{N}(i)$ restriction in Eq. (4) is redundant
+
+**Stated issue:** Indexing the sum over $j \in \mathcal{N}(i)$ is redundant because $w_{ij} = 0$ for non-neighbors anyway.
+
+**The correct answer:** Correct. Since $w_{ij}$ already zeros out non-neighbors, restricting the summation index adds no information and implies something special is happening.
+
+**Fix in manuscript:** Sum rewritten as $\rho \sum_{j \neq i} w_{ij} y_{jk'}$ with a note that $w_{ij} = 0$ for non-neighboring clusters, so the sum reduces naturally to neighbors.
+
+---
+
+## 3g — Eq. (5) uses a different expression than Eq. (4)
+
+**Stated issue:** Eq. (4) sums over $j \in \mathcal{N}(i)$; Eq. (5) sums over $j \neq i$. Same object, two notations.
+
+**The correct answer:** The two are mathematically identical (because $w_{ij} = 0$ off the neighbor set), but presenting them differently forces the reader to verify equivalence.
+
+**Fix in manuscript:** Both equations now use the **same** form, $\sum_{j \neq i} w_{ij} y_{jk'}$, making it immediately clear they describe the same spatial lag structure.
+
+---
+
+## Comment 3 — Completeness checklist
+
+| Sub-item | Resolved by | Status |
+|----------|-------------|--------|
+| 3a | Inline $w_{ij}$ definition after Eq. (1) | ✅ |
+| 3b | $\varepsilon_i\to\varepsilon_{ik}$ (Eq. 1); $x_{ik}\to x_i$, $z_{ik}\to z_i$ (Eq. 3) | ✅ |
+| 3c | Keep indices throughout + explanatory sentence | ✅ |
+| 3d | $\mathbf{W}$ declared cluster-level $n\times n$ | ✅ |
+| 3e | $\psi(d_i)\to$ scalar $\psi$ | ✅ |
+| 3f | Drop $\mathcal{N}(i)$ restriction, sum over $j\neq i$ | ✅ |
+| 3g | Unify summation form across Eqs. (4)/(5) | ✅ |
+
+# Identifiability & Collinearity (prompted by Comment 2)
+
+> **Reviewer's claim:** "For almost all allocations on the small grids the treatment indicator and spillover indicator will be exactly collinear and the effect not identifiable."
+
+**This is correct**, and it explains a long-standing frustration in the SpatialCRT project: $\hat\psi$ is frequently unstable or non-identifiable.
+
+## Why the collinearity is exact for BSS
+
+In a 2×4 BSS (checkerboard) design under TrtNoSpill:
+
+| Cluster type | $x_i$ | $z_i$ (TrtNoSpill) |
+|--------------|-------|--------------------|
+| Intervention | 1 | 0 (no treated neighbors permitted) |
+| Control | 0 | 1 (every control borders a treated cluster) |
+
+By construction, **every control cluster borders a treated cluster** — that is the definition of the checkerboard. Therefore $z_i = 1 - x_i$ *exactly*. The design matrix is singular; $\beta$ and $\psi$ cannot be separately estimated.
+
+**Consequence:** `lagsarlm()` silently drops/absorbs $z$, and $\hat\beta$ actually estimates $\beta + \psi$. **This is precisely why the BSS TrtNoSpill bias ≈ $\psi$** — textbook omitted-variable bias, not a coding error.
+
+For **SRS**, most allocations contain at least one control cluster with *zero* treated neighbors ($z_i = 0$), which breaks the collinearity and permits partial identification. This is the structural reason SRS sometimes beats BSS on $\hat\beta$ MSE.
+
+## Mitigation options (least → most involved)
+
+### Option 1 — Reframe the claim *(low effort, high impact; no re-run)*
+State explicitly that for BSS, $z_i$ is a deterministic function of $x_i$, so $\beta$ and $\psi$ are not separately identified and the model estimates their **combined** effect. Converts an apparent gap into a stated finding that *explains* the result pattern. Also answers Comment 4 ("what model is estimated").
+
+### Option 2 — Add a collinearity diagnostic *(cheap; no re-run of core sim)*
+For each allocation, compute $\mathrm{cor}(x, z)$ across clusters and report when it is $\pm 1$. Makes the issue visible and justifies BSS vs. SRS divergence quantitatively.
+
+### Option 3 — Restrict $\hat\psi$ reporting to identifiable allocations *(moderate)*
+Report $\hat\psi$ MSE only for allocations where at least one control cluster has no treated Rook neighbor (minimum condition for separate identification). For BSS this set is **empty** — itself a finding: BSS trades spillover identifiability for intervention-effect stability.
+
+### Option 4 — Proportional spillover indicator *(substantive; requires re-run)*
+Replace binary $z_i$ with
+$$z_i = \frac{\#\{\text{treated Rook neighbors of cluster } i\}}{\#\{\text{Rook neighbors of cluster } i\}} \in [0,1].$$
+Varies across allocations even for BSS, breaks exact collinearity, uses spatial structure more informatively, and makes $\psi$ interpretable as "effect per unit increase in proportion of treated neighbors." Downside: re-run everything.
+
+### Option 5 — Buffer-zone / "fried-egg" design *(most involved; future work)*
+Designate a ring of excluded buffer clusters that absorb spillover, leaving analyzed control clusters with $z_i = 0$. The design-stage analog of Option 3. Directly answers Reviewer Comment 6's buffer-zone suggestion. Position as **future work**, not a current re-run.
+
+## Recommended path *(no re-simulation required)*
+
+Combine **Options 1 + 2**, then position **4 + 5** as future work:
+
+1. State explicitly (SAR model section) that BSS induces **exact** $x_i$–$z_i$ collinearity on small grids; $\hat\beta$ then estimates a conflated direct + indirect effect.
+2. Add the $\mathrm{cor}(x,z)$ diagnostic so readers see which scenarios are identifiable.
+3. Reframe the contribution: the paper characterizes $\hat\beta$ MSE under realistic spatial confounding — BSS gives low-variance estimates of the *confounded* parameter; SRS gives more variable but sometimes better-separated estimates.
+4. Discuss Options 4 and 5 in the Discussion as natural extensions, directly responding to the reviewer's buffer-zone suggestion.
+
+::: {.callout-tip}
+## Key reframe
+The spillover non-identifiability is **not a bug to hide** — it is a structural property of compact stratified designs on small grids, and it is the mechanism behind the headline result. Stating it openly strengthens the paper and answers Comments 2, 4, and 6 simultaneously.
+:::
+
+# Running TODO / open questions
+
+- [ ] Decide whether to add the $\mathrm{cor}(x,z)$ diagnostic to results tables or to a single summary sentence.
+- [ ] Confirm `lagsarlm()` behavior under perfect collinearity (does it drop $z$, error, or return a rank-deficient fit?) — verify empirically in the SpatialCRT code.
+- [ ] Decide if Option 4 (proportional $z_i$) is worth a supplementary re-run for one grid as a proof-of-concept.
+- [ ] Cross-check that the notation fixes in the appendix likelihood match the main-text equations exactly.
