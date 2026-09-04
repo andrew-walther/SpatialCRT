@@ -1,6 +1,7 @@
 # Manuscript — Spatial Cluster Randomized Trials: Sampling Design with Spillover Effects & Spatial Dependence
 
 **Authors:** Andrew Walther, Tonya Van Deinse, Feng-Chang Lin (University of North Carolina at Chapel Hill)
+
 **Journal:** *BMC Medical Research Methodology*
 
 > ## 📄 Final accepted manuscript
