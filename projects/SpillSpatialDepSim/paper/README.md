@@ -5,7 +5,11 @@
 **Journal:** *BMC Medical Research Methodology*
 
 > ## Final accepted manuscript
-> **[`Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf`](https://github.com/andrew-walther/SpatialCRT/blob/main/projects/SpillSpatialDepSim/paper/Manuscript%20Revisions/Revision%202c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf)**
+> **[`Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2_Submission/Revisions_V2c.pdf`](https://github.com/andrew-walther/SpatialCRT/blob/main/projects/SpillSpatialDepSim/paper/Manuscript%20Revisions/Revision%202c/Walther_SpatialCRT_LaTeX_Revisions_V2_Submission/Revisions_V2c.pdf)**
+>
+> (The `Walther_SpatialCRT_LaTeX_Revisions_V2c/` folder next to it holds byte-identical
+> copies of the `.pdf`/`.tex`/`.bib`/figures, plus extra working files from producing
+> the diff — `V2_Submission/` is the clean package actually sent to the journal.)
 
 ## Directory map
 
@@ -28,7 +32,8 @@ sets across submission rounds); a cleanup pass is planned but not yet done.
 ## Rebuilding the final manuscript
 
 If you edit `Revisions_V2c.tex`, rebuild the PDF from inside
-`Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/`:
+`Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2_Submission/`
+(or the `_V2c/` copy — see note above):
 
 ```bash
 pdflatex -interaction=nonstopmode Revisions_V2c.tex
