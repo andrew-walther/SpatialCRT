@@ -369,6 +369,14 @@ Figures available in `paper/ctj_manuscript/figures/`:
       tau-sensitivity figures were merged into one 2-panel figure. **Open:** a
       deliberate review of the full main-text + SI figure list (this was a quick
       fit, not a considered final selection) — see Open To-Dos below.
+- [x] **Real-data ingestion pipeline built and ready** — completed 2026-09-04.
+      `application/code/run_application_profiles.R` now has `load_real_sud_data()`,
+      `integrate_real_sud_data()`, and `run_all_real_years()` to read, clean, and
+      aggregate the real county-level SUD data onto the 58 community-college
+      clusters once it arrives, writing to a separate `real_{year}_{profile}/`
+      output directory so the existing synthetic results are untouched. **Nothing
+      has been run yet** — this is dormant plumbing waiting on the actual dataset;
+      see Open To-Dos below for the two key next steps.
 
 ---
 
@@ -394,9 +402,10 @@ above. Remaining work:
 
 | Priority | Task | Description |
 |----------|------|-------------|
+| **High** | **Ingest and apply the real dataset** | Once Ashkan Habib's SUDDEN-derived NC county dataset and IRB access are finalized, run the (already-built) real-data pipeline — `run_all_real_years()` in `application/code/run_application_profiles.R` — and use its output to replace the explicitly-labeled placeholder Application-section numbers *and* maps (service-area/incidence/k-means-region maps) in both manuscripts |
+| **High** | **Write, revise, and submit the manuscript(s)** | With explicit consideration for how this material gets reused in the user's **preliminary oral exam** (literature review & project proposal) and **final thesis** (as a thesis chapter) — not scoped to journal submission alone |
 | High | **Consolidated review** | Bring all three documents (CTJ main text, CTJ SI, dissertation chapter) to the user for one combined review/revision cycle |
 | High | **Figure list review** | Deliberately review the full main-text + SI figure list and decide what to keep/drop/combine — the 2026-07-03 coverage+tau merge was a quick fit to make room for the new NC incidence map, not a considered final selection |
-| High | **Real application data + maps** | Replace the explicitly-labeled placeholder Application-section numbers *and* maps (service-area/incidence/k-means-region maps, used in both the SI and main text) with results from the real SUDDEN-derived NC county dataset once Ashkan Habib's data and IRB access are finalized |
 | Medium | **UNC dissertation template** | Reformat `Dissertation_Chapter.qmd` to the UNC Graduate School template once all dissertation chapters are ready to merge (currently a simple double-spaced format matching Project 1's manuscript, per user direction) |
 | Medium | **CD diagram bug** | `plot_cd_diagram()` in `10_statistical_comparisons.R` has a label-collision bug for designs with adjacent ranks, independent of image width — worked around throughout (dissertation chapter omits it; the CTJ SI uses a clean re-implementation lifted from `IncidenceDesign_ProjectSummary.qmd` instead); worth fixing upstream so future work can call the shared function directly |
 | Low | **Presentation slides** | Expand `SpatialCRT_IncidenceDesign_Presentation.qmd` scaffold into full conference slides |
@@ -422,7 +431,10 @@ quadrants become 4 population-balanced k-means regions) and has completed a full
 160,000-fit synthetic-incidence run. **All current application-scale numbers and maps are an
 explicitly labeled synthetic placeholder** — real SUD incidence data (from ~100,000 NC death
 certificates, classified via the SUDDEN algorithm) is being finalized with an epidemiology
-collaborator and will supersede these results once available.
+collaborator and will supersede these results once available. The ingestion pipeline for
+that swap (`load_real_sud_data()`, `integrate_real_sud_data()`, `run_all_real_years()` in
+`application/code/run_application_profiles.R`) is already built and ready — it just hasn't
+been run yet because the dataset itself hasn't arrived.
 
 ---
 

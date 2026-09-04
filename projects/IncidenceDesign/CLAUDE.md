@@ -204,7 +204,42 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ---
 
-## Current State (as of 2026-07-03)
+## Current State (as of 2026-09-04)
+
+**Real-data ingestion pipeline:** READY, DORMANT (waiting on the actual dataset)
+- `application/code/run_application_profiles.R` gained `load_real_sud_data()`
+  (reads a CSV/Excel of county-level empirical data, auto-detects the
+  county/year/count/population columns, filters to one year) and
+  `integrate_real_sud_data()` (joins that county data onto the existing
+  county→community-college mapping, aggregates up to the 58 clusters, computes
+  `sud_rate_per_100k` + rank-normalized incidence).
+- `build_nc_application_clusters()` and `run_application_profile()` now accept
+  `real_county_data` / `real_data_path` + `real_data_year` — when supplied, the
+  pipeline routes through real data instead of `generate_synthetic_sud_data()`
+  and writes to a separate `real_{year}_{profile}/` output directory (the
+  existing synthetic `smoke`/`pilot`/`full` results are untouched). `plot_incidence_map()`
+  titles the map "Observed SUD Incidence {year}" vs. "Synthetic Placeholder..."
+  accordingly. `run_all_real_years()` loops the whole pipeline over 2018–2021.
+- **Nothing has been run yet** — no real data file exists in the repo, so this
+  code is dormant plumbing. Once Ashkan Habib's SUDDEN-derived NC county dataset
+  and IRB access are finalized, running it swaps out the placeholder without
+  any further code changes.
+
+**Two key next steps (per user, 2026-09-04):**
+1. **Ingest and apply the real dataset** to the application section once it
+   arrives — run `run_all_real_years()` (or `run_application_profile(..., real_data_path=, real_data_year=)`
+   per year), regenerate the application maps/tables, and replace the
+   placeholder numbers in both manuscripts (main text + CTJ SI Section S11 +
+   `Dissertation_Chapter.qmd`).
+2. **Write, revise, and submit the manuscript(s)** — with explicit
+   consideration for how this material will be reused across the user's
+   **preliminary oral exam** (literature review & project proposal) and the
+   **final thesis** (as a thesis chapter), not just journal submission. This
+   means decisions made in the "Manuscript Development" roadmap below (scope,
+   figure selection, framing) should be checked against both audiences, not
+   only the CTJ submission target.
+
+## Prior State (as of 2026-07-03)
 
 **CTJ Supplementary Information:** COMPLETE
 - `paper/ctj_manuscript/Supplementary_Information.tex` (+ compiled PDF, 14 pages,
@@ -371,6 +406,7 @@ Tau-sweep + MC SEs + Power implementation on `main` 2026-04-08.
 Tau-sweep results integrated, all reports regenerated on `main` 2026-04-08.
 CTJ + dissertation-chapter manuscript first drafts on `main` 2026-07-02.
 CTJ Supplementary Information + ranked figures on `main` 2026-07-03.
+Real-data ingestion pipeline (`run_application_profiles.R`) added on `main` 2026-09-04.
 
 ---
 
@@ -521,9 +557,10 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 | Priority | Task | File |
 |----------|------|------|
+| **High** | **Ingest and apply the real SUDDEN-derived dataset** once available — the ingestion pipeline (`load_real_sud_data()`, `integrate_real_sud_data()`, `run_all_real_years()`) is ready and dormant; running it replaces the placeholder Application-section numbers AND maps (service-area/incidence/k-means-region maps) | `application/code/run_application_profiles.R`; `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| **High** | **Write, revise, and submit the manuscript(s)** with explicit consideration for reuse in the user's preliminary oral exam (literature review & project proposal) and final thesis (as a thesis chapter) — not scoped to journal submission alone | `paper/ctj_manuscript/`, `paper/dissertation_chapter/` |
 | High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
 | High | Full review of the main-text + SI figure list to deliberately decide what to keep/drop/combine (the coverage+tau merge done 2026-07-03 was a quick fit for the new NC incidence map, not a considered final selection) | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` |
-| High | Replace placeholder Application-section numbers AND maps (community-college service-area/incidence/k-means-region maps) with real SUDDEN-derived data once finalized | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | Medium | Apply UNC Graduate School dissertation template/formatting | `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | Medium | Fix the pre-existing `plot_cd_diagram()` label-collision bug (designs with adjacent ranks overlap regardless of image width) — currently worked around by omitting the CD diagram from the dissertation chapter's inline exhibits | `code/10_statistical_comparisons.R` |
 | Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |
