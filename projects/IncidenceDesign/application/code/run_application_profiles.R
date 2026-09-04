@@ -163,9 +163,98 @@ download_osbm_county_population <- function(cache_path = file.path(application_d
   pop
 }
 
+#' Load and clean raw county-level real data for a target year
+#'
+#' @param real_data_path Path to a CSV or Excel file containing county-level data.
+#' @param target_year The target year of data to extract.
+#' @return A cleaned data frame with columns NAME, year, sud_count, and population.
+#' @export
+load_real_sud_data <- function(real_data_path, target_year) {
+  if (!file.exists(real_data_path)) {
+    stop("Real data file not found: ", real_data_path, call. = FALSE)
+  }
+
+  ext <- tolower(tools::file_ext(real_data_path))
+  raw <- if (ext %in% c("xlsx", "xls")) {
+    readxl::read_excel(real_data_path)
+  } else {
+    read.csv(real_data_path, stringsAsFactors = FALSE)
+  }
+
+  names(raw) <- tolower(make.names(names(raw)))
+
+  county_col <- names(raw)[grepl("county|name", names(raw))][1]
+  year_col <- names(raw)[grepl("year", names(raw))][1]
+  count_col <- names(raw)[grepl("death|count|sud|sudden", names(raw))][1]
+  pop_col <- names(raw)[grepl("pop|risk|estimate", names(raw))][1]
+
+  if (is.na(county_col) || is.na(year_col) || is.na(count_col) || is.na(pop_col)) {
+    stop("Real data must contain columns for county, year, sud_count (or deaths), and population.", call. = FALSE)
+  }
+
+  clean_df <- raw |>
+    dplyr::filter(.data[[year_col]] == target_year) |>
+    dplyr::transmute(
+      NAME = gsub("\\s+County$", "", as.character(.data[[county_col]]), ignore.case = TRUE),
+      year = as.integer(.data[[year_col]]),
+      sud_count = as.integer(gsub("[^0-9]", "", as.character(.data[[count_col]]))),
+      population = as.numeric(gsub("[^0-9.]", "", as.character(.data[[pop_col]])))
+    )
+
+  if (nrow(clean_df) == 0) {
+    stop(sprintf("No data found in real data file for year %d.", target_year), call. = FALSE)
+  }
+
+  clean_df
+}
+
+#' Aggregate county-level real data to community college clusters
+#'
+#' @param clusters_sf An sf polygon object containing the 58 community college clusters.
+#' @param real_county_data A cleaned data frame containing the county-level real data.
+#' @return The clusters sf object with aggregated real data and rank-normalized incidence appended.
+#' @export
+integrate_real_sud_data <- function(clusters_sf, real_county_data) {
+  mapping <- get_cc_mapping_data()
+
+  joined <- real_county_data |>
+    dplyr::inner_join(mapping, by = "NAME")
+
+  aggregated <- joined |>
+    dplyr::group_by(Primary_College) |>
+    dplyr::summarise(
+      sud_count = sum(sud_count, na.rm = TRUE),
+      population = sum(population, na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  clusters_sf <- clusters_sf |>
+    dplyr::select(-population) |>
+    dplyr::left_join(aggregated, by = "Primary_College")
+
+  clusters_sf$sud_count[is.na(clusters_sf$sud_count)] <- 0L
+  clusters_sf$population[is.na(clusters_sf$population)] <- 1
+
+  N <- nrow(clusters_sf)
+  clusters_sf$sud_rate_per_100k <- (clusters_sf$sud_count / clusters_sf$population) * 100000
+  clusters_sf$incidence_rank01 <- rank(clusters_sf$sud_rate_per_100k, ties.method = "average") / N
+  clusters_sf$incidence_source <- "empirical_real_sud_data"
+
+  clusters_sf
+}
+
+#' Fetch and Prepare NC Community College Spatial Clusters
+#'
+#' @param population_path Optional path to county population file.
+#' @param cb Logical. If TRUE, uses lower-resolution boundary files.
+#' @param year Optional integer year.
+#' @param real_county_data Optional cleaned empirical county-level data to extract true populations.
+#' @return A list containing counties sf object and aggregated clusters sf object.
+#' @export
 build_nc_application_clusters <- function(population_path = NULL,
                                           cb = TRUE,
-                                          year = NULL) {
+                                          year = NULL,
+                                          real_county_data = NULL) {
   options(tigris_use_cache = TRUE)
   tigris_cache <- file.path(application_dir, "results", "tigris_cache")
   dir.create(tigris_cache, recursive = TRUE, showWarnings = FALSE)
@@ -188,7 +277,17 @@ build_nc_application_clusters <- function(population_path = NULL,
   college_ids$Legend_Label <- paste0(college_ids$ID, ") ", college_ids$Primary_College)
 
   mapping <- dplyr::left_join(mapping, college_ids, by = "Primary_College")
-  county_pop <- load_county_population(population_path)
+
+  county_pop <- if (!is.null(real_county_data)) {
+    data.frame(
+      NAME = real_county_data$NAME,
+      county_population = real_county_data$population,
+      stringsAsFactors = FALSE
+    )
+  } else {
+    load_county_population(population_path)
+  }
+
   if (is.null(county_pop)) {
     county_pop <- download_osbm_county_population()
     if (is.null(county_pop)) {
@@ -202,7 +301,11 @@ build_nc_application_clusters <- function(population_path = NULL,
       population_source <- "NC OSBM county-population-totals API, 2024 Total Population Estimate"
     }
   } else {
-    population_source <- normalizePath(population_path, mustWork = FALSE)
+    population_source <- if (!is.null(real_county_data)) {
+      "provided_real_county_data"
+    } else {
+      normalizePath(population_path, mustWork = FALSE)
+    }
   }
 
   county_data <- counties |>
@@ -334,14 +437,17 @@ summarise_application_results <- function(iteration_results) {
     )
 }
 
-plot_incidence_map <- function(incidence_sf, out_file) {
+plot_incidence_map <- function(incidence_sf, out_file, is_real = FALSE, year = NULL) {
+  title_text <- if (is_real) paste("Observed SUD Incidence", year %||% "") else "Synthetic Placeholder SUD Incidence"
+  subtitle_text <- if (is_real) "Empirical rates aggregated over NC Community College service areas" else "Poisson SAR surface over NC Community College service areas"
+
   p <- ggplot2::ggplot(incidence_sf) +
     ggplot2::geom_sf(ggplot2::aes(fill = sud_rate_per_100k), color = "white", linewidth = 0.25) +
     ggplot2::scale_fill_viridis_c(name = "SUD rate\nper 100k") +
     ggplot2::theme_void() +
     ggplot2::labs(
-      title = "Synthetic Placeholder SUD Incidence",
-      subtitle = "Poisson SAR surface over NC Community College service areas"
+      title = title_text,
+      subtitle = subtitle_text
     )
   ggplot2::ggsave(out_file, p, width = 8, height = 5.5, dpi = 300)
   p
@@ -367,7 +473,9 @@ run_application_profile <- function(profile = c("smoke", "pilot", "full"),
                                     output_root = file.path(application_dir, "results"),
                                     seed = 20260430,
                                     allow_full = identical(Sys.getenv("APPLICATION_RUN_FULL"), "TRUE"),
-                                    resume = TRUE) {
+                                    resume = TRUE,
+                                    real_data_path = NULL,
+                                    real_data_year = NULL) {
   profile <- match.arg(profile)
   config <- get_application_profile(profile)
 
@@ -379,21 +487,39 @@ run_application_profile <- function(profile = c("smoke", "pilot", "full"),
     )
   }
 
-  out_dir <- file.path(output_root, profile)
+  is_real <- !is.null(real_data_path) && !is.null(real_data_year)
+
+  out_dir <- if (is_real) {
+    file.path(output_root, paste0("real_", real_data_year, "_", profile))
+  } else {
+    file.path(output_root, profile)
+  }
   chunk_dir <- file.path(out_dir, "scenario_chunks")
   dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
   dir.create(file.path(out_dir, "figures"), recursive = TRUE, showWarnings = FALSE)
   dir.create(chunk_dir, recursive = TRUE, showWarnings = FALSE)
 
-  spatial <- build_nc_application_clusters(population_path = population_path)
+  real_county_data <- NULL
+  if (is_real) {
+    real_county_data <- load_real_sud_data(real_data_path, real_data_year)
+  }
+
+  spatial <- build_nc_application_clusters(
+    population_path = population_path,
+    real_county_data = real_county_data
+  )
   clusters <- spatial$clusters
 
-  incidence_sf <- generate_synthetic_sud_data(
-    clusters,
-    cluster_id_col = "cluster_id",
-    population_col = "population",
-    seed = seed
-  )
+  if (is_real) {
+    incidence_sf <- integrate_real_sud_data(clusters, real_county_data)
+  } else {
+    incidence_sf <- generate_synthetic_sud_data(
+      clusters,
+      cluster_id_col = "cluster_id",
+      population_col = "population",
+      seed = seed
+    )
+  }
 
   weights <- build_application_spatial_weights(incidence_sf, queen = TRUE)
   coords <- get_cluster_coords(incidence_sf)
@@ -405,7 +531,12 @@ run_application_profile <- function(profile = c("smoke", "pilot", "full"),
     seed = seed
   )
 
-  plot_incidence_map(incidence_sf, file.path(out_dir, "figures", "synthetic_incidence_map.png"))
+  plot_incidence_map(
+    incidence_sf,
+    file.path(out_dir, "figures", if (is_real) "observed_incidence_map.png" else "synthetic_incidence_map.png"),
+    is_real = is_real,
+    year = real_data_year
+  )
   plot_region_map(incidence_sf, region_obj$region_id, file.path(out_dir, "figures", "kmeans_regions_map.png"))
 
   N <- nrow(incidence_sf)
@@ -539,6 +670,33 @@ run_requested_application_profiles <- function(profiles = c("smoke", "pilot"),
                                                seed = 20260430,
                                                ...) {
   lapply(profiles, run_application_profile, population_path = population_path, seed = seed, ...)
+}
+
+#' Run the entire multi-year empirical pipeline (2018–2021)
+#'
+#' @param real_data_path Path to the county-level empirical SUD data.
+#' @param profiles Character vector of run profiles (e.g. c("smoke", "pilot")).
+#' @param ... Additional arguments passed to run_application_profile.
+#' @export
+run_all_real_years <- function(real_data_path,
+                               profiles = c("smoke", "pilot"),
+                               ...) {
+  results <- list()
+  for (year in 2018:2021) {
+    message(sprintf("\n========================================"))
+    message(sprintf("RUNNING EMPIRICAL PIPELINE FOR YEAR %d", year))
+    message(sprintf("========================================\n"))
+
+    results[[as.character(year)]] <- lapply(profiles, function(profile) {
+      run_application_profile(
+        profile = profile,
+        real_data_path = real_data_path,
+        real_data_year = year,
+        ...
+      )
+    })
+  }
+  invisible(results)
 }
 
 if (sys.nframe() == 0) {
