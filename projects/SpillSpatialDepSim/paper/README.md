@@ -4,7 +4,7 @@
 
 **Journal:** *BMC Medical Research Methodology*
 
-> ## 📄 Final accepted manuscript
+> ## Final accepted manuscript
 > **[`Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf`](https://github.com/andrew-walther/SpatialCRT/blob/main/projects/SpillSpatialDepSim/paper/Manuscript%20Revisions/Revision%202c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf)**
 
 ## Directory map
