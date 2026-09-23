@@ -440,8 +440,27 @@ this step replaces every estimate above with an actual number.
 → *Verify:* PDF renders; body and appendix page counts recorded.
 
 **5. [Post-deadline — see "Deadline" above.] Derive CTJ from the finished
-chapter, by hand, condensing to 3,500 words / 6 exhibits, with a real
-abstract rewrite, not a trim.**
+chapter, by hand, condensing to a body in the ~3,000–3,300 word range
+(not maximizing toward 3,500), plus a real abstract rewrite, not a trim.**
+
+**Target word count, set explicitly (2026-09-23): ~3,000–3,300 words of
+body, not the cap itself.** The current CTJ draft sits at roughly
+2,400–2,540 words — meaningfully under-using the 3,500-word budget SAGE
+allows. Once this step has the finished chapter's full argument to draw
+from, use enough of that headroom to produce a substantive manuscript,
+while stopping short of the cap on purpose: the goal is a robust
+submission with real room to add content or clarification during peer
+review, not one so close to 3,500 that a single reviewer request forces
+a cut elsewhere to make space. Landing flush against the cap defeats
+that purpose as much as landing at 2,400 does — both leave no room to
+respond to review.
+
+**The exhibit limit is 6 tables and figures combined**, already verified
+against SAGE's *Clinical Trials* author guidelines (see the Context
+section above) — same number, whether counted as "figures" or exhibits
+generally; there's no separate, larger figure-specific allowance on top
+of it.
+
 Work from the chapter's finished prose, not from the old CTJ file's
 prose — where the two would say the same thing, prefer the chapter's
 version and compress it, rather than reverting to CTJ's already-compressed
@@ -467,9 +486,11 @@ Also assemble the non-component submission checklist flagged in the
 component-fate table (cover letter, any journal-specific forms) — this
 plan can name that it's needed but can't fill it in this far ahead of
 submission.
-→ *Verify:* CTJ renders within 3,500 words / 6 exhibits with a small
-margin, not flush against the cap, using a word-count method stated
-explicitly this time; abstract ≤250 words, unstructured, confirmed
+→ *Verify:* CTJ body lands in the ~3,000–3,300 word range (using a
+word-count method stated explicitly this time, not the ~2,400–2,540
+estimate range this plan couldn't pin down earlier) — not flush against
+3,500 and not left under-using the budget the way the current draft is;
+exactly 6 exhibits or fewer; abstract ≤250 words, unstructured, confirmed
 against the live journal page; every claim in CTJ traces to the chapter;
 nothing cut is silently lost.
 
