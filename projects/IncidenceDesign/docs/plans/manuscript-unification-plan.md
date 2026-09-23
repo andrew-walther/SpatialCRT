@@ -294,15 +294,28 @@ it to need its own pass through step 3.** As of 2026-09-23, only one
 application figure exists that isn't tied to placeholder data —
 `community_college_service_area_clusters.png`, showing which counties
 cluster into each NC community college's service area. Once the real
-study runs, expect several more figures and tables alongside it (the
-actual incidence surface, actual per-design results for the real
-geography, whatever diagnostics the real run produces) — not just
-updated numbers in the existing prose. When that happens, run the
-application section's own figures and tables through step 3's
-body-vs-appendix test and the exhibit-fate table the same way the rest
-of the chapter's content already went through it, rather than dropping
-them in wherever is convenient because the rest of the chapter is by
-then already finished.
+study runs, expect at minimum:
+
+- a **county-level** real incidence map — genuinely new, not a
+  replacement of anything that exists even as a placeholder today. The
+  current synthetic pipeline (`synthetic_incidence_map.png`) only ever
+  produces incidence at the **cluster** (58 CC-service-area) level, so
+  this is an additional exhibit, not a swap.
+- a **cluster-level** real incidence map, the direct real-data analogue
+  of today's `synthetic_incidence_map.png` — this one *is* a like-for-
+  like replacement.
+- **design-comparison results applied to that real cluster-level
+  surface** — the real-data analogue of the existing six/eight-design
+  MSE/coverage comparison, run against actual incidence instead of the
+  synthetic placeholder.
+
+Confirm this list against whatever the real study actually produces
+rather than treating it as exhaustive — it's a floor, not a ceiling, on
+what to expect. When that happens, run the application section's own
+figures and tables through step 3's body-vs-appendix test and the
+exhibit-fate table the same way the rest of the chapter's content already
+went through it, rather than dropping them in wherever is convenient
+because the rest of the chapter is by then already finished.
 
 **3. Decide body vs. appendix for the chapter's own supplementary
 content and figures alike, using a real test, not a page-ceiling-driven
