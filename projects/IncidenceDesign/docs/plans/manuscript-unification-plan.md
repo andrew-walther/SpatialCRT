@@ -183,8 +183,23 @@ either number in advance.
 
 ## Steps
 
-**0. Give `Dissertation_Chapter.qmd` the review pass it's never had, and
-fix its bibliography and abstract before anything else.**
+**0. First, snapshot today's versions before touching anything — this
+plan edits `Dissertation_Chapter.qmd` in place from here on.**
+Copy today's `paper/dissertation_chapter/Dissertation_Chapter.qmd`,
+`paper/ctj_manuscript/CTJ_Manuscript.tex`, and
+`paper/ctj_manuscript/Supplementary_Information.tex` into this repo's
+existing `archive/` folder (it already holds `OutcomeIncidenceDesign_Legacy`,
+`PreliminarySpatialSim`, `SpatialSim_Unified` — same convention, one more
+entry), dated. This is a safeguard in addition to git history, not a
+replacement for it — the point is a version someone can find without
+archaeology. Nothing described in this plan deletes content; by the end
+there are four live deliverables (chapter body, chapter appendix, CTJ
+manuscript, CTJ supplementary material) and the current CTJ/SI additionally
+persist here as a dated snapshot once step 6 marks the live copies
+superseded.
+
+**Then give `Dissertation_Chapter.qmd` the review pass it's never had, and
+fix its bibliography and abstract before adding anything else.**
 
 Three things, all before any new content goes in:
 
@@ -247,9 +262,9 @@ County pilot site + Kinston/Jones satellites), and the hoped-for insight
 MSE/coverage numeric run and the placeholder-caveat paragraph around it
 (the chapter's application section currently has no dedicated
 figure/table of its own to remove — its three figures are all results
-figures; the application *maps*, if any get imported, are handled
-separately in step 3, since they carry the same placeholder-data problem
-this step is fixing); keep everything else; shift the surrounding prose
+figures; the application *maps* are handled separately in step 3, and not
+all of them carry the placeholder problem this step is fixing — see
+step 3); keep everything else; shift the surrounding prose
 from "placeholder result shown, to be superseded" to "analysis plan
 stated, not yet run." Mention that the R ingestion pipeline already
 exists and is waiting on data access, so a reader knows this isn't
@@ -260,6 +275,34 @@ submission — the two documents don't need to be resolved on this point
 at the same time.
 → *Verify:* the section reads as an honest in-progress item with no
 fabricated or placeholder numbers.
+
+**If the real SUDDEN dataset arrives before this plan is finished
+(genuinely possible — access was described as imminent as of
+2026-09-23):** don't wait for it, and don't restart this step once it
+does. The proposal-framing content above (dataset description,
+covariates, geography, pilot site, hoped-for insight) is not throwaway
+scaffolding — it is the setup paragraph the real-results version will
+also need almost verbatim. If data lands mid-plan, replace the "not yet
+run" framing with the actual results in the same section, in place, as a
+small targeted update once the real analysis is done — this is cheaper
+than delaying the whole chapter to write the application section once,
+under deadline pressure, and it's exactly why this step exists rather
+than waiting.
+
+**That backfill is a batch of new content, not a numbers swap — expect
+it to need its own pass through step 3.** As of 2026-09-23, only one
+application figure exists that isn't tied to placeholder data —
+`community_college_service_area_clusters.png`, showing which counties
+cluster into each NC community college's service area. Once the real
+study runs, expect several more figures and tables alongside it (the
+actual incidence surface, actual per-design results for the real
+geography, whatever diagnostics the real run produces) — not just
+updated numbers in the existing prose. When that happens, run the
+application section's own figures and tables through step 3's
+body-vs-appendix test and the exhibit-fate table the same way the rest
+of the chapter's content already went through it, rather than dropping
+them in wherever is convenient because the rest of the chapter is by
+then already finished.
 
 **3. Decide body vs. appendix for the chapter's own supplementary
 content and figures alike, using a real test, not a page-ceiling-driven
@@ -301,7 +344,10 @@ claims?** Only the former goes to appendix now; "exhaustive" and
 
 *Figures — not yet addressed anywhere before this plan; do this
 explicitly, since figures don't sort into body/appendix the same way
-prose does:*
+prose does. Three application-related figures, not two, exist across
+`application/report/figures/` and `ctj_manuscript/figures/
+application_maps/` — inventory both locations, not just
+`results/six_design_manuscript/`:*
 - The chapter's current figures are **stale relative to CTJ's** — verify
   by checksum against `results/six_design_manuscript/` before reusing
   anything the chapter currently has; at least one figure predates a
@@ -313,18 +359,47 @@ prose does:*
   writing new prose around it, not just placing an existing figure — be
   honest that this is new writing, not a placement decision, when
   scoping the work.
-- The two **application maps** are synthetic-placeholder maps, captioned
-  as such. Either give them the same placeholder caveat step 2 applies to
-  the application section's prose if they're imported, or leave them out
-  entirely until real data exists — don't import a placeholder map
-  without the caveat that now applies to placeholder numbers.
+- **Two of the three application figures are placeholder-tainted; one is
+  not — don't treat them as a single group.** `synthetic_incidence_map.png`
+  and `kmeans_regions_map.png` are built from the synthetic placeholder
+  data step 2 is reframing away from; give either the same
+  placeholder-caveat treatment as the application section's prose if
+  imported, or leave them out until real data exists.
+  `community_college_service_area_clusters.png`
+  (`application/report/figures/`) is different in kind — it shows the
+  real geography (which counties feed which CC service area), is not
+  data-dependent, and doesn't need a placeholder caveat at all. It is
+  currently used only in CTJ's Supplementary Information at reduced
+  width (`0.75\linewidth`) and doesn't appear in the chapter at all —
+  add it to the chapter's application section (or its appendix) at full
+  size regardless of when the real dataset arrives.
+- **A fourth consideration, not covered by the body-vs-appendix content
+  test above: physical size and exhibit budget, independent of
+  relevance.** `community_college_service_area_clusters.png` is
+  3600×2400px with a legend dense enough that CTJ's SI already renders
+  it at reduced width, and it would likely need simplifying further (or
+  omitting, with a cross-reference to the chapter/SI) to fit legibly
+  inside CTJ's 6-exhibit, narrow-column budget — while the same figure
+  at full size and full legend fits comfortably in the chapter's
+  single-column dissertation layout with no such constraint. This is a
+  format decision, not a content-relevance one: a figure can be
+  argument-critical (per the test above) and still need an abbreviated
+  version for CTJ specifically, purely because CTJ's page format can't
+  hold what the chapter's can. Apply this same check to every other
+  figure/table as it's inventoried, not just this one.
 - Fold in the repo's own already-flagged, still-open to-do: a considered
   review of the full main-text + SI figure list to decide what to
   keep/drop/combine (`CLAUDE.md` describes the current set as "a quick
-  fit," not a deliberate final selection).
+  fit," not a deliberate final selection) — and use this same pass to
+  surface other results/figures/tables from `results/` or `application/`
+  that never made it into any manuscript but are worth the chapter
+  appendix, now that the appendix is no longer assumed to be minimal.
 - Build a parallel exhibit-fate table (mirroring the component-fate table
   above) once the figure review above is done, so the appendix's exhibit
-  count and page estimate (below) rest on a real list, not a guess.
+  count and page estimate (below) rest on a real list, not a guess. Give
+  it a fifth column, or a note per row, for the format-constraint check
+  above — a figure's fate can differ between "which document" and "what
+  size/version" independently.
 
 *Judgment call, decide once and record it:* whether the chapter appendix
 holds all of the SI's 22 exhibits or a curated subset. With the revised,
