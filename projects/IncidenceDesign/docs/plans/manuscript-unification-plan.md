@@ -70,6 +70,19 @@ because a plan that only ever discusses *not being too short* could
 otherwise read as implying no ceiling exists at all; the ceiling exists
 and has already been knowingly exceeded.
 
+**Advisor feedback, 2026-09-23 — revises step 3's balance, not the
+hierarchy itself.** An advisor reviewing this project emphasized that the
+dissertation chapter should carry the bulk of the relevant content, so a
+reader isn't sent back and forth between chapter and appendix for this
+project specifically. This doesn't change the four-deliverable hierarchy
+above or the chapter-first decision — it changes where step 3's
+body-vs-appendix line falls. The original test ("does a reader need this
+to follow the argument, or would they only consult it?") was already
+correct in principle but had been applied too readily toward appendix for
+genuinely relevant results; step 3 below is revised to bias toward body.
+The appendix is now reserved for what's mechanical rather than merely
+detailed — see step 3.
+
 ## Build section by section, not as one pass — components have
 different fates in different documents
 
@@ -153,11 +166,20 @@ trimming a *different* subset back down for the journal). Project 2's
 simulation study is also narrower in scope than Project 1's (one design
 comparison vs. two spillover mechanisms across a larger design space), so
 landing shorter than Project 1's 42 pp. body is expected, not a shortfall
-to correct. The appendix is a separate estimate: Project 1's was 4 pp.
-with no floats, while the SI this appendix draws from is 15 pp. with 22
-exhibits — expect Chapter 3's appendix to land well above 4 pp., and give
-it its own explicit page/exhibit target once step 3 is underway rather
-than assuming Project 1's number applies here too.
+to correct.
+
+**Both halves of this estimate move with the 2026-09-23 advisor
+feedback, in opposite directions from what an earlier version of this
+plan expected.** Step 3's body-biased test keeps most of the per-
+incidence-mode/per-parameter detail in the body rather than the
+appendix, so the ≈24 pp. body figure above is a floor, not the expected
+final count — expect it to grow once that content moves in. The appendix
+correspondingly shrinks: rather than the "well above 4 pp." this plan
+estimated before the advisor feedback (reasoning from the SI's own 15
+pp./22 exhibits), expect something closer to Project 1's 4-pp./no-floats
+scale, since most of the SI's content is now staying in body. Give both
+their own explicit target once step 3 is underway rather than trusting
+either number in advance.
 
 ## Steps
 
@@ -241,25 +263,41 @@ fabricated or placeholder numbers.
 
 **3. Decide body vs. appendix for the chapter's own supplementary
 content and figures alike, using a real test, not a page-ceiling-driven
-default.**
+default — biased toward body, per the 2026-09-23 advisor feedback above.**
 A generous word budget is a reason the chapter body *can* carry more
-detail than CTJ's SI does; it is not a reason it *should* carry
-everything the SI contains. The test: **does a reader need this content
-to follow the argument, or would they only consult it?**
+detail than CTJ's SI does; for this project specifically, an advisor has
+also said it *should* — the chapter is meant to be readable without
+flipping to the appendix, so "detailed" is no longer by itself a reason
+to push something out. The test, revised: **does the appendix version
+exist only to spare the reader mechanical detail, or does it contain a
+result the reader needs to trust or understand the chapter's central
+claims?** Only the former goes to appendix now; "exhaustive" and
+"irrelevant to the argument" are no longer treated as the same thing.
 
 *Prose and tables:*
-- **Body:** the headline results and the comparisons that support the
-  chapter's central claims — the MSE/coverage ranking, the omnibus
-  Friedman result, the reframed application section from step 2.
-- **Appendix:** exhaustive breakdowns a reader looks up rather than reads
-  through — the full per-incidence-mode / per-parameter (ρ, γ, spillover
-  regime) / τ-level grids, the 8-design comparison (the chapter's main
-  argument is scoped to 6 by design; its numbers trace to
-  `results/eight_design_supplementary/`, not the six-design extract used
-  in step 0), reproducibility detail (seeding protocol, exact metric
-  formulas). Much of this can come from `Supplementary_Information.tex`
-  directly rather than being rewritten — it's already built for this
-  role.
+- **Body — including detail the earlier version of this test would have
+  pushed out:** the headline results and the comparisons that support
+  the chapter's central claims (MSE/coverage ranking, the omnibus
+  Friedman result, the reframed application section from step 2), *and,
+  per the advisor feedback,* the per-incidence-mode / per-parameter (ρ,
+  γ, spillover regime) / τ-level breakdowns — these are genuine results
+  a reader would otherwise have to leave the chapter to see, not
+  reproducibility mechanics. The 8-design comparison is a judgment call
+  under the revised test: it extends past the chapter's main 6-design
+  scope, but if it's presented as a robustness check *of* the 6-design
+  argument rather than a separate result, that argues for keeping a
+  compact version in body too, with only the full 8-design table in
+  appendix. Decide this one explicitly and record which way it went.
+- **Appendix — narrowed to what's genuinely mechanical, not just
+  detailed:** seeding protocol, exact metric formulas, and other
+  reproducibility material a reader consults to verify the pipeline
+  rather than to understand a result. Much of this can come from
+  `Supplementary_Information.tex` directly rather than being rewritten —
+  it's already built for this role. If in doubt whether something is a
+  "result" (body) or "mechanics" (appendix), default to body per the
+  advisor's direction — the cost of an appendix that's slightly too thin
+  is much lower here than the cost of a chapter a reader can't follow
+  without leaving it.
 
 *Figures — not yet addressed anywhere before this plan; do this
 explicitly, since figures don't sort into body/appendix the same way
@@ -289,10 +327,13 @@ prose does:*
   count and page estimate (below) rest on a real list, not a guess.
 
 *Judgment call, decide once and record it:* whether the chapter appendix
-holds all of the SI's 22 exhibits or a curated subset — give the appendix
-an explicit target (page count and exhibit count) once this step's figure
-review is done, rather than assuming Project 1's 4-pp./no-floats appendix
-is the right scale (it almost certainly isn't, given the SI's own size).
+holds all of the SI's 22 exhibits or a curated subset. With the revised,
+body-biased test above, expect the appendix to land closer to Project
+1's 4-pp./no-floats scale than the "well above 4 pp." estimate this plan
+carried before the 2026-09-23 advisor feedback — most of the SI's content
+is being kept in body now, not moved to appendix wholesale. Give it an
+explicit target once this step's figure review is done rather than
+assuming either scale in advance.
 
 For each candidate — prose or figure — write down which side of the test
 it landed on and why, one line each, so the reasoning survives, not just
