@@ -27,6 +27,16 @@ the modular numbered scripts. Preserved untouched for historical reference.
 - `SpatialCRT_Incidence_Sim.Rmd` — Earlier variant
 - `SpatialCRT_Incidence_Simulation_MLE_Results.RData` — MLE results from original run
 
+### `IncidenceDesign_Manuscripts_PreUnification_2026-09-23/`
+Byte-identical snapshot of the three IncidenceDesign manuscript sources as they stood
+on 2026-09-23 (last edited 2026-07-02/03), taken at step 0 of
+`projects/IncidenceDesign/docs/plans/manuscript-unification-plan.md`, before that plan
+began editing `Dissertation_Chapter.qmd` in place. Source only; the figures, bib, and
+compiled PDFs remain at their live locations and in git history.
+- `Dissertation_Chapter.qmd` — from `paper/dissertation_chapter/`
+- `CTJ_Manuscript.tex` — from `paper/ctj_manuscript/`
+- `Supplementary_Information.tex` — from `paper/ctj_manuscript/`
+
 ---
 
 ## Note
