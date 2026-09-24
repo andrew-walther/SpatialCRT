@@ -65,7 +65,15 @@ application_design_metadata <- function(design_id) {
 }
 
 application_design_is_deterministic <- function(design_id) {
-  design_id %in% c(1, 2)
+  # Only the graph checkerboard is deterministic; High Incidence Focus breaks
+  # incidence ties at random per resample since the 2026-09 revision (M3).
+  design_id %in% c(1)
+}
+
+# Rank with ties broken at random, freshly per call (revision M3; mirrors
+# random_tie_rank() in code/03_designs.R). Used by designs 2, 6, 7 and 8.
+application_random_tie_rank <- function(x) {
+  rank(x, ties.method = "random")
 }
 
 make_balanced_assignment <- function(idx, treated_fraction = 0.5) {
@@ -205,12 +213,10 @@ get_application_designs <- function(design_id,
     z <- graph_checkerboard_assignment(nb_list)
     mat <- matrix(rep(z, n_resamples), nrow = N, ncol = n_resamples)
   } else if (design_id == 2) {
-    cutoff <- stats::median(incidence)
-    z <- as.integer(incidence > cutoff)
-    if (sum(z) == 0 || sum(z) == N) {
-      z[order(incidence, decreasing = TRUE)[seq_len(round(N / 2))]] <- 1L
+    # Treat the round(N/2) highest-incidence clusters, ties broken at random (M3)
+    for (i in seq_len(n_resamples)) {
+      mat[, i] <- as.integer(application_random_tie_rank(incidence) > N - round(N / 2))
     }
-    mat <- matrix(rep(z, n_resamples), nrow = N, ncol = n_resamples)
   } else if (design_id == 3) {
     stopifnot(!is.null(region_id))
     base_saturations <- c(0.20, 0.40, 0.60, 0.80)
@@ -233,8 +239,8 @@ get_application_designs <- function(design_id,
       mat[, i] <- z
     }
   } else if (design_id == 6) {
-    quartile <- dplyr::ntile(incidence, 4)
     for (i in seq_len(n_resamples)) {
+      quartile <- dplyr::ntile(application_random_tie_rank(incidence), 4)
       z <- integer(N)
       for (q in sort(unique(quartile))) {
         idx <- which(quartile == q)
@@ -243,8 +249,8 @@ get_application_designs <- function(design_id,
       mat[, i] <- z
     }
   } else if (design_id == 7) {
-    half <- dplyr::ntile(incidence, 2)
     for (i in seq_len(n_resamples)) {
+      half <- dplyr::ntile(application_random_tie_rank(incidence), 2)
       z <- integer(N)
       for (h in sort(unique(half))) {
         idx <- which(half == h)
@@ -255,10 +261,12 @@ get_application_designs <- function(design_id,
   } else if (design_id == 8) {
     stopifnot(!is.null(region_id))
     means <- tapply(incidence, region_id, mean)
-    ranked_regions <- names(sort(means, decreasing = TRUE))
-    sats <- stats::setNames(rep(NA_real_, length(means)), names(means))
-    sats[ranked_regions] <- c(0.80, 0.60, 0.40, 0.20)
+    sat_levels <- c(0.80, 0.60, 0.40, 0.20)
     for (i in seq_len(n_resamples)) {
+      # Highest regional mean -> 0.80; ties broken at random per resample (M3)
+      sats <- stats::setNames(
+        sat_levels[length(means) + 1 - application_random_tie_rank(means)],
+        names(means))
       mat[, i] <- assign_by_region_saturation(region_id, sats)
     }
   } else {

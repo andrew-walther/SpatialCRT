@@ -1,6 +1,11 @@
 # ==============================================================================
 # 04_estimation.R
-# DIM and MLE estimation of the treatment effect tau, with CI extraction
+# Estimation of the treatment effect tau.
+#   - fit_tau_models(): oracle + non-oracle ML spatial-lag fits of one outcome,
+#     with every warning captured (used by the 2026-09 runner, 05).
+#   - fit_sar_lag() / sar_lag_setup(): lean ML engine, validated against lagsarlm.
+#   - estimate_tau(): legacy DIM / lagsarlm path of the pre-2026-09 runner; kept for
+#     DIM and for complete_after_mle.R / longleaf_setup, not used by 05.
 # ==============================================================================
 
 #' Estimate the treatment effect tau across outcome resamples
@@ -254,4 +259,80 @@ fit_sar_lag <- function(y, x, setup,
 
   list(coefficients = b, rest.se = rest_se, rho = rho, rho.se = rho_se,
        LL = opt$objective, s2 = s2, aliased = aliased, se_ok = se_ok)
+}
+
+# Per-fit wrapper used by the 2026-09 runner ----
+
+#' Fit one spatial-lag model, capturing warnings and errors instead of hiding them
+#'
+#' Replaces the old tryCatch(suppressWarnings(lagsarlm(...))) pattern (revision
+#' M6/M7): every warning is recorded, and an error yields NA estimates plus an
+#' "ERROR: ..." message rather than a silent NULL.
+#'
+#' @param y Numeric outcome vector
+#' @param xm Model matrix with an "(Intercept)" column and a "Z" column
+#' @param setup List from sar_lag_setup() (lean engine)
+#' @param listw listw object (lagsarlm engine only)
+#' @param engine "lean" (fit_sar_lag) or "lagsarlm"
+#' @return List with tau (tau-hat), se (its ML standard error), warns (character
+#'   vector of warning / error messages, possibly empty)
+#' @family sar_lag
+#' @seealso [fit_tau_models()], [fit_sar_lag()]
+fit_one_lag_model <- function(y, xm, setup, listw = NULL,
+                              engine = c("lean", "lagsarlm")) {
+  engine <- match.arg(engine)
+  warns <- character(0)
+  fit <- withCallingHandlers(
+    tryCatch(
+      if (engine == "lean") {
+        fit_sar_lag(y, xm, setup)
+      } else {
+        df <- data.frame(Y = y, xm[, colnames(xm) != "(Intercept)", drop = FALSE])
+        rhs <- paste(setdiff(colnames(xm), "(Intercept)"), collapse = " + ")
+        spatialreg::lagsarlm(stats::as.formula(paste("Y ~", rhs)), data = df,
+                             listw = listw, quiet = TRUE)
+      },
+      error = function(e) {
+        warns <<- c(warns, paste("ERROR:", conditionMessage(e)))
+        NULL
+      }
+    ),
+    warning = function(w) {
+      warns <<- c(warns, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+  if (is.null(fit)) return(list(tau = NA_real_, se = NA_real_, warns = warns))
+  # lean: coefficients / rest.se are named vectors; lagsarlm: same fields on the fit
+  b  <- fit$coefficients   # same field name for both engines (lagsarlm: coef() adds rho)
+  se <- fit$rest.se
+  list(tau = if ("Z" %in% names(b)) unname(b[["Z"]]) else NA_real_,
+       se  = if (!is.null(se) && "Z" %in% names(se)) unname(se[["Z"]]) else NA_real_,
+       warns = warns)
+}
+
+#' Fit the oracle and non-oracle models to one simulated outcome
+#'
+#' Oracle (primary):      Y ~ Z + Spill + X  (Spill = true regime-specific S(Z))
+#' Non-oracle (M8):       Y ~ Z + X
+#' Both use the same Y, so the two estimators share every random draw.
+#'
+#' @param y Numeric outcome vector length N
+#' @param Z Binary treatment vector length N
+#' @param spill Spillover covariate S(Z), length N
+#' @param X Incidence covariate for this fit's surface, length N
+#' @param setup List from sar_lag_setup()
+#' @param listw listw object (lagsarlm engine only)
+#' @param engine "lean" or "lagsarlm"
+#' @return Named list with elements oracle and nonoracle, each as returned by
+#'   fit_one_lag_model()
+#' @family sar_lag
+#' @seealso [fit_one_lag_model()]
+fit_tau_models <- function(y, Z, spill, X, setup, listw = NULL, engine = "lean") {
+  x_oracle <- cbind("(Intercept)" = 1, Z = Z, Spill = spill, X = X)
+  list(
+    oracle    = fit_one_lag_model(y, x_oracle, setup, listw, engine),
+    nonoracle = fit_one_lag_model(y, x_oracle[, c("(Intercept)", "Z", "X")],
+                                  setup, listw, engine)
+  )
 }

@@ -24,13 +24,27 @@ get_design_names <- function(design_id = NULL) {
 
 #' Check whether a design produces deterministic assignments given incidence
 #'
-#' Designs 1 (Checkerboard) and 2 (High Incidence Focus) are deterministic:
-#' they produce the same Z vector for every resample.
+#' Only Design 1 (Checkerboard) is deterministic: it produces the same Z vector for
+#' every resample. Design 2 (High Incidence Focus) was deterministic before the
+#' 2026-09 revision; it now breaks incidence ties at random for every resample (M3),
+#' so it is drawn like any other randomized design.
 #'
 #' @param design_id Integer, design identifier
 #' @return Logical
 is_design_deterministic <- function(design_id) {
-  design_id %in% c(1, 2)
+  design_id %in% c(1)
+}
+
+#' Rank incidence with ties broken at random (revision M3)
+#'
+#' Tied incidence values (common in the Poisson mode) are ordered at random rather
+#' than by grid position, and freshly on every call, so each design resample gets its
+#' own tie-break. Used by designs 2, 6, 7 and 8.
+#'
+#' @param x Numeric vector
+#' @return Integer ranks 1..length(x), a permutation (no ties)
+random_tie_rank <- function(x) {
+  rank(x, ties.method = "random")
 }
 
 #' Generate treatment assignment matrices for a given design
@@ -51,10 +65,11 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
     mat <- matrix(rep(cb, n_resamples), nrow = N, ncol = n_resamples)
 
   } else if (design_id == 2) {
-    # Design 2: High Incidence Focus — treat top-50% clusters (deterministic)
-    med_val <- median(incidence)
-    trt_assign <- as.integer(incidence > med_val)
-    mat <- matrix(rep(trt_assign, n_resamples), nrow = N, ncol = n_resamples)
+    # Design 2: High Incidence Focus — treat the N/2 highest-incidence clusters,
+    # ties broken at random per resample, so exactly N/2 are treated (M3)
+    for (i in seq_len(n_resamples)) {
+      mat[, i] <- as.integer(random_tie_rank(incidence) > N / 2)
+    }
 
   } else if (design_id == 3) {
     # Design 3: Saturation Quadrants — varying density by spatial region
@@ -103,9 +118,10 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
     }
 
   } else if (design_id == 6) {
-    # Design 6: Balanced Quartiles — stratified by incidence quartile
-    quartiles <- dplyr::ntile(incidence, 4)
+    # Design 6: Balanced Quartiles — stratified by incidence quartile; equal-size
+    # rank quartiles with ties broken at random per resample (M3)
     for (i in seq_len(n_resamples)) {
+      quartiles <- dplyr::ntile(random_tie_rank(incidence), 4)
       z <- numeric(N)
       for (q in 1:4) {
         idx <- which(quartiles == q)
@@ -116,10 +132,10 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
     }
 
   } else if (design_id == 7) {
-    # Design 7: Balanced Halves — stratified by median incidence, balanced within each half
-    med_val <- median(incidence)
-    half_id <- ifelse(incidence > med_val, 1, 2)
+    # Design 7: Balanced Halves — stratified by incidence half, balanced within each
+    # half; exact N/2 halves with ties broken at random per resample (M3)
     for (i in seq_len(n_resamples)) {
+      half_id <- dplyr::ntile(random_tie_rank(incidence), 2)
       z <- numeric(N)
       for (h in 1:2) {
         idx <- which(half_id == h)
@@ -136,14 +152,13 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
             ifelse(coords$x > half  & coords$y <= half, 2,
             ifelse(coords$x <= half & coords$y > half,  3, 4)))
 
-    # Compute average incidence per quadrant and assign saturations by rank
+    # Average incidence per quadrant; saturations by rank of the quadrant mean
+    # (highest mean -> 0.80), ties broken at random per resample (M3)
     quad_means <- sapply(1:4, function(q) mean(incidence[q_id == q]))
-    rank_order <- order(quad_means, decreasing = TRUE)
     sat_levels <- c(0.80, 0.60, 0.40, 0.20)
-    quad_sats <- numeric(4)
-    quad_sats[rank_order] <- sat_levels
 
     for (i in seq_len(n_resamples)) {
+      quad_sats <- sat_levels[5 - random_tie_rank(quad_means)]
       z <- numeric(N)
       for (q in 1:4) {
         idx <- which(q_id == q)
