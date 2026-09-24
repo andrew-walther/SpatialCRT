@@ -116,9 +116,11 @@ We report results separately for each neighbor type, with queen contiguity prima
 
 # Results
 
-## Overall design performance at the primary scenario
+## Design performance under queen contiguity
 
-At the primary scenario ($\tau = 1.0$), averaged across all 320 spatial and spillover parameter configurations, Incidence-Guided Saturation Quadrants achieved the lowest mean squared error (MSE = 0.079) with 95\% confidence interval coverage close to the nominal level (94.1\%), followed in order by Balanced Quartiles (MSE = 0.102, coverage 93.8\%), High Incidence Focus (MSE = 0.133, coverage 96.6\%), Isolation Buffer (MSE = 0.148, coverage 93.9\%), and 2$\times$2 Blocking (MSE = 0.228, coverage 93.7\%); all five maintained coverage within a few percentage points of the nominal 95\% level (Table 2, Figure 1). Checkerboard performed worst by a wide margin on both criteria (MSE = 0.802) and its coverage collapsed to 52.7\% (Figure 2), meaning the nominal 95\% confidence interval failed to contain the true treatment effect roughly half the time. This magnitude of coverage failure is not merely a loss of precision; it represents a design-induced inferential failure in which a trial analyst using this design and estimator combination would draw a systematically overconfident and frequently wrong conclusion about the treatment effect.
+At the primary scenario, $\tau = 1$, under queen contiguity and pooled over the five incidence configurations, Incidence-Guided Saturation Quadrants had the lowest mean squared error (MSE = 0.091), followed by Balanced Quartiles (0.131), Isolation Buffer (0.160), High Incidence Focus (0.245), 2$\times$2 Blocking (0.319), and Checkerboard (1.087) (Table 2, Figure 1). Coverage of the 95\% intervals was between 0.936 and 0.941 for all six designs (Figure 2), so under queen contiguity the designs differed in precision, not in the validity of their intervals. Power to reject $\tau = 0$ was 0.930 for Incidence-Guided Saturation Quadrants, 0.827 for Balanced Quartiles, 0.731 for Isolation Buffer, 0.642 for 2$\times$2 Blocking, 0.610 for High Incidence Focus, and 0.547 for Checkerboard.
+
+Incidence-Guided Saturation Quadrants also led block by block. Of the 160 queen blocks at $\tau = 1$, Incidence-Guided Saturation Quadrants had the lowest MSE in 95 (59\%), Balanced Quartiles in 58 (36\%), and Isolation Buffer in 7 (4\%); no other design had the lowest MSE in any block.
 
 ```{r}
 #| echo: false
@@ -136,121 +138,150 @@ knitr::kable(results_tbl, digits = 3, caption = "Mean squared error, 95% confide
 
 ## Formal statistical comparison
 
-An omnibus Friedman rank-sum test, treating each of the 320 parameter configurations as a repeated-measures block across the six designs, strongly rejected the null hypothesis of equal average MSE ranks at the primary scenario ($\chi^2 = 800.9$, $\text{df} = 5$, $p < 2.2\times10^{-16}$). Nemenyi post-hoc pairwise comparisons, which control the family-wise error rate across all $\binom{6}{2}=15$ pairwise comparisons, found 13 of these 15 comparisons statistically significant at $\alpha = 0.05$; pairwise Wilcoxon signed-rank tests with Holm correction for multiple comparisons agreed on the identical 13 of 15 significant pairs. The two non-significant pairs were Isolation Buffer versus 2$\times$2 Blocking (Nemenyi $p = 0.945$) and High Incidence Focus versus Balanced Quartiles (Nemenyi $p = 0.664$), indicating that these two pairs of designs, while distinct in average rank and mean MSE, are not reliably distinguishable at this sample size, whereas Checkerboard is significantly worse than every other design and Incidence-Guided Saturation Quadrants is significantly better than every design except Balanced Quartiles.
+The Friedman test rejected equal MSE ranks across the six designs under queen contiguity at $\tau = 1$ ($\chi^2 = 451.57$, $\text{df} = 5$, 160 blocks, $p < 2.2\times10^{-16}$). The average within-block ranks were 1.43 for Incidence-Guided Saturation Quadrants, 2.14 for Balanced Quartiles, 3.69 for Isolation Buffer, 4.24 for 2$\times$2 Blocking, 4.74 for Checkerboard, and 4.76 for High Incidence Focus. Nemenyi comparisons (critical difference 0.596) separated 11 of the 15 pairs. Incidence-Guided Saturation Quadrants ranked significantly better than every other design, including Balanced Quartiles ($p = 0.0086$), and Balanced Quartiles ranked significantly better than the remaining four. The four pairs that Nemenyi comparisons did not separate all lay among the bottom four designs: 2$\times$2 Blocking against Isolation Buffer ($p = 0.090$), High Incidence Focus ($p = 0.130$), and Checkerboard ($p = 0.170$), and Checkerboard against High Incidence Focus ($p = 1.00$). Holm-adjusted Wilcoxon signed-rank tests separated all 15 pairs.
 
-## Design rankings by incidence-generating mechanism
+The bottom three designs are ordered differently by average rank and by mean MSE. Checkerboard had the highest mean MSE but a slightly better average rank than High Incidence Focus, because its MSE depended strongly on the spillover regime: it had a low MSE under the both-arms regime (0.062, against 0.042 for the best design) and the highest MSE in every control-only block (see the spillover-regime results below). Mean MSE weights that control-only failure by its size; average rank counts it once per block.
 
-Because the incidence-aware designs' performance depends on how informative the observed incidence surface actually is, we next examine the design ranking separately within each of the five incidence configurations (independent; two spatial strengths; two Poisson strengths) rather than pooling across them. Two patterns are notable. First, Incidence-Guided Saturation Quadrants ranked first or effectively tied for first in every configuration, with MSE ranging narrowly from 0.077 (spatial, $\rho_X=0.50$) to 0.081 (Poisson, $\rho_X=0.50$); its performance is remarkably stable regardless of how the underlying incidence heterogeneity was generated. Second, and in contrast, High Incidence Focus is highly sensitive to the incidence-generating mechanism: it is essentially tied for best under the independent (iid) mechanism (MSE = 0.080, indistinguishable from Incidence-Guided Saturation Quadrants at 0.080) and under the higher-autocorrelation spatial mechanism (MSE = 0.078), but degrades substantially under both Poisson mechanisms (MSE = 0.202 and 0.207), where it falls behind Balanced Quartiles and Isolation Buffer and approaches the range separating the top tier from Checkerboard. This is because High Incidence Focus commits fully to a single deterministic binary split of the grid based on the observed incidence surface; when that surface is a noisy realization of a Poisson count process rather than a smooth, spatially coherent risk surface, the resulting split can meaningfully diverge from the true underlying risk pattern, and unlike the saturation and quartile-stratification designs, there is no randomization within the design to average out that misclassification. This finding, more than any single aggregate MSE number, is the clearest evidence that incidence-informed designs must be evaluated against a plausible incidence-generating mechanism for the target application, not assumed to perform uniformly well simply because they use observed incidence data.
+Because blocks within an incidence configuration share their ten surfaces, we also compared each pair of designs adjacent in the mean-MSE order over the 50 independent configuration-by-surface units. Every adjacent pair differed significantly. The mean paired differences in MSE, with $t_{49}$ 95\% intervals, were $-0.0401$ ($-0.0431$, $-0.0372$) for Incidence-Guided Saturation Quadrants against Balanced Quartiles, $-0.0293$ ($-0.0332$, $-0.0255$) for Balanced Quartiles against Isolation Buffer, $-0.0853$ ($-0.0954$, $-0.0752$) for Isolation Buffer against High Incidence Focus, $-0.0738$ ($-0.0858$, $-0.0617$) for High Incidence Focus against 2$\times$2 Blocking, and $-0.7677$ ($-0.7893$, $-0.7460$) for 2$\times$2 Blocking against Checkerboard, with Wilcoxon $p \le 4.9\times10^{-9}$ in every case. The better design of each pair had the lower MSE in all 50 units, except High Incidence Focus against 2$\times$2 Blocking, where it did so in 48 (96\%). This test separated High Incidence Focus from 2$\times$2 Blocking, which the Nemenyi comparison did not, because it compares mean MSE rather than within-block ranks.
 
-Checkerboard's degradation is similarly mechanism-dependent, but in the opposite direction: its MSE is worst under the independent mechanism (1.059) and improves, while remaining far worse than every other design, as the incidence surface becomes more spatially autocorrelated (0.791 at spatial $\rho_X=0.20$, falling to 0.546 at spatial $\rho_X=0.50$). Because Checkerboard's assignment does not use the incidence surface at all, this pattern reflects an interaction between the incidence covariate's own spatial structure and the outcome model's spatial dependence term, rather than any property of the design itself; a full account of that interaction is left to future work.
+## Design rankings by incidence configuration
 
-## Parameter sensitivity
+Within each of the five incidence configurations, the queen mean-MSE order was the same as the pooled order: Incidence-Guided Saturation Quadrants, Balanced Quartiles, Isolation Buffer, High Incidence Focus, 2$\times$2 Blocking, and Checkerboard. Across the five configurations, the MSE of Incidence-Guided Saturation Quadrants ranged from 0.087 (spatial, $\rho_X = 0.20$) to 0.093 (iid), that of Balanced Quartiles from 0.128 to 0.135, Isolation Buffer from 0.159 to 0.162, High Incidence Focus from 0.232 to 0.267, 2$\times$2 Blocking from 0.311 to 0.326, and Checkerboard from 1.068 to 1.112. Incidence-Guided Saturation Quadrants had the lowest MSE in 18 to 21 of the 32 blocks in each configuration. The mechanism that generated the incidence surface therefore changed each design's MSE only slightly and did not change the ranking. This includes High Incidence Focus, the design that uses the incidence ranks most directly: its MSE under the two Poisson configurations (0.232 and 0.238) was no higher than under the iid (0.245) and spatial (0.267 and 0.245) configurations.
 
-Table 3 examines mean MSE by design across the four tested levels of outcome spatial dependence, $\rho \in \{0, 0.01, 0.20, 0.50\}$. Five of the six designs are essentially flat across this range, varying by less than 0.03 MSE units from lowest to highest $\rho$. Checkerboard, by contrast, is highly sensitive: its MSE rises from 0.715 at $\rho=0$ to a peak of 0.992 at $\rho=0.20$ before falling back to 0.757 at $\rho=0.50$, a pattern that is not monotonic and that we do not attempt to fully explain mechanistically here, but that stands in sharp contrast to the near-total insensitivity of the other five designs to this parameter.
+## Sensitivity to spatial dependence, spillover magnitude, and spillover regime
+
+Under queen contiguity, neither the strength of spatial dependence in the outcome nor the spillover magnitude changed the ranking. Across $\rho \in \{0, 0.01, 0.20, 0.50\}$, no design's MSE changed by more than 0.02 (Table 3). Across $\gamma \in \{0.5, 0.6, 0.7, 0.8\}$, the MSE of every design except Checkerboard also varied by less than 0.02, and Checkerboard's varied between 1.052 and 1.108 with no trend in $\gamma$ (Table 4). Under rook contiguity, $\gamma$ mattered for Checkerboard alone, for the reason given in the rook results below.
 
 ```{=latex}
 \begin{table}[h]
 \small\centering
-\caption{Mean squared error by design across the four tested levels of outcome spatial dependence $\rho$, at the primary scenario ($\tau=1.0$).}
+\caption{Mean squared error by design across the four levels of outcome spatial dependence $\rho$, under queen contiguity at $\tau = 1$, pooled over the five incidence configurations.}
 \begin{tabular}{lcccc}
 \toprule
 Design & $\rho=0$ & $\rho=0.01$ & $\rho=0.20$ & $\rho=0.50$ \\
 \midrule
-Incidence-Guided Saturation Quadrants & 0.082 & 0.077 & 0.075 & 0.081 \\
-Balanced Quartiles & 0.100 & 0.101 & 0.101 & 0.107 \\
-High Incidence Focus & 0.110 & 0.118 & 0.148 & 0.157 \\
-Isolation Buffer & 0.148 & 0.143 & 0.150 & 0.150 \\
-2$\times$2 Blocking & 0.231 & 0.222 & 0.228 & 0.230 \\
-Checkerboard & 0.715 & 0.746 & 0.992 & 0.757 \\
+Incidence-Guided Saturation Quadrants & 0.090 & 0.087 & 0.093 & 0.093 \\
+Balanced Quartiles & 0.129 & 0.129 & 0.132 & 0.133 \\
+Isolation Buffer & 0.161 & 0.157 & 0.158 & 0.165 \\
+High Incidence Focus & 0.243 & 0.242 & 0.249 & 0.248 \\
+2$\times$2 Blocking & 0.318 & 0.320 & 0.314 & 0.324 \\
+Checkerboard & 1.095 & 1.077 & 1.084 & 1.092 \\
 \bottomrule
 \end{tabular}
 \end{table}
 ```
 
-A clearer and more interpretable pattern emerges from spillover magnitude $\gamma \in \{0.5, 0.6, 0.7, 0.8\}$ (Table 4). Checkerboard's MSE rises monotonically and substantially with spillover magnitude, from 0.710 at $\gamma=0.5$ to 0.905 at $\gamma=0.8$, a nearly 30\% relative increase, while every other design's MSE changes by less than 0.02 units across the same range. This monotonic relationship directly implicates the spillover mechanism, rather than outcome spatial dependence generally, as the specific driver of Checkerboard's failure: a design built to maximize the physical separation between treated and control clusters is, mechanically, a design that maximizes the number of treated-control neighbor pairs across which spillover can operate, and the resulting bias grows worse precisely as the spillover coefficient governing that leakage grows larger.
-
 ```{=latex}
 \begin{table}[h]
 \small\centering
-\caption{Mean squared error by design across the four tested levels of spillover magnitude $\gamma$, at the primary scenario ($\tau=1.0$).}
+\caption{Mean squared error by design across the four levels of spillover magnitude $\gamma$ at $\tau = 1$, pooled over the five incidence configurations, under queen contiguity (primary) and rook contiguity (sensitivity). Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}
 \begin{tabular}{lcccc}
 \toprule
 Design & $\gamma=0.5$ & $\gamma=0.6$ & $\gamma=0.7$ & $\gamma=0.8$ \\
 \midrule
-Incidence-Guided Saturation Quadrants & 0.079 & 0.079 & 0.078 & 0.079 \\
-Balanced Quartiles & 0.101 & 0.103 & 0.105 & 0.101 \\
-High Incidence Focus & 0.133 & 0.133 & 0.133 & 0.133 \\
-Isolation Buffer & 0.145 & 0.148 & 0.149 & 0.149 \\
-2$\times$2 Blocking & 0.231 & 0.229 & 0.223 & 0.228 \\
-Checkerboard & 0.710 & 0.765 & 0.830 & 0.905 \\
-\bottomrule
-\end{tabular}
-\end{table}
-```
-
-The spillover exposure regime (Table 5) also matters substantially for every design, though in a way that runs counter to a naive intuition. Every design's MSE is markedly higher under the "control only" spillover regime than under the "both" regime; for Checkerboard specifically, MSE under "control only" (1.323) is more than four times its MSE under "both" (0.282). This is consistent with the "control only" regime inducing a purely asymmetric bias, in which spillover systematically inflates control-cluster outcomes without any corresponding change in treated-cluster outcomes, shrinking the apparent treatment effect in a way that a maximum likelihood spatial model estimating a single global $\tau$ cannot fully separate from the true effect. Under the "both" regime, by contrast, spillover raises treated and control outcomes together to some degree, partially canceling in the difference that identifies $\tau$. This pattern held for every design tested and is a substantive finding independent of the specific design comparison: classical one-sided contamination, in which only the control arm is exposed to spillover, appears to be a materially harder estimation problem than reciprocal, symmetric spillover exposure, regardless of which treatment assignment strategy is used.
-
-```{=latex}
-\begin{table}[h]
-\small\centering
-\caption{Mean squared error by design under each spillover exposure regime, at the primary scenario ($\tau=1.0$).}
-\begin{tabular}{lcc}
-\toprule
-Design & Both arms exposed & Control-only exposed \\
+\multicolumn{5}{l}{\textit{Queen contiguity}} \\
+Incidence-Guided Saturation Quadrants & 0.092 & 0.089 & 0.092 & 0.089 \\
+Balanced Quartiles & 0.132 & 0.128 & 0.132 & 0.131 \\
+Isolation Buffer & 0.159 & 0.163 & 0.160 & 0.159 \\
+High Incidence Focus & 0.244 & 0.249 & 0.248 & 0.241 \\
+2$\times$2 Blocking & 0.312 & 0.314 & 0.328 & 0.323 \\
+Checkerboard & 1.108 & 1.052 & 1.086 & 1.101 \\
 \midrule
-Incidence-Guided Saturation Quadrants & 0.044 & 0.113 \\
-Balanced Quartiles & 0.044 & 0.161 \\
-High Incidence Focus & 0.104 & 0.162 \\
-Isolation Buffer & 0.148 & 0.148 \\
-2$\times$2 Blocking & 0.057 & 0.398 \\
-Checkerboard & 0.282 & 1.323 \\
+\multicolumn{5}{l}{\textit{Rook contiguity}} \\
+Incidence-Guided Saturation Quadrants & 0.069 & 0.072 & 0.075 & 0.072 \\
+Balanced Quartiles & 0.083 & 0.085 & 0.083 & 0.083 \\
+2$\times$2 Blocking & 0.129 & 0.129 & 0.127 & 0.128 \\
+Isolation Buffer & 0.131 & 0.133 & 0.134 & 0.133 \\
+High Incidence Focus & 0.207 & 0.209 & 0.205 & 0.203 \\
+Checkerboard (flagged) & 0.295 & 0.403 & 0.538 & 0.684 \\
 \bottomrule
 \end{tabular}
 \end{table}
 ```
 
-## Tau sensitivity and rank stability
+The spillover regime was the one factor that changed the queen ranking (Table 5, Figure 1). Under the both-arms regime, Balanced Quartiles had the lowest MSE (0.042), followed by Incidence-Guided Saturation Quadrants (0.046), 2$\times$2 Blocking (0.062), Checkerboard (0.062), Isolation Buffer (0.161), and High Incidence Focus (0.162). Under the control-only regime, the order was Incidence-Guided Saturation Quadrants (0.135), Isolation Buffer (0.159), Balanced Quartiles (0.219), High Incidence Focus (0.329), 2$\times$2 Blocking (0.576), and Checkerboard (2.111). Isolation Buffer's MSE was the same under both regimes (0.161 and 0.159) by construction: no treated cluster has a treated neighbor, so $WZ = 0$ at every treated cluster, $WZ \circ (1 - Z) = WZ$, and the two regimes in Equation 2 define the same outcome model; the small difference is Monte Carlo error, since the two regimes use separate draws. Every other design had a higher MSE under the control-only regime.
 
-The design ranking established at the primary scenario was stable across all five tested magnitudes of the true treatment effect. The omnibus Friedman test rejected the null of equal design ranks at every tested level of $\tau$ (Figure 3; $\chi^2 = 730.6$, $800.9$, $705.7$, $658.5$, and $557.3$ for $\tau = 0.8, 1.0, 1.5, 2.0, 3.0$ respectively, all $p < 2.2\times10^{-16}$), and Checkerboard's coverage failure was equally severe across all tested levels of outcome spatial dependence, remaining between 51.3\% and 54.3\% at every level of $\rho$ (Table 6) even as $\rho$ itself varied fourfold. Taken together, these results indicate that the relative advantage of incidence-informed and buffering designs over Checkerboard does not depend on the size of the true effect a trial is powered to detect, nor on the underlying strength of spatial dependence in the outcome.
+That increase was variance, not bias. The oracle model contains the exact regime-specific spillover covariate, so omitting a spillover term cannot bias it. In every combination of design and regime under queen contiguity, the absolute bias was at most 0.048 and squared bias was less than 2\% of MSE. Checkerboard shows the mechanism most clearly. At its 64 interior clusters, $WZ = 1/2$. Under the both-arms regime the spillover covariate is therefore the constant $\gamma/2$ at those clusters, confounded with the intercept but not with $Z$. Under the control-only regime it equals $(\gamma/2)(1 - Z)$ there, a linear combination of the intercept and $Z$, so only the 36 boundary clusters separate the spillover effect from the treatment effect. Checkerboard's MSE rose from 0.062 under the both-arms regime to 2.111 under the control-only regime, while its bias stayed near zero (0.004) and its coverage stayed at 0.942: its intervals widened with its variance. Its pooled MSE of 1.087 was almost entirely variance, with mean squared bias below $10^{-5}$ (Figure 3 shows the decomposition for the Poisson configuration with $\rho_X = 0.20$). 2$\times$2 Blocking showed the same pattern on a smaller scale, with MSE rising from 0.062 to 0.576 and a bias of 0.016 under the control-only regime.
 
 ```{=latex}
 \begin{table}[h]
 \small\centering
-\caption{Checkerboard's 95\% confidence interval coverage across the four tested levels of outcome spatial dependence $\rho$, at the primary scenario ($\tau=1.0$). The nominal level is 0.95.}
+\caption{Mean squared error by design under each spillover regime at $\tau = 1$, pooled over the five incidence configurations, under queen contiguity (primary) and rook contiguity (sensitivity). Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}
 \begin{tabular}{lcccc}
 \toprule
-& $\rho=0$ & $\rho=0.01$ & $\rho=0.20$ & $\rho=0.50$ \\
+& \multicolumn{2}{c}{Queen} & \multicolumn{2}{c}{Rook} \\
+Design & Both arms & Control only & Both arms & Control only \\
 \midrule
-Coverage & 0.513 & 0.535 & 0.518 & 0.543 \\
+Incidence-Guided Saturation Quadrants & 0.046 & 0.135 & 0.045 & 0.098 \\
+Balanced Quartiles & 0.042 & 0.219 & 0.042 & 0.125 \\
+Isolation Buffer & 0.161 & 0.159 & 0.131 & 0.134 \\
+High Incidence Focus & 0.162 & 0.329 & 0.164 & 0.249 \\
+2$\times$2 Blocking & 0.062 & 0.576 & 0.051 & 0.206 \\
+Checkerboard (flagged under rook) & 0.062 & 2.111 & 0.477 & 0.483 \\
 \bottomrule
 \end{tabular}
 \end{table}
 ```
 
-## Subgroup robustness and win-rate
+Two designs were therefore fragile with respect to the spillover regime, which a trial team cannot know in advance. Under queen contiguity, Checkerboard and 2$\times$2 Blocking were close to the best designs under the both-arms regime and were the two worst under the control-only regime. Incidence-Guided Saturation Quadrants was first or second under both regimes.
 
-Beyond the average MSE reported above, it is useful to ask how consistently each design performs across the full range of 320 tested parameter configurations, since a design with a good average but highly variable performance carries different practical risk than one that is consistently mediocre. Table 7 reports the full MSE distribution (minimum, first quartile, median, third quartile, and maximum) by design at the primary scenario. Incidence-Guided Saturation Quadrants and Balanced Quartiles both show tight, low distributions (medians of 0.059 and 0.076 respectively, with maxima below 0.28), consistent with their low average MSE reflecting genuinely consistent performance rather than a few very good configurations offsetting many poor ones. Checkerboard, by contrast, has both the highest median (0.456) and by far the widest spread (maximum MSE of 4.81, an order of magnitude above its own median), indicating that its poor average performance understates just how badly it can fail in its worst-case configurations.
+## Rook contiguity
+
+Under rook contiguity at $\tau = 1$, pooled over the five incidence configurations, the mean-MSE order was Incidence-Guided Saturation Quadrants (0.072), Balanced Quartiles (0.084), 2$\times$2 Blocking (0.128), Isolation Buffer (0.133), High Incidence Focus (0.206), and Checkerboard (0.480) (Table 2), and the same order held within each of the five incidence configurations. Incidence-Guided Saturation Quadrants had the lowest MSE in 97 of the 160 rook blocks (61\%) and Balanced Quartiles in 60 (38\%). Coverage was between 0.938 and 0.942 for every design except Checkerboard, whose coverage was 0.150. The Friedman test rejected equal ranks ($\chi^2 = 703.76$, $\text{df} = 5$, 160 blocks, $p < 2.2\times10^{-16}$). Nemenyi comparisons separated 13 of 15 pairs; the two they did not separate were Incidence-Guided Saturation Quadrants against Balanced Quartiles ($p = 0.74$) and 2$\times$2 Blocking against Isolation Buffer ($p = 1.00$). Holm-adjusted Wilcoxon tests separated every pair except 2$\times$2 Blocking against Isolation Buffer. In the surface-level comparison, Incidence-Guided Saturation Quadrants had a lower MSE than Balanced Quartiles in 48 of the 50 units (mean difference $-0.0121$; $-0.0139$, $-0.0102$; Wilcoxon $p = 9.9\times10^{-10}$). 2$\times$2 Blocking and Isolation Buffer were close: 2$\times$2 Blocking had the lower MSE in 36 of the 50 units (72\%; mean difference $-0.0048$; $-0.0078$, $-0.0017$; Wilcoxon $p = 0.0027$), but Isolation Buffer had the slightly better average rank (3.38 against 3.40), and the two designs traded places at some values of $\tau$ (see the results for $\tau$ below). Every other adjacent pair differed in all 50 units.
+
+Checkerboard under rook contiguity is a different case: $\tau$ is not identified. Because $WZ = 1 - Z$ exactly, both spillover covariates equal $\gamma(1 - Z)$, and the coefficient on $Z$ estimates $\tau - \gamma$. The estimates behaved accordingly. At $\tau = 1$, Checkerboard's mean bias was $-0.502$, $-0.600$, $-0.704$, and $-0.802$ at $\gamma = 0.5$, 0.6, 0.7, and 0.8, while its standard deviation stayed between 0.20 and 0.21; mean squared bias accounted for 0.425 of its MSE of 0.480. Its coverage fell from 0.316 at $\gamma = 0.5$ to 0.027 at $\gamma = 0.8$. Its MSE was the same under both regimes (0.477 and 0.483), as expected when the two spillover covariates coincide. Under queen contiguity, by contrast, Checkerboard's coverage stayed between 0.939 and 0.943 at every level of $\rho$; under rook contiguity it was between 0.134 and 0.161 (Table 6). Rook Checkerboard estimates were precise but centered on the wrong quantity, the opposite of its imprecise but valid queen estimates. This is the checkerboard paradox of Chapter 2, reproduced on a grid of 100 clusters; we return to the connection with Chapter 2 in the Discussion. We keep these estimates in every ranking and flag them.
 
 ```{=latex}
 \begin{table}[h]
 \small\centering
-\caption{Distribution of MSE by design across the 320 tested parameter configurations at the primary scenario ($\tau=1.0$), sorted by median.}
+\caption{Checkerboard's 95\% confidence interval coverage across the four levels of outcome spatial dependence $\rho$ at $\tau = 1$, pooled over the five incidence configurations, by neighbor type. Under rook contiguity, $\tau$ is not identified for Checkerboard. The nominal level is 0.95.}
+\begin{tabular}{lcccc}
+\toprule
+Neighbor type & $\rho=0$ & $\rho=0.01$ & $\rho=0.20$ & $\rho=0.50$ \\
+\midrule
+Queen & 0.941 & 0.943 & 0.940 & 0.939 \\
+Rook & 0.161 & 0.156 & 0.148 & 0.134 \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+## Non-oracle sensitivity analysis
+
+The non-oracle model, which omits the spillover term, was biased for every design. At $\tau = 1$, and setting aside Checkerboard under rook contiguity, its bias ranged from $-0.12$ to $-0.40$ and its coverage from 0.51 to 0.90 across designs and neighbor types. Under queen contiguity its bias ranged from $-0.123$ (Incidence-Guided Saturation Quadrants) to $-0.244$ (2$\times$2 Blocking) and its coverage from 0.709 (2$\times$2 Blocking) to 0.896 (High Incidence Focus); under rook contiguity the most biased design was Isolation Buffer (bias $-0.400$, coverage 0.513). For Checkerboard under rook contiguity, the non-oracle estimates were identical to the oracle estimates (MSE 0.480, bias $-0.652$, coverage 0.150), because once the aliased spillover column is dropped the two models are the same.
+
+Omitting the spillover term also removes a column that can be nearly collinear with $Z$, and the non-oracle estimates were accordingly less variable for some designs. Under queen contiguity, the non-oracle MSE was lower than the oracle MSE for every design, most of all for Checkerboard (oracle 1.087, non-oracle 0.108) and 2$\times$2 Blocking (oracle 0.319, non-oracle 0.121). Under rook contiguity it was higher for every design except 2$\times$2 Blocking (0.128 under both models) and Checkerboard (identical). These results do not change the recommendation. Incidence-Guided Saturation Quadrants also had the lowest non-oracle MSE under both neighbor types (0.087 under queen contiguity and 0.086 under rook contiguity), and where a design's non-oracle MSE was lower, the estimate was biased and its intervals under-covered, so the lower MSE does not support valid inference.
+
+## Stability across treatment effect sizes
+
+Under queen contiguity, the design order was the same at every $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$, whether designs were ordered by average within-block rank or by mean MSE (Figure 4). The Friedman statistic was 455.49, 451.57, 429.01, 411.19, and 376.79 at these five values ($p < 2.2\times10^{-16}$ at each). The margin between the two leading designs narrowed as $\tau$ increased: the average rank of Incidence-Guided Saturation Quadrants rose from 1.41 at $\tau = 0.8$ to 1.85 at $\tau = 3$, while that of Balanced Quartiles stayed between 2.13 and 2.14, and the MSE of Incidence-Guided Saturation Quadrants rose from 0.088 to 0.115 while that of Isolation Buffer stayed at 0.160. Under rook contiguity the order was also stable except for the close pair of 2$\times$2 Blocking and Isolation Buffer: by average rank, 2$\times$2 Blocking was ahead only at $\tau = 0.8$, and by mean MSE, Isolation Buffer was ahead only at $\tau = 3$. The five values of $\tau$ share their assignments and noise, so these five comparisons are not independent confirmations of one another; they show that the order does not depend on the size of the effect, given the same draws.
+
+## Robustness across blocks and the recommended design
+
+Table 7 gives the distribution of MSE across the 160 queen blocks at $\tau = 1$. Incidence-Guided Saturation Quadrants had the lowest median (0.080) and the lowest worst-case MSE of any design (0.169). Isolation Buffer had the narrowest range (0.128 to 0.206), because its MSE does not depend on the spillover regime, but at a higher level. Balanced Quartiles had a low median (0.115) and a worst case of 0.290. The distributions of 2$\times$2 Blocking and Checkerboard reflect their dependence on the spillover regime: both had low first quartiles (0.062 and 0.063) and high upper quartiles (0.580 and 2.093). Checkerboard had the highest MSE in all 80 control-only blocks; in the 80 both-arms blocks, the highest MSE belonged to High Incidence Focus in 42 and to Isolation Buffer in 38. Under rook contiguity, Incidence-Guided Saturation Quadrants also had the lowest worst-case MSE (0.138).
+
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{Distribution of block-level MSE by design across the 160 blocks under queen contiguity at $\tau = 1$ (32 blocks in each of the five incidence configurations), sorted by median.}
 \begin{tabular}{lccccc}
 \toprule
 Design & Best & Q25 & Median & Q75 & Worst \\
 \midrule
-Incidence-Guided Saturation Quadrants & 0.034 & 0.044 & 0.059 & 0.109 & 0.189 \\
-Balanced Quartiles & 0.033 & 0.043 & 0.076 & 0.166 & 0.274 \\
-High Incidence Focus & 0.012 & 0.051 & 0.086 & 0.166 & 0.504 \\
-2$\times$2 Blocking & 0.039 & 0.057 & 0.120 & 0.311 & 0.821 \\
-Isolation Buffer & 0.102 & 0.131 & 0.146 & 0.164 & 0.206 \\
-Checkerboard & 0.033 & 0.190 & 0.456 & 0.817 & 4.812 \\
+Incidence-Guided Saturation Quadrants & 0.037 & 0.045 & 0.080 & 0.135 & 0.169 \\
+Balanced Quartiles & 0.034 & 0.042 & 0.115 & 0.221 & 0.290 \\
+Isolation Buffer & 0.128 & 0.150 & 0.159 & 0.169 & 0.206 \\
+High Incidence Focus & 0.139 & 0.160 & 0.234 & 0.322 & 0.424 \\
+2$\times$2 Blocking & 0.048 & 0.062 & 0.271 & 0.580 & 0.719 \\
+Checkerboard & 0.051 & 0.063 & 0.899 & 2.093 & 2.843 \\
 \bottomrule
 \end{tabular}
 \end{table}
 ```
 
-A complementary "win-rate" analysis, which asks how often each design achieves the single lowest MSE among all six designs within a given parameter configuration rather than simply averaging across configurations, surfaces a more nuanced picture. High Incidence Focus wins outright in 36.6\% of the 320 configurations, marginally more often than Incidence-Guided Saturation Quadrants (35.9\%), despite having a substantially higher average MSE (0.133 versus 0.079). This apparent contradiction is resolved by the incidence-mechanism-dependent pattern already described above: High Incidence Focus wins decisively when the incidence surface is smooth and informative (the iid and higher-autocorrelation spatial mechanisms), but loses badly enough under the Poisson mechanisms to pull its average down without ever becoming the single worst design in any individual configuration. Balanced Quartiles wins 19.1\% of configurations, and Checkerboard, Isolation Buffer, and 2$\times$2 Blocking together account for the remaining 8.4\%. This win-rate pattern reinforces a central practical implication of this chapter: a single point estimate of average MSE can obscure meaningfully different risk profiles across designs, and the choice between a consistently good design (Incidence-Guided Saturation Quadrants) and a design that is excellent under favorable conditions but degrades sharply under others (High Incidence Focus) should be informed by how confident a trial team is in the quality of its own historical incidence data.
+We recommend Incidence-Guided Saturation Quadrants. It had the lowest mean MSE under both neighbor types, in every incidence configuration, at every value of $\tau$, and under the control-only regime; its worst case across blocks was the lowest of the six designs; and its intervals had coverage of 0.937 under queen contiguity and 0.942 under rook contiguity. Balanced Quartiles also performed well. It was second overall under both neighbor types and was marginally better than Incidence-Guided Saturation Quadrants only under the both-arms regime (0.0421 against 0.0459 under queen contiguity, 0.0421 against 0.0451 under rook contiguity), where Incidence-Guided Saturation Quadrants had the lower MSE in 22 of 80 queen blocks and 23 of 80 rook blocks. Under the control-only regime, Incidence-Guided Saturation Quadrants had the lower MSE in all 80 queen blocks and 75 of 80 rook blocks, by a wider margin (0.135 against 0.219 under queen contiguity).
+
+The performance of Incidence-Guided Saturation Quadrants does not come from ordering the saturations by incidence. Saturation Quadrants, which assigns the same four saturations to the quadrants in random order, had an MSE of 0.0900 against 0.0907 under queen contiguity and 0.0708 against 0.0717 under rook contiguity, and the two designs could not be distinguished (see Methods). What the two designs share, treating the four quadrants at fixed saturations of 20\% to 80\%, is what separated them from the other designs. Coverage did not separate the designs: it was close to 0.94 for every design under both neighbor types, except Checkerboard under rook contiguity, where $\tau$ is not identified.
 
 ```{=latex}
 \begin{figure}[h]
@@ -272,8 +303,6 @@ A complementary "win-rate" analysis, which asks how often each design achieves t
 \end{figure}
 
 ```
-
-A critical difference diagram summarizing these Nemenyi post-hoc comparisons graphically is archived with the supplementary six-design results bundle; the same information is reported numerically above and in Table 2.
 
 # Application: A Planned Sudden Unexpected Death Prevention Pilot in North Carolina
 
