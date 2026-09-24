@@ -123,5 +123,30 @@ No findings: DIM mentions; numbered design shorthand; unresolved @keys; Tables 2
 12. L284 — Poisson SAR placeholder, 2024 NC OSBM populations.
 13. L296, L300 — "substantially heterogeneous" CC-service-area populations.
 
-## Decisions needed before applying (raised with author 2026-09-23)
-See session transcript; recorded here once answered.
+## Decisions (author, 2026-09-23/24)
+
+Because many findings trace to the simulation itself, the author chose to
+revise and re-run it before any prose fixes to Methods/Results. Full
+detail: `simulation-revision-plan.md`.
+
+- **Narrative:** robust vs. fragile, with rankings as support, failure
+  diagnostics as context, and one recommended design for investigators.
+- **Neighbors:** queen is primary; rook is reported separately as the Chapter 2
+  continuity case and a sensitivity analysis; never pooled for headlines.
+- **Pooling:** allowed only when labeled, with splits wherever a conclusion
+  changes. The CTJ main text leads with the most application-realistic mode.
+- **Chapter 2:** brief, explicit, cited continuity. Be ready for the committee
+  question of why Project 1 kept the checkerboard.
+- **Rook Checkerboard:** keep the (biased) estimates, flagged, so all 6 designs
+  appear in every ranking; explain the anomaly in Results/Discussion.
+- **Voice:** "we" for actions and "this chapter" for the document, as in
+  Chapter 2; refer to "Chapter 2", not "Project 1".
+- **Bibliography:** one bib in `paper/`, `SpatialCRT_IncidenceDesign.bib`.
+- **Application facts confirmed:**
+  - Lenoir CC's service area is Lenoir, Greene, and Jones counties; the cluster is
+    that whole area, and spillover goes to *adjacent* service areas.
+  - One CC per county: Northampton → Halifax CC, Bertie → Martin CC,
+    Roanoke-Chowan CC → Hertford only (already the rule in `cc_mapping_data.R`;
+    state it in the chapter).
+- The remaining NEEDS-AUTHOR-CONFIRMATION items (2–4, 6–13) are still open;
+  most fall in the application section that step 2 rewrites.

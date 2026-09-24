@@ -240,6 +240,28 @@ Three things, all before any new content goes in:
 no missing keys; the in-body abstract is gone and its content is saved,
 not discarded.
 
+**Step 0 progress (2026-09-24).** Done: the snapshot (`archive/IncidenceDesign_Manuscripts_PreUnification_2026-09-23/`),
+the review brief (`step0-chapter-review-prompt.md`), and the first review pass
+(`step0-review-findings-2026-09-23.md`: 17 errors, 31 warnings, 17 style). Not
+done: the bibliography, abstract, and prose fixes. **Two changes to this step,
+by author decision:** (1) the bibliography is one self-contained file in this
+repo, `paper/SpatialCRT_IncidenceDesign.bib` (renamed from
+`IncidenceDesign_shared.bib`, with the three diverging entries corrected from
+`prelim/references.bib`), not a pointer into bios-dissertation; step 7
+checks entry-by-entry agreement with the master before porting. (2) The
+review showed that several results come from simulation oversights, not
+wording, so Methods and Results are rewritten only after step 0.5.
+
+**0.5. [Added 2026-09-24] Revise the simulation and re-run it before
+rewriting Methods/Results.** Full plan, decisions, and verification:
+`simulation-revision-plan.md`. In short: designs and outcomes use the
+same incidence surface; Poisson clusters get 100,000 people; ties are
+broken randomly; seeding is explicit; Monte Carlo SEs are honest;
+aliasing is flagged; a non-oracle sensitivity estimator is added; a
+validated fast estimator is used. Then downstream results are
+regenerated and step 0's remaining prose work continues against the new
+ground truth. The chapter-first order of steps 1–7 is unchanged.
+
 **1. Confirm the two items the chapter needs are already present — this
 is a verification step, not drafting.**
 Both the ρ-stratified Checkerboard coverage table and the

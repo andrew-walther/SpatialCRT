@@ -13,6 +13,21 @@
 > real SUDDEN-derived data is still pending. The modular Quarto manuscript framework
 > referenced by older items below (`paper/manuscript/_application.qmd` etc.) was retired
 > 2026-07-02 in favor of the two manuscripts written fresh — see `paper/archive_manuscript/`.
+>
+> **Status as of 2026-09-24: simulation revision planned; current results are provisional.**
+> A review of the dissertation chapter traced several results to simulation oversights:
+> - Designs saw a different incidence surface than the outcome model used.
+> - Poisson incidence at 1,000 people per cluster produced heavy ties.
+> - Seeding was not reproducible.
+> - Deterministic designs were copied 25×.
+> - Checkerboard under rook contiguity was silently aliased.
+>
+> A pilot suggests the top and bottom designs are stable, while High Incidence Focus changes
+> substantially. Fix, test, re-run, and regenerate every downstream result before the
+> manuscripts' Methods/Results are rewritten:
+> [`docs/plans/simulation-revision-plan.md`](docs/plans/simulation-revision-plan.md),
+> which is step 0.5 of `docs/plans/manuscript-unification-plan.md`.
+> The 2026-04-08 numbers below and in the Completed section are superseded once the re-run lands.
 
 ---
 
