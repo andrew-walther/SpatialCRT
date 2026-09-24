@@ -1,0 +1,253 @@
+B4 PILOT REPORT — 2026-09 simulation revision
+Oracle file: sim_results_MLE_tau_sweep_combined_20260924_022633.rds
+Slice: tau = 1; all 5 configs x rook/queen x both regimes; rho in {0, 0.5}; gamma in {0.5, 0.8}; 8 designs
+
+== 1. Integrity ==
+  640 scenario rows per estimator                            PASS
+  N_Valid_Est = 250 everywhere                               PASS
+  No non-aliasing warnings (N_Warn = 0)                      PASS
+  Aliasing only Checkerboard x rook (oracle, all 250)        PASS
+  Z_WZ_rank_deficient only Checkerboard x rook (both files)  PASS
+  High Incidence Focus Mean_Treated = 50                     PASS
+  Poisson rhoX 0.20: distinct X values per surface median 66 (range 65-72) [target >= ~55] PASS
+  Poisson rhoX 0.50: distinct X values per surface median 67.5 (range 60-76) [target >= ~55] PASS
+
+  Mean treated per design:
+                                Design  queen    rook
+                          Checkerboard 50.000 50.0000
+                  High Incidence Focus 50.000 50.0000
+                  Saturation Quadrants 50.000 50.0000
+                      Isolation Buffer 21.405 38.2281
+                          2x2 Blocking 50.000 50.0000
+                    Balanced Quartiles 48.000 48.0000
+                       Balanced Halves 50.000 50.0000
+ Incidence-Guided Saturation Quadrants 50.000 50.0000
+
+== 2. Before (April 2026) vs after, 6 manuscript designs, MSE / coverage ==
+ Neighbor_Type       Config                                Design MSE_after
+          rook          iid Incidence-Guided Saturation Quadrants     0.069
+          rook          iid                    Balanced Quartiles     0.080
+          rook          iid                          2x2 Blocking     0.131
+          rook          iid                      Isolation Buffer     0.137
+          rook          iid                  High Incidence Focus     0.202
+          rook          iid                          Checkerboard     0.489
+          rook poisson 0.20 Incidence-Guided Saturation Quadrants     0.072
+          rook poisson 0.20                    Balanced Quartiles     0.083
+          rook poisson 0.20                          2x2 Blocking     0.126
+          rook poisson 0.20                      Isolation Buffer     0.138
+          rook poisson 0.20                  High Incidence Focus     0.219
+          rook poisson 0.20                          Checkerboard     0.501
+          rook poisson 0.50 Incidence-Guided Saturation Quadrants     0.069
+          rook poisson 0.50                    Balanced Quartiles     0.075
+          rook poisson 0.50                      Isolation Buffer     0.124
+          rook poisson 0.50                          2x2 Blocking     0.128
+          rook poisson 0.50                  High Incidence Focus     0.201
+          rook poisson 0.50                          Checkerboard     0.488
+          rook spatial 0.20 Incidence-Guided Saturation Quadrants     0.071
+          rook spatial 0.20                    Balanced Quartiles     0.085
+          rook spatial 0.20                          2x2 Blocking     0.119
+          rook spatial 0.20                      Isolation Buffer     0.132
+          rook spatial 0.20                  High Incidence Focus     0.223
+          rook spatial 0.20                          Checkerboard     0.494
+          rook spatial 0.50 Incidence-Guided Saturation Quadrants     0.071
+          rook spatial 0.50                    Balanced Quartiles     0.083
+          rook spatial 0.50                          2x2 Blocking     0.124
+          rook spatial 0.50                      Isolation Buffer     0.138
+          rook spatial 0.50                  High Incidence Focus     0.200
+          rook spatial 0.50                          Checkerboard     0.484
+         queen          iid Incidence-Guided Saturation Quadrants     0.090
+         queen          iid                    Balanced Quartiles     0.116
+         queen          iid                      Isolation Buffer     0.162
+         queen          iid                  High Incidence Focus     0.237
+         queen          iid                          2x2 Blocking     0.324
+         queen          iid                          Checkerboard     1.169
+         queen poisson 0.20 Incidence-Guided Saturation Quadrants     0.088
+         queen poisson 0.20                    Balanced Quartiles     0.125
+         queen poisson 0.20                      Isolation Buffer     0.165
+         queen poisson 0.20                  High Incidence Focus     0.227
+         queen poisson 0.20                          2x2 Blocking     0.329
+         queen poisson 0.20                          Checkerboard     1.088
+         queen poisson 0.50 Incidence-Guided Saturation Quadrants     0.092
+         queen poisson 0.50                    Balanced Quartiles     0.114
+         queen poisson 0.50                      Isolation Buffer     0.162
+         queen poisson 0.50                  High Incidence Focus     0.243
+         queen poisson 0.50                          2x2 Blocking     0.318
+         queen poisson 0.50                          Checkerboard     1.074
+         queen spatial 0.20 Incidence-Guided Saturation Quadrants     0.089
+         queen spatial 0.20                    Balanced Quartiles     0.117
+         queen spatial 0.20                      Isolation Buffer     0.163
+         queen spatial 0.20                  High Incidence Focus     0.262
+         queen spatial 0.20                          2x2 Blocking     0.322
+         queen spatial 0.20                          Checkerboard     1.074
+         queen spatial 0.50 Incidence-Guided Saturation Quadrants     0.095
+         queen spatial 0.50                    Balanced Quartiles     0.119
+         queen spatial 0.50                      Isolation Buffer     0.157
+         queen spatial 0.50                  High Incidence Focus     0.244
+         queen spatial 0.50                          2x2 Blocking     0.313
+         queen spatial 0.50                          Checkerboard     1.103
+ MSE_before Cov_after Cov_before Rank_before Rank_after
+      0.068     0.949      0.952           2          1
+      0.081     0.945      0.936           3          2
+      0.130     0.934      0.938           4          3
+      0.132     0.934      0.941           5          4
+      0.054     0.945      0.950           1          5
+      0.660     0.182      0.075           6          6
+      0.074     0.942      0.932           1          1
+      0.089     0.934      0.927           2          2
+      0.134     0.945      0.926           4          3
+      0.132     0.932      0.930           3          4
+      0.353     0.938      0.925           5          5
+      0.518     0.158      0.075           6          6
+      0.077     0.949      0.929           1          1
+      0.080     0.946      0.946           2          2
+      0.137     0.946      0.931           4          3
+      0.131     0.936      0.945           3          4
+      0.177     0.946      1.000           5          5
+      0.420     0.166      0.200           6          6
+      0.072     0.950      0.943           1          1
+      0.081     0.930      0.939           2          2
+      0.126     0.942      0.944           5          3
+      0.125     0.941      0.952           4          4
+      0.098     0.938      0.975           3          5
+      0.396     0.182      0.225           6          6
+      0.070     0.949      0.936           1          1
+      0.078     0.930      0.933           3          2
+      0.121     0.940      0.946           4          3
+      0.134     0.941      0.944           5          4
+      0.071     0.942      0.975           2          5
+      0.484     0.162      0.150           6          6
+      0.098     0.943      0.929           2          1
+      0.117     0.943      0.938           3          2
+      0.172     0.940      0.928           4          3
+      0.078     0.943      0.975           1          4
+      0.319     0.931      0.944           5          5
+      1.346     0.939      0.912           6          6
+      0.087     0.944      0.944           2          1
+      0.134     0.923      0.940           3          2
+      0.157     0.935      0.951           4          3
+      0.073     0.944      0.950           1          4
+      0.372     0.938      0.928           5          5
+      1.106     0.939      0.925           6          6
+      0.082     0.932      0.948           1          1
+      0.132     0.941      0.935           2          2
+      0.160     0.940      0.937           3          3
+      0.228     0.924      0.963           4          4
+      0.343     0.935      0.930           5          5
+      0.992     0.940      0.925           6          6
+      0.094     0.938      0.949           1          1
+      0.121     0.939      0.941           3          2
+      0.164     0.934      0.941           4          3
+      0.103     0.938      0.975           2          4
+      0.351     0.940      0.928           5          5
+      0.922     0.945      0.900           6          6
+      0.094     0.936      0.927           1          1
+      0.113     0.941      0.939           3          2
+      0.165     0.938      0.932           4          3
+      0.099     0.938      0.975           2          4
+      0.299     0.936      0.940           5          5
+      0.560     0.938      0.950           6          6
+
+  Rank of each design (queen, per config), before -> after:
+                                Design    iid poisson 0.20 poisson 0.50
+ Incidence-Guided Saturation Quadrants 2 -> 1       2 -> 1       1 -> 1
+                    Balanced Quartiles 3 -> 2       3 -> 2       2 -> 2
+                      Isolation Buffer 4 -> 3       4 -> 3       3 -> 3
+                  High Incidence Focus 1 -> 4       1 -> 4       4 -> 4
+                          2x2 Blocking 5 -> 5       5 -> 5       5 -> 5
+                          Checkerboard 6 -> 6       6 -> 6       6 -> 6
+ spatial 0.20 spatial 0.50
+       1 -> 1       1 -> 1
+       3 -> 2       3 -> 2
+       4 -> 3       4 -> 3
+       2 -> 4       2 -> 4
+       5 -> 5       5 -> 5
+       6 -> 6       6 -> 6
+
+== 3. 8-design consolidation (Friedman / Nemenyi / Wilcoxon-Holm) ==
+
+-- queen: 40 blocks; Friedman chi2 = 174.4, p = <2e-16
+                                Design    MSE Coverage AvgRank
+ Incidence-Guided Saturation Quadrants 0.0907   0.9387    2.28
+                  Saturation Quadrants 0.0938   0.9327    2.42
+                    Balanced Quartiles 0.1184   0.9373    2.95
+                       Balanced Halves 0.1321   0.9343    3.42
+                      Isolation Buffer 0.1619   0.9374    5.25
+                  High Incidence Focus 0.2427   0.9373    6.70
+                          2x2 Blocking 0.3212   0.9361    6.35
+                          Checkerboard 1.1014   0.9397    6.62
+  Saturation Quadrants vs Incidence-Guided Saturation Quadrants: MSE 0.0938 vs 0.0907 | Nemenyi p = 1.0000 | Wilcoxon-Holm p = 0.285
+  Balanced Halves vs Balanced Quartiles: MSE 0.1321 vs 0.1184 | Nemenyi p = 0.9889 | Wilcoxon-Holm p = 0.0123
+
+-- rook: 40 blocks; Friedman chi2 = 233.1, p = <2e-16
+                                Design    MSE Coverage AvgRank
+ Incidence-Guided Saturation Quadrants 0.0702   0.9476    2.08
+                  Saturation Quadrants 0.0708   0.9405    2.38
+                    Balanced Quartiles 0.0812   0.9370    2.78
+                       Balanced Halves 0.0861   0.9410    3.12
+                          2x2 Blocking 0.1256   0.9394    5.30
+                      Isolation Buffer 0.1339   0.9387    5.40
+                  High Incidence Focus 0.2089   0.9414    6.95
+                          Checkerboard 0.4911   0.1702    8.00
+  Saturation Quadrants vs Incidence-Guided Saturation Quadrants: MSE 0.0708 vs 0.0702 | Nemenyi p = 0.9994 | Wilcoxon-Holm p = 0.432
+  Balanced Halves vs Balanced Quartiles: MSE 0.0861 vs 0.0812 | Nemenyi p = 0.9983 | Wilcoxon-Holm p = 0.129
+
+-- POOLED: 80 blocks; Friedman chi2 = 396.7, p = <2e-16
+                                Design    MSE Coverage AvgRank
+ Incidence-Guided Saturation Quadrants 0.0805   0.9431    2.17
+                  Saturation Quadrants 0.0823   0.9366    2.40
+                    Balanced Quartiles 0.0998   0.9372    2.86
+                       Balanced Halves 0.1091   0.9376    3.28
+                      Isolation Buffer 0.1479   0.9381    5.32
+                          2x2 Blocking 0.2234   0.9378    5.82
+                  High Incidence Focus 0.2258   0.9394    6.82
+                          Checkerboard 0.7963   0.5550    7.31
+  Saturation Quadrants vs Incidence-Guided Saturation Quadrants: MSE 0.0823 vs 0.0805 | Nemenyi p = 0.9991 | Wilcoxon-Holm p = 0.499
+  Balanced Halves vs Balanced Quartiles: MSE 0.1091 vs 0.0998 | Nemenyi p = 0.9639 | Wilcoxon-Holm p = 0.000533
+
+== 4. Surface-level paired tests (units = 5 configs x 10 surfaces; MSE averaged over each unit's blocks) ==
+-- queen
+  Incidence-Guided Saturation Quadrants  - Balanced Quartiles                     n=50  diff -0.0276  95% CI [-0.0325, -0.0228]  Wilcoxon p=1.5e-09  a better in 94%
+  Incidence-Guided Saturation Quadrants  - Saturation Quadrants                   n=50  diff -0.0031  95% CI [-0.0072, +0.0011]  Wilcoxon p=0.15  a better in 54%
+  Balanced Quartiles                     - Balanced Halves                        n=50  diff -0.0138  95% CI [-0.0202, -0.0073]  Wilcoxon p=0.00015  a better in 70%
+  Balanced Quartiles                     - High Incidence Focus                   n=50  diff -0.1244  95% CI [-0.1361, -0.1126]  Wilcoxon p=7.8e-10  a better in 100%
+  Isolation Buffer                       - 2x2 Blocking                           n=50  diff -0.1593  95% CI [-0.1737, -0.1450]  Wilcoxon p=7.8e-10  a better in 100%
+  2x2 Blocking                           - Checkerboard                           n=50  diff -0.7802  95% CI [-0.8286, -0.7318]  Wilcoxon p=7.8e-10  a better in 100%
+-- rook
+  Incidence-Guided Saturation Quadrants  - Balanced Quartiles                     n=50  diff -0.0109  95% CI [-0.0140, -0.0079]  Wilcoxon p=1.2e-07  a better in 82%
+  Incidence-Guided Saturation Quadrants  - Saturation Quadrants                   n=50  diff -0.0006  95% CI [-0.0031, +0.0019]  Wilcoxon p=0.56  a better in 48%
+  Balanced Quartiles                     - Balanced Halves                        n=50  diff -0.0049  95% CI [-0.0087, -0.0011]  Wilcoxon p=0.0097  a better in 66%
+  Balanced Quartiles                     - High Incidence Focus                   n=50  diff -0.1278  95% CI [-0.1354, -0.1201]  Wilcoxon p=7.8e-10  a better in 100%
+  Isolation Buffer                       - 2x2 Blocking                           n=50  diff +0.0083  95% CI [+0.0014, +0.0152]  Wilcoxon p=0.0058  a better in 34%
+  2x2 Blocking                           - Checkerboard                           n=50  diff -0.3655  95% CI [-0.3725, -0.3584]  Wilcoxon p=7.8e-10  a better in 100%
+
+== 5. Non-oracle (Y ~ Z + X) vs oracle, 6 designs, queen and rook ==
+ Neighbor_Type                                Design MSE_nonoracle MSE_oracle
+          rook Incidence-Guided Saturation Quadrants         0.086      0.070
+          rook                    Balanced Quartiles         0.095      0.081
+          rook                          2x2 Blocking         0.129      0.126
+          rook                      Isolation Buffer         0.213      0.134
+          rook                  High Incidence Focus         0.228      0.209
+          rook                          Checkerboard         0.491      0.491
+         queen Incidence-Guided Saturation Quadrants         0.090      0.091
+         queen                    Balanced Quartiles         0.094      0.118
+         queen                      Isolation Buffer         0.091      0.162
+         queen                  High Incidence Focus         0.221      0.243
+         queen                          2x2 Blocking         0.122      0.321
+         queen                          Checkerboard         0.109      1.101
+ Bias_nonoracle Bias_oracle Cov_nonoracle Cov_oracle
+         -0.122       0.021         0.819      0.948
+         -0.170       0.012         0.780      0.937
+         -0.257      -0.001         0.700      0.939
+         -0.397       0.006         0.519      0.939
+         -0.195       0.017         0.888      0.941
+         -0.653      -0.653         0.170      0.170
+         -0.124       0.031         0.805      0.939
+         -0.169       0.020         0.779      0.937
+         -0.175       0.001         0.879      0.937
+         -0.182       0.031         0.892      0.937
+         -0.245       0.004         0.712      0.936
+         -0.207      -0.012         0.739      0.940
+
+== 6. Runtime ==
+  Pilot: 0.8 min wall (10 workers), 7.6 min unit compute, 1.42 ms per fit incl. DGP
+  Projected full run (6,400,000 fits): 151 CPU-min -> ~15 min wall on 10 workers (40 units, 4 rounds)

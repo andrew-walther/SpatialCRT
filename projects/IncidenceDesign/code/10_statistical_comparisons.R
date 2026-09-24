@@ -404,6 +404,42 @@ run_pairwise_wilcoxon <- function(results, metric = "MSE", p_adjust = "holm") {
 # CONDITIONAL / STRATIFIED TESTS
 # ==============================================================================
 
+#' Surface-level paired comparison of two designs over independent units
+#'
+#' Added for the 2026-09 revision (simulation-revision-spec.md section 5). Blocks
+#' within an incidence config share the same K incidence surfaces, so a Friedman
+#' test over blocks treats correlated blocks as independent. Here the independent
+#' unit is (config, surface k): 5 configs x 10 surfaces = 50 units, whose Z and eps
+#' draws are independent. For each unit the metric is averaged over all of that
+#' unit's blocks present in surface_results (filter beforehand, e.g. to one
+#' neighbor type and tau), and designs are compared on the paired differences
+#'   D_u = m_{a,u} - m_{b,u}.
+#'
+#' @param surface_results Data frame from surface_results_*.rds (one row per
+#'   scenario x Surface), already filtered to the slice of interest.
+#' @param design_a,design_b Design labels as in the Design column.
+#' @param metric Column to compare (default "MSE").
+#' @return List with n_units, mean_diff (mean D_u; negative = a better for MSE),
+#'   se_diff, ci (t_{n-1} 95% interval), wilcoxon_p (paired signed-rank), and
+#'   frac_a_better (share of units with D_u < 0).
+#' @family statistical-comparisons
+#' @seealso [run_pairwise_wilcoxon()] for the block-level version
+run_surface_paired_test <- function(surface_results, design_a, design_b, metric = "MSE") {
+  unit_means <- surface_results %>%
+    filter(Design %in% c(design_a, design_b)) %>%
+    group_by(Incidence_Mode, Rho_Incidence, Surface, Design) %>%
+    summarise(m = mean(.data[[metric]], na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from = Design, values_from = m)
+  d <- unit_means[[design_a]] - unit_means[[design_b]]
+  d <- d[is.finite(d)]
+  n <- length(d)
+  se <- sd(d) / sqrt(n)
+  list(n_units = n, mean_diff = mean(d), se_diff = se,
+       ci = mean(d) + c(-1, 1) * qt(0.975, n - 1) * se,
+       wilcoxon_p = wilcox.test(d, mu = 0, exact = FALSE)$p.value,
+       frac_a_better = mean(d < 0))
+}
+
 #' Run hypothesis tests stratified by a single simulation parameter.
 #'
 #' Subsets the results by each level of stratify_by, then runs the Friedman
