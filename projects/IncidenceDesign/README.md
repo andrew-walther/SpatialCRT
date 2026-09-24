@@ -66,28 +66,35 @@ install.packages(c("spdep", "spatialreg", "dplyr", "tidyr",
                    "digest", "parallel", "ggplot2", "viridis"))
 ```
 
-### Quick Start — DIM estimation (~5-10 minutes)
-
-```r
-# In 05_run_simulation.R, ensure line 40 reads:
-#   estimation_mode <- "DIM"
-
-setwd("projects/IncidenceDesign/code")
-source("05_run_simulation.R")
-```
-
-### Full Run — MLE estimation (~10 hours)
+### Running the simulation (2026-09 revision; ~14 minutes on 10 cores)
 
 ```bash
-# Run from terminal to keep process independent of IDE session
-# Use caffeinate to prevent sleep on macOS:
-#   caffeinate -i -w $(pgrep -f 05_run_simulation) &
 cd projects/IncidenceDesign/code
-Rscript 05_run_simulation.R
+# BLAS must be single-threaded per worker (the runner refuses otherwise):
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript 05_run_simulation.R pilot  # ~1 min
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript 05_run_simulation.R full   # ~14 min
 ```
 
-In `05_run_simulation.R`, set `estimation_mode <- "MLE"` (line 40).
-Optionally set `n_cores > 1` (line 44) for parallel execution across incidence configs.
+- One run fits both estimators (oracle, primary; non-oracle, sensitivity) to the same
+  simulated data, and writes them to `results/sim_data/` (`pilot` output goes to
+  `results/pilot_rev_2026-09/`).
+- Checkpoints are kept per work unit under `results/checkpoints/rev_2026-09/<profile>/`, with
+  a manifest. Any change to parameters, code (01–05), packages or BLAS makes the runner
+  refuse to resume, so delete that directory to start fresh.
+- DIM is not run by the revised script (the DIM baseline in `sim_data/` predates the revision).
+- Method specification: `docs/plans/simulation-revision-spec.md`.
+
+### Tests
+
+```bash
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript tests/test_simulation_revision.R
+Rscript tests/verify_full_run_rev_2026-09.R
+```
+
+- The first runs the design, seeding, aliasing and known-answer tests, plus the ~7-minute
+  estimator-equivalence test (`SKIP_EQUIVALENCE=1` skips it).
+- The second runs the integrity checks on the latest full run.
+- `tests/crosscheck_lagsarlm_rev_2026-09.R` recomputes 1% of the scenarios with `lagsarlm`.
 
 ### Generating Visualizations Only
 
@@ -95,7 +102,7 @@ Optionally set `n_cores > 1` (line 44) for parallel execution across incidence c
 source("06_visualizations.R")
 
 # All configs, most recent MLE results (primary estimator):
-run_all_visualizations(estimation_mode = "MLE_tau_sweep")
+run_all_visualizations(results_dir = normalizePath("../results"), estimation_mode = "MLE_tau_sweep")
 
 # Single incidence config with all tables:
 r <- load_latest_results(estimation_mode = "MLE_tau_sweep")
@@ -131,14 +138,20 @@ rook (4-connected) and queen (8-connected).
 Y = (I - rho*W)^{-1} * [tau*Z + gamma*Spill(Z) + beta*X + epsilon]
 ```
 
-where tau = 1.0, beta = 1.0, sigma = 1.0, and `Spill(Z)` is the row-standardized
-mean treatment of neighbors. Two spillover modes: `control_only` (gamma applied only
-to control units) and `both` (applied to all units).
+where beta = 1.0, sigma = 1.0, and `Spill(Z)` is the row-standardized mean treatment of
+neighbors. Two spillover modes: `control_only` (gamma applied only to control units) and
+`both` (applied to all units). (Despite the historical "SDM" label, only treatment is
+spatially lagged.)
+
+**Monte Carlo structure (2026-09 revision):** K = 10 incidence surfaces per config ×
+J = 25 design draws per surface = 250 fits per scenario. The design for surface k is drawn
+from X_k, the outcome and analysis use the same X_k, and every fit has its own noise draw.
+All draws are seeded from keys.
 
 **Incidence modes:**
 - **iid Uniform:** X_i ~ Uniform(0,1) independently
 - **Spatial:** SAR filter + pnorm transform — spatially correlated but marginally Uniform(0,1)
-- **Poisson:** Spatially correlated log-rates -> Poisson counts -> rank-normalized rates in [0,1]
+- **Poisson:** Spatially correlated log-rates -> Poisson counts (100,000 people per cluster, ≈35 expected deaths) -> rank-normalized rates in [0,1]
 
 **Treatment designs:** 8 strategies — Checkerboard, High Incidence Focus, Saturation
 Quadrants, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Balanced Halves,
@@ -149,68 +162,85 @@ Incidence-Guided Saturation Quadrants.
   <br><em>Sample treatment assignments for each design applied to a single realization of iid Uniform(0,1) baseline incidence. Tile color indicates baseline incidence (darker = higher). Circles = treated, crosses = control.</em>
 </p>
 
-**Estimation:** MLE via spatial autoregressive model `lagsarlm(Y ~ Z + Spill + X)` using oracle Spill covariate (250 iterations/scenario).
+**Estimation:** ML spatial-lag model, oracle `Y ~ Z + Spill + X` (primary) and non-oracle `Y ~ Z + X` (sensitivity), fit with `fit_sar_lag()`. That's the same estimator as `spatialreg::lagsarlm(method = "eigen")` (validated to ~1e-7 on 5,120 fits) at ~120× the speed, since `lagsarlm` spends ~94% of its time in a `gc()` call.
 
 **True tau (tau-sweep):** τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} — swept to assess design robustness across effect sizes and estimate power curves.
 
 **Total scenarios:** 5 tau × 5 incidence configs × 2 neighbor types × 4 rho × 4 gamma × 2 spillover types × 8 designs = **12,800 scenarios**
-(Baseline τ=1.0 slice = 2,560 scenarios, completed 2026-03-22)
+(× 250 fits × 2 estimators = 6.4M fits in the 2026-09 run)
 
 ---
 
 ## Results Summary
 
-### Tau-sweep (COMPLETE — 2026-04-08, 12,800 scenarios)
+### Revised simulation (COMPLETE — 2026-09-24, 12,800 scenarios × 2 estimators)
 
-- **12,800 scenarios** across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} | Fail_Rate = 0.0 | N_Valid_Est = 250 (all)
-- Primary scenario (τ=1.0): **Best: D8** MSE=0.079 ≈ **D3** MSE=0.080 | **Worst: D1** MSE=0.802, coverage ~55%
-- D3/D8 dominance holds across **all τ levels** (Friedman p < 2.2×10⁻¹⁶ at each τ)
-- Power curves: D3/D8 reach 80% power already at τ=0.8 (smallest tested effect); D1 requires τ≥2.0
-- Files: `results/sim_data/sim_results_MLE_tau_sweep_combined_20260408_191916.rds` (12,800 rows)
-- All reports regenerated with tau sensitivity sections (2026-04-08)
+The results for oracle, τ = 1 and the 6 manuscript designs are below; `results/six_design_manuscript/`
+has the full detail.
 
-### MLE baseline (tau=1.0, archived — superseded by tau-sweep)
+| Design | Queen MSE | Rook MSE |
+|---|---|---|
+| Incidence-Guided Saturation Quadrants | 0.091 | 0.072 |
+| Balanced Quartiles | 0.131 | 0.084 |
+| Isolation Buffer | 0.160 | 0.133 |
+| High Incidence Focus | 0.245 | 0.206 |
+| 2x2 Blocking | 0.319 | 0.128 |
+| Checkerboard | 1.087 | 0.480 |
 
-- `results/sim_data/sim_results_MLE_combined_20260322_151030.rds` (2,560 rows, preserved)
-- Pre-sweep deliverables: `results/archive/pre_tau_sweep_20260408/`
+- **Coverage** is ≈0.94 for every design except Checkerboard × rook, which is 0.15 because τ is not
+  identified when WZ = 1 − Z. Those estimates are kept but flagged. Coverage doesn't separate
+  the designs; MSE does.
+- **Across τ:** under queen the rank order is the same at every τ (Friedman χ² 377–456, all
+  p < 2e-16). Per-τ tests share draws, so they aren't independent confirmations. Under
+  rook, 2x2 Blocking and Isolation Buffer swap at τ = 0.8.
+- **Robustness:** every adjacent pair differs significantly on 50 independent (config × surface)
+  units.
+- **Consolidation:** Saturation Quadrants and Balanced Halves are statistically indistinguishable
+  from Incidence-Guided Saturation Quadrants and Balanced Quartiles, which is why the
+  manuscripts carry 6 designs.
+- **Non-oracle sensitivity:** bias −0.12 to −0.40 and coverage 0.51–0.90 for every design. It also
+  has lower variance where Z and WZ are collinear (queen Checkerboard MSE 1.09 → 0.11).
+- **Integrity** (`results/sim_data/full_run_verification.txt`): N_Valid_Est = 250 everywhere and
+  zero non-aliasing warnings. Aliasing occurs only in Checkerboard × rook, plus 20 Isolation
+  Buffer × rook scenarios that each drew the exact checkerboard once.
 
-### Statistical Comparisons (updated for tau-sweep, 2026-04-08)
+### Superseded (April 2026)
 
-- **Friedman test by tau level:** χ²=1052.77 (τ=0.8) through χ²=743.41 (τ=3.0), all p < 2.2×10⁻¹⁶
-- **Top equivalence group:** Design 3 and Design 8 — not significantly different from each other, significantly better than all others at all tau levels
-- **Design 1 (Checkerboard) is significantly worse than all alternatives** at every τ
-- Full report (with tau-stratified tests + power analysis): `results/11_statistical_comparisons_report.pdf`
+The April tau-sweep and March baseline results (e.g. "D8 MSE 0.079, D1 0.802") rest on the
+implementation oversights fixed by the revision. They're archived in
+`results/archive/pre_revision_20260924/` (see its README) and must not be cited. **The CTJ
+manuscript and SI still carry those numbers** until they're rewritten (manuscript plan step 5).
 
 ### Results Directory Structure
 
 ```
 results/
-  MLE_tau_sweep_design_recommendations.pdf    # PRIMARY — figures/tables PDF
+  MLE_tau_sweep_design_recommendations.pdf    # 08 figures/tables PDF (oracle)
   MLE_tau_sweep_incidence_overview.pdf        # Incidence heatmaps + distributions
-  09_MLE_design_recommendation_report.{html,pdf}  # Narrative rec report with tau sensitivity
-  11_statistical_comparisons_report.{html,pdf}    # PRIMARY — formal hypothesis testing
-  00_mathematical_specification.pdf           # Theory document
-  07_results_summary.pdf                      # Results summary (with tau sensitivity section)
+  MLE_statistical_comparisons.pdf             # 10 figures (8 designs, tau = 1)
+  00/07/09/11 rendered reports                # regenerated in Phase C
   sim_data/
-    sim_results_MLE_tau_sweep_combined_20260408_191916.rds   # PRIMARY — 12,800 rows
-    sim_results_MLE_tau_sweep_{iid,spatial,poisson}_{ts}.rds # Per-incidence splits
-    sim_results_MLE_combined_20260322_151030.rds             # Archived baseline (2,560 rows)
-  mle_per_config/
-    MLE_tau_sweep_{config_name}.pdf             # Per-config 8-plot PDF (5 configs, tau=1.0)
-    MLE_tau_sweep_{config_name}_tau_sensitivity.pdf  # Per-config tau sensitivity PDFs (5)
-    MLE_tau_sweep_incidence_overview.pdf        # Incidence heatmaps + distributions
-  archive/
-    pre_tau_sweep_20260408/                     # All pre-sweep deliverables (archived)
-  figures/
-    design_samples_8panel.{png,pdf}            # 8-panel design illustration (clean)
-    design_samples_option1_overlays.{png,pdf}  # 8-panel with saturation % annotations
-  archive/
-    test_plots.pdf                             # Dev artifacts
-    completion_log.txt
+    sim_results_MLE_tau_sweep_combined_20260924_025509.rds         # PRIMARY (oracle), 12,800 rows
+    sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds # non-oracle sensitivity
+    sim_results_*_{iid,spatial,poisson}_20260924_025509.rds          # per-mode splits
+    surface_results_*_20260924_025509.rds     # one row per (scenario, surface)
+    warnings_*_20260924_025509.csv            # non-aliasing warnings (none)
+    run_info_20260924_025509.rds              # manifest, parameters, sessionInfo
+    full_run_verification.txt
+    sim_results_DIM_*_20260304_195321.rds     # pre-revision DIM baseline (not re-run)
+  six_design_manuscript/                      # 12 (oracle), 13, 14: summaries + queen/ and rook/ figures
+  six_design_manuscript_nonoracle/            # 12 (non-oracle)
+  eight_design_supplementary/                 # 14(a) consolidation check
+  estimator_validation/                       # fit_sar_lag vs lagsarlm (5,120 fits) + 1% full-run cross-check
+  pilot_rev_2026-09/                          # B4 pilot outputs + pilot_report.txt
+  mle_per_config/                             # 06 per-config PDFs
+  figures/design_samples_8panel.{png,pdf}
+  archive/pre_revision_20260924/              # everything from the April runs
+  checkpoints/rev_2026-09/                    # (git-ignored) manifest-checked unit checkpoints
 ```
 
-**Key rule:** Results for iid Uniform, Spatial, and Poisson are always reported
-**separately** — never aggregated. The combined .rds exists for loading convenience only.
+**Key rule:** Results for iid Uniform, Spatial, and Poisson, and for rook and queen, are
+reported **separately**; pooled numbers appear only when labeled as pooled. The combined .rds exists for loading convenience only.
 `load_latest_results()` automatically detects the `sim_data/` subdirectory.
 
 ### Paper Directory Structure
@@ -277,22 +307,21 @@ Figures available in `paper/ctj_manuscript/figures/`:
 
 ## Key Design Decisions
 
-1. **Incidence generated once per `(mode, rho_X)` config** — not re-drawn per `(nb_type, rho)`.
-   In practice a researcher observes historical incidence once; spatial model parameters
-   affect outcome propagation, not incidence itself.
+1. **Incidence surfaces generated once per `(mode, rho_X, k)`** and shared by every block of
+   the config. Spatial model parameters affect outcome propagation, not incidence itself.
 
-2. **Deterministic design detection** — Designs 1 and 2 yield the same assignment for
-   every design resample (given fixed incidence). They run once and replicate, saving ~25x compute.
+2. **Matched surfaces (2026-09):** each design draw is built from the same incidence surface
+   the outcome and analysis use. The pre-revision code built designs from surface 1 but
+   analyzed surface k.
 
-3. **Per-scenario deterministic seeding** — `digest::digest2int(paste(params, sep="|"))` ensures
-   reproducibility and order-independence. Adding/removing scenarios doesn't affect others.
+3. **Key-based seeding** — every draw of X, Z and ε is seeded from a key with fixed RNG
+   kinds, so results are identical sequentially, in parallel and in any order.
 
-4. **Separate reporting by incidence mode** — The three modes represent fundamentally
-   different assumptions about prior data. Aggregating across them obscures rather than informs.
+4. **Separate reporting by incidence mode and neighbor type** — queen is primary, rook the
+   sensitivity case; pooling only when labeled.
 
-5. **Oracle spillover in MLE** — `lagsarlm()` includes the true Spill covariate.
-   A `include_spill_covariate = FALSE` toggle exists in `estimate_tau()` for realistic
-   estimation comparisons (not yet run systematically).
+5. **Oracle spillover in MLE** — the primary model includes the true Spill covariate. The
+   non-oracle model (`Y ~ Z + X`) is fit to the same data as a sensitivity analysis.
 
 6. **DIM iteration counts** — Originally planned at 100,000 iterations/scenario; reduced
    to 2,500 (25 design x 100 outcome resamples) for practical runtime.
@@ -318,6 +347,7 @@ Figures available in `paper/ctj_manuscript/figures/`:
 ## Status & Next Steps
 
 **Completed:**
+- [x] **2026-09-24: simulation revision (step 0.5)** — spec, M1–M8 code changes, tests, pilot, full re-run, downstream code (12–14, 06, 08) and outputs regenerated; April outputs archived
 - [x] All code files (00–11) written and tested
 - [x] Mathematical specification document (00) rendered to HTML
 - [x] DIM simulation: 1,920 scenarios (prior 6-design sweep), visualizations generated (baseline)

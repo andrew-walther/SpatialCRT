@@ -29,6 +29,20 @@ The synthetic-incidence application pipeline is implemented and has been run end
 - The full synthetic run completed 640 scenarios and 160,000 converged MLE fits.
 - The current report is available in `report/IncidenceDesign_Application_Report.html` and `report/IncidenceDesign_Application_Report.pdf`.
 
+## Design rules changed 2026-09-24 (not yet re-run)
+
+`code/application_designs.R` now follows the simulation revision's design rules
+(`../docs/plans/simulation-revision-spec.md` §3):
+- Incidence ties are broken at random for every draw.
+- High Incidence Focus treats exactly round(N/2) = 29.
+- Balanced Quartiles treats exactly floor(N/2) = 29.
+- Only the graph checkerboard is deterministic.
+
+The application has **not** been re-run with these rules (plan decision). The results below
+and in `results/` predate them, and `code/14_manuscript_supplement_figures.R` labels its
+application table STALE. The application still uses `lagsarlm`; porting the lean engine is
+future work.
+
 ## Current Results
 
 Using synthetic incidence, the best-performing designs by mean MSE were Balanced Quartiles and Balanced Halves, followed closely by Saturation Regions, 2x2 Blocking, and Incidence-Guided Saturation Regions. Block Stratified Sampling, Isolation Buffer, and High Incidence Focus performed substantially worse.

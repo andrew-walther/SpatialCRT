@@ -14,7 +14,21 @@
 > referenced by older items below (`paper/manuscript/_application.qmd` etc.) was retired
 > 2026-07-02 in favor of the two manuscripts written fresh — see `paper/archive_manuscript/`.
 >
-> **Status as of 2026-09-24: simulation revision planned; current results are provisional.**
+> **Status as of 2026-09-24 (later): simulation revised and re-run; downstream regeneration
+> (Phase C) in progress.**
+> - The M1–M8 fixes are implemented and tested. The pilot directions matched the scratch pilot.
+> - Full run: 12,800 scenarios × 250 fits × 2 estimators in 13.9 min, using the validated lean
+>   ML engine. It's verified, and a 1% `lagsarlm` cross-check passed (max difference 6e-9).
+> - Headline (queen, τ = 1): Incidence-Guided Saturation Quadrants best (MSE 0.091), then
+>   Balanced Quartiles (0.131). Checkerboard is worst (1.09). Coverage ≈ 0.94 for every design
+>   except Checkerboard × rook (0.15, τ not identified).
+> - Decisions: keep the 6 designs; Balanced Quartiles treats exactly 50.
+> - Framing: which designs work under heterogeneous incidence, not whether incidence
+>   knowledge is needed.
+> - April 2026 numbers are superseded, including those in the Completed section below.
+>   The CTJ/SI still carry them until manuscript step 5.
+>
+> Earlier the same day — **simulation revision planned; current results are provisional.**
 > A review of the dissertation chapter traced several results to simulation oversights:
 > - Designs saw a different incidence surface than the outcome model used.
 > - Poisson incidence at 1,000 people per cluster produced heavy ties.
@@ -155,20 +169,41 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 - [ ] **Presentation slides** `[Priority: Low]` `[Effort: Medium]`
   Expand `SpatialCRT_IncidenceDesign_Presentation.qmd` scaffold into full conference slides.
 
+## 2026-09 Simulation Revision (step 0.5)
+
+- [x] **Revision M1–M8** — matched surfaces, 100,000 per Poisson cluster, random ties with exact
+  N/2, key-based seeds, one noise column per fit, aliasing flags, non-oracle sensitivity estimator,
+  surface-level MC SEs, manifest-checked checkpoints, lean validated ML engine. Spec:
+  `docs/plans/simulation-revision-spec.md`. *(2026-09-24)*
+- [x] **Full re-run + verification + 1% lagsarlm cross-check** *(2026-09-24)*
+- [ ] **Downstream regeneration (Phase C)** — 12/13/14 and the 06/08/10 PDFs done; still to do:
+  re-render reports 00/07/09/11 and the project Report/ProjectSummary, then the docs.
+- [ ] **Chapter Methods/Results rewrite (Phase D)** — robust vs. fragile; queen primary; rook
+  sensitivity including the Checkerboard-rook anomaly; non-oracle sensitivity; **one recommended
+  design (author's decision)**.
+
+### Future work surfaced by the revision
+- [ ] **Latent-risk / noisy-snapshot DGP** `[Priority: Medium]` — designs see a noisy snapshot of a
+  latent risk surface, and the outcome depends on the latent surface (not the observed one).
+- [ ] **Heterogeneous populations in the simulation** `[Priority: Medium]` — `pop_mode = "heterogeneous"`
+  exists in 02 but is unused; the application will use real county/CC populations.
+- [ ] **Port the lean engine to the application** `[Priority: Low]` — the application still uses `lagsarlm`.
+- [ ] **Poisson ρX = 0 config** `[Priority: Low]` — offered separately; not in the grid.
+
 ---
 
 ## ✅ Completed
 
 - [x] **Build modular 8-design simulation pipeline** — Numbered R scripts (01–11) replacing monolithic Rmd; three incidence modes (iid Uniform, Spatial SAR, Poisson). *(2026-03)*
-- [x] **Run full 2,560-scenario MLE simulation** — 8 designs × 4 gamma levels × 4 rho levels × 4 incidence configs × 2 spillover types × `n_sim` reps. Best: D8 (MSE 0.079), Worst: D1 (MSE 0.744). *(2026-03-22)*
+- [x] **Run full 2,560-scenario MLE simulation** *(SUPERSEDED 2026-09-24 by the revision)* — 8 designs × 4 gamma levels × 4 rho levels × 4 incidence configs × 2 spillover types × `n_sim` reps. Best: D8 (MSE 0.079), Worst: D1 (MSE 0.744). *(2026-03-22)*
 - [x] **Formal statistical comparisons** — Friedman test, Nemenyi post-hoc, pairwise Wilcoxon, CD diagrams; rendered to `11_statistical_comparisons_report.{html,pdf}`. *(2026-03-25)*
 - [x] **Comprehensive unified project report** — 50+ page `IncidenceSpatialCRT_Report.qmd` covering full pipeline through design recommendations. *(2026-03-23)*
 - [x] **Modular Quarto manuscript framework** — Master + child sections (abstract, intro, methods, simulation, application skeleton, discussion skeleton). Retired 2026-07-02 in favor of two manuscripts written fresh; preserved as `paper/archive_manuscript/`. *(2026-03-23)*
 - [x] **HPC setup for Longleaf** — SLURM job array scripts for per-scenario parallelization (2,560 tasks), ready to scale. *(2026-03-23)*
 - [x] **8-panel design sample figures** — Generated and integrated into manuscript and README. *(2026-03-24)*
-- [x] **Tau-sweep: vary `true_tau` across the full parameter grid** — 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}; design ranking (D3/D8 dominance) stable at every τ level (all conditional Friedman p < 2.2×10⁻¹⁶). *(2026-04-08)*
+- [x] **Tau-sweep: vary `true_tau` across the full parameter grid** *(results SUPERSEDED 2026-09-24; the sweep is kept in the revised run)* — 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}; design ranking (D3/D8 dominance) stable at every τ level (all conditional Friedman p < 2.2×10⁻¹⁶). *(2026-04-08)*
 - [x] **Statistical power added as a primary metric** — P(reject H₀: τ=0) tracked per scenario; power curves computed as a function of τ per design. *(2026-04-08)*
-- [x] **Monte Carlo SEs for MSE/coverage estimates** — Delta-method `SE_MSE`, `SE_Coverage`, `SE_Bias` via `add_mc_ses()`; confirmed small and uniform across designs at current rep counts. *(2026-04-08)*
+- [x] **Monte Carlo SEs for MSE/coverage estimates** *(SUPERSEDED 2026-09-24: SEs now come from the 10 surface-level means, stored by 05)* — Delta-method `SE_MSE`, `SE_Coverage`, `SE_Bias` via `add_mc_ses()`; confirmed small and uniform across designs at current rep counts. *(2026-04-08)*
 - [x] **NC application study (irregular geometry)** — Full design-comparison pipeline re-implemented for NC's actual 58 Community College service areas (`application/`), all 8 designs adapted, 640-scenario/160,000-fit synthetic-incidence run complete. Real SUDDEN-derived data still pending (tracked above). *(2026-06, ongoing)*
 - [x] **Two manuscripts drafted from scratch** — Short *Clinical Trials* (SAGE) submission (`paper/ctj_manuscript/`) and longer-form dissertation chapter (`paper/dissertation_chapter/`), both presenting 6 of the 8 designs (2 dropped as statistically redundant), no DIM-vs-MLE comparison, full design names throughout. *(2026-07-02)*
 - [x] **CTJ Supplementary Information drafted and reviewed** — Fulfills the main text's 3 deferred "online supplementary material" items (reproducibility/code, full 8-design comparison, metric formulas/parameter grid); reviewed by a fresh agent against the plan's hard constraints. *(2026-07-03)*

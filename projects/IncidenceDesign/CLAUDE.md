@@ -14,26 +14,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A modular simulation study evaluating **8 treatment assignment designs** for Spatial
 Cluster Randomized Trials (CRTs) under heterogeneous outcome incidence and spatial
 spillover. **tau is swept across {0.8, 1.0, 1.5, 2.0, 3.0}** (direct treatment effect)
-for 12,800 total scenarios. Two estimators (DIM, MLE) with 3 incidence generation
-modes that are always reported **separately** — never aggregated.
+for 12,800 total scenarios. Since the 2026-09 revision, two ML estimators are fit to
+the same data: oracle (primary) and non-oracle (sensitivity). DIM is a pre-revision
+baseline only. The 3 incidence generation modes and the 2 neighbor types are reported
+separately, with queen primary.
 
 **Application context:** Sudden Unexpected Death (SUD) in NC counties.
 Poisson base rate 35/100,000 (Mirzaei et al.).
 
 **Metrics tracked per scenario:** Bias, SD, MSE, Coverage (95% CI), Fail_Rate,
-N_Valid_Est (Monte Carlo SE denominator), Power (P(reject H₀: τ=0)).
+N_Valid_Est, Power (P(reject H₀: τ=0)), surface-level MC SEs (SE_Bias/SE_MSE/SE_Coverage/
+SE_Power), Mean_Treated, and flags N_Aliased / N_Warn / Z_WZ_rank_deficient.
 
 ---
 
 ## Research Focus and Framing (IMPORTANT)
 
-**Primary goal: compare the 8 treatment sampling designs** under realistic spatial
-conditions. The key question is which design minimizes estimation error and maintains
-valid coverage — NOT which estimator is better.
+**Primary goal: compare the treatment sampling designs** (6 in the manuscripts, 8 in the
+reports) under realistic spatial conditions. The key question is which designs estimate
+the treatment effect well under heterogeneous incidence (low MSE, valid coverage). It is
+NOT which estimator is better, and NOT whether knowing prior incidence is necessary
+(user framing, 2026-09-24).
 
-**MLE is the primary estimator.** It is the methodologically appropriate choice
-because spatial dependence ($\rho$) and spillover ($\gamma$) are both present in
-the outcome DGP. DIM ignores both and produces systematically poor coverage (~72%).
+**The oracle ML spatial-lag estimator is primary** (Y ~ Z + Spill + X, true spillover
+covariate). It's the methodologically appropriate choice because spatial dependence ($\rho$)
+and spillover ($\gamma$) are both present in the outcome DGP. The non-oracle ML fit
+(Y ~ Z + X) is a sensitivity analysis. DIM ignores both and produced ~72% coverage in the
+(pre-revision) April runs.
 
 **DIM serves as a proof-of-concept / naive baseline only.** Use DIM results to
 sanity-check simulation mechanics and as a secondary comparator. All substantive
@@ -105,18 +112,22 @@ build_spatial_grid(grid_dim=10)
                     listw_rook, listw_queen)
         |
         v
-generate_incidence(mode, N=100, n_resamples, W, rho_incidence)
-  -> X_matrix: [100 x n_outcome_resamples], values in [0,1]
-  -> base_incidence = X_matrix[, 1]   # "historical" incidence for design decisions
+generate_surfaces(cfg)            # 05; X_k keyed by ("X", mode, rho_X, k)
+  -> X: [100 x K=10], values in [0,1]; shared by every block of the config
         |
         v
-get_designs(design_id, n_resamples, N, incidence, nb_list, coords)
-  -> Z_matrix: [100 x n_design_resamples], binary {0,1}, ~50% treated
+draw_assignments(cfg, nb, rho, gamma, regime, d, X)   # 05 -> get_designs() per surface
+  -> Zm: [100 x K*J = 250]; columns (k-1)*25+1..k*25 drawn from X[, k]  (M1)
         |
         v
-estimate_tau(estimation_mode, Y_sim[100 x n_out], Z[100], spill_term[100],
-             X_matrix, active_listw, n_outcome_resamples)
-  -> list(estimates[n_out], ci_lower[n_out], ci_upper[n_out])
+Y_kj = (I - rho W)^{-1} (tau Z_kj + S(Z_kj) + beta X_k + eps_kj)   # eps: 250 columns per block
+        |
+        v
+fit_tau_models(y, Z, spill, X_k, setup)   # 04; oracle + non-oracle via fit_sar_lag()
+  -> list(oracle = list(tau, se, warns), nonoracle = ...)
+        |
+        v
+summarize_fits()                          # 05; metrics + surface-level MC SEs
         |
         v
 results data frame — 1 row per scenario:
@@ -128,14 +139,21 @@ results data frame — 1 row per scenario:
   Gamma           | 0.5, 0.6, 0.7, 0.8
   Spillover_Type  | "control_only" / "both"
   True_Tau        | 0.8, 1.0, 1.5, 2.0, or 3.0 (swept parameter)
-  Mean_Estimate   | mean(tau-hat across iterations)
+  Estimator       | "oracle" / "nonoracle" (one file per estimator)
+  Mean_Estimate   | mean(tau-hat over the 250 fits)
   Bias            | Mean_Estimate - true_tau
   SD              | sd(tau-hat)
-  MSE             | Bias^2 + SD^2
+  MSE             | mean((tau-hat - true_tau)^2)
   Coverage        | fraction of CIs containing true_tau
-  Fail_Rate       | fraction of MLE iterations that failed to converge
-  N_Valid_Est     | count of non-NA estimates (denominator for MC SEs)
-  Power           | fraction of CIs excluding zero (P(reject H0: tau=0))
+  Fail_Rate       | fraction of fits with non-finite tau-hat or SE
+  N_Valid_Est     | count of valid fits (250)
+  Power           | fraction of CIs with lower bound > 0 (one-sided)
+  SE_Bias/SE_MSE/SE_Coverage/SE_Power | sd of 10 surface means / sqrt(10)  (t9 intervals)
+  N_Surfaces      | surfaces with valid fits (10)
+  Mean_Treated    | mean sum(Z)
+  N_Aliased       | fits where the engine dropped an aliased column
+  N_Warn          | all other warnings (logged in warnings_*.csv)
+  Z_WZ_rank_deficient | rank([1, Z, WZ]) < 3 for any draw
 ```
 
 ---
@@ -153,8 +171,9 @@ results data frame — 1 row per scenario:
 | `design_id` | 1, 2, 3, 4, 5, 6, 7, 8 | 8 |
 | **Total** | 5 x 5 x 2 x 4 x 4 x 2 x 8 | **12,800** |
 
-Scenarios per (tau × incidence config): 512 (= 2x4x4x2x8).
-Baseline tau=1.0 slice (2,560 scenarios) reproduces the existing MLE_combined results.
+Scenarios per (tau × incidence config): 512 (= 2x4x4x2x8). Each scenario has 250 fits per
+estimator (K = 10 surfaces × J = 25 design draws). The `pilot` profile of 05 runs τ = 1,
+ρ ∈ {0, 0.5}, γ ∈ {0.5, 0.8}.
 
 ---
 
@@ -162,17 +181,17 @@ Baseline tau=1.0 slice (2,560 scenarios) reproduces the existing MLE_combined re
 
 | ID | Name | Deterministic? | ~Treated% | Key Feature |
 |----|------|:-:|:-:|-------------|
-| 1 | Checkerboard | **Yes** | 50% | Max spatial separation, alternating grid |
-| 2 | High Incidence Focus | **Yes** (given X) | 50% | Targets top-50% burden clusters |
-| 3 | Saturation Quadrants | No | ~50% (varies) | Random saturation per quadrant (0.2-0.8) |
-| 4 | Isolation Buffer | No | ~20-30% | Greedy: no two treated clusters adjacent |
-| 5 | 2x2 Blocking | No | 50% | 1:1 randomization within 2x2 spatial blocks |
-| 6 | Balanced Quartiles | No | ~50% | Stratified by incidence quartile |
-| 7 | Balanced Halves | No | ~50% | 2-strata median split, balanced within each half |
-| 8 | Incidence-Guided Saturation Quadrants | No | ~50% | Saturation by quadrant avg incidence rank |
+| 1 | Checkerboard | **Yes** | 50 | Alternating (x + y) mod 2 grid (maximal interspersion; under rook WZ = 1 − Z) |
+| 2 | High Incidence Focus | No (random ties) | exactly 50 | Treat the 50 highest-incidence clusters |
+| 3 | Saturation Quadrants | No | 50 | Random saturation {0.2, 0.4, 0.6, 0.8} per 5×5 quadrant |
+| 4 | Isolation Buffer | No | rook ≈ 38, queen ≈ 22 | Greedy random maximal independent set (rarely the exact checkerboard under rook) |
+| 5 | 2x2 Blocking | No | 50 | 2 of 4 within each 2×2 block |
+| 6 | Balanced Quartiles | No | exactly 50 | Equal rank quartiles; 12/12/13/13 treated in random order |
+| 7 | Balanced Halves | No | 50 | Exact rank halves, 25 treated in each |
+| 8 | Incidence-Guided Saturation Quadrants | No | 50 | Saturations {0.8…0.2} by rank of quadrant mean incidence |
 
-Deterministic designs (1, 2) generate **one** assignment and replicate it across all
-`n_design_resamples` — enforced via `is_design_deterministic()` in `03_designs.R`.
+Only Checkerboard is deterministic (`is_design_deterministic()` in `03_designs.R`). Ties in
+incidence are broken at random for every draw (`random_tie_rank()`).
 
 ---
 
@@ -189,21 +208,67 @@ beta            <- 1.0          # Incidence coefficient in outcome model
 sigma           <- 1.0          # Residual SD
 grid_dim        <- 10           # 10x10 = 100 clusters
 base_rate       <- 35 / 100000  # Poisson: SUD rate (Mirzaei et al.)
-pop_per_cluster <- 1000         # Poisson: equal population per cluster
+pop_per_cluster <- 100000       # Poisson: equal population per cluster (M2; ≈35 deaths/yr)
 pop_mode        <- "equal"      # "equal" or "heterogeneous"
-include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
+n_surfaces      <- 10           # K incidence surfaces per config
+n_design_draw   <- 25           # J design draws per surface; 250 fits per scenario
 ```
-
-**Resample counts:**
-
-| Mode | Design resamples | Outcome resamples | Iterations/scenario |
-|------|:---:|:---:|:---:|
-| DIM | 25 | 100 | 2,500 |
-| MLE | 25 | 10 | 250 |
+Both the oracle and the non-oracle model are fit to every simulated outcome. The pre-revision
+DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 
 ---
 
-## Current State (as of 2026-09-04)
+## Current State (as of 2026-09-24)
+
+**Simulation revision (step 0.5): re-run COMPLETE; downstream regeneration (Phase C) in progress.**
+Plan: `docs/plans/simulation-revision-plan.md`; method authority:
+`docs/plans/simulation-revision-spec.md`. All April 2026 numbers are superseded (archived in
+`results/archive/pre_revision_20260924/`, with a README).
+
+- **What changed:** M1–M8. Matched surfaces; 100,000 people per Poisson cluster; random
+  tie-breaking, with High Incidence Focus and Balanced Quartiles treating exactly 50 (the
+  latter a user decision after the pilot); key-based seeds; one noise column per fit;
+  aliasing flagged (estimates kept); a non-oracle estimator (Y ~ Z + X) as sensitivity; MC SEs
+  from 10 surface means; manifest-checked checkpoints; the lean `fit_sar_lag()` engine
+  (validated on 5,120 fits, max |Δτ̂| 9.7e-8, ~120× faster).
+- **Full run:** `results/sim_data/sim_results_{MLE,MLEnonoracle}_tau_sweep_combined_20260924_025509.rds`.
+  12,800 scenarios × 250 fits per estimator (6.4M fits, 13.9 min on 10 workers).
+  `full_run_verification.txt`: all checks pass; zero non-aliasing warnings. Aliasing hits
+  every Checkerboard × rook fit, plus 20 Isolation Buffer × rook scenarios where one draw
+  happened to be the exact checkerboard. The 1% `lagsarlm` cross-check is in
+  `results/estimator_validation/crosscheck_full_run.txt`.
+- **Headline (oracle, τ = 1, 6 designs):**
+
+  | Design | Queen MSE | Rook MSE |
+  |---|---|---|
+  | Incidence-Guided Saturation Quadrants | 0.091 | 0.072 |
+  | Balanced Quartiles | 0.131 | 0.084 |
+  | Isolation Buffer | 0.160 | 0.133 |
+  | High Incidence Focus | 0.245 | 0.206 |
+  | 2x2 Blocking | 0.319 | 0.128 |
+  | Checkerboard | 1.087 | 0.480 |
+
+  - Coverage is ≈0.94 for every design except Checkerboard × rook (0.15; τ not identified).
+  - Under queen the rank order is the same at every τ (under rook, 2x2 Blocking and Isolation Buffer swap at τ = 0.8).
+  - Every adjacent pair is significant on 50 independent config × surface units.
+  - Saturation Quadrants and Balanced Halves remain indistinguishable from their retained
+    counterparts, so the 6-design set is kept (user decision, 2026-09-24).
+  - Non-oracle: bias −0.12 to −0.40 and coverage 0.51–0.90 for all designs, but lower
+    variance where Z and WZ are collinear (queen Checkerboard MSE 1.09 → 0.11).
+- **Research framing (user, 2026-09-24):** the question is which designs estimate τ well
+  under heterogeneous incidence, NOT whether knowing incidence helps.
+- **Outputs regenerated:**
+  - `results/six_design_manuscript/{,queen/,rook/}`, `six_design_manuscript_nonoracle/`,
+    `eight_design_supplementary/`
+  - `results/MLE_tau_sweep_*.pdf`, `results/MLE_statistical_comparisons.pdf`, `mle_per_config/`
+  - `results/figures/design_samples_8panel.*`
+- **Not yet updated:** the CTJ manuscript and SI still carry the April numbers. They stay
+  untouched until manuscript step 5 ("numbers superseded"). The application is not re-run
+  (14(d)'s table is labeled STALE).
+- **Next:** finish Phase C, then Phase D (chapter Methods/Results rewrite). The single
+  recommended design for investigators is still the author's decision to make.
+
+## Prior State (as of 2026-09-04)
 
 **Real-data ingestion pipeline:** READY, DORMANT (waiting on the actual dataset)
 - `application/code/run_application_profiles.R` gained `load_real_sud_data()`
@@ -343,6 +408,9 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
 
 ## Prior Simulation State (as of 2026-04-08)
 
+> **SUPERSEDED 2026-09-24** by the simulation revision (see Current State). Do not cite the
+> numbers below; their files now live in `results/archive/pre_revision_20260924/`.
+
 **Tau-sweep simulation:** COMPLETE — 12,800 scenarios, τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}
 - Data: `results/sim_data/sim_results_MLE_tau_sweep_combined_20260408_191916.rds`
 - Splits: `results/sim_data/sim_results_MLE_tau_sweep_{iid|spatial|poisson}_20260408_191916.rds`
@@ -411,20 +479,32 @@ Real-data ingestion pipeline (`run_application_profiles.R`) added on `main` 2026
 
 ## Critical Invariants (DO NOT Violate)
 
-1. **Incidence generated ONCE per `(mode, rho_X)` config** — NOT per `(nb_type, rho)` scenario.
-   `X_matrix` is fixed for a given config; only the outcome DGP varies with `rho`.
+Revised 2026-09-24 for the simulation revision (spec: `docs/plans/simulation-revision-spec.md`).
 
-2. **Results are NEVER aggregated across incidence modes.** Each of iid, spatial, poisson
-   is always reported separately. See `split_by_incidence_config()` in `06_visualizations.R`.
+1. **Incidence surfaces are generated per `(mode, rho_X, k)`, k = 1..10, and shared by every
+   block of that config** — NOT regenerated per `(nb_type, rho, gamma, regime)` block. Only the
+   outcome DGP, the design draws and the noise vary across blocks.
 
-3. **Deterministic designs (1, 2) generate 1 assignment and replicate** for all design
-   resamples. Never re-draw them `n_design_resamples` times.
+2. **Never pool silently.** Incidence modes and neighbor types are reported separately:
+   queen is primary, rook is the sensitivity / Chapter 2 continuity case. Pooled numbers
+   appear only when labeled "pooled", with splits wherever a conclusion changes. See
+   `split_by_incidence_config()` in 06 and the queen/rook/pooled slices in 12-14.
 
-4. **Per-scenario seed** = `digest::digest2int(paste(inc_mode, rho_x, nb_type, rho, gamma, spill_type, d_id, sep="|"))`.
-   Never use a single `set.seed()` for the whole run.
+3. **Checkerboard is the only deterministic design.** It uses one assignment for every
+   draw, but each of its 250 fits still gets its own noise column. Every other design,
+   including High Incidence Focus, is re-drawn for each of the J = 25 draws per surface.
 
-5. **`base_incidence = X_matrix[, 1]`** — only the first column is used for treatment
-   design decisions (the "historically observed" incidence). Do not pass the full matrix.
+4. **Every random draw is key-seeded** with `set_seed_key()` (05): X by `("X", mode, rho_X, k)`,
+   Z by `("Z", mode, rho_X, nb, rho, gamma, regime, k, d)`, eps by
+   `("eps", mode, rho_X, nb, rho, gamma, regime)`. Numeric fields use `sprintf("%.2f")`, and RNG
+   kinds are set explicitly. Never draw outside `set_seed_key()` in the runner.
+
+5. **Matched surfaces (M1):** designs for surface k are drawn from `X[, k]`, and the outcome
+   and the analysis use the same `X[, k]`. (This reverses the old `base_incidence = X_matrix[, 1]` rule.)
+
+6. **Checkpoints are manifest-checked** (`results/checkpoints/rev_2026-09/<profile>/manifest.rds`:
+   parameter hash, code hashes for 01-05, package versions, BLAS). If anything changed, the
+   runner refuses to load. Never copy or reuse checkpoints across code versions.
 
 ---
 
@@ -438,6 +518,16 @@ Real-data ingestion pipeline (`run_application_profiles.R`) added on `main` 2026
 | `I` shadows `base::I` | Subtle namespace errors | Renamed to `I_mat <- diag(N_clusters)` |
 | Degenerate Z (all 0 or 1) | `estimate_tau()` crash | Early-exit guard returning all `NA` |
 | R sprintf 10k char limit | `complete_after_mle.R` failed writing docs | Write docs directly via Claude Code `Write` tool instead |
+| Design/outcome incidence mismatch (fixed 2026-09) | Designs used `X[,1]`; outcome replicate k used `X[,k]` (cor ≈ 0) | Matched surfaces (M1) |
+| Poisson ties (fixed 2026-09) | 1,000 per cluster → ~5 distinct X; High Incidence Focus treated 14–50; `ntile()` broke ties by grid position | 100,000 per cluster; `random_tie_rank()` per draw; exact N/2 |
+| Unreproducible seeds (fixed 2026-09) | X and eps drawn before the per-scenario seed; forked workers reseeded | Key-based `set_seed_key()` for every draw |
+| Overstated MC precision (fixed 2026-09) | Deterministic designs copied 25× against 10 noise draws | One noise column per fit; SEs from surface means |
+| Silent aliasing (fixed 2026-09) | Checkerboard × rook: WZ = 1 − Z; `lagsarlm` dropped Spill, and `suppressWarnings` hid it | `withCallingHandlers`; `N_Aliased`, `Z_WZ_rank_deficient` |
+| Stale checkpoints (fixed 2026-09) | Old checkpoints loaded silently on re-run | Manifest check refuses mismatches |
+| `lagsarlm` slowness | ~76 ms/fit, ~94% of it an unconditional `gc()` on exit | `fit_sar_lag()` (validated, ~0.6 ms/fit) |
+| Rank-trajectory axis (fixed 2026-09) | `plot_rank_trajectories()` y-limits hard-coded to 6 silently dropped ranks 7–8 | Limits from `max(Rank)` |
+| Commentary pivot (fixed 2026-09) | `generate_commentary()` pivot lacked `True_Tau` → list-columns on tau-sweep files | `True_Tau` added to pivot keys |
+| Naive MC SEs (fixed 2026-09) | `add_mc_ses()` overwrote stored surface-level SEs | Returns stored SEs when present |
 
 ---
 
@@ -445,17 +535,17 @@ Real-data ingestion pipeline (`run_application_profiles.R`) added on `main` 2026
 
 | Request | Action |
 |---------|--------|
-| Run DIM simulation | Set `estimation_mode <- "DIM"` in `05` line 40, `Rscript 05_run_simulation.R` |
-| Run MLE simulation | Set `estimation_mode <- "MLE"` in `05` line 40, `Rscript 05_run_simulation.R` |
-| Generate MLE plots only | `source("06_visualizations.R"); run_all_visualizations(estimation_mode="MLE_combined")` |
-| One incidence config | `r <- load_latest_results(estimation_mode="MLE_combined"); cfg <- split_by_incidence_config(r); run_standard_tables(cfg[["iid Uniform"]])` |
+| Run the simulation (oracle + non-oracle) | From `code/`: `VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript 05_run_simulation.R full` (or `pilot`); ~14 min on 10 workers |
+| Run the tests | `VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript tests/test_simulation_revision.R` (`SKIP_EQUIVALENCE=1` skips the ~7 min lagsarlm check); then `Rscript tests/verify_full_run_rev_2026-09.R` |
+| Run DIM simulation | Not supported by the revised 05 (DIM is pre-revision only; legacy path `estimate_tau()` in 04) |
+| Generate MLE plots only | `source("06_visualizations.R"); run_all_visualizations(results_dir = normalizePath("../results"), estimation_mode = "MLE_tau_sweep")` |
+| One incidence config | `r <- load_latest_results(estimation_mode="MLE_tau_sweep"); cfg <- split_by_incidence_config(r); run_standard_tables(cfg[["iid Uniform"]])` |
 | Custom stratified table | `table_stratified(results, c("Design", "Rho"), "iid Uniform")` |
 | Add a new design | Add `case` to `get_designs()` in `03`, update `get_design_names()`, add ID to `design_ids` in `05` |
-| Change parameter sweep | Edit `*_vals` vectors in `05` CONFIGURABLE PARAMETERS section (lines ~50-80) |
-| Run parallel | Set `n_cores > 1` in `05` line 44 |
-| Compare DIM vs MLE | Load both result sets, join on scenario keys, compare Coverage and Bias columns |
-| Non-oracle MLE | Set `include_spill_covariate = FALSE` in `estimate_tau()` call in `05` |
-| Full recommendation report | `source("08_design_recommendations.R"); run_recommendation_report(estimation_mode="MLE_combined")` |
+| Change parameter sweep | Edit `*_vals` vectors in `05` CONFIGURABLE PARAMETERS section (the checkpoint manifest then forces a fresh run) |
+| Run parallel | `n_cores` in `05` (default 10; forked `mclapply` over 40 units) |
+| Non-oracle results | `load_latest_results(estimation_mode = "MLEnonoracle_tau_sweep")`; 6-design tests: `Rscript 12_six_design_statistical_comparisons.R MLEnonoracle` |
+| Full recommendation report | `source("08_design_recommendations.R"); run_recommendation_report(estimation_mode="MLE_tau_sweep")` |
 | Rankings per incidence mode | `table_incidence_rankings(results)` or `plot_incidence_rankings(results)` |
 | Rankings for one parameter | `table_marginal_rankings(results, "Rho", "iid Uniform")` |
 | Rank trajectory plot | `plot_rank_trajectories(results, "Gamma", "iid Uniform")` |
@@ -501,7 +591,7 @@ Real-data ingestion pipeline (`run_application_profiles.R`) added on `main` 2026
 ## Design Recommendation Functions (`08_design_recommendations.R`)
 
 Sources `06_visualizations.R`. Answers three personalization questions.
-**Always run on MLE results only** (`estimation_mode = "MLE_combined"`).
+**Always run on MLE results only** (`estimation_mode = "MLE_tau_sweep"`, the oracle file; the default since 2026-09).
 
 **Core utility:**
 - `rank_designs_by_group(results, group_vars, metric)` — rank designs by avg MSE within groups
@@ -522,7 +612,7 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 **Summary:**
 - `generate_commentary(results, inc_label)` — 6-finding programmatic narrative: winner, dominance %, stability, coverage, sensitivity, recommendation
-- `run_recommendation_report(results, estimation_mode, output_pdf)` — master orchestrator → `results/MLE_combined_design_recommendations.pdf`
+- `run_recommendation_report(results, estimation_mode, output_pdf)` — master orchestrator → `results/MLE_tau_sweep_design_recommendations.pdf`
 
 **Validation:**
 - `validate_recommendations(results)` — 8 unit tests for new functions
@@ -566,7 +656,8 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 ### Known Minor Issues (low-priority cleanup)
 
-- `add_mc_ses()` Roxygen doc: says N_Valid_Est=0 → NA but actually produces Inf
+- `02_incidence_generation.R`: `generate_incidence_poisson()` still defaults `pop_per_cluster = 1000` (and its roxygen says so). 05 always passes 100,000, so results aren't affected. It was left unchanged after the full run so the run manifest's code hash still matches.
+- `DESIGN_FULL_NAMES` in `00_design_names.R` labels Design 1 "Block Stratified Sampling", while the manuscripts, 03 and 12–14 call it "Checkerboard". `plot_design_samples()` uses the former.
 - `load_latest_results()` comment (line ~87 of `06_visualizations.R`): clarify `_combined_` preference applies per estimation-mode, not globally
 - `07_results_summary.Rmd` compare-table caption: should note that DIM only ran 6 designs (D7/D8 NAs are expected)
 - `IncidenceSpatialCRT_Report.qmd` caption/text alignment: MC SEs table uses tau=1.0 slice (2,560 rows), not full 12,800 — prose now correctly clarifies this distinction

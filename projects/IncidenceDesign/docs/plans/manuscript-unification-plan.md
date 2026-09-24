@@ -262,6 +262,19 @@ validated fast estimator is used. Then downstream results are
 regenerated and step 0's remaining prose work continues against the new
 ground truth. The chapter-first order of steps 1–7 is unchanged.
 
+**Step 0.5 progress (2026-09-24).**
+- **Done:**
+  - Phase A: bib, abstract, and the results-independent prose fixes.
+  - Phase B: spec, code, tests, pilot, and the full re-run. It's verified, and a 1%
+    `lagsarlm` cross-check passed.
+- **Decisions after the pilot:**
+  - Keep the 6 designs.
+  - Balanced Quartiles treats exactly 50.
+  - Framing: which designs work under heterogeneous incidence, not whether knowing
+    incidence is necessary.
+- **In progress:** Phase C (downstream regeneration).
+- **Next:** Phase D, which needs the author's choice of the one recommended design.
+
 **1. Confirm the two items the chapter needs are already present — this
 is a verification step, not drafting.**
 Both the ρ-stratified Checkerboard coverage table and the

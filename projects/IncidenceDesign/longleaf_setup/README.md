@@ -1,5 +1,10 @@
 # Longleaf HPC Setup for IncidenceDesign
 
+> **Superseded by the 2026-09 revision.** `simulation.R` here implements the pre-revision
+> DGP (designs from `X[,1]`, 1,000 people per Poisson cluster, unkeyed seeds). The revised
+> `code/05_run_simulation.R` runs the full grid in ~14 minutes on a laptop, so Longleaf isn't
+> needed. Kept for reference only; don't run it.
+
 Run the MLE simulation (2,560 scenarios) on UNC's Longleaf cluster using SLURM job arrays. Each scenario runs as an independent task (~1-5 min), enabling massive parallelism.
 
 ## Directory Structure
