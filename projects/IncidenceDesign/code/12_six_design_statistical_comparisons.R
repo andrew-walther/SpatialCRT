@@ -189,8 +189,36 @@ for (nb in c("queen", "rook")) {
 
   p_mse <- plot_master_comparison(tau1, nb_filter = nb,
                                   inc_label = paste0("all configs, tau=1.0", sub_note))
-  p_coverage <- plot_coverage_by_design(tau1, inc_label = paste0("all configs, tau=1.0", sub_note))
-  p_tau <- plot_mse_vs_tau(res) + labs(caption = if (nb == "rook") ROOK_NOTE else NULL)
+  # Chapter figures (coverage, tau sensitivity): Greek tau via plotmath
+  # expressions, saved with the default pdf() device (Unicode Greek fails in
+  # pdf(), and cairo_pdf cannot load on this machine without XQuartz). The
+  # figure note is a Greek-letter copy of ROOK_NOTE; ROOK_NOTE itself stays
+  # unchanged because it is also written to the summary .txt and .rds. It goes
+  # in a left-aligned plot-wide caption so it is never clipped.
+  fig_rook_note <- if (nb == "rook")
+    expression("Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.") else NULL
+  note_theme <- theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
+  p_coverage <- plot_coverage_by_design(tau1) +
+    labs(subtitle = expression("Incidence: all configs, " * tau * " = 1.0 | Red dashed = nominal 95%"),
+         caption = fig_rook_note) +
+    note_theme
+  # Legibility only: coverage is tightly clustered, so the default black outlines
+  # collapse the boxes into dark bars; thinner grey outlines let the fill show.
+  p_coverage$layers[[1]] <- geom_boxplot(alpha = 0.5, outlier.alpha = 0.5, outlier.size = 1,
+                                         colour = "grey35", linewidth = 0.25)
+  # Legend order = queen MSE at tau = 1 (best to worst), same in both versions.
+  # The ribbon is Mean_MSE +/- the AVERAGE of the stored scenario-level SE_MSE
+  # (surface-level MC SEs) in each Design x tau cell, not the SE of the mean.
+  tau_legend_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+                        "Isolation Buffer", "High Incidence Focus", "2x2 Blocking", "Checkerboard")
+  stopifnot(setequal(tau_legend_order, unique(res$Design)))
+  res_tau <- res
+  res_tau$Design <- factor(res_tau$Design, levels = tau_legend_order)
+  p_tau <- plot_mse_vs_tau(res_tau) +
+    labs(title = expression("MSE vs. True " * tau * " by Design"), x = expression("True " * tau),
+         y = "Mean MSE\n(band: ± average scenario-level Monte Carlo SE)",
+         caption = fig_rook_note) +
+    note_theme
   ggsave(file.path(out_dir, sprintf("fig_mse_by_design_6design_%s.pdf", nb)), p_mse, width = 10, height = 7)
   ggsave(file.path(out_dir, sprintf("fig_coverage_by_design_6design_%s.pdf", nb)), p_coverage, width = 8, height = 6)
   ggsave(file.path(out_dir, sprintf("fig_tau_sensitivity_6design_%s.pdf", nb)), p_tau, width = 8, height = 6)

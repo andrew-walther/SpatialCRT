@@ -201,9 +201,25 @@ best_to_worst_6 <- mle_tau1_6 %>%
 # (b) MAIN-TEXT FIGURES: reordered MSE bar chart + new ranked bias-variance
 # ==============================================================================
 
-p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = nb_sel,
-                                          inc_label = paste0("all configs, tau=1.0", sub_note)) +
+# Chapter figure: Greek tau/rho via plotmath, saved with the default pdf()
+# device (Unicode Greek fails in pdf(); cairo_pdf cannot load on this machine
+# without XQuartz). The facet is re-declared only to relabel the column strips
+# "rho = x" -> Greek (parsed labels); rows/columns, their order and the scales
+# are identical to the helper's. The rook note is a Greek-letter copy of
+# ROOK_NOTE (ROOK_NOTE itself is written to the .txt summaries, so it stays).
+mse_subtitle <- if (nb_sel == "rook") {
+  expression("Rook Contiguity | Incidence: all configs, " * tau * " = 1.0 [Rook: " * tau *
+               " not identified for Checkerboard (WZ = 1 - Z); estimates kept but flagged.]")
+} else {
+  expression("Queen Contiguity | Incidence: all configs, " * tau * " = 1.0")
+}
+p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = nb_sel) +
   scale_x_discrete(limits = best_to_worst_6) +
+  facet_grid(Spillover_Type ~ Rho, scales = "free_y",
+             labeller = labeller(Spillover_Type = c("both" = "Spillover: Both",
+                                                    "control_only" = "Spillover: Control"),
+                                 Rho = as_labeller(function(x) paste("rho ==", x), label_parsed))) +
+  labs(subtitle = mse_subtitle) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ggsave(file.path(fig_dir, "fig_mse_by_design_6design.pdf"), p_mse_reordered,
        width = 12, height = 7)
@@ -215,7 +231,9 @@ results_rep_6 <- configs_tau1_6[[rep_label_6]]
 
 p_biasvar <- plot_bias_variance(results_rep_6, rep_label_6) +
   scale_x_discrete(limits = best_to_worst_6, labels = wrap_labels) +
-  labs(title = "Bias-Variance Decomposition of MSE (ranked best to worst)")
+  labs(title = "Bias-Variance Decomposition of MSE (ranked best to worst)",
+       subtitle = expression("Incidence: Poisson (" * rho[X] * " = 0.20)"))  # = rep_label_6, Greek
+stopifnot(rep_label_6 == "Poisson (rho_X = 0.20)")  # keep the plotmath subtitle in sync
 ggsave(file.path(fig_dir, "fig_biasvar_6design.pdf"), p_biasvar, width = 9, height = 6)
 
 # Combined coverage + tau-sensitivity 2-panel figure (frees an exhibit slot in
