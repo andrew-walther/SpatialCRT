@@ -12,7 +12,7 @@
 
 # Full names (for figure panels, tables, and prose)
 DESIGN_FULL_NAMES <- c(
-  "Design 1" = "Block Stratified Sampling",
+  "Design 1" = "Block Stratified Sampling (Checkerboard)",  # Chapter 2 name + this study's name
   "Design 2" = "High Incidence Focus",
   "Design 3" = "Saturation Quadrants",
   "Design 4" = "Isolation Buffer",
