@@ -1,0 +1,18 @@
+1% lagsarlm cross-check of the full run — 2026-09-24 03:14
+Scenarios: 128 (x 2 estimators = 256 rows; 64000 lagsarlm fits), 17.7 min on 10 workers
+Max |stored - lagsarlm| (criterion < 1e-6):
+  Mean_Estimate  2.69e-09
+  Bias           2.69e-09
+  SD             1.95e-09
+  MSE            5.95e-09
+  SE_Bias        1.15e-09
+  SE_MSE         1.04e-09
+Mismatch counts (criterion 0; Coverage/Power may differ by at most one fit):
+  Coverage             0
+  Power                0
+  N_Valid_Est          0
+  N_Aliased            0
+  N_Warn               0
+  Mean_Treated         0
+  Z_WZ_rank_deficient  0
+RESULT: PASS
