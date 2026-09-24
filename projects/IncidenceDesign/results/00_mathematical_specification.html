@@ -11,7 +11,7 @@
 
 <meta name="author" content="Andrew Walther" />
 
-<meta name="date" content="2026-03-22" />
+<meta name="date" content="2026-09-24" />
 
 <title>Mathematical Specification: Spatial CRT Design Simulation with Heterogeneous Incidence</title>
 
@@ -1500,7 +1500,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Mathematical Specification: Spatial CRT
 Design Simulation with Heterogeneous Incidence</h1>
 <h4 class="author">Andrew Walther</h4>
-<h4 class="date">2026-03-22</h4>
+<h4 class="date">2026-09-24</h4>
 
 </div>
 
@@ -1573,16 +1573,17 @@ matrices.</p>
 <div id="outcome-data-generating-process" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Outcome Data Generating
 Process</h1>
-<div id="spatial-durbin-model-sdm" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Spatial Durbin Model
-(SDM)</h2>
+<div id="spatial-lag-model-with-a-spillover-term" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Spatial Lag Model
+with a Spillover Term</h2>
 <p>The outcome vector <span class="math inline">\(\mathbf{Y} = (Y_1,
-\ldots, Y_N)^\top\)</span> is generated from the Spatial Durbin
-Model:</p>
+\ldots, Y_N)^\top\)</span> is generated from a spatial lag model with a
+spillover term (called the “Spatial Durbin Model”, SDM, in older project
+documents):</p>
 <p><span class="math display">\[\mathbf{Y} = (\mathbf{I}_N -
-\rho\mathbf{W})^{-1}\left[\tau\mathbf{Z} + \gamma \cdot
-\text{Spill}(\mathbf{Z}) + \beta\mathbf{X} +
-\boldsymbol{\varepsilon}\right]\]</span></p>
+\rho\mathbf{W})^{-1}\left[\tau\mathbf{Z} + S(\mathbf{Z}) +
+\beta\mathbf{X} + \boldsymbol{\varepsilon}\right], \quad \beta = 1,\
+\sigma = 1\]</span></p>
 <p>where:</p>
 <table>
 <colgroup>
@@ -1639,9 +1640,9 @@ treatment vector</td>
 <td align="left">Indirect effect via treated neighbors</td>
 </tr>
 <tr class="even">
-<td align="center"><span class="math inline">\(\text{Spill}(\mathbf{Z})\)</span></td>
+<td align="center"><span class="math inline">\(S(\mathbf{Z})\)</span></td>
 <td align="left"><span class="math inline">\(N \times 1\)</span>
-spillover term</td>
+spillover term (includes <span class="math inline">\(\gamma\)</span>)</td>
 <td align="left">See Section 3.2</td>
 </tr>
 <tr class="odd">
@@ -1676,20 +1677,28 @@ neighbors.</p>
 <h2><span class="header-section-number">3.2</span> Spillover
 Construction</h2>
 <p>The spillover term captures indirect treatment effects transmitted
-through the spatial network:</p>
-<p><span class="math display">\[\text{Spill}_i = \frac{\sum_{j \in
-\mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|} =
-(\mathbf{W}\mathbf{Z})_i\]</span></p>
-<p>This is the proportion of cluster <span class="math inline">\(i\)</span>’s neighbors that are treated. Two
-spillover types are considered:</p>
+through the spatial network. It is built from the spatial lag of
+treatment,</p>
+<p><span class="math display">\[(\mathbf{W}\mathbf{Z})_i = \frac{\sum_{j
+\in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|},\]</span></p>
+<p>the proportion of cluster <span class="math inline">\(i\)</span>’s
+neighbors that are treated. Two spillover regimes are considered; in
+both, <span class="math inline">\(S(\mathbf{Z})\)</span> already
+contains the magnitude <span class="math inline">\(\gamma\)</span>:</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Control-only spillover</strong>: The spillover effect
-applies only to untreated clusters: <span class="math display">\[\text{Spill}_i^{(\text{ctrl})} = \gamma \cdot
-(\mathbf{W}\mathbf{Z})_i \cdot (1 - Z_i)\]</span></p></li>
-<li><p><strong>Bidirectional spillover</strong>: The spillover effect
-applies to all clusters: <span class="math display">\[\text{Spill}_i^{(\text{both})} = \gamma \cdot
-(\mathbf{W}\mathbf{Z})_i\]</span></p></li>
+<li><p><strong>Control-only spillover</strong>
+(<code>control_only</code>): the spillover effect applies only to
+untreated clusters: <span class="math display">\[S_i^{(\text{ctrl})}(\mathbf{Z}) = \gamma \cdot
+(\mathbf{W}\mathbf{Z})_i \cdot (1 - Z_i), \quad \text{i.e. }
+S(\mathbf{Z}) = \gamma\,\mathbf{W}\mathbf{Z} \circ (\mathbf{1} -
+\mathbf{Z})\]</span></p></li>
+<li><p><strong>Bidirectional spillover</strong> (<code>both</code>): the
+spillover effect applies to all clusters: <span class="math display">\[S_i^{(\text{both})}(\mathbf{Z}) = \gamma \cdot
+(\mathbf{W}\mathbf{Z})_i, \quad \text{i.e. } S(\mathbf{Z}) =
+\gamma\,\mathbf{W}\mathbf{Z}\]</span></p></li>
 </ol>
+<p>The oracle estimator (Section 6.2) uses <span class="math inline">\(\text{Spill} = S(\mathbf{Z})\)</span>, the true
+regime-specific spillover term, as a covariate.</p>
 <hr />
 </div>
 </div>
@@ -1700,6 +1709,14 @@ Modes</h1>
 outcome rates across clusters. We consider three generation modes with
 increasing structural complexity. All modes produce values in <span class="math inline">\([0, 1]\)</span> to ensure comparability across
 modes and with the treatment assignment designs.</p>
+<p>Each incidence configuration <span class="math inline">\(c =
+(\text{mode}, \rho_X)\)</span> yields <span class="math inline">\(K =
+10\)</span> independent incidence surfaces <span class="math inline">\(\mathbf{X}_1, \ldots, \mathbf{X}_K\)</span>
+(Section 7.2). The same surface <span class="math inline">\(\mathbf{X}_k\)</span> is used to draw the
+treatment assignments, to generate the outcome, and as the covariate in
+the analysis model. The spatial filters in Modes 2 and 3 always use the
+queen weight matrix <span class="math inline">\(\mathbf{W}_Q\)</span>,
+whichever contiguity is used for the outcome.</p>
 <div id="mode-1-independent-and-identically-distributed-iid" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Mode 1: Independent
 and Identically Distributed (iid)</h2>
@@ -1716,7 +1733,7 @@ Correlated (SAR Filter)</h2>
 <p>Spatially correlated incidence is generated via the Simultaneous
 Autoregressive (SAR) filter:</p>
 <p><span class="math display">\[\mathbf{X}^* = (\mathbf{I}_N - \rho_X
-\mathbf{W})^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0},
+\mathbf{W}_Q)^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0},
 \mathbf{I}_N)\]</span></p>
 <p>where <span class="math inline">\(\rho_X \in [0, 1)\)</span> controls
 the degree of spatial correlation in incidence.</p>
@@ -1743,7 +1760,7 @@ Count-Based</h2>
 a Poisson count model with spatially correlated rates:</p>
 <p><strong>Step 1.</strong> Generate spatially correlated log-rates:
 <span class="math display">\[\log \boldsymbol{\lambda}^* = \mu_0 \cdot
-\mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}, \quad
+\mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W}_Q)^{-1}\mathbf{u}, \quad
 \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)\]</span></p>
 <p>where <span class="math inline">\(\mu_0 = \log(\text{base
 rate})\)</span> is the log of the baseline incidence rate (e.g., <span class="math inline">\(\mu_0 = \log(35/100{,}000)\)</span> for SUD).</p>
@@ -1757,6 +1774,13 @@ cluster <span class="math inline">\(i\)</span>.</p>
 = \frac{\text{rank}(R_i) - 0.5}{N}\]</span></p>
 <p>This quantile-based transformation preserves the ordering of rates
 while mapping to a uniform marginal distribution on <span class="math inline">\([0, 1]\)</span>.</p>
+<p>With <span class="math inline">\(P_0 = 100{,}000\)</span> people per
+cluster, the expected count is <span class="math inline">\(\lambda_i^*
+P_0 \approx 35\)</span> deaths per cluster, so the observed rates <span class="math inline">\(R_i\)</span> carry real rank information. (Before
+the 2026-09 revision, <span class="math inline">\(P_0 = 1{,}000\)</span>
+gave <span class="math inline">\(\lambda_i^* P_0 \approx 0.35\)</span>
+expected deaths and only about five distinct values of <span class="math inline">\(X_i\)</span>.) Any remaining ties in <span class="math inline">\(\mathbf{X}_k\)</span> are broken at random by the
+designs (Section 5).</p>
 <div id="population-modes" class="section level3" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> Population
 Modes</h3>
@@ -1764,16 +1788,17 @@ Modes</h3>
 <ol style="list-style-type: decimal">
 <li><strong>Equal population:</strong> <span class="math inline">\(P_i =
 P_0\)</span> for all <span class="math inline">\(i\)</span> (default:
-<span class="math inline">\(P_0 = 1{,}000\)</span>)</li>
+<span class="math inline">\(P_0 = 100{,}000\)</span>); used in the
+simulation (<code>pop_mode = &quot;equal&quot;</code>)</li>
 <li><strong>Heterogeneous population:</strong> <span class="math inline">\(P_i \sim \text{LogNormal}(\log P_0,
 \sigma_P^2)\)</span>, where <span class="math inline">\(\sigma_P =
-0.5\)</span> provides moderate population heterogeneity</li>
+0.5\)</span> provides moderate population heterogeneity (available in
+the code, not used in the simulation)</li>
 </ol>
 <p><strong>Parameters:</strong> <span class="math inline">\(\rho_X \in
 \{0.20, 0.50\}\)</span>, base rate <span class="math inline">\(=
 35/100{,}000\)</span>, <span class="math inline">\(P_0 =
-1{,}000\)</span>, population mode <span class="math inline">\(\in
-\{\text{equal}, \text{heterogeneous}\}\)</span>.</p>
+100{,}000\)</span>, population mode = equal.</p>
 <hr />
 </div>
 </div>
@@ -1783,44 +1808,77 @@ P_0\)</span> for all <span class="math inline">\(i\)</span> (default:
 Designs</h1>
 <p>Eight designs are evaluated. Each design produces a binary treatment
 vector <span class="math inline">\(\mathbf{Z} \in \{0, 1\}^N\)</span>.
-Designs 1–2 are deterministic given <span class="math inline">\(\mathbf{X}\)</span>; Designs 3–8 involve
-randomization.</p>
+For surface <span class="math inline">\(k\)</span> and design draw <span class="math inline">\(j\)</span>, the assignment is <span class="math inline">\(\mathbf{Z}_{kj} = \text{design}_d(\mathbf{X}_k;\
+\text{draw } j)\)</span>: designs that use incidence see the same
+surface <span class="math inline">\(\mathbf{X}_k\)</span> that enters
+the outcome. Checkerboard (Design 1) is the only deterministic design;
+Designs 2–8 involve randomization.</p>
+<p><strong>Tie-breaking.</strong> Ties in <span class="math inline">\(\mathbf{X}_k\)</span> are broken at random,
+freshly for every design draw <span class="math inline">\(j\)</span>,
+using the random-tie rank <span class="math display">\[r_i =
+\text{rank}(X_{k,i}), \quad \texttt{ties.method =
+&quot;random&quot;},\]</span> so <span class="math inline">\((r_1,
+\ldots, r_N)\)</span> is a permutation of <span class="math inline">\(1,
+\ldots, N\)</span>. Designs 2, 6, 7 and 8 use <span class="math inline">\(r\)</span> (or random-tie ranks of quadrant
+means); the other designs do not use incidence.</p>
 <div id="design-1-checkerboard-strict-spatial-stratification" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Design 1:
 Checkerboard (Strict Spatial Stratification)</h2>
 <p><span class="math display">\[Z_i = (x_i + y_i) \mod 2\]</span></p>
 <p>Treatment is assigned in an alternating checkerboard pattern. Every
-treated cluster is surrounded entirely by control clusters (under rook
-contiguity), maximizing spatial separation between treatment groups.</p>
-<p><strong>Properties:</strong> Deterministic, exactly 50% treated, zero
-spatial correlation in <span class="math inline">\(\mathbf{Z}\)</span>.</p>
+edge-neighbor of a treated cluster is a control and vice versa, so the
+two arms are maximally <em>interspersed</em>: the design maximizes
+treated-control adjacency. It does not separate the arms; that is the
+Isolation Buffer’s aim.</p>
+<p><strong>Properties:</strong> Deterministic (the same <span class="math inline">\(\mathbf{Z}\)</span> for every <span class="math inline">\(k\)</span> and <span class="math inline">\(j\)</span>; each fit still has its own noise
+column <span class="math inline">\(\boldsymbol{\varepsilon}_{kj}\)</span>), exactly
+50 treated. <span class="math inline">\(\mathbf{Z}\)</span> is perfectly
+negatively autocorrelated under rook contiguity.</p>
+<p><strong>Near-collinearity under queen contiguity.</strong> Each
+interior cluster has 4 edge-neighbors in the other arm and 4
+corner-neighbors in its own arm, so <span class="math inline">\((\mathbf{W}_Q\mathbf{Z})_i = 1/2\)</span> for
+every interior cluster whatever its own assignment. <span class="math inline">\(\mathbf{W}_Q\mathbf{Z}\)</span> varies only along
+the grid boundary (range 1/3 to 2/3, SD 0.066), which leaves the
+spillover term little variation independent of the intercept and <span class="math inline">\(\mathbf{Z}\)</span>. The estimate stays unbiased,
+but its variance is large.</p>
+<p><strong>Aliasing under rook contiguity.</strong> On the rook grid
+every neighbor of a treated cluster is a control and vice versa, so
+<span class="math inline">\(\mathbf{W}_R\mathbf{Z} = \mathbf{1} -
+\mathbf{Z}\)</span> and <span class="math inline">\(\text{rank}([\mathbf{1}, \mathbf{Z},
+\mathbf{W}\mathbf{Z}]) &lt; 3\)</span>. The oracle model’s Spill column
+is then aliased with the intercept and <span class="math inline">\(\mathbf{Z}\)</span> and is dropped, so <span class="math inline">\(\tau\)</span> is not identified apart from <span class="math inline">\(\gamma\)</span>. These estimates are kept and
+flagged (Section 8.7).</p>
 </div>
 <div id="design-2-high-incidence-focus" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Design 2: High
 Incidence Focus</h2>
-<p><span class="math display">\[Z_i = \mathbf{1}[X_i &gt;
-\text{median}(\mathbf{X})]\]</span></p>
-<p>Treatment is assigned to clusters with above-median historical
-incidence. This represents a strategy that deliberately targets
+<p><span class="math display">\[Z_i = \mathbf{1}[r_i &gt;
+N/2]\]</span></p>
+<p>Treatment is assigned to the <span class="math inline">\(N/2\)</span>
+clusters with the highest historical incidence, with ties broken at
+random as above. This represents a strategy that deliberately targets
 high-burden areas.</p>
-<p><strong>Properties:</strong> Deterministic given <span class="math inline">\(\mathbf{X}\)</span>, exactly 50% treated,
-treatment correlated with <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p><strong>Properties:</strong> Randomized only through the tie-break (a
+fixed assignment when <span class="math inline">\(\mathbf{X}_k\)</span>
+has no ties), exactly 50 treated, treatment correlated with <span class="math inline">\(\mathbf{X}\)</span>.</p>
 </div>
 <div id="design-3-saturation-quadrants" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Design 3: Saturation
 Quadrants</h2>
-<p>The grid is partitioned into four spatial quadrants: <span class="math display">\[Q_k, \quad k = 1, 2, 3, 4\]</span></p>
-<p>defined by dividing at the grid midpoint <span class="math inline">\((G/2, G/2)\)</span>. For each randomization:</p>
+<p>The grid is partitioned into four spatial quadrants: <span class="math display">\[Q_\ell, \quad \ell = 1, 2, 3, 4\]</span></p>
+<p>defined by dividing at the grid midpoint <span class="math inline">\((G/2, G/2)\)</span>, so each quadrant is a <span class="math inline">\(5 \times 5\)</span> block with <span class="math inline">\(|Q_\ell| = 25\)</span>. For each
+randomization:</p>
 <ol style="list-style-type: decimal">
 <li>Randomly assign saturation levels <span class="math inline">\(\{0.20, 0.40, 0.60, 0.80\}\)</span> to the four
-quadrants (one per quadrant, without replacement)</li>
-<li>Within quadrant <span class="math inline">\(Q_k\)</span> with
-saturation <span class="math inline">\(p_k\)</span>, randomly select
-<span class="math inline">\(\lfloor |Q_k| \cdot p_k \rceil\)</span>
-clusters for treatment</li>
+quadrants (a random permutation, one per quadrant)</li>
+<li>Within quadrant <span class="math inline">\(Q_\ell\)</span> with
+saturation <span class="math inline">\(p_\ell\)</span>, randomly select
+<span class="math inline">\(\lfloor |Q_\ell| \cdot p_\ell
+\rceil\)</span> clusters for treatment</li>
 </ol>
 <p><strong>Properties:</strong> Stochastic, treatment proportion varies
-by region, captures varying treatment density.</p>
+by region (5, 10, 15 and 20 of 25), captures varying treatment density;
+exactly 50 treated overall.</p>
 </div>
 <div id="design-4-isolation-buffer" class="section level2" number="5.4">
 <h2><span class="header-section-number">5.4</span> Design 4: Isolation
@@ -1833,13 +1891,17 @@ Buffer</h2>
 set</li>
 <li>Repeat until no available clusters remain</li>
 </ol>
-<p><strong>Properties:</strong> Stochastic, treated clusters are never
-adjacent (under the active contiguity), creates a spatial buffer around
-each treated unit. Treatment proportion varies across realizations
-(typically $$20–30%).</p>
+<p><strong>Properties:</strong> Stochastic (a greedy random maximal
+independent set in the active neighbor graph), treated clusters are
+never adjacent (under the active contiguity), creates a spatial buffer
+around each treated unit. The number treated varies across realizations:
+about 38 under rook and about 22 under queen contiguity.</p>
+<p>Under rook contiguity a draw can occasionally equal one colour class
+of the bipartite rook grid, i.e. the exact checkerboard, and is then
+aliased in the same way as Design 1 (Section 8.7).</p>
 </div>
-<div id="design-5-22-blocking" class="section level2" number="5.5">
-<h2><span class="header-section-number">5.5</span> Design 5: 2$$2
+<div id="design-5-2x2-blocking" class="section level2" number="5.5">
+<h2><span class="header-section-number">5.5</span> Design 5: 2x2
 Blocking</h2>
 <p>The grid is partitioned into non-overlapping <span class="math inline">\(2 \times 2\)</span> blocks: <span class="math display">\[B_m = \{s_i : \lfloor(x_i-1)/2\rfloor = a_m,
 \lfloor(y_i-1)/2\rfloor = b_m\}, \quad |B_m| = 4\]</span></p>
@@ -1852,30 +1914,35 @@ balanced (1:1 within each block).</p>
 <div id="design-6-balanced-quartiles" class="section level2" number="5.6">
 <h2><span class="header-section-number">5.6</span> Design 6: Balanced
 Quartiles</h2>
-<p>Clusters are stratified by incidence quartile: <span class="math display">\[S_q = \{s_i : X_i \in [F_X^{-1}((q-1)/4),\
-F_X^{-1}(q/4)]\}, \quad q = 1, 2, 3, 4\]</span></p>
-<p>Within each stratum, approximately half the clusters are randomly
-assigned to treatment: <span class="math display">\[\sum_{i \in S_q} Z_i
-\approx |S_q|/2\]</span></p>
-<p><strong>Properties:</strong> Stochastic, approximately 50% treated,
-balanced across the incidence distribution. Combines covariate
-stratification with randomization.</p>
+<p>Clusters are stratified into four equal-size quartiles of the
+random-tie rank <span class="math inline">\(r\)</span>
+(<code>ntile(r, 4)</code>): <span class="math display">\[S_q = \{s_i :
+(q-1)N/4 &lt; r_i \leq qN/4\}, \quad |S_q| = 25, \quad q = 1, 2, 3,
+4\]</span></p>
+<p>Each stratum treats <span class="math inline">\(\lfloor 25/2 \rfloor
+= 12\)</span> clusters, and two randomly chosen strata treat one more,
+so that exactly <span class="math inline">\(N/2\)</span> are treated:
+<span class="math display">\[\sum_{i \in S_q} Z_i \in \{12, 13\}, \qquad
+\sum_{q=1}^{4}\sum_{i \in S_q} Z_i = 50\]</span></p>
+<p><strong>Properties:</strong> Stochastic, exactly 50 treated, balanced
+across the incidence distribution. Combines covariate stratification
+with randomization. (Before the 2026-09 revision it treated <span class="math inline">\(4 \times 12 = 48\)</span>, from
+<code>round(25/2)</code> = 12 per stratum.)</p>
 </div>
 <div id="design-7-balanced-halves" class="section level2" number="5.7">
 <h2><span class="header-section-number">5.7</span> Design 7: Balanced
 Halves</h2>
-<p>Clusters are stratified into two groups by median baseline
-incidence:</p>
-<p><span class="math display">\[S_h = \{s_i : X_i \in H_h\}, \quad h =
-1, 2\]</span></p>
-<p>where <span class="math inline">\(H_1 = \{X_i : X_i &gt;
-\text{median}(X)\}\)</span> (high incidence) and <span class="math inline">\(H_2 = \{X_i : X_i \leq \text{median}(X)\}\)</span>
-(low incidence).</p>
-<p>Within each half, approximately half the clusters are randomly
-assigned to treatment:</p>
-<p><span class="math display">\[\sum_{i \in S_h} Z_i = \lfloor |S_h| / 2
-\rceil, \quad h = 1, 2\]</span></p>
-<p><strong>Properties:</strong> Stochastic assignment. Approximately 50%
+<p>Clusters are stratified into two equal-size halves of the random-tie
+rank <span class="math inline">\(r\)</span>
+(<code>ntile(r, 2)</code>):</p>
+<p><span class="math display">\[S_1 = \{s_i : r_i &gt; N/2\} \
+\text{(high incidence)}, \quad S_2 = \{s_i : r_i \leq N/2\} \ \text{(low
+incidence)}, \quad |S_h| = 50\]</span></p>
+<p>Within each half, exactly half the clusters are randomly assigned to
+treatment:</p>
+<p><span class="math display">\[\sum_{i \in S_h} Z_i = |S_h| / 2 = 25,
+\quad h = 1, 2\]</span></p>
+<p><strong>Properties:</strong> Stochastic assignment. Exactly 50
 treated overall. Balanced across the two halves of the incidence
 distribution. This is a 2-stratum analog of Design 6 (Balanced
 Quartiles), which uses 4 strata.</p>
@@ -1884,16 +1951,17 @@ Quartiles), which uses 4 strata.</p>
 <h2><span class="header-section-number">5.8</span> Design 8:
 Incidence-Guided Saturation Quadrants</h2>
 <p>The grid is partitioned into four spatial quadrants <span class="math inline">\(Q_1, \ldots, Q_4\)</span> using the same spatial
-partition as Design 3. Let <span class="math inline">\(\bar{X}_{Q_k} =
-|Q_k|^{-1} \sum_{i \in Q_k} X_i\)</span> denote the average baseline
-incidence in quadrant <span class="math inline">\(k\)</span>.</p>
-<p>Quadrants are ranked by <span class="math inline">\(\bar{X}_{Q_k}\)</span> in descending order and
-assigned saturation levels deterministically:</p>
+partition as Design 3. Let <span class="math inline">\(\bar{X}_{Q_\ell}
+= |Q_\ell|^{-1} \sum_{i \in Q_\ell} X_i\)</span> denote the average
+baseline incidence in quadrant <span class="math inline">\(\ell\)</span>.</p>
+<p>Quadrants are ranked by <span class="math inline">\(\bar{X}_{Q_\ell}\)</span> in descending order
+(ties between quadrant means broken at random, freshly for every design
+draw) and assigned saturation levels by rank:</p>
 <table>
 <thead>
 <tr class="header">
-<th align="center">Rank (by <span class="math inline">\(\bar{X}_{Q_k}\)</span>)</th>
-<th align="center">Saturation <span class="math inline">\(p_k\)</span></th>
+<th align="center">Rank (by <span class="math inline">\(\bar{X}_{Q_\ell}\)</span>)</th>
+<th align="center">Saturation <span class="math inline">\(p_\ell\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -1915,15 +1983,16 @@ assigned saturation levels deterministically:</p>
 </tr>
 </tbody>
 </table>
-<p>Within each quadrant, <span class="math inline">\(\lfloor |Q_k| \cdot
-p_k \rceil\)</span> clusters are randomly selected for treatment:</p>
-<p><span class="math display">\[\sum_{i \in Q_k} Z_i = \lfloor |Q_k|
-\cdot p_k \rceil\]</span></p>
+<p>Within each quadrant, <span class="math inline">\(\lfloor |Q_\ell|
+\cdot p_\ell \rceil\)</span> clusters are randomly selected for
+treatment:</p>
+<p><span class="math display">\[\sum_{i \in Q_\ell} Z_i = \lfloor
+|Q_\ell| \cdot p_\ell \rceil\]</span></p>
 <p><strong>Properties:</strong> The quadrant-to-saturation mapping is
-deterministic given incidence; within-quadrant assignment is stochastic.
-Overall treatment rate approximately 50%. Unlike Design 3, the
-saturation assignment is guided by incidence data rather than
-random.</p>
+fixed by the incidence surface <span class="math inline">\(\mathbf{X}_k\)</span> (up to random tie-breaking
+between equal quadrant means); within-quadrant assignment is stochastic.
+Exactly 50 treated overall. Unlike Design 3, the saturation assignment
+is guided by incidence data rather than random.</p>
 <hr />
 </div>
 </div>
@@ -1944,45 +2013,87 @@ variance in group <span class="math inline">\(g\)</span> and <span class="math i
 <p><strong>Note:</strong> DIM is biased for <span class="math inline">\(\tau\)</span> when spillover (<span class="math inline">\(\gamma \neq 0\)</span>) or spatial dependence
 (<span class="math inline">\(\rho \neq 0\)</span>) is present, because
 it ignores the spatial structure of the DGP.</p>
+<p><strong>Status:</strong> DIM is a naive baseline only and is
+<strong>not</strong> part of the revised (2026-09) simulation;
+<code>05_run_simulation.R</code> fits the ML estimators below. The
+existing DIM results are pre-revision (old DGP, 6 designs) and are not
+comparable to the revised ML results.</p>
 </div>
 <div id="maximum-likelihood-estimation-mle" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Maximum Likelihood
 Estimation (MLE)</h2>
-<p>The spatial autoregressive model is estimated via maximum likelihood
-using <code>spatialreg::lagsarlm()</code>:</p>
-<p><span class="math display">\[Y_i = \rho \sum_j W_{ij} Y_j + \tau Z_i
-+ \gamma \cdot \text{Spill}_i + \beta X_i + \varepsilon_i\]</span></p>
+<p>The spatial lag model is estimated by maximum likelihood. For fit
+<span class="math inline">\((k, j)\)</span> the oracle model is</p>
+<p><span class="math display">\[Y_i = \rho \sum_{i&#39;} W_{ii&#39;}
+Y_{i&#39;} + \alpha + \tau Z_i + \delta \cdot \text{Spill}_i + \beta
+X_{k,i} + \varepsilon_i\]</span></p>
 <p>or in matrix form: <span class="math display">\[\mathbf{Y} = \rho
 \mathbf{W}\mathbf{Y} +
 \mathbf{X}_{\text{design}}\boldsymbol{\beta}_{\text{design}} +
 \boldsymbol{\varepsilon}\]</span></p>
 <p>where <span class="math inline">\(\mathbf{X}_{\text{design}} =
-[\mathbf{Z},\ \text{Spill},\ \mathbf{X}]\)</span> and <span class="math inline">\(\boldsymbol{\beta}_{\text{design}} = (\tau,
-\gamma, \beta)^\top\)</span>.</p>
-<p>The MLE simultaneously estimates <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\boldsymbol{\beta}_{\text{design}}\)</span> via
-concentrated log-likelihood optimization. Confidence intervals for <span class="math inline">\(\tau\)</span> are obtained from the asymptotic
-covariance matrix:</p>
-<p><span class="math display">\[\hat{\tau}_{\text{MLE}} \pm z_{0.975}
-\cdot \text{SE}(\hat{\tau}_{\text{MLE}})\]</span></p>
-<p>where <span class="math inline">\(\text{SE}(\hat{\tau})\)</span> is
-extracted from the summary of the fitted <code>lagsarlm</code>
-object.</p>
-<div id="oracle-vs.-realistic-estimation" class="section level3" number="6.2.1">
+[\mathbf{1},\ \mathbf{Z},\ \text{Spill},\ \mathbf{X}_k]\)</span> and
+<span class="math inline">\(\boldsymbol{\beta}_{\text{design}} =
+(\alpha, \tau, \delta, \beta)^\top\)</span>. Because <span class="math inline">\(\text{Spill} = S(\mathbf{Z})\)</span> already
+contains <span class="math inline">\(\gamma\)</span> (Section 3.2), its
+true coefficient is <span class="math inline">\(\delta = 1\)</span>, and
+the true intercept is <span class="math inline">\(\alpha = 0\)</span>.
+The analysis uses the same incidence surface <span class="math inline">\(\mathbf{X}_k\)</span> that generated the outcome,
+and the same <span class="math inline">\(\mathbf{W}\)</span> (rook or
+queen) as the DGP.</p>
+<p>The MLE maximizes the concentrated log-likelihood in <span class="math inline">\(\rho\)</span>, <span class="math display">\[\ell(\rho) = \log|\mathbf{I}_N - \rho\mathbf{W}|
+- \tfrac{N}{2}\log(2\pi) - \tfrac{N}{2}\log \hat{\sigma}^2(\rho) -
+\tfrac{N}{2},
+\qquad \log|\mathbf{I}_N - \rho\mathbf{W}| = \sum_{i=1}^{N} \log(1 -
+\rho\lambda_i),\]</span> over <span class="math inline">\(\rho \in
+\left(1/\lambda_{\min}(\mathbf{W}),\
+1/\lambda_{\max}(\mathbf{W})\right)\)</span> (the interval <span class="math inline">\(1/\text{range}(\text{eig}(\mathbf{W}))\)</span>,
+shrunk by machine <span class="math inline">\(\epsilon\)</span>), where
+<span class="math inline">\(\lambda_i\)</span> are the eigenvalues of
+<span class="math inline">\(\mathbf{W}\)</span>, <span class="math inline">\(\hat{\sigma}^2(\rho) = \lVert \mathbf{e}_0 -
+\rho\,\mathbf{e}_W \rVert^2 / N\)</span>, and <span class="math inline">\(\mathbf{e}_0\)</span>, <span class="math inline">\(\mathbf{e}_W\)</span> are the OLS residuals of
+<span class="math inline">\(\mathbf{Y}\)</span> and of <span class="math inline">\(\mathbf{W}\mathbf{Y}\)</span> on <span class="math inline">\(\mathbf{X}_{\text{design}}\)</span>. Given <span class="math inline">\(\hat{\rho}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}}_{\text{design}}\)</span>
+is the OLS fit of <span class="math inline">\(\mathbf{Y} -
+\hat{\rho}\mathbf{W}\mathbf{Y}\)</span> on <span class="math inline">\(\mathbf{X}_{\text{design}}\)</span>. Standard
+errors come from inverting the analytic information matrix for <span class="math inline">\((\sigma^2, \rho,
+\boldsymbol{\beta}_{\text{design}})\)</span>, scaled by <span class="math inline">\(s^2\)</span>. The 95% Wald confidence interval for
+<span class="math inline">\(\tau\)</span> is</p>
+<p><span class="math display">\[\left[L, U\right] =
+\hat{\tau}_{\text{MLE}} \mp z_{0.975} \cdot
+\text{SE}(\hat{\tau}_{\text{MLE}}), \quad z_{0.975} = 1.96.\]</span></p>
+<p><strong>Engine.</strong> The fits use <code>fit_sar_lag()</code>
+(<code>code/04_estimation.R</code>), a lean implementation of the same
+estimator as <code>spatialreg::lagsarlm(method = &quot;eigen&quot;)</code>: the
+eigenvalues of <span class="math inline">\(\mathbf{W}\)</span> are
+computed once per neighbor type rather than once per fit. It was
+validated against <code>lagsarlm</code> on 5,120 fits
+(<code>results/estimator_validation/</code>): maximum <span class="math inline">\(|\Delta\hat{\tau}|\)</span> = 9.7e-8, relative
+<span class="math inline">\(\Delta\text{SE}\)</span> = 1.1e-8, identical
+aliasing, 0.6 vs 76 ms per fit (almost all of <code>lagsarlm</code>’s
+time is a <code>gc()</code> call on exit).
+<code>engine = &quot;lagsarlm&quot;</code> is retained for a 1% cross-check.</p>
+<p>If a column of <span class="math inline">\(\mathbf{X}_{\text{design}}\)</span> is aliased
+(linearly dependent on the others; same QR rule as <code>lm</code>,
+tolerance <span class="math inline">\(10^{-7}\)</span>), the engine
+warns “Aliased variables found”, drops that column, and fits the rest.
+Aliased estimates are kept and flagged (Section 8.7).</p>
+<div id="oracle-vs.-non-oracle-estimation" class="section level3" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Oracle
-vs. Realistic Estimation</h3>
-<p>A configurable toggle controls whether the true spillover term is
-included:</p>
+vs. Non-Oracle Estimation</h3>
+<p>Two estimators are fit to the same simulated outcome <span class="math inline">\(\mathbf{Y}_{kj}\)</span>; both include an
+intercept:</p>
 <ul>
-<li><strong>Oracle</strong>
-(<code>include_spill_covariate = TRUE</code>): The model includes the
-true <span class="math inline">\(\text{Spill}(\mathbf{Z})\)</span>
-covariate. This provides the best-case estimation performance.</li>
-<li><strong>Realistic</strong>
-(<code>include_spill_covariate = FALSE</code>): The model omits the
-spillover term, fitting <span class="math inline">\(Y \sim Z +
-X\)</span> only. This reflects what a researcher would estimate without
+<li><strong>Oracle (primary):</strong> <span class="math inline">\(Y
+\sim Z + \text{Spill} + X_k\)</span>, with <span class="math inline">\(\text{Spill} = S(\mathbf{Z}_{kj})\)</span>, the
+true regime-specific spillover term. This provides the best-case
+estimation performance.</li>
+<li><strong>Non-oracle (sensitivity analysis):</strong> <span class="math inline">\(Y \sim Z + X_k\)</span>. The model omits the
+spillover term, reflecting what a researcher would estimate without
 knowledge of the spillover mechanism.</li>
 </ul>
+<p>Because both use the same <span class="math inline">\(\mathbf{Y}\)</span>, they share every random draw
+(Section 7.5). Results are stored in separate files, one per
+estimator.</p>
 <hr />
 </div>
 </div>
@@ -2051,145 +2162,264 @@ Algorithm</h1>
 <td align="left">1, 2, 3, 4, 5, 6, 7, 8</td>
 <td align="center">8</td>
 </tr>
+<tr class="even">
+<td align="left">Treatment effect</td>
+<td align="center"><span class="math inline">\(\tau\)</span></td>
+<td align="left">0.8, 1.0, 1.5, 2.0, 3.0</td>
+<td align="center">5</td>
+</tr>
 </tbody>
 </table>
-<p><strong>Total scenarios:</strong> 5 incidence configs <span class="math inline">\(\times\)</span> 2 neighbor types <span class="math inline">\(\times\)</span> 4 <span class="math inline">\(\rho\)</span> <span class="math inline">\(\times\)</span> 4 <span class="math inline">\(\gamma\)</span> <span class="math inline">\(\times\)</span> 2 spillover types <span class="math inline">\(\times\)</span> 8 designs = <strong>2,560
-scenarios</strong>.</p>
+<p><strong>Total scenarios:</strong> 5 incidence configs <span class="math inline">\(\times\)</span> 2 neighbor types <span class="math inline">\(\times\)</span> 4 <span class="math inline">\(\rho\)</span> <span class="math inline">\(\times\)</span> 4 <span class="math inline">\(\gamma\)</span> <span class="math inline">\(\times\)</span> 2 spillover types <span class="math inline">\(\times\)</span> 8 designs <span class="math inline">\(\times\)</span> 5 <span class="math inline">\(\tau\)</span> = <strong>12,800 scenarios</strong>,
+each fit by both the oracle and the non-oracle estimator.</p>
+<p><strong>Notation:</strong> incidence config <span class="math inline">\(c = (\text{mode}, \rho_X)\)</span>; block <span class="math inline">\(b = (c, \text{nb}, \rho, \gamma,
+\text{regime})\)</span>; scenario <span class="math inline">\(s = (b, d,
+\tau)\)</span> for design <span class="math inline">\(d\)</span>.</p>
 </div>
 <div id="resample-structure" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> Resample
 Structure</h2>
-<p>Each scenario is evaluated over:</p>
+<p>Each scenario is evaluated over a matched-surface Monte Carlo
+structure:</p>
 <ul>
-<li><span class="math inline">\(R_d\)</span> = design resamples
-(distinct treatment assignment draws)</li>
-<li><span class="math inline">\(R_o\)</span> = outcome resamples
-(distinct error realizations per design draw)</li>
-<li>Total iterations per scenario: <span class="math inline">\(K = R_d
-\times R_o\)</span></li>
+<li><span class="math inline">\(K\)</span> = incidence surfaces <span class="math inline">\(\mathbf{X}_1, \ldots, \mathbf{X}_K\)</span> per
+config</li>
+<li><span class="math inline">\(J\)</span> = design draws per surface,
+<span class="math inline">\(\mathbf{Z}_{kj} =
+\text{design}_d(\mathbf{X}_k;\ \text{draw } j)\)</span></li>
+<li>One noise column <span class="math inline">\(\boldsymbol{\varepsilon}_{kj} \sim N(\mathbf{0},
+\sigma^2\mathbf{I}_N)\)</span> per fit</li>
+<li>Total fits per scenario: <span class="math inline">\(K \times
+J\)</span>, i.e. <span class="math inline">\(K \cdot J\)</span> distinct
+<span class="math inline">\((\mathbf{Z},
+\boldsymbol{\varepsilon})\)</span> pairs over <span class="math inline">\(K\)</span> surfaces</li>
 </ul>
+<p>For fit <span class="math inline">\((k, j)\)</span> the outcome is
+generated from the same surface that the design and the analysis
+use:</p>
+<p><span class="math display">\[\mathbf{Y}_{kj} = (\mathbf{I}_N -
+\rho\mathbf{W})^{-1}\left[\tau\mathbf{Z}_{kj} + S(\mathbf{Z}_{kj}) +
+\beta\mathbf{X}_k + \boldsymbol{\varepsilon}_{kj}\right]\]</span></p>
 <p><strong>Default values:</strong></p>
 <table>
+<colgroup>
+<col width="21%" />
+<col width="26%" />
+<col width="26%" />
+<col width="26%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Estimation Mode</th>
-<th align="center"><span class="math inline">\(R_d\)</span></th>
-<th align="center"><span class="math inline">\(R_o\)</span></th>
-<th align="center"><span class="math inline">\(K\)</span></th>
+<th align="center"><span class="math inline">\(K\)</span>
+(surfaces)</th>
+<th align="center"><span class="math inline">\(J\)</span> (design
+draws)</th>
+<th align="center">Fits <span class="math inline">\(K \cdot
+J\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">MLE</td>
-<td align="center">25</td>
+<td align="left">MLE (oracle and non-oracle)</td>
 <td align="center">10</td>
+<td align="center">25</td>
 <td align="center">250</td>
 </tr>
 <tr class="even">
-<td align="left">DIM</td>
-<td align="center">100</td>
-<td align="center">1,000</td>
-<td align="center">100,000</td>
+<td align="left">DIM (pre-revision)</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><span class="math inline">\(R_d \times R_o = 25
+\times 100 = 2{,}500\)</span></td>
 </tr>
 </tbody>
 </table>
+<p>The DIM row describes the pre-revision runs (<span class="math inline">\(R_d\)</span> design resamples <span class="math inline">\(\times\)</span> <span class="math inline">\(R_o\)</span> outcome resamples), which used the
+old structure (below) and are not re-run in the revision.</p>
+<p><strong>Before the 2026-09 revision</strong> (April 2026 runs, for
+reference): the <span class="math inline">\(K = 10\)</span> surfaces
+were drawn once per <span class="math inline">\((c, \tau)\)</span>; the
+designs saw only <span class="math inline">\(\mathbf{X}_1\)</span>,
+while fit <span class="math inline">\((j, k)\)</span> used <span class="math inline">\(\mathbf{X}_k\)</span> in the outcome and analysis,
+so <span class="math inline">\(\text{cor}(\mathbf{X}_1, \mathbf{X}_k)
+\approx 0\)</span> and the design and the outcome saw unrelated
+incidence surfaces. The 10 noise columns were drawn once per <span class="math inline">\((c, \text{nb}, \rho)\)</span> and each was reused
+by all 25 design draws, and by every <span class="math inline">\(\gamma\)</span>, regime and design.</p>
 </div>
 <div id="pseudocode" class="section level2" number="7.3">
 <h2><span class="header-section-number">7.3</span> Pseudocode</h2>
 <pre><code>BUILD spatial grid -&gt; coords, W_rook, W_queen, listw_rook, listw_queen
+PRECOMPUTE lag setups (eigenvalues of W, rho interval) for rook and queen
 SET I_mat = diag(N)
 
-FOR EACH incidence_mode IN {iid, spatial, poisson}:
-  SET rho_X_values = {0} if iid, else {0.20, 0.50}
+FOR EACH config c = (incidence_mode, rho_X) IN {iid; spatial 0.20, 0.50; poisson 0.20, 0.50}:
+  FOR k IN 1:K:
+    SEED(key = &quot;X&quot;, mode, rho_X, k)
+    GENERATE surface X_k (length N) using incidence_mode, rho_X, W_queen
+  # X_1..X_K are shared by every block of config c
 
-  FOR EACH rho_X IN rho_X_values:
-    GENERATE X_matrix (N x R_o) using incidence_mode, rho_X, W_queen
-    SET base_incidence = X_matrix[, 1]     # &quot;historical&quot; for design decisions
+  FOR EACH nb_type IN {rook, queen}:              # work unit = (c, nb_type, rho)
+    FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
+      SELECT active W for nb_type
+      COMPUTE inv_mat = solve(I_mat - rho * W)
 
-    FOR EACH nb_type IN {rook, queen}:
-      SELECT active W, listw for nb_type
+      FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
+        FOR EACH spill_type IN {control_only, both}:     # block b
+          SEED(key = &quot;eps&quot;, mode, rho_X, nb_type, rho, gamma, spill_type)
+          GENERATE E (N x K*J) ~ N(0, sigma^2)   # one column per fit, shared by all
+                                                  # designs, taus and both estimators
 
-      FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
-        COMPUTE inv_mat = solve(I_mat - rho * W)
-        GENERATE Epsilon_matrix (N x R_o) ~ N(0, sigma^2)
-        COMPUTE baseline_part = inv_mat %*% (X_matrix * beta + Epsilon_matrix)
+          FOR EACH design_id IN {1, ..., 8}:
+            FOR k IN 1:K:
+              SEED(key = &quot;Z&quot;, mode, rho_X, nb_type, rho, gamma, spill_type, k, design_id)
+              GENERATE J assignments Z_kj = design(X_k)   # random tie-breaking
+            COMPUTE Spill_kj = S(Z_kj) (gamma * W Z, masked by (1 - Z) if control_only)
+            FLAG Z_WZ_rank_deficient = any rank([1, Z_kj, W Z_kj]) &lt; 3
 
-        FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
-          FOR EACH spill_type IN {control_only, both}:
-            FOR EACH design_id IN {1, 2, 3, 4, 5, 6, 7, 8}:
-
-              SET scenario_seed = hash(incidence_mode, rho_X, nb_type,
-                                       rho, gamma, spill_type, design_id)
-              set.seed(scenario_seed)
-
-              IF design is deterministic:
-                GENERATE Z_matrix with 1 column, replicate to R_d
-              ELSE:
-                GENERATE Z_matrix (N x R_d)
-
-              INITIALIZE estimates[], ci_lower[], ci_upper[]
-
-              FOR d IN 1:R_d:
-                Z = Z_matrix[, d]
-                COMPUTE spillover = W %*% Z (apply spill_type mask)
-                COMPUTE trt_effect = inv_mat %*% (tau * Z + spillover)
-                Y_sim = trt_effect + baseline_part
-
-                ESTIMATE tau_hat, CI for each of R_o outcome columns
-
-              COMPUTE Bias, SD, MSE, Coverage, Fail_Rate
-              STORE results row</code></pre>
-<p><strong>Critical structural fix:</strong> Incidence (<span class="math inline">\(\mathbf{X}\)</span>) is generated <strong>once per
-(incidence_mode, <span class="math inline">\(\rho_X\)</span>)
-configuration</strong> and held fixed across all spatial parameter
-combinations (<span class="math inline">\(\rho\)</span>, neighbor type).
-This reflects the real-world scenario where historical incidence is
-observed once, and the question is how different spatial models and
-designs affect estimation quality.</p>
+            FOR EACH tau IN {0.8, 1.0, 1.5, 2.0, 3.0}:  # same Z and E for every tau
+              Y_kj = inv_mat %*% (tau * Z_kj + Spill_kj + beta * X_k + E[, kj])
+              FIT oracle     Y_kj ~ Z + Spill + X_k   (fit_sar_lag; warnings captured)
+              FIT non-oracle Y_kj ~ Z + X_k
+              FOR EACH estimator:
+                COMPUTE Bias, SD, MSE, Coverage, Power, Fail_Rate, N_Valid_Est
+                COMPUTE surface-level metrics m_1..m_K and MC SEs
+                COUNT N_Aliased, N_Warn
+                STORE scenario row and K surface rows</code></pre>
+<p>Work units <span class="math inline">\((c, \text{nb}, \rho)\)</span>
+are run in parallel; because every draw is seeded from its key, the
+output does not depend on the order or the number of workers. If any
+unit fails, the run stops.</p>
+<p><strong>Critical structural invariant:</strong> Each incidence
+surface <span class="math inline">\(\mathbf{X}_k\)</span> is generated
+<strong>once per (incidence_mode, <span class="math inline">\(\rho_X\)</span>) configuration</strong> and held
+fixed across all spatial parameter combinations (<span class="math inline">\(\rho\)</span>, neighbor type, <span class="math inline">\(\gamma\)</span>, regime), designs and <span class="math inline">\(\tau\)</span>. Only the assignments, the noise and
+the outcome DGP vary across blocks. This reflects the real-world
+scenario where historical incidence is observed once, and the question
+is how different spatial models and designs affect estimation
+quality.</p>
 </div>
 <div id="deterministic-design-optimization" class="section level2" number="7.4">
 <h2><span class="header-section-number">7.4</span> Deterministic Design
 Optimization</h2>
-<p>Designs 1 (Checkerboard) and 2 (High Incidence Focus) produce
-identical treatment vectors for every resample given fixed <span class="math inline">\(\mathbf{X}\)</span>. The algorithm detects this
-and generates a single assignment, replicating it across <span class="math inline">\(R_d\)</span> to avoid redundant computation.</p>
+<p>Design 1 (Checkerboard) is the only deterministic design: it produces
+the same treatment vector for every surface <span class="math inline">\(k\)</span> and draw <span class="math inline">\(j\)</span>, so a single assignment is replicated.
+Each of its <span class="math inline">\(K \cdot J\)</span> fits still
+has its own noise column <span class="math inline">\(\boldsymbol{\varepsilon}_{kj}\)</span>, so it
+contributes 250 distinct fits like every other design. (Before the
+revision, High Incidence Focus was also treated as deterministic; it is
+now drawn with random tie-breaking.)</p>
 </div>
 <div id="per-scenario-seeding" class="section level2" number="7.5">
 <h2><span class="header-section-number">7.5</span> Per-Scenario
 Seeding</h2>
-<p>Rather than a single global seed, each scenario receives a
-deterministic seed computed from its parameter combination:</p>
-<p><span class="math display">\[\text{seed} =
-\text{hash}(\text{incidence\_mode}, \rho_X, \text{nb\_type}, \rho,
-\gamma, \text{spill\_type}, \text{design\_id})\]</span></p>
-<p>This ensures reproducibility even if scenarios are added, removed, or
-reordered.</p>
+<p>Rather than a single global seed, every random draw is preceded
+by</p>
+<pre><code>set.seed(digest::digest2int(key), kind = &quot;Mersenne-Twister&quot;,
+         normal.kind = &quot;Inversion&quot;, sample.kind = &quot;Rejection&quot;)</code></pre>
+<p>where the key joins the fields below with <code>&quot;|&quot;</code>, numeric
+fields formatted with <code>sprintf(&quot;%.2f&quot;)</code>:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Draw</th>
+<th align="left">Key fields</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mathbf{X}_k\)</span> (one
+surface)</td>
+<td align="left"><code>&quot;X&quot;</code>, mode, <span class="math inline">\(\rho_X\)</span>, <span class="math inline">\(k\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mathbf{Z}_{k\cdot}\)</span> (all <span class="math inline">\(J\)</span> draws for surface <span class="math inline">\(k\)</span>)</td>
+<td align="left"><code>&quot;Z&quot;</code>, mode, <span class="math inline">\(\rho_X\)</span>, nb, <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\gamma\)</span>, regime, <span class="math inline">\(k\)</span>, <span class="math inline">\(d\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\boldsymbol{\varepsilon}\)</span> (all 250 columns
+for a block)</td>
+<td align="left"><code>&quot;eps&quot;</code>, mode, <span class="math inline">\(\rho_X\)</span>, nb, <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\gamma\)</span>, regime</td>
+</tr>
+</tbody>
+</table>
+<p>Consequences:</p>
+<ul>
+<li>Each draw depends only on its key, so results are identical
+sequentially, in parallel, and in any order, and do not change if
+scenarios are added, removed, or reordered.</li>
+<li><span class="math inline">\(\mathbf{X}_k\)</span> is shared by every
+block of config <span class="math inline">\(c\)</span>.</li>
+<li><strong>Common random numbers:</strong> within a block, all 8
+designs share <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> and <span class="math inline">\(\mathbf{X}_k\)</span>; each <span class="math inline">\(\tau\)</span> reuses the same <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>; the oracle and
+non-oracle fits use the same <span class="math inline">\(\mathbf{Y}\)</span>.</li>
+<li><span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> are independent
+across blocks, but blocks within a config share the <span class="math inline">\(\mathbf{X}\)</span> surfaces.</li>
+</ul>
+</div>
+<div id="estimand-and-dependence-structure" class="section level2" number="7.6">
+<h2><span class="header-section-number">7.6</span> Estimand and
+Dependence Structure</h2>
+<p>For scenario <span class="math inline">\(s\)</span>, the target is
+performance <strong>averaged over incidence surfaces</strong>:</p>
+<p><span class="math display">\[\text{MSE}(s) =
+\mathbb{E}_{\mathbf{X}}\, \mathbb{E}_{\mathbf{Z} \mid \mathbf{X}}\,
+\mathbb{E}_{\boldsymbol{\varepsilon}}\left[(\hat{\tau} -
+\tau)^2\right],\]</span></p>
+<p>and likewise for bias, coverage and power. <span class="math inline">\(\mathbf{X}\)</span> is drawn from the config’s
+generator, <span class="math inline">\(\mathbf{Z}\)</span> from the
+design given <span class="math inline">\(\mathbf{X}\)</span>, and <span class="math inline">\(\boldsymbol{\varepsilon} \sim N(\mathbf{0},
+\sigma^2\mathbf{I}_N)\)</span>.</p>
+<p><strong>Within a scenario:</strong> <span class="math inline">\(K =
+10\)</span> independent surfaces; given <span class="math inline">\(\mathbf{X}_k\)</span>, <span class="math inline">\(J = 25\)</span> independent <span class="math inline">\((\mathbf{Z}_{kj},
+\boldsymbol{\varepsilon}_{kj})\)</span> pairs. The surface is the
+primary sampling unit, so Monte Carlo SEs are computed from the <span class="math inline">\(K = 10\)</span> surface-level means (Section 8.8),
+not from 250 fits treated as independent.</p>
+<p><strong>Across scenarios:</strong></p>
+<ul>
+<li><strong>Designs within a block</strong> are paired through common
+<span class="math inline">\(\boldsymbol{\varepsilon}\)</span> and <span class="math inline">\(\mathbf{X}_k\)</span> (a within-block comparison
+removes that shared noise).</li>
+<li><strong><span class="math inline">\(\tau\)</span> levels</strong>
+share <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. Per-<span class="math inline">\(\tau\)</span> Friedman tests are therefore not
+independent confirmations of each other.</li>
+<li><strong>Blocks within a config</strong> share <span class="math inline">\(\mathbf{X}_1, \ldots, \mathbf{X}_{10}\)</span>. A
+Friedman test over blocks treats them as independent, which overstates
+the information about surface-to-surface variation. The surface-level
+robustness check addresses this: for the key pairwise claims it runs a
+paired test over 50 independent (config <span class="math inline">\(\times\)</span> <span class="math inline">\(k\)</span>) units, 5 configs <span class="math inline">\(\times\)</span> 10 surfaces, with the metric for
+each unit averaged over that surface’s blocks.</li>
+</ul>
 <hr />
 </div>
 </div>
 <div id="evaluation-metrics" class="section level1" number="8">
 <h1><span class="header-section-number">8</span> Evaluation Metrics</h1>
-<p>For each scenario, let <span class="math inline">\(\hat{\tau}_1,
-\ldots, \hat{\tau}_K\)</span> denote the <span class="math inline">\(K\)</span> estimates of <span class="math inline">\(\tau\)</span> (excluding convergence
-failures).</p>
+<p>For each scenario and estimator, let <span class="math inline">\(\hat{\tau}_1, \ldots, \hat{\tau}_n\)</span> denote
+the estimates of <span class="math inline">\(\tau\)</span> from the
+<span class="math inline">\(n\)</span> valid fits (finite <span class="math inline">\(\hat{\tau}\)</span> and finite SE) among the <span class="math inline">\(K \cdot J = 250\)</span> fits, indexed by <span class="math inline">\(f\)</span>, with Wald interval <span class="math inline">\([L_f, U_f]\)</span> from Section 6.2.</p>
 <div id="bias" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> Bias</h2>
 <p><span class="math display">\[\text{Bias} = \bar{\hat{\tau}} - \tau,
-\quad \text{where } \bar{\hat{\tau}} = \frac{1}{K}\sum_{k=1}^{K}
-\hat{\tau}_k\]</span></p>
+\quad \text{where } \bar{\hat{\tau}} = \frac{1}{n}\sum_{f=1}^{n}
+\hat{\tau}_f\]</span></p>
 </div>
 <div id="standard-deviation" class="section level2" number="8.2">
 <h2><span class="header-section-number">8.2</span> Standard
 Deviation</h2>
 <p><span class="math display">\[\text{SD} =
-\sqrt{\frac{1}{K-1}\sum_{k=1}^{K} \left(\hat{\tau}_k -
+\sqrt{\frac{1}{n-1}\sum_{f=1}^{n} \left(\hat{\tau}_f -
 \bar{\hat{\tau}}\right)^2}\]</span></p>
 </div>
 <div id="mean-squared-error" class="section level2" number="8.3">
 <h2><span class="header-section-number">8.3</span> Mean Squared
 Error</h2>
-<p><span class="math display">\[\text{MSE} = \frac{1}{K}\sum_{k=1}^{K}
-\left(\hat{\tau}_k - \tau\right)^2 = \text{Bias}^2 +
+<p><span class="math display">\[\text{MSE} = \frac{1}{n}\sum_{f=1}^{n}
+\left(\hat{\tau}_f - \tau\right)^2 = \text{Bias}^2 +
 \text{Var}(\hat{\tau})\]</span></p>
 <p>MSE decomposes into squared bias plus variance, capturing both
 accuracy and precision.</p>
@@ -2198,19 +2428,68 @@ accuracy and precision.</p>
 <h2><span class="header-section-number">8.4</span> Coverage
 Probability</h2>
 <p><span class="math display">\[\text{Coverage} =
-\frac{1}{K}\sum_{k=1}^{K} \mathbf{1}\left[\tau \in
-\left(\hat{\tau}_{k,L},\ \hat{\tau}_{k,U}\right)\right]\]</span></p>
-<p>where <span class="math inline">\((\hat{\tau}_{k,L},
-\hat{\tau}_{k,U})\)</span> is the 95% confidence interval for the <span class="math inline">\(k\)</span>-th estimate. Nominal coverage is 0.95;
+\frac{1}{n}\sum_{f=1}^{n} \mathbf{1}\left[L_f \leq \tau \leq
+U_f\right]\]</span></p>
+<p>where <span class="math inline">\([L_f, U_f] = \hat{\tau}_f \mp 1.96
+\cdot \text{SE}_f\)</span> is the 95% confidence interval for the <span class="math inline">\(f\)</span>-th estimate. Nominal coverage is 0.95;
 under- or over-coverage indicates CI miscalibration.</p>
 </div>
-<div id="convergence-failure-rate" class="section level2" number="8.5">
-<h2><span class="header-section-number">8.5</span> Convergence Failure
+<div id="power" class="section level2" number="8.5">
+<h2><span class="header-section-number">8.5</span> Power</h2>
+<p><span class="math display">\[\text{Power} = \frac{1}{n}\sum_{f=1}^{n}
+\mathbf{1}\left[L_f &gt; 0\right]\]</span></p>
+<p>the proportion of fits that reject <span class="math inline">\(H_0:
+\tau = 0\)</span>. Power is one-sided (the interval lies entirely above
+zero), as in the pre-revision runs.</p>
+</div>
+<div id="convergence-failure-rate" class="section level2" number="8.6">
+<h2><span class="header-section-number">8.6</span> Convergence Failure
 Rate</h2>
-<p><span class="math display">\[\text{Fail Rate} = 1 -
-\frac{|\{\text{valid estimates}\}|}{K_{\text{total}}}\]</span></p>
-<p>This captures the proportion of iterations where the MLE optimizer
-failed to converge (typically due to perfect collinearity between <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\text{Spill}\)</span>).</p>
+<p><span class="math display">\[\text{Fail Rate} = 1 - \frac{n}{K \cdot
+J}, \qquad \text{N\_Valid\_Est} = n\]</span></p>
+<p>This captures the proportion of fits with a non-finite <span class="math inline">\(\hat{\tau}\)</span> or SE (an engine error, or an
+information matrix that cannot be inverted). Collinearity between <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\text{Spill}\)</span> does <strong>not</strong>
+produce a failure: the aliased column is dropped and the fit is kept and
+flagged (Section 8.7).</p>
+</div>
+<div id="aliasing-and-warning-flags" class="section level2" number="8.7">
+<h2><span class="header-section-number">8.7</span> Aliasing and Warning
+Flags</h2>
+<p>Each scenario row records:</p>
+<ul>
+<li><code>N_Aliased</code>: the number of fits where the engine warned
+“Aliased variables found”.</li>
+<li><code>N_Warn</code>: the number of all other warnings (every message
+is written to the warning log).</li>
+<li><code>Z_WZ_rank_deficient</code>: TRUE if <span class="math inline">\(\text{rank}([\mathbf{1}, \mathbf{Z},
+\mathbf{W}\mathbf{Z}]) &lt; 3\)</span> for any <span class="math inline">\(\mathbf{Z}\)</span> draw of the scenario. It is
+recorded in both estimator files; the non-oracle model has no Spill
+column to alias, but its Checkerboard <span class="math inline">\(\times\)</span> rook estimates share the same
+cause (<span class="math inline">\(\tau\)</span> is not identified apart
+from <span class="math inline">\(\gamma\)</span>).</li>
+</ul>
+<p>Aliased estimates are <strong>kept</strong> and flagged in exhibits.
+Besides Checkerboard <span class="math inline">\(\times\)</span> rook
+(every fit; Section 5), Isolation Buffer <span class="math inline">\(\times\)</span> rook can occasionally draw the
+exact checkerboard: a maximal independent set that equals one colour
+class of the bipartite rook grid. In the full run that happened in 4 of
+its 40,000 rook draws (4 blocks <span class="math inline">\(\times\)</span> 5 <span class="math inline">\(\tau\)</span> = 20 scenarios, 1 aliased fit each).
+An oracle fit is aliased exactly when its draw is rank-deficient.</p>
+</div>
+<div id="monte-carlo-standard-errors" class="section level2" number="8.8">
+<h2><span class="header-section-number">8.8</span> Monte Carlo Standard
+Errors</h2>
+<p>Monte Carlo SEs are computed at the surface level (Section 7.6). For
+each metric <span class="math inline">\(m\)</span> (bias, MSE, coverage,
+power), compute <span class="math inline">\(m_k\)</span> on surface
+<span class="math inline">\(k\)</span>’s valid fits, <span class="math inline">\(k = 1, \ldots, K\)</span>; then</p>
+<p><span class="math display">\[\text{SE}(m) = \frac{\text{sd}(m_1,
+\ldots, m_K)}{\sqrt{K}}, \qquad m \pm t_{0.975,\,K-1} \cdot \text{SE}(m)
+\quad (t_9 \text{ for } K = 10).\]</span></p>
+<p>The SE is taken over the surfaces with at least one valid fit
+(<code>N_Surfaces</code>). Design differences are paired at the surface
+level: the SE of a difference is that of <span class="math inline">\((m_{d,k} - m_{d&#39;,k})\)</span> over <span class="math inline">\(k\)</span>. The per-surface metrics are saved in
+the surface-level results file (one row per scenario and surface).</p>
 <hr />
 </div>
 </div>
@@ -2252,8 +2531,8 @@ Table</h1>
 <tr class="odd">
 <td align="left">True treatment effect</td>
 <td align="center"><span class="math inline">\(\tau\)</span></td>
-<td align="center">1.0</td>
-<td align="left">—</td>
+<td align="center">1.0 (primary)</td>
+<td align="left">0.8, 1.0, 1.5, 2.0, 3.0</td>
 <td align="center">Yes</td>
 </tr>
 <tr class="even">
@@ -2322,7 +2601,7 @@ Table</h1>
 <tr class="odd">
 <td align="left">Cluster population</td>
 <td align="center"><span class="math inline">\(P_0\)</span></td>
-<td align="center">1,000</td>
+<td align="center">100,000</td>
 <td align="left">—</td>
 <td align="center">Yes</td>
 </tr>
@@ -2330,56 +2609,71 @@ Table</h1>
 <td align="left">Population mode</td>
 <td align="center">—</td>
 <td align="center">equal</td>
-<td align="left">equal, heterogeneous</td>
+<td align="left">equal (heterogeneous available, not used)</td>
 <td align="center">Yes</td>
 </tr>
 <tr class="odd">
-<td align="left">Design resamples (MLE)</td>
+<td align="left">Incidence surfaces per config (MLE)</td>
+<td align="center"><span class="math inline">\(K\)</span></td>
+<td align="center">10</td>
+<td align="left">—</td>
+<td align="center">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">Design draws per surface (MLE)</td>
+<td align="center"><span class="math inline">\(J\)</span></td>
+<td align="center">25</td>
+<td align="left">—</td>
+<td align="center">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">Fits per scenario (MLE)</td>
+<td align="center"><span class="math inline">\(K \cdot J\)</span></td>
+<td align="center">250</td>
+<td align="left">—</td>
+<td align="center">Derived</td>
+</tr>
+<tr class="even">
+<td align="left">Design resamples (DIM, pre-revision)</td>
 <td align="center"><span class="math inline">\(R_d\)</span></td>
 <td align="center">25</td>
 <td align="left">—</td>
 <td align="center">Yes</td>
 </tr>
-<tr class="even">
-<td align="left">Outcome resamples (MLE)</td>
-<td align="center"><span class="math inline">\(R_o\)</span></td>
-<td align="center">10</td>
-<td align="left">—</td>
-<td align="center">Yes</td>
-</tr>
 <tr class="odd">
-<td align="left">Design resamples (DIM)</td>
-<td align="center"><span class="math inline">\(R_d\)</span></td>
+<td align="left">Outcome resamples (DIM, pre-revision)</td>
+<td align="center"><span class="math inline">\(R_o\)</span></td>
 <td align="center">100</td>
 <td align="left">—</td>
 <td align="center">Yes</td>
 </tr>
 <tr class="even">
-<td align="left">Outcome resamples (DIM)</td>
-<td align="center"><span class="math inline">\(R_o\)</span></td>
-<td align="center">1,000</td>
-<td align="left">—</td>
-<td align="center">Yes</td>
-</tr>
-<tr class="odd">
 <td align="left">Design IDs</td>
 <td align="center">—</td>
 <td align="center">{1,2,3,4,5,6,7,8}</td>
 <td align="left">—</td>
 <td align="center">Yes</td>
 </tr>
-<tr class="even">
-<td align="left">Oracle spillover toggle</td>
+<tr class="odd">
+<td align="left">Estimators</td>
 <td align="center">—</td>
-<td align="center">TRUE</td>
-<td align="left">TRUE, FALSE</td>
+<td align="center">oracle (primary)</td>
+<td align="left">oracle, non-oracle (both fit to the same <span class="math inline">\(\mathbf{Y}\)</span>)</td>
+<td align="center">—</td>
+</tr>
+<tr class="even">
+<td align="left">ML engine</td>
+<td align="center">—</td>
+<td align="center"><code>fit_sar_lag()</code></td>
+<td align="left"><code>fit_sar_lag()</code>, <code>lagsarlm</code> (1%
+cross-check)</td>
 <td align="center">Yes</td>
 </tr>
 <tr class="odd">
 <td align="left">Estimation mode</td>
 <td align="center">—</td>
 <td align="center">MLE</td>
-<td align="left">MLE, DIM</td>
+<td align="left">MLE (DIM pre-revision only)</td>
 <td align="center">Yes</td>
 </tr>
 </tbody>

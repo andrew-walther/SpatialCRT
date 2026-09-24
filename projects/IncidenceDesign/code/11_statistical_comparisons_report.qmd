@@ -83,11 +83,17 @@ source(file.path(script_dir, "10_statistical_comparisons.R"))
 
 ```{r load-results}
 #| include: false
-# Load tau-sweep results (prefer MLE_tau_sweep; fall back to MLE_combined)
-mle_results_full <- tryCatch(
-  load_latest_results(results_dir, estimation_mode = "MLE_tau_sweep"),
-  error = function(e) load_latest_results(results_dir, estimation_mode = "MLE_combined")
-)
+# Load the oracle tau-sweep results. No fallback: a missing file must error.
+# Locate the file the same way load_latest_results() does (sim_data/ subdir,
+# "MLE_tau_sweep" in the name, prefer _combined_, newest mtime) so the
+# appendix can report the name of the file actually loaded.
+sim_files <- list.files(file.path(results_dir, "sim_data"),
+                        pattern = "sim_results_.*\\.rds$", full.names = TRUE)
+sim_files <- sim_files[grepl("MLE_tau_sweep", sim_files) & grepl("_combined_", sim_files)]
+if (length(sim_files) == 0) stop("No sim_results_MLE_tau_sweep_combined_*.rds in ",
+                                 file.path(results_dir, "sim_data"))
+loaded_file <- sim_files[which.max(file.mtime(sim_files))]
+mle_results_full <- readRDS(loaded_file)
 # Primary scenario: tau=1.0. All blocking tests use this slice for direct
 # comparability. Tau-stratified sensitivity tests run separately below.
 mle_results <- if ("True_Tau" %in% names(mle_results_full)) {
@@ -97,26 +103,41 @@ mle_results <- if ("True_Tau" %in% names(mle_results_full)) {
 }
 tau_sweep_available <- "True_Tau" %in% names(mle_results_full) &&
                        length(unique(mle_results_full$True_Tau)) > 1
-n_scenarios <- nrow(mle_results)
+# Neighbor types are analysed separately: queen = primary, rook = sensitivity.
+mle_queen      <- mle_results[mle_results$Neighbor_Type == "queen", ]
+mle_rook       <- mle_results[mle_results$Neighbor_Type == "rook", ]
+mle_queen_full <- mle_results_full[mle_results_full$Neighbor_Type == "queen", ]
+n_scenarios <- nrow(mle_results)                 # tau = 1.0 rows, both neighbor types
 n_designs <- length(unique(mle_results$Design))
-n_blocks <- n_scenarios / n_designs
+n_blocks <- nrow(mle_queen) / n_designs          # blocks per neighbor type
+
+# Full design names for prose (from get_design_names() in 03_designs.R)
+full_name <- function(d) unname(sub("^Design \\d+: ", "",
+                                    get_design_names(sub("Design ", "", d))))
 ```
 
 ```{r run-tests}
 #| include: false
-# Run all core tests on tau=1.0 slice
-fr  <- run_friedman_test(mle_results)
-nem <- run_nemenyi_posthoc(mle_results)
-wil <- run_pairwise_wilcoxon(mle_results)
+# Core tests on the tau = 1.0 slice, separately by neighbor type.
+# fr / nem / wil = queen (primary); *_rook = rook (sensitivity).
+fr  <- run_friedman_test(mle_queen)
+nem <- run_nemenyi_posthoc(mle_queen)
+wil <- run_pairwise_wilcoxon(mle_queen)
+fr_rook  <- run_friedman_test(mle_rook)
+nem_rook <- run_nemenyi_posthoc(mle_rook)
+wil_rook <- run_pairwise_wilcoxon(mle_rook)
 
-# Run conditional tests (including True_Tau if present)
+# Run conditional tests (including True_Tau if present).
+# All strata are within queen, except the Neighbor_Type strata (queen vs rook).
 cond_params <- c("Rho", "Gamma", "Spillover_Type", "Neighbor_Type", "Incidence_Mode")
 if (tau_sweep_available) cond_params <- c(cond_params, "True_Tau")
 cond_results <- list()
 cond_summaries <- list()
 for (param in cond_params) {
-  # Use full sweep for True_Tau strata; tau=1.0 slice for all others
-  data_for_param <- if (param == "True_Tau") mle_results_full else mle_results
+  # Full queen sweep for True_Tau strata; tau=1.0 queen slice for the others;
+  # tau=1.0 slice with both neighbor types for Neighbor_Type strata
+  data_for_param <- if (param == "True_Tau") mle_queen_full else
+                    if (param == "Neighbor_Type") mle_results else mle_queen
   cr <- run_conditional_tests(data_for_param, param)
   cond_results[[param]] <- cr
   cond_summaries[[param]] <- summarize_conditional_tests(cr)
@@ -129,7 +150,7 @@ This report presents formal statistical hypothesis tests to compare the performa
 
 The central question is: **can we provide statistical evidence that certain designs yield significantly better estimation accuracy (lower MSE for $\hat{\tau}$) than others?** Answering this question is essential for providing actionable guidance to investigators planning future spatial CRTs.
 
-The simulation evaluated `r n_scenarios` scenarios spanning `r n_blocks` unique parameter combinations, with each combination tested under all `r n_designs` designs. This paired structure is exploited by the non-parametric tests described below.
+At the primary effect size ($\tau = 1.0$) the simulation has `r n_scenarios` scenarios: `r n_blocks` unique parameter combinations per neighbor type, each tested under all `r n_designs` designs, for both queen and rook contiguity. Queen contiguity is the primary analysis and rook is a sensitivity analysis; the two are tested separately and never pooled for a headline result. This paired structure is exploited by the non-parametric tests described below.
 
 # Methods
 
@@ -149,14 +170,13 @@ Each scenario is defined by a unique combination of simulation parameters:
 | Parameter | Levels | Count |
 |-----------|--------|:-----:|
 | Incidence Mode | iid, spatial, poisson (with $\rho_X \in \{0.20, 0.50\}$) | 5 configs |
-| Neighbor Type | rook, queen | 2 |
 | $\rho$ (outcome spatial autocorrelation) | 0.00, 0.01, 0.20, 0.50 | 4 |
 | $\gamma$ (spillover magnitude) | 0.50, 0.60, 0.70, 0.80 | 4 |
 | Spillover Type | control-only, bidirectional | 2 |
 
-This produces $5 \times 2 \times 4 \times 4 \times 2 = `r n_blocks`$ **blocks**. Within each block, all `r n_designs` designs were evaluated under identical data-generating conditions, creating a natural repeated-measures / paired design. The metric of interest is the **Mean Squared Error (MSE)** of the MLE estimator $\hat{\tau}$ for the primary scenario $\tau = 1.0$. The tau-sweep sensitivity analysis ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$) is presented in @sec-tau-sensitivity.
+This produces $5 \times 4 \times 4 \times 2 = `r n_blocks`$ **blocks** per neighbor type. Neighbor type (queen, rook) is not a blocking factor: each test is run separately on the `r n_blocks` queen blocks (primary) and the `r n_blocks` rook blocks (sensitivity). Within each block, all `r n_designs` designs were evaluated under identical data-generating conditions, creating a natural repeated-measures / paired design. The metric of interest is the **Mean Squared Error (MSE)** of the MLE estimator $\hat{\tau}$ for the primary scenario $\tau = 1.0$. The tau-sweep sensitivity analysis ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$) is presented in @sec-tau-sensitivity.
 
-Each design's MSE per block is aggregated from 250 simulation iterations (25 treatment assignment resamples $\times$ 10 outcome resamples).
+Each design's MSE per block is aggregated from 250 model fits: 10 incidence surfaces $X_k$ $\times$ 25 design draws per surface, each fit with its own noise draw (Checkerboard, the only deterministic design, uses the same assignment in every fit). Designs are drawn from the same surface $X_k$ that enters the outcome and the analysis model. Designs within a block share the noise draws and the surfaces, which is what makes the within-block comparison paired.
 
 ## Friedman Test (Omnibus)
 
@@ -227,6 +247,8 @@ Throughout this report, statistical significance is indicated using the followin
 
 # Results: Aggregate Analysis {#sec-aggregate}
 
+All results in this section, except @sec-aggregate-rook, are for **queen contiguity** (the primary analysis) at $\tau = 1.0$. The rook sensitivity analysis is reported separately in @sec-aggregate-rook.
+
 ## Friedman Omnibus Test
 
 ```{r friedman-result}
@@ -238,7 +260,7 @@ friedman_df <- data.frame(
   Decision = ifelse(fr$p_value < 0.05, "Reject H0", "Fail to reject H0"),
   check.names = FALSE
 )
-kable(friedman_df, caption = "Friedman omnibus test result.",
+kable(friedman_df, caption = "Friedman omnibus test result (queen, tau = 1.0).",
       align = "c") %>%
   kable_styling(full_width = FALSE, position = "center")
 ```
@@ -254,24 +276,24 @@ rank_df <- data.frame(
   `Rank Position` = seq_along(fr$avg_ranks),
   check.names = FALSE
 )
-kable(rank_df, caption = "Designs ordered by average MSE rank across all scenarios (1 = best).",
+kable(rank_df, caption = "Designs ordered by average MSE rank across the queen blocks (1 = best).",
       align = c("l", "c", "c")) %>%
   kable_styling(full_width = FALSE, position = "center") %>%
   row_spec(1:2, bold = TRUE)
 ```
 
-Designs 3 (Saturation Quadrants) and 8 (Incidence-Guided Saturation Quadrants) occupy the top two positions with nearly identical average ranks (`r sprintf("%.3f", fr$avg_ranks[1])` and `r sprintf("%.3f", fr$avg_ranks[2])`), while Design 1 (Checkerboard) ranks last at `r sprintf("%.3f", fr$avg_ranks[length(fr$avg_ranks)])`.
+`r full_name(names(fr$avg_ranks)[1])` and `r full_name(names(fr$avg_ranks)[2])` occupy the top two positions with nearly identical average ranks (`r sprintf("%.3f", fr$avg_ranks[1])` and `r sprintf("%.3f", fr$avg_ranks[2])`), while `r full_name(names(fr$avg_ranks)[length(fr$avg_ranks)])` ranks last at `r sprintf("%.3f", fr$avg_ranks[length(fr$avg_ranks)])`, just behind `r full_name(names(fr$avg_ranks)[length(fr$avg_ranks) - 1])` (`r sprintf("%.3f", fr$avg_ranks[length(fr$avg_ranks) - 1])`).
 
 ## Critical Difference Diagram {#sec-cd-diagram}
 
 ```{r cd-diagram}
-#| fig-cap: "Critical Difference diagram. Designs are placed by average MSE rank (lower = better). Horizontal bars connect designs that are NOT significantly different at the 0.05 level. The red arrow shows the critical difference scale."
+#| fig-cap: "Critical Difference diagram (queen, tau = 1.0). Designs are placed by average MSE rank (lower = better). Horizontal bars connect designs that are NOT significantly different at the 0.05 level. The red arrow shows the critical difference scale."
 #| fig-height: 4
 #| fig-width: 6.5
 plot_cd_diagram(nem)
 ```
 
-**How to read this diagram:** Each design is positioned on the number line by its average rank across all `r n_blocks` blocks (lower = better). The thick dark bars above the axis connect designs that are **statistically equivalent** — i.e., their pairwise Nemenyi p-value is $\geq 0.05$. Designs that do *not* share a bar are significantly different from each other.
+**How to read this diagram:** Each design is positioned on the number line by its average rank across all `r n_blocks` queen blocks (lower = better). The thick dark bars above the axis connect designs that are **statistically equivalent** — i.e., their pairwise Nemenyi p-value is $\geq 0.05$. Designs that do *not* share a bar are significantly different from each other.
 
 The red double-arrow labeled "CD" at the bottom shows the **Critical Difference** threshold: if two designs are separated by more than this distance on the rank axis, their difference is statistically significant.
 
@@ -303,14 +325,14 @@ n_nonsig_wil <- choose(n_designs, 2) - n_sig_wil
 Of the `r choose(n_designs, 2)` pairwise comparisons, **`r n_sig_wil` are statistically significant** (Holm-adjusted $p < 0.05$) and `r n_nonsig_wil` are not.
 
 ```{r pvalue-heatmap-wilcoxon}
-#| fig-cap: "Pairwise Wilcoxon signed-rank p-values (Holm-adjusted). Stars indicate significance: *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant."
+#| fig-cap: "Pairwise Wilcoxon signed-rank p-values (queen, tau = 1.0; Holm-adjusted). Stars indicate significance: *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant."
 #| fig-height: 6
 #| fig-width: 6.5
 plot_pvalue_heatmap(wil, "Wilcoxon (Holm)")
 ```
 
 ```{r pvalue-heatmap-nemenyi}
-#| fig-cap: "Pairwise Nemenyi post-hoc p-values from the Friedman test."
+#| fig-cap: "Pairwise Nemenyi post-hoc p-values from the Friedman test (queen, tau = 1.0)."
 #| fig-height: 6
 #| fig-width: 6.5
 plot_pvalue_heatmap(nem, "Nemenyi")
@@ -339,7 +361,7 @@ if (nrow(nonsig_pairs) > 0) {
   nonsig_pairs$Wilcoxon_p <- sprintf("%.4f", nonsig_pairs$Wilcoxon_p)
   nonsig_pairs$Nemenyi_p <- sprintf("%.4f", nonsig_pairs$Nemenyi_p)
   kable(nonsig_pairs,
-        caption = "Design pairs with no significant MSE difference (Wilcoxon).",
+        caption = "Design pairs with no significant MSE difference (Wilcoxon; queen, tau = 1.0).",
         col.names = c("Design A", "Design B", "Wilcoxon p", "Nemenyi p"),
         align = "c") %>%
     kable_styling(full_width = FALSE, position = "center")
@@ -350,18 +372,69 @@ if (nrow(nonsig_pairs) > 0) {
 
 ## MSE Distribution with Significance
 
-The following boxplot shows the full distribution of scenario-level MSE values for each design, ordered by median MSE (best on the left). Brackets above the boxes with significance stars indicate pairwise comparisons from the Wilcoxon signed-rank test (Holm-adjusted). To avoid visual clutter, up to 8 key comparisons are shown, prioritizing those involving the best- and worst-performing designs.
+The following boxplot shows the full distribution of scenario-level MSE values for each design under queen contiguity, ordered by median MSE (best on the left). Brackets above the boxes with significance stars indicate pairwise comparisons from the Wilcoxon signed-rank test (Holm-adjusted). To avoid visual clutter, up to 8 key comparisons are shown, prioritizing those involving the best- and worst-performing designs.
 
 ```{r boxplot-stars}
-#| fig-cap: "Boxplot of MSE by design (ordered by median MSE). Brackets with significance stars show Wilcoxon signed-rank test results (Holm-adjusted). Stars: *** p < 0.001, ** p < 0.01, * p < 0.05."
+#| fig-cap: "Boxplot of MSE by design (queen, tau = 1.0; ordered by median MSE). Brackets with significance stars show Wilcoxon signed-rank test results (Holm-adjusted). Stars: *** p < 0.001, ** p < 0.01, * p < 0.05."
 #| fig-height: 6
 #| fig-width: 6.5
-plot_mse_boxplot_with_stars(mle_results, wil)
+plot_mse_boxplot_with_stars(mle_queen, wil)
+```
+
+## Rook Contiguity (Sensitivity) {#sec-aggregate-rook}
+
+The same Friedman, Nemenyi and Wilcoxon tests, run on the `r fr_rook$n_blocks` rook blocks at $\tau = 1.0$. Under rook contiguity the Checkerboard design's treatment effect is **not identified**: every treated cell's rook neighbours are all controls and vice versa, so $WZ = 1 - Z$, the oracle model drops the spillover term, and the Checkerboard estimate absorbs the spillover (bias $\approx -\gamma$, coverage `r sprintf("%.2f", mean(mle_rook$Coverage[mle_rook$Design == "Design 1"]))`). Its estimates are kept but flagged; its last-place rank under rook reflects this non-identification rather than a design-performance comparison.
+
+```{r friedman-result-rook}
+kable(data.frame(
+  Statistic = sprintf("%.2f", fr_rook$statistic),
+  df = fr_rook$n_designs - 1,
+  `P-value` = format.pval(fr_rook$p_value, digits = 3),
+  `N Blocks` = fr_rook$n_blocks,
+  Decision = ifelse(fr_rook$p_value < 0.05, "Reject H0", "Fail to reject H0"),
+  check.names = FALSE),
+  caption = "Friedman omnibus test result (rook, tau = 1.0; sensitivity).", align = "c") %>%
+  kable_styling(full_width = FALSE, position = "center")
+```
+
+```{r avg-ranks-table-rook}
+kable(data.frame(
+  Design = names(fr_rook$avg_ranks),
+  `Average Rank` = sprintf("%.3f", fr_rook$avg_ranks),
+  `Rank Position` = seq_along(fr_rook$avg_ranks),
+  check.names = FALSE),
+  caption = "Designs ordered by average MSE rank across the rook blocks (1 = best). Design 1 (Checkerboard) is not identified under rook.",
+  align = c("l", "c", "c")) %>%
+  kable_styling(full_width = FALSE, position = "center")
+```
+
+```{r cd-diagram-rook}
+#| fig-cap: "Critical Difference diagram (rook, tau = 1.0; sensitivity). Design 1 (Checkerboard) is not identified under rook."
+#| fig-height: 4
+#| fig-width: 6.5
+plot_cd_diagram(nem_rook)
+```
+
+```{r cd-groups-rook-list}
+#| results: asis
+groups_rook <- find_cd_groups(nem_rook$avg_ranks, nem_rook$p_matrix, 0.05)
+cat(sprintf("Under rook the Nemenyi critical difference is CD = %.3f, and the CD diagram shows %d equivalence group(s):\n\n",
+            nem_rook$critical_diff, length(groups_rook)))
+for (i in seq_along(groups_rook)) {
+  cat(sprintf("- **Group %d**: %s (avg ranks %.2f -- %.2f)\n", i,
+              paste(groups_rook[[i]], collapse = ", "),
+              min(nem_rook$avg_ranks[groups_rook[[i]]]),
+              max(nem_rook$avg_ranks[groups_rook[[i]]])))
+}
+n_sig_wil_rook <- sum(wil_rook$sig_matrix[upper.tri(wil_rook$sig_matrix)])
+n_sig_nem_rook <- sum(nem_rook$sig_matrix[upper.tri(nem_rook$sig_matrix)])
+cat(sprintf("\n%d of %d pairs differ significantly under Nemenyi and %d of %d under the Holm-adjusted Wilcoxon test.\n",
+            n_sig_nem_rook, choose(n_designs, 2), n_sig_wil_rook, choose(n_designs, 2)))
 ```
 
 # Results: Conditional Analysis {#sec-conditional}
 
-To assess whether design rankings are **robust** across simulation conditions, we repeat the Friedman test within strata defined by individual parameters. If the Friedman test remains significant within every stratum and the best-ranked designs are consistent, the recommendation is robust.
+To assess whether design rankings are **robust** across simulation conditions, we repeat the Friedman test within strata defined by individual parameters. All strata are **within queen contiguity** (the primary analysis), except the neighbor-type strata, which compare queen and rook directly. If the Friedman test remains significant within every stratum and the best-ranked designs are consistent, the recommendation is robust.
 
 ```{r conditional-setup}
 #| include: false
@@ -387,14 +460,14 @@ display_df <- all_cond_summary %>%
   select(Parameter, Stratum, Chi_squared, P_value_fmt, N_blocks, Best_Group, Significant)
 
 kable(display_df,
-      caption = "Friedman test results within each parameter stratum. 'Best Group' lists designs in the top equivalence group (statistically indistinguishable from the best).",
+      caption = "Friedman test results within each parameter stratum (queen, except the neighbor-type strata). 'Best Group' lists designs in the top equivalence group (statistically indistinguishable from the best).",
       col.names = c("Parameter", "Stratum", "Chi-squared", "P-value",
                      "N Blocks", "Best Group", "Significant"),
       align = c("l", "l", "c", "c", "c", "l", "c")) %>%
   kable_styling(full_width = FALSE, font_size = 11, latex_options = c("hold_position", "scale_down"))
 ```
 
-The Friedman test is **significant in every stratum** ($p < 2.2 \times 10^{-16}$ in all cases), indicating that design differences are not an artifact of any particular parameter setting.
+The Friedman test is **significant in every stratum** (largest p-value `r sprintf("%.1e", max(all_cond_summary$P_value))`), indicating that design differences are not an artifact of any particular parameter setting. The strata are not independent replications: blocks within an incidence configuration share the same incidence surfaces, and the $\tau$ strata share treatment and noise draws (see @sec-tau-sensitivity).
 
 ## Conditional CD Diagrams
 
@@ -403,7 +476,7 @@ The following CD diagrams show how design rankings shift (or remain stable) acro
 ### By Outcome Spatial Autocorrelation ($\rho$)
 
 ```{r cd-rho}
-#| fig-cap: "CD diagrams stratified by outcome spatial autocorrelation (Rho). Each panel shows one stratum."
+#| fig-cap: "CD diagrams stratified by outcome spatial autocorrelation (Rho; queen). Each panel shows one stratum."
 #| fig-height: 7
 #| fig-width: 6.5
 cd_plots_rho <- plot_conditional_cd_diagrams(cond_results[["Rho"]], "Rho")
@@ -413,7 +486,7 @@ wrap_plots(cd_plots_rho, ncol = 2)
 ### By Spillover Magnitude ($\gamma$)
 
 ```{r cd-gamma}
-#| fig-cap: "CD diagrams stratified by spillover magnitude (Gamma). Each panel shows one stratum."
+#| fig-cap: "CD diagrams stratified by spillover magnitude (Gamma; queen). Each panel shows one stratum."
 #| fig-height: 7
 #| fig-width: 6.5
 cd_plots_gamma <- plot_conditional_cd_diagrams(cond_results[["Gamma"]], "Gamma")
@@ -423,7 +496,7 @@ wrap_plots(cd_plots_gamma, ncol = 2)
 ### By Spillover Type
 
 ```{r cd-spillover}
-#| fig-cap: "CD diagrams stratified by spillover type."
+#| fig-cap: "CD diagrams stratified by spillover type (queen)."
 #| fig-height: 3.5
 #| fig-width: 6.5
 cd_plots_spill <- plot_conditional_cd_diagrams(cond_results[["Spillover_Type"]], "Spillover_Type")
@@ -433,7 +506,7 @@ wrap_plots(cd_plots_spill, ncol = 2)
 ### By Neighbor Type
 
 ```{r cd-neighbor}
-#| fig-cap: "CD diagrams stratified by neighbor type."
+#| fig-cap: "CD diagrams stratified by neighbor type (tau = 1.0). Under rook, Design 1 (Checkerboard) is not identified (WZ = 1 - Z); its estimates are kept but flagged."
 #| fig-height: 3.5
 #| fig-width: 6.5
 cd_plots_nb <- plot_conditional_cd_diagrams(cond_results[["Neighbor_Type"]], "Neighbor_Type")
@@ -443,7 +516,7 @@ wrap_plots(cd_plots_nb, ncol = 2)
 ### By Incidence Mode
 
 ```{r cd-incidence}
-#| fig-cap: "CD diagrams stratified by incidence generation mode. Each panel shows one stratum."
+#| fig-cap: "CD diagrams stratified by incidence generation mode (queen). Each panel shows one stratum."
 #| fig-height: 9
 #| fig-width: 6.5
 cd_plots_inc <- plot_conditional_cd_diagrams(cond_results[["Incidence_Mode"]], "Incidence_Mode")
@@ -465,31 +538,37 @@ rank_gap <- worst_rank - best_rank
 
 # Check if best two are in same equivalence group
 best_two_equiv <- !nem$sig_matrix[best_design, second_design]
-best_worst_p <- wil$p_matrix[best_design, worst_design]
+
+# Checkerboard (Design 1) under queen: mean MSE / bias / SD and its tests
+cb <- mle_queen[mle_queen$Design == "Design 1", ]
+cb_mse <- mean(cb$MSE); cb_bias <- mean(cb$Bias); cb_sd <- mean(cb$SD)
+mean_mse_q <- sort(tapply(mle_queen$MSE, mle_queen$Design, mean))
+cb_nem_ns <- setdiff(names(which(!nem$sig_matrix["Design 1", ])), "Design 1")
 ```
 
-1. **Overwhelming evidence of design differences.** The Friedman test ($\chi^2 = `r sprintf("%.2f", fr$statistic)`$, $p `r ifelse(fr$p_value < 2.2e-16, "< 2.2 \\times 10^{-16}", sprintf("= %.4f", fr$p_value))`$) decisively rejects the null hypothesis that all designs perform equally. The average rank gap between the best (`r best_design`, rank `r sprintf("%.2f", best_rank)`) and worst (`r worst_design`, rank `r sprintf("%.2f", worst_rank)`) design is `r sprintf("%.2f", rank_gap)` on an 8-point scale.
+1. **Overwhelming evidence of design differences.** The Friedman test ($\chi^2 = `r sprintf("%.2f", fr$statistic)`$, $p `r ifelse(fr$p_value < 2.2e-16, "< 2.2 \\times 10^{-16}", sprintf("= %.4f", fr$p_value))`$) decisively rejects the null hypothesis that all designs perform equally. Under queen contiguity, the average rank gap between the best (`r full_name(best_design)`, rank `r sprintf("%.2f", best_rank)`) and worst (`r full_name(worst_design)`, rank `r sprintf("%.2f", worst_rank)`) design is `r sprintf("%.2f", rank_gap)` on a `r n_designs`-point scale. The rook sensitivity analysis also rejects ($\chi^2 = `r sprintf("%.2f", fr_rook$statistic)`$; @sec-aggregate-rook).
 
-2. **`r best_design` and `r second_design` are the top performers.** These two designs `r ifelse(best_two_equiv, "are statistically indistinguishable from each other (Nemenyi $p > 0.05$) and form", "together form")` the top equivalence group in the CD diagram. Both employ quadrant-based saturation strategies, with `r best_design` using random saturation assignment and `r second_design` guiding saturation by observed incidence.
+2. **`r full_name(best_design)` and `r full_name(second_design)` are the top performers.** These two designs `r ifelse(best_two_equiv, "are statistically indistinguishable from each other (Nemenyi $p > 0.05$) and form", "together form")` the top equivalence group in the queen CD diagram (Nemenyi $p = `r sprintf("%.4f", nem$p_matrix[best_design, second_design])`$, Wilcoxon Holm-adjusted $p = `r sprintf("%.3f", wil$p_matrix[best_design, second_design])`$). Both employ quadrant-based saturation strategies; one draws each quadrant's saturation at random and the other orders the saturations by quadrant incidence, and the tests do not distinguish them.
 
-3. **`r worst_design` (Checkerboard) is significantly worse than all other designs.** The pairwise comparison between `r best_design` and `r worst_design` yields $p `r ifelse(best_worst_p < 0.001, "< 0.001", sprintf("= %.4f", best_worst_p))`$ (Wilcoxon, Holm-adjusted). The checkerboard pattern, while intuitive, fails to account for spatial heterogeneity in outcomes.
+3. **Checkerboard has by far the largest MSE, but it shares the bottom rank group.** Under queen, Checkerboard's mean MSE is `r sprintf("%.3f", cb_mse)` against `r sprintf("%.3f", mean_mse_q[1])` for `r full_name(names(mean_mse_q)[1])`; it is essentially unbiased (mean bias `r sprintf("%.3f", cb_bias)`), so the MSE is almost entirely variance (mean SD `r sprintf("%.3f", cb_sd)`). By average rank it sits beside `r paste(full_name(cb_nem_ns), collapse = " and ")`, from which the Nemenyi test does not separate it; the Holm-adjusted Wilcoxon test separates it from every other design. Under rook, Checkerboard ranks last, but there its treatment effect is not identified ($WZ = 1 - Z$), so that rank is a flagged non-identification, not a design comparison.
 
-4. **Rankings are robust across all simulation parameters.** The Friedman test is significant within every stratum tested (all $p < 2.2 \times 10^{-16}$), and the top designs remain consistent regardless of the level of spatial autocorrelation, spillover magnitude, spillover type, neighbor contiguity, or incidence generation mode.
+4. **Rankings are robust across all simulation parameters.** The Friedman test is significant within every stratum tested (all $p < 2.2 \times 10^{-16}$), and the two saturation quadrant designs are in the top equivalence group in every stratum, regardless of the level of spatial autocorrelation, spillover magnitude, spillover type, neighbor contiguity, or incidence generation mode. In many strata Balanced Quartiles and Balanced Halves join that top group. The strata share incidence surfaces (and, for $\tau$, treatment and noise draws), so they are not independent confirmations.
 
 ## Implications for Study Design
 
-For investigators planning a spatial CRT with spatially heterogeneous outcomes, these results provide strong statistical evidence to recommend **saturation quadrant designs** (`r best_design` or `r second_design`) over alternative strategies. The recommendation is not sensitive to specific assumptions about the data-generating process within the range of parameters explored.
+For investigators planning a spatial CRT with spatially heterogeneous outcomes, these results provide strong statistical evidence to recommend **saturation quadrant designs** (`r full_name(best_design)` or `r full_name(second_design)`) over alternative strategies. The recommendation is not sensitive to specific assumptions about the data-generating process within the range of parameters explored.
 
 In particular:
 
-- **Avoid the Checkerboard design** (`r worst_design`) — it performs significantly worse than all alternatives under MLE estimation.
+- **Avoid the Checkerboard design** — under queen it has the largest mean MSE of any design (`r sprintf("%.3f", cb_mse)`, nearly all variance), and under rook its treatment effect is not identified.
 - **Saturation quadrant designs** leverage spatial structure by assigning different treatment saturation levels to different regions, which provides better identification of the treatment effect under spatial dependence.
-- When prior incidence data is available, `r second_design` (Incidence-Guided) may offer a slight advantage by directing higher saturation to higher-incidence areas, though the improvement over `r best_design` is not statistically significant.
+- The two saturation quadrant designs are statistically indistinguishable; the choice between random and incidence-ordered saturation does not change estimation accuracy in these simulations.
 
 ## Limitations
 
-- **Primary $\tau = 1.0$**: Omnibus and pairwise tests condition on the primary effect size. Sensitivity across $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ is presented in @sec-tau-sensitivity; rankings remain stable across effect sizes.
-- **Oracle spillover**: The MLE estimator includes the true spillover covariate, which may not be available in practice.
+- **Primary $\tau = 1.0$**: Omnibus and pairwise tests condition on the primary effect size. Sensitivity across $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ is presented in @sec-tau-sensitivity; rankings remain stable across effect sizes, although the $\tau$ levels share treatment and noise draws and so are not independent confirmations.
+- **Blocks are not fully independent**: blocks within an incidence configuration share the same 10 incidence surfaces, so a Friedman test over blocks overstates the information about surface-to-surface variation.
+- **Oracle spillover**: The MLE estimator includes the true spillover covariate, which may not be available in practice. A non-oracle sensitivity estimator ($Y \sim Z + X$) was also run but is not analysed in this report.
 - **Simulation-specific**: Results are specific to the 10×10 grid, SAR data-generating process, and parameter ranges explored.
 
 # Tau Sensitivity Analysis {#sec-tau-sensitivity}
@@ -502,9 +581,14 @@ if (!tau_sweep_available) {
 }
 ```
 
-The tau-sweep simulation (12,800 scenarios) swept $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
-The primary question is whether the D3/D8 dominance established at $\tau = 1.0$ is robust
-to the effect size assumption.
+The tau-sweep simulation (`r format(nrow(mle_results_full), big.mark = ",")` scenarios) swept $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
+The primary question is whether the design ranking established at $\tau = 1.0$ is robust
+to the effect size assumption. All results in this section are for queen contiguity.
+
+The per-$\tau$ Friedman tests use common random numbers: every $\tau$ level reuses the same
+treatment assignments and noise draws, and only $\tau$ changes. They are therefore **not
+independent confirmations** of one another; agreement across $\tau$ shows that the ranking is
+insensitive to the effect size, not that it has been replicated five times.
 
 ## Conditional Tests by True Tau Level
 
@@ -512,7 +596,7 @@ to the effect size assumption.
 if ("True_Tau" %in% names(cond_summaries)) {
   tau_sum <- cond_summaries[["True_Tau"]]
   kable(tau_sum,
-        caption = "Conditional Friedman test results stratified by true tau level. All p-values are below 2.2e-16, confirming that design differences persist across all effect sizes.",
+        caption = "Conditional Friedman test results stratified by true tau level (queen). All p-values are below 2.2e-16. The tau levels share treatment and noise draws, so these are not independent tests.",
         booktabs = TRUE) |>
     kable_styling(font_size = 9, latex_options = c("striped", "hold_position")) |>
     print()
@@ -521,9 +605,9 @@ if ("True_Tau" %in% names(cond_summaries)) {
 
 ## Power Analysis: Probability of Rejecting H~0~: τ = 0
 
-```{r power-curves, eval=tau_sweep_available, fig.cap="Statistical power by design across tau values. 80% power reference shown. Designs with lower MSE achieve adequate power at smaller effect sizes."}
+```{r power-curves, eval=tau_sweep_available, fig.cap="Statistical power by design across tau values (iid Uniform incidence, queen). 80% power reference shown. Designs with lower MSE achieve adequate power at smaller effect sizes."}
 if (tau_sweep_available && exists("split_by_incidence_config")) {
-  tau_cfgs <- split_by_incidence_config(mle_results_full)
+  tau_cfgs <- split_by_incidence_config(mle_queen_full)
   if ("iid Uniform" %in% names(tau_cfgs)) {
     p <- plot_power_curves(tau_cfgs[["iid Uniform"]], "iid Uniform")
     if (!is.null(p)) print(p)
@@ -533,9 +617,9 @@ if (tau_sweep_available && exists("split_by_incidence_config")) {
 
 ## Rank Trajectories Across Tau Values
 
-```{r rank-trajectories-tau, eval=tau_sweep_available, fig.cap="Design rank (1=best MSE) across tau levels. Stable trajectories confirm that D3 and D8 dominate across all tested effect sizes."}
+```{r rank-trajectories-tau, eval=tau_sweep_available, fig.cap="Design rank (1=best MSE) across tau levels (iid Uniform incidence, queen). The tau levels share treatment and noise draws, so stable trajectories show insensitivity to the effect size rather than independent replication."}
 if (tau_sweep_available && exists("split_by_incidence_config")) {
-  tau_cfgs <- split_by_incidence_config(mle_results_full)
+  tau_cfgs <- split_by_incidence_config(mle_queen_full)
   if ("iid Uniform" %in% names(tau_cfgs)) {
     p <- plot_rank_trajectories_by_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
     if (!is.null(p)) print(p)
@@ -550,10 +634,10 @@ if (tau_sweep_available && exists("split_by_incidence_config")) {
 n_sig_nem <- sum(nem$sig_matrix[upper.tri(nem$sig_matrix)])
 ```
 
-Using a Friedman test with Nemenyi post-hoc comparisons and corroborated by pairwise Wilcoxon signed-rank tests, we find:
+Using a Friedman test with Nemenyi post-hoc comparisons and corroborated by pairwise Wilcoxon signed-rank tests, we find (queen contiguity, $\tau = 1.0$, unless stated):
 
-- **`r n_sig_nem` of `r choose(n_designs, 2)` design pairs** are significantly different at the $\alpha = 0.05$ level (Nemenyi post-hoc), and **`r n_sig_wil` of `r choose(n_designs, 2)`** under the Wilcoxon signed-rank test with Holm correction.
-- **`r best_design`** (Saturation Quadrants) and **`r second_design`** (Incidence-Guided Saturation Quadrants) are the recommended designs, forming the top equivalence group with average ranks of `r sprintf("%.2f", fr$avg_ranks[1])` and `r sprintf("%.2f", fr$avg_ranks[2])`.
+- **`r n_sig_nem` of `r choose(n_designs, 2)` design pairs** are significantly different at the $\alpha = 0.05$ level (Nemenyi post-hoc), and **`r n_sig_wil` of `r choose(n_designs, 2)`** under the Wilcoxon signed-rank test with Holm correction. Under rook (sensitivity), the counts are `r n_sig_nem_rook` and `r n_sig_wil_rook` of `r choose(n_designs, 2)`.
+- **`r full_name(best_design)`** and **`r full_name(second_design)`** are the recommended designs, forming the top equivalence group with average ranks of `r sprintf("%.2f", fr$avg_ranks[1])` and `r sprintf("%.2f", fr$avg_ranks[2])`; they are statistically indistinguishable from each other.
 - These findings are **robust** across all tested levels of spatial autocorrelation, spillover magnitude, spillover type, neighbor contiguity, and incidence generation mode.
 
 This analysis provides the statistical foundation for recommending specific treatment assignment designs for future spatial CRT studies.
@@ -565,7 +649,7 @@ This analysis provides the statistical foundation for recommending specific trea
 - **R** version `r paste(R.version$major, R.version$minor, sep = ".")`
 - **PMCMRplus** `r packageVersion("PMCMRplus")`: Friedman test, Nemenyi post-hoc
 - **stats** (base R): Wilcoxon signed-rank test, Holm p-value adjustment
-- **Simulation results**: `r basename(attr(mle_results, "source") %||% "sim_results_MLE_combined_20260322_151030.rds")`
+- **Simulation results**: `r basename(loaded_file)`
 
 ## Nemenyi P-value Matrix
 
@@ -581,7 +665,7 @@ for (i in 1:nrow(nem_p_display)) {
 }
 diag(nem_p_display) <- "—"
 kable(nem_p_display,
-      caption = "Full Nemenyi post-hoc p-value matrix.",
+      caption = "Full Nemenyi post-hoc p-value matrix (queen, tau = 1.0).",
       align = "c") %>%
   kable_styling(font_size = 9, full_width = FALSE, latex_options = c("hold_position", "scale_down"))
 ```
@@ -599,7 +683,7 @@ for (i in 1:nrow(wil_p_display)) {
 }
 diag(wil_p_display) <- "—"
 kable(wil_p_display,
-      caption = "Full pairwise Wilcoxon signed-rank p-value matrix (Holm-adjusted).",
+      caption = "Full pairwise Wilcoxon signed-rank p-value matrix (queen, tau = 1.0; Holm-adjusted).",
       align = "c") %>%
   kable_styling(font_size = 9, full_width = FALSE, latex_options = c("hold_position", "scale_down"))
 ```

@@ -74,12 +74,13 @@ We construct $\mathbf{W}_R$ (rook) and $\mathbf{W}_Q$ (queen) weight matrices.
 
 # Outcome Data Generating Process
 
-## Spatial Durbin Model (SDM)
+## Spatial Lag Model with a Spillover Term
 
-The outcome vector $\mathbf{Y} = (Y_1, \ldots, Y_N)^\top$ is generated from the
-Spatial Durbin Model:
+The outcome vector $\mathbf{Y} = (Y_1, \ldots, Y_N)^\top$ is generated from a spatial
+lag model with a spillover term (called the "Spatial Durbin Model", SDM, in older
+project documents):
 
-$$\mathbf{Y} = (\mathbf{I}_N - \rho\mathbf{W})^{-1}\left[\tau\mathbf{Z} + \gamma \cdot \text{Spill}(\mathbf{Z}) + \beta\mathbf{X} + \boldsymbol{\varepsilon}\right]$$
+$$\mathbf{Y} = (\mathbf{I}_N - \rho\mathbf{W})^{-1}\left[\tau\mathbf{Z} + S(\mathbf{Z}) + \beta\mathbf{X} + \boldsymbol{\varepsilon}\right], \quad \beta = 1,\ \sigma = 1$$
 
 where:
 
@@ -92,7 +93,7 @@ where:
 | $\tau$ | Direct treatment effect | **Estimand of interest** |
 | $\mathbf{Z}$ | $N \times 1$ binary treatment vector | $Z_i \in \{0, 1\}$ |
 | $\gamma$ | Spillover effect magnitude | Indirect effect via treated neighbors |
-| $\text{Spill}(\mathbf{Z})$ | $N \times 1$ spillover term | See Section 3.2 |
+| $S(\mathbf{Z})$ | $N \times 1$ spillover term (includes $\gamma$) | See Section 3.2 |
 | $\beta$ | Effect of baseline incidence on outcome | Covariate coefficient |
 | $\mathbf{X}$ | $N \times 1$ baseline incidence vector | $X_i \in [0, 1]$ |
 | $\boldsymbol{\varepsilon}$ | $N \times 1$ error vector | $\varepsilon_i \overset{\text{iid}}{\sim} N(0, \sigma^2)$ |
@@ -106,18 +107,22 @@ For row-standardized $\mathbf{W}$, $\lambda_{\max} = 1$, so we require $|\rho| <
 
 ## Spillover Construction
 
-The spillover term captures indirect treatment effects transmitted through the spatial network:
+The spillover term captures indirect treatment effects transmitted through the spatial
+network. It is built from the spatial lag of treatment,
 
-$$\text{Spill}_i = \frac{\sum_{j \in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|} = (\mathbf{W}\mathbf{Z})_i$$
+$$(\mathbf{W}\mathbf{Z})_i = \frac{\sum_{j \in \mathcal{N}(i)} Z_j}{|\mathcal{N}(i)|},$$
 
-This is the proportion of cluster $i$'s neighbors that are treated. Two spillover types are
-considered:
+the proportion of cluster $i$'s neighbors that are treated. Two spillover regimes are
+considered; in both, $S(\mathbf{Z})$ already contains the magnitude $\gamma$:
 
-1. **Control-only spillover**: The spillover effect applies only to untreated clusters:
-$$\text{Spill}_i^{(\text{ctrl})} = \gamma \cdot (\mathbf{W}\mathbf{Z})_i \cdot (1 - Z_i)$$
+1. **Control-only spillover** (`control_only`): the spillover effect applies only to untreated clusters:
+$$S_i^{(\text{ctrl})}(\mathbf{Z}) = \gamma \cdot (\mathbf{W}\mathbf{Z})_i \cdot (1 - Z_i), \quad \text{i.e. } S(\mathbf{Z}) = \gamma\,\mathbf{W}\mathbf{Z} \circ (\mathbf{1} - \mathbf{Z})$$
 
-2. **Bidirectional spillover**: The spillover effect applies to all clusters:
-$$\text{Spill}_i^{(\text{both})} = \gamma \cdot (\mathbf{W}\mathbf{Z})_i$$
+2. **Bidirectional spillover** (`both`): the spillover effect applies to all clusters:
+$$S_i^{(\text{both})}(\mathbf{Z}) = \gamma \cdot (\mathbf{W}\mathbf{Z})_i, \quad \text{i.e. } S(\mathbf{Z}) = \gamma\,\mathbf{W}\mathbf{Z}$$
+
+The oracle estimator (Section 6.2) uses $\text{Spill} = S(\mathbf{Z})$, the true
+regime-specific spillover term, as a covariate.
 
 ---
 
@@ -127,6 +132,12 @@ The baseline incidence vector $\mathbf{X}$ represents prior observed outcome rat
 clusters. We consider three generation modes with increasing structural complexity. All
 modes produce values in $[0, 1]$ to ensure comparability across modes and with the
 treatment assignment designs.
+
+Each incidence configuration $c = (\text{mode}, \rho_X)$ yields $K = 10$ independent
+incidence surfaces $\mathbf{X}_1, \ldots, \mathbf{X}_K$ (Section 7.2). The same surface
+$\mathbf{X}_k$ is used to draw the treatment assignments, to generate the outcome, and as
+the covariate in the analysis model. The spatial filters in Modes 2 and 3 always use the
+queen weight matrix $\mathbf{W}_Q$, whichever contiguity is used for the outcome.
 
 ## Mode 1: Independent and Identically Distributed (iid)
 
@@ -141,7 +152,7 @@ the case where historical outcome rates show no geographic clustering.
 
 Spatially correlated incidence is generated via the Simultaneous Autoregressive (SAR) filter:
 
-$$\mathbf{X}^* = (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$$
+$$\mathbf{X}^* = (\mathbf{I}_N - \rho_X \mathbf{W}_Q)^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$$
 
 where $\rho_X \in [0, 1)$ controls the degree of spatial correlation in incidence.
 
@@ -164,7 +175,7 @@ Motivated by the SUD application, this mode generates incidence from a Poisson c
 with spatially correlated rates:
 
 **Step 1.** Generate spatially correlated log-rates:
-$$\log \boldsymbol{\lambda}^* = \mu_0 \cdot \mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$$
+$$\log \boldsymbol{\lambda}^* = \mu_0 \cdot \mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W}_Q)^{-1}\mathbf{u}, \quad \mathbf{u} \sim N(\mathbf{0}, \mathbf{I}_N)$$
 
 where $\mu_0 = \log(\text{base rate})$ is the log of the baseline incidence rate
 (e.g., $\mu_0 = \log(35/100{,}000)$ for SUD).
@@ -183,57 +194,92 @@ $$X_i = \frac{\text{rank}(R_i) - 0.5}{N}$$
 This quantile-based transformation preserves the ordering of rates while mapping to a
 uniform marginal distribution on $[0, 1]$.
 
+With $P_0 = 100{,}000$ people per cluster, the expected count is
+$\lambda_i^* P_0 \approx 35$ deaths per cluster, so the observed rates $R_i$ carry real
+rank information. (Before the 2026-09 revision, $P_0 = 1{,}000$ gave
+$\lambda_i^* P_0 \approx 0.35$ expected deaths and only about five distinct values of
+$X_i$.) Any remaining ties in $\mathbf{X}_k$ are broken at random by the designs
+(Section 5).
+
 ### Population Modes
 
 Two population specifications are available:
 
-1. **Equal population:** $P_i = P_0$ for all $i$ (default: $P_0 = 1{,}000$)
+1. **Equal population:** $P_i = P_0$ for all $i$ (default: $P_0 = 100{,}000$); used in the simulation (`pop_mode = "equal"`)
 2. **Heterogeneous population:** $P_i \sim \text{LogNormal}(\log P_0, \sigma_P^2)$,
-   where $\sigma_P = 0.5$ provides moderate population heterogeneity
+   where $\sigma_P = 0.5$ provides moderate population heterogeneity (available in the
+   code, not used in the simulation)
 
 **Parameters:** $\rho_X \in \{0.20, 0.50\}$, base rate $= 35/100{,}000$,
-$P_0 = 1{,}000$, population mode $\in \{\text{equal}, \text{heterogeneous}\}$.
+$P_0 = 100{,}000$, population mode = equal.
 
 ---
 
 # Treatment Assignment Designs
 
 Eight designs are evaluated. Each design produces a binary treatment vector
-$\mathbf{Z} \in \{0, 1\}^N$. Designs 1--2 are deterministic given $\mathbf{X}$;
-Designs 3--8 involve randomization.
+$\mathbf{Z} \in \{0, 1\}^N$. For surface $k$ and design draw $j$, the assignment is
+$\mathbf{Z}_{kj} = \text{design}_d(\mathbf{X}_k;\ \text{draw } j)$: designs that use
+incidence see the same surface $\mathbf{X}_k$ that enters the outcome. Checkerboard
+(Design 1) is the only deterministic design; Designs 2--8 involve randomization.
+
+**Tie-breaking.** Ties in $\mathbf{X}_k$ are broken at random, freshly for every design
+draw $j$, using the random-tie rank
+$$r_i = \text{rank}(X_{k,i}), \quad \texttt{ties.method = "random"},$$
+so $(r_1, \ldots, r_N)$ is a permutation of $1, \ldots, N$. Designs 2, 6, 7 and 8 use
+$r$ (or random-tie ranks of quadrant means); the other designs do not use incidence.
 
 ## Design 1: Checkerboard (Strict Spatial Stratification)
 
 $$Z_i = (x_i + y_i) \mod 2$$
 
-Treatment is assigned in an alternating checkerboard pattern. Every treated cluster is
-surrounded entirely by control clusters (under rook contiguity), maximizing spatial
-separation between treatment groups.
+Treatment is assigned in an alternating checkerboard pattern. Every edge-neighbor of a
+treated cluster is a control and vice versa, so the two arms are maximally
+*interspersed*: the design maximizes treated-control adjacency. It does not separate
+the arms; that is the Isolation Buffer's aim.
 
-**Properties:** Deterministic, exactly 50% treated, zero spatial correlation in $\mathbf{Z}$.
+**Properties:** Deterministic (the same $\mathbf{Z}$ for every $k$ and $j$; each fit
+still has its own noise column $\boldsymbol{\varepsilon}_{kj}$), exactly 50 treated.
+$\mathbf{Z}$ is perfectly negatively autocorrelated under rook contiguity.
+
+**Near-collinearity under queen contiguity.** Each interior cluster has 4 edge-neighbors
+in the other arm and 4 corner-neighbors in its own arm, so $(\mathbf{W}_Q\mathbf{Z})_i = 1/2$
+for every interior cluster whatever its own assignment. $\mathbf{W}_Q\mathbf{Z}$ varies only
+along the grid boundary (range 1/3 to 2/3, SD 0.066), which leaves the spillover term little
+variation independent of the intercept and $\mathbf{Z}$. The estimate stays unbiased,
+but its variance is large.
+
+**Aliasing under rook contiguity.** On the rook grid every neighbor of a treated cluster
+is a control and vice versa, so $\mathbf{W}_R\mathbf{Z} = \mathbf{1} - \mathbf{Z}$ and
+$\text{rank}([\mathbf{1}, \mathbf{Z}, \mathbf{W}\mathbf{Z}]) < 3$. The oracle model's
+Spill column is then aliased with the intercept and $\mathbf{Z}$ and is dropped, so
+$\tau$ is not identified apart from $\gamma$. These estimates are kept and flagged
+(Section 8.7).
 
 ## Design 2: High Incidence Focus
 
-$$Z_i = \mathbf{1}[X_i > \text{median}(\mathbf{X})]$$
+$$Z_i = \mathbf{1}[r_i > N/2]$$
 
-Treatment is assigned to clusters with above-median historical incidence. This represents
-a strategy that deliberately targets high-burden areas.
+Treatment is assigned to the $N/2$ clusters with the highest historical incidence, with
+ties broken at random as above. This represents a strategy that deliberately targets
+high-burden areas.
 
-**Properties:** Deterministic given $\mathbf{X}$, exactly 50% treated, treatment
-correlated with $\mathbf{X}$.
+**Properties:** Randomized only through the tie-break (a fixed assignment when
+$\mathbf{X}_k$ has no ties), exactly 50 treated, treatment correlated with $\mathbf{X}$.
 
 ## Design 3: Saturation Quadrants
 
 The grid is partitioned into four spatial quadrants:
-$$Q_k, \quad k = 1, 2, 3, 4$$
+$$Q_\ell, \quad \ell = 1, 2, 3, 4$$
 
-defined by dividing at the grid midpoint $(G/2, G/2)$.  For each randomization:
+defined by dividing at the grid midpoint $(G/2, G/2)$, so each quadrant is a
+$5 \times 5$ block with $|Q_\ell| = 25$.  For each randomization:
 
-1. Randomly assign saturation levels $\{0.20, 0.40, 0.60, 0.80\}$ to the four quadrants (one per quadrant, without replacement)
-2. Within quadrant $Q_k$ with saturation $p_k$, randomly select $\lfloor |Q_k| \cdot p_k \rceil$ clusters for treatment
+1. Randomly assign saturation levels $\{0.20, 0.40, 0.60, 0.80\}$ to the four quadrants (a random permutation, one per quadrant)
+2. Within quadrant $Q_\ell$ with saturation $p_\ell$, randomly select $\lfloor |Q_\ell| \cdot p_\ell \rceil$ clusters for treatment
 
-**Properties:** Stochastic, treatment proportion varies by region, captures varying
-treatment density.
+**Properties:** Stochastic, treatment proportion varies by region (5, 10, 15 and 20 of
+25), captures varying treatment density; exactly 50 treated overall.
 
 ## Design 4: Isolation Buffer
 
@@ -244,9 +290,14 @@ Treatment is assigned sequentially with spatial constraints:
 3. Remove the selected cluster and all its neighbors from the available set
 4. Repeat until no available clusters remain
 
-**Properties:** Stochastic, treated clusters are never adjacent (under the active
-contiguity), creates a spatial buffer around each treated unit. Treatment proportion
-varies across realizations (typically approximately 20--30%).
+**Properties:** Stochastic (a greedy random maximal independent set in the active
+neighbor graph), treated clusters are never adjacent (under the active contiguity),
+creates a spatial buffer around each treated unit. The number treated varies across
+realizations: about 38 under rook and about 22 under queen contiguity.
+
+Under rook contiguity a draw can occasionally equal one colour class of the bipartite
+rook grid, i.e. the exact checkerboard, and is then aliased in the same way as Design 1
+(Section 8.7).
 
 ## Design 5: 2x2 Blocking
 
@@ -260,47 +311,50 @@ $$\sum_{i \in B_m} Z_i = 2 \quad \text{for all } m$$
 
 ## Design 6: Balanced Quartiles
 
-Clusters are stratified by incidence quartile:
-$$S_q = \{s_i : X_i \in [F_X^{-1}((q-1)/4),\ F_X^{-1}(q/4)]\}, \quad q = 1, 2, 3, 4$$
+Clusters are stratified into four equal-size quartiles of the random-tie rank $r$
+(`ntile(r, 4)`):
+$$S_q = \{s_i : (q-1)N/4 < r_i \leq qN/4\}, \quad |S_q| = 25, \quad q = 1, 2, 3, 4$$
 
-Within each stratum, approximately half the clusters are randomly assigned to treatment:
-$$\sum_{i \in S_q} Z_i \approx |S_q|/2$$
+Each stratum treats $\lfloor 25/2 \rfloor = 12$ clusters, and two randomly chosen strata
+treat one more, so that exactly $N/2$ are treated:
+$$\sum_{i \in S_q} Z_i \in \{12, 13\}, \qquad \sum_{q=1}^{4}\sum_{i \in S_q} Z_i = 50$$
 
-**Properties:** Stochastic, approximately 50% treated, balanced across the incidence
-distribution. Combines covariate stratification with randomization.
+**Properties:** Stochastic, exactly 50 treated, balanced across the incidence
+distribution. Combines covariate stratification with randomization. (Before the
+2026-09 revision it treated $4 \times 12 = 48$, from `round(25/2)` = 12 per stratum.)
 
 ## Design 7: Balanced Halves
 
-Clusters are stratified into two groups by median baseline incidence:
+Clusters are stratified into two equal-size halves of the random-tie rank $r$
+(`ntile(r, 2)`):
 
-$$S_h = \{s_i : X_i \in H_h\}, \quad h = 1, 2$$
+$$S_1 = \{s_i : r_i > N/2\} \ \text{(high incidence)}, \quad S_2 = \{s_i : r_i \leq N/2\} \ \text{(low incidence)}, \quad |S_h| = 50$$
 
-where $H_1 = \{X_i : X_i > \text{median}(X)\}$ (high incidence) and $H_2 = \{X_i : X_i \leq \text{median}(X)\}$ (low incidence).
+Within each half, exactly half the clusters are randomly assigned to treatment:
 
-Within each half, approximately half the clusters are randomly assigned to treatment:
+$$\sum_{i \in S_h} Z_i = |S_h| / 2 = 25, \quad h = 1, 2$$
 
-$$\sum_{i \in S_h} Z_i = \lfloor |S_h| / 2 \rceil, \quad h = 1, 2$$
-
-**Properties:** Stochastic assignment. Approximately 50% treated overall. Balanced across the two halves of the incidence distribution. This is a 2-stratum analog of Design 6 (Balanced Quartiles), which uses 4 strata.
+**Properties:** Stochastic assignment. Exactly 50 treated overall. Balanced across the two halves of the incidence distribution. This is a 2-stratum analog of Design 6 (Balanced Quartiles), which uses 4 strata.
 
 ## Design 8: Incidence-Guided Saturation Quadrants
 
-The grid is partitioned into four spatial quadrants $Q_1, \ldots, Q_4$ using the same spatial partition as Design 3. Let $\bar{X}_{Q_k} = |Q_k|^{-1} \sum_{i \in Q_k} X_i$ denote the average baseline incidence in quadrant $k$.
+The grid is partitioned into four spatial quadrants $Q_1, \ldots, Q_4$ using the same spatial partition as Design 3. Let $\bar{X}_{Q_\ell} = |Q_\ell|^{-1} \sum_{i \in Q_\ell} X_i$ denote the average baseline incidence in quadrant $\ell$.
 
-Quadrants are ranked by $\bar{X}_{Q_k}$ in descending order and assigned saturation levels deterministically:
+Quadrants are ranked by $\bar{X}_{Q_\ell}$ in descending order (ties between quadrant means
+broken at random, freshly for every design draw) and assigned saturation levels by rank:
 
-| Rank (by $\bar{X}_{Q_k}$) | Saturation $p_k$ |
+| Rank (by $\bar{X}_{Q_\ell}$) | Saturation $p_\ell$ |
 |:---:|:---:|
 | 1 (highest) | 0.80 |
 | 2 | 0.60 |
 | 3 | 0.40 |
 | 4 (lowest) | 0.20 |
 
-Within each quadrant, $\lfloor |Q_k| \cdot p_k \rceil$ clusters are randomly selected for treatment:
+Within each quadrant, $\lfloor |Q_\ell| \cdot p_\ell \rceil$ clusters are randomly selected for treatment:
 
-$$\sum_{i \in Q_k} Z_i = \lfloor |Q_k| \cdot p_k \rceil$$
+$$\sum_{i \in Q_\ell} Z_i = \lfloor |Q_\ell| \cdot p_\ell \rceil$$
 
-**Properties:** The quadrant-to-saturation mapping is deterministic given incidence; within-quadrant assignment is stochastic. Overall treatment rate approximately 50%. Unlike Design 3, the saturation assignment is guided by incidence data rather than random.
+**Properties:** The quadrant-to-saturation mapping is fixed by the incidence surface $\mathbf{X}_k$ (up to random tie-breaking between equal quadrant means); within-quadrant assignment is stochastic. Exactly 50 treated overall. Unlike Design 3, the saturation assignment is guided by incidence data rather than random.
 
 ---
 
@@ -322,35 +376,70 @@ $$\hat{\tau}_{\text{DIM}} \pm z_{0.975} \cdot \sqrt{\widehat{\text{Var}}(\hat{\t
 **Note:** DIM is biased for $\tau$ when spillover ($\gamma \neq 0$) or spatial dependence
 ($\rho \neq 0$) is present, because it ignores the spatial structure of the DGP.
 
+**Status:** DIM is a naive baseline only and is **not** part of the revised (2026-09)
+simulation; `05_run_simulation.R` fits the ML estimators below. The existing DIM results
+are pre-revision (old DGP, 6 designs) and are not comparable to the revised ML results.
+
 ## Maximum Likelihood Estimation (MLE)
 
-The spatial autoregressive model is estimated via maximum likelihood using `spatialreg::lagsarlm()`:
+The spatial lag model is estimated by maximum likelihood. For fit $(k, j)$ the oracle
+model is
 
-$$Y_i = \rho \sum_j W_{ij} Y_j + \tau Z_i + \gamma \cdot \text{Spill}_i + \beta X_i + \varepsilon_i$$
+$$Y_i = \rho \sum_{i'} W_{ii'} Y_{i'} + \alpha + \tau Z_i + \delta \cdot \text{Spill}_i + \beta X_{k,i} + \varepsilon_i$$
 
 or in matrix form:
 $$\mathbf{Y} = \rho \mathbf{W}\mathbf{Y} + \mathbf{X}_{\text{design}}\boldsymbol{\beta}_{\text{design}} + \boldsymbol{\varepsilon}$$
 
-where $\mathbf{X}_{\text{design}} = [\mathbf{Z},\ \text{Spill},\ \mathbf{X}]$ and
-$\boldsymbol{\beta}_{\text{design}} = (\tau, \gamma, \beta)^\top$.
+where $\mathbf{X}_{\text{design}} = [\mathbf{1},\ \mathbf{Z},\ \text{Spill},\ \mathbf{X}_k]$ and
+$\boldsymbol{\beta}_{\text{design}} = (\alpha, \tau, \delta, \beta)^\top$. Because
+$\text{Spill} = S(\mathbf{Z})$ already contains $\gamma$ (Section 3.2), its true
+coefficient is $\delta = 1$, and the true intercept is $\alpha = 0$. The analysis uses
+the same incidence surface $\mathbf{X}_k$ that generated the outcome, and the same
+$\mathbf{W}$ (rook or queen) as the DGP.
 
-The MLE simultaneously estimates $\rho$ and $\boldsymbol{\beta}_{\text{design}}$ via
-concentrated log-likelihood optimization. Confidence intervals for $\tau$ are obtained
-from the asymptotic covariance matrix:
+The MLE maximizes the concentrated log-likelihood in $\rho$,
+$$\ell(\rho) = \log|\mathbf{I}_N - \rho\mathbf{W}| - \tfrac{N}{2}\log(2\pi) - \tfrac{N}{2}\log \hat{\sigma}^2(\rho) - \tfrac{N}{2},
+\qquad \log|\mathbf{I}_N - \rho\mathbf{W}| = \sum_{i=1}^{N} \log(1 - \rho\lambda_i),$$
+over $\rho \in \left(1/\lambda_{\min}(\mathbf{W}),\ 1/\lambda_{\max}(\mathbf{W})\right)$
+(the interval $1/\text{range}(\text{eig}(\mathbf{W}))$, shrunk by machine $\epsilon$),
+where $\lambda_i$ are the eigenvalues of $\mathbf{W}$,
+$\hat{\sigma}^2(\rho) = \lVert \mathbf{e}_0 - \rho\,\mathbf{e}_W \rVert^2 / N$, and
+$\mathbf{e}_0$, $\mathbf{e}_W$ are the OLS residuals of $\mathbf{Y}$ and of
+$\mathbf{W}\mathbf{Y}$ on $\mathbf{X}_{\text{design}}$. Given $\hat{\rho}$, $\hat{\boldsymbol{\beta}}_{\text{design}}$
+is the OLS fit of $\mathbf{Y} - \hat{\rho}\mathbf{W}\mathbf{Y}$ on
+$\mathbf{X}_{\text{design}}$. Standard errors come from inverting the analytic information
+matrix for $(\sigma^2, \rho, \boldsymbol{\beta}_{\text{design}})$, scaled by $s^2$. The 95%
+Wald confidence interval for $\tau$ is
 
-$$\hat{\tau}_{\text{MLE}} \pm z_{0.975} \cdot \text{SE}(\hat{\tau}_{\text{MLE}})$$
+$$\left[L, U\right] = \hat{\tau}_{\text{MLE}} \mp z_{0.975} \cdot \text{SE}(\hat{\tau}_{\text{MLE}}), \quad z_{0.975} = 1.96.$$
 
-where $\text{SE}(\hat{\tau})$ is extracted from the summary of the fitted `lagsarlm` object.
+**Engine.** The fits use `fit_sar_lag()` (`code/04_estimation.R`), a lean implementation
+of the same estimator as `spatialreg::lagsarlm(method = "eigen")`: the eigenvalues of
+$\mathbf{W}$ are computed once per neighbor type rather than once per fit. It was
+validated against `lagsarlm` on 5,120 fits (`results/estimator_validation/`): maximum
+$|\Delta\hat{\tau}|$ = 9.7e-8, relative $\Delta\text{SE}$ = 1.1e-8, identical aliasing,
+0.6 vs 76 ms per fit (almost all of `lagsarlm`'s time is a `gc()` call on exit).
+`engine = "lagsarlm"` is retained for a 1% cross-check.
 
-### Oracle vs. Realistic Estimation
+If a column of $\mathbf{X}_{\text{design}}$ is aliased (linearly dependent on the others;
+same QR rule as `lm`, tolerance $10^{-7}$), the engine warns "Aliased variables found",
+drops that column, and fits the rest. Aliased estimates are kept and flagged
+(Section 8.7).
 
-A configurable toggle controls whether the true spillover term is included:
+### Oracle vs. Non-Oracle Estimation
 
-- **Oracle** (`include_spill_covariate = TRUE`): The model includes the true $\text{Spill}(\mathbf{Z})$
-  covariate. This provides the best-case estimation performance.
-- **Realistic** (`include_spill_covariate = FALSE`): The model omits the spillover term,
-  fitting $Y \sim Z + X$ only. This reflects what a researcher would estimate without
-  knowledge of the spillover mechanism.
+Two estimators are fit to the same simulated outcome $\mathbf{Y}_{kj}$; both include an
+intercept:
+
+- **Oracle (primary):** $Y \sim Z + \text{Spill} + X_k$, with $\text{Spill} = S(\mathbf{Z}_{kj})$,
+  the true regime-specific spillover term. This provides the best-case estimation
+  performance.
+- **Non-oracle (sensitivity analysis):** $Y \sim Z + X_k$. The model omits the spillover
+  term, reflecting what a researcher would estimate without knowledge of the spillover
+  mechanism.
+
+Because both use the same $\mathbf{Y}$, they share every random draw (Section 7.5).
+Results are stored in separate files, one per estimator.
 
 ---
 
@@ -369,128 +458,242 @@ The simulation sweeps over the following parameter grid:
 | Spillover magnitude | $\gamma$ | 0.50, 0.60, 0.70, 0.80 | 4 |
 | Spillover type | --- | control_only, both | 2 |
 | Treatment design | --- | 1, 2, 3, 4, 5, 6, 7, 8 | 8 |
+| Treatment effect | $\tau$ | 0.8, 1.0, 1.5, 2.0, 3.0 | 5 |
 
 **Total scenarios:** 5 incidence configs $\times$ 2 neighbor types $\times$ 4 $\rho$
-$\times$ 4 $\gamma$ $\times$ 2 spillover types $\times$ 8 designs = **2,560 scenarios**.
+$\times$ 4 $\gamma$ $\times$ 2 spillover types $\times$ 8 designs $\times$ 5 $\tau$
+= **12,800 scenarios**, each fit by both the oracle and the non-oracle estimator.
+
+**Notation:** incidence config $c = (\text{mode}, \rho_X)$; block
+$b = (c, \text{nb}, \rho, \gamma, \text{regime})$; scenario $s = (b, d, \tau)$ for
+design $d$.
 
 ## Resample Structure
 
-Each scenario is evaluated over:
+Each scenario is evaluated over a matched-surface Monte Carlo structure:
 
-- $R_d$ = design resamples (distinct treatment assignment draws)
-- $R_o$ = outcome resamples (distinct error realizations per design draw)
-- Total iterations per scenario: $K = R_d \times R_o$
+- $K$ = incidence surfaces $\mathbf{X}_1, \ldots, \mathbf{X}_K$ per config
+- $J$ = design draws per surface, $\mathbf{Z}_{kj} = \text{design}_d(\mathbf{X}_k;\ \text{draw } j)$
+- One noise column $\boldsymbol{\varepsilon}_{kj} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_N)$ per fit
+- Total fits per scenario: $K \times J$, i.e. $K \cdot J$ distinct $(\mathbf{Z}, \boldsymbol{\varepsilon})$ pairs over $K$ surfaces
+
+For fit $(k, j)$ the outcome is generated from the same surface that the design and the
+analysis use:
+
+$$\mathbf{Y}_{kj} = (\mathbf{I}_N - \rho\mathbf{W})^{-1}\left[\tau\mathbf{Z}_{kj} + S(\mathbf{Z}_{kj}) + \beta\mathbf{X}_k + \boldsymbol{\varepsilon}_{kj}\right]$$
 
 **Default values:**
 
-| Estimation Mode | $R_d$ | $R_o$ | $K$ |
+| Estimation Mode | $K$ (surfaces) | $J$ (design draws) | Fits $K \cdot J$ |
 |:---|:---:|:---:|:---:|
-| MLE | 25 | 10 | 250 |
-| DIM | 100 | 1,000 | 100,000 |
+| MLE (oracle and non-oracle) | 10 | 25 | 250 |
+| DIM (pre-revision) | --- | --- | $R_d \times R_o = 25 \times 100 = 2{,}500$ |
+
+The DIM row describes the pre-revision runs ($R_d$ design resamples $\times$ $R_o$
+outcome resamples), which used the old structure (below) and are not re-run in the
+revision.
+
+**Before the 2026-09 revision** (April 2026 runs, for reference): the $K = 10$ surfaces
+were drawn once per $(c, \tau)$; the designs saw only $\mathbf{X}_1$, while fit $(j, k)$
+used $\mathbf{X}_k$ in the outcome and analysis, so $\text{cor}(\mathbf{X}_1, \mathbf{X}_k) \approx 0$
+and the design and the outcome saw unrelated incidence surfaces. The 10 noise columns
+were drawn once per $(c, \text{nb}, \rho)$ and each was reused by all 25 design draws,
+and by every $\gamma$, regime and design.
 
 ## Pseudocode
 
 ```
 BUILD spatial grid -> coords, W_rook, W_queen, listw_rook, listw_queen
+PRECOMPUTE lag setups (eigenvalues of W, rho interval) for rook and queen
 SET I_mat = diag(N)
 
-FOR EACH incidence_mode IN {iid, spatial, poisson}:
-  SET rho_X_values = {0} if iid, else {0.20, 0.50}
+FOR EACH config c = (incidence_mode, rho_X) IN {iid; spatial 0.20, 0.50; poisson 0.20, 0.50}:
+  FOR k IN 1:K:
+    SEED(key = "X", mode, rho_X, k)
+    GENERATE surface X_k (length N) using incidence_mode, rho_X, W_queen
+  # X_1..X_K are shared by every block of config c
 
-  FOR EACH rho_X IN rho_X_values:
-    GENERATE X_matrix (N x R_o) using incidence_mode, rho_X, W_queen
-    SET base_incidence = X_matrix[, 1]     # "historical" for design decisions
+  FOR EACH nb_type IN {rook, queen}:              # work unit = (c, nb_type, rho)
+    FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
+      SELECT active W for nb_type
+      COMPUTE inv_mat = solve(I_mat - rho * W)
 
-    FOR EACH nb_type IN {rook, queen}:
-      SELECT active W, listw for nb_type
+      FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
+        FOR EACH spill_type IN {control_only, both}:     # block b
+          SEED(key = "eps", mode, rho_X, nb_type, rho, gamma, spill_type)
+          GENERATE E (N x K*J) ~ N(0, sigma^2)   # one column per fit, shared by all
+                                                  # designs, taus and both estimators
 
-      FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
-        COMPUTE inv_mat = solve(I_mat - rho * W)
-        GENERATE Epsilon_matrix (N x R_o) ~ N(0, sigma^2)
-        COMPUTE baseline_part = inv_mat %*% (X_matrix * beta + Epsilon_matrix)
+          FOR EACH design_id IN {1, ..., 8}:
+            FOR k IN 1:K:
+              SEED(key = "Z", mode, rho_X, nb_type, rho, gamma, spill_type, k, design_id)
+              GENERATE J assignments Z_kj = design(X_k)   # random tie-breaking
+            COMPUTE Spill_kj = S(Z_kj) (gamma * W Z, masked by (1 - Z) if control_only)
+            FLAG Z_WZ_rank_deficient = any rank([1, Z_kj, W Z_kj]) < 3
 
-        FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
-          FOR EACH spill_type IN {control_only, both}:
-            FOR EACH design_id IN {1, 2, 3, 4, 5, 6, 7, 8}:
-
-              SET scenario_seed = hash(incidence_mode, rho_X, nb_type,
-                                       rho, gamma, spill_type, design_id)
-              set.seed(scenario_seed)
-
-              IF design is deterministic:
-                GENERATE Z_matrix with 1 column, replicate to R_d
-              ELSE:
-                GENERATE Z_matrix (N x R_d)
-
-              INITIALIZE estimates[], ci_lower[], ci_upper[]
-
-              FOR d IN 1:R_d:
-                Z = Z_matrix[, d]
-                COMPUTE spillover = W %*% Z (apply spill_type mask)
-                COMPUTE trt_effect = inv_mat %*% (tau * Z + spillover)
-                Y_sim = trt_effect + baseline_part
-
-                ESTIMATE tau_hat, CI for each of R_o outcome columns
-
-              COMPUTE Bias, SD, MSE, Coverage, Fail_Rate
-              STORE results row
+            FOR EACH tau IN {0.8, 1.0, 1.5, 2.0, 3.0}:  # same Z and E for every tau
+              Y_kj = inv_mat %*% (tau * Z_kj + Spill_kj + beta * X_k + E[, kj])
+              FIT oracle     Y_kj ~ Z + Spill + X_k   (fit_sar_lag; warnings captured)
+              FIT non-oracle Y_kj ~ Z + X_k
+              FOR EACH estimator:
+                COMPUTE Bias, SD, MSE, Coverage, Power, Fail_Rate, N_Valid_Est
+                COMPUTE surface-level metrics m_1..m_K and MC SEs
+                COUNT N_Aliased, N_Warn
+                STORE scenario row and K surface rows
 ```
 
-**Critical structural fix:** Incidence ($\mathbf{X}$) is generated **once per
-(incidence_mode, $\rho_X$) configuration** and held fixed across all spatial parameter
-combinations ($\rho$, neighbor type). This reflects the real-world scenario where
-historical incidence is observed once, and the question is how different spatial models
-and designs affect estimation quality.
+Work units $(c, \text{nb}, \rho)$ are run in parallel; because every draw is seeded from
+its key, the output does not depend on the order or the number of workers. If any unit
+fails, the run stops.
+
+**Critical structural invariant:** Each incidence surface $\mathbf{X}_k$ is generated
+**once per (incidence_mode, $\rho_X$) configuration** and held fixed across all spatial
+parameter combinations ($\rho$, neighbor type, $\gamma$, regime), designs and $\tau$.
+Only the assignments, the noise and the outcome DGP vary across blocks. This reflects the
+real-world scenario where historical incidence is observed once, and the question is how
+different spatial models and designs affect estimation quality.
 
 ## Deterministic Design Optimization
 
-Designs 1 (Checkerboard) and 2 (High Incidence Focus) produce identical treatment vectors
-for every resample given fixed $\mathbf{X}$. The algorithm detects this and generates
-a single assignment, replicating it across $R_d$ to avoid redundant computation.
+Design 1 (Checkerboard) is the only deterministic design: it produces the same treatment
+vector for every surface $k$ and draw $j$, so a single assignment is replicated. Each of
+its $K \cdot J$ fits still has its own noise column $\boldsymbol{\varepsilon}_{kj}$, so it
+contributes 250 distinct fits like every other design. (Before the revision, High
+Incidence Focus was also treated as deterministic; it is now drawn with random
+tie-breaking.)
 
 ## Per-Scenario Seeding
 
-Rather than a single global seed, each scenario receives a deterministic seed computed
-from its parameter combination:
+Rather than a single global seed, every random draw is preceded by
 
-$$\text{seed} = \text{hash}(\text{incidence\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, \text{design\_id})$$
+```
+set.seed(digest::digest2int(key), kind = "Mersenne-Twister",
+         normal.kind = "Inversion", sample.kind = "Rejection")
+```
 
-This ensures reproducibility even if scenarios are added, removed, or reordered.
+where the key joins the fields below with `"|"`, numeric fields formatted with
+`sprintf("%.2f")`:
+
+| Draw | Key fields |
+|:---|:---|
+| $\mathbf{X}_k$ (one surface) | `"X"`, mode, $\rho_X$, $k$ |
+| $\mathbf{Z}_{k\cdot}$ (all $J$ draws for surface $k$) | `"Z"`, mode, $\rho_X$, nb, $\rho$, $\gamma$, regime, $k$, $d$ |
+| $\boldsymbol{\varepsilon}$ (all 250 columns for a block) | `"eps"`, mode, $\rho_X$, nb, $\rho$, $\gamma$, regime |
+
+Consequences:
+
+- Each draw depends only on its key, so results are identical sequentially, in parallel,
+  and in any order, and do not change if scenarios are added, removed, or reordered.
+- $\mathbf{X}_k$ is shared by every block of config $c$.
+- **Common random numbers:** within a block, all 8 designs share $\boldsymbol{\varepsilon}$
+  and $\mathbf{X}_k$; each $\tau$ reuses the same $\mathbf{Z}$ and $\boldsymbol{\varepsilon}$;
+  the oracle and non-oracle fits use the same $\mathbf{Y}$.
+- $\mathbf{Z}$ and $\boldsymbol{\varepsilon}$ are independent across blocks, but blocks
+  within a config share the $\mathbf{X}$ surfaces.
+
+## Estimand and Dependence Structure
+
+For scenario $s$, the target is performance **averaged over incidence surfaces**:
+
+$$\text{MSE}(s) = \mathbb{E}_{\mathbf{X}}\, \mathbb{E}_{\mathbf{Z} \mid \mathbf{X}}\, \mathbb{E}_{\boldsymbol{\varepsilon}}\left[(\hat{\tau} - \tau)^2\right],$$
+
+and likewise for bias, coverage and power. $\mathbf{X}$ is drawn from the config's
+generator, $\mathbf{Z}$ from the design given $\mathbf{X}$, and
+$\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_N)$.
+
+**Within a scenario:** $K = 10$ independent surfaces; given $\mathbf{X}_k$, $J = 25$
+independent $(\mathbf{Z}_{kj}, \boldsymbol{\varepsilon}_{kj})$ pairs. The surface is the
+primary sampling unit, so Monte Carlo SEs are computed from the $K = 10$ surface-level
+means (Section 8.8), not from 250 fits treated as independent.
+
+**Across scenarios:**
+
+- **Designs within a block** are paired through common $\boldsymbol{\varepsilon}$ and
+  $\mathbf{X}_k$ (a within-block comparison removes that shared noise).
+- **$\tau$ levels** share $\mathbf{Z}$ and $\boldsymbol{\varepsilon}$. Per-$\tau$ Friedman
+  tests are therefore not independent confirmations of each other.
+- **Blocks within a config** share $\mathbf{X}_1, \ldots, \mathbf{X}_{10}$. A Friedman test
+  over blocks treats them as independent, which overstates the information about
+  surface-to-surface variation. The surface-level robustness check addresses this: for the
+  key pairwise claims it runs a paired test over 50 independent (config $\times$ $k$)
+  units, 5 configs $\times$ 10 surfaces, with the metric for each unit averaged over that
+  surface's blocks.
 
 ---
 
 # Evaluation Metrics
 
-For each scenario, let $\hat{\tau}_1, \ldots, \hat{\tau}_K$ denote the $K$ estimates
-of $\tau$ (excluding convergence failures).
+For each scenario and estimator, let $\hat{\tau}_1, \ldots, \hat{\tau}_n$ denote the
+estimates of $\tau$ from the $n$ valid fits (finite $\hat{\tau}$ and finite SE) among the
+$K \cdot J = 250$ fits, indexed by $f$, with Wald interval $[L_f, U_f]$ from Section 6.2.
 
 ## Bias
 
-$$\text{Bias} = \bar{\hat{\tau}} - \tau, \quad \text{where } \bar{\hat{\tau}} = \frac{1}{K}\sum_{k=1}^{K} \hat{\tau}_k$$
+$$\text{Bias} = \bar{\hat{\tau}} - \tau, \quad \text{where } \bar{\hat{\tau}} = \frac{1}{n}\sum_{f=1}^{n} \hat{\tau}_f$$
 
 ## Standard Deviation
 
-$$\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^{K} \left(\hat{\tau}_k - \bar{\hat{\tau}}\right)^2}$$
+$$\text{SD} = \sqrt{\frac{1}{n-1}\sum_{f=1}^{n} \left(\hat{\tau}_f - \bar{\hat{\tau}}\right)^2}$$
 
 ## Mean Squared Error
 
-$$\text{MSE} = \frac{1}{K}\sum_{k=1}^{K} \left(\hat{\tau}_k - \tau\right)^2 = \text{Bias}^2 + \text{Var}(\hat{\tau})$$
+$$\text{MSE} = \frac{1}{n}\sum_{f=1}^{n} \left(\hat{\tau}_f - \tau\right)^2 = \text{Bias}^2 + \text{Var}(\hat{\tau})$$
 
 MSE decomposes into squared bias plus variance, capturing both accuracy and precision.
 
 ## Coverage Probability
 
-$$\text{Coverage} = \frac{1}{K}\sum_{k=1}^{K} \mathbf{1}\left[\tau \in \left(\hat{\tau}_{k,L},\ \hat{\tau}_{k,U}\right)\right]$$
+$$\text{Coverage} = \frac{1}{n}\sum_{f=1}^{n} \mathbf{1}\left[L_f \leq \tau \leq U_f\right]$$
 
-where $(\hat{\tau}_{k,L}, \hat{\tau}_{k,U})$ is the 95% confidence interval for the $k$-th
+where $[L_f, U_f] = \hat{\tau}_f \mp 1.96 \cdot \text{SE}_f$ is the 95% confidence interval for the $f$-th
 estimate. Nominal coverage is 0.95; under- or over-coverage indicates CI miscalibration.
+
+## Power
+
+$$\text{Power} = \frac{1}{n}\sum_{f=1}^{n} \mathbf{1}\left[L_f > 0\right]$$
+
+the proportion of fits that reject $H_0: \tau = 0$. Power is one-sided (the interval lies
+entirely above zero), as in the pre-revision runs.
 
 ## Convergence Failure Rate
 
-$$\text{Fail Rate} = 1 - \frac{|\{\text{valid estimates}\}|}{K_{\text{total}}}$$
+$$\text{Fail Rate} = 1 - \frac{n}{K \cdot J}, \qquad \text{N\_Valid\_Est} = n$$
 
-This captures the proportion of iterations where the MLE optimizer failed to converge
-(typically due to perfect collinearity between $\mathbf{Z}$ and $\text{Spill}$).
+This captures the proportion of fits with a non-finite $\hat{\tau}$ or SE (an engine
+error, or an information matrix that cannot be inverted). Collinearity between
+$\mathbf{Z}$ and $\text{Spill}$ does **not** produce a failure: the aliased column is
+dropped and the fit is kept and flagged (Section 8.7).
+
+## Aliasing and Warning Flags
+
+Each scenario row records:
+
+- `N_Aliased`: the number of fits where the engine warned "Aliased variables found".
+- `N_Warn`: the number of all other warnings (every message is written to the warning log).
+- `Z_WZ_rank_deficient`: TRUE if $\text{rank}([\mathbf{1}, \mathbf{Z}, \mathbf{W}\mathbf{Z}]) < 3$
+  for any $\mathbf{Z}$ draw of the scenario. It is recorded in both estimator files; the
+  non-oracle model has no Spill column to alias, but its Checkerboard $\times$ rook
+  estimates share the same cause ($\tau$ is not identified apart from $\gamma$).
+
+Aliased estimates are **kept** and flagged in exhibits. Besides Checkerboard $\times$ rook
+(every fit; Section 5), Isolation Buffer $\times$ rook can occasionally draw the exact
+checkerboard: a maximal independent set that equals one colour class of the bipartite rook
+grid. In the full run that happened in 4 of its 40,000 rook draws (4 blocks $\times$ 5
+$\tau$ = 20 scenarios, 1 aliased fit each). An oracle fit is aliased exactly when its draw
+is rank-deficient.
+
+## Monte Carlo Standard Errors
+
+Monte Carlo SEs are computed at the surface level (Section 7.6). For each metric $m$
+(bias, MSE, coverage, power), compute $m_k$ on surface $k$'s valid fits, $k = 1, \ldots, K$;
+then
+
+$$\text{SE}(m) = \frac{\text{sd}(m_1, \ldots, m_K)}{\sqrt{K}}, \qquad m \pm t_{0.975,\,K-1} \cdot \text{SE}(m) \quad (t_9 \text{ for } K = 10).$$
+
+The SE is taken over the surfaces with at least one valid fit (`N_Surfaces`). Design
+differences are paired at the surface level: the SE of a difference is that of
+$(m_{d,k} - m_{d',k})$ over $k$. The per-surface metrics are saved in the surface-level
+results file (one row per scenario and surface).
 
 ---
 
@@ -510,15 +713,17 @@ This captures the proportion of iterations where the MLE optimizer failed to con
 | Incidence mode | --- | --- | iid, spatial, poisson | Yes |
 | Incidence spatial corr. | $\rho_X$ | --- | 0 (iid), 0.20, 0.50 | Yes |
 | Base rate (Poisson) | $\mu_0$ | 35/100,000 | --- | Yes |
-| Cluster population | $P_0$ | 1,000 | --- | Yes |
-| Population mode | --- | equal | equal, heterogeneous | Yes |
-| Design resamples (MLE) | $R_d$ | 25 | --- | Yes |
-| Outcome resamples (MLE) | $R_o$ | 10 | --- | Yes |
-| Design resamples (DIM) | $R_d$ | 100 | --- | Yes |
-| Outcome resamples (DIM) | $R_o$ | 1,000 | --- | Yes |
+| Cluster population | $P_0$ | 100,000 | --- | Yes |
+| Population mode | --- | equal | equal (heterogeneous available, not used) | Yes |
+| Incidence surfaces per config (MLE) | $K$ | 10 | --- | Yes |
+| Design draws per surface (MLE) | $J$ | 25 | --- | Yes |
+| Fits per scenario (MLE) | $K \cdot J$ | 250 | --- | Derived |
+| Design resamples (DIM, pre-revision) | $R_d$ | 25 | --- | Yes |
+| Outcome resamples (DIM, pre-revision) | $R_o$ | 100 | --- | Yes |
 | Design IDs | --- | {1,2,3,4,5,6,7,8} | --- | Yes |
-| Oracle spillover toggle | --- | TRUE | TRUE, FALSE | Yes |
-| Estimation mode | --- | MLE | MLE, DIM | Yes |
+| Estimators | --- | oracle (primary) | oracle, non-oracle (both fit to the same $\mathbf{Y}$) | --- |
+| ML engine | --- | `fit_sar_lag()` | `fit_sar_lag()`, `lagsarlm` (1% cross-check) | Yes |
+| Estimation mode | --- | MLE | MLE (DIM pre-revision only) | Yes |
 
 All parameters are configurable to allow investigators to apply these findings to their
 own study contexts, even when some parameters (e.g., spillover magnitude) would not be

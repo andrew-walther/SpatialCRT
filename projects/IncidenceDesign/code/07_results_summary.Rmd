@@ -73,16 +73,20 @@ dim_results <- tryCatch(
   }
 )
 
-mle_results <- tryCatch(
-  load_latest_results(results_dir, estimation_mode = "MLE_tau_sweep"),
-  error = function(e) {
-    message("MLE tau-sweep results not found, falling back to MLE_combined: ", e$message)
-    tryCatch(
-      load_latest_results(results_dir, estimation_mode = "MLE_combined"),
-      error = function(e2) { message("MLE combined not found either: ", e2$message); NULL }
-    )
-  }
-)
+# DIM is a pre-revision (March 2026) naive baseline: old DGP, 6 designs, and the
+# old numbering, in which "Design 7" was Balanced Quartiles (renumbered to Design 6
+# on 2026-03-22; current Design 7 is Balanced Halves). Relabel so every DIM exhibit
+# and the DIM-vs-MLE join use the current numbering.
+if (!is.null(dim_results)) {
+  stopifnot(!"Design 6" %in% dim_results$Design)
+  dim_results$Design[dim_results$Design == "Design 7"] <- "Design 6"
+}
+
+# Oracle tau-sweep results from the 2026-09 revised simulation. No fallback: if the
+# file is missing the render must fail rather than silently load archived results.
+# ("MLE_tau_sweep" does not match the non-oracle "MLEnonoracle_tau_sweep" files.)
+mle_results <- load_latest_results(results_dir, estimation_mode = "MLE_tau_sweep")
+stopifnot(all(mle_results$Estimator == "oracle"))
 
 # For tau-sweep results: filter to primary scenario (tau=1.0) before splitting configs.
 # Existing plots/tables are not tau-aware; filtering ensures they summarize the primary
@@ -117,8 +121,12 @@ and spatially structured. The central research question is:
 The Poisson incidence mode uses an SUD base rate of 35 per 100,000 (Mirzaei et al.),
 consistent with county-level analyses by Gan et al. and Watson et al.
 
-The study compares two estimation methods — Difference in Means (DIM) and Maximum
-Likelihood Estimation via a spatial autoregressive model (MLE). The primary MLE results
+The primary estimator is Maximum Likelihood Estimation via a spatial autoregressive
+model (MLE), fit to the 2026-09 revised simulation. Difference in Means (DIM) appears
+only as a naive baseline, and its results are **pre-revision** (March 2026 run: old
+data-generating process, 6 designs), so DIM and MLE numbers are not like-for-like.
+Queen contiguity is the primary neighbor structure; rook is a sensitivity analysis.
+The primary MLE results
 use the $\tau = 1.0$ scenario (2,560 parameter scenarios); a tau sensitivity analysis
 across $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ (12,800 total scenarios) is presented
 in Section \ref{sec:tau-sensitivity}.
@@ -195,36 +203,40 @@ Two configs: $\rho_X \in \{0.20, 0.50\}$.
 1. Spatially correlated log-rates:
    $\log \lambda_i^* = \mu_0 + [(\mathbf{I} - \rho_X \mathbf{W})^{-1} \mathbf{u}]_i$
 2. Poisson counts: $C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)$
-   where $P_i = 1{,}000$ (equal population per cluster)
+   where $P_i = 100{,}000$ (equal population per cluster; $\lambda_i^* P_i \approx 35$ expected deaths)
 3. Observed rates: $R_i = C_i / P_i$
 4. Rank-normalized: $X_i = (\text{rank}(R_i) - 0.5) / N$
 
 Base rate $\mu_0 = \log(35/100{,}000)$ mimics SUD incidence.
 Two configs: $\rho_X \in \{0.20, 0.50\}$.
 
-**Critical design invariant:** Incidence is generated **once per (mode, $\rho_X$)
-configuration** and held fixed across all ($\rho$, $\gamma$, nb\_type) scenarios.
-This reflects the realistic constraint that a researcher observes historical incidence
-once before designing the trial; spatial model parameters affect the outcome DGP,
-not the incidence itself.
+**Critical design invariant:** Incidence surfaces $\mathbf{X}_1, \ldots, \mathbf{X}_{10}$
+are generated **once per (mode, $\rho_X$) configuration** and shared by all
+($\rho$, $\gamma$, nb\_type, spillover type) scenarios of that configuration; spatial
+model parameters affect the outcome DGP, not the incidence itself.
+**Matched surfaces:** for each surface $k$, treatment is assigned from $\mathbf{X}_k$,
+and the outcome and the analysis use the same $\mathbf{X}_k$. Reported metrics are
+therefore averages over incidence surfaces.
 
 ## Treatment Assignment Designs
 
-Six assignment strategies are evaluated, representing qualitatively distinct approaches
-to allocating approximately 50\% of clusters to treatment:
+Eight assignment strategies are evaluated, representing qualitatively distinct approaches
+to allocating clusters to treatment (all treat exactly 50 of 100 except Isolation Buffer):
 
 | ID | Name | Deterministic? | Key Feature |
 |----|------|:-:|-------------|
 | 1 | Checkerboard | Yes | Alternating grid; maximizes spatial separation |
-| 2 | High Incidence Focus | Yes | Treats top-50\% incidence clusters |
-| 3 | Saturation Quadrants | No | Random saturation level per quadrant (0.2--0.8) |
-| 4 | Isolation Buffer | No | Greedy assignment; no adjacent treated clusters |
-| 5 | 2$\times$2 Blocking | No | 1:1 randomization within 2$\times$2 spatial blocks |
-| 7 | Balanced Quartiles | No | Stratified by incidence quartile, balanced within strata |
+| 2 | High Incidence Focus | No | Treats the top-50 incidence clusters (random tie-breaking) |
+| 3 | Saturation Quadrants | No | Random permutation of saturations {0.2, 0.4, 0.6, 0.8} over quadrants |
+| 4 | Isolation Buffer | No | Greedy random maximal independent set; no adjacent treated clusters (mean treated: rook 38.2, queen 21.4) |
+| 5 | 2x2 Blocking | No | 2 of 4 treated within each 2x2 spatial block |
+| 6 | Balanced Quartiles | No | Stratified by incidence quartile; exactly 50 treated |
+| 7 | Balanced Halves | No | Median split; 25 treated per half |
+| 8 | Incidence-Guided Saturation Quadrants | No | Quadrant saturations {0.8, 0.6, 0.4, 0.2} by rank of quadrant mean incidence |
 
-Designs 1 and 2 are **deterministic** given the incidence vector: they produce the
-same assignment on every resample. The simulation detects this and runs each once,
-replicating the result across all design resamples (saving $\sim$25x compute).
+Ties in incidence are broken at random, freshly for every design draw. Checkerboard is
+the only **deterministic** design: its assignment is identical on every draw, but each
+fit still receives its own outcome noise.
 
 ## Estimation Methods
 
@@ -236,11 +248,16 @@ $$\widehat{\text{Var}}(\hat{\tau}) = \frac{s_1^2}{n_1} + \frac{s_0^2}{n_0}$$
 
 **Maximum Likelihood (MLE via SAR):**
 
-Fits `lagsarlm(Y ~ Z + Spill + X, listw = W)` from the `spatialreg` package,
-simultaneously estimating $\rho$, $\tau$, and regression coefficients. The true
-spillover covariate $\text{Spill}(\mathbf{Z})$ is included as an **oracle regressor**
-(i.e., the researcher is assumed to know the true spillover structure). CIs are
-derived from the asymptotic covariance matrix.
+Fits the spatial lag model $Y \sim Z + \text{Spill} + X$ by maximum likelihood with
+`fit_sar_lag()` (`04_estimation.R`), which matches `spatialreg::lagsarlm(method = "eigen")`
+to about $10^{-7}$, simultaneously estimating $\rho$, $\tau$, and regression coefficients.
+The true spillover covariate $\text{Spill}(\mathbf{Z})$ is included as an **oracle
+regressor** (i.e., the researcher is assumed to know the true spillover structure).
+95\% Wald CIs use the ML standard error. A non-oracle fit ($Y \sim Z + X$) was run as a
+sensitivity analysis; it is not shown in this report.
+Under rook contiguity, Checkerboard has $W\mathbf{Z} = \mathbf{1} - \mathbf{Z}$, so the
+oracle Spill column is aliased and $\tau$ is not identified; those estimates are kept
+but flagged.
 
 ---
 
@@ -284,35 +301,49 @@ kable(param_df, booktabs = TRUE, linesep = "",
 
 ## Resampling Structure
 
-For each scenario, the simulation draws:
+For each MLE scenario, the simulation uses $K = 10$ incidence surfaces and $J = 25$
+design draws per surface; every one of the $K \cdot J = 250$ fits has its own outcome
+noise column. The DIM baseline (pre-revision) used a different scheme:
 
-| Mode | Design resamples ($R_d$) | Outcome resamples ($R_o$) | Iterations / scenario |
+| Mode | Design draws | Outcome draws | Fits / scenario |
 |------|:---:|:---:|:---:|
-| DIM | 25 | 100 | 2,500 |
-| MLE | 25 | 10 | 250 |
+| DIM (pre-revision) | 25 | 100 | 2,500 |
+| MLE | 25 per surface | 10 surfaces | 250 |
 
 ## Evaluation Metrics
 
-For each scenario, across $K$ total iterations (design × outcome resamples):
+For each scenario, across the $n$ valid fits $i = 1, \ldots, n$:
 
 $$\text{Bias} = \bar{\hat{\tau}} - \tau, \quad
-\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^K (\hat{\tau}_k - \bar{\hat{\tau}})^2}$$
+\text{SD} = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (\hat{\tau}_i - \bar{\hat{\tau}})^2}$$
 
-$$\text{MSE} = \text{Bias}^2 + \text{SD}^2$$
+$$\text{MSE} = \frac{1}{n}\sum_{i=1}^n (\hat{\tau}_i - \tau)^2$$
 
-$$\text{Coverage} = \frac{1}{K}\sum_{k=1}^K \mathbf{1}\left[\tau \in (\hat{\tau}_{k,L}, \hat{\tau}_{k,U})\right]$$
+$$\text{Coverage} = \frac{1}{n}\sum_{i=1}^n \mathbf{1}\left[\tau \in (\hat{\tau}_{i,L}, \hat{\tau}_{i,U})\right]$$
 
-## Per-Scenario Reproducibility
+Monte Carlo standard errors are computed from the 10 surface-level means (the surface
+is the primary sampling unit), not from the 250 fits treated as independent.
 
-Each scenario uses a deterministic seed:
-$$\text{seed}_s = \texttt{digest::digest2int}(\texttt{paste}(\text{inc\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, d_{\text{id}}, \text{sep}=\text{"|}"))$$
+## Per-Draw Reproducibility
 
-This ensures results are reproducible and order-independent: adding or removing
-scenarios from the parameter sweep does not affect other scenarios' seeds.
+Every random draw is preceded by a key-based seed,
+$\texttt{set.seed}(\texttt{digest::digest2int}(\text{key}))$, where the key joins the
+fields that define the draw with "|": ("X", mode, $\rho_X$, $k$) for surface $k$;
+("Z", mode, $\rho_X$, nb\_type, $\rho$, $\gamma$, spill\_type, $k$, $d$) for design
+draws; ("eps", mode, $\rho_X$, nb\_type, $\rho$, $\gamma$, spill\_type) for outcome noise.
+
+Each draw depends only on its key, so results are identical in any run order. Within a
+block, all designs share the same noise and incidence surfaces, and every $\tau$ level
+reuses the same assignments and noise (common random numbers).
 
 ---
 
 # Results: Difference in Means (DIM)
+
+DIM is a naive baseline. All results in this section are **pre-revision** (March 2026
+run: old data-generating process, 6 designs, no Balanced Halves or Incidence-Guided
+Saturation Quadrants); design labels use the current numbering. Tables pool rook and
+queen.
 
 ```{r dim-check}
 dim_avail <- !is.null(dim_results) && nrow(dim_results) > 0
@@ -344,7 +375,7 @@ dim_stats_disp <- data.frame(
   Max    = c(dim_summary$Bias_max, dim_summary$MSE_max, dim_summary$Cov_max)
 )
 kable(dim_stats_disp, booktabs = TRUE, linesep = "", digits = 3,
-      caption = paste0("DIM: Summary statistics across all ",
+      caption = paste0("DIM (pre-revision): Summary statistics across all ",
                        dim_summary$N_scenarios, " scenarios")) %>%
   kable_styling(latex_options = c("striped", "hold_position"), font_size = 10)
 ```
@@ -365,14 +396,14 @@ dim_by_design <- dim_results %>%
 
 kable(dim_by_design, booktabs = TRUE, linesep = "",
       col.names = c("Design", "Mean Bias", "Median MSE", "Mean MSE", "Mean Coverage"),
-      caption = "DIM: Design performance averaged across all scenarios and incidence modes") %>%
+      caption = "DIM (pre-revision): Design performance averaged across all scenarios and incidence modes") %>%
   kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
   row_spec(1, bold = TRUE)
 ```
 
 ## DIM: MSE by Design and Neighbor Type
 
-```{r dim-mse-boxplot, eval=dim_avail, fig.cap="DIM: Distribution of MSE by design, faceted by spatial contiguity structure. Boxes sorted by median MSE within each panel."}
+```{r dim-mse-boxplot, eval=dim_avail, fig.cap="DIM (pre-revision): Distribution of MSE by design, faceted by spatial contiguity structure. Boxes sorted by median MSE within each panel."}
 # Show the iid Uniform config as representative
 if ("iid Uniform" %in% names(dim_cfgs)) {
   print(plot_mse_by_neighbor(dim_cfgs[["iid Uniform"]], "iid Uniform"))
@@ -383,7 +414,7 @@ if ("iid Uniform" %in% names(dim_cfgs)) {
 
 ## DIM: MSE Heatmap (Rho x Design)
 
-```{r dim-mse-heatmap, eval=dim_avail, fig.cap="DIM MSE heatmap for iid Uniform incidence. Cells show average MSE across spillover type and gamma, faceted by neighbor type."}
+```{r dim-mse-heatmap, eval=dim_avail, fig.cap="DIM (pre-revision) MSE heatmap for iid Uniform incidence. Cells show average MSE across spillover type and gamma, faceted by neighbor type."}
 if ("iid Uniform" %in% names(dim_cfgs)) {
   print(plot_mse_heatmap(dim_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (length(dim_cfgs) > 0) {
@@ -397,7 +428,7 @@ if ("iid Uniform" %in% names(dim_cfgs)) {
 if ("iid Uniform" %in% names(dim_cfgs)) {
   invisible(capture.output(rank_tbl <- table_design_ranks(dim_cfgs[["iid Uniform"]], "iid Uniform")))
   kable(as.data.frame(rank_tbl), booktabs = TRUE, linesep = "", digits = 1,
-        caption = "DIM: Design rank frequency (\\%) for iid Uniform incidence. Each cell = \\% of scenarios where design achieved that rank (Rank 1 = lowest MSE).") %>%
+        caption = "DIM (pre-revision): Design rank frequency (\\%) for iid Uniform incidence. Each cell = \\% of scenarios where design achieved that rank (Rank 1 = lowest MSE).") %>%
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
 }
 ```
@@ -408,14 +439,14 @@ if ("iid Uniform" %in% names(dim_cfgs)) {
 if ("iid Uniform" %in% names(dim_cfgs)) {
   invisible(capture.output(rob_tbl <- table_robustness(dim_cfgs[["iid Uniform"]], "iid Uniform")))
   kable(as.data.frame(rob_tbl), booktabs = TRUE, linesep = "", digits = 4,
-        caption = "DIM: Robustness profile for iid Uniform incidence. Sorted by Median MSE. IQR = interquartile range across scenarios.") %>%
+        caption = "DIM (pre-revision): Robustness profile for iid Uniform incidence. Sorted by Median MSE. IQR = interquartile range across scenarios.") %>%
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
 }
 ```
 
 ## DIM: Coverage by Design
 
-```{r dim-coverage, eval=dim_avail, fig.cap="DIM: Coverage probability distribution by design across all scenarios. Red dashed line = nominal 95\\% target."}
+```{r dim-coverage, eval=dim_avail, fig.cap="DIM (pre-revision): Coverage probability distribution by design across all scenarios. Red dashed line = nominal 95\\% target."}
 if ("iid Uniform" %in% names(dim_cfgs)) {
   print(plot_coverage_by_design(dim_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (length(dim_cfgs) > 0) {
@@ -425,7 +456,7 @@ if ("iid Uniform" %in% names(dim_cfgs)) {
 
 ## DIM: Bias-Variance Decomposition
 
-```{r dim-biasvar, eval=dim_avail, fig.cap="DIM: Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence. Total bar height = MSE."}
+```{r dim-biasvar, eval=dim_avail, fig.cap="DIM (pre-revision): Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence. Total bar height = MSE."}
 if ("iid Uniform" %in% names(dim_cfgs)) {
   print(plot_bias_variance(dim_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (length(dim_cfgs) > 0) {
@@ -469,15 +500,16 @@ mle_stats_disp <- data.frame(
 )
 kable(mle_stats_disp, booktabs = TRUE, linesep = "", digits = 3, na = "—",
       caption = paste0("MLE: Summary statistics across all ",
-                       mle_summary$N_scenarios, " scenarios")) %>%
+                       mle_summary$N_scenarios, " tau = 1.0 scenarios, pooled over rook and queen and over incidence modes. The minimum coverage comes from Checkerboard under rook, where tau is not identified.")) %>%
   kable_styling(latex_options = c("striped", "hold_position"), font_size = 10)
 ```
 
 ## MLE Design Comparison by MSE
 
 ```{r mle-design-summary, eval=mle_avail, results='asis'}
+# Split by neighbor type (queen primary, rook sensitivity); never pool them here.
 mle_by_design <- mle_results_tau1 %>%
-  group_by(Design) %>%
+  group_by(Neighbor_Type, Design) %>%
   summarise(
     Mean_Bias     = round(mean(Bias, na.rm=TRUE), 3),
     Median_MSE    = round(median(MSE, na.rm=TRUE), 3),
@@ -486,19 +518,19 @@ mle_by_design <- mle_results_tau1 %>%
     Fail_Rate     = round(mean(Fail_Rate, na.rm=TRUE), 4),
     .groups       = "drop"
   ) %>%
-  arrange(Mean_MSE)
+  arrange(factor(Neighbor_Type, levels = c("queen", "rook")), Mean_MSE)
 
 kable(mle_by_design, booktabs = TRUE, linesep = "",
-      col.names = c("Design", "Mean Bias", "Median MSE", "Mean MSE",
+      col.names = c("Neighbors", "Design", "Mean Bias", "Median MSE", "Mean MSE",
                     "Mean Coverage", "Fail Rate"),
-      caption = "MLE: Design performance averaged across all scenarios and incidence modes") %>%
+      caption = "MLE: Design performance at tau = 1.0 by neighbor type (queen primary, rook sensitivity), averaged across incidence modes. Checkerboard under rook: tau not identified (WZ = 1 - Z); estimates kept but flagged.") %>%
   kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
   row_spec(1, bold = TRUE)
 ```
 
 ## MLE: MSE by Design and Neighbor Type
 
-```{r mle-mse-boxplot, eval=mle_avail, fig.cap="MLE: Distribution of MSE by design, faceted by spatial contiguity. Note: high-rho scenarios produce inflated MSE for some designs due to reduced iteration count (250 vs 2,500 for DIM)."}
+```{r mle-mse-boxplot, eval=mle_avail, fig.cap="MLE: Distribution of MSE by design at tau = 1.0 (iid Uniform incidence), faceted by spatial contiguity (queen primary, rook sensitivity). Checkerboard under rook: tau not identified; estimates kept but flagged."}
 if ("iid Uniform" %in% names(mle_cfgs)) {
   print(plot_mse_by_neighbor(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (length(mle_cfgs) > 0) {
@@ -508,7 +540,7 @@ if ("iid Uniform" %in% names(mle_cfgs)) {
 
 ## MLE: MSE Heatmap
 
-```{r mle-mse-heatmap, eval=mle_avail, fig.cap="MLE MSE heatmap for iid Uniform incidence. Elevated cells at rho = 0.50 reflect variance inflation with fewer iterations."}
+```{r mle-mse-heatmap, eval=mle_avail, fig.cap="MLE MSE heatmap for iid Uniform incidence at tau = 1.0, faceted by neighbor type. Cells show average MSE across spillover type and gamma."}
 if ("iid Uniform" %in% names(mle_cfgs)) {
   print(plot_mse_heatmap(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (length(mle_cfgs) > 0) {
@@ -520,9 +552,11 @@ if ("iid Uniform" %in% names(mle_cfgs)) {
 
 ```{r mle-ranks-iid, eval=mle_avail, results='asis'}
 if ("iid Uniform" %in% names(mle_cfgs)) {
-  invisible(capture.output(mle_rank_tbl <- table_design_ranks(mle_cfgs[["iid Uniform"]], "iid Uniform")))
+  # Queen only (primary); rook is not pooled into the headline rank table.
+  mle_iid_queen <- mle_cfgs[["iid Uniform"]] %>% filter(Neighbor_Type == "queen")
+  invisible(capture.output(mle_rank_tbl <- table_design_ranks(mle_iid_queen, "iid Uniform")))
   kable(as.data.frame(mle_rank_tbl), booktabs = TRUE, linesep = "", digits = 1,
-        caption = "MLE: Design rank frequency (\\%) for iid Uniform incidence.") %>%
+        caption = "MLE: Design rank frequency (\\%) for iid Uniform incidence, queen contiguity, tau = 1.0.") %>%
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
 }
 ```
@@ -531,16 +565,17 @@ if ("iid Uniform" %in% names(mle_cfgs)) {
 
 ```{r mle-robustness-iid, eval=mle_avail, results='asis'}
 if ("iid Uniform" %in% names(mle_cfgs)) {
-  invisible(capture.output(mle_rob_tbl <- table_robustness(mle_cfgs[["iid Uniform"]], "iid Uniform")))
+  mle_iid_queen <- mle_cfgs[["iid Uniform"]] %>% filter(Neighbor_Type == "queen")
+  invisible(capture.output(mle_rob_tbl <- table_robustness(mle_iid_queen, "iid Uniform")))
   kable(as.data.frame(mle_rob_tbl), booktabs = TRUE, linesep = "", digits = 4,
-        caption = "MLE: Robustness profile for iid Uniform incidence.") %>%
+        caption = "MLE: Robustness profile for iid Uniform incidence, queen contiguity, tau = 1.0.") %>%
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
 }
 ```
 
 ## MLE: Coverage by Design
 
-```{r mle-coverage, eval=mle_avail, fig.cap="MLE: Coverage probability distribution by design. MLE coverage is substantially higher than DIM due to proper spatial autocorrelation modeling. Red dashed line = 95\\%."}
+```{r mle-coverage, eval=mle_avail, fig.cap="MLE: Coverage probability distribution by design (iid Uniform incidence, tau = 1.0), faceted by neighbor type. Coverage is near-nominal for every design except Checkerboard under rook, where tau is not identified. Red dashed line = 95\\%."}
 if ("iid Uniform" %in% names(mle_cfgs)) {
   print(plot_coverage_by_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (length(mle_cfgs) > 0) {
@@ -567,20 +602,22 @@ mle_agg <- mle_results_tau1 %>%
             MLE_Cov = round(mean(Coverage, na.rm=TRUE), 3),
             .groups = "drop")
 
-compare_tbl <- left_join(dim_agg, mle_agg, by = "Design") %>%
-  arrange(DIM_MSE)
+# Rows = all 8 MLE designs; DIM (6 designs) is joined on, so Design 7 and 8 DIM cells
+# are NA by construction.
+compare_tbl <- left_join(mle_agg, dim_agg, by = "Design") %>%
+  select(Design, DIM_MSE, DIM_Cov, MLE_MSE, MLE_Cov) %>%
+  arrange(MLE_MSE)
 
 kable(compare_tbl, booktabs = TRUE, linesep = "",
       col.names = c("Design", "DIM MSE", "DIM Coverage", "MLE MSE", "MLE Coverage"),
-      caption = "DIM vs. MLE: Average MSE and coverage by design (averaged across all scenarios and incidence modes). Results are always reported separately by incidence mode in subgroup analyses.") %>%
+      caption = "DIM vs. MLE: Average MSE and coverage by design, pooled over rook and queen and over incidence modes (MLE at tau = 1.0). DIM is the pre-revision baseline (old data-generating process, 6 designs), so the two columns are not like-for-like; Design 7 (Balanced Halves) and Design 8 (Incidence-Guided Saturation Quadrants) were not in the DIM run and are NA by construction. Pooled MLE values for Checkerboard mix queen with rook, where tau is not identified.") %>%
   kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
-  add_header_above(c(" " = 1, "DIM" = 2, "MLE" = 2)) %>%
-  row_spec(1, bold = TRUE)
+  add_header_above(c(" " = 1, "DIM (pre-revision)" = 2, "MLE" = 2))
 ```
 
 ## Coverage Comparison by Estimator
 
-```{r coverage-compare-plot, eval=dim_avail && mle_avail, fig.cap="Coverage comparison: DIM (left) vs MLE (right) for the iid Uniform incidence configuration. MLE achieves near-nominal coverage for all designs except Checkerboard; DIM coverage is consistently below 0.95."}
+```{r coverage-compare-plot, eval=dim_avail && mle_avail, fig.cap="Coverage comparison: DIM (top, pre-revision baseline) vs MLE (bottom, tau = 1.0) for the iid Uniform incidence configuration. MLE achieves near-nominal coverage for every design except Checkerboard under rook; DIM coverage is mostly below 0.95."}
 if ("iid Uniform" %in% names(dim_cfgs) && "iid Uniform" %in% names(mle_cfgs)) {
   p_dim <- plot_coverage_by_design(dim_cfgs[["iid Uniform"]], "DIM | iid Uniform") +
     theme(legend.position = "none")
@@ -595,24 +632,39 @@ if ("iid Uniform" %in% names(dim_cfgs) && "iid Uniform" %in% names(mle_cfgs)) {
 ## Key Observations
 
 ```{r compare-obs, results='asis'}
+# All numbers below are computed from the loaded results (MLE: tau = 1.0 slice).
+obs_by <- mle_results_tau1 %>%
+  group_by(Neighbor_Type, Design) %>%
+  summarise(MSE = mean(MSE), Var = mean(SD^2), Bias = mean(Bias),
+            Cov = mean(Coverage), .groups = "drop")
+q_obs  <- obs_by %>% filter(Neighbor_Type == "queen") %>% arrange(MSE)
+cb_q   <- obs_by %>% filter(Neighbor_Type == "queen", Design == "Design 1")
+cb_r   <- obs_by %>% filter(Neighbor_Type == "rook",  Design == "Design 1")
+cov_ok <- obs_by %>% filter(!(Neighbor_Type == "rook" & Design == "Design 1"))
+
 cat("\\begin{itemize}\n")
-cat("  \\item \\textbf{Coverage:} MLE achieves near-nominal 95\\% coverage for Designs 2--7,\n")
-cat("    dramatically outperforming DIM (mean \\~0.72 across all scenarios). This reflects MLE's\n")
-cat("    explicit modeling of spatial autocorrelation $\\rho$, which inflates DIM standard errors.\n\n")
-cat("  \\item \\textbf{MSE:} DIM median MSE is lower than MLE for most designs because DIM uses\n")
-cat("    2,500 iterations vs. 250 for MLE. MLE's maximum MSE (3.910) exceeds DIM's (0.799),\n")
-cat("    occurring in high-$\\rho$ scenarios where spatial lag model variance inflates\n")
-cat("    with fewer iterations.\n\n")
-cat("  \\item \\textbf{Design 1 (Checkerboard):} Consistently the worst design under both\n")
-cat("    estimators. Despite maximizing spatial separation, alternating treatment assignment\n")
-cat("    creates a strong correlation between treatment and spatially-structured incidence,\n")
-cat("    inducing systematic confounding.\n\n")
-cat("  \\item \\textbf{Design 7 (Balanced Quartiles):} Top DIM performer. Stratifying by incidence\n")
-cat("    quartile and randomizing within strata controls confounding from $X$ directly,\n")
-cat("    yielding low MSE and the best DIM coverage.\n\n")
-cat("  \\item \\textbf{Design 3 (Saturation Quadrants):} Top MLE performer. Random saturation\n")
-cat("    per quadrant introduces sufficient variation in spatial treatment patterns,\n")
-cat("    allowing the spatial autoregressive model to cleanly separate $\\tau$ from $\\rho$.\n")
+cat(sprintf("  \\item \\textbf{Coverage does not separate the designs.} MLE coverage averages %.3f--%.3f\n",
+            min(cov_ok$Cov), max(cov_ok$Cov)))
+cat("    for every design and neighbor type except Checkerboard under rook, i.e.\\ near-nominal\n")
+cat("    (a finite-sample Wald shortfall of about one point). MSE is what separates the designs.\n\n")
+if (!is.null(dim_results)) {
+  cat(sprintf("  \\item \\textbf{DIM baseline (pre-revision):} mean coverage %.2f across its %d scenarios.\n",
+              mean(dim_results$Coverage, na.rm = TRUE), nrow(dim_results)))
+  cat("    It was run under the old data-generating process, so it is not a like-for-like\n")
+  cat("    comparison with the MLE results.\n\n")
+}
+cat(sprintf("  \\item \\textbf{Checkerboard (Design 1):} highest MSE under queen (%.3f at $\\tau = 1$),\n",
+            cb_q$MSE))
+cat(sprintf("    with mean bias %.3f, so almost all of it is variance: the oracle model separates $\\tau$ from the spillover\n",
+            cb_q$Bias))
+cat("    term only weakly under a checkerboard. Under rook, $W\\mathbf{Z} = \\mathbf{1} - \\mathbf{Z}$,\n")
+cat(sprintf("    so $\\tau$ is not identified: bias %.3f (approximately $-\\gamma$), coverage %.3f.\n",
+            cb_r$Bias, cb_r$Cov))
+cat("    These estimates are kept but flagged.\n\n")
+cat(sprintf("  \\item \\textbf{Lowest MSE (queen):} %s (%.3f) and %s (%.3f), which are statistically\n",
+            sub("^Design [0-9]: ", "", get_design_names(sub("Design ", "", q_obs$Design[1]))), q_obs$MSE[1],
+            sub("^Design [0-9]: ", "", get_design_names(sub("Design ", "", q_obs$Design[2]))), q_obs$MSE[2]))
+cat("    indistinguishable (eight-design comparisons in \\texttt{results/eight\\_design\\_supplementary/}).\n")
 cat("\\end{itemize}\n")
 ```
 
@@ -626,14 +678,14 @@ cat("\\end{itemize}\n")
 if ("iid Uniform" %in% names(dim_cfgs)) {
   invisible(capture.output(sens_tbl <- table_sensitivity(dim_cfgs[["iid Uniform"]], "iid Uniform")))
   kable(as.data.frame(sens_tbl), booktabs = TRUE, linesep = "", digits = 4,
-        caption = "DIM: Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence. Higher values indicate parameters where design choice matters more.") %>%
+        caption = "DIM (pre-revision): Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence. Higher values indicate parameters where design choice matters more.") %>%
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
 }
 ```
 
 ## Effect of Rho on Design Rankings (DIM)
 
-```{r dim-rho-effect, eval=dim_avail, fig.cap="DIM: Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels."}
+```{r dim-rho-effect, eval=dim_avail, fig.cap="DIM (pre-revision): Per-design MSE line plots across gamma levels, for iid Uniform incidence. Each panel shows one design; lines represent different rho levels."}
 if ("iid Uniform" %in% names(dim_cfgs)) {
   print(plot_mse_per_design(dim_cfgs[["iid Uniform"]], "iid Uniform"))
 }
@@ -653,7 +705,8 @@ print(plot_incidence_distributions(grid_dim = 10, n_resamples = 50))
 
 # Subgroup Results by Incidence Mode
 
-The following tables report DIM results separately for each incidence configuration.
+The following tables report DIM (pre-revision baseline) results separately for each
+incidence configuration, pooled over rook and queen.
 Results are **never aggregated across incidence modes**, as each represents a
 fundamentally different assumption about prior data.
 
@@ -668,7 +721,7 @@ for (cfg_nm in names(dim_cfgs)) {
   # Robustness table
   invisible(capture.output(rob <- table_robustness(cfg, cfg_nm)))
   tbl_out <- kable(as.data.frame(rob), booktabs = TRUE, linesep = "", digits = 4,
-                   caption = sprintf("DIM robustness profile: %s", cap_safe(cfg_nm))) %>%
+                   caption = sprintf("DIM (pre-revision) robustness profile: %s", cap_safe(cfg_nm))) %>%
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 9)
   print(tbl_out)
   cat("\n")
@@ -682,7 +735,9 @@ for (cfg_nm in names(dim_cfgs)) {
 The tau-sweep simulation (12,800 scenarios) swept the direct treatment effect $\tau$
 across $\{0.8, 1.0, 1.5, 2.0, 3.0\}$. The primary scenario is $\tau = 1.0$; all
 standard results above use this slice. This section examines whether design rankings
-and statistical power change across effect sizes.
+and statistical power change across effect sizes. Plots show iid Uniform incidence under
+queen contiguity (primary). All $\tau$ levels reuse the same assignments and noise
+(common random numbers), so agreement across $\tau$ is not independent confirmation.
 
 ```{r tau-sensitivity-check}
 tau_avail <- !is.null(mle_results) &&
@@ -690,29 +745,31 @@ tau_avail <- !is.null(mle_results) &&
              length(unique(mle_results$True_Tau)) > 1
 ```
 
-```{r tau-mse-plots, eval=tau_avail, fig.cap="MLE MSE by design across tau values. Rankings should be stable across effect sizes; D1 (Checkerboard) is consistently worst."}
+```{r tau-mse-plots, eval=tau_avail, fig.cap="MLE MSE by design across tau values (iid Uniform, queen). Checkerboard has the highest mean MSE at every tau."}
 tau_cfgs <- split_by_incidence_config(mle_results)
+# Queen only (primary); rook is a sensitivity analysis and is not pooled in here.
+tau_cfgs <- lapply(tau_cfgs, function(df) df[df$Neighbor_Type == "queen", ])
 if ("iid Uniform" %in% names(tau_cfgs)) {
   p <- plot_mse_vs_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
   if (!is.null(p)) print(p)
 }
 ```
 
-```{r tau-power-plots, eval=tau_avail, fig.cap="Statistical power P(reject H0: tau=0) by design across tau values. 80% power reference line shown. Designs with higher MSE require larger tau to achieve adequate power."}
+```{r tau-power-plots, eval=tau_avail, fig.cap="Statistical power P(reject H0: tau=0) by design across tau values (iid Uniform, queen). 80% power reference line shown. Designs with higher MSE require larger tau to achieve adequate power."}
 if ("iid Uniform" %in% names(tau_cfgs)) {
   p <- plot_power_curves(tau_cfgs[["iid Uniform"]], "iid Uniform")
   if (!is.null(p)) print(p)
 }
 ```
 
-```{r tau-coverage-plots, eval=tau_avail, fig.cap="MLE coverage by design across tau values. Nominal 95% reference line shown. Coverage should be near-nominal for all designs except D1."}
+```{r tau-coverage-plots, eval=tau_avail, fig.cap="MLE coverage by design across tau values (iid Uniform, queen). Nominal 95% reference line shown. Coverage is near-nominal for every design, including Checkerboard; under rook (not shown) Checkerboard is not identified."}
 if ("iid Uniform" %in% names(tau_cfgs)) {
   p <- plot_coverage_vs_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
   if (!is.null(p)) print(p)
 }
 ```
 
-```{r tau-rank-stability, eval=tau_avail, fig.cap="Design rank trajectories across tau values. Rank 1 = best MSE. Stable trajectories indicate robust design recommendations across effect sizes."}
+```{r tau-rank-stability, eval=tau_avail, fig.cap="Design rank trajectories across tau values (iid Uniform, queen). Rank 1 = best MSE. Stable trajectories indicate robust design recommendations across effect sizes."}
 if ("iid Uniform" %in% names(tau_cfgs)) {
   p <- plot_rank_trajectories_by_tau(tau_cfgs[["iid Uniform"]], "iid Uniform")
   if (!is.null(p)) print(p)
@@ -731,37 +788,61 @@ two contiguity structures, four spatial autocorrelation levels, four spillover m
 and two spillover types. The full tau-sweep covers 12,800 scenarios across
 $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
 
-**Key findings:**
+```{r concl-nums}
+# Numbers quoted in the findings below, computed from the loaded oracle results
+# at tau = 1.0, averaged over incidence modes within each neighbor type.
+cn <- mle_results_tau1 %>%
+  group_by(Neighbor_Type, Design) %>%
+  summarise(MSE = mean(MSE), Var = mean(SD^2), Bias = mean(Bias),
+            Cov = mean(Coverage), .groups = "drop")
+cmse <- function(nb, d) sprintf("%.3f", cn$MSE[cn$Neighbor_Type == nb & cn$Design == paste("Design", d)])
+ccov <- cn %>% filter(!(Neighbor_Type == "rook" & Design == "Design 1"))
+cb_q <- cn %>% filter(Neighbor_Type == "queen", Design == "Design 1")
+cb_r <- cn %>% filter(Neighbor_Type == "rook",  Design == "Design 1")
+dim_cov <- if (!is.null(dim_results)) sprintf("%.2f", mean(dim_results$Coverage, na.rm = TRUE)) else "NA"
+```
 
-1. **Estimation method dominates coverage.** MLE achieves near-nominal 95\% coverage
-   for Designs 2--7, while DIM systematically under-covers (mean 72\%). When spatial
-   autocorrelation is present, a properly-specified spatial model is essential for
-   valid inference.
+**Key findings** (MLE, $\tau = 1.0$; queen primary, rook sensitivity):
 
-2. **Design choice matters most under DIM.** Under MLE, coverage is uniformly high
-   across most designs. Under DIM, the gap between best (Design 7, ~82\%) and worst
-   (Design 1, ~45\%) designs is substantial. Researchers using simpler estimators
-   should prefer stratified designs.
+1. **Coverage is near-nominal and does not separate the designs.** Mean coverage is
+   `r sprintf("%.3f", min(ccov$Cov))`--`r sprintf("%.3f", max(ccov$Cov))` for every
+   design under both neighbor types, except Checkerboard under rook. The design
+   differences show up in MSE. The pre-revision DIM baseline under-covers (mean
+   `r dim_cov`), but it was run under the old data-generating process and is not a
+   like-for-like comparison.
 
-3. **Checkerboard is the consistently worst design.** Design 1's perfect spatial
-   alternation creates systematic confounding when incidence is spatially structured,
-   inflating bias and degrading coverage under both estimators.
+2. **Saturation Quadrants and Incidence-Guided Saturation Quadrants have the lowest MSE**
+   (queen: `r cmse("queen", 3)` and `r cmse("queen", 8)`; rook: `r cmse("rook", 3)` and
+   `r cmse("rook", 8)`). The two are statistically indistinguishable (queen Nemenyi
+   p = 0.985, Holm-adjusted Wilcoxon p = 0.413; eight-design comparisons in
+   `results/eight_design_supplementary/`).
 
-4. **High Incidence Focus and Balanced Quartiles are robustly competitive.** Designs 2
-   and 7 rank consistently well across estimator, incidence mode, and parameter regimes.
-   Design 7's incidence-quartile stratification directly addresses confounding from $X$.
+3. **Balanced Halves and Balanced Quartiles form the next tier** (queen: `r cmse("queen", 7)`
+   and `r cmse("queen", 6)`), and are also statistically indistinguishable (queen Nemenyi
+   p = 1.000, Wilcoxon p = 0.884). Isolation Buffer (`r cmse("queen", 4)`),
+   High Incidence Focus (`r cmse("queen", 2)`) and 2x2 Blocking (`r cmse("queen", 5)`)
+   follow under queen; under rook, 2x2 Blocking (`r cmse("rook", 5)`) and Isolation
+   Buffer (`r cmse("rook", 4)`) are close and High Incidence Focus (`r cmse("rook", 2)`)
+   is higher.
 
-5. **Saturation Quadrants excels under MLE.** Design 3 achieves the lowest average MSE
-   under the oracle spatial model, likely because quadrant-level variation in treatment
-   saturation provides rich spatial contrast for estimating $\rho$ and $\tau$ jointly.
+4. **Checkerboard has the highest MSE.** Under queen its MSE is `r sprintf("%.3f", cb_q$MSE)`,
+   with mean bias `r sprintf("%.3f", cb_q$Bias)`, so almost all of it is variance. Under rook,
+   $W\mathbf{Z} = \mathbf{1} - \mathbf{Z}$ and $\tau$ is not identified (bias
+   `r sprintf("%.3f", cb_r$Bias)`, approximately $-\gamma$; coverage
+   `r sprintf("%.3f", cb_r$Cov)`); these estimates are kept but flagged.
+
+5. **The MSE ordering is the same at every $\tau$ under queen**
+   ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$), with the caveat that all $\tau$ levels share
+   the same assignments and noise.
 
 ## Limitations and Planned Extensions
 
-- **Oracle MLE:** The MLE model uses the true spillover covariate. Non-oracle
-  comparisons (`include_spill_covariate = FALSE`) remain as a planned extension.
-- **Iteration count asymmetry:** DIM uses 2,500 iterations vs. 250 for MLE.
-  MLE's apparent variance inflation at high-$\rho$ may partly reflect this imbalance.
-- **Equal populations:** Poisson mode uses $P_i = 1{,}000$ for all clusters.
+- **Oracle MLE:** The primary MLE model uses the true spillover covariate. A non-oracle
+  fit ($Y \sim Z + X$) was run as a sensitivity analysis
+  (`sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds`) but is not shown here.
+- **DIM baseline is pre-revision:** DIM (2,500 fits per scenario) was run under the old
+  data-generating process with 6 designs and was not re-run for the 2026-09 revision.
+- **Equal populations:** Poisson mode uses $P_i = 100{,}000$ for all clusters.
   Heterogeneous population sizes (log-normal) would more closely match NC county data.
 - **Grid sensitivity:** All results use $G = 10$ ($N = 100$). Sensitivity to
   $G = 8$ or $G = 15$ has not been evaluated.
@@ -788,30 +869,34 @@ $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$.
 ```{r file-inventory, results='asis'}
 files_df <- data.frame(
   File = c(
+    "sim_results_MLE_tau_sweep_combined_20260924_025509.rds",
+    "sim_results_MLE_tau_sweep_{iid,spatial,poisson}_20260924_025509.rds",
+    "sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds",
+    "surface_results_MLE_tau_sweep_20260924_025509.rds",
     "sim_results_DIM_combined_20260304_195321.rds",
-    "sim_results_MLE_tau_sweep_combined_20260408_191916.rds",
-    "sim_results_MLE_combined_20260322_151030.rds",
-    "sim_results_MLE_tau_sweep_{iid,spatial,poisson}_*.rds",
     "MLE_tau_sweep_design_recommendations.pdf",
     "MLE_tau_sweep_incidence_overview.pdf",
-    "MLE_tau_sweep_*.pdf (5 files, per incidence config)",
-    "MLE_tau_sweep_*_tau_sensitivity.pdf (5 files)",
+    "mle_per_config/MLE_tau_sweep_*.pdf (5 files, per incidence config)",
+    "mle_per_config/MLE_tau_sweep_*_tau_sensitivity.pdf (5 files)",
     "11_statistical_comparisons_report.{html,pdf}",
-    "00_mathematical_specification.html",
-    "07_results_summary.pdf"
+    "00_mathematical_specification.pdf",
+    "07_results_summary.pdf",
+    "archive/pre_revision_20260924/"
   ),
   Contents = c(
-    "DIM baseline: 1,920 scenarios (6-design sweep, archived)",
-    "PRIMARY: 12,800 MLE tau-sweep scenarios (tau in {0.8,1.0,1.5,2.0,3.0})",
-    "Archived MLE baseline: 2,560 scenarios at tau=1.0 (8 designs)",
-    "Per-incidence-mode MLE tau-sweep splits",
+    "PRIMARY: 12,800 oracle MLE tau-sweep scenarios (2026-09 revised simulation)",
+    "Per-incidence-mode splits of the oracle results",
+    "Non-oracle MLE (Y ~ Z + X) sensitivity analysis, 12,800 scenarios",
+    "One row per (scenario, surface); basis of the Monte Carlo SEs",
+    "DIM baseline: 1,920 scenarios (pre-revision DGP, 6-design sweep; its Design 7 is current Design 6)",
     "Design recommendation figures + tables (primary tau=1.0)",
     "Incidence heatmaps and distributions",
-    "Per-config 8-plot PDFs (primary tau=1.0 slice)",
+    "Per-config plot PDFs (primary tau=1.0 slice)",
     "Per-config tau sensitivity PDFs (MSE/power/coverage vs tau)",
     "Formal statistical comparisons (Friedman, Nemenyi, Wilcoxon)",
     "Mathematical theory document",
-    "This report"
+    "This report",
+    "Superseded pre-revision (March/April 2026) MLE results and reports"
   )
 )
 kable(files_df, booktabs = TRUE, linesep = "",
