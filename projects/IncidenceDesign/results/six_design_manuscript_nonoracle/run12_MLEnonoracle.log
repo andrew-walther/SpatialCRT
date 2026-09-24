@@ -1,0 +1,208 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: viridisLite
+Loading results from: sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds 
+6-design rows: 9600 (1600 blocks x 6 designs; 5 tau levels)
+======================================================================
+SIX-DESIGN STATISTICAL COMPARISONS (manuscript design set)
+Estimator:  non-oracle (Y ~ Z + X), sensitivity 
+Retained:  Checkerboard, High Incidence Focus, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Incidence-Guided Saturation Quadrants 
+Dropped:  Saturation Quadrants, Balanced Halves (redundant, see plan)
+Per-tau Friedman tests share Z and eps across tau (common random numbers):
+they are not independent confirmations of one another.
+======================================================================
+
+######## QUEEN (primary) ########
+--- True_Tau = 1.0 (960 rows, 160 blocks) ---
+Friedman chi-sq = 468.04, df = 5, p = <2e-16
+Average ranks (lower = better MSE):
+Incidence-Guided Saturation Quadrants                    Balanced Quartiles 
+                                2.231                                 2.344 
+                     Isolation Buffer                          Checkerboard 
+                                3.019                                 3.100 
+                         2x2 Blocking                  High Incidence Focus 
+                                4.306                                 6.000 
+
+Nemenyi critical difference (alpha=0.05) = 0.596
+13 of 15 pairs significantly different (Nemenyi)
+                                      2x2 Blocking Balanced Quartiles
+2x2 Blocking                                    NA             0.0000
+Balanced Quartiles                               0                 NA
+Checkerboard                                     0             0.0041
+High Incidence Focus                             0             0.0000
+Incidence-Guided Saturation Quadrants            0             0.9946
+Isolation Buffer                                 0             0.0158
+                                      Checkerboard High Incidence Focus
+2x2 Blocking                                0.0000                    0
+Balanced Quartiles                          0.0041                    0
+Checkerboard                                    NA                    0
+High Incidence Focus                        0.0000                   NA
+Incidence-Guided Saturation Quadrants       0.0005                    0
+Isolation Buffer                            0.9989                    0
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Quartiles                                                   0.9946
+Checkerboard                                                         0.0005
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0023
+                                      Isolation Buffer
+2x2 Blocking                                    0.0000
+Balanced Quartiles                              0.0158
+Checkerboard                                    0.9989
+High Incidence Focus                            0.0000
+Incidence-Guided Saturation Quadrants           0.0023
+Isolation Buffer                                    NA
+
+13 of 15 pairs significantly different (Wilcoxon, Holm-adjusted)
+
+Mean MSE / Coverage by design (tau=1.0):
+                                Design        MSE Coverage
+ Incidence-Guided Saturation Quadrants 0.08698668 0.810150
+                      Isolation Buffer 0.09106364 0.878550
+                    Balanced Quartiles 0.09778655 0.769875
+                          Checkerboard 0.10758171 0.740950
+                          2x2 Blocking 0.12101510 0.709425
+                  High Incidence Focus 0.21891720 0.895725
+
+--- Conditional test: stratify by True_Tau (full sweep) ---
+  True_Tau = 0.8: Friedman chi-sq = 460.92, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < Isolation Buffer < Checkerboard < 2x2 Blocking < High Incidence Focus
+  True_Tau = 1: Friedman chi-sq = 468.04, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < Isolation Buffer < Checkerboard < 2x2 Blocking < High Incidence Focus
+  True_Tau = 1.5: Friedman chi-sq = 468.70, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < Isolation Buffer < Checkerboard < 2x2 Blocking < High Incidence Focus
+  True_Tau = 2: Friedman chi-sq = 471.71, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < Isolation Buffer < Checkerboard < 2x2 Blocking < High Incidence Focus
+  True_Tau = 3: Friedman chi-sq = 472.81, p = <2e-16, n_blocks = 160; rank order: Balanced Quartiles < Incidence-Guided Saturation Quadrants < Isolation Buffer < Checkerboard < 2x2 Blocking < High Incidence Focus
+
+######## ROOK (sensitivity / Chapter 2 continuity) ########
+Rook: tau not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged. 
+--- True_Tau = 1.0 (960 rows, 160 blocks) ---
+Friedman chi-sq = 745.40, df = 5, p = <2e-16
+Average ranks (lower = better MSE):
+Incidence-Guided Saturation Quadrants                    Balanced Quartiles 
+                                1.369                                 1.675 
+                         2x2 Blocking                      Isolation Buffer 
+                                3.006                                 4.338 
+                 High Incidence Focus                          Checkerboard 
+                                4.612                                 6.000 
+
+Nemenyi critical difference (alpha=0.05) = 0.596
+13 of 15 pairs significantly different (Nemenyi)
+                                      2x2 Blocking Balanced Quartiles
+2x2 Blocking                                    NA             0.0000
+Balanced Quartiles                               0                 NA
+Checkerboard                                     0             0.0000
+High Incidence Focus                             0             0.0000
+Incidence-Guided Saturation Quadrants            0             0.6873
+Isolation Buffer                                 0             0.0000
+                                      Checkerboard High Incidence Focus
+2x2 Blocking                                     0                0.000
+Balanced Quartiles                               0                0.000
+Checkerboard                                    NA                0.000
+High Incidence Focus                             0                   NA
+Incidence-Guided Saturation Quadrants            0                0.000
+Isolation Buffer                                 0                0.777
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Quartiles                                                   0.6873
+Checkerboard                                                         0.0000
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0000
+                                      Isolation Buffer
+2x2 Blocking                                     0.000
+Balanced Quartiles                               0.000
+Checkerboard                                     0.000
+High Incidence Focus                             0.777
+Incidence-Guided Saturation Quadrants            0.000
+Isolation Buffer                                    NA
+
+15 of 15 pairs significantly different (Wilcoxon, Holm-adjusted)
+
+Mean MSE / Coverage by design (tau=1.0):
+                                Design        MSE Coverage
+ Incidence-Guided Saturation Quadrants 0.08641664 0.810100
+                    Balanced Quartiles 0.09690030 0.772350
+                          2x2 Blocking 0.12766523 0.691225
+                      Isolation Buffer 0.21145462 0.512850
+                  High Incidence Focus 0.22312817 0.892400
+                          Checkerboard 0.47992058 0.149775
+
+--- Conditional test: stratify by True_Tau (full sweep) ---
+  True_Tau = 0.8: Friedman chi-sq = 744.46, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < 2x2 Blocking < Isolation Buffer < High Incidence Focus < Checkerboard
+  True_Tau = 1: Friedman chi-sq = 745.40, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < 2x2 Blocking < Isolation Buffer < High Incidence Focus < Checkerboard
+  True_Tau = 1.5: Friedman chi-sq = 737.87, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < 2x2 Blocking < Isolation Buffer < High Incidence Focus < Checkerboard
+  True_Tau = 2: Friedman chi-sq = 724.88, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < 2x2 Blocking < Isolation Buffer < High Incidence Focus < Checkerboard
+  True_Tau = 3: Friedman chi-sq = 680.90, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < 2x2 Blocking < Isolation Buffer < High Incidence Focus < Checkerboard
+
+######## POOLED over rook and queen (label as pooled wherever used) ########
+Rook: tau not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged. 
+--- True_Tau = 1.0 (1920 rows, 320 blocks) ---
+Friedman chi-sq = 871.60, df = 5, p = <2e-16
+Average ranks (lower = better MSE):
+Incidence-Guided Saturation Quadrants                    Balanced Quartiles 
+                                1.800                                 2.009 
+                         2x2 Blocking                      Isolation Buffer 
+                                3.656                                 3.678 
+                         Checkerboard                  High Incidence Focus 
+                                4.550                                 5.306 
+
+Nemenyi critical difference (alpha=0.05) = 0.421
+13 of 15 pairs significantly different (Nemenyi)
+                                      2x2 Blocking Balanced Quartiles
+2x2 Blocking                                    NA             0.0000
+Balanced Quartiles                               0                 NA
+Checkerboard                                     0             0.0000
+High Incidence Focus                             0             0.0000
+Incidence-Guided Saturation Quadrants            0             0.7176
+Isolation Buffer                                 1             0.0000
+                                      Checkerboard High Incidence Focus
+2x2 Blocking                                     0                    0
+Balanced Quartiles                               0                    0
+Checkerboard                                    NA                    0
+High Incidence Focus                             0                   NA
+Incidence-Guided Saturation Quadrants            0                    0
+Isolation Buffer                                 0                    0
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Quartiles                                                   0.7176
+Checkerboard                                                         0.0000
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0000
+                                      Isolation Buffer
+2x2 Blocking                                         1
+Balanced Quartiles                                   0
+Checkerboard                                         0
+High Incidence Focus                                 0
+Incidence-Guided Saturation Quadrants                0
+Isolation Buffer                                    NA
+
+15 of 15 pairs significantly different (Wilcoxon, Holm-adjusted)
+
+Mean MSE / Coverage by design (tau=1.0):
+                                Design        MSE  Coverage
+ Incidence-Guided Saturation Quadrants 0.08670166 0.8101250
+                    Balanced Quartiles 0.09734343 0.7711125
+                          2x2 Blocking 0.12434016 0.7003250
+                      Isolation Buffer 0.15125913 0.6957000
+                  High Incidence Focus 0.22102269 0.8940625
+                          Checkerboard 0.29375115 0.4453625
+
+--- Conditional test: stratify by True_Tau (full sweep) ---
+  True_Tau = 0.8: Friedman chi-sq = 860.11, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < 2x2 Blocking < Isolation Buffer < Checkerboard < High Incidence Focus
+  True_Tau = 1: Friedman chi-sq = 871.60, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < 2x2 Blocking < Isolation Buffer < Checkerboard < High Incidence Focus
+  True_Tau = 1.5: Friedman chi-sq = 872.65, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
+  True_Tau = 2: Friedman chi-sq = 888.52, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation Quadrants < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
+  True_Tau = 3: Friedman chi-sq = 880.71, p = <2e-16, n_blocks = 320; rank order: Balanced Quartiles < Incidence-Guided Saturation Quadrants < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
+Summary written to /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript_nonoracle/six_design_summary.txt 
+There were 12 warnings (use warnings() to see them)
+
+Done. Outputs in /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript_nonoracle 

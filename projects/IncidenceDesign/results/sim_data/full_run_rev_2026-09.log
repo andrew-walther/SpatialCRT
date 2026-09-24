@@ -1,0 +1,36 @@
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Loading required package: sf
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+Loading required package: Matrix
+
+Attaching package: ‘spatialreg’
+
+The following objects are masked from ‘package:spdep’:
+
+    get.ClusterOption, get.coresOption, get.mcOption,
+    get.VerboseOption, get.ZeroPolicyOption, set.ClusterOption,
+    set.coresOption, set.mcOption, set.VerboseOption,
+    set.ZeroPolicyOption
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+=== Simulation (profile: full, engine: lean) ===
+Units: 40 | scenarios per estimator: 12800 | fits per scenario: 250 | total fits: 6400000
+Workers: 10 | checkpoints: /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/checkpoints/rev_2026-09/full
+
+=== Complete: 13.9 min wall; unit compute 138.8 min total (208 s mean/unit) ===
+Saved MLE_tau_sweep: 12800 scenario rows, 128000 surface rows, 0 warning rows
+Saved MLEnonoracle_tau_sweep: 12800 scenario rows, 128000 surface rows, 0 warning rows

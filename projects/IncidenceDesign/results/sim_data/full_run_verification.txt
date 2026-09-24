@@ -1,0 +1,33 @@
+FULL-RUN VERIFICATION (2026-09 revision)
+
+== oracle: sim_results_MLE_tau_sweep_combined_20260924_025509.rds
+  12,800 scenario rows                                               PASS
+  one row per scenario key                                           PASS
+  Estimator column matches file                                      PASS
+  N_Valid_Est = 250 everywhere                                       PASS
+  Fail_Rate = 0 everywhere                                           PASS
+  N_Surfaces = 10 everywhere                                         PASS
+  Checkerboard x rook: all 250 fits flagged                          PASS
+  rank deficiency only Checkerboard or Isolation Buffer x rook       PASS
+  oracle: N_Aliased > 0 iff Z_WZ_rank_deficient; non-oracle never aliased PASS
+  fixed-size designs treat 50                                        PASS
+  no NA in core metrics                                              PASS
+  Isolation Buffer x rook scenarios with a checkerboard draw: 20 (aliased fits: 20)
+  non-aliasing warnings: 0 scenario-message rows, 0 fits in total
+
+== nonoracle: sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds
+  12,800 scenario rows                                               PASS
+  one row per scenario key                                           PASS
+  Estimator column matches file                                      PASS
+  N_Valid_Est = 250 everywhere                                       PASS
+  Fail_Rate = 0 everywhere                                           PASS
+  N_Surfaces = 10 everywhere                                         PASS
+  Checkerboard x rook: all 250 fits flagged                          PASS
+  rank deficiency only Checkerboard or Isolation Buffer x rook       PASS
+  oracle: N_Aliased > 0 iff Z_WZ_rank_deficient; non-oracle never aliased PASS
+  fixed-size designs treat 50                                        PASS
+  no NA in core metrics                                              PASS
+  Isolation Buffer x rook scenarios with a checkerboard draw: 20 (aliased fits: 0)
+  non-aliasing warnings: 0 scenario-message rows, 0 fits in total
+
+RESULT: PASS

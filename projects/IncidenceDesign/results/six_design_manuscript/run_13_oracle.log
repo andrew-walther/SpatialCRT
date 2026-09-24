@@ -1,0 +1,395 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: viridisLite
+Loading results from: sim_results_MLE_tau_sweep_combined_20260924_025509.rds 
+Loading results from: sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds 
+Surface-level results from: surface_results_MLE_tau_sweep_20260924_025509.rds 
+
+################ QUEEN ################
+
+=== 1. Overall performance (tau=1.0), all incidence configs averaged ===
+                                Design        MSE Coverage    Power
+ Incidence-Guided Saturation Quadrants 0.09067072 0.936550 0.930275
+                    Balanced Quartiles 0.13081366 0.935950 0.827275
+                      Isolation Buffer 0.16016279 0.939000 0.730600
+                  High Incidence Focus 0.24545517 0.937850 0.609900
+                          2x2 Blocking 0.31923193 0.939075 0.642050
+                          Checkerboard 1.08689503 0.940725 0.547100
+ Mean_Treated
+     50.00000
+     50.00000
+     21.43332
+     50.00000
+     50.00000
+     50.00000
+
+=== 2. Design ranking by incidence configuration (tau=1.0) ===
+
+-- iid Uniform --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.09250419
+                    Balanced Quartiles 0.12963396
+                      Isolation Buffer 0.15955783
+                  High Incidence Focus 0.24548671
+                          2x2 Blocking 0.31145274
+                          Checkerboard 1.09148706
+
+-- Poisson (rho_X = 0.20) --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.09002847
+                    Balanced Quartiles 0.12845657
+                      Isolation Buffer 0.16197135
+                  High Incidence Focus 0.23238755
+                          2x2 Blocking 0.32641232
+                          Checkerboard 1.11163213
+
+-- Poisson (rho_X = 0.50) --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.09212759
+                    Balanced Quartiles 0.13514468
+                      Isolation Buffer 0.16093402
+                  High Incidence Focus 0.23757534
+                          2x2 Blocking 0.32004829
+                          Checkerboard 1.07734922
+
+-- Spatial (rho_X = 0.20) --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.08705606
+                    Balanced Quartiles 0.13028081
+                      Isolation Buffer 0.15906350
+                  High Incidence Focus 0.26654302
+                          2x2 Blocking 0.31515214
+                          Checkerboard 1.06820370
+
+-- Spatial (rho_X = 0.50) --
+                                Design       MSE
+ Incidence-Guided Saturation Quadrants 0.0916373
+                    Balanced Quartiles 0.1305523
+                      Isolation Buffer 0.1592873
+                  High Incidence Focus 0.2452832
+                          2x2 Blocking 0.3230942
+                          Checkerboard 1.0858030
+
+=== 3. Parameter sensitivity: mean MSE by Design x Rho (tau=1.0) ===
+                                Design      MSE.0   MSE.0.01    MSE.0.2
+                          2x2 Blocking 0.31848529 0.32039985 0.31376975
+                    Balanced Quartiles 0.12897769 0.12917935 0.13245971
+                          Checkerboard 1.09493266 1.07671640 1.08411043
+                  High Incidence Focus 0.24285718 0.24156356 0.24936085
+ Incidence-Guided Saturation Quadrants 0.08961065 0.08661382 0.09347595
+                      Isolation Buffer 0.16117022 0.15679853 0.15786742
+    MSE.0.5
+ 0.32427282
+ 0.13263787
+ 1.09182060
+ 0.24803910
+ 0.09298247
+ 0.16481499
+
+=== 4. Parameter sensitivity: mean MSE by Design x Gamma (tau=1.0) ===
+                                Design   MSE.0.5    MSE.0.6    MSE.0.7
+                          2x2 Blocking 0.3119317 0.31398237 0.32814953
+                    Balanced Quartiles 0.1323354 0.12810394 0.13204370
+                          Checkerboard 1.1081651 1.05240207 1.08561448
+                  High Incidence Focus 0.2443096 0.24855104 0.24780699
+ Incidence-Guided Saturation Quadrants 0.0922179 0.08942814 0.09155364
+                      Isolation Buffer 0.1591880 0.16300500 0.15967092
+    MSE.0.8
+ 0.32286414
+ 0.13077156
+ 1.10139841
+ 0.24115301
+ 0.08948321
+ 0.15878723
+
+=== 5. Parameter sensitivity: mean MSE by Design x Spillover_Type (tau=1.0) ===
+                                Design   MSE.both MSE.control_only
+                          2x2 Blocking 0.06231516        0.5761487
+                    Balanced Quartiles 0.04213690        0.2194904
+                          Checkerboard 0.06238821        2.1114018
+                  High Incidence Focus 0.16173999        0.3291704
+ Incidence-Guided Saturation Quadrants 0.04588623        0.1354552
+                      Isolation Buffer 0.16083204        0.1594935
+
+=== 6. Subgroup robustness: MSE quantiles by design (tau=1.0) ===
+                                Design       Best        Q25     Median
+ Incidence-Guided Saturation Quadrants 0.03691716 0.04531636 0.08033364
+                    Balanced Quartiles 0.03396747 0.04236626 0.11492146
+                      Isolation Buffer 0.12845797 0.15017140 0.15925414
+                  High Incidence Focus 0.13863039 0.15976113 0.23364232
+                          2x2 Blocking 0.04794329 0.06227093 0.27113886
+                          Checkerboard 0.05141491 0.06309867 0.89939311
+       Q75     Worst
+ 0.1354231 0.1688274
+ 0.2209564 0.2903762
+ 0.1692942 0.2064562
+ 0.3217241 0.4239246
+ 0.5797342 0.7189802
+ 2.0934977 2.8430042
+
+=== 7. Win rate: fraction of 160 blocks where design has lowest MSE (tau=1.0) ===
+winners
+Incidence-Guided Saturation Quadrants                    Balanced Quartiles 
+                              0.59375                               0.36250 
+                     Isolation Buffer 
+                              0.04375 
+
+=== 7b. Win counts by incidence configuration (tau=1.0) ===
+                        winners
+                         Balanced Quartiles
+  iid Uniform                            11
+  Poisson (rho_X = 0.20)                 12
+  Poisson (rho_X = 0.50)                 12
+  Spatial (rho_X = 0.20)                 11
+  Spatial (rho_X = 0.50)                 12
+  Sum                                    58
+                        winners
+                         Incidence-Guided Saturation Quadrants Isolation Buffer
+  iid Uniform                                               18                3
+  Poisson (rho_X = 0.20)                                    19                1
+  Poisson (rho_X = 0.50)                                    19                1
+  Spatial (rho_X = 0.20)                                    21                0
+  Spatial (rho_X = 0.50)                                    18                2
+  Sum                                                       95                7
+
+=== 8. Checkerboard coverage across Rho (tau=1.0) ===
+  Rho Coverage
+ 0.00   0.9408
+ 0.01   0.9430
+ 0.20   0.9400
+ 0.50   0.9391
+
+=== 9. Average-rank order per tau (within-block MSE ranks; tau levels share draws) ===
+  tau = 0.8: Incidence-Guided Saturation Quadrants (1.41) < Balanced Quartiles (2.14) < Isolation Buffer (3.71) < 2x2 Blocking (4.24) < Checkerboard (4.74) < High Incidence Focus (4.76)
+  tau = 1.0: Incidence-Guided Saturation Quadrants (1.43) < Balanced Quartiles (2.14) < Isolation Buffer (3.69) < 2x2 Blocking (4.24) < Checkerboard (4.74) < High Incidence Focus (4.76)
+  tau = 1.5: Incidence-Guided Saturation Quadrants (1.54) < Balanced Quartiles (2.14) < Isolation Buffer (3.59) < 2x2 Blocking (4.24) < Checkerboard (4.74) < High Incidence Focus (4.76)
+  tau = 2.0: Incidence-Guided Saturation Quadrants (1.64) < Balanced Quartiles (2.14) < Isolation Buffer (3.49) < 2x2 Blocking (4.24) < Checkerboard (4.74) < High Incidence Focus (4.76)
+  tau = 3.0: Incidence-Guided Saturation Quadrants (1.85) < Balanced Quartiles (2.13) < Isolation Buffer (3.31) < 2x2 Blocking (4.22) < Checkerboard (4.72) < High Incidence Focus (4.76)
+
+=== 10. Non-oracle (Y ~ Z + X) vs oracle, tau=1.0 ===
+                                Design MSE.oracle Bias.oracle Coverage.oracle
+ Incidence-Guided Saturation Quadrants     0.0907     0.03212           0.937
+                    Balanced Quartiles     0.1308     0.01727           0.936
+                      Isolation Buffer     0.1602     0.00262           0.939
+                  High Incidence Focus     0.2455     0.03127           0.938
+                          2x2 Blocking     0.3192     0.00959           0.939
+                          Checkerboard     1.0869     0.00113           0.941
+ MSE.nonoracle Bias.nonoracle Coverage.nonoracle
+        0.0870         -0.123              0.810
+        0.0978         -0.176              0.770
+        0.0911         -0.175              0.879
+        0.2189         -0.180              0.896
+        0.1210         -0.244              0.709
+        0.1076         -0.206              0.741
+
+=== 11. Surface-level robustness (paired over 5 configs x 10 surfaces, tau=1.0) ===
+  Incidence-Guided Saturation Quadrants  vs Balanced Quartiles                     n=50 diff -0.0401 [-0.0431, -0.0372] Wilcoxon p=7.8e-10; first better in 100%
+  Balanced Quartiles                     vs Isolation Buffer                       n=50 diff -0.0293 [-0.0332, -0.0255] Wilcoxon p=7.8e-10; first better in 100%
+  Isolation Buffer                       vs High Incidence Focus                   n=50 diff -0.0853 [-0.0954, -0.0752] Wilcoxon p=7.8e-10; first better in 100%
+  High Incidence Focus                   vs 2x2 Blocking                           n=50 diff -0.0738 [-0.0858, -0.0617] Wilcoxon p=4.9e-09; first better in 96%
+  2x2 Blocking                           vs Checkerboard                           n=50 diff -0.7677 [-0.7893, -0.7460] Wilcoxon p=7.8e-10; first better in 100%
+
+################ ROOK ################
+Rook: tau not identified for Checkerboard (WZ = 1 - Z); estimates kept but flagged. 
+
+=== 1. Overall performance (tau=1.0), all incidence configs averaged ===
+                                Design        MSE Coverage    Power
+ Incidence-Guided Saturation Quadrants 0.07165113 0.942300 0.962675
+                    Balanced Quartiles 0.08371778 0.940150 0.917300
+                          2x2 Blocking 0.12812905 0.937825 0.817725
+                      Isolation Buffer 0.13290418 0.939400 0.806025
+                  High Incidence Focus 0.20623986 0.939125 0.644750
+                          Checkerboard 0.47992058 0.149775 0.413650
+ Mean_Treated
+     50.00000
+     50.00000
+     50.00000
+     38.24688
+     50.00000
+     50.00000
+
+=== 2. Design ranking by incidence configuration (tau=1.0) ===
+
+-- iid Uniform --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.07188128
+                    Balanced Quartiles 0.08148433
+                          2x2 Blocking 0.12864083
+                      Isolation Buffer 0.13143905
+                  High Incidence Focus 0.20466778
+                          Checkerboard 0.48041687
+
+-- Poisson (rho_X = 0.20) --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.07279615
+                    Balanced Quartiles 0.08446549
+                          2x2 Blocking 0.12959755
+                      Isolation Buffer 0.13619986
+                  High Incidence Focus 0.20202994
+                          Checkerboard 0.48097282
+
+-- Poisson (rho_X = 0.50) --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.06905668
+                    Balanced Quartiles 0.08506174
+                          2x2 Blocking 0.12877303
+                      Isolation Buffer 0.13408592
+                  High Incidence Focus 0.21119535
+                          Checkerboard 0.48214981
+
+-- Spatial (rho_X = 0.20) --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.07188886
+                    Balanced Quartiles 0.08399503
+                          2x2 Blocking 0.12507503
+                      Isolation Buffer 0.13079319
+                  High Incidence Focus 0.21317071
+                          Checkerboard 0.48157566
+
+-- Spatial (rho_X = 0.50) --
+                                Design        MSE
+ Incidence-Guided Saturation Quadrants 0.07263267
+                    Balanced Quartiles 0.08358232
+                          2x2 Blocking 0.12855881
+                      Isolation Buffer 0.13200286
+                  High Incidence Focus 0.20013549
+                          Checkerboard 0.47448773
+
+=== 3. Parameter sensitivity: mean MSE by Design x Rho (tau=1.0) ===
+                                Design      MSE.0   MSE.0.01    MSE.0.2
+                          2x2 Blocking 0.12355197 0.13109615 0.12849147
+                    Balanced Quartiles 0.08214932 0.08206053 0.08486592
+                          Checkerboard 0.48064019 0.47852935 0.47950265
+                  High Incidence Focus 0.20492356 0.20705810 0.20210017
+ Incidence-Guided Saturation Quadrants 0.06818649 0.06923653 0.07254360
+                      Isolation Buffer 0.12992694 0.13276680 0.13256336
+    MSE.0.5
+ 0.12937662
+ 0.08579537
+ 0.48101012
+ 0.21087759
+ 0.07663788
+ 0.13635961
+
+=== 4. Parameter sensitivity: mean MSE by Design x Gamma (tau=1.0) ===
+                                Design    MSE.0.5    MSE.0.6    MSE.0.7
+                          2x2 Blocking 0.12877882 0.12924795 0.12668216
+                    Balanced Quartiles 0.08319141 0.08530142 0.08315120
+                          Checkerboard 0.29509117 0.40280470 0.53787838
+                  High Incidence Focus 0.20705806 0.20938432 0.20517357
+ Incidence-Guided Saturation Quadrants 0.06882827 0.07173434 0.07451078
+                      Isolation Buffer 0.13146957 0.13263952 0.13436872
+   MSE.0.8
+ 0.1278073
+ 0.0832271
+ 0.6839081
+ 0.2033435
+ 0.0715311
+ 0.1331389
+
+=== 5. Parameter sensitivity: mean MSE by Design x Spillover_Type (tau=1.0) ===
+                                Design   MSE.both MSE.control_only
+                          2x2 Blocking 0.05053772       0.20572038
+                    Balanced Quartiles 0.04207614       0.12535943
+                          Checkerboard 0.47656698       0.48327418
+                  High Incidence Focus 0.16367472       0.24880499
+ Incidence-Guided Saturation Quadrants 0.04512987       0.09817238
+                      Isolation Buffer 0.13141216       0.13439619
+
+=== 6. Subgroup robustness: MSE quantiles by design (tau=1.0) ===
+                                Design       Best        Q25     Median
+ Incidence-Guided Saturation Quadrants 0.03417865 0.04503094 0.06936243
+                    Balanced Quartiles 0.03221981 0.04180575 0.07822414
+                          2x2 Blocking 0.03943024 0.05069185 0.11658452
+                      Isolation Buffer 0.10569784 0.12436038 0.13307655
+                  High Incidence Focus 0.13770578 0.16194297 0.19354709
+                          Checkerboard 0.25875372 0.35480534 0.46983032
+        Q75     Worst
+ 0.09676952 0.1380682
+ 0.12491034 0.1624964
+ 0.20637950 0.2371980
+ 0.14123362 0.1688940
+ 0.24669061 0.3042241
+ 0.59888632 0.7195605
+
+=== 7. Win rate: fraction of 160 blocks where design has lowest MSE (tau=1.0) ===
+winners
+Incidence-Guided Saturation Quadrants                    Balanced Quartiles 
+                              0.60625                               0.37500 
+                         2x2 Blocking                      Isolation Buffer 
+                              0.01250                               0.00625 
+
+=== 7b. Win counts by incidence configuration (tau=1.0) ===
+                        winners
+                         2x2 Blocking Balanced Quartiles
+  iid Uniform                       0                 12
+  Poisson (rho_X = 0.20)            2                 12
+  Poisson (rho_X = 0.50)            0                 11
+  Spatial (rho_X = 0.20)            0                 12
+  Spatial (rho_X = 0.50)            0                 13
+  Sum                               2                 60
+                        winners
+                         Incidence-Guided Saturation Quadrants Isolation Buffer
+  iid Uniform                                               19                1
+  Poisson (rho_X = 0.20)                                    18                0
+  Poisson (rho_X = 0.50)                                    21                0
+  Spatial (rho_X = 0.20)                                    20                0
+  Spatial (rho_X = 0.50)                                    19                0
+  Sum                                                       97                1
+
+=== 8. Checkerboard coverage across Rho (tau=1.0) ===
+  Rho Coverage
+ 0.00   0.1607
+ 0.01   0.1564
+ 0.20   0.1482
+ 0.50   0.1338
+
+=== 9. Average-rank order per tau (within-block MSE ranks; tau levels share draws) ===
+  tau = 0.8: Incidence-Guided Saturation Quadrants (1.47) < Balanced Quartiles (1.76) < 2x2 Blocking (3.40) < Isolation Buffer (3.41) < High Incidence Focus (4.97) < Checkerboard (5.99)
+  tau = 1.0: Incidence-Guided Saturation Quadrants (1.49) < Balanced Quartiles (1.77) < Isolation Buffer (3.38) < 2x2 Blocking (3.40) < High Incidence Focus (4.97) < Checkerboard (5.99)
+  tau = 1.5: Incidence-Guided Saturation Quadrants (1.53) < Balanced Quartiles (1.83) < Isolation Buffer (3.29) < 2x2 Blocking (3.39) < High Incidence Focus (4.96) < Checkerboard (5.99)
+  tau = 2.0: Incidence-Guided Saturation Quadrants (1.59) < Balanced Quartiles (1.89) < Isolation Buffer (3.19) < 2x2 Blocking (3.37) < High Incidence Focus (4.96) < Checkerboard (6.00)
+  tau = 3.0: Incidence-Guided Saturation Quadrants (1.76) < Balanced Quartiles (2.02) < Isolation Buffer (2.92) < 2x2 Blocking (3.33) < High Incidence Focus (4.97) < Checkerboard (6.00)
+
+=== 10. Non-oracle (Y ~ Z + X) vs oracle, tau=1.0 ===
+                                Design MSE.oracle Bias.oracle Coverage.oracle
+ Incidence-Guided Saturation Quadrants     0.0717     0.01849           0.942
+                    Balanced Quartiles     0.0837     0.00848           0.940
+                          2x2 Blocking     0.1281     0.00397           0.938
+                      Isolation Buffer     0.1329     0.00251           0.939
+                  High Incidence Focus     0.2062     0.01772           0.939
+                          Checkerboard     0.4799    -0.65185           0.150
+ MSE.nonoracle Bias.nonoracle Coverage.nonoracle
+        0.0864         -0.121              0.810
+        0.0969         -0.176              0.772
+        0.1277         -0.257              0.691
+        0.2115         -0.400              0.513
+        0.2231         -0.192              0.892
+        0.4799         -0.652              0.150
+
+=== 11. Surface-level robustness (paired over 5 configs x 10 surfaces, tau=1.0) ===
+  Incidence-Guided Saturation Quadrants  vs Balanced Quartiles                     n=50 diff -0.0121 [-0.0139, -0.0102] Wilcoxon p=9.9e-10; first better in 96%
+  Balanced Quartiles                     vs 2x2 Blocking                           n=50 diff -0.0444 [-0.0473, -0.0416] Wilcoxon p=7.8e-10; first better in 100%
+  2x2 Blocking                           vs Isolation Buffer                       n=50 diff -0.0048 [-0.0078, -0.0017] Wilcoxon p=0.0027; first better in 72%
+  Isolation Buffer                       vs High Incidence Focus                   n=50 diff -0.0733 [-0.0796, -0.0671] Wilcoxon p=7.8e-10; first better in 100%
+  High Incidence Focus                   vs Checkerboard                           n=50 diff -0.2737 [-0.2799, -0.2675] Wilcoxon p=7.8e-10; first better in 100%
+
+################ FLAG SUMMARY (all tau, both estimators) ################
+-- oracle: scenarios with any aliased fit = 820; total non-aliasing warnings = 0; min N_Valid_Est = 250
+           Design Neighbor_Type N_Aliased N_Warn Z_WZ_rank_deficient Fail_Rate
+     Checkerboard          rook     2e+05      0                 800         0
+ Isolation Buffer          rook     2e+01      0                  20         0
+-- non-oracle: scenarios with any aliased fit = 0; total non-aliasing warnings = 0; min N_Valid_Est = 250
+           Design Neighbor_Type N_Aliased N_Warn Z_WZ_rank_deficient Fail_Rate
+     Checkerboard          rook         0      0                 800         0
+ Isolation Buffer          rook         0      0                  20         0
+Written to /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript/dissertation_results_extract.txt 

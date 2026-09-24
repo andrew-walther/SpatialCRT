@@ -1,0 +1,456 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: viridisLite
+Loading results from: sim_results_MLE_tau_sweep_combined_20260924_025509.rds 
+======================================================================
+EIGHT-DESIGN STATISTICAL COMPARISONS (consolidation justification)
+Purpose: justify dropping Saturation Quadrants (redundant with
+Incidence-Guided Saturation Quadrants) and Balanced Halves (redundant
+with Balanced Quartiles) from the 6-design manuscript comparison.
+Reported for queen (primary), rook, and a labeled POOLED slice.
+======================================================================
+
+######## QUEEN (primary) -- True_Tau = 1.0, all 8 designs ########
+Friedman chi-sq = 711.29, df = 7, p = <2e-16, n_blocks = 160
+Average ranks (lower = better MSE):
+                 Saturation Quadrants Incidence-Guided Saturation Quadrants 
+                                2.100                                 2.350 
+                      Balanced Halves                    Balanced Quartiles 
+                                3.312                                 3.356 
+                     Isolation Buffer                          2x2 Blocking 
+                                5.138                                 6.244 
+                         Checkerboard                  High Incidence Focus 
+                                6.737                                 6.763 
+
+Nemenyi critical difference (alpha=0.05) = 0.830
+23 of 28 pairs significantly different (Nemenyi)
+26 of 28 pairs significantly different (Wilcoxon, Holm-adjusted)
+
+All-8 mean MSE / Coverage / Rank (tau=1.0):
+                                Design        MSE Coverage Rank
+                  Saturation Quadrants 0.09004083 0.935900    1
+ Incidence-Guided Saturation Quadrants 0.09067072 0.936550    2
+                       Balanced Halves 0.12994350 0.935750    3
+                    Balanced Quartiles 0.13081366 0.935950    4
+                      Isolation Buffer 0.16016279 0.939000    5
+                  High Incidence Focus 0.24545517 0.937850    6
+                          2x2 Blocking 0.31923193 0.939075    7
+                          Checkerboard 1.08689503 0.940725    8
+
+--- Consolidation pair: Saturation Quadrants vs Incidence-Guided Saturation Quadrants ---
+MSE: 0.0900 vs 0.0907 (delta = -0.0006) | Nemenyi p = 0.9849 | Wilcoxon (Holm) p = 0.413
+
+--- Consolidation pair: Balanced Halves vs Balanced Quartiles ---
+MSE: 0.1299 vs 0.1308 (delta = -0.0009) | Nemenyi p = 1.0000 | Wilcoxon (Holm) p = 0.884
+
+Full Nemenyi p-value matrix (8 designs):
+                                      2x2 Blocking Balanced Halves
+2x2 Blocking                                    NA          0.0000
+Balanced Halves                             0.0000              NA
+Balanced Quartiles                          0.0000          1.0000
+Checkerboard                                0.6181          0.0000
+High Incidence Focus                        0.5549          0.0000
+Incidence-Guided Saturation Quadrants       0.0000          0.0104
+Isolation Buffer                            0.0014          0.0000
+Saturation Quadrants                        0.0000          0.0003
+                                      Balanced Quartiles Checkerboard
+2x2 Blocking                                      0.0000       0.6181
+Balanced Halves                                   1.0000       0.0000
+Balanced Quartiles                                    NA       0.0000
+Checkerboard                                      0.0000           NA
+High Incidence Focus                              0.0000       1.0000
+Incidence-Guided Saturation Quadrants             0.0058       0.0000
+Isolation Buffer                                  0.0000       0.0000
+Saturation Quadrants                              0.0001       0.0000
+                                      High Incidence Focus
+2x2 Blocking                                        0.5549
+Balanced Halves                                     0.0000
+Balanced Quartiles                                  0.0000
+Checkerboard                                        1.0000
+High Incidence Focus                                    NA
+Incidence-Guided Saturation Quadrants               0.0000
+Isolation Buffer                                    0.0000
+Saturation Quadrants                                0.0000
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Halves                                                      0.0104
+Balanced Quartiles                                                   0.0058
+Checkerboard                                                         0.0000
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0000
+Saturation Quadrants                                                 0.9849
+                                      Isolation Buffer Saturation Quadrants
+2x2 Blocking                                    0.0014               0.0000
+Balanced Halves                                 0.0000               0.0003
+Balanced Quartiles                              0.0000               0.0001
+Checkerboard                                    0.0000               0.0000
+High Incidence Focus                            0.0000               0.0000
+Incidence-Guided Saturation Quadrants           0.0000               0.9849
+Isolation Buffer                                    NA               0.0000
+Saturation Quadrants                            0.0000                   NA
+
+Full Wilcoxon (Holm-adjusted) p-value matrix (8 designs):
+                                      2x2 Blocking Balanced Halves
+2x2 Blocking                                    NA          0.0000
+Balanced Halves                                  0              NA
+Balanced Quartiles                               0          0.8842
+Checkerboard                                     0          0.0000
+High Incidence Focus                             0          0.0000
+Incidence-Guided Saturation Quadrants            0          0.0000
+Isolation Buffer                                 0          0.0000
+Saturation Quadrants                             0          0.0000
+                                      Balanced Quartiles Checkerboard
+2x2 Blocking                                      0.0000            0
+Balanced Halves                                   0.8842            0
+Balanced Quartiles                                    NA            0
+Checkerboard                                      0.0000           NA
+High Incidence Focus                              0.0000            0
+Incidence-Guided Saturation Quadrants             0.0000            0
+Isolation Buffer                                  0.0000            0
+Saturation Quadrants                              0.0000            0
+                                      High Incidence Focus
+2x2 Blocking                                             0
+Balanced Halves                                          0
+Balanced Quartiles                                       0
+Checkerboard                                             0
+High Incidence Focus                                    NA
+Incidence-Guided Saturation Quadrants                    0
+Isolation Buffer                                         0
+Saturation Quadrants                                     0
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                          0.000
+Balanced Halves                                                       0.000
+Balanced Quartiles                                                    0.000
+Checkerboard                                                          0.000
+High Incidence Focus                                                  0.000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                      0.000
+Saturation Quadrants                                                  0.413
+                                      Isolation Buffer Saturation Quadrants
+2x2 Blocking                                         0                0.000
+Balanced Halves                                      0                0.000
+Balanced Quartiles                                   0                0.000
+Checkerboard                                         0                0.000
+High Incidence Focus                                 0                0.000
+Incidence-Guided Saturation Quadrants                0                0.413
+Isolation Buffer                                    NA                0.000
+Saturation Quadrants                                 0                   NA
+
+######## ROOK -- True_Tau = 1.0, all 8 designs ########
+Rook: tau not identified for Checkerboard (WZ = 1 - Z); estimates kept but flagged. 
+Friedman chi-sq = 900.22, df = 7, p = <2e-16, n_blocks = 160
+Average ranks (lower = better MSE):
+                 Saturation Quadrants Incidence-Guided Saturation Quadrants 
+                                2.281                                 2.306 
+                   Balanced Quartiles                       Balanced Halves 
+                                2.919                                 3.038 
+                     Isolation Buffer                          2x2 Blocking 
+                                5.225                                 5.275 
+                 High Incidence Focus                          Checkerboard 
+                                6.969                                 7.987 
+
+Nemenyi critical difference (alpha=0.05) = 0.830
+21 of 28 pairs significantly different (Nemenyi)
+25 of 28 pairs significantly different (Wilcoxon, Holm-adjusted)
+
+All-8 mean MSE / Coverage / Rank (tau=1.0):
+                                Design        MSE Coverage Rank
+                  Saturation Quadrants 0.07075356 0.940100    1
+ Incidence-Guided Saturation Quadrants 0.07165113 0.942300    2
+                    Balanced Quartiles 0.08371778 0.940150    3
+                       Balanced Halves 0.08417786 0.939825    4
+                          2x2 Blocking 0.12812905 0.937825    5
+                      Isolation Buffer 0.13290418 0.939400    6
+                  High Incidence Focus 0.20623986 0.939125    7
+                          Checkerboard 0.47992058 0.149775    8
+
+--- Consolidation pair: Saturation Quadrants vs Incidence-Guided Saturation Quadrants ---
+MSE: 0.0708 vs 0.0717 (delta = -0.0009) | Nemenyi p = 1.0000 | Wilcoxon (Holm) p = 0.82
+
+--- Consolidation pair: Balanced Halves vs Balanced Quartiles ---
+MSE: 0.0842 vs 0.0837 (delta = 0.0005) | Nemenyi p = 0.9999 | Wilcoxon (Holm) p = 0.82
+
+Full Nemenyi p-value matrix (8 designs):
+                                      2x2 Blocking Balanced Halves
+2x2 Blocking                                    NA          0.0000
+Balanced Halves                                  0              NA
+Balanced Quartiles                               0          0.9999
+Checkerboard                                     0          0.0000
+High Incidence Focus                             0          0.0000
+Incidence-Guided Saturation Quadrants            0          0.1317
+Isolation Buffer                                 1          0.0000
+Saturation Quadrants                             0          0.1049
+                                      Balanced Quartiles Checkerboard
+2x2 Blocking                                      0.0000       0.0000
+Balanced Halves                                   0.9999       0.0000
+Balanced Quartiles                                    NA       0.0000
+Checkerboard                                      0.0000           NA
+High Incidence Focus                              0.0000       0.0049
+Incidence-Guided Saturation Quadrants             0.3297       0.0000
+Isolation Buffer                                  0.0000       0.0000
+Saturation Quadrants                              0.2782       0.0000
+                                      High Incidence Focus
+2x2 Blocking                                        0.0000
+Balanced Halves                                     0.0000
+Balanced Quartiles                                  0.0000
+Checkerboard                                        0.0049
+High Incidence Focus                                    NA
+Incidence-Guided Saturation Quadrants               0.0000
+Isolation Buffer                                    0.0000
+Saturation Quadrants                                0.0000
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Halves                                                      0.1317
+Balanced Quartiles                                                   0.3297
+Checkerboard                                                         0.0000
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0000
+Saturation Quadrants                                                 1.0000
+                                      Isolation Buffer Saturation Quadrants
+2x2 Blocking                                         1               0.0000
+Balanced Halves                                      0               0.1049
+Balanced Quartiles                                   0               0.2782
+Checkerboard                                         0               0.0000
+High Incidence Focus                                 0               0.0000
+Incidence-Guided Saturation Quadrants                0               1.0000
+Isolation Buffer                                    NA               0.0000
+Saturation Quadrants                                 0                   NA
+
+Full Wilcoxon (Holm-adjusted) p-value matrix (8 designs):
+                                      2x2 Blocking Balanced Halves
+2x2 Blocking                                    NA          0.0000
+Balanced Halves                             0.0000              NA
+Balanced Quartiles                          0.0000          0.8202
+Checkerboard                                0.0000          0.0000
+High Incidence Focus                        0.0000          0.0000
+Incidence-Guided Saturation Quadrants       0.0000          0.0000
+Isolation Buffer                            0.3085          0.0000
+Saturation Quadrants                        0.0000          0.0000
+                                      Balanced Quartiles Checkerboard
+2x2 Blocking                                      0.0000            0
+Balanced Halves                                   0.8202            0
+Balanced Quartiles                                    NA            0
+Checkerboard                                      0.0000           NA
+High Incidence Focus                              0.0000            0
+Incidence-Guided Saturation Quadrants             0.0000            0
+Isolation Buffer                                  0.0000            0
+Saturation Quadrants                              0.0000            0
+                                      High Incidence Focus
+2x2 Blocking                                             0
+Balanced Halves                                          0
+Balanced Quartiles                                       0
+Checkerboard                                             0
+High Incidence Focus                                    NA
+Incidence-Guided Saturation Quadrants                    0
+Isolation Buffer                                         0
+Saturation Quadrants                                     0
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Halves                                                      0.0000
+Balanced Quartiles                                                   0.0000
+Checkerboard                                                         0.0000
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0000
+Saturation Quadrants                                                 0.8202
+                                      Isolation Buffer Saturation Quadrants
+2x2 Blocking                                    0.3085               0.0000
+Balanced Halves                                 0.0000               0.0000
+Balanced Quartiles                              0.0000               0.0000
+Checkerboard                                    0.0000               0.0000
+High Incidence Focus                            0.0000               0.0000
+Incidence-Guided Saturation Quadrants           0.0000               0.8202
+Isolation Buffer                                    NA               0.0000
+Saturation Quadrants                            0.0000                   NA
+
+######## POOLED over rook and queen -- True_Tau = 1.0, all 8 designs ########
+Rook: tau not identified for Checkerboard (WZ = 1 - Z); estimates kept but flagged. 
+Friedman chi-sq = 1573.47, df = 7, p = <2e-16, n_blocks = 320
+Average ranks (lower = better MSE):
+                 Saturation Quadrants Incidence-Guided Saturation Quadrants 
+                                2.191                                 2.328 
+                   Balanced Quartiles                       Balanced Halves 
+                                3.138                                 3.175 
+                     Isolation Buffer                          2x2 Blocking 
+                                5.181                                 5.759 
+                 High Incidence Focus                          Checkerboard 
+                                6.866                                 7.362 
+
+Nemenyi critical difference (alpha=0.05) = 0.587
+24 of 28 pairs significantly different (Nemenyi)
+24 of 28 pairs significantly different (Wilcoxon, Holm-adjusted)
+
+All-8 mean MSE / Coverage / Rank (tau=1.0):
+                                Design        MSE  Coverage Rank
+                  Saturation Quadrants 0.08039719 0.9380000    1
+ Incidence-Guided Saturation Quadrants 0.08116092 0.9394250    2
+                       Balanced Halves 0.10706068 0.9377875    3
+                    Balanced Quartiles 0.10726572 0.9380500    4
+                      Isolation Buffer 0.14653348 0.9392000    5
+                          2x2 Blocking 0.22368049 0.9384500    6
+                  High Incidence Focus 0.22584751 0.9384875    7
+                          Checkerboard 0.78340780 0.5452500    8
+
+--- Consolidation pair: Saturation Quadrants vs Incidence-Guided Saturation Quadrants ---
+MSE: 0.0804 vs 0.0812 (delta = -0.0008) | Nemenyi p = 0.9967 | Wilcoxon (Holm) p = 0.298
+
+--- Consolidation pair: Balanced Halves vs Balanced Quartiles ---
+MSE: 0.1071 vs 0.1073 (delta = -0.0002) | Nemenyi p = 1.0000 | Wilcoxon (Holm) p = 0.651
+
+Full Nemenyi p-value matrix (8 designs):
+                                      2x2 Blocking Balanced Halves
+2x2 Blocking                                    NA           0e+00
+Balanced Halves                              0.000              NA
+Balanced Quartiles                           0.000           1e+00
+Checkerboard                                 0.000           0e+00
+High Incidence Focus                         0.000           0e+00
+Incidence-Guided Saturation Quadrants        0.000           3e-04
+Isolation Buffer                             0.057           0e+00
+Saturation Quadrants                         0.000           0e+00
+                                      Balanced Quartiles Checkerboard
+2x2 Blocking                                       0e+00       0.0000
+Balanced Halves                                    1e+00       0.0000
+Balanced Quartiles                                    NA       0.0000
+Checkerboard                                       0e+00           NA
+High Incidence Focus                               0e+00       0.1685
+Incidence-Guided Saturation Quadrants              8e-04       0.0000
+Isolation Buffer                                   0e+00       0.0000
+Saturation Quadrants                               0e+00       0.0000
+                                      High Incidence Focus
+2x2 Blocking                                        0.0000
+Balanced Halves                                     0.0000
+Balanced Quartiles                                  0.0000
+Checkerboard                                        0.1685
+High Incidence Focus                                    NA
+Incidence-Guided Saturation Quadrants               0.0000
+Isolation Buffer                                    0.0000
+Saturation Quadrants                                0.0000
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Halves                                                      0.0003
+Balanced Quartiles                                                   0.0008
+Checkerboard                                                         0.0000
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0000
+Saturation Quadrants                                                 0.9967
+                                      Isolation Buffer Saturation Quadrants
+2x2 Blocking                                     0.057               0.0000
+Balanced Halves                                  0.000               0.0000
+Balanced Quartiles                               0.000               0.0000
+Checkerboard                                     0.000               0.0000
+High Incidence Focus                             0.000               0.0000
+Incidence-Guided Saturation Quadrants            0.000               0.9967
+Isolation Buffer                                    NA               0.0000
+Saturation Quadrants                             0.000                   NA
+
+Full Wilcoxon (Holm-adjusted) p-value matrix (8 designs):
+                                      2x2 Blocking Balanced Halves
+2x2 Blocking                                    NA          0.0000
+Balanced Halves                             0.0000              NA
+Balanced Quartiles                          0.0000          0.6513
+Checkerboard                                0.0000          0.0000
+High Incidence Focus                        0.1241          0.0000
+Incidence-Guided Saturation Quadrants       0.0000          0.0000
+Isolation Buffer                            0.1527          0.0000
+Saturation Quadrants                        0.0000          0.0000
+                                      Balanced Quartiles Checkerboard
+2x2 Blocking                                      0.0000            0
+Balanced Halves                                   0.6513            0
+Balanced Quartiles                                    NA            0
+Checkerboard                                      0.0000           NA
+High Incidence Focus                              0.0000            0
+Incidence-Guided Saturation Quadrants             0.0000            0
+Isolation Buffer                                  0.0000            0
+Saturation Quadrants                              0.0000            0
+                                      High Incidence Focus
+2x2 Blocking                                        0.1241
+Balanced Halves                                     0.0000
+Balanced Quartiles                                  0.0000
+Checkerboard                                        0.0000
+High Incidence Focus                                    NA
+Incidence-Guided Saturation Quadrants               0.0000
+Isolation Buffer                                    0.0000
+Saturation Quadrants                                0.0000
+                                      Incidence-Guided Saturation Quadrants
+2x2 Blocking                                                         0.0000
+Balanced Halves                                                      0.0000
+Balanced Quartiles                                                   0.0000
+Checkerboard                                                         0.0000
+High Incidence Focus                                                 0.0000
+Incidence-Guided Saturation Quadrants                                    NA
+Isolation Buffer                                                     0.0000
+Saturation Quadrants                                                 0.2976
+                                      Isolation Buffer Saturation Quadrants
+2x2 Blocking                                    0.1527               0.0000
+Balanced Halves                                 0.0000               0.0000
+Balanced Quartiles                              0.0000               0.0000
+Checkerboard                                    0.0000               0.0000
+High Incidence Focus                            0.0000               0.0000
+Incidence-Guided Saturation Quadrants           0.0000               0.2976
+Isolation Buffer                                    NA               0.0000
+Saturation Quadrants                            0.0000                   NA
+Summary written to /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/eight_design_supplementary/eight_design_summary.txt 
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+Scale for fill is already present.
+Adding another scale for fill, which will replace the existing scale.
+WARN: `geom_errorbarh()` was deprecated in ggplot2 4.0.0.
+ℹ Please use the `orientation` argument of `geom_errorbar()` instead.
+`height` was translated to `width`.
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+WARN: font metrics unknown for character 0x0a in encoding latin1
+Scale for fill is already present.
+Adding another scale for fill, which will replace the existing scale.
+`height` was translated to `width`.
+======================================================================
+*** STALE: built from the pre-revision application run. The application uses the
+*** revised design rules (random tie-breaking, exact N/2) only after it is re-run.
+6-DESIGN APPLICATION-SCALE TABLE (NC 58-cluster community college network)
+Source: application/results/full/application_full_results.rds$summary_results
+Filtered to design_id in {1,2,4,5,6,8} (the 6 retained manuscript designs),
+tau = 1.0, averaged over gamma/rho/spillover_type.
+
+NOTE (relabeling): the application study's design_id 1 is named
+'Block Stratified Sampling' (application_designs.R), not 'Checkerboard' --
+the Checkerboard concept was adapted to a block-stratified analog for the
+irregular NC geography. Design_id 8 is similarly named 'Incidence-Guided
+Saturation Regions' in the application code (vs. 'Incidence-Guided
+Saturation Quadrants' in the grid study) for the same reason -- 'regions'
+(k-means clusters) replace the literal 2x2 grid quadrants on the irregular
+map. Both are the application study's own names, used verbatim below.
+======================================================================
+
+                         design_name        mse coverage   power
+                  Balanced Quartiles 0.07010799  0.93775 0.97050
+ Incidence-Guided Saturation Regions 0.07782345  0.93375 0.96600
+                        2x2 Blocking 0.07815068  0.92800 0.96125
+           Block Stratified Sampling 0.23225578  0.93025 0.59200
+                    Isolation Buffer 0.26489664  0.93825 0.55325
+                High Incidence Focus 0.26858947  0.93850 0.53450
+Application table written to /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript/application_table_6design.txt 
+
+=== 14_manuscript_supplement_figures.R complete ===
+8-design summary:   /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/eight_design_supplementary/eight_design_summary.txt 
+Main-text figures:  /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript/queen /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript/rook 
+SI figures:         /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript/queen/si_figures /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript/rook/si_figures 
+Application table:  /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/six_design_manuscript/application_table_6design.txt 
