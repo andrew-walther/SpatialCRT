@@ -206,15 +206,25 @@ for (nb in c("queen", "rook")) {
   # collapse the boxes into dark bars; thinner grey outlines let the fill show.
   p_coverage$layers[[1]] <- geom_boxplot(alpha = 0.5, outlier.alpha = 0.5, outlier.size = 1,
                                          colour = "grey35", linewidth = 0.25)
-  # Legend order = queen MSE at tau = 1 (best to worst), same in both versions.
+  # Legend order = this neighbor type's MSE at tau = 1 (best to worst), matching
+  # the chapter's queen/rook figures. Colours are fixed per design from the queen
+  # order (viridis "D", as in plot_mse_vs_tau()), so a design has the same colour
+  # in both versions and only the legend order differs.
   # The ribbon is Mean_MSE +/- the AVERAGE of the stored scenario-level SE_MSE
   # (surface-level MC SEs) in each Design x tau cell, not the SE of the mean.
-  tau_legend_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+  tau_colour_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
                         "Isolation Buffer", "High Incidence Focus", "2x2 Blocking", "Checkerboard")
-  stopifnot(setequal(tau_legend_order, unique(res$Design)))
+  tau_legend_order <- if (nb == "rook")
+    c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+      "2x2 Blocking", "Isolation Buffer", "High Incidence Focus", "Checkerboard") else tau_colour_order
+  stopifnot(setequal(tau_legend_order, unique(res$Design)),
+            setequal(tau_colour_order, tau_legend_order))
+  tau_palette <- setNames(scales::viridis_pal(option = "D")(length(tau_colour_order)), tau_colour_order)
   res_tau <- res
   res_tau$Design <- factor(res_tau$Design, levels = tau_legend_order)
   p_tau <- plot_mse_vs_tau(res_tau) +
+    scale_color_manual(values = tau_palette, breaks = tau_legend_order) +
+    scale_fill_manual(values = tau_palette, breaks = tau_legend_order) +
     labs(title = expression("MSE vs. True " * tau * " by Design"), x = expression("True " * tau),
          y = "Mean MSE\n(band: ± average scenario-level Monte Carlo SE)",
          caption = fig_rook_note) +
