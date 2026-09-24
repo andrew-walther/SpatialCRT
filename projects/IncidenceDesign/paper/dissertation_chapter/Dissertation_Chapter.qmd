@@ -39,7 +39,7 @@ This chapter extends the proof-of-concept study of Chapter 2, which asked a narr
 
 ## Aims
 
-This chapter has three aims. First, to rank the six treatment assignment designs by estimation accuracy, measured by mean squared error (MSE), and by inferential validity, measured by 95\% confidence interval coverage, separately within each of the three incidence-heterogeneity mechanisms, since a design that performs well under one mechanism may not generalize to another. Second, to test whether that ranking is stable across the spatial and spillover parameters that a real trial team cannot control or know in advance, including the magnitude of the true treatment effect itself, the strength of residual spatial dependence in the outcome, and the magnitude of the spillover effect. Third, to translate the resulting ranking into concrete, actionable design guidance, illustrated using a real and currently developing application: a planned sudden unexpected death (SUD) prevention pilot to be delivered through North Carolina's community college network. The sections that follow describe the simulation methods, report results for each aim, present the SUD application, and discuss limitations and future work.
+This chapter has three aims. First, to rank the six treatment assignment designs by estimation accuracy, measured by mean squared error (MSE), and by inferential validity, measured by 95\% confidence interval coverage, separately within each of the three incidence-heterogeneity mechanisms, since a design that performs well under one mechanism may not generalize to another. Second, to test whether that ranking is stable across the spatial and spillover parameters that a real trial team cannot control or know in advance, including the magnitude of the true treatment effect itself, the strength of residual spatial dependence in the outcome, and the magnitude of the spillover effect. Third, to translate the resulting ranking into design guidance, illustrated with a planned sudden unexpected death (SUD) prevention pilot to be delivered through North Carolina's community college network. The sections that follow describe the simulation methods, report results for each aim, present the SUD application, and discuss limitations and future work.
 
 # Methods
 
@@ -122,25 +122,39 @@ At the primary scenario, $\tau = 1$, under queen contiguity and pooled over the 
 
 Incidence-Guided Saturation Quadrants also led block by block. Of the 160 queen blocks at $\tau = 1$, Incidence-Guided Saturation Quadrants had the lowest MSE in 95 (59\%), Balanced Quartiles in 58 (36\%), and Isolation Buffer in 7 (4\%); no other design had the lowest MSE in any block.
 
-```{r}
-#| echo: false
-#| results: asis
-results_tbl <- data.frame(
-  Design = c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
-             "High Incidence Focus", "Isolation Buffer", "2x2 Blocking", "Checkerboard"),
-  MSE = c(0.079, 0.102, 0.133, 0.148, 0.228, 0.802),
-  Coverage = c(0.941, 0.938, 0.966, 0.939, 0.937, 0.527),
-  `Avg. Friedman Rank` = c(1.881, 2.534, 2.756, 4.144, 4.278, 5.406),
-  check.names = FALSE
-)
-knitr::kable(results_tbl, digits = 3, caption = "Mean squared error, 95% confidence interval coverage, and average Friedman rank (lower is better) by design at the primary scenario (tau = 1.0), averaged over 320 spatial and spillover parameter configurations.")
+```{=latex}
+\begin{table}[h]
+\small\centering
+\caption{Performance of the six designs at the primary scenario, $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Monte Carlo standard errors of MSE, in parentheses, are computed from the 50 configuration-by-surface means (Methods); those of bias, coverage, and power are all below 0.007. Average rank is the mean of each design's within-block MSE rank among the six designs over the 160 blocks (1 = lowest MSE). Clusters treated is the mean number of clusters treated per assignment. Under rook contiguity, $\tau$ is not identified for Checkerboard ($WZ = 1 - Z$); its estimates are kept and flagged, and its coefficient on $Z$ estimates $\tau - \gamma$.}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}cccccc}
+\toprule
+Design & MSE (SE) & Bias & Coverage & Power & \shortstack{Average\\rank} & \shortstack{Clusters\\treated} \\
+\midrule
+\multicolumn{7}{l}{\textit{Queen contiguity (primary)}} \\
+Incidence-Guided Saturation Quadrants & 0.091 (0.0008) & 0.032 & 0.937 & 0.930 & 1.425 & 50 \\
+Balanced Quartiles & 0.131 (0.0011) & 0.017 & 0.936 & 0.827 & 2.138 & 50 \\
+Isolation Buffer & 0.160 (0.0011) & 0.003 & 0.939 & 0.731 & 3.694 & 21.4 \\
+High Incidence Focus & 0.245 (0.0047) & 0.031 & 0.938 & 0.610 & 4.763 & 50 \\
+2$\times$2 Blocking & 0.319 (0.0032) & 0.010 & 0.939 & 0.642 & 4.244 & 50 \\
+Checkerboard & 1.087 (0.0101) & 0.001 & 0.941 & 0.547 & 4.737 & 50 \\
+\midrule
+\multicolumn{7}{l}{\textit{Rook contiguity (sensitivity)}} \\
+Incidence-Guided Saturation Quadrants & 0.072 (0.0006) & 0.018 & 0.942 & 0.963 & 1.488 & 50 \\
+Balanced Quartiles & 0.084 (0.0006) & 0.008 & 0.940 & 0.917 & 1.775 & 50 \\
+Isolation Buffer & 0.133 (0.0009) & 0.003 & 0.939 & 0.806 & 3.381 & 38.2 \\
+High Incidence Focus & 0.206 (0.0030) & 0.018 & 0.939 & 0.645 & 4.969 & 50 \\
+2$\times$2 Blocking & 0.128 (0.0012) & 0.004 & 0.938 & 0.818 & 3.400 & 50 \\
+Checkerboard (flagged) & 0.480 (0.0015) & $-0.652$ & 0.150 & 0.414 & 5.987 & 50 \\
+\bottomrule
+\end{tabular}
+\end{table}
 ```
 
 ## Formal statistical comparison
 
 The Friedman test rejected equal MSE ranks across the six designs under queen contiguity at $\tau = 1$ ($\chi^2 = 451.57$, $\text{df} = 5$, 160 blocks, $p < 2.2\times10^{-16}$). The average within-block ranks were 1.43 for Incidence-Guided Saturation Quadrants, 2.14 for Balanced Quartiles, 3.69 for Isolation Buffer, 4.24 for 2$\times$2 Blocking, 4.74 for Checkerboard, and 4.76 for High Incidence Focus. Nemenyi comparisons (critical difference 0.596) separated 11 of the 15 pairs. Incidence-Guided Saturation Quadrants ranked significantly better than every other design, including Balanced Quartiles ($p = 0.0086$), and Balanced Quartiles ranked significantly better than the remaining four. The four pairs that Nemenyi comparisons did not separate all lay among the bottom four designs: 2$\times$2 Blocking against Isolation Buffer ($p = 0.090$), High Incidence Focus ($p = 0.130$), and Checkerboard ($p = 0.170$), and Checkerboard against High Incidence Focus ($p = 1.00$). Holm-adjusted Wilcoxon signed-rank tests separated all 15 pairs.
 
-The bottom three designs are ordered differently by average rank and by mean MSE. Checkerboard had the highest mean MSE but a slightly better average rank than High Incidence Focus, because its MSE depended strongly on the spillover regime: it had a low MSE under the both-arms regime (0.062, against 0.042 for the best design) and the highest MSE in every control-only block (see the spillover-regime results below). Mean MSE weights that control-only failure by its size; average rank counts it once per block.
+The bottom three designs were ordered differently by average rank and by mean MSE. Checkerboard had the highest mean MSE but a slightly better average rank than High Incidence Focus, because its MSE depended strongly on the spillover regime: it had a low MSE under the both-arms regime (0.062, against 0.042 for the best design) and the highest MSE in every control-only block (see the spillover-regime results below). Mean MSE weights that control-only failure by its size; average rank counts it once per block.
 
 Because blocks within an incidence configuration share their ten surfaces, we also compared each pair of designs adjacent in the mean-MSE order over the 50 independent configuration-by-surface units. Every adjacent pair differed significantly. The mean paired differences in MSE, with $t_{49}$ 95\% intervals, were $-0.0401$ ($-0.0431$, $-0.0372$) for Incidence-Guided Saturation Quadrants against Balanced Quartiles, $-0.0293$ ($-0.0332$, $-0.0255$) for Balanced Quartiles against Isolation Buffer, $-0.0853$ ($-0.0954$, $-0.0752$) for Isolation Buffer against High Incidence Focus, $-0.0738$ ($-0.0858$, $-0.0617$) for High Incidence Focus against 2$\times$2 Blocking, and $-0.7677$ ($-0.7893$, $-0.7460$) for 2$\times$2 Blocking against Checkerboard, with Wilcoxon $p \le 4.9\times10^{-9}$ in every case. The better design of each pair had the lower MSE in all 50 units, except High Incidence Focus against 2$\times$2 Blocking, where it did so in 48 (96\%). This test separated High Incidence Focus from 2$\times$2 Blocking, which the Nemenyi comparison did not, because it compares mean MSE rather than within-block ranks.
 
@@ -201,7 +215,7 @@ Checkerboard (flagged) & 0.295 & 0.403 & 0.538 & 0.684 \\
 
 The spillover regime was the one factor that changed the queen ranking (Table 5, Figure 1a). Under the both-arms regime, Balanced Quartiles had the lowest MSE (0.042), followed by Incidence-Guided Saturation Quadrants (0.046), 2$\times$2 Blocking (0.062), Checkerboard (0.062), Isolation Buffer (0.161), and High Incidence Focus (0.162). Under the control-only regime, the order was Incidence-Guided Saturation Quadrants (0.135), Isolation Buffer (0.159), Balanced Quartiles (0.219), High Incidence Focus (0.329), 2$\times$2 Blocking (0.576), and Checkerboard (2.111). Isolation Buffer's MSE was the same under both regimes (0.161 and 0.159) by construction: no treated cluster has a treated neighbor, so $WZ = 0$ at every treated cluster, $WZ \circ (1 - Z) = WZ$, and the two regimes in Equation 2 define the same outcome model; the small difference is Monte Carlo error, since the two regimes use separate draws. Every other design had a higher MSE under the control-only regime.
 
-That increase was variance, not bias. The oracle model contains the exact regime-specific spillover covariate, so omitting a spillover term cannot bias it. In every combination of design and regime under queen contiguity, the absolute bias was at most 0.048 and squared bias, averaged over scenarios, was at most 2.2\% of MSE. Checkerboard shows the mechanism most clearly. At its 64 interior clusters, $WZ = 1/2$. Under the both-arms regime the spillover covariate is therefore the constant $\gamma/2$ at those clusters, confounded with the intercept but not with $Z$. Under the control-only regime it equals $(\gamma/2)(1 - Z)$ there, a linear combination of the intercept and $Z$, so only the 36 boundary clusters separate the spillover effect from the treatment effect. Checkerboard's MSE rose from 0.062 under the both-arms regime to 2.111 under the control-only regime, while its bias stayed near zero (0.004) and its coverage stayed at 0.942: its intervals widened with its variance. Its pooled MSE of 1.087 was almost entirely variance: squared bias, averaged over scenarios, was 0.0045, less than 0.5\% of MSE (Figure 3a shows the decomposition for the Poisson configuration with $\rho_X = 0.20$). 2$\times$2 Blocking showed the same pattern on a smaller scale, with MSE rising from 0.062 to 0.576 and a bias of 0.016 under the control-only regime.
+That increase was variance, not bias. The oracle model contains the exact regime-specific spillover covariate, so omitting a spillover term cannot bias it. In every combination of design and regime under queen contiguity, the absolute bias was at most 0.048 and squared bias, averaged over scenarios, was at most 2.2\% of MSE. Checkerboard showed the mechanism most clearly. At its 64 interior clusters, $WZ = 1/2$. Under the both-arms regime the spillover covariate is therefore the constant $\gamma/2$ at those clusters, confounded with the intercept but not with $Z$. Under the control-only regime it equals $(\gamma/2)(1 - Z)$ there, a linear combination of the intercept and $Z$, so only the 36 boundary clusters separate the spillover effect from the treatment effect. Checkerboard's MSE rose from 0.062 under the both-arms regime to 2.111 under the control-only regime, while its bias stayed near zero (0.004) and its coverage stayed at 0.942: its intervals widened with its variance. Its pooled MSE of 1.087 was almost entirely variance: squared bias, averaged over scenarios, was 0.0045, less than 0.5\% of MSE (Figure 3a shows the decomposition for the Poisson configuration with $\rho_X = 0.20$). 2$\times$2 Blocking showed the same pattern on a smaller scale, with MSE rising from 0.062 to 0.576 and a bias of 0.016 under the control-only regime.
 
 ```{=latex}
 \begin{table}[h]
@@ -258,7 +272,7 @@ Under queen contiguity, the design order was the same at every $\tau \in \{0.8, 
 
 ## Robustness across blocks and the recommended design
 
-Table 7 gives the distribution of MSE across the 160 queen blocks at $\tau = 1$. Incidence-Guided Saturation Quadrants had the lowest median (0.080) and the lowest worst-case MSE of any design (0.169). Isolation Buffer had the narrowest range (0.128 to 0.206), because its MSE does not depend on the spillover regime, but at a higher level. Balanced Quartiles had a low median (0.115) and a worst case of 0.290. The distributions of 2$\times$2 Blocking and Checkerboard reflect their dependence on the spillover regime: both had low first quartiles (0.062 and 0.063) and high upper quartiles (0.580 and 2.093). Checkerboard had the highest MSE in all 80 control-only blocks; in the 80 both-arms blocks, the highest MSE belonged to High Incidence Focus in 42 and to Isolation Buffer in 38. Under rook contiguity, Incidence-Guided Saturation Quadrants also had the lowest worst-case MSE (0.138).
+Table 7 gives the distribution of MSE across the 160 queen blocks at $\tau = 1$. Incidence-Guided Saturation Quadrants had the lowest median (0.080) and the lowest worst-case MSE of any design (0.169). Isolation Buffer had the narrowest range (0.128 to 0.206), because its MSE does not depend on the spillover regime, but at a higher level. Balanced Quartiles had a low median (0.115) and a worst case of 0.290. The distributions of 2$\times$2 Blocking and Checkerboard reflected their dependence on the spillover regime: both had low first quartiles (0.062 and 0.063) and high upper quartiles (0.580 and 2.093). Checkerboard had the highest MSE in all 80 control-only blocks; in the 80 both-arms blocks, the highest MSE belonged to High Incidence Focus in 42 and to Isolation Buffer in 38. Under rook contiguity, Incidence-Guided Saturation Quadrants also had the lowest worst-case MSE (0.138).
 
 ```{=latex}
 \begin{table}[h]
@@ -281,40 +295,89 @@ Checkerboard & 0.051 & 0.063 & 0.899 & 2.093 & 2.843 \\
 
 We recommend Incidence-Guided Saturation Quadrants. It had the lowest mean MSE under both neighbor types, in every incidence configuration, at every value of $\tau$, and under the control-only regime; its worst case across blocks was the lowest of the six designs; and its intervals had coverage of 0.937 under queen contiguity and 0.942 under rook contiguity. Balanced Quartiles also performed well. It was second overall under both neighbor types and was marginally better than Incidence-Guided Saturation Quadrants only under the both-arms regime (0.0421 against 0.0459 under queen contiguity, 0.0421 against 0.0451 under rook contiguity), where Incidence-Guided Saturation Quadrants had the lower MSE in 22 of 80 queen blocks and 23 of 80 rook blocks. Under the control-only regime, Incidence-Guided Saturation Quadrants had the lower MSE in all 80 queen blocks and 75 of 80 rook blocks, by a wider margin (0.135 against 0.219 under queen contiguity).
 
-Ordering the saturations by incidence made no detectable difference to Incidence-Guided Saturation Quadrants. Saturation Quadrants, which assigns the same four saturations to the quadrants in random order, had an MSE of 0.0900 against 0.0907 under queen contiguity and 0.0708 against 0.0717 under rook contiguity, and the two designs could not be distinguished (see Methods). The two designs share their structure, with the four quadrants treated at saturations of 20\% to 80\%, but no design in this study removes that structure while keeping the rest of the design fixed, so these results do not isolate it as the source of their lower MSE. Coverage did not separate the designs: it was close to 0.94 for every design under both neighbor types, except Checkerboard under rook contiguity, where $\tau$ is not identified.
+Ordering the saturations by incidence made no detectable difference to Incidence-Guided Saturation Quadrants. Saturation Quadrants, which assigns the same four saturations to the quadrants in random order, had an MSE of 0.0900 against 0.0907 under queen contiguity and 0.0708 against 0.0717 under rook contiguity, and the two designs could not be distinguished (see Methods). The two designs share their structure, with the four quadrants treated at saturations of 20\% to 80\%, but no design in this chapter removes that structure while keeping the rest of the design fixed, so these results do not isolate it as the source of their lower MSE. Coverage did not separate the designs: it was close to 0.94 for every design under both neighbor types, except Checkerboard under rook contiguity, where $\tau$ is not identified.
 
 ```{=latex}
-\begin{figure}[h]
+\begin{figure}[p]
 \centering
-\includegraphics[width=0.9\linewidth]{figures/fig_mse_by_design_6design.pdf}
-\caption{Mean squared error by design and spillover exposure regime, at the primary scenario ($\tau=1.0$), faceted by outcome spatial dependence $\rho$ and spillover exposure regime.}
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_mse_by_design_ranked_6design_queen.pdf}
+\caption{Queen contiguity (primary)}
+\end{subfigure}
+
+\vspace{0.5em}
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_mse_by_design_ranked_6design_rook.pdf}
+\caption{Rook contiguity (sensitivity)}
+\end{subfigure}
+\caption{Mean squared error (MSE) of the oracle estimate of $\tau$ by design at $\tau = 1$, under (a) queen contiguity (primary) and (b) rook contiguity (sensitivity). Columns of panels correspond to the four levels of outcome spatial dependence $\rho$, rows to the both-arms (top) and control-only (bottom) spillover regimes, and bar colors to the spillover magnitude $\gamma$. Each bar overlays the MSEs of the five incidence configurations for one combination of design, $\rho$, $\gamma$, and regime: the bar's height is the largest of the five, and the horizontal lines within it mark the other four. Designs are ordered by pooled mean MSE for the neighbor type of the panel (Table 2). The vertical scale is set separately for each row. Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[tbp]
 \centering
-\includegraphics[width=0.75\linewidth]{figures/fig_coverage_by_design_6design.pdf}
-\caption{95\% confidence interval coverage by design at $\tau=1.0$. The dashed red line marks the nominal 95\% level.}
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.62\linewidth]{figures/fig_coverage_by_design_6design_queen.pdf}
+\caption{Queen contiguity (primary)}
+\end{subfigure}
+
+\vspace{0.5em}
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.62\linewidth]{figures/fig_coverage_by_design_6design_rook.pdf}
+\caption{Rook contiguity (sensitivity)}
+\end{subfigure}
+\caption{Coverage of the 95\% confidence intervals by design at $\tau = 1$, under (a) queen contiguity (primary) and (b) rook contiguity (sensitivity). Each box summarizes the coverage of the 160 scenarios of one design (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each estimated from 250 fits. Designs are ordered by median coverage within each panel, so the order differs between panels and from the MSE order used elsewhere. The dashed red line marks the nominal 0.95 level. Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[tbp]
 \centering
-\includegraphics[width=0.75\linewidth]{figures/fig_tau_sensitivity_6design.pdf}
-\caption{Mean squared error by design across the five tested treatment-effect magnitudes.}
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.68\linewidth]{figures/fig_biasvar_6design_queen.pdf}
+\caption{Queen contiguity (primary)}
+\end{subfigure}
+
+\vspace{0.5em}
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.68\linewidth]{figures/fig_biasvar_6design_rook.pdf}
+\caption{Rook contiguity (sensitivity)}
+\end{subfigure}
+\caption{Decomposition of mean squared error into squared bias and variance by design at $\tau = 1$ for one incidence configuration, Poisson with $\rho_X = 0.20$, under (a) queen contiguity (primary) and (b) rook contiguity (sensitivity). For each design, the two stacked components are the squared bias and the variance ($\text{SD}^2$) of $\hat\tau$, each averaged over the 32 scenarios of that configuration (4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes). Designs are ordered by pooled mean MSE for the neighbor type of the panel (Table 2). The vertical scales of the two panels differ. Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged, and nearly all of its MSE is squared bias.}
 \end{figure}
 
+\begin{figure}[tbp]
+\centering
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.62\linewidth]{figures/fig_tau_sensitivity_6design_queen.pdf}
+\caption{Queen contiguity (primary)}
+\end{subfigure}
+
+\vspace{0.5em}
+\begin{subfigure}{\linewidth}
+\centering
+\includegraphics[width=0.62\linewidth]{figures/fig_tau_sensitivity_6design_rook.pdf}
+\caption{Rook contiguity (sensitivity)}
+\end{subfigure}
+\caption{Mean squared error by design across the five values of the treatment effect, $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$, under (a) queen contiguity (primary) and (b) rook contiguity (sensitivity). Each point averages the 160 scenarios of one design at one value of $\tau$, pooled over the five incidence configurations. Shaded bands show $\pm 1$ times the average of the scenario-level Monte Carlo standard errors of MSE; they describe the precision of a single scenario's MSE, not of the plotted average, whose standard error is smaller (Table 2). The five values of $\tau$ share their assignments and noise. The vertical scales of the two panels differ. Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}
+\end{figure}
 ```
 
 # Application: A Planned Sudden Unexpected Death Prevention Pilot in North Carolina
 
 ## Background
 
-Sudden unexpected death (SUD) in adults is a substantial and incompletely understood cause of premature mortality. The SUDDEN (Sudden Unexpected Death in North Carolina) methodology, a validated algorithm for classifying deaths as sudden and unexpected from death certificate and medical record data, was developed and screened against expert physician panel review by Nanavati and colleagues [@nanavati_sudden_2014]. Using this methodology, Mirzaei and colleagues estimated a North Carolina SUD base rate of approximately 35 per 100,000 among adults aged 20--64 and found that the resulting years of life lost and productivity loss from SUD exceed that of any individual cancer, underscoring SUD's substantial and under-recognized public health burden [@mirzaei_years_2019]. Subsequent work has documented substantial geographic and socioeconomic gradients in SUD incidence within North Carolina specifically: Gan and colleagues found elevated SUD incidence in rural counties relative to urban counties [@gan_factors_2019], and Mounsey and colleagues found an inverse relationship between household income and SUD incidence in Wake County [@mounsey_relation_2017]. Together, this literature establishes both that SUD is a meaningful and measurable outcome in North Carolina and that its incidence varies spatially and socioeconomically in ways that are directly relevant to the incidence-informed designs evaluated in this chapter.
+Sudden unexpected death (SUD) in adults is a substantial and incompletely understood cause of premature mortality. The SUDDEN (Sudden Unexpected Death in North Carolina) methodology, a validated algorithm for classifying deaths as sudden and unexpected from death certificate and medical record data, was developed and screened against expert physician panel review by Nanavati and colleagues [@nanavati_sudden_2014]. Using this methodology, Mirzaei and colleagues estimated a North Carolina SUD base rate of approximately 35 per 100,000 among adults aged 20--64 and found that the resulting years of life lost and productivity loss from SUD exceed that of any individual cancer, underscoring SUD's substantial and under-recognized public health burden [@mirzaei_years_2019]. Subsequent work has documented substantial geographic and socioeconomic gradients in SUD incidence within North Carolina specifically: Gan and colleagues found elevated SUD incidence in rural counties relative to urban counties [@gan_factors_2019], and Mounsey and colleagues found an inverse relationship between household income and SUD incidence in Wake County [@mounsey_relation_2017]. Together, this literature establishes both that SUD is a meaningful and measurable outcome in North Carolina and that its incidence varies spatially and socioeconomically in ways that are relevant to the incidence-informed designs evaluated in this chapter.
 
 ## The planned pilot design
 
-A pilot intervention is being planned in collaboration with North Carolina's community college (CC) system, which offers a natural spatial and organizational unit for the design framework developed in this chapter. North Carolina's 58 community colleges collectively serve all 100 counties in the state; each college has a primary campus in one county and, in many cases, satellite campuses in neighboring counties (for example, Durham Technical Community College operates a satellite campus in Orange County in addition to its primary Durham County campus). This network structure motivates the spillover term in this chapter's outcome model. Community colleges within a shared service network communicate and coordinate programmatic activity with one another, so an intervention delivered at one college plausibly influences outcomes in a neighboring college's service area even without any formal expansion of the intervention itself. The spillover term in Equation 2 approximates this mechanism: it passes spillover between adjacent clusters through the contiguity weights $W$, whereas coordination between colleges follows their programmatic ties, which need not coincide with shared service-area boundaries.
+A pilot intervention is being planned in collaboration with North Carolina's community college (CC) system, which provides the spatial and organizational unit for the design framework developed in this chapter. North Carolina's 58 community colleges collectively serve all 100 counties in the state; each college has a primary campus in one county and, in many cases, satellite campuses in neighboring counties (for example, Durham Technical Community College operates a satellite campus in Orange County in addition to its primary Durham County campus). This network structure motivates the spillover term in this chapter's outcome model. Community colleges within a shared service network communicate and coordinate programmatic activity with one another, so an intervention delivered at one college plausibly influences outcomes in a neighboring college's service area even without any formal expansion of the intervention itself. The spillover term in Equation 2 approximates this mechanism: it passes spillover between adjacent clusters through the contiguity weights $W$, whereas coordination between colleges follows their programmatic ties, which need not coincide with shared service-area boundaries.
 
-The planned pilot site is Lenoir Community College, whose service area comprises Lenoir, Greene, and Jones counties; the pilot cluster is that whole service area, with anticipated spillover to adjacent CC service areas; the pilot intervention involves workforce development and disaster-response-style training intended to empower CC students and staff to recognize signs of medical distress, connect at-risk individuals to care, and support timely follow-up. Because the teaching intervention under consideration is delivered county-wide by design, rather than at finer spatial resolution such as the census tract level, the natural treatment unit for this application is the CC service area (equivalently, a group of one or more counties) rather than the census tract, notwithstanding that individual-level incidence data may still be collected at finer resolution to inform the incidence-aware design components. The eventual evaluation plan anticipates that the intervention's effect will be visible first in intermediate process measures, such as medication adherence and the timeliness of clinic visits following an at-risk event, since meaningful shifts in the SUD incidence rate itself are not expected to be detectable on the timescale of an initial pilot; this expected measurement lag between process outcomes and the ultimate incidence outcome modeled throughout this chapter is discussed further as a limitation below.
+The planned pilot site is Lenoir Community College, whose service area comprises Lenoir, Greene, and Jones counties; the pilot cluster is that whole service area, with anticipated spillover to adjacent CC service areas; the pilot intervention involves workforce development and disaster-response-style training intended to empower CC students and staff to recognize signs of medical distress, connect at-risk individuals to care, and support timely follow-up. Because the teaching intervention under consideration is delivered county-wide by design, rather than at finer spatial resolution such as the census tract level, the treatment unit for this application is the CC service area (equivalently, a group of one or more counties) rather than the census tract, notwithstanding that individual-level incidence data may still be collected at finer resolution to inform the incidence-aware design components. The eventual evaluation plan anticipates that the intervention's effect will be visible first in intermediate process measures, such as medication adherence and the timeliness of clinic visits following an at-risk event, since meaningful shifts in the SUD incidence rate itself are not expected to be detectable on the timescale of an initial pilot; this expected measurement lag between process outcomes and the ultimate incidence outcome modeled throughout this chapter is discussed further as a limitation below.
 
 County-level SUD incidence for 2018--2021 was derived by Habib from North Carolina death certificates [@habib_temporal_2026]. Of the 412,514 deaths recorded statewide over that period, that derivation kept the 111,665 deaths among working-age adults (aged 18--64). It excluded deaths in hospitals and other institutions and deaths from expected causes (such as trauma, overdose, COVID-19, and end-stage chronic disease), and it applied a death-certificate algorithm validated against the SUDDEN physician-adjudicated cohort [@gan_factors_2019; @nanavati_sudden_2014]. The result is 21,147 sudden unexpected out-of-hospital deaths among working-age adults, pooled to the county level using death-certificate zip codes, with population-at-risk denominators from Surveillance, Epidemiology, and End Results (SEER) data for the corresponding years. We then aggregate these county-level data to the 58 community college service-area clusters. These data are not yet available for use in this dissertation chapter: access to them requires joining an active institutional review board protocol governing the SUDDEN dataset, a process that is underway at the time of this writing. Planned covariates for the eventual real-data application, once finalized, include county-level median income, food-desert status, physician access, and average driving distance to the nearest hospital, none of which are incorporated into the placeholder illustration below.
 
@@ -322,13 +385,13 @@ County-level SUD incidence for 2018--2021 was derived by Habib from North Caroli
 
 As a preliminary illustration only, and not as a finalized design recommendation, we re-ran the six-design comparison pipeline over the actual 58-cluster CC service-area geography, using dissolved county-level service boundaries and Queen contiguity, rather than the abstract $10\times10$ regular grid used in the primary comparison above. Because real SUD incidence data is not yet available, the baseline incidence surface used in this application run is a synthetic placeholder, generated from a Poisson spatial autoregressive process calibrated to the same 35-per-100,000 base rate reported above, with population drawn from 2024 North Carolina Office of State Budget and Management county population estimates. \textbf{The numeric results reported in this subsection are a simulated placeholder and must not be interpreted as a design recommendation for the real application}; they will be superseded once the real SUDDEN-derived county dataset described above is finalized and substituted for the synthetic incidence surface.
 
-With that caveat stated clearly, the qualitative pattern observed on this real, irregular geography was consistent with the primary grid-based comparison reported above: designs that stratify or saturate treatment according to incidence (Balanced Quartiles and the saturation-family designs) again achieved the lowest average MSE, in the range of 0.075--0.078, while a design adapted from the grid-based Checkerboard concept and a design that ignores incidence entirely (High Incidence Focus, applied without a reliable real incidence signal) performed markedly worse, with average MSE above 0.23. This qualitative consistency across a substantially different, irregular real-world geography is reassuring evidence that the primary comparison's conclusions are not an artifact specific to the regular $10\times10$ grid, though it is not a substitute for repeating the full comparison once real incidence data replace the synthetic placeholder.
+With that caveat, the qualitative pattern observed on this real, irregular geography was consistent with the primary grid-based comparison reported above: designs that stratify or saturate treatment according to incidence (Balanced Quartiles and the saturation-family designs) again achieved the lowest average MSE, in the range of 0.075--0.078, while a design adapted from the grid-based Checkerboard concept and a design that ignores incidence entirely (High Incidence Focus, applied without a reliable real incidence signal) performed worse, with average MSE above 0.23. This qualitative consistency across a substantially different, irregular real-world geography is evidence that the primary comparison's conclusions are not an artifact specific to the regular $10\times10$ grid, though it is not a substitute for repeating the full comparison once real incidence data replace the synthetic placeholder.
 
 # Discussion
 
 ## Summary and relevance
 
-This chapter compared six treatment assignment designs for a spatial cluster randomized trial on a grid of 100 clusters, under three mechanisms of heterogeneous baseline incidence, two spillover regimes, and a range of values for spatial dependence, spillover magnitude, and the treatment effect. Some findings held under every condition we varied. Others depended on the spillover regime, which a trial team is unlikely to know when it chooses a design.
+We compared six treatment assignment designs for a spatial cluster randomized trial on a grid of 100 clusters, under three mechanisms of heterogeneous baseline incidence, two spillover regimes, and a range of values for spatial dependence, spillover magnitude, and the treatment effect. Some findings held under every condition we varied. Others depended on the spillover regime, which a trial team is unlikely to know when it chooses a design.
 
 The robust findings are these. Incidence-Guided Saturation Quadrants had the lowest mean squared error under both neighbor types (0.091 under queen contiguity and 0.072 under rook contiguity), and Balanced Quartiles was second (0.131 and 0.084). Under queen contiguity, the order of the six designs was the same in each of the five incidence configurations and at every value of $\tau$, and neither the strength of spatial dependence in the outcome nor the spillover magnitude changed it. The mechanism that generated the incidence surface changed each design's MSE only slightly. Coverage of the 95\% intervals was close to 0.94 for every design under both neighbor types, except Checkerboard under rook contiguity, so the designs differed in precision and coverage did not separate them.
 
@@ -338,7 +401,7 @@ Checkerboard failed for different reasons under the two neighbor types. Under qu
 
 We recommend Incidence-Guided Saturation Quadrants. It had the lowest mean MSE under both neighbor types, in every incidence configuration, at every value of $\tau$, and under the control-only regime, and it had the lowest worst-case MSE across blocks (0.169 under queen contiguity). Balanced Quartiles also works well. It was second under both neighbor types and was marginally better than Incidence-Guided Saturation Quadrants only under the both-arms regime (0.042 against 0.046 under queen contiguity).
 
-Saturation Quadrants, which assigns the same four saturations to the quadrants in random order, could not be distinguished from Incidence-Guided Saturation Quadrants (MSE 0.0900 against 0.0907 under queen contiguity). Ordering the saturations by incidence therefore made no detectable difference: the saturation design did as well when its saturations were assigned without reference to incidence. Both designs treat the four quadrants at saturations from 20\% to 80\%, but no design in this study removes that structure while keeping the rest fixed, so these results do not show that the saturation structure is the reason for their lower MSE.
+Saturation Quadrants, which assigns the same four saturations to the quadrants in random order, could not be distinguished from Incidence-Guided Saturation Quadrants (MSE 0.0900 against 0.0907 under queen contiguity). Ordering the saturations by incidence therefore made no detectable difference: the saturation design did as well when its saturations were assigned without reference to incidence. Both designs treat the four quadrants at saturations from 20\% to 80\%, but no design in this chapter removes that structure while keeping the rest fixed, so these results do not show that the saturation structure is the reason for their lower MSE.
 
 These are design-stage results, and they complement analysis-stage modeling rather than replace it. Every design was analyzed with a spatial lag model that included the spillover term, and for every design whose $\tau$ was identified the estimates were close to unbiased: the absolute bias of each design under each regime was at most 0.048 under queen contiguity and 0.027 under rook contiguity. Given that model, the choice of design determined how precisely $\tau$ was estimated.
 
@@ -362,7 +425,7 @@ Fifth, the simulation shares random draws by design. Blocks within an incidence 
 
 Sixth, the simulation's base rate of 35 per 100,000 comes from the published SUD literature and was chosen to motivate the simulation. It is not the observed rate of the county data described in the Application, which come from a different source, age range, period, and case definition. We kept the published rate deliberately, because the simulation is a general design study, not a calibration to one data set. In the Poisson mechanism, incidence enters the designs and the fitted model only through the ranks of the observed rates, so the base rate affects the simulation only through the spatial pattern of those ranks and the number of tied rates.
 
-Seventh, in the planned application, changes in SUD incidence are not expected to be detectable on the timescale of an initial pilot, so its evaluation will rely on intermediate process outcomes. This chapter evaluated the designs on a continuous cluster-level outcome generated by the model in Equation 1, and we did not study how their performance carries over to a process outcome.
+Seventh, in the planned application, changes in SUD incidence are not expected to be detectable on the timescale of an initial pilot, so its evaluation will rely on intermediate process outcomes. We evaluated the designs on a continuous cluster-level outcome generated by the model in Equation 1 and did not study how their performance carries over to a process outcome.
 
 ## Future work
 
