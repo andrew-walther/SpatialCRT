@@ -36,7 +36,7 @@ format:
         \floatplacement{table}{H}
         \definecolor{boxbg}{RGB}{240,248,255}
         \definecolor{boxframe}{RGB}{70,130,180}
-bibliography: ../section_drafts/references.bib
+bibliography: ../SpatialCRT_IncidenceDesign.bib
 ---
 
 ```{r setup}

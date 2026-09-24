@@ -223,8 +223,7 @@ results/
 
 ```
 paper/
-  IncidenceDesign_shared.bib                  # Single bibliography shared by both manuscripts
-  spatialCRT.bib                              # Base Zotero export (included in shared.bib)
+  SpatialCRT_IncidenceDesign.bib              # Single bibliography shared by both manuscripts
   SAGE_Journal_Template/                      # sagej.cls, SageH.bst, SageV.bst (CTJ render dependency)
   SpatialCRT_IncidenceDesign_Presentation.qmd # Presentation slides (scaffold)
   report/
@@ -241,7 +240,7 @@ paper/
                                                #   si_figures/ subdirectories)
   dissertation_chapter/                       # Longer-form chapter, 6 designs, no length ceiling
     Dissertation_Chapter.{qmd,pdf}
-    shared-refs.bib -> ../IncidenceDesign_shared.bib  # symlink (Quarto underscore workaround)
+    shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink (Quarto underscore workaround)
   archive_manuscript/                         # Retired modular-Quarto manuscript (reference only)
 ```
 

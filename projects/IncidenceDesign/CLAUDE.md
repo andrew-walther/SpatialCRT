@@ -79,8 +79,7 @@ the reasoning behind this distinction.
 | **paper/dissertation_chapter/** | | | |
 | `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, 6 designs, full detail, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
 | **paper/** | | | |
-| `spatialCRT.bib` | ~86K | Base bibliography (Zotero export) | Included in `IncidenceDesign_shared.bib` |
-| `IncidenceDesign_shared.bib` | ~99K, 79 entries | Single shared bibliography for both manuscripts | `spatialCRT.bib` + SUD/SUDDEN citations + design-theory citations |
+| `SpatialCRT_IncidenceDesign.bib` | ~99K, 80 entries | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`) | Zotero base + SUD/SUDDEN citations + design-theory citations |
 | `SAGE_Journal_Template/` | — | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
 | `SpatialCRT_IncidenceDesign_Presentation.qmd` | ~26 | Presentation template | Quarto revealjs slides (scaffold) |
 
@@ -318,7 +317,7 @@ include_spill_covariate <- TRUE # Oracle mode: true Spill covariate in MLE
   ceiling, full theory + full simulation detail + a fuller Results section (per-
   incidence-mode rankings, Rho/Gamma/spillover-regime sensitivity, subgroup
   robustness/win-rate) than the CTJ version. Bibliography must be referenced via the
-  `shared-refs.bib` symlink in that directory, not the `../IncidenceDesign_shared.bib`
+  `shared-refs.bib` symlink in that directory, not the `../SpatialCRT_IncidenceDesign.bib`
   path directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib
   filenames referenced from YAML.
 - **Both manuscripts present 6 designs, not 8** (Checkerboard, High Incidence Focus,
@@ -394,8 +393,8 @@ paper/
   dissertation_chapter/
     Dissertation_Chapter.{qmd,pdf}  # Longer-form dissertation chapter draft
     figures/
-    shared-refs.bib -> ../IncidenceDesign_shared.bib  # symlink, see note above
-  IncidenceDesign_shared.bib  # Single bibliography shared by both manuscripts
+    shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink, see note above
+  SpatialCRT_IncidenceDesign.bib  # Single bibliography shared by both manuscripts
   SAGE_Journal_Template/      # sagej.cls, SageH.bst, SageV.bst (CTJ render dependency)
 ```
 
