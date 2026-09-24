@@ -70,7 +70,7 @@ cat("\n  Mean treated per design:\n"); print(as.data.frame(mt), row.names = FALS
 
 # 2. Before/after (same slice of the April 2026 tau-sweep results) ----
 cat("\n== 2. Before (April 2026) vs after, 6 manuscript designs, MSE / coverage ==\n")
-old <- readRDS(file.path("..", "results", "sim_data",
+old <- readRDS(file.path("..", "results", "archive", "pre_revision_20260924", "sim_data",
                          "sim_results_MLE_tau_sweep_combined_20260408_191916.rds"))
 old <- old %>% filter(True_Tau == 1, Rho %in% c(0, 0.5), Gamma %in% c(0.5, 0.8))
 stopifnot(nrow(old) == 640)
