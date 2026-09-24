@@ -119,14 +119,22 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
 
   } else if (design_id == 6) {
     # Design 6: Balanced Quartiles — stratified by incidence quartile; equal-size
-    # rank quartiles with ties broken at random per resample (M3)
+    # rank quartiles with ties broken at random per resample (M3). Exactly N/2
+    # treated (user decision 2026-09-24): each quartile treats floor(size/2), and
+    # the remaining N/2 - sum(floor) treatments go to randomly chosen odd-sized
+    # quartiles (on the 10x10 grid: two random quartiles treat 13 of 25, two 12).
     for (i in seq_len(n_resamples)) {
       quartiles <- dplyr::ntile(random_tie_rank(incidence), 4)
+      sizes <- tabulate(quartiles, nbins = 4)
+      n_trt <- floor(sizes / 2)
+      odd <- which(sizes %% 2 == 1)
+      n_extra <- floor(N / 2) - sum(n_trt)
+      extra <- odd[sample.int(length(odd), n_extra)]
+      n_trt[extra] <- n_trt[extra] + 1
       z <- numeric(N)
       for (q in 1:4) {
         idx <- which(quartiles == q)
-        n_half <- round(length(idx) / 2)
-        z[idx] <- sample(c(rep(1, n_half), rep(0, length(idx) - n_half)))
+        z[idx] <- sample(c(rep(1, n_trt[q]), rep(0, length(idx) - n_trt[q])))
       }
       mat[, i] <- z
     }

@@ -54,9 +54,8 @@ for (d in c(6, 7)) {
   # consequence: treated counts per incidence level are balanced in expectation,
   # and the within-tie treatment probability is flat in grid index.
   lvl_rate <- tapply(rowMeans(Zd), X_tied, mean)
-  expected <- if (d == 6) 12 / 25 else 0.5
-  check(sprintf("Design %d: treated per draw = %d", d, if (d == 6) 48 else 50),
-        all(colSums(Zd) == if (d == 6) 48 else 50))
+  expected <- 0.5
+  check(sprintf("Design %d: treated per draw = 50", d), all(colSums(Zd) == 50))
   check(sprintf("Design %d: treatment rate at every tied incidence level ~ %.2f (±0.03)",
                 d, expected),
         all(abs(lvl_rate - expected) < 0.03))
@@ -137,8 +136,8 @@ check("Non-oracle: never aliased", all(flag$N_Aliased[!orc] == 0))
 check("Z_WZ_rank_deficient TRUE only for Checkerboard x rook (both estimators)",
       identical(flag$Z_WZ_rank_deficient, cb_rook))
 check("No other warnings", all(flag$N_Warn == 0))
-check("High Incidence Focus Mean_Treated = 50",
-      all(flag$Mean_Treated[flag$Design == "Design 2"] == 50))
+check("High Incidence Focus and Balanced Quartiles Mean_Treated = 50",
+      all(flag$Mean_Treated[flag$Design %in% c("Design 2", "Design 6")] == 50))
 
 # 5. Known answer: correctly specified models are ~unbiased with ~nominal coverage ----
 cat("\n[5] Known answer (Balanced Quartiles, queen, spatial rhoX = 0.20, rho = 0.20)\n")

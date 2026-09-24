@@ -49,7 +49,7 @@ chk <- c(
   "Z_WZ_rank_deficient only Checkerboard x rook (both files)" =
     all(orc$Z_WZ_rank_deficient == (orc$Design == "Design 1" & orc$Neighbor_Type == "rook")) &&
     all(non$Z_WZ_rank_deficient == (non$Design == "Design 1" & non$Neighbor_Type == "rook")),
-  "High Incidence Focus Mean_Treated = 50"   = all(orc$Mean_Treated[orc$Design == "Design 2"] == 50)
+  "HIF and Balanced Quartiles Mean_Treated = 50" = all(orc$Mean_Treated[orc$Design %in% c("Design 2", "Design 6")] == 50)
 )
 for (n in names(chk)) cat(sprintf("  %-58s %s\n", n, if (chk[[n]]) "PASS" else "FAIL"))
 

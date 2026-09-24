@@ -31,6 +31,6 @@ The following objects are masked from ‘package:base’:
 Units: 20 | scenarios per estimator: 640 | fits per scenario: 250 | total fits: 320000
 Workers: 10 | checkpoints: /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/checkpoints/rev_2026-09/pilot
 
-=== Complete: 0.8 min wall; unit compute 7.6 min total (23 s mean/unit) ===
+=== Complete: 0.7 min wall; unit compute 7.3 min total (22 s mean/unit) ===
 Saved MLE_tau_sweep: 640 scenario rows, 6400 surface rows, 0 warning rows
 Saved MLEnonoracle_tau_sweep: 640 scenario rows, 6400 surface rows, 0 warning rows

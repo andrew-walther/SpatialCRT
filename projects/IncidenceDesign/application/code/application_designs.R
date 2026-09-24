@@ -239,12 +239,19 @@ get_application_designs <- function(design_id,
       mat[, i] <- z
     }
   } else if (design_id == 6) {
+    # Exactly floor(N/2) treated (mirrors code/03_designs.R, decision 2026-09-24):
+    # floor(size/2) per quartile, remaining treatments to random odd-sized quartiles
     for (i in seq_len(n_resamples)) {
       quartile <- dplyr::ntile(application_random_tie_rank(incidence), 4)
+      sizes <- tabulate(quartile, nbins = 4)
+      n_trt <- floor(sizes / 2)
+      odd <- which(sizes %% 2 == 1)
+      extra <- odd[sample.int(length(odd), floor(N / 2) - sum(n_trt))]
+      n_trt[extra] <- n_trt[extra] + 1L
       z <- integer(N)
-      for (q in sort(unique(quartile))) {
+      for (q in 1:4) {
         idx <- which(quartile == q)
-        z[idx] <- make_balanced_assignment(idx, 0.5)
+        z[idx] <- sample(c(rep(1L, n_trt[q]), rep(0L, length(idx) - n_trt[q])))
       }
       mat[, i] <- z
     }

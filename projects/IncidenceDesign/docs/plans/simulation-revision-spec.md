@@ -65,12 +65,12 @@ of quadrant means); the rest are unchanged.
 | 3 | Saturation Quadrants | random permutation of {0.2, 0.4, 0.6, 0.8} over 5×5 quadrants | 50 |
 | 4 | Isolation Buffer | greedy random maximal independent set in nb | rook ≈ 38, queen ≈ 22 |
 | 5 | 2×2 Blocking | 2 of 4 within each 2×2 block | 50 |
-| 6 | Balanced Quartiles | strata = `ntile(r, 4)` (25 each); `round(25/2)` = 12 treated per stratum | 48 |
+| 6 | Balanced Quartiles | strata = `ntile(r, 4)` (25 each); floor(25/2) = 12 per stratum plus one more in 2 random strata | exactly 50 |
 | 7 | Balanced Halves | strata = `ntile(r, 2)` (50 each); 25 treated per stratum | 50 |
 | 8 | Incidence-Guided Saturation Quadrants | quadrant saturations {0.8, 0.6, 0.4, 0.2} by random-tie rank of quadrant mean X_k (highest mean → 0.8) | 50 |
 
-Balanced Quartiles keeps the pre-revision per-stratum rule (12 of 25, 48 in total); only
-the strata changed. `is_design_deterministic()` is TRUE for Checkerboard only.
+Balanced Quartiles treated 48 before the revision (`round(25/2)` = 12 per stratum); it now
+treats exactly N/2 (user decision after the B4 pilot, 2026-09-24). `is_design_deterministic()` is TRUE for Checkerboard only.
 The application copy (`application/code/application_designs.R`) gets the same tie rule.
 
 ## 4. Seeds (M4)
