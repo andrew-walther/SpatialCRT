@@ -1,0 +1,28 @@
+fit_sar_lag() vs spatialreg::lagsarlm() — 2026-09-24 02:04
+R 4.5.2, spatialreg 1.4.3, spdep 1.4.2
+Fits: 5120 (2560 oracle, 2560 non-oracle); aliased fits: 160 (Checkerboard x rook oracle: 160)
+Fits with any warning (lagsarlm): 160; distinct warnings: Aliased variables found: Spill
+
+Max absolute / relative differences (threshold):
+  tau-hat          9.69e-08  (< 1e-6)
+  SE(tau-hat) rel  1.09e-08  (< 1e-5)
+  rho-hat          8.07e-08  (< 1e-6)
+  logLik           5.68e-14  (< 1e-6)
+  any coefficient  5.15e-07  (< 1e-6)
+  any SE rel       4.37e-08  (< 1e-5)
+  SE(rho-hat) abs  7.73e-09  (not a criterion)
+
+Elapsed: lagsarlm 391.5 s, fit_sar_lag 3.2 s, speedup 121.9x (76.47 vs 0.63 ms/fit)
+
+Checks:
+  n_fits_ge_5000               PASS
+  tau_lt_1e6                   PASS
+  se_rel_lt_1e5                PASS
+  rho_lt_1e6                   PASS
+  loglik_lt_1e6                PASS
+  all_coef_lt_1e6              PASS
+  all_se_rel_lt_1e5            PASS
+  identical_aliasing           PASS
+  identical_coef_names         PASS
+  identical_warnings           PASS
+  aliased_iff_cb_rook_oracle   PASS
