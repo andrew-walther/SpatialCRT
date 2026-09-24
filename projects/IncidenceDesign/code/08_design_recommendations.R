@@ -299,7 +299,9 @@ plot_rank_trajectories <- function(results, param, inc_label = "",
     geom_point(size = point_size) +
     geom_text(aes(label = Short_Name), hjust = -0.1, vjust = -0.5,
               size = label_size, show.legend = FALSE) +
-    scale_y_reverse(breaks = 1:6, limits = c(6.5, 0.5)) +
+    # Axis spans every rank present (was hard-coded to 6, which silently dropped
+    # ranks 7-8 once the study had 8 designs)
+    scale_y_reverse(breaks = seq_len(max(ranked$Rank)), limits = c(max(ranked$Rank) + 0.5, 0.5)) +
     scale_color_viridis_d(option = "turbo") +
     theme_minimal(base_size = 14) +
     labs(

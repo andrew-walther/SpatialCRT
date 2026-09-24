@@ -716,20 +716,23 @@ run_standard_tables <- function(results, inc_label = "") {
 
 #' Append Monte Carlo standard error columns to a results data frame.
 #'
-#' Computes exact SEs from the stored simulation counts and summary statistics.
-#' The formulas assume approximately normal estimator distributions (valid for
-#' large Monte Carlo sample sizes) and require a True_Tau column and N_Valid_Est
-#' column — both added by the updated simulation scripts.
+#' Results from the 2026-09 runner (05) already carry surface-level SEs
+#' (SE_Bias, SE_MSE, SE_Coverage, SE_Power = sd of the 10 surface means / sqrt(10);
+#' see docs/plans/simulation-revision-spec.md section 7). When those columns are
+#' present they are returned unchanged: the fallback formulas below treat all fits
+#' as independent, which understates the SE when fits share incidence surfaces.
 #'
+#' Fallback for older results only (requires N_Valid_Est):
 #'   SE_Bias     = SD / sqrt(N_Valid_Est)
 #'   SE_Coverage = sqrt(Coverage * (1 - Coverage) / N_Valid_Est)    [binomial]
 #'   SE_MSE      = sqrt(2*SD^4 + 4*Bias^2*SD^2) / sqrt(N_Valid_Est) [normal DGP]
 #'
 #' @param results Data frame containing columns: SD, Bias, Coverage, N_Valid_Est.
-#' @return Data frame with three new columns: SE_Bias, SE_Coverage, SE_MSE.
-#'   Rows where N_Valid_Est is 0 or NA will produce NA SEs.
+#' @return Data frame with SE_Bias, SE_Coverage, SE_MSE columns (stored ones if
+#'   present). In the fallback, rows with N_Valid_Est = 0 give Inf/NaN, not NA.
 #' @family tau-sweep
 add_mc_ses <- function(results) {
+  if (all(c("SE_Bias", "SE_MSE", "SE_Coverage") %in% names(results))) return(results)
   required <- c("SD", "Bias", "Coverage", "N_Valid_Est")
   missing  <- setdiff(required, names(results))
   if (length(missing) > 0) {

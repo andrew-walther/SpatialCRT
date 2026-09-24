@@ -402,26 +402,13 @@ Incidence-Guided Saturation Quadrants           0.0000               0.2976
 Isolation Buffer                                    NA               0.0000
 Saturation Quadrants                            0.0000                   NA
 Summary written to /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/eight_design_supplementary/eight_design_summary.txt 
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-Scale for fill is already present.
-Adding another scale for fill, which will replace the existing scale.
-WARN: `geom_errorbarh()` was deprecated in ggplot2 4.0.0.
-ℹ Please use the `orientation` argument of `geom_errorbar()` instead.
-`height` was translated to `width`.
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
-WARN: font metrics unknown for character 0x0a in encoding latin1
 Scale for fill is already present.
 Adding another scale for fill, which will replace the existing scale.
 `height` was translated to `width`.
+Scale for fill is already present.
+Adding another scale for fill, which will replace the existing scale.
+`height` was translated to `width`.
+There were 13 warnings (use warnings() to see them)
 ======================================================================
 *** STALE: built from the pre-revision application run. The application uses the
 *** revised design rules (random tie-breaking, exact N/2) only after it is re-run.
