@@ -104,7 +104,7 @@ results_full <- apply_design_names(results_full)
 
 tau_primary <- 1.0
 
-# Primary slice: tau = 1.0 (2,560 scenarios across 4 incidence configs)
+# Primary slice: tau = 1.0 (2,048 scenarios across 4 incidence configs, rook + queen)
 results_primary <- results_full |> filter(True_Tau == tau_primary)
 
 # Split primary results into named per-config list
@@ -124,15 +124,15 @@ design_order <- DESIGN_DISPLAY_ORDER
 
 # Executive Summary
 
-This report summarizes a completed simulation study that systematically compares eight treatment assignment strategies for Spatial Cluster Randomized Trials (CRTs). The study generated 12,800 scenarios by sweeping the direct treatment effect ($\tau$) and spatial DGP parameters across realistic ranges, using Maximum Likelihood Estimation (MLE) to evaluate each design. Key findings:
+This report summarizes a completed simulation study that systematically compares eight treatment assignment strategies for Spatial Cluster Randomized Trials (CRTs). The study generated 12,800 scenarios by sweeping the direct treatment effect ($\tau$) and spatial DGP parameters across realistic ranges, using Maximum Likelihood Estimation (MLE) to evaluate each design (results from the revised simulation of September 2026). This summary uses the 10,240 Spatial and Poisson incidence scenarios. Queen contiguity is the primary neighbor structure and rook a sensitivity analysis; tables and figures pool the two unless labeled otherwise. The Checkerboard design is labeled "Block Stratified" in the code-generated tables and figures. Key findings:
 
-- **Saturation Quadrants and Incidence-Guided Saturation Quadrants are the clear winners** across all conditions tested. At the primary effect size ($\tau = 1.0$), Incidence-Guided Saturation Quadrants achieves MSE = 0.079 and Saturation Quadrants achieves MSE = 0.080 — approximately **ten times lower** than the worst-performing Block Stratified Sampling (MSE = 0.802).
+- **Saturation Quadrants and Incidence-Guided Saturation Quadrants have the lowest MSE** and are statistically indistinguishable from each other. At the primary effect size ($\tau = 1.0$) under queen contiguity, both achieve MSE = 0.090, about **twelve times lower** than the worst-performing Checkerboard design (MSE = 1.086). Pooled over rook and queen, their MSEs are 0.080 and 0.081, versus 0.783 for Checkerboard.
 
-- **Spatial separation is counterproductive.** Block Stratified Sampling, which maximizes spatial distance between treated and control clusters, performs dramatically worse than all alternatives. Its 95% confidence intervals contain the true effect only ~55% of the time — far below the nominal 95% target.
+- **Spatial separation is counterproductive.** Checkerboard, which alternates treated and control clusters, has the largest MSE. Under rook contiguity its treatment effect is not identified ($\mathbf{WZ} = \mathbf{1} - \mathbf{Z}$), so its estimates are biased by about $-\gamma$ and its 95% intervals cover the true effect only 15% of the time; under queen its coverage is near nominal (0.94) but its estimates are very variable. Pooled over rook and queen, its coverage is 55%.
 
-- **Saturation-based designs are robust.** The saturation design ranking advantage holds across all tested levels of spatial autocorrelation ($\rho$), spillover magnitude ($\gamma$), spillover direction, and neighborhood structure. Two parameters — spillover direction and contiguity type — had no meaningful effect on rankings and are noted only briefly.
+- **Saturation-based designs are robust.** Both saturation designs are in the top statistical group at every tested level of spatial autocorrelation ($\rho$) and spillover magnitude ($\gamma$), under both spillover directions, and under both contiguity types. Under bidirectional spillover and under rook contiguity, Balanced Quartiles and Balanced Halves join that top group.
 
-- **Coverage and power are strong for recommended designs.** MLE achieves approximately 94% coverage for all designs except Block Stratified Sampling across the full effect size range ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$), with Block Stratified Sampling remaining severely anti-conservative throughout.
+- **Coverage and power are strong for recommended designs.** MLE achieves approximately 94% coverage for every design except Checkerboard under rook, across the full effect size range ($\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$). Coverage therefore does not separate the designs; MSE and power do.
 
 - **Path forward:** These results motivate applying Saturation Quadrants and Incidence-Guided Saturation Quadrants to real-world NC county-level Sudden Unexpected Death (SUD) data, where spatial dependence in outcomes is well-established and design choice carries substantial practical consequence.
 
@@ -161,7 +161,7 @@ Several intuitive strategies exist for assigning treatment in a spatial CRT: con
 
 ## Study Region and Spatial Structure
 
-The simulated study region is a **10×10 regular lattice** of 100 clusters. Spatial adjacency is defined by either rook contiguity (shared edges; 4 neighbors per interior cluster) or queen contiguity (shared edges or corners; 8 neighbors per interior cluster), yielding a row-standardized spatial weight matrix $\mathbf{W}$. Results are robust to the choice of contiguity definition — this parameter had no meaningful effect on design rankings — and is not discussed further.
+The simulated study region is a **10×10 regular lattice** of 100 clusters. Spatial adjacency is defined by either rook contiguity (shared edges; 4 neighbors per interior cluster) or queen contiguity (shared edges or corners; 8 neighbors per interior cluster), yielding a row-standardized spatial weight matrix $\mathbf{W}$. Queen contiguity is the primary structure and rook is a sensitivity analysis. The top of the design ranking is similar under both; the main difference is that under rook the Checkerboard design makes $\mathbf{WZ} = \mathbf{1} - \mathbf{Z}$, so its treatment effect is not identified (those estimates are kept but flagged).
 
 ## Outcome Data Generating Process
 
@@ -201,13 +201,15 @@ knitr::kable(sdm_df, escape = FALSE, booktabs = TRUE,
 **Baseline incidence** ($\mathbf{X}$) is generated under two modes, representing realistic outcome distributions:
 
 - *Spatial:* Uniform marginal values with spatial autocorrelation ($\rho_X \in \{0.20, 0.50\}$)
-- *Poisson:* Count-based SUD-realistic incidence ($\lambda = 35/100{,}000$, $\rho_X \in \{0.20, 0.50\}$)
+- *Poisson:* Count-based SUD-realistic incidence ($\lambda = 35/100{,}000$, 100,000 people per cluster, $\rho_X \in \{0.20, 0.50\}$)
 
-The full parameter sweep covers **12,800 scenarios** across four incidence configurations, as summarized in @tbl-params.
+For each incidence configuration, 10 incidence surfaces are drawn. Each design is drawn from a surface, and the outcome and the analysis use that same surface.
+
+The full parameter sweep covers **12,800 scenarios**; the four Spatial and Poisson configurations used here account for 10,240 of them (the rest are iid incidence), as summarized in @tbl-params.
 
 ```{r}
 #| label: tbl-params
-#| tbl-cap: "Simulation parameter grid. Each combination of the five swept parameters was fully crossed, yielding 12,800 total scenarios."
+#| tbl-cap: "Simulation parameter grid. Each combination of the five swept parameters was fully crossed with 2 neighbor types and 8 designs, yielding 10,240 Spatial and Poisson scenarios (12,800 including iid incidence)."
 
 greek <- if (knitr::is_latex_output()) {
   list(tau = "$\\tau$", rho = "$\\rho$", gamma = "$\\gamma$", rhoX = "$\\rho_X$")
@@ -247,12 +249,12 @@ knitr::kable(params_df, escape = FALSE, booktabs = TRUE,
 
 ```{r}
 #| label: tbl-designs
-#| tbl-cap: "The eight treatment assignment strategies evaluated, grouped by conceptual design type. The ID column shows simulation indices; display order reflects conceptual grouping (Blocking → Stratified → Saturation) rather than ID order. All designs target approximately 50% treated clusters. Deterministic designs produce the same assignment for every replicate given fixed baseline incidence."
+#| tbl-cap: "The eight treatment assignment strategies evaluated, grouped by conceptual design type. The ID column shows simulation indices; display order reflects conceptual grouping (Blocking → Stratified → Saturation) rather than ID order. All designs treat exactly 50 of 100 clusters except Isolation Buffer (about 22 under queen and 38 under rook contiguity). Ties in incidence are broken at random for every design draw. Checkerboard is the only deterministic design."
 
 designs_df <- data.frame(
   ID = c(1, 5, 4, 2, 7, 6, 3, 8),
   Name = c(
-    "Block Stratified Sampling",
+    "Checkerboard",
     "2x2 Blocking",
     "Isolation Buffer",
     "High Incidence Focus",
@@ -265,13 +267,13 @@ designs_df <- data.frame(
     "Alternating grid cells — maximizes spatial separation between treated and control",
     "1:1 randomization within non-overlapping 2x2 spatial blocks",
     "Greedy assignment: no two treated clusters share a border",
-    "Treats all top-50% burden clusters by baseline incidence",
+    "Treats the top 50 clusters by baseline incidence rank (ties broken at random)",
     "2-strata median split; balanced 1:1 assignment within each half",
-    "Stratified randomization within incidence quartile strata",
+    "Stratified randomization within incidence quartile strata (exactly 50 treated)",
     "Randomizes saturation rate (20-80%) independently within each geographic quadrant",
     "Quadrant saturation rates guided by average incidence rank per quadrant"
   ),
-  Det = c("Yes", "No", "No", "Yes", "No", "No", "No", "No")
+  Det = c("Yes", "No", "No", "No", "No", "No", "No", "No")
 )
 knitr::kable(designs_df, escape = TRUE, booktabs = TRUE,
              col.names = c("ID", "Name", "Description", "Det.")) |>
@@ -280,7 +282,7 @@ knitr::kable(designs_df, escape = TRUE, booktabs = TRUE,
                             font_size = 9)
 ```
 
-@fig-designs shows all eight designs applied to the same 10×10 grid instance, with cluster color indicating baseline incidence and within-quadrant saturation percentages annotated for Saturation Quadrants and Incidence-Guided Saturation Quadrants.
+The figure below shows all eight designs applied to the same 10×10 grid instance, with cluster color indicating baseline incidence and within-quadrant saturation percentages annotated for Saturation Quadrants and Incidence-Guided Saturation Quadrants.
 
 ```{r}
 #| label: fig-designs
@@ -289,16 +291,22 @@ knitr::kable(designs_df, escape = TRUE, booktabs = TRUE,
 #| fig-height: 4.5
 #| out-width: "100%"
 
-knitr::include_graphics(
-  file.path(results_dir, "figures", "design_samples_option1_overlays.png")
-)
+# The annotated overlay figure was archived with the pre-revision outputs and has
+# not been regenerated for the 2026-09 revision. Show a visible notice instead of
+# silently reusing the stale archived figure.
+overlay_png <- file.path(results_dir, "figures", "design_samples_option1_overlays.png")
+if (file.exists(overlay_png)) {
+  knitr::include_graphics(overlay_png)
+} else {
+  cat("[Figure not available: the saturation-overlay design figure\nhas not been regenerated for the 2026-09 revised designs.]\n")
+}
 ```
 
-The conceptual contrast across designs is important: Block Stratified Sampling enforces **maximum spatial separation** between treated and control clusters. Saturation Quadrants and Incidence-Guided Saturation Quadrants take the opposite approach — they vary **saturation intensity** within spatial regions, intentionally mixing treated and control units at a local level. This distinction directly determines how well each design accommodates spatial spillover in the outcome DGP.
+The conceptual contrast across designs is important: Checkerboard enforces **maximum spatial separation** between treated and control clusters. Saturation Quadrants and Incidence-Guided Saturation Quadrants take the opposite approach — they vary **saturation intensity** within spatial regions, intentionally mixing treated and control units at a local level. This distinction directly determines how well each design accommodates spatial spillover in the outcome DGP.
 
 ## Estimation and Evaluation Metrics
 
-All results use **Maximum Likelihood Estimation (MLE)** via the `lagsarlm` function from the `spatialreg` package. The model is fit as an oracle — the true spillover term ($\mathbf{WZ}$) is included as a covariate, so MLE has access to the correct spillover structure. Each scenario uses 25 design resamples × 10 outcome resamples = **250 Monte Carlo iterations**.
+All results use **Maximum Likelihood Estimation (MLE)** of the spatial lag model via the project's `fit_sar_lag()` engine, which is the same estimator as `lagsarlm` from the `spatialreg` package (agreement to about $10^{-7}$). The model is fit as an oracle — the true spillover term (the regime-specific $\gamma\mathbf{WZ}$ covariate) is included, so MLE has access to the correct spillover structure; a non-oracle model without it was also run as a sensitivity analysis and is not shown here. Each scenario uses 10 incidence surfaces × 25 design draws = **250 fits**, each with its own noise draw; Monte Carlo standard errors are computed from the 10 surface-level results.
 
 Four metrics are tracked per scenario:
 
@@ -315,11 +323,11 @@ MSE is the primary criterion for design comparison. Coverage provides an inferen
 
 ## Overall Design Performance
 
-@tbl-mse-rankings summarizes design performance at the primary effect size ($\tau = 1.0$), averaged across all four Spatial and Poisson incidence configurations.
+@tbl-mse-rankings summarizes design performance at the primary effect size ($\tau = 1.0$), averaged across all four Spatial and Poisson incidence configurations and **pooled over rook and queen**. Under queen alone the MSEs are 0.090 (Saturation Quadrants), 0.090 (Incidence-Guided Saturation Quadrants) and 1.086 (Checkerboard); under rook they are 0.070, 0.072 and 0.480.
 
 ```{r}
 #| label: tbl-mse-rankings
-#| tbl-cap: "Mean MSE and coverage at the primary effect size (tau = 1.0), averaged across Spatial and Poisson incidence configurations. Designs are sorted by MSE (best to worst)."
+#| tbl-cap: "Mean MSE and coverage at the primary effect size (tau = 1.0), averaged across Spatial and Poisson incidence configurations, rook and queen pooled. Designs are sorted by MSE (best to worst). Block Stratified = Checkerboard; its pooled coverage mixes queen (0.94) with rook (0.15), where its treatment effect is not identified."
 
   results_primary |>
   group_by(Design) |>
@@ -338,14 +346,14 @@ MSE is the primary criterion for design comparison. Coverage provides an inferen
 ```
 
 ::: {.callout-note}
-**Note for manuscript development:** Saturation Quadrants and Incidence-Guided Saturation Quadrants perform similarly (MSE 0.079 vs. 0.080 at τ = 1.0), as do Balanced Quartiles and Balanced Halves. For final manuscript reporting, one member of each pair will be selected as the representative design to streamline presentation. This decision will be deferred until the application to NC county data is complete.
+**Note for manuscript development:** Saturation Quadrants and Incidence-Guided Saturation Quadrants perform similarly (pooled MSE 0.080 vs. 0.081 at τ = 1.0), as do Balanced Quartiles and Balanced Halves (0.108 vs. 0.107). For final manuscript reporting, one member of each pair is retained as the representative design (Incidence-Guided Saturation Quadrants and Balanced Quartiles; see `results/six_design_manuscript/`).
 :::
 
-Saturation Quadrants and Incidence-Guided Saturation Quadrants are the top performers by a substantial margin; Block Stratified Sampling is dramatically inferior. To understand *why*, @fig-bv decomposes each design's MSE into its squared bias and variance components for the most SUD-realistic configuration (Poisson incidence, $\rho_X = 0.20$).
+Saturation Quadrants and Incidence-Guided Saturation Quadrants are the top performers by a substantial margin; Checkerboard is dramatically inferior. To understand *why*, @fig-bv decomposes each design's MSE into its squared bias and variance components for the most SUD-realistic configuration (Poisson incidence, $\rho_X = 0.20$).
 
 ```{r}
 #| label: fig-bv
-#| fig-cap: "Bias-squared and variance contributions to MSE for each design (Poisson incidence, rho_X = 0.20, tau = 1.0). Block Stratified Sampling's MSE is almost entirely variance; Saturation Quadrants and Incidence-Guided Saturation Quadrants achieve low bias and low variance simultaneously."
+#| fig-cap: "Bias-squared and variance contributions to MSE for each design (Poisson incidence, rho_X = 0.20, tau = 1.0, rook and queen pooled). Checkerboard (Block Stratified) has both a large variance (from queen) and a large squared bias (from rook, where its treatment effect is not identified); every other design's MSE is almost entirely variance. Saturation Quadrants and Incidence-Guided Saturation Quadrants achieve low bias and low variance simultaneously."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -362,7 +370,7 @@ plot_bias_variance(results_rep, rep_label) +
   theme(axis.text.x = element_text(angle = 40, hjust = 1))
 ```
 
-Block Stratified Sampling fails because its rigid alternating structure creates near-perfect collinearity between treatment assignment ($\mathbf{Z}$) and average neighbor treatment ($\mathbf{WZ}$). MLE cannot disentangle the direct treatment effect from spillover, producing high-variance estimates. Isolation Buffer suffers a similar problem — its greedy no-adjacency constraint produces sparse, fragmented treatment that is similarly misaligned with the spatial DGP.
+Checkerboard fails because its rigid alternating structure ties treatment assignment ($\mathbf{Z}$) to average neighbor treatment ($\mathbf{WZ}$). Under rook contiguity the tie is exact ($\mathbf{WZ} = \mathbf{1} - \mathbf{Z}$): the spillover covariate is aliased and dropped, and the direct effect is not identified apart from spillover (bias about $-\gamma$). Under queen contiguity with control-only spillover the spillover covariate is nearly collinear with $\mathbf{Z}$, so MLE cannot disentangle the direct effect from spillover and the estimates are very variable. Isolation Buffer, whose greedy no-adjacency constraint treats only about 22 (queen) or 38 (rook) clusters, has intermediate MSE.
 
 Saturation Quadrants and Incidence-Guided Saturation Quadrants succeed precisely because their saturation-based approach distributes treated and control clusters heterogeneously within each quadrant, preserving contrast between $\mathbf{Z}$ and $\mathbf{WZ}$ and keeping both bias and variance low.
 
@@ -375,13 +383,13 @@ friedman_res <- run_friedman_test(results_primary)
 nemenyi_res  <- run_nemenyi_posthoc(results_primary)
 ```
 
-A **Friedman test** — the non-parametric analogue of a repeated-measures ANOVA, with each simulation scenario treated as a block — confirms that design differences are highly significant: $\chi^2(7) = 1091.90$, $p < 2.2 \times 10^{-16}$. This finding is not specific to any particular parameter setting: stratifying the analysis by $\rho$, $\gamma$, spillover direction, neighbor type, or incidence mode produces statistically significant design differences in every stratum (all conditional Friedman $p < 2.2 \times 10^{-16}$).
+A **Friedman test** — the non-parametric analogue of a repeated-measures ANOVA, with each parameter combination treated as a block — confirms that design differences are highly significant: pooled over rook and queen, $\chi^2(7) = `r sprintf("%.2f", friedman_res$statistic)`$ over `r friedman_res$n_blocks` blocks, $p < 2.2 \times 10^{-16}$ (queen alone: $\chi^2(7) = 570.70$, 128 blocks). This finding is not specific to any particular parameter setting: stratifying the analysis by $\rho$, $\gamma$, spillover direction, neighbor type, or incidence mode produces statistically significant design differences in every stratum (all conditional Friedman $p < 2.2 \times 10^{-16}$). The strata share incidence surfaces and noise draws, so they are not independent confirmations.
 
-Post-hoc Nemenyi pairwise comparisons (@fig-cd, @fig-cd-mse) reveal a **four-tier structure** among designs. Saturation Quadrants and Incidence-Guided Saturation Quadrants form a **statistically distinct top tier** — both are significantly different from all other designs ($p < 0.05$). Below them, Balanced Quartiles, High Incidence Focus, and Balanced Halves form a statistically equivalent second tier: the three designs are not significantly different from one another but are significantly worse than the saturation designs. Isolation Buffer and 2×2 Blocking form a third tier, equivalent to each other but significantly worse than the second tier. Block Stratified Sampling stands alone at the bottom, significantly different from every other design.
+Post-hoc Nemenyi pairwise comparisons (@fig-cd, @fig-cd-mse; rook and queen pooled) reveal a **four-tier structure** among designs. Saturation Quadrants and Incidence-Guided Saturation Quadrants form a **statistically distinct top tier** — not significantly different from each other (Nemenyi $p = 0.99$) and significantly different from all other designs ($p < 0.05$). Below them, Balanced Quartiles and Balanced Halves form a statistically equivalent second tier. Isolation Buffer and 2×2 Blocking form a third tier, equivalent to each other ($p = 0.13$) but significantly worse than the second tier. High Incidence Focus and Checkerboard form the bottom tier ($p = 0.32$). Under queen alone, Checkerboard, High Incidence Focus and 2×2 Blocking are not significantly different from one another; under rook alone, Balanced Quartiles and Balanced Halves are not significantly different from the saturation designs, and Checkerboard is last in nearly every block (average rank 7.98 of 8).
 
 ```{r}
 #| label: fig-cd
-#| fig-cap: "Critical difference (CD) diagram by average rank ($\\tau = 1.0$, all incidence configurations). Designs are positioned by their average Friedman rank (lower = better). The red arrow marks the critical difference ($CD = 0.656$): designs whose average ranks differ by less than this threshold are connected by a bold segment and are not significantly different (Nemenyi, $\\alpha = 0.05$). Four distinct tiers are visible: Saturation Quadrants and Incidence-Guided Saturation Quadrants (top); Balanced Quartiles, High Incidence Focus, and Balanced Halves (second); Isolation Buffer and 2×2 Blocking (third); Block Stratified Sampling (bottom, isolated)."
+#| fig-cap: "Critical difference (CD) diagram by average rank ($\\tau = 1.0$, all Spatial and Poisson incidence configurations). Designs are positioned by their average Friedman rank (lower = better). The red arrow marks the critical difference ($CD = 0.656$): designs whose average ranks differ by less than this threshold are connected by a bold segment and are not significantly different (Nemenyi, $\\alpha = 0.05$). Rook and queen pooled. Four tiers are visible: Saturation Quadrants and Incidence-Guided Saturation Quadrants (top); Balanced Quartiles and Balanced Halves (second); Isolation Buffer and 2×2 Blocking (third); High Incidence Focus and Checkerboard (Block Stratified; bottom)."
 #| fig-width: 9
 #| fig-height: 2.8
 #| out-width: "95%"
@@ -488,7 +496,7 @@ ggplot() +
 
 ```{r}
 #| label: fig-cd-mse
-#| fig-cap: "CD diagram by mean MSE ($\\tau = 1.0$, all incidence configurations). Each point shows a design's mean MSE on a log scale; designs are sorted left-to-right by increasing MSE. Horizontal bars connect designs that are not significantly different from each other (Nemenyi, $\\alpha = 0.05$). This view conveys the practical magnitude of MSE differences alongside the statistical grouping. The four-tier structure from Figure 3 is preserved: the saturation designs achieve the lowest MSE and are clearly separated from all others."
+#| fig-cap: "CD diagram by mean MSE ($\\tau = 1.0$, all Spatial and Poisson incidence configurations, rook and queen pooled). Each point shows a design's mean MSE on a log scale; designs are sorted left-to-right by increasing MSE. Horizontal bars connect designs that are not significantly different from each other (Nemenyi, $\\alpha = 0.05$). This view conveys the practical magnitude of MSE differences alongside the statistical grouping. The four-tier structure from Figure 3 is preserved: the saturation designs achieve the lowest MSE and are clearly separated from all others."
 #| fig-width: 9
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -601,7 +609,7 @@ plot_cd_diagram_mse(nemenyi_res, results_primary)
 
 ```{r}
 #| label: fig-cd-twopanel
-#| fig-cap: "Supplementary comparison of designs at tau = 1.0. Left: mean MSE per design (log scale) with error bars showing ± 1 standard error across scenarios; designs are colored by conceptual group (Blocking, Stratified, Saturation). Right: pairwise Nemenyi p-value heatmap — dark cells indicate statistically significant differences (p < 0.05) and light cells indicate non-significant differences. Together these panels show both the magnitude of MSE differences and their statistical significance."
+#| fig-cap: "Supplementary comparison of designs at tau = 1.0 (rook and queen pooled). Left: mean MSE per design (log scale) with error bars showing ± 1 standard error across scenarios; designs are colored by conceptual group (Blocking, Stratified, Saturation). Right: pairwise Nemenyi p-value heatmap — dark cells indicate statistically significant differences (p < 0.05) and light cells indicate non-significant differences. Together these panels show both the magnitude of MSE differences and their statistical significance."
 #| fig-width: 11
 #| fig-height: 4.5
 #| out-width: "100%"
@@ -637,7 +645,7 @@ p_bar + p_heat + plot_layout(widths = c(1, 1.4))
 
 ```{r}
 #| label: fig-heatmap
-#| fig-cap: "Mean MSE by design and outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Color uses a log scale to distinguish designs in the low-MSE range; higher rho increases absolute MSE across all designs, but rankings remain stable — Saturation Quadrants and Incidence-Guided Saturation Quadrants consistently achieve the lowest MSE at every rho level."
+#| fig-cap: "Mean MSE by design and outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Color uses a log scale to distinguish designs in the low-MSE range; rook and queen pooled. Absolute MSE changes little with rho (it is slightly higher at rho = 0.50), and rankings remain stable — Saturation Quadrants and Incidence-Guided Saturation Quadrants achieve the two lowest MSEs at every rho level."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -649,7 +657,7 @@ plot_mse_heatmap(results_rep, rep_label) +
 
 ```{r}
 #| label: fig-heatmap-rank
-#| fig-cap: "Design rank by outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Each cell shows the average rank of that design across gamma and spillover direction scenarios at the given rho level (rank 1 = lowest MSE = best). Green indicates top-ranked designs; red indicates the worst. Saturation Quadrants and Incidence-Guided Saturation Quadrants consistently rank 1st and 2nd; Block Stratified Sampling consistently ranks last."
+#| fig-cap: "Design rank by outcome spatial autocorrelation (rho), Poisson incidence (rho_X = 0.20, tau = 1.0). Each cell shows the average rank of that design across gamma and spillover direction scenarios at the given rho level (rank 1 = lowest MSE = best). Green indicates top-ranked designs; red indicates the worst. Saturation Quadrants and Incidence-Guided Saturation Quadrants rank at or near the top throughout; Checkerboard (Block Stratified) ranks last at every rho under rook, where its treatment effect is not identified, and is near the bottom with High Incidence Focus and 2x2 Blocking under queen."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -683,18 +691,18 @@ ggplot(rank_heat_df,
   theme(panel.grid = element_blank())
 ```
 
-**Outcome spatial autocorrelation ($\rho$)** and **spillover magnitude ($\gamma$)** both increase absolute MSE — stronger spatial dependence and larger spillover make estimation more difficult for all designs (@fig-heatmap, @fig-heatmap-rank). However, neither parameter changes the design ranking. Notably, the advantage of the saturation designs over mid-tier designs **grows as $\gamma$ increases**: at $\gamma = 0.8$, the saturation designs' MSE advantage over the stratified and blocking designs is approximately 40% larger than at $\gamma = 0.5$. Saturation-based allocation provides increasing relative returns under stronger spillover — precisely the conditions most likely to occur in real-world spatial interventions.
+**Outcome spatial autocorrelation ($\rho$)** and **spillover magnitude ($\gamma$)** change absolute MSE only modestly for most designs (@fig-heatmap, @fig-heatmap-rank); the main exception is Checkerboard, whose pooled MSE rises from 0.70 at $\gamma = 0.5$ to 0.88 at $\gamma = 0.8$. Neither parameter changes which designs are at the top, and the saturation designs' MSE advantage over the stratified and blocking designs is about the same at every level of $\gamma$ (rook and queen pooled).
 
-Two parameters showed **no meaningful impact on design rankings** and are not discussed further:
+Two parameters change the rankings only in part:
 
-- **Spillover direction** (`control_only` vs. `both`): both strata yield the same optimal designs (Saturation Quadrants, Incidence-Guided Saturation Quadrants), with modest shifts in absolute MSE magnitude (all conditional Friedman $p < 2.2 \times 10^{-16}$ in both strata).
-- **Neighbor type** (rook vs. queen): rankings are invariant; queen contiguity yields slightly lower absolute MSE owing to stronger spatial smoothing with 8 neighbors vs. 4.
+- **Spillover direction** (`control_only` vs. `both`): under control-only spillover the top group is the two saturation designs alone; under bidirectional spillover Balanced Quartiles ranks first, with Balanced Halves and both saturation designs statistically tied with it (all conditional Friedman $p < 2.2 \times 10^{-16}$ in both strata; rook and queen pooled).
+- **Neighbor type** (rook vs. queen): queen contiguity yields higher absolute MSE for every design (e.g., Saturation Quadrants 0.090 under queen vs. 0.070 under rook). The top of the ranking is similar; under rook the top group widens to include Balanced Quartiles and Balanced Halves, and Checkerboard's treatment effect is not identified.
 
 ## Effect Size Sensitivity and Statistical Power
 
 ```{r}
 #| label: fig-mse-tau
-#| fig-cap: "Mean MSE by design across effect sizes (tau in {0.8, 1.0, 1.5, 2.0, 3.0}), Poisson incidence (rho_X = 0.20), log scale. Block Stratified Sampling diverges dramatically at small-to-moderate tau; Saturation Quadrants and Incidence-Guided Saturation Quadrants maintain low MSE across the full range. At tau = 3.0, the large true signal compresses differences among designs."
+#| fig-cap: "Mean MSE by design across effect sizes (tau in {0.8, 1.0, 1.5, 2.0, 3.0}), Poisson incidence (rho_X = 0.20), rook and queen pooled, log scale. MSE rises slightly with tau for every design, and the design ordering is the same at every tau; Saturation Quadrants and Incidence-Guided Saturation Quadrants maintain the lowest MSE across the full range and Checkerboard (Block Stratified) the highest."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -720,7 +728,7 @@ results_poisson_sweep |>
 
 ```{r}
 #| label: fig-coverage-tau
-#| fig-cap: "Coverage of 95% confidence intervals by design across effect sizes, Poisson incidence (rho_X = 0.20). The dashed line marks nominal 95% coverage. All designs except Block Stratified Sampling maintain near-nominal coverage throughout; Block Stratified Sampling is severely anti-conservative at all effect sizes (~55% coverage)."
+#| fig-cap: "Coverage of 95% confidence intervals by design across effect sizes, Poisson incidence (rho_X = 0.20), rook and queen pooled. The dashed line marks nominal 95% coverage. All designs except Checkerboard (Block Stratified) maintain near-nominal coverage throughout; Checkerboard's pooled coverage (54% at tau = 0.8 to 69% at tau = 3.0) comes entirely from rook, where its treatment effect is not identified; under queen it is 94% at every tau."
 #| fig-width: 8
 #| fig-height: 3.8
 #| out-width: "95%"
@@ -747,19 +755,17 @@ results_poisson_sweep |>
   guides(color = guide_legend(ncol = 1))
 ```
 
-Design rankings are **stable across the full effect size range** (@fig-mse-tau). At $\tau = 3.0$, a very large treatment signal compresses MSE differences among designs — all designs eventually become adequate when the effect is large enough to overwhelm spatial confounding. At the more practically relevant range $\tau \in \{0.8, 1.0, 1.5\}$, the saturation design advantage is most pronounced and most consequential for trial planning.
+Design rankings are **stable across the full effect size range** (@fig-mse-tau): MSE rises slightly with $\tau$ for every design, and the ordering of designs is the same at every $\tau$. Each $\tau$ reuses the same design and noise draws, so the $\tau$ levels are not independent confirmations of one another.
 
-Coverage (@fig-coverage-tau) tells a particularly striking story. All designs except Block Stratified Sampling maintain approximately 94–95% coverage under MLE across all tested effect sizes. **Block Stratified Sampling never exceeds approximately 60% coverage**, regardless of $\tau$. A trial using the Block Stratified Sampling design would produce nominal 95% confidence intervals that contain the true treatment effect less than 60% of the time. This is not simply a power deficit — it is a fundamental structural failure arising from the collinearity between $\mathbf{Z}$ and $\mathbf{WZ}$ under the alternating assignment pattern.
+Coverage (@fig-coverage-tau) tells a particularly striking story. All designs except Checkerboard maintain approximately 94% coverage under MLE across all tested effect sizes (about one point below nominal, a finite-sample property of the Wald interval). **Checkerboard's pooled coverage is 54–69%**, and all of that shortfall comes from rook contiguity (13–44% across $\tau$), where $\mathbf{WZ} = \mathbf{1} - \mathbf{Z}$ and the direct effect is not identified apart from spillover. This is not simply a power deficit — it is a structural failure of the alternating assignment pattern. Under queen, Checkerboard's coverage is 94%, but its MSE is the largest of any design.
 
 # Design Recommendations and Next Steps
 
 ## Recommended Designs
 
-**Incidence-Guided Saturation Quadrants** is the primary recommendation when reliable baseline incidence data are available. Its quadrant-level saturation rates are set proportional to the observed incidence rank of each region, directly leveraging the spatial structure of the outcome to guide allocation.
+**Incidence-Guided Saturation Quadrants** and **Saturation Quadrants** are the recommended designs. They are statistically indistinguishable (MSE 0.090 for both under queen at $\tau = 1.0$; pooled 0.081 vs. 0.080, within Monte Carlo standard error), so the data do not favor one over the other. Incidence-Guided Saturation Quadrants sets quadrant-level saturation rates by the incidence rank of each region; Saturation Quadrants randomizes saturation rates across quadrants and does not require incidence data, which makes it simpler to implement and explain to stakeholders.
 
-**Saturation Quadrants** is the recommended alternative when baseline incidence estimates are uncertain or unavailable — it randomizes saturation rates across quadrants without requiring incidence data and achieves nearly identical performance (MSE 0.080 vs. 0.079 at $\tau = 1.0$, well within Monte Carlo standard error). Saturation Quadrants is simpler to implement and explain to stakeholders while sacrificing essentially nothing in estimation performance.
-
-**Block Stratified Sampling should never be used** when spatial spillover is anticipated. Its intuitive appeal — spatially separating treated and control units — is precisely what makes it fail in the presence of spillover. Both saturation designs should be preferred over the blocking and stratified designs (2×2 Blocking, Isolation Buffer, High Incidence Focus, Balanced Halves, Balanced Quartiles) in the SUD application context, where spillover across county lines is plausible.
+**Checkerboard should never be used** when spatial spillover is anticipated. Its intuitive appeal — spatially separating treated and control units — is precisely what makes it fail in the presence of spillover. Both saturation designs should be preferred over the blocking and stratified designs (2×2 Blocking, Isolation Buffer, High Incidence Focus, Balanced Halves, Balanced Quartiles) in the SUD application context, where spillover across county lines is plausible.
 
 ## Open Questions and Path to Real-World Application
 
@@ -769,6 +775,6 @@ These simulation results establish the theoretical case for saturation-based des
 
 2. **Generalizing the quadrant partition:** Saturation Quadrants and Incidence-Guided Saturation Quadrants rely on rectangular geographic quadrants. For a non-rectangular study region like NC, analogous spatial partitions — k-means geographic clusters, administrative regions, or compass quadrant approximations — would need to replace the regular grid structure.
 
-3. **Relaxing the oracle MLE assumption:** The current estimator uses the true spillover term ($\mathbf{WZ}$) as a covariate. In practice, the spillover structure must be assumed or estimated. Non-oracle MLE — where the spillover term is either omitted or approximated — is a high-priority simulation extension before applying these methods to real data.
+3. **Relaxing the oracle MLE assumption:** The primary estimator uses the true spillover term as a covariate. In practice, the spillover structure must be assumed or estimated. A non-oracle model that omits the spillover term ($Y \sim Z + X$) has been run on the same simulated outcomes as a sensitivity analysis (not summarized here); approximated spillover terms remain to be studied before applying these methods to real data.
 
-4. **Heterogeneous cluster populations:** NC counties vary substantially in population size, which affects expected Poisson event counts per cluster. The current study assumes equal cluster populations ($n = 1{,}000$); variable population sizes may interact with incidence-guided design strategies in non-trivial ways.
+4. **Heterogeneous cluster populations:** NC counties vary substantially in population size, which affects expected Poisson event counts per cluster. The current study assumes equal cluster populations ($n = 100{,}000$); variable population sizes may interact with incidence-guided design strategies in non-trivial ways.

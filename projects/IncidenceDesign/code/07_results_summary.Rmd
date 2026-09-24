@@ -874,7 +874,7 @@ files_df <- data.frame(
     "sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds",
     "surface_results_MLE_tau_sweep_20260924_025509.rds",
     "sim_results_DIM_combined_20260304_195321.rds",
-    "MLE_tau_sweep_design_recommendations.pdf",
+    "MLE_tau_sweep_design_recommendations_{queen,rook}.pdf",
     "MLE_tau_sweep_incidence_overview.pdf",
     "mle_per_config/MLE_tau_sweep_*.pdf (5 files, per incidence config)",
     "mle_per_config/MLE_tau_sweep_*_tau_sensitivity.pdf (5 files)",

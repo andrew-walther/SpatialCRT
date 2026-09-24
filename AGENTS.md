@@ -41,14 +41,21 @@ The 8 designs are: Checkerboard (1), High Incidence Focus (2), Saturation Quadra
 Isolation Buffer (4), 2x2 Blocking (5), Balanced Quartiles (6), Balanced Halves (7),
 Incidence-Guided Saturation Quadrants (8).
 
-**MLE (lagsarlm oracle) is the primary estimator.** DIM is a naive baseline only.
+**Oracle ML spatial-lag estimator is primary** (validated lean engine `fit_sar_lag()` ≡
+`lagsarlm`); a non-oracle fit is a sensitivity analysis. DIM is a pre-revision naive
+baseline only.
 
-Key results (tau-sweep complete 2026-04-08, 12,800 scenarios; primary scenario τ=1.0):
-- **Best designs: Design 8 (Incidence-Guided Saturation Quadrants) ≈ Design 3 (Saturation Quadrants)** under MLE (MSE 0.079 vs 0.080 at τ=1.0)
-- **Worst design: Design 1 (Checkerboard)** — MSE 0.802, coverage ~55% at τ=1.0
-- MLE coverage ~0.94 for all designs except D1; DIM coverage ~0.72
-- D3/D8 dominance holds across all τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} (all conditional Friedman p < 2.2×10⁻¹⁶)
-- All reports regenerated with tau sensitivity sections (2026-04-08)
+Key results (2026-09 revision, full re-run 2026-09-24; 12,800 scenarios × 250 fits per
+estimator; queen primary; τ = 1; 6 manuscript designs):
+- **Best design: Incidence-Guided Saturation Quadrants** (queen MSE 0.091, rook 0.072), then
+  Balanced Quartiles (0.131 / 0.084)
+- **Worst: Checkerboard** (queen MSE 1.09). Under rook its τ is not identified
+  (WZ = 1 − Z): coverage 0.15, estimates kept but flagged
+- Coverage ≈ 0.94 for every other design; under queen the rank order is identical at every τ ∈ {0.8, …, 3.0} (under rook, 2x2 Blocking and Isolation Buffer swap at τ = 0.8)
+- April 2026 numbers (MSE 0.079 / 0.802, etc.) are superseded; see
+  `projects/IncidenceDesign/results/archive/pre_revision_20260924/README.md`
+- Manuscripts (CTJ, SI, chapter) still carry the April numbers until they are rewritten
+  (manuscript plan step 0 remainder / step 5)
 
 ---
 

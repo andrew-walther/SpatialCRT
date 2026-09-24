@@ -438,7 +438,7 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
 **Results directory layout:**
 ```
 results/
-  MLE_tau_sweep_design_recommendations.pdf    # PRIMARY figures/tables PDF
+  MLE_tau_sweep_design_recommendations_{queen,rook}.pdf  # 08 figures/tables PDF, per neighbor type
   MLE_tau_sweep_incidence_overview.pdf        # Incidence overview
   11_statistical_comparisons_report.{html,pdf} # Formal hypothesis testing + tau-strata
   00_mathematical_specification.pdf
@@ -612,7 +612,7 @@ Sources `06_visualizations.R`. Answers three personalization questions.
 
 **Summary:**
 - `generate_commentary(results, inc_label)` — 6-finding programmatic narrative: winner, dominance %, stability, coverage, sensitivity, recommendation
-- `run_recommendation_report(results, estimation_mode, output_pdf)` — master orchestrator → `results/MLE_tau_sweep_design_recommendations.pdf`
+- `run_recommendation_report(results, estimation_mode, output_pdf, default_tau, nb_type = "queen")` — master orchestrator → `results/MLE_tau_sweep_design_recommendations_<nb>.pdf` (`nb_type = NULL` pools, labeled "pooled")
 
 **Validation:**
 - `validate_recommendations(results)` — 8 unit tests for new functions

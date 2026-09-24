@@ -62,25 +62,31 @@ are in development under `paper/`.
 
 ---
 
-## IncidenceDesign Key Findings (8-design MLE sweep, 2,560 scenarios)
+## IncidenceDesign Key Findings (revised simulation, 2026-09-24; τ = 1, oracle ML)
 
-| Design | Coverage (MLE) | MSE (MLE) |
-|--------|---------------|-----------|
-| **8 — Incidence-Guided Saturation Quadrants** | **~0.94** | **~0.079** |
-| **3 — Saturation Quadrants** | **~0.94** | **~0.080** |
-| 6 — Balanced Quartiles | ~0.94 | ~0.10 |
-| 2 — High Incidence Focus | ~0.94 | ~0.13 |
-| 7 — Balanced Halves | ~0.94 | ~0.13 |
-| 4 — Isolation Buffer | ~0.94 | ~0.15 |
-| 5 — 2x2 Blocking | ~0.94 | ~0.23 |
-| 1 — Checkerboard | ~0.55 | ~0.744 |
+| Design | Queen MSE | Queen coverage | Rook MSE | Rook coverage |
+|--------|-----------|----------------|----------|---------------|
+| Saturation Quadrants | 0.090 | 0.94 | 0.071 | 0.94 |
+| Incidence-Guided Saturation Quadrants | 0.091 | 0.94 | 0.072 | 0.94 |
+| Balanced Halves | 0.130 | 0.94 | 0.084 | 0.94 |
+| Balanced Quartiles | 0.131 | 0.94 | 0.084 | 0.94 |
+| Isolation Buffer | 0.160 | 0.94 | 0.133 | 0.94 |
+| High Incidence Focus | 0.246 | 0.94 | 0.206 | 0.94 |
+| 2x2 Blocking | 0.319 | 0.94 | 0.128 | 0.94 |
+| Checkerboard | 1.087 | 0.94 | 0.480 | **0.15** |
 
-**MLE (spatialreg `lagsarlm`) achieves near-nominal coverage (~94%) vs. DIM (~72%)**
-by properly modeling spatial autocorrelation and spillover. MLE is the primary estimator;
-DIM is a naive baseline. Checkerboard is consistently worst — its perfect spatial
-alternation creates systematic confounding when incidence is spatially structured.
+Queen contiguity is primary, and rook is the sensitivity case. Each pair of adjacent rows
+above the Isolation Buffer (the two saturation designs, the two balanced designs) is
+statistically indistinguishable, which is why the manuscripts carry 6 designs.
 
-*Results reported per incidence mode; table above averaged for reference.
+- **Coverage** is near-nominal for every design except Checkerboard under rook. There the
+  spillover term is exactly 1 − Z, so τ is not identified.
+- **Checkerboard's queen MSE** is almost all variance: the spillover term is ½ for every
+  interior cluster, leaving it almost no independent variation.
+- **Estimator:** oracle ML spatial lag (`fit_sar_lag()`, validated against `lagsarlm`), with
+  a non-oracle sensitivity fit. The April 2026 results are superseded.
+
+*Results reported per incidence mode; table above averaged over incidence modes for reference.
 See `paper/report/IncidenceSpatialCRT_Report.pdf` for the comprehensive analysis.*
 
 ---

@@ -215,7 +215,7 @@ manuscript and SI still carry those numbers** until they're rewritten (manuscrip
 
 ```
 results/
-  MLE_tau_sweep_design_recommendations.pdf    # 08 figures/tables PDF (oracle)
+  MLE_tau_sweep_design_recommendations_{queen,rook}.pdf  # 08 figures/tables PDF (oracle, per neighbor type)
   MLE_tau_sweep_incidence_overview.pdf        # Incidence heatmaps + distributions
   MLE_statistical_comparisons.pdf             # 10 figures (8 designs, tau = 1)
   00/07/09/11 rendered reports                # regenerated in Phase C

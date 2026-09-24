@@ -287,7 +287,7 @@ This report provides a comprehensive reference for the simulation study evaluati
 
 **Application context:** Sudden Unexpected Death (SUD) in North Carolina counties. The Poisson incidence mode uses an SUD base rate of 35 per 100,000, consistent with county-level analyses.
 
-The study uses Maximum Likelihood Estimation via a spatial autoregressive model (MLE) as the primary estimator, evaluated across `r if (mle_avail) format(n_scenarios_total, big.mark = ",")` parameter scenarios. Three analytical questions structure the results:
+The study uses Maximum Likelihood Estimation via a spatial autoregressive model (MLE) as the primary estimator. The full simulation has 12,800 scenarios (five values of $\tau$); the primary $\tau = 1.0$ slice analyzed in most of this report has `r if (mle_avail) format(n_scenarios_total, big.mark = ",")` scenarios. Queen contiguity is the primary neighbor structure and rook is a sensitivity analysis; **unless a result says otherwise, the tables and figures below pool rook and queen**. Three analytical questions structure the results:
 
 - **Q1:** Which design performs best within each incidence generation mode?
 - **Q2:** How do design rankings change as individual parameters vary?
@@ -382,13 +382,13 @@ where $\Phi(\cdot)$ is the standard normal CDF. Two configs: $\rho_X \in \{0.20,
 ## Mode 3: Poisson Count-Based
 
 1. Spatially correlated log-rates: $\log \boldsymbol{\lambda}^* = \mu_0 \cdot \mathbf{1} + (\mathbf{I}_N - \rho_X \mathbf{W})^{-1}\mathbf{u}$
-2. Poisson counts: $C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)$ where $P_i = 1{,}000$
+2. Poisson counts: $C_i \sim \text{Poisson}(\lambda_i^* \cdot P_i)$ where $P_i = 100{,}000$ (so $\lambda P \approx 35$ expected deaths per cluster)
 3. Observed rates: $R_i = C_i / P_i$
 4. Rank-normalized: $X_i = (\text{rank}(R_i) - 0.5) / N$
 
 Base rate $\mu_0 = \log(35/100{,}000)$ for SUD. Two configs: $\rho_X \in \{0.20, 0.50\}$.
 
-**Critical design invariant:** Incidence is generated **once per (mode, $\rho_X$) configuration** and held fixed across all ($\rho$, $\gamma$, nb_type) scenarios.
+**Critical design invariant:** Incidence is generated **once per (mode, $\rho_X$) configuration**: $K = 10$ surfaces $\mathbf{X}_1, \ldots, \mathbf{X}_{10}$, held fixed across all ($\rho$, $\gamma$, nb_type) scenarios. **Matched surfaces:** each design is drawn from surface $\mathbf{X}_k$, and the outcome and the analysis use the same $\mathbf{X}_k$.
 
 ## Incidence Spatial Patterns
 
@@ -440,22 +440,30 @@ knitr::include_graphics(file.path(results_dir, "figures", "design_samples_8panel
 ```
 
 ```{r design-8panel-annotated}
-#| fig-cap: "Same 8 designs with saturation percentage annotations. Percentage labels on the quadrant-based designs (Designs 3 and 8) show the within-quadrant treatment saturation rate assigned to each spatial region, illustrating how the two saturation quadrant strategies differ in how saturation levels are allocated."
+#| fig-cap: "Same 8 designs with saturation percentage annotations. Percentage labels on the quadrant-based designs (Saturation Quadrants and Incidence-Guided Saturation Quadrants) show the within-quadrant treatment saturation rate assigned to each spatial region, illustrating how the two saturation quadrant strategies differ in how saturation levels are allocated."
 #| out-width: "100%"
-knitr::include_graphics(file.path(results_dir, "figures", "design_samples_option1_overlays.png"))
+# The annotated overlay figure was archived with the pre-revision outputs and has
+# not been regenerated for the 2026-09 revision. Show a visible notice instead of
+# silently reusing the stale archived figure.
+overlay_png <- file.path(results_dir, "figures", "design_samples_option1_overlays.png")
+if (file.exists(overlay_png)) {
+  knitr::include_graphics(overlay_png)
+} else {
+  cat("[Figure not available: the saturation-overlay design figure\nhas not been regenerated for the 2026-09 revised designs.]\n")
+}
 ```
 
 ## Design 1: Checkerboard (Strict Spatial Stratification)
 
 $$Z_i = (x_i + y_i) \mod 2$$
 
-Treatment in an alternating checkerboard pattern. **Deterministic**, exactly 50% treated.
+Treatment in an alternating checkerboard pattern. **Deterministic**, exactly 50% treated. It is the only deterministic design: the same assignment is used for every fit, but each fit still has its own noise draw.
 
 ## Design 2: High Incidence Focus
 
-$$Z_i = \mathbf{1}[X_i > \text{median}(\mathbf{X})]$$
+$$Z_i = \mathbf{1}[r_i > N/2], \quad r = \text{rank}(\mathbf{X}_k, \text{ties broken at random})$$
 
-Treatment assigned to above-median incidence clusters. **Deterministic** given $\mathbf{X}$.
+Treatment assigned to the top half of clusters by incidence rank; exactly 50 treated. Ties in $\mathbf{X}_k$ are broken at random, freshly for every design draw, so the design is not deterministic.
 
 ## Design 3: Saturation Quadrants
 
@@ -471,15 +479,15 @@ Grid partitioned into non-overlapping $2 \times 2$ blocks. Within each block, ex
 
 ## Design 6: Balanced Quartiles
 
-Clusters stratified by incidence quartile. Within each stratum, approximately half randomly assigned to treatment.
+Clusters stratified into incidence quartiles (25 each) by random-tie rank. Within each stratum 12 clusters are randomly treated, plus one more in 2 randomly chosen strata, so exactly 50 are treated.
 
 ## Design 7: Balanced Halves
 
-Clusters stratified into two groups by median baseline incidence. Within each half, approximately half randomly assigned to treatment. A 2-stratum analog of Design 6.
+Clusters stratified into two halves (50 each) by random-tie incidence rank. Within each half, 25 clusters randomly assigned to treatment (exactly 50 treated). A 2-stratum analog of Balanced Quartiles.
 
 ## Design 8: Incidence-Guided Saturation Quadrants
 
-Grid partitioned into four spatial quadrants (same as Design 3). Quadrants ranked by average baseline incidence and **deterministically** assigned saturation levels:
+Grid partitioned into four spatial quadrants (same as Saturation Quadrants). Quadrants ranked by average baseline incidence $\bar{X}_{Q_k}$ of the design's surface $\mathbf{X}_k$ (ties broken at random) and **deterministically** assigned saturation levels:
 
 | Rank (by $\bar{X}_{Q_k}$) | Saturation $p_k$ |
 |:---:|:---:|
@@ -488,7 +496,7 @@ Grid partitioned into four spatial quadrants (same as Design 3). Quadrants ranke
 | 3 | 0.40 |
 | 4 (lowest) | 0.20 |
 
-Within each quadrant, clusters randomly selected at the assigned rate. Unlike Design 3, the saturation-to-quadrant mapping is guided by incidence data rather than random.
+Within each quadrant, clusters randomly selected at the assigned rate. Unlike Saturation Quadrants, the saturation-to-quadrant mapping is guided by incidence data rather than random.
 
 ---
 
@@ -499,15 +507,17 @@ Within each quadrant, clusters randomly selected at the assigned rate. Unlike De
 The naive estimator:
 $$\hat{\tau}_{\text{DIM}} = \bar{Y}_1 - \bar{Y}_0$$
 
-DIM is biased for $\tau$ when spillover ($\gamma \neq 0$) or spatial dependence ($\rho \neq 0$) is present.
+DIM is biased for $\tau$ when spillover ($\gamma \neq 0$) or spatial dependence ($\rho \neq 0$) is present. DIM results exist only from the pre-revision simulation (old data-generating process, 6 designs) and are not shown in this report.
 
 ## Maximum Likelihood Estimation (MLE)
 
-The spatial autoregressive model is estimated via maximum likelihood using `spatialreg::lagsarlm()`:
+The spatial autoregressive (lag) model is estimated via maximum likelihood with the project's lean engine `fit_sar_lag()`, which is the same estimator as `spatialreg::lagsarlm(method = "eigen")` (validated to agree to about $10^{-7}$ in $\hat{\tau}$):
 
 $$Y_i = \rho \sum_j W_{ij} Y_j + \tau Z_i + \gamma \cdot \text{Spill}_i + \beta X_i + \varepsilon_i$$
 
-MLE simultaneously estimates $\rho$ and regression coefficients. The true spillover covariate $\text{Spill}(\mathbf{Z})$ is included as an **oracle regressor**. Confidence intervals for $\tau$ use the asymptotic covariance matrix.
+MLE simultaneously estimates $\rho$ and regression coefficients. The true spillover covariate $\text{Spill}(\mathbf{Z})$ is included as an **oracle regressor**. Confidence intervals for $\tau$ are 95% Wald intervals from the ML standard error. A non-oracle model ($Y \sim Z + X$, no Spill term) was also fit to the same outcomes as a sensitivity analysis; its results are not shown in this report.
+
+Under rook contiguity the Checkerboard design gives $\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$, so the oracle model's Spill column is aliased with $Z$ and the intercept and is dropped: $\tau$ is not identified apart from $\gamma$. These estimates are kept but flagged (`N_Aliased`, `Z_WZ_rank_deficient`); their bias is approximately $-\gamma$.
 
 **MLE is the primary estimator throughout this report.** DIM serves only as a naive baseline.
 
@@ -566,28 +576,38 @@ if (mle_avail) {
 
 ## Resampling Structure
 
-| Mode | Design resamples ($R_d$) | Outcome resamples ($R_o$) | Iterations / scenario |
+| Mode | Incidence surfaces ($K$) | Design draws per surface ($J$) | Fits / scenario |
 |------|:---:|:---:|:---:|
-| MLE | 25 | 10 | 250 |
+| MLE | 10 | 25 | 250 |
 
-## Per-Scenario Reproducibility
+For surface $k$ and design draw $j$, $\mathbf{Z}_{kj}$ is drawn from $\mathbf{X}_k$, and each of the 250 fits gets its own noise column $\boldsymbol{\varepsilon}_{kj}$:
+$\mathbf{Y}_{kj} = (\mathbf{I} - \rho\mathbf{W})^{-1}(\tau\mathbf{Z}_{kj} + \text{Spill}(\mathbf{Z}_{kj}) + \beta\mathbf{X}_k + \boldsymbol{\varepsilon}_{kj})$.
 
-Each scenario uses a deterministic seed:
-$$\text{seed}_s = \texttt{digest::digest2int}(\texttt{paste}(\text{inc\_mode}, \rho_X, \text{nb\_type}, \rho, \gamma, \text{spill\_type}, d_{\text{id}}, \text{sep}=\text{"|}"))$$
+## Per-Draw Reproducibility
 
-This ensures results are reproducible and order-independent.
+Every random draw is preceded by `set.seed(digest::digest2int(key))`, where the key joins the fields that the draw depends on:
+
+| Draw | Key fields |
+|---|---|
+| $\mathbf{X}_k$ (one surface) | "X", mode, $\rho_X$, $k$ |
+| $\mathbf{Z}_{k\cdot}$ (all $J$ draws for surface $k$) | "Z", mode, $\rho_X$, nb_type, $\rho$, $\gamma$, spill_type, $k$, design |
+| $\boldsymbol{\varepsilon}$ (all 250 columns for a block) | "eps", mode, $\rho_X$, nb_type, $\rho$, $\gamma$, spill_type |
+
+Each draw depends only on its key, so results are reproducible and order-independent. Within a block all 8 designs share $\boldsymbol{\varepsilon}$ and $\mathbf{X}_k$, and each $\tau$ reuses the same $\mathbf{Z}$ and $\boldsymbol{\varepsilon}$ (common random numbers).
 
 ---
 
 # Evaluation Metrics {#sec-metrics}
 
-For each scenario, let $\hat{\tau}_1, \ldots, \hat{\tau}_K$ denote the $K$ estimates of $\tau$ (excluding convergence failures).
+For each scenario, let $\hat{\tau}_1, \ldots, \hat{\tau}_M$ denote the $M$ valid estimates of $\tau$ ($M = 250$ fits, excluding any with a non-finite estimate or SE).
 
 - **Bias**: $\text{Bias} = \bar{\hat{\tau}} - \tau$
-- **Standard Deviation**: $\text{SD} = \sqrt{\frac{1}{K-1}\sum_{k=1}^{K} \left(\hat{\tau}_k - \bar{\hat{\tau}}\right)^2}$
-- **Mean Squared Error**: $\text{MSE} = \text{Bias}^2 + \text{SD}^2$ — **primary ranking criterion**
-- **Coverage Probability**: $\text{Coverage} = \frac{1}{K}\sum_{k=1}^{K} \mathbf{1}\left[\tau \in \left(\hat{\tau}_{k,L},\ \hat{\tau}_{k,U}\right)\right]$
-- **Convergence Failure Rate**: Proportion of iterations where MLE failed to converge
+- **Standard Deviation**: $\text{SD} = \sqrt{\frac{1}{M-1}\sum_{m=1}^{M} \left(\hat{\tau}_m - \bar{\hat{\tau}}\right)^2}$
+- **Mean Squared Error**: $\text{MSE} = \frac{1}{M}\sum_{m=1}^{M} (\hat{\tau}_m - \tau)^2$ — **primary ranking criterion**
+- **Coverage Probability**: $\text{Coverage} = \frac{1}{M}\sum_{m=1}^{M} \mathbf{1}\left[\hat{\tau}_{m,L} \le \tau \le \hat{\tau}_{m,U}\right]$
+- **Power**: $\frac{1}{M}\sum_{m} \mathbf{1}[\hat{\tau}_{m,L} > 0]$ (one-sided)
+- **Convergence Failure Rate**: Proportion of fits with a non-finite estimate or SE
+- **Monte Carlo SEs**: computed from the $K = 10$ surface-level values of each metric, $\text{SE}(m) = \text{sd}(m_1, \ldots, m_{10}) / \sqrt{10}$, because the incidence surface is the primary sampling unit (the 250 fits are not independent)
 
 ---
 
@@ -611,7 +631,7 @@ if (mle_avail) {
     caption = paste0(
       "MLE: Summary statistics across all ",
       format(n_scenarios_total, big.mark = ","),
-      " scenarios"
+      " tau = 1.0 scenarios (rook and queen pooled)"
     )
   )
 }
@@ -627,7 +647,7 @@ if (mle_avail) {
     col.names = c("Design", "Mean Bias", "Median MSE", "Mean MSE",
                   "Mean Coverage", "Fail Rate"),
     digits    = c(0, 3, 3, 3, 3, 4),
-    caption   = "MLE: Design performance averaged across all scenarios and incidence modes"
+    caption   = "MLE: Design performance averaged across all tau = 1.0 scenarios and incidence modes (rook and queen pooled; the Checkerboard row mixes queen with the non-identified rook case)"
   )
 }
 ```
@@ -635,7 +655,7 @@ if (mle_avail) {
 ## MSE by Design and Neighbor Type
 
 ```{r mle-mse-boxplot}
-#| fig-cap: "MLE: Distribution of MSE by design, faceted by spatial contiguity structure."
+#| fig-cap: "MLE: Distribution of MSE by design, faceted by spatial contiguity structure (iid Uniform incidence, tau = 1.0)."
 if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   print(plot_mse_by_neighbor(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (mle_avail && length(mle_cfgs) > 0) {
@@ -646,7 +666,7 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
 ## Coverage by Design
 
 ```{r mle-coverage}
-#| fig-cap: "MLE: Coverage probability distribution by design. Red dashed line = nominal 95% target."
+#| fig-cap: "MLE: Coverage probability distribution by design (iid Uniform incidence, tau = 1.0, rook and queen pooled). Red dashed line = nominal 95% target. The low Checkerboard values are its rook scenarios, where tau is not identified."
 if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   print(plot_coverage_by_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (mle_avail && length(mle_cfgs) > 0) {
@@ -657,7 +677,7 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
 ## Bias-Variance Decomposition
 
 ```{r mle-biasvar}
-#| fig-cap: "MLE: Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence."
+#| fig-cap: "MLE: Bias-squared (dark) and variance (light) components of MSE per design for iid Uniform incidence (tau = 1.0, rook and queen pooled)."
 if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   print(plot_bias_variance(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 } else if (mle_avail && length(mle_cfgs) > 0) {
@@ -669,7 +689,7 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
 
 # Results: Formal Statistical Comparisons {#sec-stats}
 
-The descriptive summaries above rank designs by mean MSE, but do not establish whether observed differences are *statistically significant*. Here we apply non-parametric hypothesis tests to the paired MSE values across the `r if (stats_avail) fr_report$n_blocks else 320` unique parameter blocks. Each block is a unique combination of simulation parameters (Incidence Mode × Neighbor Type × $\rho$ × $\gamma$ × Spillover Type); within each block all 8 designs are evaluated under identical conditions, creating a paired repeated-measures structure.
+The descriptive summaries above rank designs by mean MSE, but do not establish whether observed differences are *statistically significant*. Here we apply non-parametric hypothesis tests to the paired MSE values across the `r if (stats_avail) fr_report$n_blocks else 320` unique parameter blocks. Each block is a unique combination of simulation parameters (Incidence Mode × Neighbor Type × $\rho$ × $\gamma$ × Spillover Type); within each block all 8 designs are evaluated under identical conditions, creating a paired repeated-measures structure. **These tests pool rook and queen blocks at $\tau = 1.0$.** For the primary queen structure alone (160 blocks), the Friedman statistic is $\chi^2 = 711.29$ (df = 7, $p < 2 \times 10^{-16}$); queen, rook and pooled results for all 8 designs are in `results/eight_design_supplementary/eight_design_summary.txt`. Blocks within an incidence configuration share the same 10 incidence surfaces, so treating blocks as independent overstates the information about surface-to-surface variation.
 
 Three complementary tests are used: (1) the **Friedman test** (omnibus — is there any significant difference among designs?), (2) **Nemenyi post-hoc** comparisons with family-wise error control (which specific pairs differ?), and (3) pairwise **Wilcoxon signed-rank tests** with Holm correction (sensitivity check). Significance level $\alpha = 0.05$ throughout.
 
@@ -694,7 +714,7 @@ if (stats_avail) {
 }
 ```
 
-The Friedman test ($\chi^2 = `r if (stats_avail) sprintf("%.2f", fr_report$statistic) else "—"`$, $p < 2.2 \times 10^{-16}$) decisively rejects the null hypothesis that all 8 designs perform equally. The table below shows each design's **average MSE rank** across all blocks (rank 1 = best):
+The pooled Friedman test ($\chi^2 = `r if (stats_avail) sprintf("%.2f", fr_report$statistic) else "—"`$, $p < 2.2 \times 10^{-16}$) decisively rejects the null hypothesis that all 8 designs perform equally. The table below shows each design's **average MSE rank** across all blocks (rank 1 = best):
 
 ```{r stats-avg-ranks-table}
 #| results: asis
@@ -705,7 +725,7 @@ if (stats_avail) {
     check.names   = FALSE
   )
   knitr::kable(rank_df,
-    caption = "Average MSE rank per design across all 320 blocks (1 = best).",
+    caption = "Average MSE rank per design across all 320 blocks (rook and queen pooled; 1 = best).",
     align   = c("l", "c")) %>%
     kable_styling(full_width = FALSE, position = "center",
                   latex_options = "hold_position") %>%
@@ -724,23 +744,23 @@ if (stats_avail) plot_cd_diagram(nem_report)
 
 **How to read this diagram:** Designs positioned closer together are more similar in performance. A thick bar connecting two designs means their difference is *not* statistically significant. The red arrow labelled "CD" shows the critical difference threshold — any two designs separated by more than this distance are significantly different.
 
-The headline finding: **Design 3 (Saturation Quadrants) and Design 8 (Incidence-Guided Saturation Quadrants) form the top equivalence group** — statistically indistinguishable from each other, and significantly better than all other designs. **Design 1 (Checkerboard) is significantly worse than all alternatives** (Nemenyi $p < 0.001$ vs. every other design).
+The headline finding: **Saturation Quadrants and Incidence-Guided Saturation Quadrants form the top equivalence group** — statistically indistinguishable from each other (Nemenyi $p = 0.997$ pooled, $0.985$ queen) and significantly better than every other design in both the pooled and the queen-only analysis. Under rook alone they are not significantly separated from Balanced Quartiles or Balanced Halves (Nemenyi $p$ from 0.10 to 0.33). **Checkerboard has the worst pooled average rank, but it is not significantly worse than every alternative:** pooled, it does not differ significantly from High Incidence Focus (Nemenyi $p = 0.17$); under queen, Checkerboard, High Incidence Focus and 2x2 Blocking are not significantly different from one another (Nemenyi $p$ = 1.00, 0.62, 0.55). Under rook, Checkerboard ranks last in nearly every block (average rank 7.99 of 8) because $\tau$ is not identified there.
 
 ## Pairwise Significance: MSE Distributions
 
 ```{r stats-boxplot}
-#| fig-cap: "MSE distribution by design (ordered by median MSE, best on left). Significance brackets show pairwise Wilcoxon signed-rank test results (Holm-adjusted). Stars: *** p < 0.001, ** p < 0.01, * p < 0.05."
+#| fig-cap: "MSE distribution by design (tau = 1.0, rook and queen pooled; ordered by median MSE, best on left). Significance brackets show pairwise Wilcoxon signed-rank test results (Holm-adjusted). Stars: *** p < 0.001, ** p < 0.01, * p < 0.05."
 #| fig-height: 6
 #| fig-width: 6.5
 if (stats_avail) plot_mse_boxplot_with_stars(mle_results, wil_report)
 ```
 
-The boxplot confirms the rank-based findings: Designs 3 and 8 have the lowest and most compact MSE distributions, while Design 1 has both the highest median and the widest spread (high variance alongside high bias). Significance brackets annotate the most informative pairwise comparisons.
+The boxplot (rook and queen pooled) confirms the rank-based findings: Saturation Quadrants and Incidence-Guided Saturation Quadrants have the lowest and most compact MSE distributions, while Checkerboard has both the highest median and the widest spread. Its MSE comes from two sources: a large variance under queen with control-only spillover (bias near 0), where the Spill covariate is nearly collinear with $Z$, and, under rook, a bias of about $-\gamma$ because $\tau$ is not identified. Significance brackets annotate the most informative pairwise comparisons.
 
 ## Pairwise P-value Heatmap
 
 ```{r stats-heatmap}
-#| fig-cap: "Pairwise Wilcoxon signed-rank p-values (Holm-adjusted). Red = strongly significant (p < 0.001), orange = significant (p < 0.01 or < 0.05), grey/green = not significant."
+#| fig-cap: "Pairwise Wilcoxon signed-rank p-values (Holm-adjusted; rook and queen pooled). Red = strongly significant (p < 0.001), orange = significant (p < 0.01 or < 0.05), grey/green = not significant."
 #| fig-height: 6
 #| fig-width: 6.5
 if (stats_avail) plot_pvalue_heatmap(wil_report, "Wilcoxon (Holm)")
@@ -826,7 +846,7 @@ if (stats_avail) {
 }
 ```
 
-The Friedman test is **significant in every stratum** ($p < 2.2 \times 10^{-16}$ in all cases). Design 3 and Design 8 appear in the top equivalence group across all parameter levels, confirming that the recommendation is robust.
+The Friedman test is **significant in every stratum** ($p < 2.2 \times 10^{-16}$ in all cases). Saturation Quadrants appears in the top equivalence group in every stratum, and Incidence-Guided Saturation Quadrants in every stratum except bidirectional ("both") spillover, where Balanced Quartiles ranks first and Balanced Halves and Saturation Quadrants are statistically tied with it. Except for the Neighbor_Type rows, each stratum pools rook and queen blocks.
 
 ```{r stats-cd-rho-gamma}
 #| fig-cap: "CD diagrams by outcome spatial autocorrelation (Rho, top) and spillover magnitude (Gamma, bottom). Rankings are consistent across levels."
@@ -842,7 +862,7 @@ if (stats_avail) {
 ```
 
 ```{r stats-cd-spill-nb}
-#| fig-cap: "CD diagrams by spillover type (top) and neighbor contiguity type (bottom). Design rankings are stable regardless of spillover structure or contiguity definition."
+#| fig-cap: "CD diagrams by spillover type (top) and neighbor contiguity type (bottom). The top of the ranking is similar across spillover types and contiguity definitions; the bottom differs (under rook, Checkerboard is last because tau is not identified)."
 #| fig-height: 7
 #| fig-width: 6.5
 if (stats_avail) {
@@ -882,17 +902,17 @@ if (stats_avail) {
 }
 ```
 
-Taken together, the Friedman test, Nemenyi post-hoc comparisons, and pairwise Wilcoxon signed-rank tests converge on a clear and consistent picture:
+Taken together, the Friedman test, Nemenyi post-hoc comparisons, and pairwise Wilcoxon signed-rank tests (all pooling rook and queen at $\tau = 1.0$ unless stated) converge on a clear and consistent picture:
 
-- **Design differences are real, not chance.** The Friedman omnibus test ($\chi^2 = `r if (stats_avail) sprintf("%.2f", fr_report$statistic) else "—"`$, $p < 2.2 \times 10^{-16}$) provides overwhelming evidence that the 8 designs do not perform equally. The average rank gap between best and worst is `r if (stats_avail) sprintf("%.2f", as.numeric(worst_rank_s) - as.numeric(best_rank_s)) else "—"` points on an 8-point scale.
+- **Design differences are real, not chance.** The pooled Friedman omnibus test ($\chi^2 = `r if (stats_avail) sprintf("%.2f", fr_report$statistic) else "—"`$, $p < 2.2 \times 10^{-16}$) provides overwhelming evidence that the 8 designs do not perform equally. The average rank gap between best and worst is `r if (stats_avail) sprintf("%.2f", as.numeric(worst_rank_s) - as.numeric(best_rank_s)) else "—"` points on an 8-point scale.
 
-- **Design 3 and Design 8 are the recommended designs.** Saturation Quadrants (`r if (stats_avail) best_s else "Design 3"`, avg rank `r if (stats_avail) best_rank_s else "2.66"`) and Incidence-Guided Saturation Quadrants (`r if (stats_avail) second_s else "Design 8"`, avg rank `r if (stats_avail) second_rank_s else "2.73"`) form the top equivalence group — they are statistically indistinguishable from each other and significantly better than every other design. When prior incidence data are available, Design 8 may offer a marginal advantage; otherwise Design 3 is equally well-supported.
+- **Saturation Quadrants and Incidence-Guided Saturation Quadrants are the recommended designs.** Saturation Quadrants (`r if (stats_avail) best_s else "—"`, avg rank `r if (stats_avail) best_rank_s else "—"`) and Incidence-Guided Saturation Quadrants (`r if (stats_avail) second_s else "—"`, avg rank `r if (stats_avail) second_rank_s else "—"`) form the top equivalence group — they are statistically indistinguishable from each other and, pooled and under queen, significantly better than every other design (under rook alone, not significantly separated from Balanced Quartiles or Balanced Halves). The data do not favor one of the two over the other.
 
-- **Avoid Design 1 (Checkerboard).** With an average rank of `r if (stats_avail) worst_rank_s else "7.04"`, the Checkerboard pattern is significantly worse than all alternatives under MLE estimation. Its poor performance is consistent across all parameter settings.
+- **Avoid Checkerboard.** With a pooled average rank of `r if (stats_avail) worst_rank_s else "—"`, Checkerboard is last. Under rook, $\tau$ is not identified (bias about $-\gamma$, coverage 0.15); under queen, its coverage is near nominal but its MSE is the largest of the 8 designs (1.087 vs 0.090 for Saturation Quadrants), and it is not significantly different from High Incidence Focus or 2x2 Blocking.
 
-- **`r if (stats_avail) n_sig_nem_s else 24` of `r if (stats_avail) total_pairs_s else 28` design pairs are significantly different** (Nemenyi post-hoc; `r if (stats_avail) n_sig_wil_s else 27` under Wilcoxon/Holm). The few non-significant pairs involve mid-tier designs with similarly modest MSE profiles.
+- **`r if (stats_avail) n_sig_nem_s else "—"` of `r if (stats_avail) total_pairs_s else "—"` design pairs are significantly different** (pooled Nemenyi post-hoc; `r if (stats_avail) n_sig_wil_s else "—"` under Wilcoxon/Holm). The non-significant pairs include the two near-identical pairs (Saturation Quadrants vs Incidence-Guided Saturation Quadrants; Balanced Quartiles vs Balanced Halves) and pairs among the lower-ranked designs (see the table above).
 
-- **Rankings are robust.** The Friedman test is significant in every parameter stratum tested ($p < 2.2 \times 10^{-16}$ across all levels of $\rho$, $\gamma$, spillover type, neighbor type, and incidence mode). The top equivalence group is stable regardless of the specific data-generating conditions, giving investigators confidence that the design recommendation generalises beyond any single scenario.
+- **Rankings are robust.** The Friedman test is significant in every parameter stratum tested ($p < 2.2 \times 10^{-16}$ across all levels of $\rho$, $\gamma$, spillover type, neighbor type, and incidence mode). Saturation Quadrants is in the top equivalence group in every stratum, and Incidence-Guided Saturation Quadrants in every stratum except bidirectional spillover, so the recommendation generalises beyond any single scenario. Per-stratum tests share incidence surfaces and noise draws, so they are not independent confirmations of one another.
 
 ---
 
@@ -902,7 +922,7 @@ Taken together, the Friedman test, Nemenyi post-hoc comparisons, and pairwise Wi
 
 ```{r q1-mse-plot}
 #| eval: !expr mle_avail
-#| fig-cap: "Average MSE per design for each incidence configuration. Bars sorted left-to-right (lowest = best). Rank labels above bars."
+#| fig-cap: "Average MSE per design for each incidence configuration (tau = 1.0, rook and queen pooled). Bars sorted left-to-right (lowest = best). Rank labels above bars."
 #| fig-height: 5.0
 print(plot_incidence_rankings(mle_results) +
   theme(text        = element_text(size = 10),
@@ -914,7 +934,7 @@ print(plot_incidence_rankings(mle_results) +
 
 ```{r q1-cov-plot}
 #| eval: !expr mle_avail
-#| fig-cap: "Average 95% CI coverage probability per design for each incidence configuration. Red dashed line = nominal 0.95."
+#| fig-cap: "Average 95% CI coverage probability per design for each incidence configuration (tau = 1.0, rook and queen pooled). Red dashed line = nominal 0.95. Checkerboard's low pooled coverage comes entirely from rook, where tau is not identified; under queen it is near nominal."
 #| fig-height: 5.0
 print(plot_incidence_coverage(mle_results) +
   theme(text        = element_text(size = 10),
@@ -941,7 +961,7 @@ for (cfg_nm in cfg_names) {
   cap_safe_nm <- gsub("_", " ", cfg_nm)
   tbl_out <- kable(r, booktabs = TRUE, linesep = "", align = "rlrrr",
         col.names = c("Rank", "Design", "Avg MSE", "Avg Coverage", "Avg Bias"),
-        caption = sprintf("MLE design rankings for %s", cap_safe_nm)) %>%
+        caption = sprintf("MLE design rankings for %s (tau = 1.0, rook and queen pooled)", cap_safe_nm)) %>%
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
     row_spec(1, bold = TRUE)
   print(tbl_out)
@@ -957,7 +977,7 @@ for (cfg_nm in cfg_names) {
 
 ```{r q2-rho-trajectories}
 #| eval: !expr mle_avail
-#| fig-cap: "Design rank trajectories across Rho for each incidence config. Rank 1 = best. Flat lines indicate robust designs; crossing lines reveal rank reversals."
+#| fig-cap: "Design rank trajectories across Rho for each incidence config (tau = 1.0, rook and queen pooled). Rank 1 = best. Flat lines indicate robust designs; crossing lines reveal rank reversals."
 #| fig-height: 8.0
 p_list <- lapply(seq_along(mle_cfgs), function(i) {
   plot_rank_trajectories(mle_cfgs[[i]], "Rho", cfg_names[i],
@@ -975,7 +995,7 @@ gridExtra::grid.arrange(grobs = p_list, ncol = 1)
 
 ```{r q2-gamma-trajectories}
 #| eval: !expr mle_avail
-#| fig-cap: "Design rank trajectories across Gamma. Gamma has minimal effect on design rankings under MLE: all trajectory lines are nearly flat."
+#| fig-cap: "Design rank trajectories across Gamma (tau = 1.0, rook and queen pooled). Gamma has minimal effect on design rankings under MLE: all trajectory lines are nearly flat."
 #| fig-height: 8.0
 p_list2 <- lapply(seq_along(mle_cfgs), function(i) {
   plot_rank_trajectories(mle_cfgs[[i]], "Gamma", cfg_names[i],
@@ -1000,7 +1020,7 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   knitr::kable(
     as.data.frame(sens_tbl),
     digits  = 4,
-    caption = "MLE: Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence."
+    caption = "MLE: Eta-squared (proportion of MSE variance explained) by parameter, for iid Uniform incidence (tau = 1.0, rook and queen pooled)."
   )
 }
 ```
@@ -1008,7 +1028,7 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
 ## MSE Per Design Across Gamma
 
 ```{r mle-rho-effect}
-#| fig-cap: "Per-design MSE line plots across gamma levels, for iid Uniform incidence."
+#| fig-cap: "Per-design MSE line plots across gamma levels, for iid Uniform incidence (tau = 1.0)."
 if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   print(plot_mse_per_design(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 }
@@ -1047,7 +1067,7 @@ for (cfg_nm in cfg_names) {
 
     tbl_out <- kable(ranked, booktabs = TRUE, linesep = "",
           caption = sprintf(
-            "%s | Marginal rankings by %s.", cap_safe_nm, param_label)) %>%
+            "%s | Marginal rankings by %s (tau = 1.0, rook and queen pooled).", cap_safe_nm, param_label)) %>%
       kable_styling(latex_options = c("striped", "hold_position", "scale_down"),
                     font_size = 8) %>%
       row_spec(1, bold = TRUE)
@@ -1065,7 +1085,7 @@ for (cfg_nm in cfg_names) {
 
 ```{r q3-heatmaps}
 #| eval: !expr mle_avail
-#| fig-cap: "Best design heatmap: Rho vs. Gamma for each incidence config. Each tile shows which design achieves the lowest average MSE."
+#| fig-cap: "Best design heatmap: Rho vs. Gamma for each incidence config (tau = 1.0, rook and queen pooled). Each tile shows which design achieves the lowest average MSE."
 #| fig-height: 8.0
 p_list3 <- lapply(seq_along(mle_cfgs), function(i) {
   plot_best_design_heatmap(mle_cfgs[[i]], "Rho", "Gamma", cfg_names[i],
@@ -1084,7 +1104,7 @@ gridExtra::grid.arrange(grobs = p_list3, ncol = 2)
 
 ```{r q3-heatmaps-spill}
 #| eval: !expr mle_avail
-#| fig-cap: "Best design heatmap: Rho vs. Spillover Type for each incidence config. Reveals the key spillover-type interaction."
+#| fig-cap: "Best design heatmap: Rho vs. Spillover Type for each incidence config (tau = 1.0, rook and queen pooled). Reveals the key spillover-type interaction."
 #| fig-height: 7.5
 p_list4 <- lapply(seq_along(mle_cfgs), function(i) {
   plot_best_design_heatmap(mle_cfgs[[i]], "Rho", "Spillover_Type", cfg_names[i],
@@ -1102,6 +1122,8 @@ gridExtra::grid.arrange(grobs = p_list4, ncol = 2)
 ---
 
 # Per-Config Narrative Findings {#sec-commentary}
+
+The findings below are generated from the $\tau = 1.0$ results with rook and queen pooled. In every configuration the top two designs are Saturation Quadrants and Incidence-Guided Saturation Quadrants, which are statistically indistinguishable (@sec-stats); which of the two is listed as the "winner" depends on differences in average MSE of at most 0.004, smaller than the typical per-scenario Monte Carlo SE of their MSE (about 0.007; @sec-tau-sensitivity). The Checkerboard coverage quoted here is pooled; it is near nominal under queen and about 0.15 under rook.
 
 ```{r per-config-commentary}
 #| eval: !expr mle_avail
@@ -1198,7 +1220,7 @@ decision_df <- data.frame(
   Justification = c(
     sprintf("Ranks 1st in %d of %d configs across all Gamma levels", n_configs_modal_best_wins, length(cfg_names)),
     "Winner shifts at this corner; verify from Rho x Spillover_Type heatmap",
-    sprintf("Invalid CIs (coverage %s); MSE %sx higher than winner", worst_cov_range, mse_ratio_range),
+    sprintf("Pooled coverage %s (rook: tau not identified, coverage 0.15; queen: near nominal but largest MSE); pooled MSE %sx higher than winner", worst_cov_range, mse_ratio_range),
     "Queen contiguity amplifies 2x2 block effects"
   ),
   stringsAsFactors = FALSE
@@ -1206,7 +1228,7 @@ decision_df <- data.frame(
 
 kable(decision_df, booktabs = TRUE, linesep = "",
       col.names = c("Situation", "Recommended Design", "Justification"),
-      caption = "Practical design selection guide.") %>%
+      caption = "Practical design selection guide (tau = 1.0, rook and queen pooled).") %>%
   kable_styling(latex_options = c("striped", "hold_position", "scale_down"),
                 font_size = 9) %>%
   column_spec(1, width = "4cm") %>%
@@ -1230,7 +1252,7 @@ for (cfg_nm in names(mle_cfgs)) {
   tbl_out <- knitr::kable(
     as.data.frame(rob),
     digits  = 4,
-    caption = sprintf("MLE robustness profile: %s", gsub("_", " ", cfg_nm))
+    caption = sprintf("MLE robustness profile: %s (tau = 1.0, rook and queen pooled)", gsub("_", " ", cfg_nm))
   )
   print(tbl_out)
   cat("\n")
@@ -1240,7 +1262,7 @@ for (cfg_nm in names(mle_cfgs)) {
 ## MSE Heatmap
 
 ```{r mle-mse-heatmap}
-#| fig-cap: "MLE MSE heatmap for iid Uniform incidence."
+#| fig-cap: "MLE MSE heatmap for iid Uniform incidence (tau = 1.0, rook and queen pooled)."
 if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   print(plot_mse_heatmap(mle_cfgs[["iid Uniform"]], "iid Uniform"))
 }
@@ -1257,7 +1279,7 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
   knitr::kable(
     as.data.frame(mle_rank_tbl),
     digits  = 1,
-    caption = "MLE: Design rank frequency (%) for iid Uniform incidence. Each cell = % of scenarios where design achieved that rank."
+    caption = "MLE: Design rank frequency (%) for iid Uniform incidence (tau = 1.0, rook and queen pooled). Each cell = % of scenarios where design achieved that rank."
   )
 }
 ```
@@ -1266,25 +1288,25 @@ if (mle_avail && "iid Uniform" %in% names(mle_cfgs)) {
 
 # Conclusions and Future Work {#sec-conclusions}
 
-The simulation study evaluated `r if (mle_avail) n_designs` treatment assignment designs across `r if (mle_avail) format(n_scenarios_total, big.mark = ",")` parameter scenarios.
+The simulation study evaluated `r if (mle_avail) n_designs` treatment assignment designs across 12,800 scenarios; the findings below use the `r if (mle_avail) format(n_scenarios_total, big.mark = ",")` $\tau = 1.0$ scenarios with rook and queen pooled unless stated.
 
 **Key findings:**
 
-1. **MLE achieves near-nominal coverage.** Average coverage across all scenarios is `r if (mle_avail) overall_cov_mean`, close to the nominal 0.95 target.
+1. **MLE achieves near-nominal coverage except for Checkerboard under rook.** Coverage is about 0.94 for every design except Checkerboard × rook (0.15), where $\tau$ is not identified; the pooled average over all scenarios, `r if (mle_avail) overall_cov_mean`, is pulled down by that cell. The remaining shortfall of about one point below 0.95 is a finite-sample property of the Wald interval. Coverage does not separate the designs; MSE does.
 
-2. **`r if (mle_avail) best_design` is the top performer.** It achieves the lowest average MSE (`r if (mle_avail) round(best_mse, 3)`) and coverage of `r if (mle_avail) best_coverage`.
+2. **`r if (mle_avail) best_design` has the lowest pooled average MSE** (`r if (mle_avail) round(best_mse, 3)`, coverage `r if (mle_avail) best_coverage`), statistically tied with the runner-up; Saturation Quadrants and Incidence-Guided Saturation Quadrants are indistinguishable. Under queen alone their MSEs are 0.090 and 0.091.
 
-3. **`r if (mle_avail) worst_design_name` is consistently worst.** Highest MSE (`r if (mle_avail) round(worst_mse, 3)`) and lowest coverage (`r if (mle_avail) worst_coverage`). Its perfect spatial alternation creates systematic confounding.
+3. **`r if (mle_avail) worst_design_name` is consistently worst.** Highest pooled MSE (`r if (mle_avail) round(worst_mse, 3)`) and lowest pooled coverage (`r if (mle_avail) worst_coverage`). Under rook its perfect alternation makes $\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$, so $\tau$ is not identified (bias about $-\gamma$); under queen it is almost unbiased but very variable (MSE 1.087), almost entirely from control-only spillover, where the Spill covariate is nearly collinear with $Z$ (MSE 2.11 vs 0.06 under bidirectional spillover).
 
-4. **Spillover type is the key moderator.** Under control-only spillover, `r if (mle_avail) best_under_control_only_short` dominates. Under bidirectional spillover, `r if (mle_avail) best_under_both_short` becomes competitive.
+4. **Spillover type is the key moderator (pooled).** Under control-only spillover, `r if (mle_avail) best_under_control_only_short` dominates. Under bidirectional spillover, `r if (mle_avail) best_under_both_short` becomes competitive.
 
 5. **Design rankings are stable across incidence modes and Gamma levels.** The ordering is largely consistent, and spillover magnitude does not affect design choice.
 
 ## Limitations and Planned Extensions
 
-- **Oracle MLE:** The MLE model uses the true spillover covariate.
+- **Oracle MLE:** The MLE model uses the true spillover covariate. A non-oracle sensitivity analysis ($Y \sim Z + X$) was run on the same outcomes (`results/sim_data/sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds`) but is not reported here.
 - **Tau sensitivity:** $\tau$ was swept across $\{0.8, 1.0, 1.5, 2.0, 3.0\}$ in the completed tau-sweep run (12,800 scenarios). See @sec-tau-sensitivity for power curves and rank-stability results. Primary results use $\tau = 1.0$.
-- **Equal populations:** Poisson mode uses $P_i = 1{,}000$ for all clusters.
+- **Equal populations:** Poisson mode uses $P_i = 100{,}000$ for all clusters.
 - **Grid sensitivity:** Results use $G = 10$ ($N = 100$) only.
 
 ---
@@ -1305,7 +1327,7 @@ if (!exists("tau_sweep_available") || !tau_sweep_available) {
 
 ## MSE Across Tau Values
 
-```{r tau-mse-iid, eval=tau_sweep_available, fig.cap="MSE by design across tau values (iid Uniform incidence). Design rankings should be stable; D1 (Checkerboard) is consistently worst."}
+```{r tau-mse-iid, eval=tau_sweep_available, fig.cap="MSE by design across tau values (iid Uniform incidence, rook and queen pooled). Bands show +/- 1 surface-level Monte Carlo SE. Checkerboard is worst at every tau."}
 if (tau_sweep_available) {
   tau_cfgs <- split_by_incidence_config(mle_results_full)
   if ("iid Uniform" %in% names(tau_cfgs)) {
@@ -1317,7 +1339,7 @@ if (tau_sweep_available) {
 
 ## Power Curves
 
-```{r tau-power-iid, eval=tau_sweep_available, fig.cap="Statistical power P(reject H0: tau=0) by design across tau values (iid Uniform). 80% power reference shown. Efficient designs reach 80% power at smaller effect sizes."}
+```{r tau-power-iid, eval=tau_sweep_available, fig.cap="Statistical power P(reject H0: tau=0) by design across tau values (iid Uniform, rook and queen pooled). 80% power reference shown. Efficient designs reach 80% power at smaller effect sizes."}
 if (tau_sweep_available) {
   tau_cfgs <- split_by_incidence_config(mle_results_full)
   if ("iid Uniform" %in% names(tau_cfgs)) {
@@ -1329,7 +1351,7 @@ if (tau_sweep_available) {
 
 ## Coverage Across Tau Values
 
-```{r tau-coverage-iid, eval=tau_sweep_available, fig.cap="MLE coverage by design across tau values (iid Uniform). Nominal 95% reference shown. Valid designs maintain coverage independent of effect size."}
+```{r tau-coverage-iid, eval=tau_sweep_available, fig.cap="MLE coverage by design across tau values (iid Uniform, rook and queen pooled). Nominal 95% reference shown. Valid designs maintain coverage independent of effect size."}
 if (tau_sweep_available) {
   tau_cfgs <- split_by_incidence_config(mle_results_full)
   if ("iid Uniform" %in% names(tau_cfgs)) {
@@ -1341,7 +1363,7 @@ if (tau_sweep_available) {
 
 ## Rank Stability Across Tau Values
 
-```{r tau-rank-stability, eval=tau_sweep_available, fig.cap="Design rank trajectories across tau values (rank 1 = best MSE). Stable trajectories confirm D3/D8 dominance is not an artifact of the primary effect size assumption."}
+```{r tau-rank-stability, eval=tau_sweep_available, fig.cap="Design rank trajectories across tau values (iid Uniform, rook and queen pooled; rank 1 = best MSE). Stable trajectories show that the top ranking of Saturation Quadrants and Incidence-Guided Saturation Quadrants is not an artifact of the primary effect size. Each tau reuses the same design and noise draws, so the tau levels are not independent confirmations."}
 if (tau_sweep_available) {
   tau_cfgs <- split_by_incidence_config(mle_results_full)
   if ("iid Uniform" %in% names(tau_cfgs)) {
@@ -1353,11 +1375,16 @@ if (tau_sweep_available) {
 
 ## Monte Carlo Standard Errors
 
-The `N_Valid_Est` column records the number of non-NA MLE estimates per scenario,
-serving as the denominator for Monte Carlo (MC) standard errors. All 2,560 primary-scenario
-(τ=1.0) rows have `N_Valid_Est = 250` (full convergence), and this holds across all 12,800
-tau-sweep scenarios (Fail_Rate = 0.0 everywhere), confirming that reported MSE and coverage
-differences reflect genuine design properties rather than MLE instability.
+The `N_Valid_Est` column records the number of valid MLE estimates per scenario. All 2,560
+primary-scenario (τ=1.0) rows have `N_Valid_Est = 250` (full convergence), and this holds
+across all 12,800 tau-sweep scenarios (Fail_Rate = 0.0 everywhere), so reported MSE and
+coverage differences are not driven by MLE failures. (Checkerboard × rook fits are all
+flagged as aliased: they converge, but $\tau$ is not identified.)
+
+The Monte Carlo (MC) standard errors shown below are the stored surface-level SEs
+(`SE_MSE`): for each scenario, the MSE is computed separately on each of the $K = 10$
+incidence surfaces, and $\text{SE} = \text{sd}(\text{MSE}_1, \ldots, \text{MSE}_{10}) / \sqrt{10}$.
+The surface is the primary sampling unit, so the 250 fits are not treated as independent.
 
 ```{r mc-ses-table, eval=mle_avail, results='asis'}
 if (mle_avail && "N_Valid_Est" %in% names(mle_results)) {
@@ -1373,7 +1400,7 @@ if (mle_avail && "N_Valid_Est" %in% names(mle_results)) {
     arrange(Mean_MSE)
   kable(mc_ses_summ, booktabs = TRUE,
         col.names = c("Design", "Mean N Valid", "Mean MSE", "MC SE (MSE)"),
-        caption = "Monte Carlo standard errors for MSE at primary scenario (tau=1.0). MC SEs are uniformly small, confirming that MSE differences across designs are not attributable to simulation noise.") |>
+        caption = "Monte Carlo standard errors for MSE, tau = 1.0 slice (2,560 scenarios, rook and queen pooled). MC SE is the surface-level SE (sd of the 10 surface-level MSEs / sqrt(10)), averaged over scenarios. The SEs are small relative to the gaps between most designs, but not relative to the gap between Saturation Quadrants and Incidence-Guided Saturation Quadrants, or between Balanced Quartiles and Balanced Halves. These are per-design SEs, not SEs of paired differences.") |>
     kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) |>
     print()
 }
@@ -1383,43 +1410,37 @@ if (mle_avail && "N_Valid_Est" %in% names(mle_results)) {
 
 # Appendix A: Simulation Pseudocode {#sec-appendix-pseudocode}
 
+Revised structure (2026-09). Every random draw is preceded by `set.seed(digest2int(key))`
+with the key shown; K = 10 surfaces, J = 25 design draws per surface.
+
 ```
-BUILD spatial grid -> coords, W_rook, W_queen, listw_rook, listw_queen
-SET I_mat = diag(N)
+BUILD spatial grid -> coords, W_rook, W_queen
 
-FOR EACH incidence_mode IN {iid, spatial, poisson}:
-  SET rho_X_values = {0} if iid, else {0.20, 0.50}
+FOR EACH incidence config (mode, rho_X) IN {iid; spatial 0.20, 0.50; poisson 0.20, 0.50}:
+  FOR k IN 1:K:
+    GENERATE surface X_k                         # key "X", mode, rho_X, k
+                                                 # (spatial filters use W_queen; poisson P = 100,000)
 
-  FOR EACH rho_X IN rho_X_values:
-    GENERATE X_matrix (N x R_o) using incidence_mode, rho_X, W_queen
-    SET base_incidence = X_matrix[, 1]
+  FOR EACH nb_type IN {rook, queen}:
+    FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
+      COMPUTE inv_mat = solve(I - rho * W)
+      FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
+        FOR EACH spill_type IN {control_only, both}:        # one "block"
+          GENERATE Epsilon (N x K*J) ~ N(0, 1)       # key "eps", mode, rho_X, nb, rho, gamma, spill_type
+                                                     # shared by all 8 designs and all tau
 
-    FOR EACH nb_type IN {rook, queen}:
-      SELECT active W, listw for nb_type
-
-      FOR EACH rho IN {0.00, 0.01, 0.20, 0.50}:
-        COMPUTE inv_mat = solve(I_mat - rho * W)
-        GENERATE Epsilon_matrix (N x R_o) ~ N(0, sigma^2)
-        COMPUTE baseline_part = inv_mat %*% (X_matrix * beta + Epsilon_matrix)
-
-        FOR EACH gamma IN {0.50, 0.60, 0.70, 0.80}:
-          FOR EACH spill_type IN {control_only, both}:
-            FOR EACH design_id IN {1, 2, 3, 4, 5, 6, 7, 8}:
-
-              SET scenario_seed = hash(incidence_mode, rho_X, nb_type,
-                                       rho, gamma, spill_type, design_id)
-              set.seed(scenario_seed)
-
-              GENERATE Z_matrix (N x R_d)
-              FOR d IN 1:R_d:
-                Z = Z_matrix[, d]
-                COMPUTE spillover = W %*% Z (apply spill_type mask)
-                COMPUTE trt_effect = inv_mat %*% (tau * Z + spillover)
-                Y_sim = trt_effect + baseline_part
-                ESTIMATE tau_hat, CI for each of R_o outcome columns
-
-              COMPUTE Bias, SD, MSE, Coverage, Fail_Rate
-              STORE results row
+          FOR EACH design d IN 1:8:
+            FOR k IN 1:K:
+              GENERATE Z_k1..Z_kJ from X_k           # key "Z", mode, rho_X, nb, rho, gamma, spill_type, k, d
+                                                     # (Checkerboard: same Z every time)
+            FOR EACH tau IN {0.8, 1.0, 1.5, 2.0, 3.0}:
+              FOR each fit (k, j):
+                Y = inv_mat %*% (tau*Z_kj + Spill(Z_kj) + beta*X_k + eps_kj)
+                FIT oracle  Y ~ Z + Spill + X_k      # fit_sar_lag(); flag aliased fits
+                FIT non-oracle Y ~ Z + X_k           # same Y
+              COMPUTE Bias, SD, MSE, Coverage, Power, Fail_Rate over the 250 fits
+              COMPUTE surface-level SEs from the K per-surface metrics
+              STORE one results row per estimator
 ```
 
 ---

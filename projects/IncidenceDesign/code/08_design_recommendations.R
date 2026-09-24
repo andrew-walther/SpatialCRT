@@ -623,11 +623,15 @@ generate_commentary <- function(results, inc_label = "") {
 #' @param results_dir Path to results directory (used if results is NULL)
 #' @param estimation_mode Character: "MLE_tau_sweep" (default; oracle, 2026-09 revision)
 #' @param output_pdf Logical: save to PDF?
+#' @param default_tau Numeric: tau level all rankings are conditioned on (default 1.0)
+#' @param nb_type "queen" (default, primary), "rook", or NULL to pool deliberately;
+#'   the PDF is named results/<estimation_mode>_design_recommendations_<nb>.pdf
 #' @return Invisible combined results data frame
 run_recommendation_report <- function(results = NULL, results_dir = NULL,
                                       estimation_mode = "MLE_tau_sweep",
                                       output_pdf = TRUE,
-                                      default_tau = 1.0) {
+                                      default_tau = 1.0,
+                                      nb_type = "queen") {
   # Load results if needed
   if (is.null(results)) {
     rd <- if (!is.null(results_dir)) {
@@ -650,20 +654,28 @@ run_recommendation_report <- function(results = NULL, results_dir = NULL,
     ))
   }
 
+  # Never pool neighbor types silently (2026-09): queen is primary, rook the
+  # sensitivity case. nb_type = NULL pools deliberately and is labeled "pooled".
+  if (!is.null(nb_type)) {
+    stopifnot(nb_type %in% unique(results$Neighbor_Type))
+    results <- results[results$Neighbor_Type == nb_type, ]
+  }
+  nb_label <- if (is.null(nb_type)) "pooled" else nb_type
+
   est_label <- if (!is.null(estimation_mode)) estimation_mode else "MLE"
 
   config_list <- split_by_incidence_config(results)
 
   cat("\n##############################################################\n")
   cat("  PERSONALIZED DESIGN RECOMMENDATION REPORT\n")
-  cat(sprintf("  Estimator: %s | Configs: %d | Scenarios: %d\n",
-              est_label, length(config_list), nrow(results)))
+  cat(sprintf("  Estimator: %s | Neighbor type: %s | Configs: %d | Scenarios: %d\n",
+              est_label, nb_label, length(config_list), nrow(results)))
   cat("##############################################################\n")
 
   # --- PDF setup ---
   if (output_pdf) {
     pdf_file <- file.path(dirname(script_dir_07), "results",
-                          sprintf("%s_design_recommendations.pdf", est_label))
+                          sprintf("%s_design_recommendations_%s.pdf", est_label, nb_label))
     pdf(pdf_file, width = 14, height = 10)
   }
 
