@@ -25,12 +25,16 @@
 # the full manuscript name (get_design_names() with the "Design N: " prefix
 # stripped), per the CTJ + dissertation manuscript no-shorthand convention.
 #
+# 2026-09 revision: queen (primary) and rook (sensitivity; tau not identified for
+# Checkerboard) are analyzed separately. (a) reports queen, rook and a labeled POOLED
+# slice; (b)-(c) are produced once per neighbor type into six_design_manuscript/<nb>/.
+# (d) is labeled STALE until the application is re-run on the revised designs.
+#
 # OUTPUTS:
 #   results/eight_design_supplementary/eight_design_summary.txt
-#   results/six_design_manuscript/fig_mse_by_design_6design.pdf   (overwritten, reordered)
-#   results/six_design_manuscript/fig_biasvar_6design.pdf         (new)
-#   results/six_design_manuscript/application_table_6design.txt   (new)
-#   results/six_design_manuscript/si_figures/*.pdf                (new, 6 files)
+#   results/six_design_manuscript/<nb>/fig_{mse_by_design,biasvar,coverage_tau}_6design.pdf
+#   results/six_design_manuscript/<nb>/si_figures/*.pdf
+#   results/six_design_manuscript/application_table_6design.txt   (STALE, see (d))
 # ==============================================================================
 
 library(dplyr)
@@ -48,10 +52,10 @@ proj_dir    <- dirname(script_dir)
 source("10_statistical_comparisons.R")  # sources 06_visualizations.R -> 01-03
 
 six_dir  <- file.path(results_dir, "six_design_manuscript")
-si_dir   <- file.path(six_dir, "si_figures")
 eight_dir <- file.path(results_dir, "eight_design_supplementary")
-dir.create(si_dir, showWarnings = FALSE, recursive = TRUE)
 dir.create(eight_dir, showWarnings = FALSE, recursive = TRUE)
+ROOK_NOTE <- "Rook: tau not identified for Checkerboard (WZ = 1 - Z); estimates kept but flagged."
+nb_label <- c(queen = "queen contiguity", rook = "rook contiguity")
 
 # ==============================================================================
 # FULL-NAME RELABELING (mirrors code/12_six_design_statistical_comparisons.R)
@@ -88,30 +92,19 @@ DESIGN_GROUPS_6 <- c(
 mle_full <- load_latest_results(results_dir = results_dir, estimation_mode = "MLE_tau_sweep")
 stopifnot("True_Tau" %in% names(mle_full))
 
-# --- 8-design (all designs, relabeled, no filter) ---
+# --- 8-design (all designs, relabeled; split by neighbor type in (a)) ---
 mle_full_8 <- mle_full
 mle_full_8$Design <- full_name_map[mle_full_8$Design]
-mle_tau1_8 <- mle_full_8[mle_full_8$True_Tau == 1.0, ]
+mle_tau1_8_all <- mle_full_8[mle_full_8$True_Tau == 1.0, ]
 
-# --- 6-design (retained designs only, relabeled) ---
-mle_full_6 <- mle_full[mle_full$Design %in% retained_ids, ]
-mle_full_6$Design <- full_name_map[mle_full_6$Design]
-mle_tau1_6 <- mle_full_6[mle_full_6$True_Tau == 1.0, ]
+# --- 6-design (retained designs only, relabeled; filtered per nb in (b)-(c)) ---
+mle_full_6_all <- mle_full[mle_full$Design %in% retained_ids, ]
+mle_full_6_all$Design <- full_name_map[mle_full_6_all$Design]
 
-# Reuse the already-verified 6-design test results (fr6/nem6/wil6/cond_tau6)
-# rather than recomputing, so SI numbers match six_design_summary.txt exactly.
+# Reuse the 6-design test results from 12 (queen/rook/pooled) rather than
+# recomputing, so SI numbers match six_design_summary.txt exactly.
 six_report <- readRDS(file.path(six_dir, "six_design_comparison_report.rds"))
-fr6  <- six_report$friedman
-nem6 <- six_report$nemenyi
-wil6 <- six_report$wilcoxon
-
-# Best-to-worst design ordering (pooled mean MSE at tau=1.0, all configs) --
-# used for every reordered 6-design figure below. Matches the CTJ Table 2 order.
-best_to_worst_6 <- mle_tau1_6 %>%
-  group_by(Design) %>%
-  summarise(Avg_MSE = mean(MSE, na.rm = TRUE), .groups = "drop") %>%
-  arrange(Avg_MSE) %>%
-  pull(Design)
+stopifnot(all(c("queen", "rook") %in% names(six_report)))
 
 wrap_labels <- function(x, width = 14) {
   vapply(x, function(s) paste(strwrap(s, width = width), collapse = "\n"),
@@ -131,89 +124,99 @@ cat("EIGHT-DESIGN STATISTICAL COMPARISONS (consolidation justification)\n")
 cat("Purpose: justify dropping Saturation Quadrants (redundant with\n")
 cat("Incidence-Guided Saturation Quadrants) and Balanced Halves (redundant\n")
 cat("with Balanced Quartiles) from the 6-design manuscript comparison.\n")
-cat("======================================================================\n\n")
+cat("Reported for queen (primary), rook, and a labeled POOLED slice.\n")
+cat("======================================================================\n")
 
-cat("--- Primary scenario: True_Tau = 1.0, all 8 designs ---\n")
-fr8  <- run_friedman_test(mle_tau1_8)
-nem8 <- run_nemenyi_posthoc(mle_tau1_8)
-wil8 <- run_pairwise_wilcoxon(mle_tau1_8)
-
-cat(sprintf("Friedman chi-sq = %.2f, df = %d, p = %s, n_blocks = %d\n",
-            fr8$statistic, fr8$n_designs - 1, format.pval(fr8$p_value, digits = 3),
-            fr8$n_blocks))
-cat("Average ranks (lower = better MSE):\n")
-print(round(fr8$avg_ranks, 3))
-
-n_designs8 <- length(fr8$avg_ranks)
-n_sig_nem8 <- sum(nem8$sig_matrix[upper.tri(nem8$sig_matrix)])
-cat(sprintf("\nNemenyi critical difference (alpha=0.05) = %.3f\n", nem8$critical_diff))
-cat(sprintf("%d of %d pairs significantly different (Nemenyi)\n",
-            n_sig_nem8, choose(n_designs8, 2)))
-
-n_sig_wil8 <- sum(wil8$sig_matrix[upper.tri(wil8$sig_matrix)])
-cat(sprintf("%d of %d pairs significantly different (Wilcoxon, Holm-adjusted)\n",
-            n_sig_wil8, wil8$n_tests))
-
-desc8 <- aggregate(cbind(MSE, Coverage) ~ Design, data = mle_tau1_8, FUN = mean)
-desc8 <- desc8[order(desc8$MSE), ]
-desc8$Rank <- seq_len(nrow(desc8))
-cat("\nAll-8 mean MSE / Coverage / Rank (tau=1.0, primary scenario):\n")
-print(desc8, row.names = FALSE)
-
-# The two specific consolidation comparisons
-cat("\n--- Consolidation pair 1: Saturation Quadrants vs Incidence-Guided Saturation Quadrants ---\n")
-mse_sq  <- desc8$MSE[desc8$Design == "Saturation Quadrants"]
-mse_isq <- desc8$MSE[desc8$Design == "Incidence-Guided Saturation Quadrants"]
-p_nem_sq_isq <- nem8$p_matrix["Saturation Quadrants", "Incidence-Guided Saturation Quadrants"]
-p_wil_sq_isq <- wil8$p_matrix["Saturation Quadrants", "Incidence-Guided Saturation Quadrants"]
-cat(sprintf("MSE: Saturation Quadrants = %.4f, Incidence-Guided Saturation Quadrants = %.4f (delta = %.4f)\n",
-            mse_sq, mse_isq, mse_sq - mse_isq))
-cat(sprintf("Nemenyi p = %.4f | Wilcoxon (Holm) p = %s\n",
-            p_nem_sq_isq, format.pval(p_wil_sq_isq, digits = 3)))
-
-cat("\n--- Consolidation pair 2: Balanced Halves vs Balanced Quartiles ---\n")
-mse_bh <- desc8$MSE[desc8$Design == "Balanced Halves"]
-mse_bq <- desc8$MSE[desc8$Design == "Balanced Quartiles"]
-p_nem_bh_bq <- nem8$p_matrix["Balanced Halves", "Balanced Quartiles"]
-p_wil_bh_bq <- wil8$p_matrix["Balanced Halves", "Balanced Quartiles"]
-cat(sprintf("MSE: Balanced Halves = %.4f, Balanced Quartiles = %.4f (delta = %.4f)\n",
-            mse_bh, mse_bq, mse_bh - mse_bq))
-cat(sprintf("Nemenyi p = %.4f | Wilcoxon (Holm) p = %s\n",
-            p_nem_bh_bq, format.pval(p_wil_bh_bq, digits = 3)))
-
-cat("\nFull Nemenyi p-value matrix (8 designs):\n")
-print(round(nem8$p_matrix, 4))
-cat("\nFull Wilcoxon (Holm-adjusted) p-value matrix (8 designs):\n")
-print(round(wil8$p_matrix, 4))
+slices8 <- list(queen = mle_tau1_8_all[mle_tau1_8_all$Neighbor_Type == "queen", ],
+                rook = mle_tau1_8_all[mle_tau1_8_all$Neighbor_Type == "rook", ],
+                pooled = mle_tau1_8_all)
+cons_pairs <- list(c("Saturation Quadrants", "Incidence-Guided Saturation Quadrants"),
+                   c("Balanced Halves", "Balanced Quartiles"))
+eight_report <- list()
+for (sl in names(slices8)) {
+  d8 <- slices8[[sl]]
+  cat(sprintf("\n######## %s -- True_Tau = 1.0, all 8 designs ########\n",
+              c(queen = "QUEEN (primary)", rook = "ROOK", pooled = "POOLED over rook and queen")[[sl]]))
+  if (sl != "queen") cat(ROOK_NOTE, "\n")
+  fr8  <- run_friedman_test(d8)
+  nem8 <- run_nemenyi_posthoc(d8)
+  wil8 <- run_pairwise_wilcoxon(d8)
+  cat(sprintf("Friedman chi-sq = %.2f, df = %d, p = %s, n_blocks = %d\n",
+              fr8$statistic, fr8$n_designs - 1, format.pval(fr8$p_value, digits = 3),
+              fr8$n_blocks))
+  cat("Average ranks (lower = better MSE):\n")
+  print(round(fr8$avg_ranks, 3))
+  # choose(k, 2) pair denominator (nem8$n_blocks is the block count -- see 10's comment)
+  n_designs8 <- length(fr8$avg_ranks)
+  cat(sprintf("\nNemenyi critical difference (alpha=0.05) = %.3f\n", nem8$critical_diff))
+  cat(sprintf("%d of %d pairs significantly different (Nemenyi)\n",
+              sum(nem8$sig_matrix[upper.tri(nem8$sig_matrix)]), choose(n_designs8, 2)))
+  cat(sprintf("%d of %d pairs significantly different (Wilcoxon, Holm-adjusted)\n",
+              sum(wil8$sig_matrix[upper.tri(wil8$sig_matrix)]), wil8$n_tests))
+  desc8 <- aggregate(cbind(MSE, Coverage) ~ Design, data = d8, FUN = mean)
+  desc8 <- desc8[order(desc8$MSE), ]
+  desc8$Rank <- seq_len(nrow(desc8))
+  cat("\nAll-8 mean MSE / Coverage / Rank (tau=1.0):\n")
+  print(desc8, row.names = FALSE)
+  for (pr in cons_pairs) {
+    cat(sprintf("\n--- Consolidation pair: %s vs %s ---\n", pr[1], pr[2]))
+    cat(sprintf("MSE: %.4f vs %.4f (delta = %.4f) | Nemenyi p = %.4f | Wilcoxon (Holm) p = %s\n",
+                desc8$MSE[desc8$Design == pr[1]], desc8$MSE[desc8$Design == pr[2]],
+                desc8$MSE[desc8$Design == pr[1]] - desc8$MSE[desc8$Design == pr[2]],
+                nem8$p_matrix[pr[1], pr[2]], format.pval(wil8$p_matrix[pr[1], pr[2]], digits = 3)))
+  }
+  cat("\nFull Nemenyi p-value matrix (8 designs):\n")
+  print(round(nem8$p_matrix, 4))
+  cat("\nFull Wilcoxon (Holm-adjusted) p-value matrix (8 designs):\n")
+  print(round(wil8$p_matrix, 4))
+  eight_report[[sl]] <- list(friedman = fr8, nemenyi = nem8, wilcoxon = wil8, descriptive = desc8)
+}
 
 sink()
 cat("Summary written to", file.path(eight_dir, "eight_design_summary.txt"), "\n")
+saveRDS(eight_report, file.path(eight_dir, "eight_design_comparison_report.rds"))
 
-saveRDS(
-  list(friedman = fr8, nemenyi = nem8, wilcoxon = wil8, descriptive = desc8),
-  file.path(eight_dir, "eight_design_comparison_report.rds")
-)
+# ==============================================================================
+# (b)-(c) PER NEIGHBOR TYPE: queen (primary) and rook (sensitivity), each into
+# six_design_manuscript/<nb>/ -- never pooled
+# ==============================================================================
+
+for (nb_sel in c("queen", "rook")) {
+fig_dir <- file.path(six_dir, nb_sel)
+si_dir  <- file.path(fig_dir, "si_figures")
+dir.create(si_dir, showWarnings = FALSE, recursive = TRUE)
+sub_note <- if (nb_sel == "rook") paste0(" [", ROOK_NOTE, "]") else ""
+mle_full_6 <- mle_full_6_all[mle_full_6_all$Neighbor_Type == nb_sel, ]
+mle_tau1_6 <- mle_full_6[mle_full_6$True_Tau == 1.0, ]
+nem6 <- six_report[[nb_sel]]$nemenyi
+
+# Best-to-worst ordering (mean MSE at tau=1.0 over all configs, this nb only)
+best_to_worst_6 <- mle_tau1_6 %>%
+  group_by(Design) %>%
+  summarise(Avg_MSE = mean(MSE, na.rm = TRUE), .groups = "drop") %>%
+  arrange(Avg_MSE) %>%
+  pull(Design)
 
 # ==============================================================================
 # (b) MAIN-TEXT FIGURES: reordered MSE bar chart + new ranked bias-variance
 # ==============================================================================
 
-p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = "queen",
-                                          inc_label = "all configs, tau=1.0") +
+p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = nb_sel,
+                                          inc_label = paste0("all configs, tau=1.0", sub_note)) +
   scale_x_discrete(limits = best_to_worst_6) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
-ggsave(file.path(six_dir, "fig_mse_by_design_6design.pdf"), p_mse_reordered,
+ggsave(file.path(fig_dir, "fig_mse_by_design_6design.pdf"), p_mse_reordered,
        width = 12, height = 7)
 
 # SUD-relevant representative config for the bias-variance decomposition
 configs_tau1_6 <- split_by_incidence_config(mle_tau1_6)
-rep_label_6 <- "Poisson (rho_X = 0.20)"
+rep_label_6 <- inc_config_label("poisson", 0.20)
 results_rep_6 <- configs_tau1_6[[rep_label_6]]
 
 p_biasvar <- plot_bias_variance(results_rep_6, rep_label_6) +
   scale_x_discrete(limits = best_to_worst_6, labels = wrap_labels) +
   labs(title = "Bias-Variance Decomposition of MSE (ranked best to worst)")
-ggsave(file.path(six_dir, "fig_biasvar_6design.pdf"), p_biasvar, width = 9, height = 6)
+ggsave(file.path(fig_dir, "fig_biasvar_6design.pdf"), p_biasvar, width = 9, height = 6)
 
 # Combined coverage + tau-sensitivity 2-panel figure (frees an exhibit slot in
 # the main text -- see CTJ_Manuscript.tex Figure 3 -- to make room for the NC
@@ -245,7 +248,7 @@ p_tau_panel <- plot_mse_vs_tau(mle_full_6_leveled) +
 
 p_coverage_tau <- (p_coverage_panel / p_tau_panel) +
   plot_annotation(tag_levels = "a")
-ggsave(file.path(six_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width = 9, height = 11)
+ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width = 9, height = 11)
 
 # ==============================================================================
 # (c) SI FIGURES (6 designs, full names, ranking-oriented)
@@ -337,7 +340,7 @@ ggsave(file.path(six_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
 {
   mse_vals <- mle_tau1_6 %>%
     group_by(Design) %>%
-    summarize(Mean_MSE = mean(MSE), .groups = "drop") %>%
+    summarize(Mean_MSE = mean(MSE, na.rm = TRUE), .groups = "drop") %>%
     tibble::deframe()
 
   avg_ranks <- nem6$avg_ranks
@@ -445,7 +448,8 @@ ggsave(file.path(si_dir, "si_fig_rank_heatmap.pdf"), p_heatmap_rank, width = 8, 
 # --- SI Fig 5: two-panel ranked mean-MSE bar (colored by group) + p-value heatmap ---
 mse_bar_df <- mle_tau1_6 %>%
   group_by(Design) %>%
-  summarize(Mean_MSE = mean(MSE), SE = sd(MSE) / sqrt(n()), .groups = "drop")
+  summarize(Mean_MSE = mean(MSE, na.rm = TRUE),
+            SE = sd(MSE, na.rm = TRUE) / sqrt(sum(!is.na(MSE))), .groups = "drop")
 
 p_bar <- ggplot(mse_bar_df,
                 aes(x = Mean_MSE, y = factor(Design, levels = rev(best_to_worst_6)))) +
@@ -478,6 +482,8 @@ p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
 ggsave(file.path(si_dir, "si_fig_tau_mse.pdf"), p_tau_mse, width = 8, height = 5)
 ggsave(file.path(si_dir, "si_fig_tau_coverage.pdf"), p_tau_cov, width = 8, height = 5)
 
+}  # end per-neighbor loop
+
 # ==============================================================================
 # (d) 6-DESIGN APPLICATION TABLE
 # ==============================================================================
@@ -494,6 +500,8 @@ app_agg <- app_agg[order(app_agg$mse), ]
 
 sink(file.path(six_dir, "application_table_6design.txt"), split = TRUE)
 cat("======================================================================\n")
+cat("*** STALE: built from the pre-revision application run. The application uses the\n")
+cat("*** revised design rules (random tie-breaking, exact N/2) only after it is re-run.\n")
 cat("6-DESIGN APPLICATION-SCALE TABLE (NC 58-cluster community college network)\n")
 cat("Source: application/results/full/application_full_results.rds$summary_results\n")
 cat("Filtered to design_id in {1,2,4,5,6,8} (the 6 retained manuscript designs),\n")
@@ -514,6 +522,6 @@ cat("Application table written to", file.path(six_dir, "application_table_6desig
 
 cat("\n=== 14_manuscript_supplement_figures.R complete ===\n")
 cat("8-design summary:  ", file.path(eight_dir, "eight_design_summary.txt"), "\n")
-cat("Main-text figures: ", six_dir, "\n")
-cat("SI figures:        ", si_dir, "\n")
+cat("Main-text figures: ", file.path(six_dir, c("queen", "rook")), "\n")
+cat("SI figures:        ", file.path(six_dir, c("queen", "rook"), "si_figures"), "\n")
 cat("Application table: ", file.path(six_dir, "application_table_6design.txt"), "\n")

@@ -14,7 +14,7 @@
 #
 # Usage:
 #   source("08_design_recommendations.R")
-#   run_recommendation_report(estimation_mode = "MLE_combined")
+#   run_recommendation_report(estimation_mode = "MLE_tau_sweep")
 #   -- or call individual functions --
 # ==============================================================================
 
@@ -128,7 +128,7 @@ rank_designs_by_group <- function(results, group_vars = character(0), metric = "
 #' For each of the 5 incidence configs, ranks all 6 designs by avg MSE.
 #' Shows avg MSE and avg Coverage side-by-side.
 #'
-#' @param results Combined results data frame (all 1,920 rows)
+#' @param results Combined results data frame (all rows of one estimator's results file)
 #' @return Invisible data frame with columns: Inc_Config, Design, Avg_MSE,
 #'         Avg_Coverage, Avg_Bias, Rank
 table_incidence_rankings <- function(results) {
@@ -165,7 +165,7 @@ table_incidence_rankings <- function(results) {
 
 #' Plot: Faceted bar chart of avg MSE per design, one panel per incidence config
 #'
-#' @param results Combined results data frame (all 1,920 rows)
+#' @param results Combined results data frame (all rows of one estimator's results file)
 #' @return ggplot object
 plot_incidence_rankings <- function(results) {
   config_list <- split_by_incidence_config(results)
@@ -202,7 +202,7 @@ plot_incidence_rankings <- function(results) {
 
 #' Plot: Faceted bar chart of avg Coverage per design, per incidence config
 #'
-#' @param results Combined results data frame (all 1,920 rows)
+#' @param results Combined results data frame (all rows of one estimator's results file)
 #' @return ggplot object
 plot_incidence_coverage <- function(results) {
   config_list <- split_by_incidence_config(results)
@@ -498,7 +498,10 @@ generate_commentary <- function(results, inc_label = "") {
 
   # --- Finding 2: Dominance ---
   # Compute pairwise: best vs second, best vs worst
-  scenario_ids <- c("Neighbor_Type", "Rho", "Gamma", "Spillover_Type")
+  # True_Tau is a scenario key in tau-sweep results; without it pivot_wider would
+  # stack the 5 tau levels into list-columns
+  scenario_ids <- intersect(c("Neighbor_Type", "Rho", "Gamma", "Spillover_Type", "True_Tau"),
+                            names(results))
   wide <- results %>%
     select(all_of(c(scenario_ids, "Design", "MSE"))) %>%
     pivot_wider(names_from = Design, values_from = MSE,
@@ -614,13 +617,13 @@ generate_commentary <- function(results, inc_label = "") {
 #' Produces a PDF with all recommendation plots and prints tables + commentary
 #' to the console. Operates on MLE results by default.
 #'
-#' @param results Combined results (all 1,920 rows) or NULL to auto-load
+#' @param results Combined results (all rows of one estimator's results file) or NULL to auto-load
 #' @param results_dir Path to results directory (used if results is NULL)
-#' @param estimation_mode Character: "MLE_combined" (default)
+#' @param estimation_mode Character: "MLE_tau_sweep" (default; oracle, 2026-09 revision)
 #' @param output_pdf Logical: save to PDF?
 #' @return Invisible combined results data frame
 run_recommendation_report <- function(results = NULL, results_dir = NULL,
-                                      estimation_mode = "MLE_combined",
+                                      estimation_mode = "MLE_tau_sweep",
                                       output_pdf = TRUE,
                                       default_tau = 1.0) {
   # Load results if needed
@@ -737,13 +740,13 @@ run_recommendation_report <- function(results = NULL, results_dir = NULL,
 #'
 #' Runs 8 assertion-based tests. Stops with error on first failure.
 #'
-#' @param results Combined results (all 1,920 rows) or NULL to auto-load
+#' @param results Combined results (all rows of one estimator's results file) or NULL to auto-load
 #' @return Invisible TRUE if all tests pass
 validate_recommendations <- function(results = NULL) {
   if (is.null(results)) {
     results <- load_latest_results(
       results_dir = file.path(dirname(script_dir_07), "results"),
-      estimation_mode = "MLE_combined"
+      estimation_mode = "MLE_tau_sweep"
     )
   }
 
@@ -752,29 +755,30 @@ validate_recommendations <- function(results = NULL) {
   configs <- split_by_incidence_config(results)
   test_config <- configs[[1]]
   test_label <- names(configs)[1]
+  n_designs <- length(unique(results$Design))   # derived, not hard-coded
 
   # Test 1: rank_designs_by_group returns correct shape (no grouping)
   cat("Test 1: rank_designs_by_group shape (ungrouped)... ")
   ranked <- rank_designs_by_group(test_config, character(0))
-  stopifnot(nrow(ranked) == 6)
+  stopifnot(nrow(ranked) == n_designs)
   stopifnot(all(c("Design", "Avg_MSE", "Avg_Coverage", "Rank") %in% names(ranked)))
-  stopifnot(all(ranked$Rank %in% 1:6))
+  stopifnot(all(ranked$Rank %in% seq_len(n_designs)))
   cat("PASS\n")
 
   # Test 2: rank_designs_by_group with group_vars
   cat("Test 2: rank_designs_by_group with grouping... ")
   ranked_rho <- rank_designs_by_group(test_config, "Rho")
   n_rho <- length(unique(test_config$Rho))
-  stopifnot(nrow(ranked_rho) == 6 * n_rho)
+  stopifnot(nrow(ranked_rho) == n_designs * n_rho)
   cat("PASS\n")
 
-  # Test 3: Ranks are 1-6 within each group
+  # Test 3: Ranks are 1..n_designs within each group
   cat("Test 3: Rank range within groups... ")
   rank_check <- ranked_rho %>%
     group_by(Rho) %>%
     summarise(min_r = min(Rank), max_r = max(Rank), .groups = "drop")
   stopifnot(all(rank_check$min_r == 1))
-  stopifnot(all(rank_check$max_r <= 6))
+  stopifnot(all(rank_check$max_r <= n_designs))
   cat("PASS\n")
 
   # Test 4: No cross-incidence aggregation in table_incidence_rankings
@@ -794,12 +798,12 @@ validate_recommendations <- function(results = NULL) {
   }
   cat("PASS\n")
 
-  # Test 6: table_scenario_lookup returns 6 rows for full specification
+  # Test 6: table_scenario_lookup returns one row per design for a full specification
   cat("Test 6: Scenario lookup shape... ")
   lookup <- table_scenario_lookup(test_config, rho = 0.20, gamma = 0.7,
                                   spill_type = "both", nb_type = "queen",
                                   inc_label = test_label)
-  stopifnot(nrow(lookup) == 6)
+  stopifnot(nrow(lookup) == n_designs)
   cat("PASS\n")
 
   # Test 7: Plot functions return ggplot objects
@@ -833,13 +837,13 @@ validate_recommendations <- function(results = NULL) {
 #' Checks that all functions from 06_visualizations.R remain callable and
 #' produce expected output types after 07 is loaded.
 #'
-#' @param results Combined results (all 1,920 rows) or NULL to auto-load
+#' @param results Combined results (all rows of one estimator's results file) or NULL to auto-load
 #' @return Invisible TRUE if all tests pass
 validate_no_side_effects <- function(results = NULL) {
   if (is.null(results)) {
     results <- load_latest_results(
       results_dir = file.path(dirname(script_dir_07), "results"),
-      estimation_mode = "MLE_combined"
+      estimation_mode = "MLE_tau_sweep"
     )
   }
 
@@ -862,8 +866,10 @@ validate_no_side_effects <- function(results = NULL) {
 
   # Test 2: Results data integrity
   cat("Test 2: Results data integrity... ")
-  stopifnot(nrow(results) == 1920)
-  stopifnot(ncol(results) == 13)
+  # One row per scenario: row count equals the number of distinct scenario keys
+  scen_keys <- intersect(c("Incidence_Mode", "Rho_Incidence", "Neighbor_Type", "Design",
+                           "Rho", "Gamma", "Spillover_Type", "True_Tau"), names(results))
+  stopifnot(nrow(results) == nrow(dplyr::distinct(results[, scen_keys])))
   expected_cols <- c("Incidence_Mode", "Rho_Incidence", "Neighbor_Type", "Design",
                      "Rho", "Gamma", "Spillover_Type", "Mean_Estimate",
                      "Bias", "SD", "MSE", "Coverage", "Fail_Rate")
@@ -873,15 +879,16 @@ validate_no_side_effects <- function(results = NULL) {
   # Test 3: split_by_incidence_config still works correctly
   cat("Test 3: split_by_incidence_config... ")
   configs <- split_by_incidence_config(results)
-  stopifnot(length(configs) == 5)
-  stopifnot(all(sapply(configs, nrow) == 384))
+  stopifnot(length(configs) == nrow(dplyr::distinct(results, Incidence_Mode, Rho_Incidence)))
+  stopifnot(sum(sapply(configs, nrow)) == nrow(results))
+  stopifnot(length(unique(sapply(configs, nrow))) == 1)   # balanced grid
   cat("PASS\n")
 
   # Test 4: table_design_ranks produces expected shape
   cat("Test 4: table_design_ranks output shape... ")
   test_results <- configs[[1]]
   rank_tbl <- table_design_ranks(test_results, names(configs)[1])
-  stopifnot(nrow(rank_tbl) == 6)
+  stopifnot(nrow(rank_tbl) == length(unique(results$Design)))
   stopifnot("Design" %in% names(rank_tbl))
   cat("PASS\n")
 

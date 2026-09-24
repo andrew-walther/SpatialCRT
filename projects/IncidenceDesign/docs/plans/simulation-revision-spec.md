@@ -147,6 +147,11 @@ Flags:
   both estimator files; the non-oracle model has no Spill column to alias, but its
   Checkerboard × rook estimates share the same cause (τ is not identified apart from γ).
 - Aliased estimates are **kept** (user decision M6) and flagged in exhibits.
+- Besides Checkerboard × rook (every fit), Isolation Buffer × rook can occasionally draw
+  the exact checkerboard: a maximal independent set that equals one colour class of the
+  bipartite rook grid. In the full run that happened in 4 of its 40,000 rook draws
+  (4 blocks × 5 τ = 20 scenarios, 1 aliased fit each). An oracle fit is aliased exactly
+  when its draw is rank-deficient.
 
 ## 8. Result schema
 

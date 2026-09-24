@@ -68,7 +68,7 @@ split_by_incidence_config <- function(results) {
 #' Automatically checks for a sim_data/ subdirectory first (new layout),
 #' then falls back to results_dir itself (legacy layout).
 #' @param results_dir Path to results directory (or results/sim_data/)
-#' @param estimation_mode Optional filter string, e.g. "MLE_combined" or "DIM_combined"
+#' @param estimation_mode Optional filter string, e.g. "MLE_tau_sweep" (oracle) or "MLEnonoracle_tau_sweep"
 #' @return Data frame of results
 load_latest_results <- function(results_dir = file.path(dirname(script_dir), "results"),
                                 estimation_mode = NULL) {
@@ -254,31 +254,40 @@ plot_coverage_by_design <- function(results, inc_label = "") {
 # PLOT 6: Grid Heatmaps of Incidence Patterns (standalone, not per-config)
 # ==============================================================================
 
-plot_incidence_heatmaps <- function(grid_dim = 10) {
-  grid_obj <- build_spatial_grid(grid_dim)
+#' Default incidence configs for the standalone incidence plots (the 5 simulated ones)
+DEFAULT_INC_CONFIGS <- list(list(mode = "iid", rho_x = 0), list(mode = "spatial", rho_x = 0.20),
+                            list(mode = "spatial", rho_x = 0.50), list(mode = "poisson", rho_x = 0.20),
+                            list(mode = "poisson", rho_x = 0.50))
+
+#' Draw incidence for each config, one row per cluster x resample, labeled by config
+#'
+#' @param grid_obj From build_spatial_grid()
+#' @param n_resamples Resamples per config
+#' @param configs List of list(mode, rho_x)
+#' @param base_rate,pop_per_cluster Poisson parameters (simulation default: 100,000
+#'   per cluster since the 2026-09 revision, M2)
+#' @return Data frame with Incidence, Mode (label), Resample, and cluster index
+draw_incidence_by_config <- function(grid_obj, n_resamples, configs, base_rate, pop_per_cluster) {
   N <- grid_obj$N_clusters
+  bind_rows(lapply(configs, function(cf) {
+    x <- generate_incidence(cf$mode, N, n_resamples, grid_obj$W_queen, cf$rho_x,
+                            base_rate = base_rate, pop_per_cluster = pop_per_cluster,
+                            pop_mode = "equal")
+    data.frame(Cluster = rep(seq_len(N), n_resamples), Resample = rep(seq_len(n_resamples), each = N),
+               Incidence = as.vector(x), Mode = inc_config_label(cf$mode, cf$rho_x))
+  }))
+}
+
+plot_incidence_heatmaps <- function(grid_dim = 10, configs = DEFAULT_INC_CONFIGS,
+                                    base_rate = 35 / 100000, pop_per_cluster = 100000) {
+  grid_obj <- build_spatial_grid(grid_dim)
   coords <- grid_obj$coords
 
   set.seed(42)
 
-  # Generate one realization per mode
-  x_iid <- generate_incidence("iid", N, 1)
-  x_spatial_low  <- generate_incidence("spatial", N, 1, grid_obj$W_queen, 0.20)
-  x_spatial_high <- generate_incidence("spatial", N, 1, grid_obj$W_queen, 0.50)
-  x_poisson_low  <- generate_incidence("poisson", N, 1, grid_obj$W_queen, 0.20,
-                                        base_rate = 35/100000, pop_per_cluster = 1000,
-                                        pop_mode = "equal")
-  x_poisson_high <- generate_incidence("poisson", N, 1, grid_obj$W_queen, 0.50,
-                                        base_rate = 35/100000, pop_per_cluster = 1000,
-                                        pop_mode = "equal")
-
-  df <- bind_rows(
-    data.frame(coords, Incidence = x_iid[, 1],           Mode = "iid Uniform"),
-    data.frame(coords, Incidence = x_spatial_low[, 1],    Mode = "Spatial (rho_X = 0.20)"),
-    data.frame(coords, Incidence = x_spatial_high[, 1],   Mode = "Spatial (rho_X = 0.50)"),
-    data.frame(coords, Incidence = x_poisson_low[, 1],    Mode = "Poisson (rho_X = 0.20)"),
-    data.frame(coords, Incidence = x_poisson_high[, 1],   Mode = "Poisson (rho_X = 0.50)")
-  )
+  # One realization per config
+  df <- draw_incidence_by_config(grid_obj, 1, configs, base_rate, pop_per_cluster)
+  df <- cbind(coords[df$Cluster, ], df)
 
   ggplot(df, aes(x = x, y = y, fill = Incidence)) +
     geom_tile(color = "grey50", linewidth = 0.3) +
@@ -300,28 +309,15 @@ plot_incidence_heatmaps <- function(grid_dim = 10) {
 # PLOT 7: Incidence Distribution Histograms (standalone, not per-config)
 # ==============================================================================
 
-plot_incidence_distributions <- function(grid_dim = 10, n_resamples = 50) {
+plot_incidence_distributions <- function(grid_dim = 10, n_resamples = 50,
+                                         configs = DEFAULT_INC_CONFIGS,
+                                         base_rate = 35 / 100000, pop_per_cluster = 100000) {
   grid_obj <- build_spatial_grid(grid_dim)
-  N <- grid_obj$N_clusters
 
   set.seed(42)
 
-  x_iid <- as.vector(generate_incidence("iid", N, n_resamples))
-  x_sp20 <- as.vector(generate_incidence("spatial", N, n_resamples, grid_obj$W_queen, 0.20))
-  x_sp50 <- as.vector(generate_incidence("spatial", N, n_resamples, grid_obj$W_queen, 0.50))
-  x_po20 <- as.vector(generate_incidence("poisson", N, n_resamples, grid_obj$W_queen, 0.20,
-                                          base_rate = 35/100000, pop_per_cluster = 1000,
-                                          pop_mode = "equal"))
-  x_po50 <- as.vector(generate_incidence("poisson", N, n_resamples, grid_obj$W_queen, 0.50,
-                                          base_rate = 35/100000, pop_per_cluster = 1000,
-                                          pop_mode = "equal"))
-
-  df <- data.frame(
-    Value = c(x_iid, x_sp20, x_sp50, x_po20, x_po50),
-    Mode = rep(c("iid Uniform", "Spatial (rho_X = 0.20)", "Spatial (rho_X = 0.50)",
-                 "Poisson (rho_X = 0.20)", "Poisson (rho_X = 0.50)"),
-               each = N * n_resamples)
-  )
+  df <- draw_incidence_by_config(grid_obj, n_resamples, configs, base_rate, pop_per_cluster)
+  df$Value <- df$Incidence
 
   ggplot(df, aes(x = Value, fill = Mode)) +
     geom_histogram(bins = 30, alpha = 0.8, color = "white", linewidth = 0.2) +
