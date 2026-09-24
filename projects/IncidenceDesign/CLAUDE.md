@@ -86,7 +86,7 @@ the reasoning behind this distinction.
 | **paper/dissertation_chapter/** | | | |
 | `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, 6 designs, full detail, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
 | **paper/** | | | |
-| `SpatialCRT_IncidenceDesign.bib` | ~99K, 80 entries | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`) | Zotero base + SUD/SUDDEN citations + design-theory citations |
+| `SpatialCRT_IncidenceDesign.bib` | ~99K, 81 entries | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`; `habib_temporal_2026` added 2026-09-24 = Ashkan Habib's unpublished BIOS master's paper, source of the SUD county data) | Zotero base + SUD/SUDDEN citations + design-theory citations |
 | `SAGE_Journal_Template/` | — | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
 | `SpatialCRT_IncidenceDesign_Presentation.qmd` | ~26 | Presentation template | Quarto revealjs slides (scaffold) |
 
@@ -265,6 +265,12 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
 - **Not yet updated:** the CTJ manuscript and SI still carry the April numbers. They stay
   untouched until manuscript step 5 ("numbers superseded"). The application is not re-run
   (14(d)'s table is labeled STALE).
+- **SUD data attribution (2026-09-24):** the Application passages of the CTJ, SI (S11), and
+  chapter now credit Habib's master's paper (`habib_temporal_2026`) for the county-level
+  data: working-age (18–64) sudden unexpected out-of-hospital deaths, 2018–2021, 21,147 of
+  412,514 NC deaths (111,665 working-age), via the SUDDEN-validated algorithm
+  (`gan_factors_2019`, `nanavati_sudden_2014`); we aggregate them to the 58 CC clusters. This
+  replaced the wrong "~100,000 death certificates" and "epidemiology co-investigator" wording.
 - **Next:** finish Phase C, then Phase D (chapter Methods/Results rewrite). The single
   recommended design for investigators is still the author's decision to make.
 
