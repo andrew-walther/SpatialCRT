@@ -59,29 +59,6 @@ format:
         % Appendix-subsection anchor; see Dissertation_Chapter.qmd's header.
         \newcommand{\applabel}[2]{\label{#2}}
 
-        % LOCAL WORKAROUND for bios-prelim.cls's FRAGILE CSLReferences patch.
-        % The class (fixed 2026-09-10) redefines CSLReferences as a paragraph
-        % block, matching the pandoc that built Chapter 2. RStudio's Quarto
-        % 1.10.18 emits CSLReferences as a \list with \bibitem entries, so the
-        % class version fails with "Lonely \item". This hook runs after the
-        % class's own \AtBeginDocument and restores pandoc's current list
-        % definition, adding only the class's spacing intent: entries
-        % single-spaced inside, one blank line (\baselineskip) between them.
-        % Remove once the class itself is updated.
-        \AtBeginDocument{%
-          \renewenvironment{CSLReferences}[2]{%
-            \singlespacing
-            \begin{list}{}{%
-              \setlength{\itemindent}{0pt}%
-              \setlength{\leftmargin}{0pt}%
-              \setlength{\parsep}{0pt}%
-              \ifodd #1
-                \setlength{\leftmargin}{\cslhangindent}%
-                \setlength{\itemindent}{-1\cslhangindent}%
-              \fi
-              \setlength{\itemsep}{\baselineskip}}}%
-            {\end{list}}}
-
 crossref:
   fig-prefix: "Figure"
   tbl-prefix: "Table"

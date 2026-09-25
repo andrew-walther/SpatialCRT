@@ -90,7 +90,7 @@ Table \ref{tab:designs} describes the six retained designs, and Figure \ref{fig:
 \begin{table}[!htb]
 \small\centering
 \caption{The six treatment assignment designs compared in this chapter, ordered by mean squared error under queen contiguity at $\tau = 1$, pooled over the five incidence configurations (Table \ref{tab:performance}). A cluster's incidence rank is its rank by the baseline incidence surface $X_k$, with ties broken at random in every draw. Clusters treated is the number of clusters treated per assignment; for Isolation Buffer, which depends on the neighbor type, it is the mean over its assignments under each neighbor type.}\label{tab:designs}
-\begin{tabular}{p{3.4cm}p{7.2cm}p{2.0cm}p{2.1cm}}
+\begin{tabular}{p{3.4cm}p{6.4cm}p{2.0cm}p{2.3cm}}
 \toprule
 Design & Assignment rule & Clusters treated & Deterministic \\
 \midrule
@@ -202,6 +202,7 @@ Table \ref{tab:by-config} gives each design's MSE within each of the five incide
 ```{=latex}
 \begin{table}[!htb]
 \small\centering
+\setlength{\tabcolsep}{4pt}
 \caption{Mean squared error by design within each of the five incidence configurations at $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity). Each entry averages the 32 scenarios of one design, neighbor type, and configuration (4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. The spatially autocorrelated and Poisson configurations are labeled by the strength of dependence in the incidence surface, $\rho_X$. Rows in both panels are ordered by pooled mean MSE under queen contiguity (Table \ref{tab:performance}). Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}\label{tab:by-config}
 \begin{tabular}{lccccc}
 \toprule
@@ -285,6 +286,7 @@ The spillover regime was the one factor that changed the queen ranking (Table \r
 ```{=latex}
 \begin{table}[!htb]
 \small\centering
+\setlength{\tabcolsep}{4pt}
 \caption{Mean squared error by design under each spillover regime at $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages 80 scenarios (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$). Rows are ordered by pooled mean MSE under queen contiguity (Table \ref{tab:performance}). Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}\label{tab:regime}
 \begin{tabular}{lcccc}
 \toprule
@@ -483,7 +485,7 @@ Four extensions follow from these limitations. First, a data-generating process 
 \begin{table}[!htb]
 \small\centering
 \caption{The two designs implemented but not compared in the body of this chapter, in the format of Table \ref{tab:designs}. Saturation Quadrants shares its mechanism with Incidence-Guided Saturation Quadrants, and Balanced Halves with Balanced Quartiles (see Treatment assignment designs). A cluster's incidence rank is its rank by the baseline incidence surface $X_k$, with ties broken at random in every draw. Clusters treated is the number of clusters treated per assignment.}\label{tab:excluded-designs}
-\begin{tabular}{p{3.4cm}p{7.2cm}p{2.0cm}p{2.1cm}}
+\begin{tabular}{p{3.4cm}p{6.4cm}p{2.0cm}p{2.3cm}}
 \toprule
 Design & Assignment rule & Clusters treated & Deterministic \\
 \midrule
