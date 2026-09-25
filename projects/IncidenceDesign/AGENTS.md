@@ -323,6 +323,21 @@ comparison on them is the next plan. Plan of record:
   - Prelim render (step 4): body 41 pp, appendix 13, references 3; 59 pp with the TOC preview.
   - The generated header patches the class's FRAGILE `CSLReferences` for current Quarto. The
     class itself still needs the fix, which also affects Chapter 2 and the lit review.
+- **Author review of the prelim render (2026-09-25), applied (commit 02a70d9):**
+  - queen figures in the body; the rook MSE/coverage/bias-variance figures are in Appendix A4;
+    the τ figure is a single side-by-side queen|rook plot;
+  - floats are `[!htb]` with smaller figures, so none lands alone on a page or after the
+    chapter end;
+  - A2 has no script or function names;
+  - the technical notes (now A5) are one formal subsection, and the regime-gap note moved to
+    the Q&A notes;
+  - SUD counts are 23,523, with the heart-failure inclusion explained.
+  - Standalone 53 pp; prelim 56 pp.
+  - The design palette ends at viridis `end = 0.85` so Checkerboard is visible; the colours
+    are consistent across the τ and coverage figures.
+  - The sync skips PDF-only re-renders.
+  - The Chapter 2 audit is paused by the author. Chapter 2 is accepted and final: any critique
+    of it stays light.
 - **Pending:**
   - author confirmation of the inline `NEEDS-AUTHOR-CONFIRMATION` items;
   - a Chapter 2 audit (separate session), because Chapter 2's 3×4/3×3 block-stratified numbers
