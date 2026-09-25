@@ -31,6 +31,7 @@
 #   - MLE_statistical_comparisons_6design_{queen,rook}.pdf
 #   - six_design_summary.txt            (console summary, saved to file)
 #   - fig_{mse_by_design,coverage_by_design,tau_sensitivity}_6design_{queen,rook}.pdf
+#   - fig_tau_sensitivity_6design_combined.pdf (queen | rook side by side, shared legend)
 # ==============================================================================
 
 script_dir <- tryCatch(
@@ -233,5 +234,39 @@ for (nb in c("queen", "rook")) {
   ggsave(file.path(out_dir, sprintf("fig_coverage_by_design_6design_%s.pdf", nb)), p_coverage, width = 8, height = 6)
   ggsave(file.path(out_dir, sprintf("fig_tau_sensitivity_6design_%s.pdf", nb)), p_tau, width = 8, height = 6)
 }
+
+# ------------------------------------------------------------------------
+# Combined tau-sensitivity figure for the chapter: (a) queen | (b) rook side by
+# side, one shared legend at the bottom. The legend uses the queen MSE order
+# (tau_colour_order) for both panels, since colours are fixed per design; the
+# rook note goes in a plot-wide caption so it spans the full text width.
+# Sized for text width (6.3 x 3.6 in) with base_size = 10, so the smallest text
+# (axis ticks, legend labels, caption; 0.8 x base) prints at 8 pt.
+# The separate queen/rook files above are kept unchanged.
+# ------------------------------------------------------------------------
+library(patchwork)
+tau_panel <- function(nb, panel_title, y_lab) {
+  res_tau <- slices[[nb]]
+  res_tau$Design <- factor(res_tau$Design, levels = tau_colour_order)
+  plot_mse_vs_tau(res_tau) +
+    scale_color_manual(values = tau_palette, breaks = tau_colour_order) +
+    scale_fill_manual(values = tau_palette, breaks = tau_colour_order) +
+    labs(title = panel_title, x = expression("True " * tau), y = y_lab,
+         color = NULL, fill = NULL) +
+    theme_bw(base_size = 10) +
+    theme(plot.title = element_text(size = 10))
+}
+p_tau_combined <- (tau_panel("queen", "(a) Queen", "Mean MSE\n(band: ± average scenario-level\nMonte Carlo SE)") |
+                     tau_panel("rook", "(b) Rook", NULL)) +
+  plot_layout(guides = "collect") +
+  plot_annotation(
+    caption = expression("Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged."),
+    theme = theme(plot.caption = element_text(hjust = 0, size = 8))) &
+  theme(legend.position = "bottom", legend.text = element_text(size = 8),
+        legend.key.size = unit(0.9, "lines"), legend.margin = margin(0, 0, 0, 0),
+        legend.box.spacing = unit(2, "pt")) &
+  guides(color = guide_legend(ncol = 2), fill = guide_legend(ncol = 2))
+ggsave(file.path(out_dir, "fig_tau_sensitivity_6design_combined.pdf"), p_tau_combined,
+       width = 6.3, height = 3.6)
 
 cat("\nDone. Outputs in", out_dir, "\n")
