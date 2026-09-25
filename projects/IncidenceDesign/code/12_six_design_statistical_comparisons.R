@@ -209,8 +209,9 @@ for (nb in c("queen", "rook")) {
                                          colour = "grey35", linewidth = 0.25)
   # Legend order = this neighbor type's MSE at tau = 1 (best to worst), matching
   # the chapter's queen/rook figures. Colours are fixed per design from the queen
-  # order (viridis "D", as in plot_mse_vs_tau()), so a design has the same colour
-  # in both versions and only the legend order differs.
+  # order (viridis "D", as in plot_mse_vs_tau(), but with end = 0.85 so the last
+  # colour, Checkerboard, is a darker yellow-green that stays visible on white),
+  # so a design has the same colour in both versions and only the legend order differs.
   # The ribbon is Mean_MSE +/- the AVERAGE of the stored scenario-level SE_MSE
   # (surface-level MC SEs) in each Design x tau cell, not the SE of the mean.
   tau_colour_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
@@ -220,7 +221,7 @@ for (nb in c("queen", "rook")) {
       "2x2 Blocking", "Isolation Buffer", "High Incidence Focus", "Checkerboard") else tau_colour_order
   stopifnot(setequal(tau_legend_order, unique(res$Design)),
             setequal(tau_colour_order, tau_legend_order))
-  tau_palette <- setNames(scales::viridis_pal(option = "D")(length(tau_colour_order)), tau_colour_order)
+  tau_palette <- setNames(scales::viridis_pal(option = "D", end = 0.85)(length(tau_colour_order)), tau_colour_order)
   res_tau <- res
   res_tau$Design <- factor(res_tau$Design, levels = tau_legend_order)
   p_tau <- plot_mse_vs_tau(res_tau) +
