@@ -438,7 +438,7 @@ above. Remaining work:
 
 | Priority | Task | Description |
 |----------|------|-------------|
-| **High** | **Apply the designs to the real dataset** | The real data are aggregated (2026-09-25; `application/data/derived/`). Next: plan and run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers *and* maps in both manuscripts |
+| **NEXT UP** | **Plan the application simulation study** | Paused 2026-09-25, not started. The real data are aggregated (`application/data/derived/`) and the queen/rook weights are built (`application/data/nc_cluster_weights.rds`). To do: plan and run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers *and* maps in both manuscripts |
 | **High** | **Write, revise, and submit the manuscript(s)** | With explicit consideration for how this material gets reused in the user's **preliminary oral exam** (literature review & project proposal) and **final thesis** (as a thesis chapter) — not scoped to journal submission alone |
 | High | **Consolidated review** | Bring all three documents (CTJ main text, CTJ SI, dissertation chapter) to the user for one combined review/revision cycle |
 | High | **Figure list review** | Deliberately review the full main-text + SI figure list and decide what to keep/drop/combine — the 2026-07-03 coverage+tau merge was a quick fit to make room for the new NC incidence map, not a considered final selection |

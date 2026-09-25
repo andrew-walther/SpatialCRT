@@ -273,7 +273,7 @@ comparison on them is the next plan. Plan of record:
 - **Not changed:** the chapter's Application text (it already cites 21,147 / 82.6, which
   stays correct under this decision). The application runner itself is still pre-revision
   (`lagsarlm`, old seeding).
-- **Next (user's starting idea, to discuss in the next plan):** use the 4 yearly surfaces
+- **NEXT UP (paused 2026-09-25 by the user; not started):** plan the application simulation study. Starting idea, to discuss: use the 4 yearly surfaces
   (2018–2021) in place of the synthetic surfaces. Apply each design per year, with design
   draws × simulated outcomes supplying replication within each year. Consider a
   design-on-year-t / evaluate-on-year-t+1 check, and port onto the revised engine.
@@ -712,7 +712,7 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 | Priority | Task | File |
 |----------|------|------|
-| **High** | **Apply the designs to the real SUD data** (aggregated 2026-09-25; see Current State): plan + run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers AND maps | `application/code/`; `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| **NEXT UP** | **Plan the application simulation study** (paused 2026-09-25; data and weights ready, see Current State): plan + run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers AND maps | `application/code/`; `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | **High** | **Write, revise, and submit the manuscript(s)** with explicit consideration for reuse in the user's preliminary oral exam (literature review & project proposal) and final thesis (as a thesis chapter) — not scoped to journal submission alone | `paper/ctj_manuscript/`, `paper/dissertation_chapter/` |
 | High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
 | High | Full review of the main-text + SI figure list to deliberately decide what to keep/drop/combine (the coverage+tau merge done 2026-07-03 was a quick fit for the new NC incidence map, not a considered final selection) | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` |
