@@ -46,6 +46,9 @@ format:
         \usepackage[hidelinks,linktoc=none]{hyperref}
         \usepackage{booktabs}
         \usepackage{array}
+        % Defines the \FloatBarrier used in the chapter body (before Technical
+        % notes); without it the draft does not compile.
+        \usepackage{placeins}
 
         % Tables otherwise inherit the class's global double-spacing.
         \BeforeBeginEnvironment{tabular}{\begingroup\setstretch{1}}
