@@ -22,10 +22,12 @@
 #      manuscript-declarations.md, make sure the bios-prelim.cls symlink exists.
 #   3. Render the draft with RStudio's Quarto (skipped with --no-render).
 #   4. Stage ONLY the Chapter 3 paths under
-#      prelim/project-proposals/project2-incidence/ (including the rendered
-#      draft/project2-incidence-draft.pdf, when this run rendered it),
-#      explicitly by path, and commit them with
-#      "Sync Chapter 3 from SpatialCRT <short-sha>" (only if something changed).
+#      prelim/project-proposals/project2-incidence/, explicitly by path, and
+#      commit them with "Sync Chapter 3 from SpatialCRT <short-sha>" (only if
+#      something changed). The rendered draft/project2-incidence-draft.pdf is
+#      added only when this run rendered it AND some other Chapter 3 path
+#      changed (or the PDF is not yet committed); a re-render whose bytes
+#      differ only by timestamps is discarded by restoring the committed PDF.
 #      `git commit -- <paths>` commits those paths alone, even if something
 #      else happens to be staged. Never pushes.
 #   5. Print a one-line summary.
@@ -134,9 +136,12 @@ CANDIDATES=(
   "$TARGET_REL/draft/bios-prelim.cls"
   "$TARGET_REL/draft/figures"
 )
-# The rendered PDF is committed only when this run rendered it, so a
-# --no-render sync never commits a PDF that predates the .qmd it just wrote.
-[ "$NO_RENDER" -eq 1 ] || CANDIDATES+=("$TARGET_REL/draft/project2-incidence-draft.pdf")
+# The rendered PDF is handled separately below: it is committed only when this
+# run rendered it (so a --no-render sync never commits a PDF that predates the
+# .qmd it just wrote) and only when something else changed (so a re-render
+# that differs only in embedded timestamps does not bloat the repo).
+PDF_REL="$TARGET_REL/draft/project2-incidence-draft.pdf"
+[ "$NO_RENDER" -eq 1 ] || CANDIDATES+=("$PDF_REL")
 PATHS=()
 for p in "${CANDIDATES[@]}"; do
   if [ -e "$BIOS/$p" ] || [ -L "$BIOS/$p" ] || [ -n "$(git -C "$BIOS" ls-files -- "$p")" ]; then
@@ -151,8 +156,27 @@ done
 # would not be committed.
 ignored="$(git -C "$BIOS" ls-files --others --ignored --exclude-standard -- "${PATHS[@]}")"
 [ -z "$ignored" ] || fail "files are gitignored in bios-dissertation and would not be committed: $ignored"
-git -C "$BIOS" add -A -- "${PATHS[@]}"
-BIOS_COMMIT="no commit (nothing changed)"
+# Split the PDF off from the other paths.
+OTHER=()
+HAVE_PDF=0
+for p in "${PATHS[@]}"; do
+  if [ "$p" = "$PDF_REL" ]; then HAVE_PDF=1; else OTHER+=("$p"); fi
+done
+git -C "$BIOS" add -A -- "${OTHER[@]}"
+PDF_NOTE=""
+if [ "$HAVE_PDF" -eq 1 ]; then
+  if ! git -C "$BIOS" diff --cached --quiet -- "${OTHER[@]}" ||
+     ! git -C "$BIOS" cat-file -e "HEAD:$PDF_REL" 2>/dev/null; then
+    git -C "$BIOS" add -A -- "$PDF_REL"
+  else
+    # Nothing but the PDF would change: restore the committed PDF (index and
+    # working tree, this one path only) and commit nothing.
+    git -C "$BIOS" checkout HEAD -- "$PDF_REL"
+    PATHS=("${OTHER[@]}")
+    PDF_NOTE=" (PDF-only re-render discarded; committed PDF restored)"
+  fi
+fi
+BIOS_COMMIT="no commit (nothing changed)$PDF_NOTE"
 if ! git -C "$BIOS" diff --cached --quiet -- "${PATHS[@]}"; then
   git -C "$BIOS" commit -q -m "Sync Chapter 3 from SpatialCRT $SHA" -- "${PATHS[@]}"
   # Belt and braces: the commit must touch nothing outside the target dir.
