@@ -406,6 +406,13 @@ Figures available in `paper/ctj_manuscript/figures/`:
       output directory so the existing synthetic results are untouched. **Nothing
       has been run yet** — this is dormant plumbing waiting on the actual dataset;
       see Open To-Dos below for the two key next steps.
+- [x] **Real SUD data aggregated to the 58 clusters**, completed 2026-09-25.
+      `application/code/run_sud_aggregation.R` joins Habib's methodology death
+      counts (`sudden_county_year.csv`, 21,147 deaths) to SEER `pop_18_64`
+      (`final_county_sudden.csv`) and writes county- and cluster-level rates per 100,000
+      by year, total, and average to the gitignored `application/data/derived/`. It
+      reproduces Habib (2026) exactly (see `application/README.md`), and the tests pass (`application/tests/test_application_data.R`).
+      The design comparison on these surfaces has not been run yet.
 
 ---
 
@@ -431,7 +438,7 @@ above. Remaining work:
 
 | Priority | Task | Description |
 |----------|------|-------------|
-| **High** | **Ingest and apply the real dataset** | Once Ashkan Habib's SUDDEN-derived NC county dataset and IRB access are finalized, run the (already-built) real-data pipeline — `run_all_real_years()` in `application/code/run_application_profiles.R` — and use its output to replace the explicitly-labeled placeholder Application-section numbers *and* maps (service-area/incidence/k-means-region maps) in both manuscripts |
+| **High** | **Apply the designs to the real dataset** | The real data are aggregated (2026-09-25; `application/data/derived/`). Next: plan and run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers *and* maps in both manuscripts |
 | **High** | **Write, revise, and submit the manuscript(s)** | With explicit consideration for how this material gets reused in the user's **preliminary oral exam** (literature review & project proposal) and **final thesis** (as a thesis chapter) — not scoped to journal submission alone |
 | High | **Consolidated review** | Bring all three documents (CTJ main text, CTJ SI, dissertation chapter) to the user for one combined review/revision cycle |
 | High | **Figure list review** | Deliberately review the full main-text + SI figure list and decide what to keep/drop/combine — the 2026-07-03 coverage+tau merge was a quick fit to make room for the new NC incidence map, not a considered final selection |
@@ -457,13 +464,13 @@ Community College service areas — the real geography for the planned SUD preve
 described in both manuscripts' Application sections. It re-implements all 8 designs for this
 irregular geometry (e.g., Checkerboard becomes "Block Stratified Sampling"; the 2×2 saturation
 quadrants become 4 population-balanced k-means regions) and has completed a full 640-scenario,
-160,000-fit synthetic-incidence run. **All current application-scale numbers and maps are an
-explicitly labeled synthetic placeholder** — real SUD incidence data (from ~100,000 NC death
-certificates, classified via the SUDDEN algorithm) is being finalized with an epidemiology
-collaborator and will supersede these results once available. The ingestion pipeline for
-that swap (`load_real_sud_data()`, `integrate_real_sud_data()`, `run_all_real_years()` in
-`application/code/run_application_profiles.R`) is already built and ready — it just hasn't
-been run yet because the dataset itself hasn't arrived.
+160,000-fit synthetic-incidence run. **All current application-scale results and maps are an
+explicitly labeled synthetic placeholder.** The real data arrived and were aggregated on
+2026-09-25: Habib's (2026) sudden unexpected out-of-hospital deaths among NC adults aged 18–64,
+2018–2021 (21,147 deaths, from death certificates via a SUDDEN-validated algorithm), with SEER
+denominators, aggregated to the 58 clusters by `application/code/run_sud_aggregation.R`.
+The data are restricted and gitignored. The design comparison on the real surfaces is the next
+planned step.
 
 ---
 

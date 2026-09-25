@@ -76,6 +76,13 @@ the reasoning behind this distinction.
 | `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `14_manuscript_supplement_figures.R` | ~400 | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
+| **application/** | | | |
+| `application/code/run_sud_aggregation.R` | ~65 | Entry script: real SUD data → county + 58-cluster rates per 100k (by year, total, average) → `application/data/derived/` | Sources the three `sud_*.R` files below |
+| `application/code/sud_load_data.R` | ~105 | Load and join numerator + denominator; complete-panel checks | `load_sud_county_data()` |
+| `application/code/sud_incidence.R` | ~110 | Rate formulas; county → college aggregation | `compute_incidence()`, `aggregate_sud_to_clusters()` |
+| `application/code/sud_reconcile.R` | ~100 | QC report vs Habib (2026) and the 23,523 counts | `reconcile_sud_counts()` |
+| `application/code/build_cluster_weights.R` | ~70 | Queen + rook contiguity (nb, binary A, row-standardized W) for the 58 clusters → tracked `application/data/nc_cluster_weights.rds` | Reuses `build_nc_application_clusters()`, `build_application_spatial_weights()` |
+| `application/tests/test_application_data.R` | ~130 | 23 checks: rate formulas (fixture), bad input, real data vs Habib (2026), weights | Real-data part skips if the gitignored sources are absent |
 | **paper/report/** | | | |
 | `IncidenceSpatialCRT_Report.qmd` | ~1100 | Unified project report (50+ pages, 8-design) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
 | **paper/archive_manuscript/** | | | |
@@ -218,7 +225,60 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 
 ---
 
-## Current State (as of 2026-09-24)
+## Current State (as of 2026-09-25): real SUD data aggregated
+
+**The real NC SUD data are aggregated to the 58 community college clusters.** The design
+comparison on them is the next plan. Plan of record:
+`~/.claude/plans/read-the-prompt-at-gentle-willow.md`.
+
+- **Sources** (gitignored: restricted death-certificate data, public repo; originals in
+  OneDrive `.../Application - Sudden Death/SUD Data - Ashkan/`):
+  - **Numerator:** `application/data/sudden_county_year.csv`, Habib's `Temporal Trends Data.R`
+    output (CORES = 3-digit county FIPS, DOD_YR, num_obs), after the case-definition filters
+    in `habib_temporal_2026`. 21,147 deaths.
+  - **Denominator:** `pop_18_64` in `application/data/final_county_sudden.csv` (SEER,
+    year-specific; Σ = 25,594,321 person-years).
+  - Join: `county_fips = 37000 + CORES`.
+- **Decision (user, 2026-09-25):** use the methodology counts (21,147), not
+  `final_county_sudden$num_obs` (23,523). That file's counts are ≥ the methodology counts in
+  all 400 county-years, and the script that built them is missing. The paper's numbers come
+  from `sudden_county_year.csv` (reproduced exactly: 75.1/77.9/86.7/90.6, 82.6, Orange 41.2,
+  Swain 215.6 vs the paper's 216.0). The 23,523 counts stay as `deaths_final_csv` for
+  reconciliation; cluster ranks barely differ (Spearman 0.98). Questions for Ashkan are in
+  `application/data/derived/sud_reconciliation_report.txt` (confirmation items, not blockers).
+- **Rates:**
+  - yearly: d/P
+  - average: Σd/ΣP (per 100k person-years)
+  - total: Σd/(ΣP/4) = 4 × average
+  - `mean_of_yearly_rates` is diagnostic only
+- **Outputs:** `application/data/derived/`, which regenerates via
+  `Rscript application/code/run_sud_aggregation.R`. Pooled cluster rates 42.0–168.9
+  (median 110.2); min cluster-year count 4; year-to-year cluster rank Spearman 0.72–0.82.
+  Maps come from `plot_real_sud_incidence_maps()` in `run_application_profiles.R`.
+- **Fixed:** `load_real_sud_data()` guessed columns by regex (it picked `county_name` as the
+  count column), and `integrate_real_sud_data()` filled missing values with 0/1. Both now wrap
+  the new script. `cc_mapping_data.R`'s directory detection resolved to `getwd()` when sourced
+  inside `suppressMessages()`; it now uses the innermost `source()` frame.
+- **Contiguity weights:** `application/data/nc_cluster_weights.rds` (tracked; build with
+  `build_cluster_weights.R`). Queen degree 1–8 (mean 4.93), rook 1–8 (mean 4.79); 4
+  queen-only corner pairs. **Legal boundaries (`cb = FALSE`)** by author decision
+  (2026-09-25; nearby counties across water can benefit from an education intervention).
+  This adds Albemarle–Martin, Carteret–Pamlico and Carteret–Beaufort County CC relative to
+  the shoreline-clipped `cb = TRUE` used by the earlier synthetic runs.
+- **Code layout (user, 2026-09-25):** application scripts stay under `application/`, split
+  one job per file. Script headers say "Author: Andrew Walther".
+- **Habib script notes:** the `hf` (I50) pattern is defined but unused, although the paper
+  excludes heart failure. The multi-line free-text regex can't match "KIDNEY FAILURE" or
+  "LIVER FAILURE".
+- **Not changed:** the chapter's Application text (it already cites 21,147 / 82.6, which
+  stays correct under this decision). The application runner itself is still pre-revision
+  (`lagsarlm`, old seeding).
+- **Next (user's starting idea, to discuss in the next plan):** use the 4 yearly surfaces
+  (2018–2021) in place of the synthetic surfaces. Apply each design per year, with design
+  draws × simulated outcomes supplying replication within each year. Consider a
+  design-on-year-t / evaluate-on-year-t+1 check, and port onto the revised engine.
+
+## Prior State (as of 2026-09-24)
 
 **Simulation revision (step 0.5): re-run COMPLETE; downstream regeneration (Phase C) in progress.**
 Plan: `docs/plans/simulation-revision-plan.md`; method authority:
@@ -652,7 +712,7 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 | Priority | Task | File |
 |----------|------|------|
-| **High** | **Ingest and apply the real SUDDEN-derived dataset** once available — the ingestion pipeline (`load_real_sud_data()`, `integrate_real_sud_data()`, `run_all_real_years()`) is ready and dormant; running it replaces the placeholder Application-section numbers AND maps (service-area/incidence/k-means-region maps) | `application/code/run_application_profiles.R`; `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| **High** | **Apply the designs to the real SUD data** (aggregated 2026-09-25; see Current State): plan + run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers AND maps | `application/code/`; `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | **High** | **Write, revise, and submit the manuscript(s)** with explicit consideration for reuse in the user's preliminary oral exam (literature review & project proposal) and final thesis (as a thesis chapter) — not scoped to journal submission alone | `paper/ctj_manuscript/`, `paper/dissertation_chapter/` |
 | High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
 | High | Full review of the main-text + SI figure list to deliberately decide what to keep/drop/combine (the coverage+tau merge done 2026-07-03 was a quick fit for the new NC incidence map, not a considered final selection) | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` |
