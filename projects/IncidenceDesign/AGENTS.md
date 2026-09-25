@@ -277,7 +277,7 @@ comparison on them is the next plan. Plan of record:
   "zip-code pooling", but the data are keyed by county code. The application runner itself is
   still pre-revision (`lagsarlm`, old seeding).
 
-### Phase D chapter rewrite (2026-09-24/25): done through step 2; step 3 awaiting author review
+### Phase D chapter rewrite (2026-09-24/25): steps 0–4 and 7 done; chapter synced to the prelim
 - `paper/dissertation_chapter/Dissertation_Chapter.qmd` is rewritten on the revised run:
   - Methods (from the spec), Results (robust vs. fragile; queen primary; rook sensitivity;
     non-oracle; τ stability), Discussion, and a brief Chapter 2 link through its β̂ ≈ β − ψ
@@ -301,13 +301,27 @@ comparison on them is the next plan. Plan of record:
   absent from the master were dropped, so the CTJ loses publisher cities (revisit at step 5).
   The five test citations were added to `bios-dissertation/prelim/references.bib`
   (local commit b1e90b3, not pushed).
-- **Next:** author review of step 3 → apply (writer: new tables, appendix A2/A5; mechanic:
-  placement) → step 4 render and page counts → step 7 port into bios-dissertation. Then
-  integrate the application results as the other sessions finish them.
-- **NEXT UP (paused 2026-09-25 by the user; not started):** plan the application simulation study. Starting idea, to discuss: use the 4 yearly surfaces
-  (2018–2021) in place of the synthetic surfaces. Apply each design per year, with design
-  draws × simulated outcomes supplying replication within each year. Consider a
-  design-on-year-t / evaluate-on-year-t+1 check, and port onto the revised engine.
+- **Step 3 applied (author-approved, 2026-09-25):**
+  - body adds Table 3 (MSE by configuration), Figure 1 (design samples) and Figure 6 (service areas);
+  - the appendix has A1 (eight designs), A2 (simulation mechanics), A3 (CD diagrams, coverage
+    across τ) and A4 (technical notes from a full re-run, `notes/a5_technical_notes.md`);
+  - the final fresh review had no ERRORs, and its WARNs are fixed. Standalone render: 56 pp.
+- **Step 7 / sync (author decision: the SpatialCRT `.qmd` is the only file edited):**
+  - `paper/dissertation_chapter/tools/sync_to_prelim.sh` generates
+    `bios-dissertation/prelim/project-proposals/project2-incidence/draft/project2-incidence-draft.qmd`
+    (CHAPTER 3 / APPENDIX B). It checks every citekey against the master bib, failing loud,
+    renders, and commits only `project2-incidence/` paths there. It never pushes.
+  - A `post-commit` hook (install with `tools/install_hooks.sh`) runs it when a commit touches
+    the chapter, its figures, `tools/` or the bib. Its log is `tools/sync.log` (gitignored).
+  - Cross-references are `\label`/`\ref`, so numbers read 3.x / B.x in the prelim.
+  - Prelim render (step 4): body 41 pp, appendix 13, references 3; 59 pp with the TOC preview.
+  - The generated header patches the class's FRAGILE `CSLReferences` for current Quarto. The
+    class itself still needs the fix, which also affects Chapter 2 and the lit review.
+- **Pending:**
+  - author confirmation of the inline `NEEDS-AUTHOR-CONFIRMATION` items;
+  - a Chapter 2 audit (separate session), because Chapter 2's 3×4/3×3 block-stratified numbers
+    contradict its own β̂ ≈ β − ψ.
+- **Next:** CTJ derivation (manuscript step 5); integrate the application results as they land.
 
 ## Prior State (as of 2026-09-24)
 
