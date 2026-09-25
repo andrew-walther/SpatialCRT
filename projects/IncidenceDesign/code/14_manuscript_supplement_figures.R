@@ -295,7 +295,9 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
 
   # Outer levels at +/-2.3 (was +/-1.9): two- and three-line labels of designs
   # with near-equal ranks overlapped at +/-1.9 (queen 4.74/4.76, rook 3.38/3.40).
-  y_levels <- c(1.3, -1.3, 2.3, -2.3)
+  # Now +/-2.6: at the larger label font (size 3.2) and 3.75 in height, +/-2.3 left
+  # the rook 3.38 and 3.40 labels touching.
+  y_levels <- c(1.3, -1.3, 2.6, -2.6)
   df_pts$y_label <- NA_real_
   for (i in seq_len(nrow(df_pts))) {
     far_enough <- if (i == 1) TRUE else min(df_pts$rank[i] - df_pts$rank[seq_len(i - 1)]) > 1.5
@@ -330,21 +332,26 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
     geom_segment(data = df_pts,
                  aes(x = rank, xend = rank, y = 0.05, yend = y_label * 0.55),
                  color = "grey50", linewidth = 0.2, linetype = "dotted") +
+    # size = 3.2 mm (~9.1 pt) at a 7 in native width prints at ~8.2 pt when the
+    # figure is scaled to the chapter's 6.27 in A4 text width (was 2.6 mm at 10 in,
+    # ~4.6 pt printed).
     geom_text(data = df_pts, aes(x = rank, y = y_label * 0.75, label = label),
-              size = 2.6, fontface = "bold", hjust = 0.5, lineheight = 0.85) +
+              size = 3.2, fontface = "bold", hjust = 0.5, lineheight = 0.85) +
     {if (nrow(df_bars) > 0)
       geom_segment(data = df_bars, aes(x = xmin, xend = xmax, y = y, yend = y),
                    linewidth = 2.8, color = "grey35", lineend = "round")
     } +
-    annotate("segment", x = 1, xend = 1 + cd_val, y = -2.9, yend = -2.9,
+    # CD arrow and y-limits pulled in (were y = -2.9 / -3.4, ylim -4.0 to >= 4) to
+    # trim empty space, so two stacked panels fit one page at 7 x 3.75 in.
+    annotate("segment", x = 1, xend = 1 + cd_val, y = -2.65, yend = -2.65,
              linewidth = 1.0, color = "red3",
              arrow = arrow(ends = "both", length = unit(0.08, "inches"))) +
-    annotate("text", x = 1 + cd_val / 2, y = -3.4,
-             label = sprintf("CD = %.3f", cd_val), size = 2.9, color = "red3",
+    annotate("text", x = 1 + cd_val / 2, y = -3.05,
+             label = sprintf("CD = %.3f", cd_val), size = 3.2, color = "red3",
              fontface = "bold") +
     scale_x_continuous(breaks = 1:n, limits = c(0.5, n + 0.5),
                        name = "Average Rank (lower = better MSE)") +
-    coord_cartesian(ylim = c(-4.0, max(4, max(df_bars$y, 0) + 1))) +
+    coord_cartesian(ylim = c(-3.3, max(3.3, max(df_bars$y, 0) + 0.3))) +
     theme_minimal(base_size = 11) +
     theme(axis.title.y = element_blank(), axis.text.y = element_blank(),
           axis.ticks.y = element_blank(), panel.grid.major.y = element_blank(),
@@ -353,7 +360,7 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
           plot.margin = margin(5, 10, 5, 10)) +
     ggtitle(expression("Critical Difference Diagram by Average Rank (6-design set, " * tau * " = 1.0)"))
 
-  ggsave(file.path(si_dir, "si_fig_cd_diagram_rank.pdf"), p_cd_rank, width = 10, height = 5.2)
+  ggsave(file.path(si_dir, "si_fig_cd_diagram_rank.pdf"), p_cd_rank, width = 7, height = 3.75)
 }
 
 # --- SI Fig 2: CD diagram by mean MSE (log scale) ---
