@@ -163,8 +163,11 @@ Public geography only, so it's committed.
   `final_county_sudden` has more deaths (23,523 vs 21,147; 91.9 vs 82.6 per 100,000).
 - **Still open (confirmation items, not blockers):**
   1. Should the free-text filter match KIDNEY / LIVER FAILURE?
-  2. Is `pop_18_64` the SEER mid-year estimate?
-  3. Does the data-use agreement allow publishing county- or cluster-level counts and maps?
+  2. Is `pop_18_64` the SEER mid-year estimate? Unknown (author, 2026-09-25): check Habib's
+     master's paper; ask him if it doesn't say. Not a blocker.
+  3. Data-use agreement: plan to include cluster-level derived results (counts, rates, maps)
+     in the chapter and CTJ; the author will obtain approval before publication (2026-09-25).
+     Don't publish county-level counts.
 
 ## Current Results
 
