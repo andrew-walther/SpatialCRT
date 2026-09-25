@@ -298,7 +298,7 @@ comparison on them is the next plan. Plan of record:
   τ = 3. The recommendation rests on lowest pooled MSE and first/second in each regime at
   every τ.
 - **Step 3 draft for author review:** `paper/dissertation_chapter/notes/step3_exhibit_fate.md`.
-  It covers body vs. appendix, the appendix outline A1–A5 (A5 = technical notes on
+  It covers body vs. appendix, the appendix outline A1–A6 (A5 = oracle vs non-oracle table; A6 = technical notes on
   anticipated committee questions), and a new deliverable: Q&A backup slides plus a written
   companion doc for the full prelim.
 - **Figure code:** `code/12`/`14` got cosmetic fixes (plotmath τ/ρ, captions, legend order).
@@ -329,7 +329,7 @@ comparison on them is the next plan. Plan of record:
   - floats are `[!htb]` with smaller figures, so none lands alone on a page or after the
     chapter end;
   - A2 has no script or function names;
-  - the technical notes (now A5) are one formal subsection, and the regime-gap note moved to
+  - the technical notes (now A6) are one formal subsection, and the regime-gap note moved to
     the Q&A notes;
   - SUD counts are 23,523, with the heart-failure inclusion explained.
   - Standalone 53 pp; prelim 56 pp.
