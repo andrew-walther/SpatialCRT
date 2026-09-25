@@ -270,9 +270,40 @@ comparison on them is the next plan. Plan of record:
 - **Habib script notes:** the `hf` (I50) pattern is defined but unused, although the paper
   excludes heart failure. The multi-line free-text regex can't match "KIDNEY FAILURE" or
   "LIVER FAILURE".
-- **Not changed:** the chapter's Application text (it already cites 21,147 / 82.6, which
-  stays correct under this decision). The application runner itself is still pre-revision
-  (`lagsarlm`, old seeding).
+- **Chapter Application text (updated 2026-09-25, commit eb4db79):** framed as a proposal.
+  Data preparation (aggregation, yearly rates, weights, checks) is reported as done; the design
+  application is planned. A hidden HTML-comment TODO stub lists the planned exhibits. Open
+  `NEEDS-AUTHOR-CONFIRMATION` comments sit inline, including a possible error: the text says
+  "zip-code pooling", but the data are keyed by county code. The application runner itself is
+  still pre-revision (`lagsarlm`, old seeding).
+
+### Phase D chapter rewrite (2026-09-24/25): done through step 2; step 3 awaiting author review
+- `paper/dissertation_chapter/Dissertation_Chapter.qmd` is rewritten on the revised run:
+  - Methods (from the spec), Results (robust vs. fragile; queen primary; rook sensitivity;
+    non-oracle; τ stability), Discussion, and a brief Chapter 2 link through its β̂ ≈ β − ψ
+    collinearity result.
+  - Static Table 2; queen/rook figure pairs (Figures 1–4, including bias–variance).
+  - Renders at 40 pp.
+- Six fresh-reviewer passes. Passes 4–6 had no ERROR outside the Application.
+  `docs/plans/step0-chapter-review-prompt.md` is the current review brief; it holds the
+  settled decisions.
+- **Finding to remember:** under queen, the control-only lead of Incidence-Guided Saturation
+  Quadrants holds only up to τ = 1.5. Isolation Buffer matches it at τ = 2 and passes it at
+  τ = 3. The recommendation rests on lowest pooled MSE and first/second in each regime at
+  every τ.
+- **Step 3 draft for author review:** `paper/dissertation_chapter/notes/step3_exhibit_fate.md`.
+  It covers body vs. appendix, the appendix outline A1–A5 (A5 = technical notes on
+  anticipated committee questions), and a new deliverable: Q&A backup slides plus a written
+  companion doc for the full prelim.
+- **Figure code:** `code/12`/`14` got cosmetic fixes (plotmath τ/ρ, captions, legend order).
+  Numeric outputs are unchanged.
+- **Bib:** `paper/SpatialCRT_IncidenceDesign.bib` is synced to the master. Printing fields
+  absent from the master were dropped, so the CTJ loses publisher cities (revisit at step 5).
+  The five test citations were added to `bios-dissertation/prelim/references.bib`
+  (local commit b1e90b3, not pushed).
+- **Next:** author review of step 3 → apply (writer: new tables, appendix A2/A5; mechanic:
+  placement) → step 4 render and page counts → step 7 port into bios-dissertation. Then
+  integrate the application results as the other sessions finish them.
 - **NEXT UP (paused 2026-09-25 by the user; not started):** plan the application simulation study. Starting idea, to discuss: use the 4 yearly surfaces
   (2018–2021) in place of the synthetic surfaces. Apply each design per year, with design
   draws × simulated outcomes supplying replication within each year. Consider a
