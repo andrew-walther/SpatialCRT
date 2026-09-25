@@ -3,7 +3,7 @@
 # Purpose: B4 pilot checks for the 2026-09 simulation revision (plan B4):
 #          integrity, before/after directions, 8-design consolidation, surface-level
 #          robustness, non-oracle headline, projected full-run time.
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-24
 # Dependencies: dplyr, tidyr, PMCMRplus (via 10); sources code/10 (-> 06 -> 01-03)
 # ============================================================

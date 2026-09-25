@@ -2,7 +2,7 @@
 # Script: test_estimator_equivalence.R
 # Purpose: Validate fit_sar_lag() against spatialreg::lagsarlm() on >= 5,000 fits
 #          before any simulation code depends on it (simulation-revision-plan.md B3).
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-24
 # Dependencies: spatialreg, spdep; sources code/01-04
 # ============================================================

@@ -2,7 +2,7 @@
 # Script: pilot_m1.R
 # Purpose: Scratch pilot (evidence for simulation-revision-plan.md) comparing the
 #          current incidence structure against M1 matched surfaces.
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-24
 # Dependencies: spatialreg, parallel; sources code/01-03
 # Note: run once from a session scratchpad; the saveRDS path below points there and

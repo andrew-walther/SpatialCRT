@@ -1,7 +1,7 @@
 # ============================================================
 # Script: verify_full_run_rev_2026-09.R
 # Purpose: B5 integrity checks on the full 2026-09 run (plan B5 "verify" line).
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-24
 # Dependencies: base R
 # ============================================================

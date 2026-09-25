@@ -2,7 +2,7 @@
 # Script: crosscheck_lagsarlm_rev_2026-09.R
 # Purpose: B5 1% cross-check — recompute a random 1% of full-run scenarios end to end
 #          with engine = "lagsarlm" and compare with the stored (lean-engine) rows.
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-24
 # Dependencies: dplyr, parallel; sources code/05 (define-only)
 # ============================================================

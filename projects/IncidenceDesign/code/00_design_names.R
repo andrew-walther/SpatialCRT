@@ -5,7 +5,7 @@
 #          to replace "Design N" column values with ordered short
 #          display names. All other scripts/reports should source
 #          this rather than defining their own label vectors.
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-04-26
 # Dependencies: dplyr
 # ============================================================

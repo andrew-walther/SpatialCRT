@@ -1,7 +1,7 @@
 # ============================================================
 # Script: test_simulation_revision.R
 # Purpose: Tests for the 2026-09 simulation revision (simulation-revision-plan.md B3).
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-24
 # Dependencies: spatialreg, spdep, dplyr, digest, parallel; sources code/05 (define-only)
 # ============================================================
