@@ -1,12 +1,40 @@
+#' This script's own directory, captured at source-time
+#'
+#' @description Self-contained directory detection so `get_cc_mapping_data()`
+#' can find `cc_name_crosswalk.csv` regardless of which script sources this
+#' file or what working directory is active. Must be evaluated at the top
+#' level of this file (not inside a function called later) so `sys.frame(1)`
+#' resolves to the frame `source()` creates for this file.
+.cc_mapping_script_dir <- local({
+  args <- commandArgs(trailingOnly = FALSE)
+  file_arg <- grep("--file=", args, value = TRUE)
+  if (length(file_arg) > 0) {
+    normalizePath(dirname(sub("--file=", "", file_arg[1])), mustWork = TRUE)
+  } else {
+    source_file <- tryCatch(sys.frame(1)$ofile, error = function(e) NULL)
+    if (!is.null(source_file)) {
+      normalizePath(dirname(source_file), mustWork = TRUE)
+    } else {
+      normalizePath(getwd(), mustWork = TRUE)
+    }
+  }
+})
+
 #' Define NC Community College Mapping Data
 #'
-#' @description Generates the hardcoded 100-county mapping dataframe linking 
-#' each North Carolina county to its primary serving community college.
+#' @description Generates the hardcoded 100-county mapping dataframe linking
+#' each North Carolina county to its primary serving community college
+#' (abbreviated short name), plus the college's full official name joined in
+#' from `cc_name_crosswalk.csv`. Both sources independently restrict every
+#' county to exactly one college, including Bertie and Northampton, which
+#' this study also treats as served solely by Martin CC and Halifax CC
+#' respectively (see Roanoke-Chowan CC's restriction to Hertford County).
 #'
-#' @return A dataframe containing NAME, Primary_College, and Is_Shared.
+#' @return A dataframe containing NAME, Primary_College, Full_College_Name,
+#'   and Is_Shared.
 #' @export
 get_cc_mapping_data <- function() {
-  data.frame(
+  mapping <- data.frame(
     NAME = c(
       "Alamance", "Alexander", "Alleghany", "Anson", "Ashe", "Avery", "Beaufort", 
       "Bertie", "Bladen", "Brunswick", "Buncombe", "Burke", "Cabarrus", "Caldwell", 
@@ -43,4 +71,19 @@ get_cc_mapping_data <- function() {
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
     )
   )
+
+  crosswalk_path <- file.path(.cc_mapping_script_dir, "..", "data", "cc_name_crosswalk.csv")
+  crosswalk <- utils::read.csv(crosswalk_path, stringsAsFactors = FALSE)
+
+  mapping <- merge(mapping, crosswalk,
+                    by.x = "Primary_College", by.y = "Short_Name",
+                    all.x = TRUE, sort = FALSE)
+  names(mapping)[names(mapping) == "Full_Name"] <- "Full_College_Name"
+
+  if (any(is.na(mapping$Full_College_Name))) {
+    missing <- unique(mapping$Primary_College[is.na(mapping$Full_College_Name)])
+    stop("No full-name crosswalk entry for: ", paste(missing, collapse = ", "), call. = FALSE)
+  }
+
+  mapping[, c("NAME", "Primary_College", "Full_College_Name", "Is_Shared")]
 }
