@@ -474,7 +474,12 @@ hit real, non-obvious page-count effects from format changes alone, and
 this step replaces every estimate above with an actual number.
 → *Verify:* PDF renders; body and appendix page counts recorded.
 
-**5. [Post-deadline — see "Deadline" above.] Derive CTJ from the finished
+**Timing revised (author, 2026-09-25):** both the chapter and the CTJ submission are wanted as soon
+as possible. Step 5 starts as soon as steps 3, 7 and 4 are done, not after the prelim deadline.
+Only the CTJ application section waits on the real-data results: submit with them, or with the
+application framed as a proposal (author's call at that point). The chapter-first order stands.
+
+**5. [Originally post-deadline; now next after steps 3/7/4.] Derive CTJ from the finished
 chapter, by hand, condensing to a body in the ~3,000–3,300 word range
 (not maximizing toward 3,500), plus a real abstract rewrite, not a trim.**
 
