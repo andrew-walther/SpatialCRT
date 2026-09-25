@@ -342,6 +342,21 @@ comparison on them is the next plan. Plan of record:
   - author confirmation of the inline `NEEDS-AUTHOR-CONFIRMATION` items;
   - a Chapter 2 audit (separate session), because Chapter 2's 3×4/3×3 block-stratified numbers
     contradict its own β̂ ≈ β − ψ.
+- **TO DO before the CTJ (author, 2026-09-25): add Simple Random Sampling as a benchmark design.**
+  There is currently no naive baseline: Checkerboard continues Chapter 2 but isn't a generic
+  benchmark. Plan it in a dedicated session. Open choices:
+  - complete randomization with exactly 50 treated (recommended) vs Bernoulli;
+  - SRS as a 7th ranked design vs a separate reference;
+  - a relative-efficiency column (MSE / MSE_SRS).
+
+  Key-seeded draws (spec §4: the Z key includes d; ε and X are shared per block/config) mean
+  existing designs' results should be reproduced exactly by the rerun, which makes a free
+  verification check. It touches:
+  - `03`, `05` (re-run, ~14 min);
+  - summaries `12`–`14` (rank-based statistics change: Friedman, Nemenyi, win rates, CD
+    diagrams);
+  - chapter numbers and figures;
+  - the application study.
 - **Next:** CTJ derivation (manuscript step 5); integrate the application results as they land.
 
 ## Prior State (as of 2026-09-24)
