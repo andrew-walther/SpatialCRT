@@ -7,7 +7,7 @@ Application domain: NC law enforcement training interventions for SUD prevention
 Core question: *which cluster assignment strategy minimizes estimation error for the
 direct treatment effect when outcomes are spatially correlated and spillover is present?*
 
-> For AI session context and quick technical reference, see [CLAUDE.md](CLAUDE.md).
+> For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
 ---
 
@@ -29,15 +29,15 @@ direct treatment effect when outcomes are spatially correlated and spillover is 
 
 ```
 SpatialCRT/
-  CLAUDE.md                    # AI session context (cross-project)
+  AGENTS.md                    # AI session context (cross-project; CLAUDE.md imports it)
   README.md                    # This file
   SpatialCRT.Rproj             # Single RStudio project at root
   projects/
     SpillSpatialDepSim/        # Project 1: NC DOC applied simulation
-      CLAUDE.md  README.md
+      AGENTS.md  README.md
       code/      data/  results/  paper/
     IncidenceDesign/            # Project 2: Systematic design study (PRIMARY)
-      CLAUDE.md  README.md
+      AGENTS.md  README.md
       code/      results/  paper/
   archive/                     # Legacy / exploratory work (preserved, not maintained)
     README.md

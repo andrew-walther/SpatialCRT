@@ -1,6 +1,6 @@
 # Modular Incidence Simulation for Spatial CRT Design Evaluation
 
-> For AI session context and quick technical reference, see [CLAUDE.md](CLAUDE.md).
+> For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
 ## Overview
 
@@ -355,7 +355,7 @@ Figures available in `paper/ctj_manuscript/figures/`:
 - [x] Design recommendations module (08) with validation tests
 - [x] Narrative PDF report (09): `results/MLE_design_recommendation_report.pdf`
 - [x] Results directory reorganized: `sim_data/`, `mle_per_config/`, `dim/`, `archive/`
-- [x] Project documentation: CLAUDE.md + README.md
+- [x] Project documentation: AGENTS.md + README.md
 - [x] Design set expanded to 8 designs (Balanced Halves, Incidence-Guided Saturation Quadrants added)
 - [x] Re-run MLE simulation: 2,560 scenarios covering all 8 designs (1–8) — completed 2026-03-22
 - [x] Unified project report consolidating all code-side reports — completed 2026-03-23

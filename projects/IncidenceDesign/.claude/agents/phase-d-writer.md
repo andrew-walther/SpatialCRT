@@ -15,7 +15,7 @@ Authority and ground truth:
   `results/eight_design_supplementary/eight_design_summary.txt`,
   `results/sim_data/full_run_verification.txt`, or a computation you run on
   `results/sim_data/*_20260924_025509.rds`. Report the source of every number you write.
-- Decisions and framing: project `CLAUDE.md` ("Current State (as of 2026-09-24)") and the
+- Decisions and framing: project `AGENTS.md` ("Current State" and "Prior State (as of 2026-09-24)") and the
   coordinator's brief. Don't re-litigate them.
 
 Rules: no DIM in manuscript prose; no numbered design shorthand; "we" for actions and "this

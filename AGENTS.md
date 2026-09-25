@@ -22,7 +22,7 @@ Application domain: NC law enforcement / SUD prevention policy.
 | **Grid** | 2×4 / 3×3 / 3×4 (8–12 districts) | 10×10 (100 clusters) |
 | **Estimand** | alpha, beta, psi, rho | tau (direct treatment effect) |
 | **Question** | Block vs. random assignment with spillover | Which design minimizes MSE across incidence modes? |
-| **Status** | **Complete** (original + UnifiedSpatialSim scripts) | **Complete** |
+| **Status** | **Complete** (original + UnifiedSpatialSim scripts) | **Simulation revised + re-run 2026-09-24**; real NC SUD data aggregated to 58 clusters 2026-09-25; manuscripts being rewritten |
 | **Entry point** | `code/SpatialSim_NC_DOC.Rmd` | `code/05_run_simulation.R` |
 
 ### How the Projects Relate
@@ -63,7 +63,7 @@ estimator; queen primary; τ = 1; 6 manuscript designs):
 
 ```
 SpatialCRT/
-  AGENTS.md                    # This file
+  AGENTS.md                    # This file (CLAUDE.md imports it)
   README.md                    # Human-facing overview
   SpatialCRT.Rproj             # Single .Rproj at root
   projects/
