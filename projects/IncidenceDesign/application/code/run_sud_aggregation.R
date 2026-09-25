@@ -10,11 +10,13 @@
 #
 # Run from anywhere:  Rscript projects/IncidenceDesign/application/code/run_sud_aggregation.R
 #
-# Inputs  (gitignored): application/data/sudden_county_year.csv, final_county_sudden.csv
+# Inputs  (gitignored): application/data/final_county_sudden.csv (numerator: corrected
+#                       counts; denominator: pop_18_64), sudden_county_year.csv (Habib
+#                       2026 counts, reconciliation only)
 # Outputs (gitignored): application/data/derived/
 #   sud_cluster_incidence.csv      58 colleges x period {2018, ..., 2021, 2018-2021}
 #   sud_county_incidence.csv       100 counties x the same periods
-#   sud_reconciliation_report.txt  checks against Habib (2026) and the alternative counts
+#   sud_reconciliation_report.txt  numerator vs the Habib (2026) counts and the paper
 
 suppressPackageStartupMessages(library(dplyr))
 
@@ -56,7 +58,7 @@ checks <- reconcile_sud_counts(county_df, mapping, file.path(out_dir, "sud_recon
 
 pooled_rates <- cluster_inc$rate_per_100k[cluster_inc$n_years > 1]
 message(sprintf(
-  "%d clusters | %s deaths | %s person-years | pooled cluster rates %.1f-%.1f per 100k | paper checks: %s\nWrote %s",
+  "%d clusters | %s deaths | %s person-years | pooled cluster rates %.1f-%.1f per 100k | Habib (2026) paper checks: %s\nWrote %s",
   length(pooled_rates), format(sum(county_df$deaths), big.mark = ","),
   format(sum(county_df$pop_18_64), big.mark = ","), min(pooled_rates), max(pooled_rates),
   if (all(checks)) "all match" else "MISMATCH (see report)", out_dir))

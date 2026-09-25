@@ -56,12 +56,25 @@ restricted death-certificate data and this repo is public):
 
 | File | Role | Content |
 |---|---|---|
-| `data/sudden_county_year.csv` | **Numerator** | Habib's `Temporal Trends Data.R` output: `CORES` (3-digit county FIPS), `DOD_YR`, `num_obs` = sudden unexpected out-of-hospital deaths, ages 18–64, after the case-definition filters in Habib (2026). 21,147 deaths. |
-| `data/final_county_sudden.csv` | **Denominator** + covariates | `pop_18_64` = SEER year-specific population aged 18–64 (Σ 2018–2021 = 25,594,321 person-years); 36 static county covariates plus year-varying `cvd_rate`. Its own `num_obs` (23,523) comes from an undocumented step and is used only for reconciliation. |
+| `data/final_county_sudden.csv` | **Numerator + denominator** + covariates | `num_obs` = sudden unexpected out-of-hospital deaths, ages 18–64, from Habib's corrected case filtering (23,523 deaths). `pop_18_64` = SEER year-specific population aged 18–64 (Σ 2018–2021 = 25,594,321 person-years). Also 36 static county covariates plus year-varying `cvd_rate`. |
+| `data/sudden_county_year.csv` | Reconciliation only | Habib's `Temporal Trends Data.R` output: `CORES` (3-digit county FIPS), `DOD_YR`, `num_obs` = the older counts behind Habib (2026). 21,147 deaths. Carried as `deaths_habib2026`. |
 
-The two files join on `county_fips = 37000 + CORES`. With these choices the aggregation
-reproduces Habib (2026) exactly: 75.1 / 77.9 / 86.7 / 90.6 per 100,000 by year, 82.6
-overall, and county range Orange 41.2 to Swain 215.6 (the paper says 216.0).
+**Numerator decision (author, 2026-09-25; Habib, personal communication, 2026-09-25).**
+The SUD counts come from `final_county_sudden$num_obs` (23,523 deaths). That file reflects
+Habib's corrected case filtering: heart-failure deaths are no longer excluded as presumed
+non-sudden, because he found a small but non-negligible overlap between adjudicated sudden
+cardiac death and heart-failure patients. This reverses the earlier choice of the 21,147
+counts. Those counts match the published paper (`habib_temporal_2026`) but not the corrected
+method, so they're kept only as the reconciliation column `deaths_habib2026`.
+
+Statewide rates per 100,000 (numerator, then Habib 2026 in parentheses): 83.9 (75.1) in
+2018, 85.9 (77.9) in 2019, 97.1 (86.7) in 2020, 100.5 (90.6) in 2021, and 91.9 (82.6)
+pooled. The corrected counts are ≥ the Habib (2026) counts in all 400 county-years (equal in
+48). The `deaths_habib2026` column still reproduces the paper exactly, including county
+range Orange 41.2 to Swain 215.6 (the paper says 216.0). On the numerator the pooled county
+range is Orange 44.3 to Swain 242.5.
+
+The two files join on `county_fips = 37000 + CORES`.
 
 **Code** (`code/`; each file has a header saying what it does and where it fits):
 
@@ -70,7 +83,7 @@ overall, and county range Orange 41.2 to Swain 215.6 (the paper says 216.0).
 | `run_sud_aggregation.R` | Entry script: runs the three steps below, checks that clusters add up to counties, writes `data/derived/` |
 | `sud_load_data.R` | Step 1: `load_sud_county_data()` reads and joins the two sources; stops unless it's a complete 100 × 4 panel |
 | `sud_incidence.R` | Step 2: `compute_incidence()` (rate formulas) and `aggregate_sud_to_clusters()` (county → college) |
-| `sud_reconcile.R` | Step 3: `reconcile_sud_counts()` writes the QC report against Habib (2026) and the 23,523 counts |
+| `sud_reconcile.R` | Step 3: `reconcile_sud_counts()` writes the QC report: numerator vs the Habib (2026) counts, and those counts vs the paper |
 | `build_cluster_weights.R` | Queen and rook contiguity weights for the 58 clusters → `data/nc_cluster_weights.rds` |
 | `cc_mapping_data.R` | County → college mapping (strict 1-to-1, 100 counties → 58 colleges) |
 
@@ -88,7 +101,7 @@ Outputs in `data/derived/` (gitignored):
 |---|---|
 | `sud_cluster_incidence.csv` | Long: 58 colleges × period ∈ {2018, 2019, 2020, 2021, 2018-2021}; deaths, person-years, rates |
 | `sud_county_incidence.csv` | The same for the 100 counties |
-| `sud_reconciliation_report.txt` | Statewide totals vs the paper, the numerator checks, and the 21,147 vs 23,523 comparison |
+| `sud_reconciliation_report.txt` | Statewide totals for both counts vs the paper, the Habib (2026) paper checks, and the 23,523 vs 21,147 comparison |
 | `figures/observed_sud_incidence_<period>.png` | Cluster maps (`plot_real_sud_incidence_maps()` in `run_application_profiles.R`) |
 
 **Rate definitions** (d = deaths, P = population aged 18–64, T = 4 years):
@@ -99,12 +112,13 @@ Outputs in `data/derived/` (gitignored):
   100,000 over the whole period
 - `mean_of_yearly_rates`: diagnostic only. It differs from the average by ≤ 0.75 per 100k.
 
-**Key facts:**
-- Pooled cluster rates are 42.0–168.9 per 100k (median 110.2).
-- The smallest cluster-year count is 4 deaths.
-- Year-to-year cluster rank Spearman is 0.72–0.82.
-- Switching to the 23,523 counts barely changes cluster ranks (Spearman 0.98). The code
-  switch is `deaths_col = "deaths_final_csv"`.
+**Key facts** (numerator = corrected counts):
+- Pooled cluster rates are 45.3–194.9 per 100k (median 125.6); Wake Tech is lowest,
+  Edgecombe CC highest.
+- The smallest cluster-year count is 5 deaths (Pamlico CC, 2018).
+- Year-to-year cluster rank Spearman is 0.72–0.82 (all six year pairs).
+- Cluster ranks barely differ from the Habib (2026) counts (pooled Spearman 0.982). The code
+  switch is `deaths_col = "deaths_habib2026"`.
 
 `load_real_sud_data()` / `integrate_real_sud_data()` in `run_application_profiles.R` now wrap
 this code. They used to guess columns by regex, which picked `county_name` as the count
@@ -133,18 +147,22 @@ Public geography only, so it's committed.
 - **Two scripts in `SUD Data - Ashkan/scripts/`:**
   - `Temporal Trends Data.R` builds `sudden_county_year.csv`.
   - `Data Age and County Residence Restriction.R` is a Lenoir-only extract.
-  - Neither builds `final_county_sudden.csv`.
-- **Two issues in `Temporal Trends Data.R`, neither of which explains the 23,523:**
-  - It defines a heart-failure (I50) pattern but never applies it, although the paper
-    excludes heart failure.
+  - Neither builds `final_county_sudden.csv` in our copy. Habib says his R script and
+    `final_county_sudden` reflect the corrected filtering; we don't have that version.
+- **Notes on `Temporal Trends Data.R`:**
+  - It defines a heart-failure (I50) pattern but never applies it. That's now explained:
+    under the corrected filtering, heart failure is deliberately not excluded (Habib,
+    2026-09-25).
   - Its multi-line free-text regex can't match "KIDNEY FAILURE" or "LIVER FAILURE".
-- **Questions (confirmation items, not blockers):**
-  1. Which script built `final_county_sudden.csv`'s `num_obs`, and which filters differ?
-  2. Which count should publications cite (21,147 / 82.6 or 23,523 / 91.9)?
-  3. Was heart failure (I50) meant to be excluded?
-  4. Should the free-text filter match KIDNEY / LIVER FAILURE?
-  5. Is `pop_18_64` the SEER mid-year estimate, and the right denominator for both counts?
-  6. Does the data-use agreement allow publishing county- or cluster-level counts and maps?
+- **Answered (Habib, 2026-09-25):** which count to use (23,523, `final_county_sudden`) and
+  whether heart failure is excluded (no).
+- **Still open (confirmation items, not blockers):**
+  1. A copy of the script that built `final_county_sudden.csv`'s `num_obs`: does it differ
+     from `Temporal Trends Data.R` in anything besides the heart-failure exclusion?
+  2. Should the free-text filter match KIDNEY / LIVER FAILURE?
+  3. Is `pop_18_64` the SEER mid-year estimate?
+  4. Does the data-use agreement allow publishing county- or cluster-level counts and maps?
+  5. How should publications cite 23,523 / 91.9 when the paper reports 21,147 / 82.6?
 
 ## Current Results
 
@@ -158,5 +176,5 @@ The current working recommendation is to carry Balanced Quartiles, Balanced Halv
   surfaces (2018–2021) replace the synthetic surfaces, with design draws × simulated outcomes
   within each year. Port the runner onto the revised engine (`fit_sar_lag()`, key-based
   seeds, 6 manuscript designs, queen/rook). Decide which surface feeds X and the τ/ρ/γ grid.
-- Confirm the case definition with Ashkan Habib (questions in `sud_reconciliation_report.txt`).
+- Confirm the remaining source-data items with Ashkan Habib (listed above).
 - Then update the report, the recommendation, and the manuscripts' Application text.

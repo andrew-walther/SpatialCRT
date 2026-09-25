@@ -26,8 +26,8 @@
 #'
 #' @param df data.frame with `year`, `pop_18_64`, the deaths column and `group_vars`.
 #' @param group_vars Character vector of grouping columns.
-#' @param deaths_col Numerator column: "deaths" (methodology counts, default) or
-#'   "deaths_final_csv" (reconciliation).
+#' @param deaths_col Numerator column: "deaths" (corrected counts, default) or
+#'   "deaths_habib2026" (reconciliation with Habib 2026).
 #' @return Long data.frame, one row per group and period, with columns:
 #'   group_vars, period, n_years, deaths, person_years, rate_per_100k (yearly or
 #'   average), rate_cumulative_per_100k (total; NA on yearly rows),

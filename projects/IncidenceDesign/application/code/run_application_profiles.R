@@ -168,8 +168,8 @@ download_osbm_county_population <- function(cache_path = file.path(application_d
 #' Load county-level real SUD data for a target year
 #'
 #' @description Thin wrapper over `load_sud_county_data()` (sud_load_data.R):
-#'   methodology death counts from `sudden_county_year.csv` joined to SEER
-#'   `pop_18_64` from `final_county_sudden.csv`. Replaces the earlier regex
+#'   corrected death counts (`num_obs`) and SEER `pop_18_64`, both from
+#'   `final_county_sudden.csv`. Replaces the earlier regex
 #'   column guessing, which picked `county_name` as the count column.
 #'
 #' @param real_data_path Directory holding `sudden_county_year.csv` and
@@ -182,7 +182,7 @@ load_real_sud_data <- function(real_data_path = file.path(application_dir, "data
     stop("target_year must be one of ", paste(SUD_YEARS, collapse = ", "), call. = FALSE)
   }
   county_df <- load_sud_county_data(
-    counts_path = file.path(real_data_path, "sudden_county_year.csv"),
+    habib2026_path = file.path(real_data_path, "sudden_county_year.csv"),
     source_path = file.path(real_data_path, "final_county_sudden.csv")
   )
   county_df <- county_df[county_df$year == target_year, ]
