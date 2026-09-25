@@ -11,3 +11,9 @@
 .claude/worktrees/
 **/.claude/worktrees/
 .positai
+
+# Restricted-source NC SUD data (death-certificate derived; public repo) — never commit.
+# Derived outputs regenerate via projects/IncidenceDesign/application/code/run_sud_aggregation.R
+projects/IncidenceDesign/application/data/final_county_sudden.csv
+projects/IncidenceDesign/application/data/sudden_county_year.csv
+projects/IncidenceDesign/application/data/derived/

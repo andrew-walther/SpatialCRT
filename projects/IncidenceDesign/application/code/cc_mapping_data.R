@@ -3,21 +3,28 @@
 #' @description Self-contained directory detection so `get_cc_mapping_data()`
 #' can find `cc_name_crosswalk.csv` regardless of which script sources this
 #' file or what working directory is active. Must be evaluated at the top
-#' level of this file (not inside a function called later) so `sys.frame(1)`
-#' resolves to the frame `source()` creates for this file.
+#' level of this file. Uses the innermost `source()` frame that carries `ofile`
+#' (this file, even when sourced from another script or inside a wrapper such
+#' as `suppressMessages()`), then the `--file=` argument (when run with Rscript),
+#' then the working directory.
 .cc_mapping_script_dir <- local({
-  args <- commandArgs(trailingOnly = FALSE)
-  file_arg <- grep("--file=", args, value = TRUE)
-  if (length(file_arg) > 0) {
-    normalizePath(dirname(sub("--file=", "", file_arg[1])), mustWork = TRUE)
-  } else {
-    source_file <- tryCatch(sys.frame(1)$ofile, error = function(e) NULL)
-    if (!is.null(source_file)) {
-      normalizePath(dirname(source_file), mustWork = TRUE)
+  dir_found <- NULL
+  for (i in rev(seq_len(sys.nframe()))) {
+    ofile <- tryCatch(sys.frame(i)$ofile, error = function(e) NULL)
+    if (!is.null(ofile)) {
+      dir_found <- normalizePath(dirname(ofile), mustWork = TRUE)
+      break
+    }
+  }
+  if (is.null(dir_found)) {
+    file_arg <- grep("--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
+    dir_found <- if (length(file_arg) > 0) {
+      normalizePath(dirname(sub("--file=", "", file_arg[1])), mustWork = TRUE)
     } else {
       normalizePath(getwd(), mustWork = TRUE)
     }
   }
+  dir_found
 })
 
 #' Define NC Community College Mapping Data

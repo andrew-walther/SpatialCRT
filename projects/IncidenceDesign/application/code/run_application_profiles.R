@@ -46,6 +46,8 @@ project_dir <- normalizePath(file.path(application_dir, ".."), mustWork = TRUE)
 source(file.path(code_dir, "cc_mapping_data.R"))
 source(file.path(code_dir, "synthetic_sud_data.R"))
 source(file.path(code_dir, "application_designs.R"))
+source(file.path(code_dir, "sud_load_data.R"))
+source(file.path(code_dir, "sud_incidence.R"))
 
 get_application_profile <- function(profile = c("smoke", "pilot", "full")) {
   profile <- match.arg(profile)
@@ -163,80 +165,77 @@ download_osbm_county_population <- function(cache_path = file.path(application_d
   pop
 }
 
-#' Load and clean raw county-level real data for a target year
+#' Load county-level real SUD data for a target year
 #'
-#' @param real_data_path Path to a CSV or Excel file containing county-level data.
-#' @param target_year The target year of data to extract.
-#' @return A cleaned data frame with columns NAME, year, sud_count, and population.
+#' @description Thin wrapper over `load_sud_county_data()` (sud_load_data.R):
+#'   methodology death counts from `sudden_county_year.csv` joined to SEER
+#'   `pop_18_64` from `final_county_sudden.csv`. Replaces the earlier regex
+#'   column guessing, which picked `county_name` as the count column.
+#'
+#' @param real_data_path Directory holding `sudden_county_year.csv` and
+#'   `final_county_sudden.csv` (default `application/data/`).
+#' @param target_year One of 2018-2021.
+#' @return data.frame with columns NAME, year, sud_count, and population (ages 18-64).
 #' @export
-load_real_sud_data <- function(real_data_path, target_year) {
-  if (!file.exists(real_data_path)) {
-    stop("Real data file not found: ", real_data_path, call. = FALSE)
+load_real_sud_data <- function(real_data_path = file.path(application_dir, "data"), target_year) {
+  if (!target_year %in% SUD_YEARS) {
+    stop("target_year must be one of ", paste(SUD_YEARS, collapse = ", "), call. = FALSE)
   }
+  county_df <- load_sud_county_data(
+    counts_path = file.path(real_data_path, "sudden_county_year.csv"),
+    source_path = file.path(real_data_path, "final_county_sudden.csv")
+  )
+  county_df <- county_df[county_df$year == target_year, ]
 
-  ext <- tolower(tools::file_ext(real_data_path))
-  raw <- if (ext %in% c("xlsx", "xls")) {
-    readxl::read_excel(real_data_path)
-  } else {
-    read.csv(real_data_path, stringsAsFactors = FALSE)
-  }
-
-  names(raw) <- tolower(make.names(names(raw)))
-
-  county_col <- names(raw)[grepl("county|name", names(raw))][1]
-  year_col <- names(raw)[grepl("year", names(raw))][1]
-  count_col <- names(raw)[grepl("death|count|sud|sudden", names(raw))][1]
-  pop_col <- names(raw)[grepl("pop|risk|estimate", names(raw))][1]
-
-  if (is.na(county_col) || is.na(year_col) || is.na(count_col) || is.na(pop_col)) {
-    stop("Real data must contain columns for county, year, sud_count (or deaths), and population.", call. = FALSE)
-  }
-
-  clean_df <- raw |>
-    dplyr::filter(.data[[year_col]] == target_year) |>
-    dplyr::transmute(
-      NAME = gsub("\\s+County$", "", as.character(.data[[county_col]]), ignore.case = TRUE),
-      year = as.integer(.data[[year_col]]),
-      sud_count = as.integer(gsub("[^0-9]", "", as.character(.data[[count_col]]))),
-      population = as.numeric(gsub("[^0-9.]", "", as.character(.data[[pop_col]])))
-    )
-
-  if (nrow(clean_df) == 0) {
-    stop(sprintf("No data found in real data file for year %d.", target_year), call. = FALSE)
-  }
-
-  clean_df
+  data.frame(
+    NAME = county_df$county_name,
+    year = county_df$year,
+    sud_count = county_df$deaths,
+    population = county_df$pop_18_64,
+    stringsAsFactors = FALSE
+  )
 }
 
-#' Aggregate county-level real data to community college clusters
+#' Attach one year's real SUD incidence to the community college clusters
+#'
+#' @description Aggregates with `aggregate_sud_to_clusters()` and joins by
+#'   Primary_College. Stops if any cluster lacks data (the earlier version
+#'   silently filled missing counts with 0 and populations with 1).
 #'
 #' @param clusters_sf An sf polygon object containing the 58 community college clusters.
-#' @param real_county_data A cleaned data frame containing the county-level real data.
-#' @return The clusters sf object with aggregated real data and rank-normalized incidence appended.
+#' @param real_county_data Output of `load_real_sud_data()` (a single year).
+#' @return The clusters sf object with sud_count, population (ages 18-64),
+#'   sud_rate_per_100k and rank-normalized incidence appended.
 #' @export
 integrate_real_sud_data <- function(clusters_sf, real_county_data) {
-  mapping <- get_cc_mapping_data()
+  year <- unique(real_county_data$year)
+  if (length(year) != 1) stop("integrate_real_sud_data() expects a single year.", call. = FALSE)
 
-  joined <- real_county_data |>
-    dplyr::inner_join(mapping, by = "NAME")
-
-  aggregated <- joined |>
-    dplyr::group_by(Primary_College) |>
-    dplyr::summarise(
-      sud_count = sum(sud_count, na.rm = TRUE),
-      population = sum(population, na.rm = TRUE),
-      .groups = "drop"
+  county_df <- data.frame(
+    county_name = real_county_data$NAME,
+    year = real_county_data$year,
+    deaths = real_county_data$sud_count,
+    pop_18_64 = real_county_data$population,
+    stringsAsFactors = FALSE
+  )
+  aggregated <- aggregate_sud_to_clusters(county_df, get_cc_mapping_data()) |>
+    dplyr::transmute(
+      Primary_College,
+      sud_count = deaths,
+      population = person_years,
+      sud_rate_per_100k = rate_per_100k
     )
+
+  missing <- setdiff(clusters_sf$Primary_College, aggregated$Primary_College)
+  if (length(missing) > 0) {
+    stop("No SUD data for cluster(s): ", paste(missing, collapse = ", "), call. = FALSE)
+  }
 
   clusters_sf <- clusters_sf |>
     dplyr::select(-population) |>
     dplyr::left_join(aggregated, by = "Primary_College")
 
-  clusters_sf$sud_count[is.na(clusters_sf$sud_count)] <- 0L
-  clusters_sf$population[is.na(clusters_sf$population)] <- 1
-
   N <- nrow(clusters_sf)
-  clusters_sf$sud_rate_per_100k <- (clusters_sf$sud_count / clusters_sf$population) * 100000
   clusters_sf$incidence_rank01 <- rank(clusters_sf$sud_rate_per_100k, ties.method = "average") / N
   clusters_sf$incidence_source <- "empirical_real_sud_data"
 
@@ -468,6 +467,43 @@ plot_region_map <- function(incidence_sf, region_id, out_file) {
   p
 }
 
+#' Map observed SUD incidence per 100k for every year and the pooled period
+#'
+#' @description Aggregates the real data with `aggregate_sud_to_clusters()`,
+#'   attaches it to the 58 cluster polygons, and writes one map per period
+#'   (2018-2021 separately, plus the pooled 2018-2021 rate) with
+#'   `plot_incidence_map()`. Output goes to the gitignored derived folder.
+#'
+#' @param out_dir Output directory for the PNGs.
+#' @return Invisibly, the vector of files written.
+#' @export
+plot_real_sud_incidence_maps <- function(out_dir = file.path(application_dir, "data", "derived", "figures")) {
+  dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+  data_dir <- file.path(application_dir, "data")
+  cluster_inc <- aggregate_sud_to_clusters(
+    load_sud_county_data(file.path(data_dir, "sudden_county_year.csv"),
+                         file.path(data_dir, "final_county_sudden.csv")),
+    get_cc_mapping_data()
+  )
+  clusters <- build_nc_application_clusters(
+    real_county_data = load_real_sud_data(target_year = min(SUD_YEARS))
+  )$clusters
+
+  files <- character(0)
+  for (period in unique(cluster_inc$period)) {
+    period_df <- cluster_inc[cluster_inc$period == period, c("Primary_College", "rate_per_100k")]
+    names(period_df)[2] <- "sud_rate_per_100k"
+    incidence_sf <- dplyr::left_join(clusters, period_df, by = "Primary_College")
+    if (any(is.na(incidence_sf$sud_rate_per_100k))) {
+      stop("Missing rate for some clusters in period ", period, call. = FALSE)
+    }
+    out_file <- file.path(out_dir, sprintf("observed_sud_incidence_%s.png", period))
+    plot_incidence_map(incidence_sf, out_file, is_real = TRUE, year = period)
+    files <- c(files, out_file)
+  }
+  invisible(files)
+}
+
 run_application_profile <- function(profile = c("smoke", "pilot", "full"),
                                     population_path = NULL,
                                     output_root = file.path(application_dir, "results"),
@@ -501,7 +537,7 @@ run_application_profile <- function(profile = c("smoke", "pilot", "full"),
 
   real_county_data <- NULL
   if (is_real) {
-    real_county_data <- load_real_sud_data(real_data_path, real_data_year)
+    real_county_data <- load_real_sud_data(real_data_path, target_year = real_data_year)
   }
 
   spatial <- build_nc_application_clusters(
@@ -674,7 +710,7 @@ run_requested_application_profiles <- function(profiles = c("smoke", "pilot"),
 
 #' Run the entire multi-year empirical pipeline (2018–2021)
 #'
-#' @param real_data_path Path to the county-level empirical SUD data.
+#' @param real_data_path Directory holding `sudden_county_year.csv` and `final_county_sudden.csv`.
 #' @param profiles Character vector of run profiles (e.g. c("smoke", "pilot")).
 #' @param ... Additional arguments passed to run_application_profile.
 #' @export
