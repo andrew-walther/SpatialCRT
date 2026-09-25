@@ -190,6 +190,20 @@ this table, whatever else is decided.
 - **A3. Supplementary statistical comparisons.** Rank CD diagrams (queen, rook), and, optionally,
   the pairwise Nemenyi p-value heatmap. Regenerated 1b files. About 1–2 pp.
 - **A4 (optional). Non-oracle MSE by design** (queen, rook). About 1 p.
+- **A5. Technical notes on anticipated questions** (added 2026-09-25 at author request: "good items
+  to cover in the appendix if applicable"). Each note is included only if an investigation
+  (computation on the results `.rds`, algebra, or the Chapter 2 draft) gives a supportable answer.
+  Otherwise the question goes only to the Q&A companion doc (below). Candidates:
+  1. Why the oracle bias of Incidence-Guided Saturation Quadrants grows with τ (queen 0.029 → 0.047
+     at τ = 0.8 → 3), and why its control-only MSE rises while Isolation Buffer's is flat.
+  2. Why rook Checkerboard coverage rises with τ (0.138 at τ = 0.8 → 0.442 at τ = 3), even though
+     its bias is −γ at every τ (the SE presumably grows with τ; verify).
+  3. Chapter 2's 3×4 control-only block-stratified MSE ≈ 0.0004 at ψ = 0.5 (draft L972–976) vs.
+     its own β̂ ≈ β − ψ collinearity result (L1350–1356). Note: this is a Chapter 2 issue; if it's
+     real, the fix belongs in Chapter 2, with Chapter 3 at most cross-referencing it.
+  4. The rook Checkerboard regime gap (0.477 vs 0.483; paired p = 0.009 over 80 blocks), which is
+     identical by construction, so Monte Carlo error only.
+  About 1–2 pp. if all four hold up. Needs phase-d-writer (investigation plus new claims).
 
 **Page estimate** (current render: double-spaced `article`, 1-inch margins; body pp. 1–35):
 
@@ -224,3 +238,7 @@ render replaces these estimates with real counts.
    tables or prose, or are single-configuration duplicates.
 4. The design-sample figure uses `DESIGN_FULL_NAMES`, which labels design 1 "Block Stratified
    Sampling (Checkerboard)". It needs either a six-design regeneration or a caption note.
+5. **New deliverable (author, 2026-09-25):** Q&A backup slides for the prelim presentation, plus
+   a written companion document answering likely committee questions, covering the full prelim
+   (literature review, Chapter 2, Chapter 3). The A5 candidates above seed its Chapter 3 part.
+   Scoped as its own task after step 7; it likely lives in bios-dissertation.
