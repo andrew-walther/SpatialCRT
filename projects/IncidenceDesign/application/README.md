@@ -156,13 +156,15 @@ Public geography only, so it's committed.
   - Its multi-line free-text regex can't match "KIDNEY FAILURE" or "LIVER FAILURE".
 - **Answered (Habib, 2026-09-25):** which count to use (23,523, `final_county_sudden`) and
   whether heart failure is excluded (no).
+- **Settled by the author (2026-09-25):** there is no separate updated script to request.
+  Publications cite Habib (2026) for the case definition and state that heart-failure deaths,
+  excluded in that paper, are included here, because some heart-failure patients died of
+  adjudicated sudden cardiac death (Habib, personal communication). That inclusion is why
+  `final_county_sudden` has more deaths (23,523 vs 21,147; 91.9 vs 82.6 per 100,000).
 - **Still open (confirmation items, not blockers):**
-  1. A copy of the script that built `final_county_sudden.csv`'s `num_obs`: does it differ
-     from `Temporal Trends Data.R` in anything besides the heart-failure exclusion?
-  2. Should the free-text filter match KIDNEY / LIVER FAILURE?
-  3. Is `pop_18_64` the SEER mid-year estimate?
-  4. Does the data-use agreement allow publishing county- or cluster-level counts and maps?
-  5. How should publications cite 23,523 / 91.9 when the paper reports 21,147 / 82.6?
+  1. Should the free-text filter match KIDNEY / LIVER FAILURE?
+  2. Is `pop_18_64` the SEER mid-year estimate?
+  3. Does the data-use agreement allow publishing county- or cluster-level counts and maps?
 
 ## Current Results
 
