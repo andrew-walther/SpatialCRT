@@ -293,7 +293,9 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
   # tuned for, so a single-line label collides with neighbors at this figure width.
   df_pts$label <- sprintf("%s\n(%.2f)", wrap_labels(df_pts$design, 16), df_pts$rank)
 
-  y_levels <- c(1.3, -1.3, 1.9, -1.9)
+  # Outer levels at +/-2.3 (was +/-1.9): two- and three-line labels of designs
+  # with near-equal ranks overlapped at +/-1.9 (queen 4.74/4.76, rook 3.38/3.40).
+  y_levels <- c(1.3, -1.3, 2.3, -2.3)
   df_pts$y_label <- NA_real_
   for (i in seq_len(nrow(df_pts))) {
     far_enough <- if (i == 1) TRUE else min(df_pts$rank[i] - df_pts$rank[seq_len(i - 1)]) > 1.5
@@ -349,7 +351,7 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
           panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
           plot.title = element_text(hjust = 0.5, size = 12),
           plot.margin = margin(5, 10, 5, 10)) +
-    ggtitle("Critical Difference Diagram by Average Rank (6-design set, tau=1.0)")
+    ggtitle(expression("Critical Difference Diagram by Average Rank (6-design set, " * tau * " = 1.0)"))
 
   ggsave(file.path(si_dir, "si_fig_cd_diagram_rank.pdf"), p_cd_rank, width = 10, height = 5.2)
 }
@@ -495,7 +497,8 @@ ggsave(file.path(si_dir, "si_fig_performance_pvalue_twopanel.pdf"), p_twopanel,
 p_tau_mse <- plot_mse_vs_tau(mle_full_6_leveled) +
   labs(title = "MSE vs. True Tau by Design (6-design set)")
 p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
-  labs(title = "Coverage vs. True Tau by Design (6-design set)")
+  labs(title = expression("Coverage vs. True " * tau * " by Design (6-design set)"),
+       x = expression("True " * tau))
 
 ggsave(file.path(si_dir, "si_fig_tau_mse.pdf"), p_tau_mse, width = 8, height = 5)
 ggsave(file.path(si_dir, "si_fig_tau_coverage.pdf"), p_tau_cov, width = 8, height = 5)

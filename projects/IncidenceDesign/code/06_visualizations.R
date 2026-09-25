@@ -1152,9 +1152,22 @@ run_all_visualizations <- function(results = NULL, results_dir = NULL,
 #' @param save_path Optional directory path; if provided, saves PNG and PDF there
 #' @param width Figure width in inches (default 14)
 #' @param height Figure height in inches (default 7)
+#' @param design_order Integer design IDs to display, in panel order (default:
+#'   all 8, in the original 8-panel order). All 8 assignments are always drawn
+#'   in the same RNG sequence, so a subset shows exactly the same assignments
+#'   as the corresponding panels of the 8-panel figure.
+#' @param ncol Number of panel columns (default 4)
+#' @param file_stem Output file name stem (default "design_samples_8panel")
 #' @return A ggplot object (invisibly)
+#' @examples
+#' # Six manuscript designs, in the chapter's Table 1 order
+#' plot_design_samples(save_path = "../results/figures",
+#'                     design_order = c(8, 6, 4, 2, 5, 1), ncol = 3,
+#'                     file_stem = "design_samples_6panel", width = 11, height = 7)
 plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
-                                width = 14, height = 7) {
+                                width = 14, height = 7,
+                                design_order = c(1, 5, 4, 2, 7, 6, 3, 8),
+                                ncol = 4, file_stem = "design_samples_8panel") {
 
   set.seed(seed)
 
@@ -1171,7 +1184,7 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
   # Canonical full names, keyed by integer string "1"-"8"
   # Requires 00_design_names.R to be sourced before calling this function.
   design_labels <- setNames(unname(DESIGN_FULL_NAMES), as.character(1:8))
-  design_display_order_full <- unname(DESIGN_FULL_NAMES[paste("Design", c(1, 5, 4, 2, 7, 6, 3, 8))])
+  design_display_order_full <- unname(DESIGN_FULL_NAMES[paste("Design", design_order)])
 
   # Generate one assignment per design
   sample_designs_list <- lapply(1:8, function(d) {
@@ -1196,6 +1209,10 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
 
   sample_designs_df <- do.call(rbind, sample_designs_list)
 
+  # Keep only the requested designs (a no-op for the default 8-panel order);
+  # the draws above always cover all 8 so the RNG sequence is unchanged
+  sample_designs_df <- sample_designs_df[!is.na(sample_designs_df$Design), ]
+
   # Build the plot
   p <- ggplot(sample_designs_df, aes(x = x, y = y)) +
     geom_tile(aes(fill = Incidence), color = "grey50", linewidth = 0.4) +
@@ -1208,7 +1225,7 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
       labels = c("0" = "Control (X)", "1" = "Treated (\u25cf)"),
       name   = "Treatment\nAssignment"
     ) +
-    facet_wrap(~ Design, ncol = 4) +
+    facet_wrap(~ Design, ncol = ncol) +
     theme_void(base_size = 12) +
     theme(
       legend.position  = "right",
@@ -1223,9 +1240,9 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
   # Save if requested
   if (!is.null(save_path)) {
     dir.create(save_path, showWarnings = FALSE, recursive = TRUE)
-    ggsave(file.path(save_path, "design_samples_8panel.png"), p,
+    ggsave(file.path(save_path, paste0(file_stem, ".png")), p,
            width = width, height = height, dpi = 300, bg = "white")
-    ggsave(file.path(save_path, "design_samples_8panel.pdf"), p,
+    ggsave(file.path(save_path, paste0(file_stem, ".pdf")), p,
            width = width, height = height, bg = "white")
     cat(sprintf("Saved design sample figure to %s\n", save_path))
   }
