@@ -503,7 +503,19 @@ ggsave(file.path(si_dir, "si_fig_performance_pvalue_twopanel.pdf"), p_twopanel,
 # (mle_full_6_leveled already built above, ahead of the main-text combined figure)
 p_tau_mse <- plot_mse_vs_tau(mle_full_6_leveled) +
   labs(title = "MSE vs. True Tau by Design (6-design set)")
+# Colours fixed per design, identical to the tau-sensitivity figures in
+# 12_six_design_statistical_comparisons.R (viridis "D", end = 0.85, in queen MSE
+# order), so Checkerboard is not the pale viridis yellow; the legend keeps this
+# neighbor type's best-to-worst order. Overridden here rather than in
+# plot_coverage_vs_tau() (06) so its other callers are unaffected.
+tau_colour_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+                      "Isolation Buffer", "High Incidence Focus", "2x2 Blocking", "Checkerboard")
+stopifnot(setequal(tau_colour_order, best_to_worst_6))
+tau_palette <- setNames(scales::viridis_pal(option = "D", end = 0.85)(length(tau_colour_order)),
+                        tau_colour_order)
 p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
+  scale_color_manual(values = tau_palette, breaks = best_to_worst_6) +
+  scale_fill_manual(values = tau_palette, breaks = best_to_worst_6) +
   labs(title = expression("Coverage vs. True " * tau * " by Design (6-design set)"),
        x = expression("True " * tau))
 
