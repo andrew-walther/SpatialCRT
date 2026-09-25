@@ -1216,13 +1216,17 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
   # Build the plot
   p <- ggplot(sample_designs_df, aes(x = x, y = y)) +
     geom_tile(aes(fill = Incidence), color = "grey50", linewidth = 0.4) +
+    # White halo under the control X so it stays visible on the darkest tiles
+    geom_point(data = function(d) d[d$Assignment == "0", ],
+               aes(shape = Assignment), color = "white",
+               size = 2.2, stroke = 2.4) +
     geom_point(aes(shape = Assignment), fill = "white", color = "black",
                size = 2.2, stroke = 0.9) +
     scale_fill_viridis_c(option = "mako", direction = -1,
                          name = "Baseline\nIncidence") +
     scale_shape_manual(
       values = c("0" = 4, "1" = 21),
-      labels = c("0" = "Control (X)", "1" = "Treated (\u25cf)"),
+      labels = c("0" = "Control", "1" = "Treated"),
       name   = "Treatment\nAssignment"
     ) +
     facet_wrap(~ Design, ncol = ncol) +
@@ -1242,7 +1246,14 @@ plot_design_samples <- function(seed = 2026, grid_dim = 10, save_path = NULL,
     dir.create(save_path, showWarnings = FALSE, recursive = TRUE)
     ggsave(file.path(save_path, paste0(file_stem, ".png")), p,
            width = width, height = height, dpi = 300, bg = "white")
-    ggsave(file.path(save_path, paste0(file_stem, ".pdf")), p,
+    # R's pdf() device always draws ASCII "-" as a minus sign (it writes a
+    # 45/minus override whatever the encoding), misprinting "Incidence-Guided".
+    # U+00AD maps to the /hyphen glyph, so swap it into the strip labels of
+    # the PDF only; the PNG and the plot data keep the ASCII hyphen.
+    p_pdf <- p + facet_wrap(~ Design, ncol = ncol,
+                            labeller = as_labeller(function(x)
+                              gsub("-", "\u00ad", x, fixed = TRUE)))
+    ggsave(file.path(save_path, paste0(file_stem, ".pdf")), p_pdf,
            width = width, height = height, bg = "white")
     cat(sprintf("Saved design sample figure to %s\n", save_path))
   }
