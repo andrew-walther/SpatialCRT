@@ -5,10 +5,41 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
 
 1. **Simple Random Sampling (SRS) benchmark.** Add it to the simulation, regenerate the
    results, and update the chapter. Added by the author 2026-09-25.
+   Plan: `~/.claude/plans/pasted-content-id-a3af-you-are-synchronous-seal.md`.
+
+   **Status (2026-09-27): segment A (steps 1–3) done; segment B (steps 4–5: chapter, wrap-up) next.**
+   - Commits: 0052161 (code, tests), 197aa62 (full run), 3366af2 (summaries, figures).
+   - SRS is Design 9: complete randomization, exactly 50 of 100 treated. It is a benchmark,
+     not a proposed design: shown as gray reference lines in figures, as a set-off row
+     plus MSE/MSE_SRS in tables, and kept out of the six-design rank tests.
+   - Run: `results/sim_data/*_20260927_000502.rds`, 14,400 scenarios per estimator.
+     `results/srs_reproduction_check.txt`: all Design 1–8 rows are identical to the
+     2026-09-24 run. The 12/13/14 txt/rds outputs are byte-identical, so no existing
+     chapter number changes.
+   - SRS numbers: `results/srs_benchmark/srs_benchmark_summary.txt` (from
+     `code/15_srs_benchmark.R`). Updated figures are in `results/six_design_manuscript/`;
+     none are copied to the chapter yet.
+   - Stop rule not triggered. Oracle pooled MSE of IGSQ vs SRS: queen 0.091 vs 0.128
+     (RE 0.71) at τ = 1, RE 0.73 pooled over τ; rook RE 0.84 / 0.87.
+   - **AUTHOR DECISION NEEDED before writing the chapter: SRS beats most proposed designs.**
+     - Queen, τ = 1, RE = MSE/MSE_SRS: Balanced Quartiles 1.02 (paired test vs SRS
+       p = 0.31, not different); Isolation Buffer 1.25; High Incidence Focus 1.91;
+       2x2 Blocking 2.49; Checkerboard 8.46.
+     - Rook: Balanced Quartiles 0.98, then 2x2 Blocking 1.51, Isolation Buffer 1.56,
+       High Incidence Focus 2.43, Checkerboard 5.64.
+     - Only IGSQ (and the consolidated Saturation Quadrants) beat SRS significantly
+       (paired p < 1e-8, better in all 50 units).
+     - Under both-arms spillover (queen), SRS beats IGSQ: RE 1.08. Under control-only,
+       IGSQ RE is 0.63.
+     - This changes the chapter's framing (value add only for IGSQ), so agree it before
+       the writer runs.
 2. **Application study on the real SUD data.** Apply the designs, including SRS, to the yearly
    cluster-level incidence surfaces, then fill the chapter's Application results stub in place.
    The data are already ingested and aggregated (`application/README.md`, `AGENTS.md`).
-3. **CTJ manuscript (manuscript-plan step 5).** Derive it from the finished chapter: body about
+3. **CTJ manuscript (manuscript-plan step 5).** SRS note (author, 2026-09-26): the CTJ stands
+   alone, with no "Chapter 2" references. Link SRS to Project 1 only by citing that paper
+   (submitted to BMC Medical Research Methodology), e.g. "we compare performance to SRS,
+   as in [Paper 1]". Derive it from the finished chapter: body about
    3,000–3,300 words, at most 6 exhibits, an unstructured abstract of at most 250 words (check
    SAGE's live guidelines), and cut material saved to supplementary files. Can start before
    item 2 finishes, with the application written as a proposal.
