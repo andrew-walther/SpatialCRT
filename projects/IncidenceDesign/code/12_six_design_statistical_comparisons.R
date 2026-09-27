@@ -66,7 +66,8 @@ full_name_map <- setNames(
 stopifnot(identical(unname(full_name_map),
                      c("Checkerboard", "High Incidence Focus", "Saturation Quadrants",
                        "Isolation Buffer", "2x2 Blocking", "Balanced Quartiles",
-                       "Balanced Halves", "Incidence-Guided Saturation Quadrants")))
+                       "Balanced Halves", "Incidence-Guided Saturation Quadrants",
+                       "Simple Random Sampling")))
 
 # 6 retained designs: drop "Design 3" (Saturation Quadrants) and "Design 7" (Balanced Halves)
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
@@ -81,6 +82,14 @@ stopifnot("True_Tau" %in% names(mle_full))
 
 mle_full_6 <- mle_full[mle_full$Design %in% retained_ids, ]
 mle_full_6$Design <- full_name_map[mle_full_6$Design]
+
+# Simple Random Sampling (Design 9) is a benchmark, not a proposed design (author,
+# 2026-09-26): it never enters the six-design tests or palettes above, and appears
+# in the figures only as a gray reference line (dotted for coverage, dashed for
+# MSE). Its numbers are tabulated in 15_srs_benchmark.R.
+srs_full <- mle_full[mle_full$Design == "Design 9", ]
+stopifnot(nrow(srs_full) > 0)
+SRS_CAPTION <- "Gray dashed: Simple Random Sampling benchmark (mean MSE)."
 
 # Integrity: every block (all parameters except Design) has all 6 designs, once
 block_cols <- c("Incidence_Mode", "Rho_Incidence", "Neighbor_Type", "Rho", "Gamma",
@@ -174,6 +183,20 @@ saveRDS(c(report, list(estimator = est_prefix, retained_designs = unname(full_na
 # CD diagram keeps short_design_label() internally (supplementary-only); the
 # manuscript exhibits use full design names from the Design column.
 # ------------------------------------------------------------------------
+#' Gray dashed SRS reference curve (mean MSE per tau) for the tau-sensitivity figures
+#'
+#' The curve is identified in the figure caption (SRS_CAPTION), not in-panel,
+#' because it runs among the design lines and a label would collide with them.
+#'
+#' @param nb "queen" or "rook"
+#' @return A ggplot layer: the dashed SRS curve
+srs_tau_layers <- function(nb) {
+  s <- srs_full[srs_full$Neighbor_Type == nb, ]
+  s <- aggregate(MSE ~ True_Tau, data = s, FUN = mean)
+  geom_line(data = s, aes(x = True_Tau, y = MSE), inherit.aes = FALSE,
+            linetype = "dashed", colour = "grey20", linewidth = 0.7)
+}
+
 for (nb in c("queen", "rook")) {
   r <- report[[nb]]
   res <- slices[[nb]]
@@ -198,10 +221,21 @@ for (nb in c("queen", "rook")) {
   # in a left-aligned plot-wide caption so it is never clipped.
   fig_rook_note <- if (nb == "rook")
     expression("Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.") else NULL
+  # Two-line captions use atop() because plotmath has no newline
+  tau_caption <- if (nb == "rook")
+    expression(atop("Gray dashed: Simple Random Sampling benchmark (mean MSE).",
+                    "Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")) else SRS_CAPTION
+  cov_caption <- if (nb == "rook")
+    expression(atop("Gray dotted: Simple Random Sampling benchmark (median coverage).",
+                    "Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")) else
+    "Gray dotted: Simple Random Sampling benchmark (median coverage)."
   note_theme <- theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
+  srs_nb <- srs_full[srs_full$Neighbor_Type == nb, ]
+  srs_cov_median <- median(srs_nb$Coverage[srs_nb$True_Tau == 1.0])
   p_coverage <- plot_coverage_by_design(tau1) +
+    geom_hline(yintercept = srs_cov_median, linetype = "dotted", colour = "grey30", linewidth = 0.6) +
     labs(subtitle = expression("Incidence: all configs, " * tau * " = 1.0 | Red dashed = nominal 95%"),
-         caption = fig_rook_note) +
+         caption = cov_caption) +
     note_theme
   # Legibility only: coverage is tightly clustered, so the default black outlines
   # collapse the boxes into dark bars; thinner grey outlines let the fill show.
@@ -224,12 +258,12 @@ for (nb in c("queen", "rook")) {
   tau_palette <- setNames(scales::viridis_pal(option = "D", end = 0.85)(length(tau_colour_order)), tau_colour_order)
   res_tau <- res
   res_tau$Design <- factor(res_tau$Design, levels = tau_legend_order)
-  p_tau <- plot_mse_vs_tau(res_tau) +
+  p_tau <- plot_mse_vs_tau(res_tau) + srs_tau_layers(nb) +
     scale_color_manual(values = tau_palette, breaks = tau_legend_order) +
     scale_fill_manual(values = tau_palette, breaks = tau_legend_order) +
     labs(title = expression("MSE vs. True " * tau * " by Design"), x = expression("True " * tau),
          y = "Mean MSE\n(band: ± average scenario-level Monte Carlo SE)",
-         caption = fig_rook_note) +
+         caption = tau_caption) +
     note_theme
   ggsave(file.path(out_dir, sprintf("fig_mse_by_design_6design_%s.pdf", nb)), p_mse, width = 10, height = 7)
   ggsave(file.path(out_dir, sprintf("fig_coverage_by_design_6design_%s.pdf", nb)), p_coverage, width = 8, height = 6)
@@ -249,7 +283,7 @@ library(patchwork)
 tau_panel <- function(nb, panel_title, y_lab) {
   res_tau <- slices[[nb]]
   res_tau$Design <- factor(res_tau$Design, levels = tau_colour_order)
-  plot_mse_vs_tau(res_tau) +
+  plot_mse_vs_tau(res_tau) + srs_tau_layers(nb) +
     scale_color_manual(values = tau_palette, breaks = tau_colour_order) +
     scale_fill_manual(values = tau_palette, breaks = tau_colour_order) +
     labs(title = panel_title, x = expression("True " * tau), y = y_lab,
@@ -261,7 +295,8 @@ p_tau_combined <- (tau_panel("queen", "(a) Queen", "Mean MSE\n(band: ± average 
                      tau_panel("rook", "(b) Rook", NULL)) +
   plot_layout(guides = "collect") +
   plot_annotation(
-    caption = expression("Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged."),
+    caption = expression(atop("Gray dashed: Simple Random Sampling benchmark (mean MSE).",
+                              "Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")),
     theme = theme(plot.caption = element_text(hjust = 0, size = 8))) &
   theme(legend.position = "bottom", legend.text = element_text(size = 8),
         legend.key.size = unit(0.9, "lines"), legend.margin = margin(0, 0, 0, 0),

@@ -69,7 +69,8 @@ full_name_map <- setNames(
 stopifnot(identical(unname(full_name_map),
                      c("Checkerboard", "High Incidence Focus", "Saturation Quadrants",
                        "Isolation Buffer", "2x2 Blocking", "Balanced Quartiles",
-                       "Balanced Halves", "Incidence-Guided Saturation Quadrants")))
+                       "Balanced Halves", "Incidence-Guided Saturation Quadrants",
+                       "Simple Random Sampling")))
 
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
 
@@ -92,14 +93,22 @@ DESIGN_GROUPS_6 <- c(
 mle_full <- load_latest_results(results_dir = results_dir, estimation_mode = "MLE_tau_sweep")
 stopifnot("True_Tau" %in% names(mle_full))
 
-# --- 8-design (all designs, relabeled; split by neighbor type in (a)) ---
-mle_full_8 <- mle_full
+# --- 8-design (Designs 1-8, relabeled; split by neighbor type in (a)). The Simple
+# Random Sampling benchmark (Design 9) is excluded explicitly: it is a reference,
+# not a design, and is tabulated in 15_srs_benchmark.R (author, 2026-09-26) ---
+mle_full_8 <- mle_full[mle_full$Design %in% paste("Design", 1:8), ]
 mle_full_8$Design <- full_name_map[mle_full_8$Design]
 mle_tau1_8_all <- mle_full_8[mle_full_8$True_Tau == 1.0, ]
 
 # --- 6-design (retained designs only, relabeled; filtered per nb in (b)-(c)) ---
 mle_full_6_all <- mle_full[mle_full$Design %in% retained_ids, ]
 mle_full_6_all$Design <- full_name_map[mle_full_6_all$Design]
+
+# --- Simple Random Sampling benchmark: gray reference lines only (never a bar,
+# box or coloured series, so the six-design palettes are unchanged) ---
+srs_full_all <- mle_full[mle_full$Design == "Design 9", ]
+stopifnot(nrow(srs_full_all) > 0)
+SRS_LABEL <- "Simple Random Sampling (benchmark)"
 
 # Reuse the 6-design test results from 12 (queen/rook/pooled) rather than
 # recomputing, so SI numbers match six_design_summary.txt exactly.
@@ -188,6 +197,8 @@ dir.create(si_dir, showWarnings = FALSE, recursive = TRUE)
 sub_note <- if (nb_sel == "rook") paste0(" [", ROOK_NOTE, "]") else ""
 mle_full_6 <- mle_full_6_all[mle_full_6_all$Neighbor_Type == nb_sel, ]
 mle_tau1_6 <- mle_full_6[mle_full_6$True_Tau == 1.0, ]
+srs_full <- srs_full_all[srs_full_all$Neighbor_Type == nb_sel, ]
+srs_tau1 <- srs_full[srs_full$True_Tau == 1.0, ]
 nem6 <- six_report[[nb_sel]]$nemenyi
 
 # Best-to-worst ordering (mean MSE at tau=1.0 over all configs, this nb only)
@@ -219,8 +230,21 @@ p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = nb_sel) +
              labeller = labeller(Spillover_Type = c("both" = "Spillover: Both",
                                                     "control_only" = "Spillover: Control"),
                                  Rho = as_labeller(function(x) paste("rho ==", x), label_parsed))) +
-  labs(subtitle = mse_subtitle) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  # SRS reference per panel: the bars are the largest of the five configuration
+  # MSEs for each gamma, so the line uses the same statistic -- SRS's largest
+  # configuration MSE -- averaged over the four gamma values (the typical height
+  # an SRS bar would reach in that panel)
+  geom_hline(data = srs_tau1 %>%
+               group_by(Spillover_Type, Rho, Gamma) %>%
+               summarise(m = max(MSE), .groups = "drop") %>%
+               group_by(Spillover_Type, Rho) %>%
+               summarise(yint = mean(m), .groups = "drop"),
+             aes(yintercept = yint), linetype = "dashed", colour = "grey40", linewidth = 0.6,
+             inherit.aes = FALSE) +
+  labs(subtitle = mse_subtitle,
+       caption = "Gray dashed: Simple Random Sampling benchmark (largest configuration MSE, averaged over the four spillover magnitudes)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        plot.caption = element_text(hjust = 0))
 ggsave(file.path(fig_dir, "fig_mse_by_design_6design.pdf"), p_mse_reordered,
        width = 12, height = 7)
 
@@ -232,7 +256,14 @@ results_rep_6 <- configs_tau1_6[[rep_label_6]]
 p_biasvar <- plot_bias_variance(results_rep_6, rep_label_6) +
   scale_x_discrete(limits = best_to_worst_6, labels = wrap_labels) +
   labs(title = "Bias-Variance Decomposition of MSE (ranked best to worst)",
-       subtitle = expression("Incidence: Poisson (" * rho[X] * " = 0.20)"))  # = rep_label_6, Greek
+       subtitle = expression("Incidence: Poisson (" * rho[X] * " = 0.20)")) +  # = rep_label_6, Greek
+  # SRS reference: its MSE (squared bias + variance) in the same configuration
+  geom_hline(yintercept = with(srs_tau1[srs_tau1$Incidence_Mode == "poisson" &
+                                          abs(srs_tau1$Rho_Incidence - 0.20) < 1e-9, ],
+                               mean(Bias^2) + mean(SD^2)),
+             linetype = "dashed", colour = "grey40", linewidth = 0.6) +
+  labs(caption = "Gray dashed: Simple Random Sampling benchmark (MSE in the same configuration)") +
+  theme(plot.caption = element_text(hjust = 0))
 stopifnot(rep_label_6 == "Poisson (rho_X = 0.20)")  # keep the plotmath subtitle in sync
 ggsave(file.path(fig_dir, "fig_biasvar_6design.pdf"), p_biasvar, width = 9, height = 6)
 
@@ -513,7 +544,11 @@ tau_colour_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartil
 stopifnot(setequal(tau_colour_order, best_to_worst_6))
 tau_palette <- setNames(scales::viridis_pal(option = "D", end = 0.85)(length(tau_colour_order)),
                         tau_colour_order)
+srs_cov_tau <- aggregate(Coverage ~ True_Tau, data = srs_full, FUN = mean)
 p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
+  geom_line(data = srs_cov_tau, aes(x = True_Tau, y = Coverage), inherit.aes = FALSE,
+            linetype = "dashed", colour = "grey40", linewidth = 0.6) +
+  labs(caption = "Gray dashed: Simple Random Sampling benchmark (mean coverage)") +
   scale_color_manual(values = tau_palette, breaks = best_to_worst_6) +
   scale_fill_manual(values = tau_palette, breaks = best_to_worst_6) +
   labs(title = expression("Coverage vs. True " * tau * " by Design (6-design set)"),
