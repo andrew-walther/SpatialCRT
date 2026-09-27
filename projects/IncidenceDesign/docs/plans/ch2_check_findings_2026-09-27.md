@@ -147,6 +147,54 @@ This broader reading qualifies the interpretation of the audit; it does not reso
 the numerical discrepancy. Neither the final PDF nor the current code should be
 silently substituted for the other as the verified source of the same exhibit.
 
+## Author recollection and proposed cross-study framing (follow-up, 2026-09-27)
+
+The author recalled Project 1's practical argument as BSS being a "good, not great,
+but not bad" allocation: investigators could implement it reliably rather than
+risk drawing an SRS allocation with poor MSE. The author wants Chapter 3 to explain
+why its Checkerboard-versus-SRS findings do not simply discount Project 1's contribution.
+This is a clarification of the intended scientific connection, not approval of final prose.
+
+The defensible distinction is **average performance versus allocation risk**:
+
+- For fixed simulation conditions and allocation a, let m(a) be the expected squared
+  treatment-effect estimation error over repeated outcomes. SRS performance can be
+  summarized by its mean over a, or by the upper tail/maximum of m(a) over allocations.
+  A restricted design can have a higher mean but a lower upper tail than SRS; those
+  two findings are mathematically compatible. This describes a possible trade-off,
+  not a newly verified claim for every setting in either project.
+- Project 1 enumerated the small-grid allocation sets and presented both mean MSE
+  and the spread of allocation-specific MSEs. Its accepted narrative emphasized
+  avoiding poor allocations, while acknowledging settings with higher BSS mean MSE.
+- Project 2's primary comparisons average MSE over its simulation draws and conditions
+  (with regime/configuration splits). Its SRS summary's block-level quantiles
+  (`code/15_srs_benchmark.R:195–197`) are quantiles of already-averaged scenario MSEs,
+  not the upper tail of conditional MSE over allocations at fixed conditions.
+  Thus these summaries do not directly repeat Project 1's allocation-risk comparison.
+- Project 2 also changes grid size, incidence heterogeneity, the unit of analysis,
+  spillover specification and primary adjacency. Chapter 2 uses binary exposure to
+  any treated rook neighbor; Chapter 3 uses a weighted treated-neighbor proportion
+  (and a control-only modifier in that regime), with queen primary. Neither a BSS
+  advantage nor the same ranking is guaranteed to transfer to this setting.
+
+Do **not** claim that Checkerboard still protects against bad SRS allocations in
+Project 2 without a comparison designed to assess that claim. A fixed allocation
+removes allocation randomness; it does not guarantee low MSE, identification, or
+protection against all uncertainty. Nor does the distinction above resolve the
+separate accepted-exhibit reproduction discrepancy recorded earlier in this note.
+
+Proposed discussion wording, not yet approved or inserted into the chapter:
+
+> Chapter 2 emphasized the trade-off between average estimation error and sensitivity
+> to the realized treatment allocation, motivating spatial restrictions as a way to
+> avoid poorly performing allocations in the settings examined. This chapter extends
+> the design comparison to larger grids with heterogeneous baseline incidence and
+> evaluates average MSE relative to complete randomization. Checkerboard's higher
+> average MSE here shows that its performance does not generalize uniformly to this
+> setting; allocation consistency alone is insufficient to ensure accurate estimation.
+
+No additional simulations or manuscript changes were authorized by this discussion.
+
 ## Decisions still open for IncidenceDesign
 
 1. Agree restrained SRS benchmark prose, reported by spillover regime with queen
