@@ -216,9 +216,72 @@ This writing rule is settled. The exact scientific wording, SRS framing and
 Checkerboard placement remain under discussion; the proposed paragraphs above have
 not become approved manuscript text merely because the reference rule is confirmed.
 
+## Author-requested allocation-risk analysis (2026-09-27; implementation pending)
+
+The author requested that Project 2 consider variation in MSE across allocations,
+as in Project 1, for **all proposed designs and SRS**, before settling findings,
+recommendations and manuscript prose. Checkerboard's poor average performance in
+the larger heterogeneous-incidence setting should be assessed alongside downside
+allocation risk. This is an analytical extension to plan, not a request to justify
+Checkerboard regardless of the results. No implementation scope or simulation
+budget has yet been approved.
+
+### Feasibility check
+
+The existing runner uses one outcome-noise vector for each allocation draw
+(`code/05_run_simulation.R:289–310`). It summarizes 25 such draws within each
+incidence surface (`200–237`) and saves scenario and surface summaries, not
+allocation-specific repeated-outcome MSEs (`326–346`). The current oracle surface
+file has 144,000 rows and no allocation ID or within-allocation error replicates.
+Consequently, variability of those stored MSEs cannot isolate allocation risk.
+Even retaining each fit's squared error alone would mix outcome noise with allocation
+variation. A new nested simulation is needed for the requested distinction.
+
+For a fixed incidence surface X and scenario, define
+
+    m_d(a | X) = E_epsilon[(tau_hat - tau)^2 | design d, allocation a, X].
+
+Estimate this by repeating outcomes while holding allocation a and X fixed, then
+compare the distribution of m_d across draws from design d. Evaluate each design
+according to its actual allocation probabilities; do not give rare and common
+allocations equal weight by deduplicating draws without retaining frequencies.
+There are too many balanced allocations on the 100-cluster grid for exhaustive
+enumeration. A sampled maximum must not be called the true worst case.
+
+### Proposed implementation plan for author approval
+
+1. Specify a focused pilot with all eight candidate designs plus the SRS benchmark,
+   oracle estimation, queen primary, tau=1 and separate spillover regimes/incidence
+   configurations. Agree rho/gamma coverage and numbers of allocations and repeated
+   outcomes before running. Use the existing model, design rules and key-seeding
+   conventions; leave validated main-run files/checkpoints unchanged.
+2. Repeat outcomes for each fixed surface/allocation and retain conditional MSE,
+   bias, coverage, Monte Carlo uncertainty, aliasing and failures. Verify that only
+   noise varies within an allocation and that aggregation recovers mean performance
+   within Monte Carlo uncertainty. Do not conceal non-identification under rook.
+3. Report mean allocation MSE, between-allocation variance (and SD for interpretation),
+   an upper quantile (proposed 90th percentile), and mean MSE in the worst 10% of
+   sampled allocations. Separate simulation error in estimated allocation MSEs from
+   real allocation variation; increase replication if needed for stable tails.
+   An observed maximum can be supplementary and explicitly sample-dependent.
+4. Review precision and the mean-versus-tail trade-offs with the author before
+   expanding to rook/tau sensitivities, revising recommendations or writing prose.
+   The deterministic Checkerboard has no allocation variation conditional on X;
+   this alone is not evidence of low MSE. Across-surface variation remains a separate
+   question for every design.
+
+The NC application should eventually use the same distinction. Current documented
+state (`application/README.md`): the older synthetic-incidence service-area study
+ran, real SUD incidence and 58-cluster weights are prepared, but the revised design
+comparison on real incidence has not run. Do not describe its revised findings as
+already established. Also, Project 2 changes more than incidence heterogeneity;
+without a controlled comparison, do not attribute the changed Checkerboard ranking
+to heterogeneity alone.
+
 ## Decisions still open for IncidenceDesign
 
-1. Agree restrained SRS benchmark prose, reported by spillover regime with queen
+1. Agree the scope of the new allocation-risk analysis above before settling final
+   recommendations. Then agree restrained SRS benchmark prose, reported by spillover regime with queen
    primary and pooled results explicitly labeled. IGSQ's pooled advantage is not a
    universal advantage: at tau=1 under queen, RE is about 0.63 for control-only but
    1.08 for both-arms spillover. Isolation Buffer also improves on SRS under

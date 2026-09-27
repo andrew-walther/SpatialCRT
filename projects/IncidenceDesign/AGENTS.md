@@ -27,6 +27,12 @@ with a citation to the Project 1 BMC Medical Research Methodology paper, never
 "Chapter 2" or "Project 1" as reader-facing references. Describe findings within
 their studied conditions; verify final bibliographic details before adding the citation.
 
+**New analysis requested (2026-09-27):** assess allocation-specific MSE variation
+and upper tails for every candidate design and SRS before final recommendations.
+Existing runs use one noise draw per allocation draw and cannot isolate this risk
+from outcome noise. A nested simulation plan is recorded in the findings note;
+pilot scope and replication remain unapproved. No new simulation has been run.
+
 ## What This Project Is
 
 A modular simulation study evaluating **8 treatment assignment designs** for Spatial
