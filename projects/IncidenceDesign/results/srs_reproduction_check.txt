@@ -1,0 +1,8 @@
+SRS REPRODUCTION CHECK: Designs 1-8, new run vs 2026-09-24 run
+
+scen_oracle     PASS  old rows 12800 | new rows 14400 (Design 1-8: 12800, Design 9: 1600)
+scen_nonoracle  PASS  old rows 12800 | new rows 14400 (Design 1-8: 12800, Design 9: 1600)
+surf_oracle     PASS  old rows 128000 | new rows 144000 (Design 1-8: 128000, Design 9: 16000)
+surf_nonoracle  PASS  old rows 128000 | new rows 144000 (Design 1-8: 128000, Design 9: 16000)
+
+ALL IDENTICAL

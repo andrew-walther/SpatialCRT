@@ -1,7 +1,7 @@
 FULL-RUN VERIFICATION (2026-09 revision)
 
-== oracle: sim_results_MLE_tau_sweep_combined_20260924_025509.rds
-  12,800 scenario rows                                               PASS
+== oracle: sim_results_MLE_tau_sweep_combined_20260927_000502.rds
+  14,400 scenario rows (9 designs incl. SRS)                         PASS
   one row per scenario key                                           PASS
   Estimator column matches file                                      PASS
   N_Valid_Est = 250 everywhere                                       PASS
@@ -15,8 +15,8 @@ FULL-RUN VERIFICATION (2026-09 revision)
   Isolation Buffer x rook scenarios with a checkerboard draw: 20 (aliased fits: 20)
   non-aliasing warnings: 0 scenario-message rows, 0 fits in total
 
-== nonoracle: sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds
-  12,800 scenario rows                                               PASS
+== nonoracle: sim_results_MLEnonoracle_tau_sweep_combined_20260927_000502.rds
+  14,400 scenario rows (9 designs incl. SRS)                         PASS
   one row per scenario key                                           PASS
   Estimator column matches file                                      PASS
   N_Valid_Est = 250 everywhere                                       PASS
