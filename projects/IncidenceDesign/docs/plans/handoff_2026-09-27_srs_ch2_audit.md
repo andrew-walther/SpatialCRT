@@ -4,6 +4,13 @@ Context for the next agent (Codex or Claude). Read first: `AGENTS.md`, `docs/pla
 (item 1 status), this file, `results/srs_benchmark/srs_benchmark_summary.txt`, and
 `paper/dissertation_chapter/notes/a5_technical_notes.md` Q3.
 
+**Continuation update (2026-09-27):** Task 1's restricted code check and the subsequent
+accepted-PDF review are recorded in [ch2_check_findings_2026-09-27.md](ch2_check_findings_2026-09-27.md).
+Read that note before acting on the original task list below. Verdict (c) is limited
+to the numerical reproduction: current code/CSV agree, but disagree with the accepted
+exhibit whose historical inputs remain untraced. Project 1 stays finalized/read-only;
+the author has not approved manuscript changes or settled the Task 2 decisions.
+
 ## State
 - SRS (Design 9: complete randomization, 50 of 100) is in the simulation. The re-run is
   verified, and the Design 1–8 rows are identical to the old run.

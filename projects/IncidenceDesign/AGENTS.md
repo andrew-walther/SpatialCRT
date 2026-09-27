@@ -9,6 +9,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
+## Continuation note (2026-09-27): SRS and Chapter 2 decisions
+
+Read `docs/plans/ch2_check_findings_2026-09-27.md` with `docs/plans/TODO.md` before
+continuing manuscript work. It records the restricted Chapter 2 reproduction and
+subsequent review of the accepted PDF, including the allocation-level figures/tables.
+Current code and stored CSV agree at 3×4 checkerboard MSE 0.22555, whereas the accepted
+exhibit reports 0.0004; the exhibit's historical inputs have not been traced. This is
+a limited reproduction discrepancy, not a settled explanation of cross-study results.
+The author regards Project 1 as final: keep SpillSpatialDepSim and bios-dissertation
+read-only. SRS framing, Checkerboard placement and the Chapter 2 link remain open;
+no chapter/CTJ edits were made. Save future key findings in this project's `docs/plans/`.
+
 ## What This Project Is
 
 A modular simulation study evaluating **8 treatment assignment designs** for Spatial

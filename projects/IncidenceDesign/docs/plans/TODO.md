@@ -8,6 +8,11 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
    Plan: `~/.claude/plans/pasted-content-id-a3af-you-are-synchronous-seal.md`.
 
    **Status (2026-09-27): segment A (steps 1–3) done; segment B (steps 4–5: chapter, wrap-up) next.**
+   - **Read before continuing:** [Chapter 2 check and accepted-PDF review](ch2_check_findings_2026-09-27.md).
+     The limited reproduction discrepancy remains unresolved; Project 1 is finalized
+     and stays read-only. SRS framing, Checkerboard placement and the Chapter 2 link
+     still require author decisions. The accepted exhibits' allocation-consistency
+     argument must be considered alongside average MSE.
    - Commits: 0052161 (code, tests), 197aa62 (full run), 3366af2 (summaries, figures).
    - SRS is Design 9: complete randomization, exactly 50 of 100 treated. It is a benchmark,
      not a proposed design: shown as gray reference lines in figures, as a set-off row
@@ -38,14 +43,17 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
    The data are already ingested and aggregated (`application/README.md`, `AGENTS.md`).
 3. **CTJ manuscript (manuscript-plan step 5).** SRS note (author, 2026-09-26): the CTJ stands
    alone, with no "Chapter 2" references. Link SRS to Project 1 only by citing that paper
-   (submitted to BMC Medical Research Methodology), e.g. "we compare performance to SRS,
+   (accepted at BMC Medical Research Methodology), e.g. "we compare performance to SRS,
    as in [Paper 1]". Derive it from the finished chapter: body about
    3,000–3,300 words, at most 6 exhibits, an unstructured abstract of at most 250 words (check
    SAGE's live guidelines), and cut material saved to supplementary files. Can start before
    item 2 finishes, with the application written as a proposal.
-4. **Chapter 2 (Project 1) audit.** Paused by the author. Chapter 2 is accepted and final: at
-   most a light limitations acknowledgement; no reformulation, and no critique of it in
-   Chapter 3. Findings so far: `paper/dissertation_chapter/notes/a5_technical_notes.md` (Q3).
+4. **Chapter 2 (Project 1) audit.** Minimal authorized code check and accepted-PDF review
+   completed 2026-09-27; further work paused for discussion. Chapter 2 is accepted and
+   final: no reformulation or critique of it in Chapter 3. Current findings and limits:
+   [ch2_check_findings_2026-09-27.md](ch2_check_findings_2026-09-27.md). Earlier draft-only
+   observations in `paper/dissertation_chapter/notes/a5_technical_notes.md` (Q3) must be
+   read with that follow-up. No further provenance tracing or advisor contact authorized.
 
 Smaller open items:
 - 17 inline `NEEDS-AUTHOR-CONFIRMATION` comments in the chapter's Application section.

@@ -2,6 +2,12 @@
 
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
+**Manuscript continuation (2026-09-27):** The [Chapter 2 check and accepted-manuscript
+review](docs/plans/ch2_check_findings_2026-09-27.md) records the evidence, limits and
+open decisions for the SRS benchmark and Checkerboard discussion. Project 1 remains
+finalized and read-only; Chapter 3 framing has not yet been settled. See
+[TODO](docs/plans/TODO.md) for remaining work.
+
 ## Overview
 
 This project evaluates which **treatment assignment design** produces the most accurate
