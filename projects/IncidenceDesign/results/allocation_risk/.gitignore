@@ -1,0 +1,4 @@
+# Reproducible per-fit caches and transient run requests; keep final summaries.
+**/checkpoints/
+**/request_*.rds
+**/run.log
