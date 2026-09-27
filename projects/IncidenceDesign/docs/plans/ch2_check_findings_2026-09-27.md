@@ -278,6 +278,44 @@ already established. Also, Project 2 changes more than incidence heterogeneity;
 without a controlled comparison, do not attribute the changed Checkerboard ranking
 to heterogeneity alone.
 
+## Author clarification: SRS benchmark and recommendation (2026-09-27)
+
+The author recalled Project 1's sequence: hold a treatment allocation fixed, sample
+subjects onto the grid, assign treatment/exposure, generate responses and fit the
+spatial-lag model, repeating to estimate that allocation's MSE. Comparing these
+MSEs over the enumerated allocations gave the allocation-performance distribution.
+This matches the inspected code. The repeated datasets varied both subject locations
+(and therefore district sample sizes and subject-level W) and outcome noise; it was
+not just repeated errors on an otherwise fixed subject dataset. A single fit gives
+a squared error, while the allocation's estimated MSE averages squared errors over
+its repeated datasets.
+
+The author wants SRS to serve as an informative benchmark supporting a clear,
+convincing recommendation among the systematic designs, rather than having readers
+infer from average MSE alone that allocation strategy is inconsequential. The
+proposed allocation-risk analysis addresses this concern for all designs, but its
+pilot scope has **not** been approved by this clarification.
+
+Keep the recommendation evidence-based and conditional:
+
+- At queen/tau=1, the current IGSQ-to-SRS MSE ratio is about 0.63 under control-only
+  spillover (about 37% lower average MSE), 1.08 under both-arms spillover (about 8%
+  higher), and 0.71 when pooled over the studied regimes/settings (about 29% lower).
+  These support a substantive control-only benefit, not universal superiority.
+- SRS's good mean performance does not establish that every allocation is good;
+  equally, it does not establish that its upper-tail risk is worse than a systematic
+  design's. That is the open question for the proposed extension.
+- Report SRS's actual strengths even if it remains a reasonable choice in some
+  settings. A strong systematic-design recommendation should specify the conditions
+  and criterion under which it improves on that benchmark, not discount the benchmark
+  to secure a preferred conclusion.
+- The unresolved Project 1 exhibit discrepancy remains separate; use its verified
+  simulation structure to motivate the allocation-risk question without claiming
+  that the previous numerical discrepancy has been reconciled.
+
+No new simulation, recommendation, or manuscript wording was approved or implemented
+in this exchange.
+
 ## Decisions still open for IncidenceDesign
 
 1. Agree the scope of the new allocation-risk analysis above before settling final
