@@ -23,6 +23,8 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
      IGSQ retains a control-only mean and estimated-tail benefit; SRS remains better
      under both-arms spillover. Finite-noise tail uncertainty and the plain-saturation
      results preclude claims of universal or uniquely incidence-guided superiority.
+     Further analysis priorities are saved in the findings note ("Further analysis
+     recommendations"); they are proposals for discussion, not approved new runs.
    - Commits: 0052161 (code, tests), 197aa62 (full run), 3366af2 (summaries, figures).
    - SRS is Design 9: complete randomization, exactly 50 of 100 treated. It is a benchmark,
      not a proposed design: shown as gray reference lines in figures, as a set-off row

@@ -302,6 +302,73 @@ generalization. Those are different precision questions.
   unchanged. Modules 01–05 and the 2026-09-27 full-run result files are preserved.
 - No Project 1, bios-dissertation or manuscript files were modified. No pushes.
 
+## Further analysis recommendations — discussion, not approved new runs
+
+The author asked what additional analyses would improve clarity and robustness.
+The following priorities are recommendations; no additional simulation or change
+to the design rules is authorized by this discussion alone.
+
+1. **Confirm allocation-risk findings across more incidence surfaces.** If downside
+   protection will be a substantive manuscript claim, extend the focused comparison
+   to all ten existing X surfaces per configuration, retaining both spillover regimes
+   and the same selected parameter settings. Include SRS, both saturation designs,
+   Balanced Quartiles and Isolation Buffer. Ten surfaces is a practical extension,
+   not a guarantee of adequate population precision. Choose further outcome and
+   allocation replication using explicit Monte Carlo precision targets, agreed
+   before the extension. More outcomes refine each allocation's MSE; more allocation
+   draws improve tail sampling; more surfaces address generalization. Do not expand
+   every tau/neighbor/scenario combination simply to produce more fits. Exact maxima
+   and identification of the individual worst allocations are low priorities.
+2. **Explain why the regimes differ.** Use saved assignments to compare treatment
+   versus spillover exposure overlap, residual treatment variation after accounting
+   for intercept/spillover/incidence, and suitably scaled model-matrix conditioning.
+   Relate these diagnostics to allocation MSE, especially for Checkerboard, SRS and
+   the saturation designs. This could explain which geometries help distinguish the
+   direct effect from spillover. These are diagnostics, not a complete SAR variance
+   formula or causal attribution of the Project 1/2 difference to heterogeneity.
+3. **Use existing results before adding sensitivity runs.** Present bias, coverage
+   and failure/alias rates beside mean MSE, by regime, with Monte Carlo uncertainty.
+   Summarize the already available non-oracle sensitivity in the same strata; it
+   omits the spillover term and is not a check of every possible misspecification.
+   Retain oracle ML as primary. Compare plain and incidence-guided saturation directly
+   in the full-study results so the manuscript distinguishes support for saturation
+   from evidence for an incremental benefit of incidence guidance. No new estimator
+   contest or DIM comparison is proposed.
+4. **Clarify implementation and resource constraints.** Report treated-cluster
+   counts/fractions and incidence balance with performance. Isolation Buffer does
+   not enforce the same 50/100 treatment budget as most grid designs; its risk
+   comparison should make that explicit. In the NC application also distinguish
+   cluster balance from population balance and define the allocation support,
+   spatial grouping, and any deterministic assignment rule. A new budget-matched
+   buffer or changed randomization rule would be a separate design decision, not
+   a silent modification of the current study.
+5. **Make the real-SUD NC application the next major robustness test.** Include SRS,
+   report each yearly surface rather than only pooling, and preserve the regime
+   distinction. Irregular service-area geometry and unequal populations provide a
+   useful complement to the grid results. A focused optional sensitivity would
+   construct allocations using an earlier year's incidence and evaluate simulated
+   outcomes under a later year's incidence. Distinguish the historical planning
+   signal from the covariate driving outcomes and agree analysis adjustment before
+   implementation. This tests reliance on perfectly measured/current incidence;
+   consecutive year pairs are related settings, not independent population samples.
+   Real incidence informs a simulation-based application, not evidence of an
+   observed intervention effect. The revised engine/designs still need integration
+   and verification for the application before its existing results can be replaced.
+
+Recommended sequence: first extract existing-result/assignment diagnostics (items
+2–4); agree whether to promote the allocation-risk pilot to a manuscript analysis
+and its precision target (item 1); then run the planned NC application with any
+agreed historical-incidence sensitivity (item 5). Avoid a broad new parameter sweep
+or reopening Project 1 as a prerequisite to writing. A no-spillover control or
+additional grid sizes can remain secondary unless a specific claim requires them.
+
+The emphasis on explicit aims/performance measures and Monte Carlo uncertainty is
+consistent with Morris, White and Crowther (2019), *Using simulation studies to
+evaluate statistical methods*, Statistics in Medicine,
+[doi:10.1002/sim.8086](https://doi.org/10.1002/sim.8086). The specific priorities above
+are judgments based on this project's completed analyses, not conclusions supplied
+by that methodological reference.
+
 ## Checkpoints and continuation
 
 Code/method checkpoints: `455a480` (authorized plan), `ea2452d` (runner/tests),
