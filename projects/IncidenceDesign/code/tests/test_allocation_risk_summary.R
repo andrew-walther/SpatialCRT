@@ -36,6 +36,8 @@ stopifnot(z$Mean_Allocation_MSE[z$Design == "Design 6" & z$Spillover_Type == "bo
 bad <- s; bad$Complete[1] <- FALSE
 stopifnot(inherits(try(allocation_risk_compare(bad, g), silent = TRUE), "try-error"),
   inherits(try(allocation_risk_compare(s[-1, ], g), silent = TRUE), "try-error"))
+nonfinite <- s; nonfinite$SE_Mean_MSE_Joint[1] <- NA_real_
+stopifnot(inherits(try(allocation_risk_compare(nonfinite, g), silent = TRUE), "try-error"))
 # Half-selected top draw reverses completely: selected=10, held-out=0.
 a <- s[rep(1, 2), c(allocation_unit_keys, "Design")]
 a$Frequency <- c(1, 1); a$MSE_Half1 <- c(10, 0); a$MSE_Half2 <- c(0, 10)

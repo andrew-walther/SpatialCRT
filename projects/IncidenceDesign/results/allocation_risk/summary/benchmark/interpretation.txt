@@ -1,0 +1,14 @@
+Allocation-risk conditional summary
+Input: /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/results/allocation_risk/benchmark/results.rds
+Output slice: benchmark ; actual surfaces: 1
+Actual configs: 1 ; blocks: 9 ; outcome replicates per unique allocation: 100
+Pooled tables equally average the selected fixed surfaces/configurations and rho/gamma corners within each regime.
+The pilot selects the first two surfaces of five configs; targeted extensions may use a strict subset, as recorded above.
+MC SEs condition on these fixed X surfaces, with independent block/design streams; no population inference or p-values.
+Ratios are ratios of averages. Unit shares are descriptive comparisons on matched fixed settings.
+Conditional q90 and worst10 averages concern estimated risks; they are NOT pooled quantiles or deconvolved true tails.
+RMS corrected within SD = sqrt(average signed corrected variance). Negative component estimates are counted and retained.
+Observed maximum depends on sampled allocations/outcomes; it is not an exhaustive worst case.
+Split-half and cross-selected tails diagnose outcome-noise sensitivity and selection optimism.
+Main-run differences are descriptive only: the old slice used one outcome per allocation, with 25 fits per surface.
+Warnings: 0 ; aliases: 0

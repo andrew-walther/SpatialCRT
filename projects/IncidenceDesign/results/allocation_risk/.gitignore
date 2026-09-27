@@ -2,3 +2,6 @@
 **/checkpoints/
 **/request_*.rds
 **/run.log
+# Redundant large CSV exports; the tracked results.rds preserves these full tables.
+**/allocation_metrics.csv
+**/draw_mapping.csv

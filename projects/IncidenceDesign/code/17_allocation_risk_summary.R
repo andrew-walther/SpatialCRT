@@ -35,6 +35,9 @@ allocation_summary_key <- function(x, keys) {
 #' # allocation_risk_average(results$summary, "Spillover_Type")
 allocation_risk_average <- function(s, groups) {
   if (!all(s$Complete) || anyNA(s$Complete)) stop("Incomplete blocks: comparisons withheld")
+  required <- c("Mean_MSE", "SE_Mean_MSE_Joint", "Variance_Corrected", "Q90_Estimated",
+                "Worst10_Mean_Estimated", "Sampled_Max_Estimated", "Coverage")
+  if (any(!is.finite(as.matrix(s[required])))) stop("Nonfinite complete-block metrics")
   keys <- c(groups, "Design", "Design_Name")
   out <- lapply(split(seq_len(nrow(s)), allocation_summary_key(s, keys)), function(i) {
     z <- s[i, ]; v <- mean(z$Variance_Corrected)
@@ -153,9 +156,10 @@ allocation_risk_report <- function(input, output) {
   if (anyDuplicated(allocation_summary_key(s, c(allocation_unit_keys, "Design"))))
     stop("Duplicate summary units")
   # Coverage is averaged within allocation frequency, then equally across fixed units.
+  allocation_ids <- allocation_summary_key(a, c(allocation_unit_keys, "Design"))
+  summary_ids <- allocation_summary_key(s, c(allocation_unit_keys, "Design"))
   for (j in seq_len(nrow(s))) {
-    m <- allocation_summary_key(a, c(allocation_unit_keys, "Design")) ==
-      allocation_summary_key(s[j, ], c(allocation_unit_keys, "Design"))
+    m <- allocation_ids == summary_ids[j]
     s$Coverage[j] <- weighted.mean(a$Coverage[m], a$Frequency[m])
   }
   common <- c("Neighbor_Type", "True_Tau", "Estimator", "Spillover_Type")
