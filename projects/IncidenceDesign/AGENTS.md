@@ -30,8 +30,10 @@ their studied conditions; verify final bibliographic details before adding the c
 **New analysis requested (2026-09-27):** assess allocation-specific MSE variation
 and upper tails for every candidate design and SRS before final recommendations.
 Existing runs use one noise draw per allocation draw and cannot isolate this risk
-from outcome noise. A nested simulation plan is recorded in the findings note;
-pilot scope and replication remain unapproved. No new simulation has been run.
+from outcome noise. **The author subsequently authorized the necessary pilot/analysis
+and subagents.** Implementation is in progress; the approved starting scope and
+precision checks are in `docs/plans/allocation_risk_plan_2026-09-27.md`. The older
+"pending approval" statements in the chronological findings note predate this authorization.
 
 ## What This Project Is
 
