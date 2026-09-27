@@ -49,7 +49,8 @@ Code: `projects/SpillSpatialDepSim/code/SpatialSim_3x4.Rmd`. Also `SpatialSim_3x
 - **Author's note (2026-09-27):** Chapter 2 simulated SUBJECTS within clusters. All subjects
   in a cluster share the cluster response plus an individual random error, and the model is
   fit at the subject level.
-- Check whether the spatial weights / lagsarlm fit are built at the subject level. If W links
+- The author believes (2026-09-27) that W was built at the SUBJECT level. Confirm this in the code first:
+  whether the spatial weights / lagsarlm fit are built at the subject level. If W links
   subjects, the cluster-level collinearity z = 1 − x may not carry over to the fit.
 - Check also:
   - how x and z (spillover indicator) are built per subject;
