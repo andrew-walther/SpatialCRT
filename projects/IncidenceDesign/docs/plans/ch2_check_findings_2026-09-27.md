@@ -351,3 +351,17 @@ also support a broader allocation-consistency argument that must be represented
 fairly. Project 1 is accepted/final and stays read-only, as does bios-dissertation.
 Discuss the SRS framing, Checkerboard placement and neutral Chapter 2 link with me
 before changing the chapter. Do not infer that the audit has settled those decisions.
+
+
+## Subsequent authorization and allocation-risk pilot (2026-09-27)
+
+The author subsequently approved the necessary analysis/pilot and economical
+subagent execution. This supersedes the historical "await approval" statements
+above. See [allocation-risk findings](allocation_risk_findings_2026-09-27.md) for
+methods, all-design results and precision limitations, and
+[the authorized plan](allocation_risk_plan_2026-09-27.md) for initial scope.
+The conditional pilot supports saturation designs under control-only spillover,
+including lower estimated upper-tail MSE than SRS, while SRS remains competitive
+or better under both-arms spillover. It does not settle the earlier Project 1
+exhibit discrepancy, prove incidence guidance uniquely optimal, or authorize
+manuscript wording/Checkerboard placement without discussion.

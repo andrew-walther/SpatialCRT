@@ -55,6 +55,15 @@ Check tail stability using independent outcome batches; bootstrap of noisy MSE
 estimates alone does not remove ranking noise. Quantiles/maxima are estimates over
 sampled allocations, not exhaustive worst-case guarantees.
 
+Implementation clarification: duplicate assignments are cached with their original
+draw frequencies. The runner uses the explicit covariance correction
+`sum(f_i * (1 - f_i/n) * v_i)/(n-1)`, verified against hand-computed examples.
+Early split-half diagnostics showed substantial outcome-noise contamination, so
+the authorized precision follow-up extends the same allocations from 100 to 400
+outcomes for designs 3, 4, 6, 8 and SRS, first surface of every configuration,
+rho=0.5/gamma=0.8, both regimes (50 blocks). This is a precision extension, not an
+independent replication or an increase in the number of sampled allocations.
+
 ## Files, constraints and delegation
 
 - New runner: `code/16_allocation_risk.R`; tests: `code/tests/test_allocation_risk.R`.

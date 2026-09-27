@@ -31,9 +31,27 @@ their studied conditions; verify final bibliographic details before adding the c
 and upper tails for every candidate design and SRS before final recommendations.
 Existing runs use one noise draw per allocation draw and cannot isolate this risk
 from outcome noise. **The author subsequently authorized the necessary pilot/analysis
-and subagents.** Implementation is in progress; the approved starting scope and
-precision checks are in `docs/plans/allocation_risk_plan_2026-09-27.md`. The older
+and subagents.** The nested pilot is complete; see
+`docs/plans/allocation_risk_findings_2026-09-27.md` for results, precision checks and
+reproduction commands. The older
 "pending approval" statements in the chronological findings note predate this authorization.
+
+**Allocation-risk pilot (2026-09-27):** new scripts 16–18 and isolated
+`results/allocation_risk/` outputs; existing modules/main outputs unchanged. Queen,
+oracle, tau=1; first two surfaces of five configurations, rho=0/0.5,
+gamma=0.5/0.8, both regimes, all nine designs. Pilot: 100 assignment draws × 100
+outcomes per unique allocation, 5,617,600 successful fits, no warnings/aliases.
+IGSQ/SRS mean-MSE ratio = 0.649 under control-only, 1.070 under both-arms.
+Control-only estimated worst-decile ratio = 0.555; finite-outcome noise requires
+reading this with the targeted R=400 check in the findings note. Plain Saturation
+Quadrants also performs strongly; incidence guidance is not shown uniquely optimal.
+The R=400 check completed 50 selected blocks (1.5 million additional fits, no
+failures/warnings/aliases), preserving the regime distinction; its control-only
+IGSQ/SRS mean and estimated worst-decile ratios are 0.658 and 0.527. Individual
+tail membership remains noisy. Full pilot plus refinement: 7,117,600 distinct fits.
+Never substitute these selected-surface/corner numbers for the full-study numbers.
+Manuscript framing/Checkerboard placement remain author decisions; revised real-SUD
+application remains pending. Project 1 and bios-dissertation remain read-only.
 
 ## What This Project Is
 

@@ -8,6 +8,24 @@ open decisions for the SRS benchmark and Checkerboard discussion. Project 1 rema
 finalized and read-only; Chapter 3 framing has not yet been settled. See
 [TODO](docs/plans/TODO.md) for remaining work.
 
+**Allocation-risk analysis (2026-09-27):** the author authorized a nested pilot
+comparing all eight designs with SRS, including variability and upper tails of
+allocation-specific MSE. See the [methods and findings note](docs/plans/allocation_risk_findings_2026-09-27.md)
+for scope, precision limitations, code walkthrough, and interpretation. This uses
+queen weights, oracle ML, tau=1, ten fixed incidence surfaces and parameter corners;
+it does not replace the main study or run the revised NC application.
+
+To reproduce it, from `code/`, run `16_allocation_risk.R pilot 8`, then
+`18_allocation_risk_precision.R`, with `VECLIB_MAXIMUM_THREADS=1`,
+`OPENBLAS_NUM_THREADS=1`, and `OMP_NUM_THREADS=1` set before starting R.
+`Rscript 17_allocation_risk_summary.R pilot` and
+`Rscript 17_allocation_risk_summary.R precision_R400` regenerate the tables in
+`results/allocation_risk/summary/`. Behavior checks are in
+`tests/test_allocation_risk.R` and `tests/test_allocation_risk_summary.R`.
+Individual-fit caches are gitignored; outputs and manifests are isolated from the
+existing simulation. Full commands and the rationale for outcome replication are
+in the linked note.
+
 ## Overview
 
 This project evaluates which **treatment assignment design** produces the most accurate

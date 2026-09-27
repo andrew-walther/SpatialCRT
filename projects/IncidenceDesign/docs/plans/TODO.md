@@ -16,8 +16,13 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
    - **Author-requested extension (2026-09-27):** evaluate variation and upper-tail
      MSE across allocations for all candidate designs and SRS before finalizing
      recommendations. Existing surface/scenario summaries cannot isolate this:
-     repeated outcomes per fixed allocation are needed. Proposed pilot and metrics
-     are in the findings note; scope/replication await approval before implementation.
+     repeated outcomes per fixed allocation are needed. **Subsequently authorized and
+     completed as a nested pilot**, with targeted R=400 precision follow-up; read
+     [allocation-risk findings](allocation_risk_findings_2026-09-27.md) before writing.
+     Queen/oracle/tau=1, two surfaces/configuration and parameter corners only.
+     IGSQ retains a control-only mean and estimated-tail benefit; SRS remains better
+     under both-arms spillover. Finite-noise tail uncertainty and the plain-saturation
+     results preclude claims of universal or uniquely incidence-guided superiority.
    - Commits: 0052161 (code, tests), 197aa62 (full run), 3366af2 (summaries, figures).
    - SRS is Design 9: complete randomization, exactly 50 of 100 treated. It is a benchmark,
      not a proposed design: shown as gray reference lines in figures, as a set-off row
