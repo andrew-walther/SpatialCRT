@@ -48,6 +48,10 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
    3,000–3,300 words, at most 6 exhibits, an unstructured abstract of at most 250 words (check
    SAGE's live guidelines), and cut material saved to supplementary files. Can start before
    item 2 finishes, with the application written as a proposal.
+   - **Reference rule reaffirmed by author, 2026-09-27:** dissertation references can
+     say "In Chapter 2..."; CTJ references must say, for example, "In previous work..."
+     and cite the BMC paper. Verify its final bibliographic details at manuscript
+     preparation. See the author-confirmed rule in `ch2_check_findings_2026-09-27.md`.
 4. **Chapter 2 (Project 1) audit.** Minimal authorized code check and accepted-PDF review
    completed 2026-09-27; further work paused for discussion. Chapter 2 is accepted and
    final: no reformulation or critique of it in Chapter 3. Current findings and limits:

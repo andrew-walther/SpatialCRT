@@ -21,6 +21,12 @@ The author regards Project 1 as final: keep SpillSpatialDepSim and bios-disserta
 read-only. SRS framing, Checkerboard placement and the Chapter 2 link remain open;
 no chapter/CTJ edits were made. Save future key findings in this project's `docs/plans/`.
 
+**Author-confirmed reference rule (2026-09-27):** dissertation prose may refer directly
+to "Chapter 2". CTJ must use self-contained wording (e.g., "In previous work...")
+with a citation to the Project 1 BMC Medical Research Methodology paper, never
+"Chapter 2" or "Project 1" as reader-facing references. Describe findings within
+their studied conditions; verify final bibliographic details before adding the citation.
+
 ## What This Project Is
 
 A modular simulation study evaluating **8 treatment assignment designs** for Spatial

@@ -195,6 +195,27 @@ Proposed discussion wording, not yet approved or inserted into the chapter:
 
 No additional simulations or manuscript changes were authorized by this discussion.
 
+## Author-confirmed reference rule (2026-09-27)
+
+The author explicitly distinguished how Project 1 is referenced in the two outputs:
+
+- **Dissertation:** direct references such as "In Chapter 2, we found..." or
+  "Chapter 2 emphasized..." are appropriate because the earlier work appears in
+  the same document. Prefer a precise statement of the finding and its conditions
+  over an unqualified assertion that BSS is better.
+- **CTJ manuscript:** the paper must stand alone. Use wording such as "In previous
+  work, we found..." with an actual citation to the Project 1 BMC Medical Research
+  Methodology paper. Do not use "Chapter 2", "Project 1", or assume the reader has
+  the dissertation. The citation is appropriate for specific attributed findings
+  even when the prose says "previous work"; that phrase alone is not a reference.
+- Verify the BMC paper's final bibliographic details when preparing the CTJ citation;
+  do not invent its DOI, year, volume or article number. No bibliography was changed
+  in this discussion.
+
+This writing rule is settled. The exact scientific wording, SRS framing and
+Checkerboard placement remain under discussion; the proposed paragraphs above have
+not become approved manuscript text merely because the reference rule is confirmed.
+
 ## Decisions still open for IncidenceDesign
 
 1. Agree restrained SRS benchmark prose, reported by spillover regime with queen
