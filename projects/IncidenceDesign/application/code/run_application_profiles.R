@@ -586,7 +586,7 @@ run_application_profile <- function(profile = c("smoke", "pilot", "full"),
     tau = config$tau_vals,
     gamma = config$gamma_vals,
     rho = config$rho_vals,
-    design_id = 1:8
+    design_id = 1:9
   )
 
   iteration_results <- list()

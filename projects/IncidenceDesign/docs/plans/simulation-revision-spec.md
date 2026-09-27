@@ -68,9 +68,10 @@ of quadrant means); the rest are unchanged.
 | 6 | Balanced Quartiles | strata = `ntile(r, 4)` (25 each); floor(25/2) = 12 per stratum plus one more in 2 random strata | exactly 50 |
 | 7 | Balanced Halves | strata = `ntile(r, 2)` (50 each); 25 treated per stratum | 50 |
 | 8 | Incidence-Guided Saturation Quadrants | quadrant saturations {0.8, 0.6, 0.4, 0.2} by random-tie rank of quadrant mean X_k (highest mean → 0.8) | 50 |
+| 9 | Simple Random Sampling (benchmark; added 2026-09-26) | complete randomization: a uniformly random subset of N/2 clusters; ignores X and geography | exactly 50 |
 
 Balanced Quartiles treated 48 before the revision (`round(25/2)` = 12 per stratum); it now
-treats exactly N/2 (user decision after the B4 pilot, 2026-09-24). `is_design_deterministic()` is TRUE for Checkerboard only.
+treats exactly N/2 (user decision after the B4 pilot, 2026-09-24). Simple Random Sampling (Design 9) is a naive benchmark, not a proposed design (author, 2026-09-26); its Z key includes d = 9, so adding it leaves every other design's draws unchanged. `is_design_deterministic()` is TRUE for Checkerboard only.
 The application copy (`application/code/application_designs.R`) gets the same tie rule.
 
 ## 4. Seeds (M4)

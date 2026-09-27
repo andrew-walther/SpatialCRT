@@ -860,7 +860,7 @@ plot_rank_trajectories_by_tau <- function(results, inc_label = "") {
   ggplot(rank_data, aes(x = True_Tau, y = Rank, color = Design, group = Design)) +
     geom_line(linewidth = 0.9) +
     geom_point(size = 2.5) +
-    scale_y_reverse(breaks = 1:8) +   # rank 1 at top
+    scale_y_reverse(breaks = seq_len(max(rank_data$Rank))) +   # rank 1 at top
     scale_color_viridis_d(option = "D") +
     labs(
       title    = "Design Rank Trajectory Across Tau Values",

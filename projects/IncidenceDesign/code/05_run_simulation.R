@@ -98,7 +98,7 @@ n_surfaces    <- 10    # K
 n_design_draw <- 25    # J
 
 # Designs to evaluate
-design_ids <- 1:8
+design_ids <- 1:9   # 9 = Simple Random Sampling benchmark
 
 # Pilot profile (plan B4): tau = 1; all configs, nb and regimes; rho in {0, 0.5};
 # gamma in {0.5, 0.8}

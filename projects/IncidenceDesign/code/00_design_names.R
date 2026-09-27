@@ -19,7 +19,8 @@ DESIGN_FULL_NAMES <- c(
   "Design 5" = "2x2 Blocking",
   "Design 6" = "Balanced Quartiles",
   "Design 7" = "Balanced Halves",
-  "Design 8" = "Incidence-Guided Saturation Quadrants"
+  "Design 8" = "Incidence-Guided Saturation Quadrants",
+  "Design 9" = "Simple Random Sampling"                     # benchmark, not a proposed design
 )
 
 # Short names (for plot axes and legends where space is limited)
@@ -31,7 +32,8 @@ DESIGN_SHORT_NAMES <- c(
   "Design 5" = "2x2 Blocking",
   "Design 6" = "Bal. Quartiles",
   "Design 7" = "Bal. Halves",
-  "Design 8" = "Incidence Sat. Quad."
+  "Design 8" = "Incidence Sat. Quad.",
+  "Design 9" = "Simple Random"
 )
 
 # Abbreviations (for very space-constrained contexts)
@@ -43,7 +45,8 @@ DESIGN_ABBREVS <- c(
   "Design 5" = "2x2B",
   "Design 6" = "BalQ",
   "Design 7" = "BalH",
-  "Design 8" = "ISQ"
+  "Design 8" = "ISQ",
+  "Design 9" = "SRS"
 )
 
 # Display order: Blocking -> Stratified -> Saturation (roughly worst -> best)
@@ -56,7 +59,8 @@ DESIGN_DISPLAY_ORDER <- c(
   "Bal. Halves",         # D7 — Stratified
   "Bal. Quartiles",      # D6 — Stratified
   "Sat. Quadrants",      # D3 — Saturation
-  "Incidence Sat. Quad." # D8 — Saturation
+  "Incidence Sat. Quad.", # D8 — Saturation
+  "Simple Random"         # D9 — Benchmark
 )
 
 # Conceptual group membership (keyed by short name)
@@ -68,7 +72,8 @@ DESIGN_GROUPS <- c(
   "Bal. Halves"          = "Stratified",
   "Bal. Quartiles"       = "Stratified",
   "Sat. Quadrants"       = "Saturation",
-  "Incidence Sat. Quad." = "Saturation"
+  "Incidence Sat. Quad." = "Saturation",
+  "Simple Random"        = "Benchmark"
 )
 
 #' Apply canonical short display names to the Design column

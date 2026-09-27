@@ -1,6 +1,7 @@
 # ==============================================================================
 # 03_designs.R
-# Eight treatment assignment strategies for the spatial CRT simulation
+# Eight treatment assignment strategies plus the Simple Random Sampling benchmark
+# (Design 9) for the spatial CRT simulation
 # ==============================================================================
 
 #' Human-readable names for each design ID
@@ -16,7 +17,8 @@ get_design_names <- function(design_id = NULL) {
     "5" = "Design 5: 2x2 Blocking",
     "6" = "Design 6: Balanced Quartiles",
     "7" = "Design 7: Balanced Halves",
-    "8" = "Design 8: Incidence-Guided Saturation Quadrants"
+    "8" = "Design 8: Incidence-Guided Saturation Quadrants",
+    "9" = "Design 9: Simple Random Sampling"
   )
   if (is.null(design_id)) return(all_names)
   all_names[as.character(design_id)]
@@ -49,7 +51,7 @@ random_tie_rank <- function(x) {
 
 #' Generate treatment assignment matrices for a given design
 #'
-#' @param design_id Integer, design identifier (1-8)
+#' @param design_id Integer, design identifier (1-9; 9 = Simple Random Sampling benchmark)
 #' @param n_resamples Integer, number of assignment vectors to generate
 #' @param N Integer, number of clusters
 #' @param incidence Numeric vector length N, baseline incidence values in [0,1]
@@ -174,6 +176,14 @@ get_designs <- function(design_id, n_resamples, N, incidence, nb_list, coords) {
         z[idx] <- sample(c(rep(1, n_trt), rep(0, length(idx) - n_trt)))
       }
       mat[, i] <- z
+    }
+
+  } else if (design_id == 9) {
+    # Design 9: Simple Random Sampling — the naive benchmark. Complete randomization:
+    # exactly N/2 clusters treated, every such subset equally likely, no use of
+    # incidence or spatial structure (author decision 2026-09-26)
+    for (i in seq_len(n_resamples)) {
+      mat[, i] <- sample(rep(c(1, 0), c(N %/% 2, N - N %/% 2)))
     }
 
   } else {

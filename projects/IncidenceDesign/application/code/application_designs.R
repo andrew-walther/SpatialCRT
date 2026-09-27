@@ -10,7 +10,8 @@ APPLICATION_DESIGN_FULL_NAMES <- c(
   "5" = "2x2 Blocking",
   "6" = "Balanced Quartiles",
   "7" = "Balanced Halves",
-  "8" = "Incidence-Guided Saturation Regions"
+  "8" = "Incidence-Guided Saturation Regions",
+  "9" = "Simple Random Sampling"
 )
 
 APPLICATION_DESIGN_SHORT_NAMES <- c(
@@ -21,7 +22,8 @@ APPLICATION_DESIGN_SHORT_NAMES <- c(
   "5" = "2x2 Blocking",
   "6" = "Bal. Quartiles",
   "7" = "Bal. Halves",
-  "8" = "Incidence Sat. Regions"
+  "8" = "Incidence Sat. Regions",
+  "9" = "Simple Random"
 )
 
 APPLICATION_DESIGN_DISPLAY_ORDER <- c(
@@ -32,7 +34,8 @@ APPLICATION_DESIGN_DISPLAY_ORDER <- c(
   "Bal. Halves",
   "Bal. Quartiles",
   "Sat. Regions",
-  "Incidence Sat. Regions"
+  "Incidence Sat. Regions",
+  "Simple Random"
 )
 
 APPLICATION_DESIGN_GROUPS <- c(
@@ -43,7 +46,8 @@ APPLICATION_DESIGN_GROUPS <- c(
   "Bal. Halves" = "Stratified",
   "Bal. Quartiles" = "Stratified",
   "Sat. Regions" = "Saturation",
-  "Incidence Sat. Regions" = "Saturation"
+  "Incidence Sat. Regions" = "Saturation",
+  "Simple Random" = "Benchmark"
 )
 
 application_design_names <- function(design_id = NULL, style = c("full", "short")) {
@@ -275,6 +279,13 @@ get_application_designs <- function(design_id,
         sat_levels[length(means) + 1 - application_random_tie_rank(means)],
         names(means))
       mat[, i] <- assign_by_region_saturation(region_id, sats)
+    }
+  } else if (design_id == 9) {
+    # Simple Random Sampling benchmark (mirrors code/03_designs.R): complete
+    # randomization of round(N/2) treated clusters, ignoring incidence and geography
+    n_trt <- round(N / 2)
+    for (i in seq_len(n_resamples)) {
+      mat[, i] <- sample(rep(c(1L, 0L), c(n_trt, N - n_trt)))
     }
   } else {
     stop("Unknown design_id: ", design_id, call. = FALSE)

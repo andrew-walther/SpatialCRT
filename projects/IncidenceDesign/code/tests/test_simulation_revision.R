@@ -71,7 +71,14 @@ check("ntile(random_tie_rank(X), 4) gives 4 strata of 25",
 check("ntile(random_tie_rank(X), 2) gives 2 strata of 50",
       all(table(dplyr::ntile(r, 2)) == 50))
 check("Checkerboard is the only deterministic design",
-      identical(vapply(1:8, is_design_deterministic, logical(1)), c(TRUE, rep(FALSE, 7))))
+      identical(vapply(1:9, is_design_deterministic, logical(1)), c(TRUE, rep(FALSE, 8))))
+
+# Simple Random Sampling (Design 9): complete randomization, exactly N/2 treated,
+# draws differ, and every cluster is treated with probability 0.5 (±0.07 over 1,000)
+Z9 <- get_designs(9, 1000, N, X_tied, grid_obj$nb_queen, grid_obj$coords)
+check("SRS: treated per draw = 50", all(colSums(Z9) == 50))
+check("SRS: draws differ (1,000 distinct assignments)", !anyDuplicated(t(Z9)))
+check("SRS: every cluster's treatment rate ~ 0.50 ± 0.07", all(abs(rowMeans(Z9) - 0.5) < 0.07))
 
 # 2. Design k is drawn from X[, k] (M1) ----
 cat("\n[2] Matched surfaces (M1)\n")
@@ -122,7 +129,7 @@ check("Z shared across tau (same Mean_Treated at tau = 1 and 2)", {
 # 4. Aliasing and rank-deficiency flags (M6/M7), gamma >= 0.5 ----
 cat("\n[4] Aliasing flags (M6/M7)\n")
 n_surfaces <- 2; n_design_draw <- 3; gamma_vals <- c(0.5, 0.8)
-spill_types <- c("control_only", "both"); true_tau_vals <- 1; design_ids <- 1:8
+spill_types <- c("control_only", "both"); true_tau_vals <- 1; design_ids <- 1:9
 flag <- dplyr::bind_rows(lapply(c("rook", "queen"), function(nb) {
   run_unit(2, nb, 0.2, surf_small[[2]])$scen
 }))
@@ -136,8 +143,8 @@ check("Non-oracle: never aliased", all(flag$N_Aliased[!orc] == 0))
 check("Z_WZ_rank_deficient TRUE only for Checkerboard x rook (both estimators)",
       identical(flag$Z_WZ_rank_deficient, cb_rook))
 check("No other warnings", all(flag$N_Warn == 0))
-check("High Incidence Focus and Balanced Quartiles Mean_Treated = 50",
-      all(flag$Mean_Treated[flag$Design %in% c("Design 2", "Design 6")] == 50))
+check("High Incidence Focus, Balanced Quartiles and SRS Mean_Treated = 50",
+      all(flag$Mean_Treated[flag$Design %in% c("Design 2", "Design 6", "Design 9")] == 50))
 
 # 5. Known answer: correctly specified models are ~unbiased with ~nominal coverage ----
 cat("\n[5] Known answer (Balanced Quartiles, queen, spatial rhoX = 0.20, rho = 0.20)\n")

@@ -7,7 +7,7 @@
 # ============================================================
 #
 # Run from code/:  Rscript tests/verify_full_run_rev_2026-09.R
-# Checks: 12,800 rows per estimator; N_Valid_Est = 250; aliasing and rank-deficiency
+# Checks: 14,400 rows per estimator (9 designs incl. the SRS benchmark); N_Valid_Est = 250; aliasing and rank-deficiency
 # flags only for Checkerboard x rook; lists every non-aliasing warning. Writes
 # results/sim_data/full_run_verification.txt; exits non-zero on failure.
 
@@ -28,7 +28,7 @@ for (est in names(files)) {
   r <- readRDS(files[[est]])
   cb_rook <- r$Design == "Design 1" & r$Neighbor_Type == "rook"
   chk <- c(
-    "12,800 scenario rows" = nrow(r) == 12800,
+    "14,400 scenario rows (9 designs incl. SRS)" = nrow(r) == 14400,
     "one row per scenario key" = !anyDuplicated(r[, c("Incidence_Mode", "Rho_Incidence",
       "Neighbor_Type", "Design", "Rho", "Gamma", "Spillover_Type", "True_Tau")]),
     "Estimator column matches file" = all(r$Estimator == est),

@@ -27,7 +27,7 @@ non  <- readRDS(latest("^sim_results_MLEnonoracle_tau_sweep_combined_.*\\.rds$")
 surf <- readRDS(latest("^surface_results_MLE_tau_sweep_.*\\.rds$"))
 info <- readRDS(latest("^run_info_.*\\.rds$"))
 
-nm <- setNames(sub("^Design [0-9]+: ", "", get_design_names()), paste("Design", 1:8))
+nm <- setNames(sub("^Design [0-9]+: ", "", get_design_names()), paste("Design", 1:9))
 six <- paste("Design", c(1, 2, 4, 5, 6, 8))
 label <- function(df) mutate(df, Design = factor(nm[Design], levels = nm))
 cfg_lab <- function(mode, rx) ifelse(mode == "iid", "iid", sprintf("%s %.2f", mode, rx))
