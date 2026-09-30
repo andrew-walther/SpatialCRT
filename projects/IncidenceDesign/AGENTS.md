@@ -110,7 +110,7 @@ the reasoning behind this distinction.
 | `03_designs.R` | ~162 | 8 treatment designs | `get_designs()`, `get_design_names()`, `is_design_deterministic()` |
 | `04_estimation.R` | 102 | DIM + MLE estimation | `estimate_tau()` |
 | `05_run_simulation.R` | ~385 | Main orchestrator | `run_incidence_config()` |
-| `06_visualizations.R` | ~800 | Plots + tables | 18 functions — see section below |
+| `06_visualizations.R` | ~800 | Plots + tables | 18 plot/table/runner functions (see the script) |
 | `07_results_summary.Rmd` | ~800 | Rendered results report | Knitted HTML/PDF summary |
 | `08_design_recommendations.R` | ~891 | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
 | `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative report | Knitted to `results/MLE_design_recommendation_report.pdf` |
@@ -132,7 +132,7 @@ the reasoning behind this distinction.
 | **paper/archive_manuscript/** | | | |
 | (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
 | **paper/ctj_manuscript/** | | | |
-| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, 6 designs, condensed, exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Current State section for `TEXINPUTS`/`BSTINPUTS` setup |
+| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, 6 designs, condensed, exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas for `TEXINPUTS`/`BSTINPUTS` setup |
 | `Supplementary_Information.tex` | ~400 | SI: reproducibility/seeding (S1), parameter grid (S2), metric formulas (S3), estimation model (S4), full 8-design table (S5), 8-design consolidation justification (S6, only 8-design section), 6-design rankings/sensitivity/robustness/application (S7-S11) | Plain `article` class, S-prefixed numbering, no bibtex needed |
 | **paper/dissertation_chapter/** | | | |
 | `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, 6 designs, full detail, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
@@ -275,51 +275,8 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 comparison on them is the next plan. Plan of record:
 `~/.claude/plans/read-the-prompt-at-gentle-willow.md`.
 
-- **Sources** (gitignored: restricted death-certificate data, public repo; originals in
-  OneDrive `.../Application - Sudden Death/SUD Data - Ashkan/`):
-  - **Numerator:** `num_obs` in `application/data/final_county_sudden.csv` (Habib's
-    corrected case filtering). 23,523 deaths.
-  - **Denominator:** `pop_18_64` in the same file (SEER, year-specific; Σ = 25,594,321
-    person-years).
-  - **Reconciliation only:** `application/data/sudden_county_year.csv`, Habib's
-    `Temporal Trends Data.R` output (CORES = 3-digit county FIPS, DOD_YR, num_obs), the
-    counts behind `habib_temporal_2026`. 21,147 deaths. Join: `county_fips = 37000 + CORES`.
-- **Decision (author, 2026-09-25; reverses the earlier choice of the 21,147 counts):** the
-  numerator is `final_county_sudden$num_obs` (23,523). Reason (Habib, personal communication,
-  2026-09-25): that file comes from his corrected case filtering, which no longer excludes
-  heart-failure deaths as presumed non-sudden, because adjudicated sudden cardiac death
-  overlaps non-negligibly with heart-failure patients. The corrected counts are ≥ the paper's
-  in all 400 county-years (equal in 48). Statewide rates: 83.9/85.9/97.1/100.5 by year, 91.9
-  pooled (paper: 75.1/77.9/86.7/90.6, 82.6). The 21,147 counts stay as `deaths_habib2026`,
-  and the tests check that column still reproduces the paper (including Orange 41.2, Swain
-  215.6 vs the paper's 216.0). Cluster ranks barely differ (pooled Spearman 0.982). All
-  analysis uses the corrected counts even though they no longer match the paper; the chapter
-  text is updated separately. Remaining questions for Ashkan: `application/README.md`.
-- **Rates:**
-  - yearly: d/P
-  - average: Σd/ΣP (per 100k person-years)
-  - total: Σd/(ΣP/4) = 4 × average
-  - `mean_of_yearly_rates` is diagnostic only
-- **Outputs:** `application/data/derived/`, which regenerates via
-  `Rscript application/code/run_sud_aggregation.R`. Pooled cluster rates 45.3–194.9
-  (median 125.6); min cluster-year count 5; year-to-year cluster rank Spearman 0.72–0.82.
-  Maps come from `plot_real_sud_incidence_maps()` in `run_application_profiles.R`.
-- **Fixed:** `load_real_sud_data()` guessed columns by regex (it picked `county_name` as the
-  count column), and `integrate_real_sud_data()` filled missing values with 0/1. Both now wrap
-  the new script. `cc_mapping_data.R`'s directory detection resolved to `getwd()` when sourced
-  inside `suppressMessages()`; it now uses the innermost `source()` frame.
-- **Contiguity weights:** `application/data/nc_cluster_weights.rds` (tracked; build with
-  `build_cluster_weights.R`). Queen degree 1–8 (mean 4.93), rook 1–8 (mean 4.79); 4
-  queen-only corner pairs. **Legal boundaries (`cb = FALSE`)** by author decision
-  (2026-09-25; nearby counties across water can benefit from an education intervention).
-  This adds Albemarle–Martin, Carteret–Pamlico and Carteret–Beaufort County CC relative to
-  the shoreline-clipped `cb = TRUE` used by the earlier synthetic runs.
-- **Code layout (user, 2026-09-25):** application scripts stay under `application/`, split
-  one job per file. Script headers say "Author: Andrew Walther".
-- **Habib script notes:** the `hf` (I50) pattern is defined but unused. That's explained:
-  under the corrected filtering, heart failure is deliberately not excluded (Habib,
-  2026-09-25). The multi-line free-text regex can't match "KIDNEY FAILURE" or "LIVER
-  FAILURE".
+- **SUD data details** (sources, numerator decision 23,523 vs 21,147, rate formulas, outputs,
+  contiguity weights, code layout, Habib script notes): see [application/AGENTS.md](application/AGENTS.md).
 - **Chapter Application text (updated 2026-09-25, commit eb4db79):** framed as a proposal.
   Data preparation (aggregation, yearly rates, weights, checks) is reported as done; the design
   application is planned. A hidden HTML-comment TODO stub lists the planned exhibits. Open
@@ -459,212 +416,11 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
 - **Next:** finish Phase C, then Phase D (chapter Methods/Results rewrite). The single
   recommended design for investigators is still the author's decision to make.
 
-## Prior State (as of 2026-09-04)
+## Build gotchas
 
-**Real-data ingestion pipeline:** READY, DORMANT (waiting on the actual dataset)
-- `application/code/run_application_profiles.R` gained `load_real_sud_data()`
-  (reads a CSV/Excel of county-level empirical data, auto-detects the
-  county/year/count/population columns, filters to one year) and
-  `integrate_real_sud_data()` (joins that county data onto the existing
-  county→community-college mapping, aggregates up to the 58 clusters, computes
-  `sud_rate_per_100k` + rank-normalized incidence).
-- `build_nc_application_clusters()` and `run_application_profile()` now accept
-  `real_county_data` / `real_data_path` + `real_data_year` — when supplied, the
-  pipeline routes through real data instead of `generate_synthetic_sud_data()`
-  and writes to a separate `real_{year}_{profile}/` output directory (the
-  existing synthetic `smoke`/`pilot`/`full` results are untouched). `plot_incidence_map()`
-  titles the map "Observed SUD Incidence {year}" vs. "Synthetic Placeholder..."
-  accordingly. `run_all_real_years()` loops the whole pipeline over 2018–2021.
-- **Nothing has been run yet** — no real data file exists in the repo, so this
-  code is dormant plumbing. Once Ashkan Habib's SUDDEN-derived NC county dataset
-  and IRB access are finalized, running it swaps out the placeholder without
-  any further code changes.
-
-**Two key next steps (per user, 2026-09-04):**
-1. **Ingest and apply the real dataset** to the application section once it
-   arrives — run `run_all_real_years()` (or `run_application_profile(..., real_data_path=, real_data_year=)`
-   per year), regenerate the application maps/tables, and replace the
-   placeholder numbers in both manuscripts (main text + CTJ SI Section S11 +
-   `Dissertation_Chapter.qmd`).
-2. **Write, revise, and submit the manuscript(s)** — with explicit
-   consideration for how this material will be reused across the user's
-   **preliminary oral exam** (literature review & project proposal) and the
-   **final thesis** (as a thesis chapter), not just journal submission. This
-   means decisions made in the "Manuscript Development" roadmap below (scope,
-   figure selection, framing) should be checked against both audiences, not
-   only the CTJ submission target.
-
-## Prior State (as of 2026-07-03)
-
-**CTJ Supplementary Information:** COMPLETE
-- `paper/ctj_manuscript/Supplementary_Information.tex` (+ compiled PDF, 14 pages,
-  S-prefixed numbering: Tables S1-S12, Figures S1-S7) fulfills the three items
-  the main text defers to "online supplementary material": reproducibility/
-  seeding/code pipeline (S1), full parameter grid + resample counts (S2),
-  metric formulas (S3), estimation model incl. non-oracle variant (S4), the
-  full 8-design table (S5), and the complete eight-design comparison (S6) —
-  the only section anywhere in either document that presents all 8 designs.
-  Sections S7-S11 cover the 6 retained designs only: per-incidence-mode
-  rankings, Rho/Gamma/spillover-regime sensitivity (with CD-diagram, heatmap,
-  and two-panel figures), tau sensitivity, robustness/win-rate, and a
-  6-design application-scale table.
-- New `code/14_manuscript_supplement_figures.R` generates all of this: a
-  fresh 8-design Friedman/Nemenyi/Wilcoxon run (`choose(8,2)=28` Nemenyi
-  denominator, `results/eight_design_supplementary/`) confirming the main
-  text's consolidation claims (Nemenyi p=1.0000 for Saturation Quadrants vs.
-  Incidence-Guided Saturation Quadrants; MSE 0.1024 vs 0.1095, Wilcoxon
-  p=1.34e-6, for Balanced Quartiles vs. Balanced Halves); the SI figure suite
-  (clean CD diagrams lifted from `paper/report/IncidenceDesign_ProjectSummary.qmd`'s
-  inline code, not the buggy short-label `plot_cd_diagram()` in
-  `10_statistical_comparisons.R`); a reordered (best-to-worst) main-text
-  `fig_mse_by_design_6design.pdf`; and a new ranked bias-variance
-  `fig_biasvar_6design.pdf`.
-- `CTJ_Manuscript.tex` updated: swapped in the reordered Figure 1, added the
-  new bias-variance Figure 2 (explains *why* designs differ — Checkerboard's
-  MSE is nearly all variance from Z/WZ collinearity), added an SI pointer
-  sentence. Now exactly 6 exhibits (2 tables + 4 figures, at the CTJ cap);
-  body ~2,540 words incl. captions (limit 3,500), abstract 400 words (limit 425).
-- Reviewed by a fresh agent against the plan's decisions (6-design scope
-  except S6, no DIM-vs-MLE comparison, no design shorthand, numeric accuracy,
-  S-numbering) — one gap found and fixed (two generated CD-diagram figures
-  were missing from the SI; added to S7 as Figures S1-S2).
-- Added the three NC application maps already produced by the application
-  study (`application/report/figures/community_college_service_area_clusters.png`,
-  `application/results/full/figures/{synthetic_incidence_map,kmeans_regions_map}.png`)
-  to SI Section S11 as Figures S8-S10, and the incidence map alone to the main
-  text's Application section (Figure 4) to visually motivate the study. These
-  are the "full" profile placeholder maps and **will need to be swapped for
-  updated maps once the real SUDDEN-derived county data is finalized** —
-  same caveat as the numeric placeholder results.
-- To make room for the new main-text Figure 4 (NC incidence map) without
-  exceeding the 6-exhibit cap, merged the separate coverage and
-  tau-sensitivity figures into one 2-panel `fig_coverage_tau_6design.pdf`
-  (built manually in `code/14_manuscript_supplement_figures.R` rather than
-  via `plot_coverage_by_design()`, which hardcodes its own
-  `reorder(Design, Coverage)` and would ignore the best-to-worst factor
-  ordering used everywhere else). Exhibits are still exactly 6 (2 tables + 4
-  figures: MSE, bias-variance, coverage+tau combined, NC incidence map).
-- **Open per user request:** do a full review of the manuscript's figure list
-  (main text + SI) to decide what to keep, drop, or further combine, now that
-  the exhibit budget is being actively traded off between figures rather than
-  fixed — this was a quick swap to fit the incidence map in, not a
-  considered final selection.
-- **Not yet done:** the application-table naming wrinkle extends beyond the
-  single relabeling the original plan anticipated — the application study
-  also calls design 8 "Incidence-Guided Saturation Regions" (not "...
-  Quadrants"), both noted with a footnote in SI Section S11; consolidated
-  user review pass on the SI still pending.
-
-## Prior State (as of 2026-07-02)
-
-**Manuscripts (CTJ + dissertation chapter):** First full drafts COMPLETE
-- Two documents, both written fresh (not edits of the retired `paper/archive_manuscript/`
-  files): a short manuscript targeting *Clinical Trials* (SAGE) and a longer-form
-  dissertation chapter, sharing a bibliography and verified facts but not prose files.
-- `paper/ctj_manuscript/CTJ_Manuscript.tex` — compiles via `sagej.cls` (Sage Vancouver
-  style). 7 pages, ~2,255-word body (limit 3,500), ~398-word abstract (limit 425), 6
-  exhibits (limit 6). Requires TinyTeX on `PATH` plus
-  `TEXINPUTS`/`BSTINPUTS=".:../SAGE_Journal_Template:"` to find `sagej.cls`/`SageV.bst`.
-- `paper/dissertation_chapter/Dissertation_Chapter.qmd` — Quarto, renders to a
-  simple double-spaced `article`-class PDF (`linestretch: 2`, `unsrt` numbered
-  citations) matching the format of the SpillSpatialDepSim (Project 1) manuscript,
-  per user direction — not the UNC Graduate School template yet (to be applied in a
-  later pass once all dissertation chapters are ready to merge). 28 pages, no length
-  ceiling, full theory + full simulation detail + a fuller Results section (per-
-  incidence-mode rankings, Rho/Gamma/spillover-regime sensitivity, subgroup
-  robustness/win-rate) than the CTJ version. Bibliography must be referenced via the
-  `shared-refs.bib` symlink in that directory, not the `../SpatialCRT_IncidenceDesign.bib`
-  path directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib
-  filenames referenced from YAML.
-- **Both manuscripts present 6 designs, not 8** (Checkerboard, High Incidence Focus,
-  Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Incidence-Guided Saturation
-  Quadrants), dropping Saturation Quadrants and Balanced Halves as statistically
-  redundant with a retained design (see `code/12_six_design_statistical_comparisons.R`
-  and `results/six_design_manuscript/`). **This is unrelated to the older "6-design
-  era" mentioned elsewhere in this file** (the pre-Balanced-Halves/pre-Incidence-
-  Guided-Saturation-Quadrants phase, before those two designs existed) — the overlap
-  in count is coincidental.
-- Shared bibliography: `paper/IncidenceDesign_shared.bib` (79 entries) — base
-  `paper/spatialCRT.bib` plus 13 new SUD/SUDDEN citations (converted from
-  `application/Bibliography_Sudden_Death.html`), 1 Project-1 carryover citation, and
-  6 new 2001–2025 design-theory citations, all verified against CrossRef/arXiv.
-- Both manuscripts reviewed by fresh agents against the plan's decisions (6 designs,
-  no DIM comparison, no design shorthand, accurate Project-1/meeting-notes grounding,
-  numeric accuracy against `results/six_design_manuscript/`) — all checks passed
-  after two small fixes (a table-layout bug and a swapped rho_X label).
-- **Not yet done:** actual journal/advisor submission (waiting on Ashkan Habib's real
-  SUDDEN-derived county dataset — current Application-section numbers are an
-  explicitly labeled simulated placeholder), UNC dissertation template formatting,
-  and a consolidated user review/revision pass on both documents together.
-
-## Prior Simulation State (as of 2026-04-08)
-
-> **SUPERSEDED 2026-09-24** by the simulation revision (see Current State). Do not cite the
-> numbers below; their files now live in `results/archive/pre_revision_20260924/`.
-
-**Tau-sweep simulation:** COMPLETE — 12,800 scenarios, τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}
-- Data: `results/sim_data/sim_results_MLE_tau_sweep_combined_20260408_191916.rds`
-- Splits: `results/sim_data/sim_results_MLE_tau_sweep_{iid|spatial|poisson}_20260408_191916.rds`
-- Stats: 12,800 scenarios | 2,560 per tau level | N_Valid_Est = 250 (all converged) | Fail_Rate = 0.0
-- Primary scenario (tau=1.0): D8 MSE=0.079, D3 MSE=0.080 | Worst: D1 MSE=0.802, coverage=55%
-- All reports regenerated and integrated with tau sensitivity sections (2026-04-08)
-
-**MLE simulation (baseline tau=1.0):** ARCHIVED — superseded by tau-sweep
-- Data preserved: `results/sim_data/sim_results_MLE_combined_20260322_151030.rds`
-- Pre-sweep deliverables archived: `results/archive/pre_tau_sweep_20260408/`
-
-**Statistical comparisons (tau-sweep, primary tau=1.0):** UPDATED
-- χ² by tau level: τ=0.8: 1052.77, τ=1.0: 1091.90, τ=1.5: 964.05, τ=2.0: 909.95, τ=3.0: 743.41
-- All tau levels p < 2.2×10⁻¹⁶ — D3/D8 dominance holds across all effect sizes
-- Full report: `results/11_statistical_comparisons_report.{html,pdf}`
-
-**Comprehensive report:** `paper/report/IncidenceSpatialCRT_Report.{html,pdf}` — 50+ pages
-- Now includes: Tau Sensitivity section (MSE vs τ, power curves, coverage, rank stability)
-- Monte Carlo SEs section (N_Valid_Est, SE_MSE per design at primary tau=1.0)
-
-**DIM simulation:** COMPLETE for prior 6-design sweep (naive baseline only)
-- Data: `results/sim_data/sim_results_DIM_combined_20260304_195321.rds`
-- Coverage systematically ~72% — use MLE for all substantive analysis.
-
-**Results directory layout:**
-```
-results/
-  MLE_tau_sweep_design_recommendations_{queen,rook}.pdf  # 08 figures/tables PDF, per neighbor type
-  MLE_tau_sweep_incidence_overview.pdf        # Incidence overview
-  11_statistical_comparisons_report.{html,pdf} # Formal hypothesis testing + tau-strata
-  00_mathematical_specification.pdf
-  07_results_summary.pdf
-  09_MLE_design_recommendation_report.{html,pdf}
-  sim_data/          # All .rds files (load_latest_results() auto-detects this)
-  mle_per_config/    # MLE per-config PDFs (tau_sweep_* + tau_sweep_*_tau_sensitivity)
-  figures/           # design_samples_8panel + design_samples_option1_overlays
-  six_design_manuscript/  # 6-design stats re-run + named-label figures (both manuscripts pull from here)
-  archive/
-    pre_tau_sweep_20260408/  # Archived pre-sweep deliverables
-paper/
-  report/
-    IncidenceSpatialCRT_Report.{qmd,html,pdf}  # Unified report (now 50+ pages with tau section)
-  archive_manuscript/  # Retired paper/manuscript/ + paper/section_drafts/ content (reference only,
-                        # byte-identical to last commit before this location was retired 2026-07-02)
-  ctj_manuscript/
-    CTJ_Manuscript.{tex,pdf}  # Clinical Trials (SAGE) submission draft
-    figures/
-  dissertation_chapter/
-    Dissertation_Chapter.{qmd,pdf}  # Longer-form dissertation chapter draft
-    figures/
-    shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink, see note above
-  SpatialCRT_IncidenceDesign.bib  # Single bibliography shared by both manuscripts
-  SAGE_Journal_Template/      # sagej.cls, SageH.bst, SageV.bst (CTJ render dependency)
-```
-
-**Git:** Original work on `claude/gallant-buck` → `main` 2026-03-05.
-Reorganized into `projects/IncidenceDesign/` on `claude/dreamy-wiles`.
-Statistical comparisons + report expansions on `claude/elated-lederberg`.
-Tau-sweep + MC SEs + Power implementation on `main` 2026-04-08.
-Tau-sweep results integrated, all reports regenerated on `main` 2026-04-08.
-CTJ + dissertation-chapter manuscript first drafts on `main` 2026-07-02.
-CTJ Supplementary Information + ranked figures on `main` 2026-07-03.
-Real-data ingestion pipeline (`run_application_profiles.R`) added on `main` 2026-09-04.
+- **CTJ manuscript:** needs TinyTeX on `PATH` plus `TEXINPUTS`/`BSTINPUTS=".:../SAGE_Journal_Template:"` to find `sagej.cls`/`SageV.bst`.
+- **Dissertation chapter bibliography:** reference it via the `shared-refs.bib` symlink in `paper/dissertation_chapter/`, not `../SpatialCRT_IncidenceDesign.bib` directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib filenames referenced from YAML.
+- Earlier "Prior State" logs (2026-04-08 to 2026-09-04) were removed from this file on 2026-09-29; see `git log -p AGENTS.md` for them.
 
 ---
 
@@ -746,78 +502,7 @@ Revised 2026-09-24 for the simulation revision (spec: `docs/plans/simulation-rev
 
 ---
 
-## Visualization Functions (`06_visualizations.R`)
-
-**Helpers:**
-- `inc_config_label(inc_mode, rho_x)` — human-readable config label string
-- `split_by_incidence_config(results)` — splits combined df into named list of per-config dfs
-- `load_latest_results(results_dir, estimation_mode)` — loads most recently modified .rds; auto-detects `sim_data/` subdirectory if present
-
-**Plots** (each accepts `results` df + `inc_label` string):
-- `plot_mse_by_neighbor()` — boxplot of MSE by design, faceted by rook/queen
-- `plot_mse_heatmap()` — tile heatmap: rho x design, cell = avg MSE
-- `plot_mse_per_design()` — per-design MSE line plots across gamma, one panel per design
-- `plot_master_comparison()` — bar chart sorted by MSE for a given neighbor type
-- `plot_coverage_by_design()` — boxplot of coverage by design (red dashed line at 0.95)
-- `plot_incidence_heatmaps()` — side-by-side grid heatmaps of iid/spatial/poisson incidence
-- `plot_incidence_distributions()` — faceted density plots comparing incidence distributions
-- `plot_design_ranks()` — stacked bar of rank-frequency ("win rates") per design
-- `plot_bias_variance()` — stacked bar of Bias-squared + Variance components per design
-- `plot_coverage_mse_tradeoff()` — scatter: each point = 1 scenario, x=MSE, y=Coverage
-
-**Tables** (each prints to console, returns invisible):
-- `table_design_ranks()` — win-rate frequency table
-- `table_robustness()` — best/Q25/median/Q75/worst MSE per design
-- `table_pairwise_dominance()` — % of scenarios where row-design beats col-design
-- `table_sensitivity()` — eta-squared for Rho, Gamma, Spillover_Type, Neighbor_Type per design
-- `table_stratified(results, group_by_vars, inc_label)` — flexible grouping by any combination
-- `table_comprehensive()` — full scenario-level detail (first 30 rows by default)
-
-**Runners:**
-- `run_standard_tables(results, inc_label)` — all 10 standard tables for one config
-- `run_all_visualizations(results, results_dir, estimation_mode, output_pdf=TRUE)` — full pipeline
-
----
-
-## Design Recommendation Functions (`08_design_recommendations.R`)
-
-Sources `06_visualizations.R`. Answers three personalization questions.
-**Always run on MLE results only** (`estimation_mode = "MLE_tau_sweep"`, the oracle file; the default since 2026-09).
-
-**Core utility:**
-- `rank_designs_by_group(results, group_vars, metric)` — rank designs by avg MSE within groups
-
-**Q1 — Per incidence mode:**
-- `table_incidence_rankings(results)` — console table: design rank + MSE + Coverage per config
-- `plot_incidence_rankings(results)` — faceted bar chart: avg MSE per design per config
-- `plot_incidence_coverage(results)` — faceted bar chart: avg Coverage per design per config
-
-**Q2 — Per parameter level (marginal):**
-- `table_marginal_rankings(results, param, inc_label)` — wide table: param levels × designs, cells = MSE (#Rank)
-- `plot_rank_trajectories(results, param, inc_label)` — line plot of rank vs parameter level (1 = best at top)
-- `plot_conditional_mse(results, param, inc_label)` — faceted boxplot: MSE distribution per design at each param level
-
-**Q3 — Per parameter combination:**
-- `plot_best_design_heatmap(results, row_param, col_param, inc_label)` — tile heatmap: winning design per (row, col) combo
-- `table_scenario_lookup(results, rho, gamma, spill_type, nb_type, inc_label)` — filter to specific params, rank designs, print recommendation
-
-**Summary:**
-- `generate_commentary(results, inc_label)` — 6-finding programmatic narrative: winner, dominance %, stability, coverage, sensitivity, recommendation
-- `run_recommendation_report(results, estimation_mode, output_pdf, default_tau, nb_type = "queen")` — master orchestrator → `results/MLE_tau_sweep_design_recommendations_<nb>.pdf` (`nb_type = NULL` pools, labeled "pooled")
-
-**Validation:**
-- `validate_recommendations(results)` — 8 unit tests for new functions
-- `validate_no_side_effects(results)` — 6 integration tests verifying existing modules unaffected
-
----
-
 ## Extensions & Future Work Roadmap
-
-### Completed (as of 2026-04-08)
-- **Tau-sweep:** COMPLETE — 12,800 scenarios, τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}, all reports integrated
-- **True_Tau dimension in Quarto reports:** COMPLETE — all 6 report files updated
-- **Power metric:** COMPLETE — P(reject H₀: τ=0) tracked per scenario
-- **Monte Carlo SEs:** COMPLETE — N_Valid_Est, SE_MSE columns; delta-method SE_MSE = √(2SD⁴ + 4Bias²SD²)/√N
 
 ### Simulation Extensions (open)
 
