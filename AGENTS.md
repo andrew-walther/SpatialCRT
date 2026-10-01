@@ -1,124 +1,71 @@
-# AGENTS.md — AI Session Context for SpatialCRT
+# AGENTS.md — SpatialCRT
 
-> Cross-project orchestrator. For project-level detail, see:
-> - `projects/SpillSpatialDepSim/AGENTS.md`
-> - `projects/IncidenceDesign/AGENTS.md`
+Cross-project orientation for agent sessions (Claude Code, Codex). `CLAUDE.md`
+only imports this file; edit it here. Project-level detail:
+- `projects/SpillSpatialDepSim/AGENTS.md`
+- `projects/IncidenceDesign/AGENTS.md` (and `application/AGENTS.md`)
 
----
+## Projects
 
-## Repository Overview
-
-**SpatialCRT** evaluates treatment assignment designs for **Spatial Cluster Randomized
-Trials (CRTs)** where outcomes exhibit spatial heterogeneity and spillover is present.
-Application domain: NC law enforcement / SUD prevention policy.
-
----
-
-## Two Active Projects
-
-| | SpillSpatialDepSim | IncidenceDesign |
+| | SpillSpatialDepSim (Project 1) | IncidenceDesign (Project 2, primary) |
 |-|--------------------|-----------------|
 | **Location** | `projects/SpillSpatialDepSim/` | `projects/IncidenceDesign/` |
-| **Grid** | 2×4 / 3×3 / 3×4 (8–12 districts) | 10×10 (100 clusters) |
-| **Estimand** | alpha, beta, psi, rho | tau (direct treatment effect) |
-| **Question** | Block vs. random assignment with spillover | Which design minimizes MSE across incidence modes? |
-| **Status** | **Complete** (original + UnifiedSpatialSim scripts) | **Simulation revised + re-run 2026-09-24**; real NC SUD data aggregated to 58 clusters 2026-09-25; manuscripts being rewritten |
+| **Question** | Block stratified vs. simple random assignment under spillover | Which of 8 designs minimizes MSE for τ under heterogeneous incidence? |
+| **Status** | **Accepted** at *BMC Medical Research Methodology* (final source: `paper/Manuscript Revisions/Revision 2c/`) | Simulation revised + re-run 2026-09-24; chapter rewritten (Phase D); CTJ manuscript + SI still carry April 2026 numbers (manuscript plan step 5); real-data application next |
 | **Entry point** | `code/SpatialSim_NC_DOC.Rmd` | `code/05_run_simulation.R` |
 
-### How the Projects Relate
+IncidenceDesign's current results and design list are in `README.md` and
+`projects/IncidenceDesign/AGENTS.md`. The April 2026 numbers are superseded
+(`projects/IncidenceDesign/results/archive/pre_revision_20260924/README.md`).
 
-SpillSpatialDepSim is the **applied predecessor**: it established the simulation
-framework (SAR model, spillover types, block stratification logic) that IncidenceDesign
-extended to a larger grid with heterogeneous outcome incidence and 8 formal design
-strategies.
+## Rules
 
----
+- **Writing:** no mannered prose. Say what you mean in literal terms, in
+  prose, docs, and comments alike.
+- **Restricted data.** This repo is public. The NC sudden-unexpected-death
+  source files (`application/data/final_county_sudden.csv`,
+  `sudden_county_year.csv`, `data/derived/`) are git-ignored and must never
+  be committed. Results aggregated to the 58 community-college clusters may
+  be tracked, and aggregate statistics in docs are acceptable (author
+  decision 2026-10-01).
+- **Dissertation Chapter 3 sync.**
+  `projects/IncidenceDesign/paper/dissertation_chapter/Dissertation_Chapter.qmd`
+  is the only copy anyone edits. A post-commit hook
+  (`dissertation_chapter/tools/`, installed by `install_hooks.sh`) runs
+  `sync_to_prelim.sh`, which renders it with RStudio's Quarto 1.10 and
+  commits the result in `~/GithubProjects/bios-dissertation`. The prelim
+  YAML header is `tools/prelim_header.yml` (sets `colorlinks: false`, so
+  links print black). The sync never pushes.
+- **Commits:** stage specific paths, never `git commit -a`.
+- License: MIT (`LICENSE`).
 
-## Research Focus (IncidenceDesign — PRIMARY)
-
-**Primary question: which treatment assignment design minimizes MSE for tau?**
-The 8 designs are: Checkerboard (1), High Incidence Focus (2), Saturation Quadrants (3),
-Isolation Buffer (4), 2x2 Blocking (5), Balanced Quartiles (6), Balanced Halves (7),
-Incidence-Guided Saturation Quadrants (8).
-
-**Oracle ML spatial-lag estimator is primary** (validated lean engine `fit_sar_lag()` ≡
-`lagsarlm`); a non-oracle fit is a sensitivity analysis. DIM is a pre-revision naive
-baseline only.
-
-Key results (2026-09 revision, full re-run 2026-09-24; 12,800 scenarios × 250 fits per
-estimator; queen primary; τ = 1; 6 manuscript designs):
-- **Best design: Incidence-Guided Saturation Quadrants** (queen MSE 0.091, rook 0.072), then
-  Balanced Quartiles (0.131 / 0.084)
-- **Worst: Checkerboard** (queen MSE 1.09). Under rook its τ is not identified
-  (WZ = 1 − Z): coverage 0.15, estimates kept but flagged
-- Coverage ≈ 0.94 for every other design; under queen the rank order is identical at every τ ∈ {0.8, …, 3.0} (under rook, 2x2 Blocking and Isolation Buffer swap at τ = 0.8)
-- April 2026 numbers (MSE 0.079 / 0.802, etc.) are superseded; see
-  `projects/IncidenceDesign/results/archive/pre_revision_20260924/README.md`
-- Manuscripts (CTJ, SI, chapter) still carry the April numbers until they are rewritten
-  (manuscript plan step 0 remainder / step 5)
-
----
-
-## Repository Structure
+## Structure
 
 ```
-SpatialCRT/
-  AGENTS.md                    # This file (CLAUDE.md imports it)
-  README.md                    # Human-facing overview
-  SpatialCRT.Rproj             # Single .Rproj at root
-  projects/
-    SpillSpatialDepSim/        # Project 1 (applied, NC DOC context)
-      AGENTS.md  README.md
-      code/      data/  results/  paper/
-    IncidenceDesign/            # Project 2 (systematic design study)
-      AGENTS.md  README.md
-      code/      results/
-      paper/
-        report/                  # Unified project report (HTML + PDF)
-        manuscript/              # Modular Quarto manuscript (child sections)
-        section_drafts/          # Archival LaTeX drafts + bibliography
-  archive/                     # Legacy/exploratory (not maintained)
-    README.md
-    PreliminarySpatialSim/
-    SpatialSim_Unified/
-    OutcomeIncidenceDesign_Legacy/
+projects/
+  SpillSpatialDepSim/   code/ data/ results/ paper/
+  IncidenceDesign/      code/ results/ docs/ longleaf_setup/
+    application/        data/ (restricted files ignored) code/ results/ report/
+    paper/              dissertation_chapter/ ctj_manuscript/ report/ archive_manuscript/
+archive/                legacy work, not maintained
 ```
 
----
+Cross-project paths from IncidenceDesign code:
+`here::here("projects", "SpillSpatialDepSim", "results")`.
 
-## Cross-Project Path Reference
-
-From IncidenceDesign code, reference SpillSpatialDepSim results via:
-```r
-here::here("projects", "SpillSpatialDepSim", "results")
-# or relative: ../../SpillSpatialDepSim/results/
-```
-
----
-
-## Getting Started
+## Getting started
 
 ```r
-# Open the project
 # File > Open Project > SpatialCRT.Rproj
-
-# IncidenceDesign — load completed results
 setwd("projects/IncidenceDesign/code")
 source("06_visualizations.R")
 mle_results <- load_latest_results(estimation_mode = "MLE_combined")
-
-# SpillSpatialDepSim — reproduce paper results
-setwd("projects/SpillSpatialDepSim/code")
-rmarkdown::render("SpatialSim_NC_DOC.Rmd")
-rmarkdown::render("SimEstimateAnalysisAll.Rmd")
 ```
 
----
+Shared packages: `sf`, `spdep`, `spatialreg`, `dplyr`, `tidyr`, `ggplot2`,
+`viridis`, `rmarkdown`, `knitr`, `digest`, `parallel`, `here`.
 
-## Shared Packages
+## Planned
 
-```r
-install.packages(c("sf", "spdep", "spatialreg", "dplyr", "tidyr",
-                   "ggplot2", "viridis", "rmarkdown", "knitr",
-                   "digest", "parallel", "here"))
-```
+Split into separate SpatialCRT-Spillover and SpatialCRT-Incidence repos
+after the CTJ submission.
