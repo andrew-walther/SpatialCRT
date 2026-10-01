@@ -208,3 +208,233 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 - [x] **Two manuscripts drafted from scratch** — Short *Clinical Trials* (SAGE) submission (`paper/ctj_manuscript/`) and longer-form dissertation chapter (`paper/dissertation_chapter/`), both presenting 6 of the 8 designs (2 dropped as statistically redundant), no DIM-vs-MLE comparison, full design names throughout. *(2026-07-02)*
 - [x] **CTJ Supplementary Information drafted and reviewed** — Fulfills the main text's 3 deferred "online supplementary material" items (reproducibility/code, full 8-design comparison, metric formulas/parameter grid); reviewed by a fresh agent against the plan's hard constraints. *(2026-07-03)*
 - [x] **NC application maps added to both manuscript documents** — 3 maps from `application/` added to the SI (Figures S8-S10) and main text (Figure 4); coverage + tau-sensitivity figures merged into one to preserve the CTJ's 6-exhibit cap. *(2026-07-03)*
+
+---
+
+## Open Work Moved from AGENTS.md (2026-10-01)
+
+Moved verbatim from `AGENTS.md` "Extensions & Future Work Roadmap" (done rows removed
+2026-10-01).
+
+### Simulation Extensions (open)
+
+| Priority | Extension | Implementation Note |
+|----------|-----------|---------------------|
+| Medium | **Heterogeneous population** Poisson mode | `pop_mode = "heterogeneous"` in `05`; extend `generate_incidence_poisson()` for unequal cluster sizes |
+| Medium | **Grid sensitivity** | Change `grid_dim` to 8 or 15 in `05`; tests D3/D8 dominance at different spatial scales |
+| Low | **DIM tau-sweep** | Re-run DIM across all τ levels for power curve comparison (DIM is confirmed naive baseline) |
+| Low | **Heterogeneous beta** | Vary `beta` coefficient across simulation configs |
+
+### Manuscript Development (open)
+
+First full drafts of both manuscripts, plus the CTJ Supplementary Information,
+are complete (see Current State above: `paper/ctj_manuscript/`,
+`paper/dissertation_chapter/`). Remaining work:
+
+| Priority | Task | File |
+|----------|------|------|
+| **NEXT UP** | **Plan the application simulation study** (paused 2026-09-25; data and weights ready, see Current State): plan + run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers AND maps | `application/code/`; `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
+| **High** | **Write, revise, and submit the manuscript(s)** with explicit consideration for reuse in the user's preliminary oral exam (literature review & project proposal) and final thesis (as a thesis chapter) — not scoped to journal submission alone | `paper/ctj_manuscript/`, `paper/dissertation_chapter/` |
+| High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
+| High | Full review of the main-text + SI figure list to deliberately decide what to keep/drop/combine (the coverage+tau merge done 2026-07-03 was a quick fit for the new NC incidence map, not a considered final selection) | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` |
+| Medium | Fix the pre-existing `plot_cd_diagram()` label-collision bug (designs with adjacent ranks overlap regardless of image width) — currently worked around by omitting the CD diagram from the dissertation chapter's inline exhibits | `code/10_statistical_comparisons.R` |
+| Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |
+
+---
+
+## Progress Log (moved from AGENTS.md 2026-10-01)
+
+Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
+checkpoints here, not in `AGENTS.md`.
+
+### Continuation note (2026-09-27): SRS and Chapter 2 decisions
+
+Read `docs/plans/ch2_check_findings_2026-09-27.md` with `docs/plans/TODO.md` before
+continuing manuscript work. It records the restricted Chapter 2 reproduction and
+subsequent review of the accepted PDF, including the allocation-level figures/tables.
+Current code and stored CSV agree at 3×4 checkerboard MSE 0.22555, whereas the accepted
+exhibit reports 0.0004; the exhibit's historical inputs have not been traced. This is
+a limited reproduction discrepancy, not a settled explanation of cross-study results.
+The author regards Project 1 as final: keep SpillSpatialDepSim and bios-dissertation
+read-only. SRS framing, Checkerboard placement and the Chapter 2 link remain open;
+no chapter/CTJ edits were made. Save future key findings in this project's `docs/plans/`.
+
+**Author-confirmed reference rule (2026-09-27):** dissertation prose may refer directly
+to "Chapter 2". CTJ must use self-contained wording (e.g., "In previous work...")
+with a citation to the Project 1 BMC Medical Research Methodology paper, never
+"Chapter 2" or "Project 1" as reader-facing references. Describe findings within
+their studied conditions; verify final bibliographic details before adding the citation.
+
+**New analysis requested (2026-09-27):** assess allocation-specific MSE variation
+and upper tails for every candidate design and SRS before final recommendations.
+Existing runs use one noise draw per allocation draw and cannot isolate this risk
+from outcome noise. **The author subsequently authorized the necessary pilot/analysis
+and subagents.** The nested pilot is complete; see
+`docs/plans/allocation_risk_findings_2026-09-27.md` for results, precision checks and
+reproduction commands. The older
+"pending approval" statements in the chronological findings note predate this authorization.
+
+**Allocation-risk pilot (2026-09-27):** new scripts 16–18 and isolated
+`results/allocation_risk/` outputs; existing modules/main outputs unchanged. Queen,
+oracle, tau=1; first two surfaces of five configurations, rho=0/0.5,
+gamma=0.5/0.8, both regimes, all nine designs. Pilot: 100 assignment draws × 100
+outcomes per unique allocation, 5,617,600 successful fits, no warnings/aliases.
+IGSQ/SRS mean-MSE ratio = 0.649 under control-only, 1.070 under both-arms.
+Control-only estimated worst-decile ratio = 0.555; finite-outcome noise requires
+reading this with the targeted R=400 check in the findings note. Plain Saturation
+Quadrants also performs strongly; incidence guidance is not shown uniquely optimal.
+The R=400 check completed 50 selected blocks (1.5 million additional fits, no
+failures/warnings/aliases), preserving the regime distinction; its control-only
+IGSQ/SRS mean and estimated worst-decile ratios are 0.658 and 0.527. Individual
+tail membership remains noisy. Full pilot plus refinement: 7,117,600 distinct fits.
+Never substitute these selected-surface/corner numbers for the full-study numbers.
+Manuscript framing/Checkerboard placement remain author decisions; revised real-SUD
+application remains pending. Project 1 and bios-dissertation remain read-only.
+
+### Current State (as of 2026-09-25): real SUD data aggregated
+
+**The real NC SUD data are aggregated to the 58 community college clusters.** The design
+comparison on them is the next plan. Plan of record:
+`~/.claude/plans/read-the-prompt-at-gentle-willow.md`.
+
+- **SUD data details** (sources, numerator decision 23,523 vs 21,147, rate formulas, outputs,
+  contiguity weights, code layout, Habib script notes): see [application/AGENTS.md](application/AGENTS.md).
+- **Chapter Application text (updated 2026-09-25, commit eb4db79):** framed as a proposal.
+  Data preparation (aggregation, yearly rates, weights, checks) is reported as done; the design
+  application is planned. A hidden HTML-comment TODO stub lists the planned exhibits. Open
+  `NEEDS-AUTHOR-CONFIRMATION` comments sit inline, including a possible error: the text says
+  "zip-code pooling", but the data are keyed by county code. The application runner itself is
+  still pre-revision (`lagsarlm`, old seeding).
+
+#### Phase D chapter rewrite (2026-09-24/25): steps 0–4 and 7 done; chapter synced to the prelim
+- `paper/dissertation_chapter/Dissertation_Chapter.qmd` is rewritten on the revised run:
+  - Methods (from the spec), Results (robust vs. fragile; queen primary; rook sensitivity;
+    non-oracle; τ stability), Discussion, and a brief Chapter 2 link through its β̂ ≈ β − ψ
+    collinearity result.
+  - Static Table 2; queen/rook figure pairs (Figures 1–4, including bias–variance).
+  - Renders at 40 pp.
+- Six fresh-reviewer passes. Passes 4–6 had no ERROR outside the Application.
+  `docs/plans/step0-chapter-review-prompt.md` is the current review brief; it holds the
+  settled decisions.
+- **Finding to remember:** under queen, the control-only lead of Incidence-Guided Saturation
+  Quadrants holds only up to τ = 1.5. Isolation Buffer matches it at τ = 2 and passes it at
+  τ = 3. The recommendation rests on lowest pooled MSE and first/second in each regime at
+  every τ.
+- **Step 3 draft for author review:** `paper/dissertation_chapter/notes/step3_exhibit_fate.md`.
+  It covers body vs. appendix, the appendix outline A1–A6 (A5 = oracle vs non-oracle table; A6 = technical notes on
+  anticipated committee questions), and a new deliverable: Q&A backup slides plus a written
+  companion doc for the full prelim.
+- **Figure code:** `code/12`/`14` got cosmetic fixes (plotmath τ/ρ, captions, legend order).
+  Numeric outputs are unchanged.
+- **Bib:** `paper/SpatialCRT_IncidenceDesign.bib` is synced to the master. Printing fields
+  absent from the master were dropped, so the CTJ loses publisher cities (revisit at step 5).
+  The five test citations were added to `bios-dissertation/prelim/references.bib`
+  (local commit b1e90b3, not pushed).
+- **Step 3 applied (author-approved, 2026-09-25):**
+  - body adds Table 3 (MSE by configuration), Figure 1 (design samples) and Figure 6 (service areas);
+  - the appendix has A1 (eight designs), A2 (simulation mechanics), A3 (CD diagrams, coverage
+    across τ) and A4 (technical notes from a full re-run, `notes/a5_technical_notes.md`);
+  - the final fresh review had no ERRORs, and its WARNs are fixed. Standalone render: 56 pp.
+- **Step 7 / sync (author decision: the SpatialCRT `.qmd` is the only file edited):**
+  - `paper/dissertation_chapter/tools/sync_to_prelim.sh` generates
+    `bios-dissertation/prelim/project-proposals/project2-incidence/draft/project2-incidence-draft.qmd`
+    (CHAPTER 3 / APPENDIX B). It checks every citekey against the master bib, failing loud,
+    renders, and commits only `project2-incidence/` paths there. It never pushes.
+  - A `post-commit` hook (install with `tools/install_hooks.sh`) runs it when a commit touches
+    the chapter, its figures, `tools/` or the bib. Its log is `tools/sync.log` (gitignored).
+  - Cross-references are `\label`/`\ref`, so numbers read 3.x / B.x in the prelim.
+  - Prelim render (step 4): body 41 pp, appendix 13, references 3; 59 pp with the TOC preview.
+  - The class (`bios-prelim.cls`) handles both pandoc `CSLReferences` forms since 2026-09-25,
+    so the header no longer patches it. `tools/prelim_header.yml` sets `colorlinks: false`
+    (2026-10-01): Quarto 1.10 otherwise prints links blue.
+- **Author review of the prelim render (2026-09-25), applied (commit 02a70d9):**
+  - queen figures in the body; the rook MSE/coverage/bias-variance figures are in Appendix A4;
+    the τ figure is a single side-by-side queen|rook plot;
+  - floats are `[!htb]` with smaller figures, so none lands alone on a page or after the
+    chapter end;
+  - A2 has no script or function names;
+  - the technical notes (now A6) are one formal subsection, and the regime-gap note moved to
+    the Q&A notes;
+  - SUD counts are 23,523, with the heart-failure inclusion explained.
+  - Standalone 53 pp; prelim 56 pp.
+  - The design palette ends at viridis `end = 0.85` so Checkerboard is visible; the colours
+    are consistent across the τ and coverage figures.
+  - The sync skips PDF-only re-renders.
+  - The Chapter 2 audit is paused by the author. Chapter 2 is accepted and final: any critique
+    of it stays light.
+- **Pending:**
+  - author confirmation of the inline `NEEDS-AUTHOR-CONFIRMATION` items;
+  - a Chapter 2 audit (separate session), because Chapter 2's 3×4/3×3 block-stratified numbers
+    contradict its own β̂ ≈ β − ψ.
+- **TO DO before the CTJ (author, 2026-09-25): add Simple Random Sampling as a benchmark design.**
+  There is currently no naive baseline: Checkerboard continues Chapter 2 but isn't a generic
+  benchmark. Plan it in a dedicated session. Open choices:
+  - complete randomization with exactly 50 treated (recommended) vs Bernoulli;
+  - SRS as a 7th ranked design vs a separate reference;
+  - a relative-efficiency column (MSE / MSE_SRS).
+
+  Key-seeded draws (spec §4: the Z key includes d; ε and X are shared per block/config) mean
+  existing designs' results should be reproduced exactly by the rerun, which makes a free
+  verification check. It touches:
+  - `03`, `05` (re-run, ~14 min);
+  - summaries `12`–`14` (rank-based statistics change: Friedman, Nemenyi, win rates, CD
+    diagrams);
+  - chapter numbers and figures;
+  - the application study.
+- **Next:** CTJ derivation (manuscript step 5); integrate the application results as they land.
+
+### Prior State (as of 2026-09-24)
+
+**Simulation revision (step 0.5): re-run COMPLETE; downstream regeneration (Phase C) in progress.**
+Plan: `docs/plans/simulation-revision-plan.md`; method authority:
+`docs/plans/simulation-revision-spec.md`. All April 2026 numbers are superseded (archived in
+`results/archive/pre_revision_20260924/`, with a README).
+
+- **What changed:** M1–M8. Matched surfaces; 100,000 people per Poisson cluster; random
+  tie-breaking, with High Incidence Focus and Balanced Quartiles treating exactly 50 (the
+  latter a user decision after the pilot); key-based seeds; one noise column per fit;
+  aliasing flagged (estimates kept); a non-oracle estimator (Y ~ Z + X) as sensitivity; MC SEs
+  from 10 surface means; manifest-checked checkpoints; the lean `fit_sar_lag()` engine
+  (validated on 5,120 fits, max |Δτ̂| 9.7e-8, ~120× faster).
+- **Full run:** `results/sim_data/sim_results_{MLE,MLEnonoracle}_tau_sweep_combined_20260924_025509.rds`.
+  12,800 scenarios × 250 fits per estimator (6.4M fits, 13.9 min on 10 workers).
+  `full_run_verification.txt`: all checks pass; zero non-aliasing warnings. Aliasing hits
+  every Checkerboard × rook fit, plus 20 Isolation Buffer × rook scenarios where one draw
+  happened to be the exact checkerboard. The 1% `lagsarlm` cross-check is in
+  `results/estimator_validation/crosscheck_full_run.txt`.
+- **Headline (oracle, τ = 1, 6 designs):**
+
+  | Design | Queen MSE | Rook MSE |
+  |---|---|---|
+  | Incidence-Guided Saturation Quadrants | 0.091 | 0.072 |
+  | Balanced Quartiles | 0.131 | 0.084 |
+  | Isolation Buffer | 0.160 | 0.133 |
+  | High Incidence Focus | 0.245 | 0.206 |
+  | 2x2 Blocking | 0.319 | 0.128 |
+  | Checkerboard | 1.087 | 0.480 |
+
+  - Coverage is ≈0.94 for every design except Checkerboard × rook (0.15; τ not identified).
+  - Under queen the rank order is the same at every τ (under rook, 2x2 Blocking and Isolation Buffer swap at τ = 0.8).
+  - Every adjacent pair is significant on 50 independent config × surface units.
+  - Saturation Quadrants and Balanced Halves remain indistinguishable from their retained
+    counterparts, so the 6-design set is kept (user decision, 2026-09-24).
+  - Non-oracle: bias −0.12 to −0.40 and coverage 0.51–0.90 for all designs, but lower
+    variance where Z and WZ are collinear (queen Checkerboard MSE 1.09 → 0.11).
+- **Research framing (user, 2026-09-24):** the question is which designs estimate τ well
+  under heterogeneous incidence, NOT whether knowing incidence helps.
+- **Outputs regenerated:**
+  - `results/six_design_manuscript/{,queen/,rook/}`, `six_design_manuscript_nonoracle/`,
+    `eight_design_supplementary/`
+  - `results/MLE_tau_sweep_*.pdf`, `results/MLE_statistical_comparisons.pdf`, `mle_per_config/`
+  - `results/figures/design_samples_8panel.*`
+- **Not yet updated:** the CTJ manuscript and SI still carry the April numbers. They stay
+  untouched until manuscript step 5 ("numbers superseded"). The application is not re-run
+  (14(d)'s table is labeled STALE).
+- **SUD data attribution (2026-09-24):** the Application passages of the CTJ, SI (S11), and
+  chapter now credit Habib's master's paper (`habib_temporal_2026`) for the county-level
+  data: working-age (18–64) sudden unexpected out-of-hospital deaths, 2018–2021, 21,147 of
+  412,514 NC deaths (111,665 working-age), via the SUDDEN-validated algorithm
+  (`gan_factors_2019`, `nanavati_sudden_2014`); we aggregate them to the 58 CC clusters. This
+  replaced the wrong "~100,000 death certificates" and "epidemiology co-investigator" wording.
+- (Superseded: Phase C and Phase D are done; see Current State above. The single
+  recommended design for investigators is still the author's decision to make.)

@@ -2,9 +2,13 @@
 
 **Evaluating treatment assignment strategies for spatial CRTs with spillover and spatial dependence.**
 
-Applied context: NC Department of Corrections (NC DOC) training intervention across
-judicial districts, where outcomes (SUD recidivism) exhibit spatial correlation and
-treated districts may spill over into adjacent districts.
+Applied context: North Carolina Department of Adult Correction (formerly NC DOC)
+probation interventions assigned across judicial districts, where outcomes are spatially
+correlated and treated districts may spill over into adjacent districts.
+
+**Status: accepted** at *BMC Medical Research Methodology*. Final source and PDF:
+`paper/Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.{tex,pdf}`.
+This is Chapter 2 of the author's dissertation.
 
 ---
 
@@ -49,13 +53,19 @@ separately for Random vs. Block assignment groups.
 
 ## Key Findings
 
-Across grid sizes and parameter configurations:
-- Block-stratified assignments do not consistently outperform random assignments
-- The optimal treatment combination depends on the specific parameter configuration
-- Higher spatial autocorrelation (rho=0.01 vs 0.00) affects MSE for rho estimation
-  but has modest effects on beta/psi estimation
+From the accepted paper:
+- Simple random sampling (SRS) can reach lower average MSE for the intervention effect,
+  but its MSE varies widely across treatment combinations, so a single allocation can
+  perform poorly.
+- Block stratified sampling (BSS) gives nearly constant MSE across combinations, which
+  bounds worst-case allocation risk, though it does not reach the minimum error.
+- Both designs show substantial bias when the treatment and spillover indicators are
+  collinear.
+- The preferred design depends on the spillover mechanism; BSS is most advantageous when
+  spillover flows mainly into control clusters.
 
-See `paper/SpatialCRT_Manuscript_V2.pdf` for the full manuscript.
+See `paper/Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf`
+for the full paper.
 
 ---
 
