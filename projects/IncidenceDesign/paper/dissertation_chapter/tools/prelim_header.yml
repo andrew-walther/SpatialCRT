@@ -29,6 +29,7 @@ classoption: [12pt, prelim]
 format:
   pdf:
     pdf-engine: pdflatex        # class uses fontenc+lmodern, not fontspec
+    colorlinks: false           # Quarto 1.10 colors links by default, overriding hidelinks
     number-sections: true       # REQUIRED, see the lit-review draft's comment
     toc: false                  # the class generates the TOC, not pandoc
     top-level-division: chapter
