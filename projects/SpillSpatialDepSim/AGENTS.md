@@ -9,8 +9,14 @@
 
 **SpillSpatialDepSim** evaluates treatment assignment strategies for spatial cluster
 randomized trials (CRTs) in the presence of **spillover effects** and **spatial
-dependence**. Applied context: NC Department of Corrections training intervention
-across judicial districts, with SUD/recidivism outcomes.
+dependence**. Applied context: North Carolina Department of Adult Correction (formerly
+NC DOC) probation interventions assigned across judicial districts.
+
+**Status: final.** Accepted at *BMC Medical Research Methodology*. Final LaTeX source and
+PDF: `paper/Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/`
+(`Revisions_V2c.tex/.pdf`). It is Chapter 2 of the dissertation (ported into
+`bios-dissertation/prelim/project-proposals/project1-spillover/`). Treat code, results,
+and paper as read-only unless the author asks otherwise.
 
 **Core question:** Does block-stratified vs. random treatment assignment affect
 estimation quality for intervention effects when spillover is present?
@@ -113,10 +119,10 @@ SpillSpatialDepSim is the **applied predecessor** of IncidenceDesign. Key differ
 |--------|-------------------|-----------------|
 | Grid | 2×4/3×3/3×4 (8–12 districts) | 10×10 (100 clusters) |
 | Estimand | alpha, beta, psi, rho | tau (direct treatment effect) |
-| Incidence | Single mode | 3 modes (iid, spatial, Poisson) |
-| Designs | Applied NC DOC configurations | 6 systematic designs |
-| Estimators | SAR lagsarlm | DIM + MLE (lagsarlm oracle) |
-| Status | **Complete** (original + UnifiedSpatialSim) | Complete |
+| Incidence | Single mode | 3 modes (iid, spatial, Poisson), matched surfaces |
+| Designs | Applied NC judicial-district configurations | 8 systematic designs (6 in the manuscripts) |
+| Estimators | SAR lagsarlm | Oracle ML spatial lag (`fit_sar_lag()`), non-oracle sensitivity |
+| Status | **Accepted** (BMC MRM) | Simulation revised 2026-09-24; chapter rewritten; application pending |
 
 Cross-reference: `here("projects", "SpillSpatialDepSim", "results")` from
 IncidenceDesign code.

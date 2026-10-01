@@ -322,8 +322,9 @@ comparison on them is the next plan. Plan of record:
     the chapter, its figures, `tools/` or the bib. Its log is `tools/sync.log` (gitignored).
   - Cross-references are `\label`/`\ref`, so numbers read 3.x / B.x in the prelim.
   - Prelim render (step 4): body 41 pp, appendix 13, references 3; 59 pp with the TOC preview.
-  - The generated header patches the class's FRAGILE `CSLReferences` for current Quarto. The
-    class itself still needs the fix, which also affects Chapter 2 and the lit review.
+  - The class (`bios-prelim.cls`) handles both pandoc `CSLReferences` forms since 2026-09-25,
+    so the header no longer patches it. `tools/prelim_header.yml` sets `colorlinks: false`
+    (2026-10-01): Quarto 1.10 otherwise prints links blue.
 - **Author review of the prelim render (2026-09-25), applied (commit 02a70d9):**
   - queen figures in the body; the rook MSE/coverage/bias-variance figures are in Appendix A4;
     the τ figure is a single side-by-side queen|rook plot;
@@ -413,8 +414,8 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
   412,514 NC deaths (111,665 working-age), via the SUDDEN-validated algorithm
   (`gan_factors_2019`, `nanavati_sudden_2014`); we aggregate them to the 58 CC clusters. This
   replaced the wrong "~100,000 death certificates" and "epidemiology co-investigator" wording.
-- **Next:** finish Phase C, then Phase D (chapter Methods/Results rewrite). The single
-  recommended design for investigators is still the author's decision to make.
+- (Superseded: Phase C and Phase D are done; see Current State above. The single
+  recommended design for investigators is still the author's decision to make.)
 
 ## Build gotchas
 
@@ -508,7 +509,6 @@ Revised 2026-09-24 for the simulation revision (spec: `docs/plans/simulation-rev
 
 | Priority | Extension | Implementation Note |
 |----------|-----------|---------------------|
-| High | **Non-oracle MLE** (`include_spill_covariate = FALSE`) | Toggle already in `estimate_tau()`; run `05_run_simulation.R` with `include_spill_covariate = FALSE` |
 | Medium | **Heterogeneous population** Poisson mode | `pop_mode = "heterogeneous"` in `05`; extend `generate_incidence_poisson()` for unequal cluster sizes |
 | Medium | **Grid sensitivity** | Change `grid_dim` to 8 or 15 in `05`; tests D3/D8 dominance at different spatial scales |
 | Low | **DIM tau-sweep** | Re-run DIM across all τ levels for power curve comparison (DIM is confirmed naive baseline) |
@@ -526,7 +526,6 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 | **High** | **Write, revise, and submit the manuscript(s)** with explicit consideration for reuse in the user's preliminary oral exam (literature review & project proposal) and final thesis (as a thesis chapter) — not scoped to journal submission alone | `paper/ctj_manuscript/`, `paper/dissertation_chapter/` |
 | High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
 | High | Full review of the main-text + SI figure list to deliberately decide what to keep/drop/combine (the coverage+tau merge done 2026-07-03 was a quick fit for the new NC incidence map, not a considered final selection) | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` |
-| Medium | Apply UNC Graduate School dissertation template/formatting | `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
 | Medium | Fix the pre-existing `plot_cd_diagram()` label-collision bug (designs with adjacent ranks overlap regardless of image width) — currently worked around by omitting the CD diagram from the dissertation chapter's inline exhibits | `code/10_statistical_comparisons.R` |
 | Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |
 
@@ -544,7 +543,7 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 IncidenceDesign extends the applied simulation framework from `projects/SpillSpatialDepSim/`.
 SpillSpatialDepSim used a small grid (8–12 districts) with SAR estimation to evaluate
-block vs. random assignment in an NC DOC applied context. IncidenceDesign asks the same
+block vs. random assignment for NC Department of Adult Correction probation interventions. IncidenceDesign asks the same
 core question but at larger scale (100 clusters) with systematic design variation and
 heterogeneous incidence modes.
 
