@@ -27,6 +27,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Where to write things down:** key findings go in `docs/plans/` (open items:
   `docs/plans/TODO.md`); dated progress checkpoints go in the progress log of
   `ROADMAP.md`. Restricted SUD data details: `application/AGENTS.md`.
+- **Application design authority:** start with
+  `docs/plans/nc_sud_application_plan_2026-10-02.md`; its status records settled
+  versus proposed choices. The integrated prompt is
+  `docs/plans/continuation_prompt_2026-10-02.md`. Do not treat proposals as approved
+  model/design changes.
 
 ---
 
@@ -257,8 +262,9 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - **Allocation-risk pilot:** complete; `docs/plans/allocation_risk_findings_2026-09-27.md`.
 - **CTJ manuscript + SI:** still carry the April numbers until manuscript step 5
   (`docs/plans/manuscript-unification-plan.md`).
-- **Next:** Simple Random Sampling benchmark design (before the CTJ); the design comparison
-  on the real SUD data (aggregated to the 58 clusters 2026-09-25); CTJ derivation.
+- **Next:** settle SRS/Checkerboard manuscript framing and the real-SUD application
+  design, implement/verify the application, then integrate results and derive CTJ.
+  SRS code/results and the allocation-risk pilot are already complete.
 
 ## Dissertation Chapter 3 Sync
 

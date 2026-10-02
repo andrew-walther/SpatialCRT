@@ -2,6 +2,14 @@
 
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
+**Application planning (2026-10-02):** the
+[NC SUD application design](docs/plans/nc_sud_application_plan_2026-10-02.md)
+and [integrated continuation prompt](docs/plans/continuation_prompt_2026-10-02.md)
+combine the earlier manuscript decisions with the real-data application request.
+The author chose the continuous SAR approach; remaining study choices are under
+discussion before implementation. The plan covers verification, results and
+subsequent chapter/appendix and CTJ/supplement updates.
+
 **Manuscript continuation (2026-09-27):** The [Chapter 2 check and accepted-manuscript
 review](docs/plans/ch2_check_findings_2026-09-27.md) records the evidence, limits and
 open decisions for the SRS benchmark and Checkerboard discussion. Project 1 remains

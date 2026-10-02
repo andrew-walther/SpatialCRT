@@ -3,6 +3,15 @@
 Maintained by each Claude session. Update it when an item finishes or changes, and before
 the session ends print the remaining items and a ready-to-paste prompt for the next one.
 
+**Active continuation (2026-10-02):** the integrated prompt is
+[continuation_prompt_2026-10-02.md](continuation_prompt_2026-10-02.md).
+The author requested a short application design document and interview before
+implementation: [NC SUD application plan](nc_sud_application_plan_2026-10-02.md).
+Continuous SAR using real incidence information is approved; incidence
+transformation and the remaining proposed study details are under discussion.
+The eleven September 27 commits were pushed; earlier "not pushed" statements in
+conversation history are superseded. New commits still require push authorization.
+
 1. **Simple Random Sampling (SRS) benchmark.** Add it to the simulation, regenerate the
    results, and update the chapter. Added by the author 2026-09-25.
    Plan: `~/.claude/plans/pasted-content-id-a3af-you-are-synchronous-seal.md`.
@@ -53,6 +62,8 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
 2. **Application study on the real SUD data.** Apply the designs, including SRS, to the yearly
    cluster-level incidence surfaces, then fill the chapter's Application results stub in place.
    The data are already ingested and aggregated (`application/README.md`, `AGENTS.md`).
+   Design → implement/verify → run/interpret → revise chapter/appendix → CTJ/SI.
+   Current design/interview document: `nc_sud_application_plan_2026-10-02.md`.
 3. **CTJ manuscript (manuscript-plan step 5).** SRS note (author, 2026-09-26): the CTJ stands
    alone, with no "Chapter 2" references. Link SRS to Project 1 only by citing that paper
    (accepted at BMC Medical Research Methodology), e.g. "we compare performance to SRS,

@@ -1,5 +1,12 @@
 # NC SUD Application
 
+**Revised study planning (2026-10-02):** see the
+[application design document](../docs/plans/nc_sud_application_plan_2026-10-02.md).
+The author chose a continuous SAR application using observed SUD incidence to
+inform allocation. Remaining design choices are under interview; new implementation
+has not started. The older synthetic results below are historical, not results of
+the planned real-SUD comparison.
+
 This directory adapts the IncidenceDesign simulation framework from a regular 10x10 grid to the North Carolina Community College service-area application. The application uses 58 irregular spatial clusters, Queen-contiguity neighbors, and population-balanced design adaptations to evaluate treatment assignment strategies for a future SUD intervention study.
 
 ## Directory Structure

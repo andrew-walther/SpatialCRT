@@ -247,6 +247,23 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Application design and integrated continuation (2026-10-02)
+
+- Created `docs/plans/nc_sud_application_plan_2026-10-02.md` and an integrated
+  `continuation_prompt_2026-10-02.md`, as requested by the author. They combine
+  Project 1 continuity, open manuscript decisions, and application execution.
+- Author chose the existing continuous SAR approach, with observed NC SUD
+  incidence informing allocation. Incidence transformation and remaining study
+  details await agreement; no application code or manuscripts changed.
+- Read-only input check: 58 finite cluster rates in each of 2018–2021 and the
+  pooled period; named queen/rook weights available. Existing runner uses only
+  both-arms spillover, suppresses fit warnings and has old cache/seeding behavior.
+- September-session commits through `e4599ca` were pushed after explicit approval.
+  New October work has no push authorization. Current Chapter 3 sync rules allow
+  the established hook to update the prelim; Project 1 remains read-only.
+- Next: finish the study interview and approve the concrete implementation plan,
+  then implement/verify/run the revised application before replacing old results.
+
 ### Continuation note (2026-09-27): SRS and Chapter 2 decisions
 
 Read `docs/plans/ch2_check_findings_2026-09-27.md` with `docs/plans/TODO.md` before
