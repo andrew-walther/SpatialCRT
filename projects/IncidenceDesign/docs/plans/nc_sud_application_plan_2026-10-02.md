@@ -34,6 +34,11 @@ interpret results, and revise the written application sections and exhibits.
 The application can proceed before the full CTJ rewrite; final recommendations
 should consider it alongside the grid study and allocation-risk pilot.
 
+**Author-confirmed endpoint (October 2):** complete the application and integrate
+its results into full drafts of the thesis chapter/appendix and CTJ manuscript/SI.
+Build and settle the thesis chapter first, then trim/reorganize it for CTJ. A plan,
+pilot or proposal-only application section is not the final deliverable.
+
 Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
 `allocation_risk_findings_2026-09-27.md`, and `application/AGENTS.md` / README.
 

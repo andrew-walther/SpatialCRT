@@ -14,6 +14,12 @@ directly and does not require rate normalization.
 The eleven September 27 commits were pushed; earlier "not pushed" statements in
 conversation history are superseded. New commits still require push authorization.
 
+**Completion goal reaffirmed October 2:** finish the NC application; integrate
+its findings into a full thesis chapter and appendix; then trim/reorganize that
+long-form source into full CTJ manuscript and supplementary-material drafts.
+CTJ remains a required deliverable even though chapter/prelim work has schedule
+priority. Planning and pilot runs are intermediate milestones.
+
 1. **Simple Random Sampling (SRS) benchmark.** Add it to the simulation, regenerate the
    results, and update the chapter. Added by the author 2026-09-25.
    Plan: `~/.claude/plans/pasted-content-id-a3af-you-are-synchronous-seal.md`.

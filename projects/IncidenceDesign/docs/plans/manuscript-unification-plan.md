@@ -1,6 +1,13 @@
 # Plan: Write Project 2 long-form first; derive CTJ + supplementary
 # material from it
 
+**Author reaffirmation, 2026-10-02:** complete the real NC SUD application and use
+its findings to finish the thesis chapter and appendix first, then trim/reorganize
+that source into full CTJ manuscript and supplementary-material drafts. All four
+documents are required deliverables; the deadline sequencing below does not remove
+CTJ from the project's completion goal. The application is to contain completed
+methods/results, replacing its proposal-only state after the revised study runs.
+
 **Written in a bios-dissertation session on 2026-09-18** (that's where
 this planning conversation happened) and copied here; this is the copy of
 record.

@@ -7,6 +7,13 @@ That permission applied to those commits, not every future push.
 
 Copy the following into Codex or Claude with the IncidenceDesign project open:
 
+**Author-confirmed completion goal (October 2):** complete the NC application,
+integrate its findings into a full thesis chapter and appendix, then trim/reorganize
+that agreed long-form source into a full CTJ manuscript draft and supplementary
+material. Planning, a pilot, or an application proposal alone does not fulfill the
+goal. The recorded deadline priority affects sequencing, not the inclusion of CTJ
+as a required final deliverable.
+
 > Continue Project 2 in
 > `/Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign`.
 > Work directly in the checkout. Read the root and project AGENTS.md, ROADMAP.md,
@@ -21,6 +28,10 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > Our goal is a clear, defensible treatment-design recommendation supported by
 > the revised grid study, the allocation-risk findings, and a completed application
 > on the 58 NC community-college service-area clusters using 2018–2021 SUD incidence.
+> Carry the work through to full drafts: complete the application, integrate its
+> results into the thesis chapter and appendix, then trim/reorganize that long-form
+> source to produce the full standalone CTJ manuscript and supplementary material.
+> A study plan, pilot or application proposal is an intermediate milestone.
 > Use observed NC incidence as fixed input; generate no synthetic incidence for
 > the primary application. Simulate treatment allocations and outcomes to assess
 > estimation error under known parameters.
