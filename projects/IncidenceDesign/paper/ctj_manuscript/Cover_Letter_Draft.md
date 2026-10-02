@@ -2,8 +2,7 @@
 
 Dear Editors of Clinical Trials,
 
-Please consider “Treatment allocation under spatial spillover: heterogeneous
-incidence and education-pilot planning” as an original research article.
+Please consider “Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence” as an original research article.
 
 The study compares eight treatment-allocation strategies and simple random
 sampling under heterogeneous incidence and spatial spillover. It extends our
@@ -19,7 +18,7 @@ both-arms spillover. The manuscript explicitly reports interval undercoverage,
 unequal treatment budgets and finite tail uncertainty. These findings inform
 trial design without assuming a universally preferred allocation strategy.
 
-The full draft has 2,217 main-text words, a structured 283-word abstract and six
+The full draft has 3,381 main-text words including end declarations, a structured 283-word abstract and six
 main exhibits, with detailed reproducibility and application results in the
 supplement. Code and authorized aggregate outputs accompany the work; restricted
 county source data are excluded from public distribution.

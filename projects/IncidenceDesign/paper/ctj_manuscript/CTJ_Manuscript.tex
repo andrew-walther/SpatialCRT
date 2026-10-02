@@ -30,8 +30,8 @@
 \def\volumenumber{Submission draft}
 \def\issuenumber{review}
 % One source owns the title, abstract, authors, body and all exhibit content.
-\newcommand{\CTJTitle}{Treatment allocation under spatial spillover: heterogeneous incidence and education-pilot planning}
-\newcommand{\CTJAuthorLine}{Andrew Walther\textsuperscript{1}, Ross Joseph Simpson, Jr.\textsuperscript{2}, Ashkan Habib\textsuperscript{1}, and Feng-Chang Lin\textsuperscript{1}}
+\newcommand{\CTJTitle}{Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence}
+\newcommand{\CTJAuthorLine}{Andrew Walther\textsuperscript{1}, Ashkan Habib\textsuperscript{1}, Ross Joseph Simpson, Jr.\textsuperscript{2}, and Feng-Chang Lin\textsuperscript{1}}
 \newcommand{\CTJAffilOne}{\textsuperscript{1}Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC, USA}
 \newcommand{\CTJAffilTwo}{\textsuperscript{2}Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA}
 \newcommand{\CTJContact}{Feng-Chang Lin, Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599, USA.}
@@ -89,7 +89,7 @@ Telephone: [AUTHOR TO SUPPLY].\par}
 \hyphenpenalty=10000
 \exhyphenpenalty=10000
 \linenumbers
-\runninghead{Allocation under spatial spillover}
+\runninghead{Sampling design for spatial CRTs}
 % A breakable abstract and separate author title page avoid the class's
 % boxed production-layout abstract, which cannot span a review page.
 \renewenvironment{abstract}{\section*{Abstract}}{}
@@ -112,9 +112,9 @@ Email: \url{flin33@email.unc.edu}
 Telephone: [AUTHOR TO SUPPLY].
 \vspace{8mm}
 
-Running head: Allocation under spatial spillover
+Running head: Sampling design for spatial CRTs
 
-Main-text word count: 2184. Abstract word count: 283.
+Main-text word count: 3381 (including end declarations). Abstract word count: 283.
 \vfill
 Clinical Trials submission draft. Author-supplied ethics/data-use documentation and final submission approval remain pending.
 \end{titlepage}
@@ -134,6 +134,8 @@ In previous work, we compared simple random assignment and block-stratified samp
 
 Our application supports planning an education intervention for healthcare professionals involved in SUD prevention. Historical incidence can identify areas of need without implying that education ability, or the intervention's effect on it, depends on incidence. We consequently separate incidence-guided allocation from the simulated education baseline. A trial may realize only one assignment, making both expected accuracy and poor-allocation downside relevant.
 
+Incidence-informed assignment also raises a practical distinction. A trial may direct resources toward areas with greater historical disease burden, balance that burden between arms, or use it to determine local treatment saturation. These strategies express different priorities even when their overall treatment budgets are similar. They need not provide the same information for separating treatment from neighboring exposure. Our objective was to evaluate their estimation consequences under specified spatial models, including the possibility that the design with the lowest average error offers little additional protection against an unfavorable realized allocation.
+
 \section{Methods}
 \subsection{Grid model and assignments}
 We used a $10\times10$ grid with row-standardized weights $W$. Queen neighbors share an edge or corner; rook neighbors share an edge. Queen was primary, with rook assessed separately. Outcomes followed
@@ -152,7 +154,12 @@ where $Z$ is treatment and $\tau$ its structural coefficient before spatial prop
 
 Five incidence configurations comprised independent Uniform$(0,1)$ incidence, spatial incidence at two dependence strengths and Poisson incidence at the same two strengths. Spatial incidence used a queen SAR filter followed by a normal distribution-function transformation. Poisson counts used spatial log-rates with base rate 35 per 100,000 and equal populations of 100,000; observed rates were rank-scaled to $(r_i-0.5)/100$, using average ranks for ties. These are general simulation settings, not calibration to the application counts. Each configuration's ten independent surfaces were shared across parameters. For surface $k$, assignment, outcome generation and fitted incidence all used $X_k$.
 
-The eight strategies were: Checkerboard; treatment of the highest-incidence half; plain saturation quadrants; Isolation Buffer, a greedy random maximal independent set; randomization of two clusters in every $2\times2$ block; balancing by incidence quartiles; balancing by incidence halves; and incidence-guided saturation quadrants. Both saturation strategies assigned 20/40/60/80\% treatment within four quadrants; plain saturation randomized their order and guided saturation ordered them by mean incidence. All treated 50 clusters except buffer, whose budget depended on the graph. SRS completely randomized 50 of 100. Supplementary material gives exact rules. Checkerboard was deterministic; incidence ties were broken randomly for each assignment in ranking-based designs. High Incidence Focus had singleton support when no tie affected selection.
+The eight strategies were: Checkerboard; treatment of the highest-incidence half; plain saturation quadrants; Isolation Buffer, a greedy random maximal independent set; randomization of two clusters in every $2\times2$ block; balancing by incidence quartiles; balancing by incidence halves; and incidence-guided saturation quadrants. Both saturation strategies assigned 20/40/60/80\% treatment within four quadrants; plain saturation randomized their order and guided saturation ordered them by mean incidence. All treated 50 clusters except buffer, whose budget depended on the graph. SRS completely randomized 50 of 100. Table~\ref{tab:allocation-rules} summarizes the rules and their geographic adaptations; supplementary material gives full specifications. Checkerboard was deterministic; incidence ties were broken randomly for each assignment in ranking-based designs. High Incidence Focus had singleton support when no tie affected selection.
+\ifctjreading
+\CTJDesignTable
+\fi
+
+The strategies vary both incidence balance and spatial exposure. Quartile and half stratification distribute treatment within incidence groups; High Incidence Focus instead aligns treatment with incidence. Spatial blocking imposes local treatment balance, while saturation permits intentionally different local proportions. Buffer prevents treated neighbors, and Checkerboard imposes strong interspersion. These restrictions can affect the relationship between treatment and spillover covariates, beyond the number treated. The detailed grid analysis retained six designs after comparing the two related variants, plain versus guided saturation and halves versus quartiles. We nevertheless include all eight strategies and SRS in the full benchmark and application: near performance of related designs does not establish equivalence or justify ignoring their practical differences.
 
 The nine-design benchmark contained 14,400 scenarios per estimator, each with ten surfaces and 25 assignment/outcome pairs per surface, giving 250 independently noised fits. Designs within a block shared surfaces and outcome noise; treatment-effect levels reused assignment/noise draws. The SRS extension preserved the original eight-design outputs. Scenario metrics were MSE, bias and 95\% Wald coverage. Surface-level Monte Carlo SEs and paired comparisons used independent configuration-by-surface units rather than treating shared-surface blocks as independent replications. Detailed six-design ranking analyses remain explicitly subset analyses in the supplement.
 
@@ -161,8 +168,13 @@ The primary maximum likelihood SAR fit included an intercept, treatment, the tru
 
 For assignment $a$, allocation risk is $m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,X]$. Nested outcome replication estimates its distribution before calculating allocation q90 and the estimated mean of the worst 10\% of sampled assignments. These differ from quantiles of realized errors or scenario-level MSE. A focused grid pilot used two fixed surfaces per configuration, queen parameter corners, 100 assignment draws and 100 outcomes per unique assignment, with a selected same-assignment refinement to 400 outcomes. Its findings are supporting pilot evidence, separate from the full grid comparison.
 
+The repeated-outcome step is essential to interpreting downside. For a fixed incidence surface and assignment, random outcome noise can produce a large individual estimation error even when that assignment's expected MSE is modest. We therefore average squared errors over outcomes before ordering assignments by estimated risk. Conversely, a design with only one possible assignment has no between-allocation risk distribution to protect against, but its conditional mean error can still be high. Finite outcome replication adds noise to the estimated risks, so observed tail separation and tail membership require separate scrutiny from the precision of a design's overall mean.
+
 \subsection{Observed-incidence application}
-We aggregated corrected county-year SUD counts supplied by Habib\cite{habib_temporal_2026} and SEER populations aged 18--64 into 58 community-college service-area clusters partitioning North Carolina's 100 counties. The corrected numerator includes heart-failure deaths previously excluded as presumed non-sudden (Habib, personal communication, September 25, 2026): 23,523 deaths over 25,594,321 person-years during 2018--2021. Annual rates were deaths/population per 100,000. Every county mapped to one cluster; annual cluster totals reproduced statewide totals. Observed rates were held fixed with no synthetic incidence generation. The four years were separate planning inputs, not longitudinal intervention follow-up.
+We aggregated corrected county-year SUD counts supplied by Habib\cite{habib_temporal_2026} and SEER populations aged 18--64 into 58 community-college service-area clusters partitioning North Carolina's 100 counties. The corrected numerator includes heart-failure deaths previously excluded as presumed non-sudden (Habib, personal communication, September 25, 2026): 23,523 deaths over 25,594,321 person-years during 2018--2021. Annual rates were deaths/population per 100,000. Every county mapped to one cluster; annual cluster totals reproduced statewide totals. Observed rates were held fixed with no synthetic incidence generation (Figure~\ref{fig:nc-map}). The four years were separate planning inputs, not longitudinal intervention follow-up.
+\ifctjreading
+\CTJMapFigure
+\fi
 
 \textbf{Ethics and data use: [AUTHOR-SUPPLIED STATEMENT PENDING: responsible IRB/institution, approval or waiver/exemption determination and protocol number as applicable; consent determination and data-use permissions for restricted death-certificate sources and aggregate publication].} No approval or exemption is asserted by this placeholder.
 
@@ -170,38 +182,42 @@ Primary education outcomes used Equation~\ref{eq:grid} with $\beta=0$, $\tau=1$ 
 
 All nine strategies were adapted before performance evaluation. Checkerboard became a deterministic greedy graph-interspersion assignment, not a literal checkerboard. Saturation used four frozen geographic regions selected from 250 $k$-means candidates by compactness and population/cluster/county balance, using pooled person-years/4 as reference population. Guided saturation ranked annual per-capita cluster rates, averaged cluster ranks equally within regions, then ordered regional saturations 80/60/40/20\%. The grid rule averages its incidence covariate directly. The application mean-rank rule aligns with rank-scaled Poisson surfaces but differs from continuous grid incidence; it also differs from pooling deaths/population. Spatial blocking used 14 frozen yearly $k$-means groups based on standardized location, incidence ranks and log-population. Other strategies retained their mechanisms. SRS and incidence-balancing/targeting treated 29 clusters; Balanced Halves randomly assigned 14/15 within its two halves. Rounded local budgets were retained and reported rather than equalized retrospectively.
 
+These adaptations preserve each strategy's allocation mechanism while acknowledging the irregular graph and unequal populations. Geographic regions replace rectangular quadrants; frozen groups replace uniform four-cluster blocks. Neither is an exact copy of the grid design. We selected partitions without examining simulated estimation performance and retained their rounding rules, including resulting treatment-count differences. Cluster counts and working-age population shares accompany accuracy because treating half the clusters does not imply reaching half the population. The population denominator used to calculate historical rates is also distinct from the eventual sample of healthcare professionals whose education outcomes would be measured.
+
 Primary queen settings crossed $\rho=0,0.2,0.5$, $\gamma=0.5,0.8$, both regimes, four years and nine designs. Sensitivities added a hypothetical rank-scaled incidence baseline together with incidence adjustment, used rook parameter corners, or replaced guided saturation's regional mean rank with mean raw rates or pooled regional rates. The total was 1,248 reporting rows from 936 computational sources. Identical supports reused computation with explicit source IDs; annual budgets and population shares were recalculated. Shared annual sources are not independent confirmations.
 
 We drew 100 assignments and 100 independent outcomes per unique assignment, using 1,000 outcomes for proven singleton supports. Prespecified adaptive replication targeted relative MCSE(mean MSE)$\leq5\%$ and MCSE(coverage)$\leq0.01$; duplicate-frequency covariance and both allocation/outcome variation were accounted for. A separate queen-corner extension retained assignments and raised stochastic outcome replication to 400. Opposite outcome halves selected and evaluated worst-decile assignments. Key-based seeds and manifest checks protected reproducibility and refused stale checkpoints. Further details, matched sensitivity tables and failure diagnostics are in the supplement.
 
 \section{Results}
 \subsection{Grid accuracy and pilot downside}
-Table~\ref{tab:grid-srs} reports the full queen benchmark at $\tau=1$; Figure~\ref{fig:grid} illustrates regime differences in the detailed six-design subset. Guided saturation's pooled mean MSE was 0.0907 against SRS 0.1285, but regime separation was essential: control-only MSE was 0.1355 against 0.2146 (ratio 0.631), whereas both-arms MSE was 0.0459 against 0.0424 (ratio 1.083). Plain saturation had similar accuracy; an extra benefit from incidence guidance was not established. SRS and incidence balancing were competitive under both arms. Identified designs' coverage was approximately 94\%, below 95\%; rook Checkerboard was nonidentified and substantially biased. Rook results and effect-size/configuration breakdowns are reported separately in the supplement.
+Table~\ref{tab:grid-srs} reports the full queen benchmark at $\tau=1$; Figure~\ref{fig:grid} separates incidence configurations in the detailed six-design subset. Figure~\ref{fig:grid-bias} shows the error decomposition for one prespecified Poisson configuration; variance dominates its queen MSE in both regimes. Guided saturation's pooled mean MSE was 0.0907 against SRS 0.1285, but regime separation was essential: control-only MSE was 0.1355 against 0.2146 (ratio 0.631), whereas both-arms MSE was 0.0459 against 0.0424 (ratio 1.083). Plain saturation had similar accuracy; an extra benefit from incidence guidance was not established. SRS and incidence balancing were competitive under both arms. Identified designs' coverage was approximately 94\%, below 95\%; rook Checkerboard was nonidentified and substantially biased. Rook results and effect-size/configuration breakdowns are reported separately in the supplement.
 \ifctjreading
 \CTJGridTable
 \CTJGridFigure
+\CTJBiasFigure
 \fi
+
+The regime difference was especially large for interspersed assignments. Checkerboard MSE increased from 0.0624 under both arms to 2.1114 control-only; blocking increased from 0.0623 to 0.5761. Their poorer control-only accuracy reflects imprecision rather than a comparable increase in bias. In the selected Poisson configuration, empirical variance accounts for more than 97\% of mean MSE for every displayed design and regime (Figure~\ref{fig:grid-bias}). Buffer behaves differently: no treated cluster has a treated neighbor, so multiplying its neighboring-treatment exposure by the control indicator leaves that exposure unchanged. Its two spillover regimes therefore define the same outcome model; small observed mean differences arise from separate Monte Carlo draws.
+
+The detailed six-design queen pooled MSE ordering was stable across the five incidence configurations and five treatment-effect sizes. This does not imply a fixed conditional ranking. Under control-only spillover, buffer and guided saturation were nearly level at $\tau=2$ (MSE 0.1596 and 0.1604); at $\tau=3$, buffer was lower (0.1596 versus 0.1822). Guided saturation remained lowest in pooled MSE within that subset, but the crossover limits a blanket claim across effect sizes. Effect-size comparisons also reused assignments and noise, so they are sensitivity comparisons rather than independent confirmations. Full parameter/configuration and rook breakdowns in the supplement retain these distinctions.
+
+The grid sensitivity omitting spillover illustrates why an apparently favorable error metric is insufficient. Among the six-design comparisons at $\tau=1$, excluding nonidentified rook Checkerboard, pooled bias ranged from approximately $-0.12$ to $-0.40$ and coverage from 0.51 to 0.90. Some designs had lower MSE under this misspecified fit because their reduced variance outweighed increased bias. That trade-off did not restore valid treatment-effect inference. These sensitivity results concern omission of spillover; they do not establish robustness to an incorrectly specified exposure network or spillover functional form.
 
 The selected-surface grid pilot supported saturation's control-only downside pattern. Guided saturation's estimated worst-decile conditional MSE was 0.1936 against SRS 0.3486; under both arms it was 0.0582 against 0.0544. Outcome refinement preserved the control-only direction but did not remove uncertainty about allocation tails. These are pilot values and do not replace full-study estimates.
 
 \subsection{Completed application}
 All 1,248 application reporting settings completed and passed precision gates. Production used 7,598,000 independent outcome fits; the separate extension added 2,280,000, for 9,878,000 distinct outcomes after counting copied prefixes once. Maximum relative MCSE(mean MSE) was 0.04871 and maximum MCSE(coverage) 0.00892. There were no warnings, aliases, boundary fits or estimation failures. All main stochastic sources passed at 100 assignments and 100 outcomes; two singleton baseline-sensitivity sources required 2,000 outcomes.
 
-Under control-only spillover, plain saturation's yearly descriptive mean MSE was 0.22329 against SRS 0.30761, a 27.4\% reduction. Guided saturation's reductions were 21.1--29.9\% depending on year (Table~\ref{tab:nc-year}, Figure~\ref{fig:nc-mse}). Both saturation designs had lower MSE than SRS in every primary parameter setting, including setting-specific approximate MC intervals. Neither was uniquely best. High Incidence Focus's control-only accuracy varied markedly across years. Under both arms, SRS mean MSE was 0.07638, plain saturation 0.07518 and guided saturation 0.07428--0.07682. These small differences do not establish equivalence or universal optimality. Primary yearly mean coverage was approximately 92.6--93.6\%, below nominal; passing precision targets did not repair undercoverage.
+Under control-only spillover, plain saturation's yearly descriptive mean MSE was 0.32159 against SRS 0.30761, a 27.4\% reduction. Guided saturation's reductions were 21.1--29.9\% depending on year (Figure~\ref{fig:nc-mse}; absolute annual values in the supplementary material). Both saturation designs had lower MSE than SRS in every primary parameter setting, including setting-specific approximate MC intervals. Neither was uniquely best. High Incidence Focus's control-only accuracy varied markedly across years. Under both arms, SRS mean MSE was 0.07638, plain saturation 0.07518 and guided saturation 0.07428--0.07682. These small differences do not establish equivalence or universal optimality. Primary yearly mean coverage was approximately 92.6--93.6\%, below nominal; passing precision targets did not repair undercoverage.
 \ifctjreading
-\CTJAnnualTable
 \CTJMeanFigure
 \fi
 
-At the refined queen corners with $\gamma=0.8$, control-only plain saturation had estimated q90 31.8--32.9\% below SRS and worst-decile mean 34.6--37.8\% below; guided saturation reductions were 20.8--38.6\% and 20.7--43.4\%. Cross-selected outcome halves retained this pattern (Figure~\ref{fig:nc-risk}). However, only ten sampled draws formed the worst decile. All 112 non-singleton reporting rows flagged uncertain tail-boundary membership. Both-arms guided saturation had half-sample Jaccard overlap 0--0.25, with about 61--86\% of raw estimated-risk variance attributable to outcome MC noise. Small both-arms tail differences cannot support superior downside protection. Singleton Checkerboard and High Incidence Focus have no allocation variation for these inputs, but can still have substantial estimation error.
-\ifctjreading
-\CTJRiskFigure
-\fi
+The annual comparison preserves the broad regime distinction while showing changes introduced by the NC geography. Graph Checkerboard is identified, yet has roughly three times SRS MSE in both regimes. Buffer is close to SRS control-only but has approximately 3.74 times its both-arms MSE. Spatial blocking is close to SRS under both arms and more variable across planning years control-only (Figure~\ref{fig:nc-mse}). Thus transferring a grid mechanism does not transfer its numerical ranking unchanged. These year-specific descriptive averages are conditional on fixed observed incidence and the adapted supports; they neither incorporate uncertainty in historical rates nor independently replicate the incidence-independent assignments reused across years.
 
-Budgets differed (Figure~\ref{fig:nc-pop}). Graph Checkerboard treated 27 clusters under queen; buffer averaged 15.89; spatial blocking treated 28/31/27/29 by year, including a singleton group always assigned control under the retained rounding rule. High Incidence Focus treated 29 clusters but approximately 22--24\% of working-age population; buffer reached about 27\%. These shares describe geographic reach, not healthcare-professional enrollment or cost. Graph Checkerboard was identified but imprecise, unlike the exact rectangular-rook alias.
-\ifctjreading
-\CTJBudgetFigure
-\fi
+At the refined queen corners with $\gamma=0.8$, control-only plain saturation had estimated q90 31.8--32.9\% below SRS and worst-decile mean 34.6--37.8\% below; guided saturation reductions were 20.8--38.6\% and 20.7--43.4\%. Cross-selected outcome halves retained this pattern (detailed tail displays in the supplementary material). However, only ten sampled draws formed the worst decile. All 112 non-singleton reporting rows flagged uncertain tail-boundary membership. Both-arms guided saturation had half-sample Jaccard overlap 0--0.25, with about 61--86\% of raw estimated-risk variance attributable to outcome MC noise. Small both-arms tail differences cannot support superior downside protection. Singleton Checkerboard and High Incidence Focus have no allocation variation for these inputs, but can still have substantial estimation error.
+
+Budgets differed (annual cluster/population tables and displays in the supplementary material). Graph Checkerboard treated 27 clusters under queen; buffer averaged 15.89; spatial blocking treated 28/31/27/29 by year, including a singleton group always assigned control under the retained rounding rule. High Incidence Focus treated 29 clusters but approximately 22--24\% of working-age population; buffer reached about 27\%. These shares describe geographic reach, not healthcare-professional enrollment or cost. Graph Checkerboard was identified but imprecise, unlike the exact rectangular-rook alias.
 
 The hypothetical baseline/X-adjusted sensitivity increased High Incidence Focus MSE roughly 3.68--4.44-fold under both arms and 1.42--2.52-fold control-only. Treatment--incidence alignment reduced information after adjustment; baseline and adjustment changed jointly. Matched rook/queen corners preserved broad conclusions. Alternative regional summaries changed some region orders, with no retrospective replacement of the prespecified mean-rank rule.
 
@@ -210,9 +226,13 @@ The completed grid and observed-incidence application support conditional guidan
 
 Incidence guidance did not establish an accuracy advantage over plain saturation. Historical incidence can still express implementation priorities, but that purpose should be distinguished from improved estimation. High Incidence Focus illustrates the trade-off: low conditional both-arms error in the primary education model came from a fixed assignment, not a demonstration of randomized causal identification. Its sensitivity to incidence adjustment also prevents a general recommendation based on that result alone.
 
+For trial planning, the combined findings favor evaluating plausible exposure regimes before selecting an allocation. Saturation creates variation in local treatment proportions while retaining treatment and control clusters; its favorable control-only accuracy is consistent with the need to distinguish direct treatment from neighboring exposure. Under both-arms spillover, SRS and incidence-balanced assignments already provide competitive estimation, making a modest mean difference an insufficient reason to impose a more restricted design. Incidence-targeted assignment can still serve a substantive delivery objective, but a fixed high-incidence allocation needs its own justification and cannot inherit the randomization-based interpretation of SRS.
+
 These comparisons complement spatial analysis rather than replace it. The primary fit knows the spillover mechanism; the grid sensitivity omitting it showed bias and poor coverage. We did not establish performance with incorrect exposure networks, heterogeneous treatment effects or participant-level sampling error. The grid and one irregular geography do not span all trial structures, and unequal treatment budgets prevent interpreting the rankings as equal-cost optimization. Historical incidence was fixed; measurement uncertainty and change between planning and implementation were not propagated.
 
 Wald coverage remained below nominal even when Monte Carlo precision was adequate. Interval calibration must be addressed before adopting this analysis for a final protocol. Allocation-tail estimates are conditional on sampled masks and finite outcome replication; the extension improved risk estimation for the same masks rather than providing fresh allocation confirmation. Shared annual supports also preclude treating repeated performance as independent evidence.
+
+A practical decision should also compare recruitment and exposure consequences alongside MSE. Buffer's smaller treated-cluster budget and High Incidence Focus's smaller population reach mean that these results do not answer which design is most efficient for a fixed implementation cost or participant sample. Before using them to choose one pilot allocation, investigators would need to define the education endpoint, identify eligible professionals, specify cluster and participant budgets, and assess whether geographic contiguity represents actual communication. Those choices could alter outcome precision or the exposure network. Interval calibration is another protocol-stage requirement: precise simulation estimates of subnominal coverage identify a limitation, rather than validate the reported Wald intervals.
 
 The education application is a completed design evaluation, not an implemented intervention or evidence that education reduces SUD. Final decisions require a specified education endpoint, eligible professionals, budget and plausible communication network. Within the evaluated assumptions, saturation offers favorable average and descriptive downside performance under control-only spillover; SRS remains a reasonable comparator and candidate under both-arms exposure.
 
@@ -244,17 +264,17 @@ The supplementary document supplies exact design rules, parameter grids, estimat
 \else
 % Submission tables/figures remain on separate sheets after the references.
 \clearpage
+\CTJDesignTable
+\clearpage
 \CTJGridTable
 \clearpage
-\CTJAnnualTable
+\CTJMapFigure
 \clearpage
 \CTJGridFigure
 \clearpage
+\CTJBiasFigure
+\clearpage
 \CTJMeanFigure
-\clearpage
-\CTJRiskFigure
-\clearpage
-\CTJBudgetFigure
 \clearpage
 \fi
 \end{document}

@@ -1,3 +1,9 @@
+**Later approved editorial checkpoint:** the original CTJ title and compact six-exhibit
+set are restored/revised in both layouts; author order is Walther, Habib, Simpson, Lin.
+Current counts: 3,215 body prose/heading words, 283 abstract; chapter 66 pp,
+CTJ review 21 pp, reading 8 pp, SI 44 pp. The original completion checks below
+are retained by milestone; see [current exhibit findings](ctj_exhibit_revision_findings_2026-10-02.md).
+
 # Completed long-form chapter and derived CTJ drafts — 2026-10-02
 
 The observed-incidence application, full thesis chapter/appendix and full CTJ

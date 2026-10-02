@@ -67,6 +67,22 @@ def verify():
     master = sources[MAIN]
     shared_exhibits = MAIN_EXHIBITS.read_text()
     reading = READING.read_text()
+    legends = MAIN.with_name('Figure_Legends.md').read_text()
+    figure_blocks = re.findall(r'\\begin\{figure\*\}.*?\\end\{figure\*\}',
+                               shared_exhibits, re.S)
+    require_equal(len(figure_blocks), 4, 'Four main figures')
+    for index, block in enumerate(figure_blocks, 1):
+        caption = re.search(r'\\caption\{(.*?)\}\\label\{fig:', block, re.S).group(1)
+        caption = caption.replace('Table~\\ref{tab:grid-srs}', 'Table 2')
+        if f'Figure {index}. {caption}' not in legends:
+            raise AssertionError(f'Figure {index}: separate legend differs from master')
+    require_equal(re.search(r'\\newcommand\{\\CTJTitle\}\{([^}]+)\}', master).group(1),
+                  'Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence',
+                  'Author-approved restored title')
+    author_block = master.split('\\newcommand{\\CTJAuthorLine}', 1)[1].split('\n', 1)[0]
+    authors = ['Andrew Walther', 'Ashkan Habib', 'Ross Joseph Simpson, Jr.', 'Feng-Chang Lin']
+    positions = [author_block.index(author) for author in authors]
+    require_equal(positions, sorted(positions), 'Author-approved author order')
     require_equal(reading.count('\\input{CTJ_Manuscript.tex}'), 1,
                   'Reading preview uses the master manuscript')
     require_equal(reading.count('\\def\\CTJReadingVersion{1}'), 1,
@@ -75,8 +91,8 @@ def verify():
         raise AssertionError('Reading wrapper duplicates manuscript content')
     require_equal(master.count('\\input{CTJ_Exhibits.tex}'), 1,
                   'Master loads the shared exhibit definitions')
-    for name in ('CTJGridTable', 'CTJAnnualTable', 'CTJGridFigure',
-                 'CTJMeanFigure', 'CTJRiskFigure', 'CTJBudgetFigure'):
+    for name in ('CTJDesignTable', 'CTJGridTable', 'CTJMapFigure',
+                 'CTJGridFigure', 'CTJBiasFigure', 'CTJMeanFigure'):
         calls = [m.start() for m in re.finditer(r'\\' + name + r'\b', master)]
         require_equal(len(calls), 2, name + ': one call in each layout branch')
         bibliography = master.index('\\bibliographystyle')
@@ -86,6 +102,10 @@ def verify():
                       name + ': one shared definition')
     sources[MAIN] += '\n' + shared_exhibits
     chapter, main, supplement = (sources[p] for p in (CHAPTER, MAIN, SUPPLEMENT))
+    for path, source in ((CHAPTER, chapter), (SUPPLEMENT, supplement)):
+        author_line = next(line for line in source.splitlines() if '\\author{' in line)
+        positions = [author_line.index(author) for author in authors]
+        require_equal(positions, sorted(positions), path.name + ': author order')
     annual = csv_rows(EXHIBITS / 'yearly_primary_design_means.csv')
     yearly = {(r['Year'], r['Regime'], int(r['Design_ID'])): r for r in annual}
     grid = csv_rows(ROOT / 'results/srs_benchmark/manuscript_regime_means.csv')
@@ -107,8 +127,21 @@ def verify():
     for path, source in sources.items():
         require_equal([n for _, n in numerical_rows(table(source, 'tab:grid-srs'))],
                       expected_grid, f'{path.name}: grid benchmark')
-        require_equal([n for _, n in numerical_rows(table(source, 'tab:nc-year'))],
-                      expected_year, f'{path.name}: primary annual MSE')
+        if path != MAIN:
+            require_equal([n for _, n in numerical_rows(table(source, 'tab:nc-year'))],
+                          expected_year, f'{path.name}: primary annual MSE')
+    # The main now reports annual performance graphically; validate all 72 ratios
+    # against the same primary aggregates used by the chapter/SI tables.
+    compact = ROOT / 'results/manuscript_exhibit_revision_20261002'
+    ratios = csv_rows(compact / 'annual_srs_ratios.csv')
+    require_equal(len(ratios), 72, 'Compact annual figure cell count')
+    for row in ratios:
+        key = (row['Year'], row['Regime'], int(row['Design_ID']))
+        expected = float(yearly[key]['Mean_MSE']) / float(yearly[(key[0], key[1], 9)]['Mean_MSE'])
+        if abs(float(row['Ratio']) - expected) > 1e-10:
+            raise AssertionError(f'Compact annual figure: wrong ratio {key}')
+    require_equal(len(re.findall(r' & ', table(main, 'tab:allocation-rules'))), 10,
+                  'Allocation-rule table: header plus nine strategies')
     for year in ('2018', '2019', '2020', '2021'):
         expected = []
         for regime in ('both', 'control_only'):
@@ -188,7 +221,8 @@ def verify():
         pass
     else:
         raise AssertionError('Wrong-value fixture was silently accepted')
-    print('PASS: 36 grid cells and 20 annual primary MSE cells in all three sources;')
+    print('PASS: 36 grid cells in all three sources; 20 annual MSE cells in chapter/SI;')
+    print('72 matched annual figure ratios and all-nine-design allocation-rule table;')
     print('360 annual performance cells, 72 budget cells, 32 sensitivity cells, all ' + str(len(table_labels)) +
           ' supplement table bodies; figures, references, citations and six-exhibit cap.')
     print('PASS: deliberate incorrect-number fixture rejected. Scientific prose reviewed separately.')

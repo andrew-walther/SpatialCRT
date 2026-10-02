@@ -45,7 +45,7 @@ verification, interpretation and the final submitted text.
 
 ## Author block
 
-Andrew Walther^1^, Ross Joseph Simpson, Jr.^2^, Ashkan Habib^1^,
+Andrew Walther^1^, Ashkan Habib^1^, Ross Joseph Simpson, Jr.^2^,
 and Feng-Chang Lin^1^
 
 ^1^Department of Biostatistics, University of North Carolina at Chapel Hill,

@@ -247,6 +247,29 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Approved compact exhibit revision and author order (2026-10-02)
+
+- Restored *Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous
+  Incidence* in both CTJ layouts, SI and cover letter. Author order now Walther,
+  Habib, Simpson, Lin; Lin remains corresponding.
+- Six main exhibits: all-nine-design allocation rules and current grid MSE/coverage;
+  observed NC rates/frozen-region map, compact simulation accuracy/decomposition,
+  and nine-design annual NC MSE/SRS heatmap. Numbering follows first citation.
+- Chapter uses the compact annual comparison; its substantive tail/budget findings
+  remain in the body, detailed absolute/tail displays move to Appendix A7. SI mirrors
+  this change. No simulation or analytical recommendation changed; old assets retained.
+- New read-only export and intent-based checks verify exact empirical decomposition,
+  configuration/regime separation and year-matched denominators; all manuscript
+  tables/figures/citations checked. Counts: 3,215 body/283 abstract; reading 8 pp,
+  review 21 pp, chapter 66 pp, SI 44 pp. Fresh rendered-page review and hook sync
+  recorded in `docs/plans/ctj_exhibit_revision_findings_2026-10-02.md`.
+- On author feedback about the 3,500-word cap, expanded CTJ from the chapter to
+  3,215 body prose/heading words (3,381 with end declarations); abstract 283.
+  Added mechanisms, effect-size crossover, omitted-spillover sensitivity, allocation
+  risk interpretation and NC trial-planning implications; added numbers checked.
+- Next: author full draft review and requested Claude review; institutional metadata
+  remain explicit placeholders. Nothing pushed or submitted.
+
 ### Paired CTJ reading and submission layouts (2026-10-02)
 
 - Author approved building both layouts to assess the eventual article appearance.

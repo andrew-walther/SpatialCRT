@@ -28,7 +28,9 @@ Read in order:
    `nc_sud_implementation_findings_2026-10-02.md`,
    `nc_sud_application_findings_2026-10-02.md`.
 4. `docs/plans/manuscript-unification-plan.md` and
-   `manuscript_completion_findings_2026-10-02.md`.
+   `manuscript_completion_findings_2026-10-02.md`,
+   `ctj_layout_review_2026-10-02.md` and
+   `ctj_exhibit_revision_findings_2026-10-02.md`.
 5. `application/AGENTS.md`, `application/README.md` and project `README.md`.
 6. The canonical `paper/dissertation_chapter/Dissertation_Chapter.qmd` and its PDF,
    `paper/ctj_manuscript/CTJ_Manuscript.tex`/PDF, shared `CTJ_Exhibits.tex`,
@@ -122,6 +124,7 @@ read-only checks as needed. Existing commands:
 `Rscript application/tests/test_real_sud_tail.R`,
 `Rscript application/tests/test_real_sud_summary.R`,
 `node application/tests/test_companion.mjs`,
+`Rscript code/tests/test_manuscript_exhibits.R`,
 `python3 paper/tools/verify_manuscripts.py`.
 Set VECLIB_MAXIMUM_THREADS=1, OPENBLAS_NUM_THREADS=1 and OMP_NUM_THREADS=1 before R.
 The exhaustive cache verification and full ML cross-check were already run;
@@ -149,16 +152,24 @@ Review all document sources AND rendered PDFs:
 - Verify live journal requirements: original-research body ≤3,500 words, structured
   abstract ≤425 with appropriate headings, six main exhibits, keywords, review
   formatting/title page, legends, reference style, declarations and submission parts.
-  Draft counts are 2,184 prose/heading words (2,217 including mathematical-expression
-  units)/283 abstract; two tables/four figures. Old plan's
+  Draft counts are 3,215 prose/heading words; 3,381 including end declarations
+  (3,419 also counting 38 mathematical-expression units)/283 abstract; two tables/four figures. Old plan's
   250-word unstructured-abstract instruction was superseded by the live check.
-- Author confirmed Walther, Simpson, Habib and Lin with Lin corresponding, currently
+- Author confirmed Walther, Habib, Simpson and Lin in that order with Lin corresponding, currently
   no funding/conflicts. IRB/data-use/consent documentation is unavailable and the
   author explicitly approved a placeholder. Do not fabricate an approval, waiver,
   protocol or permission. Telephone/ORCID/contributions/coauthor consent/final
   attestations remain submission tasks. The implementation is not an actual trial.
 - Assess the Codex assistance-disclosure draft against current Sage policy and
   author responsibility. Do not treat a future Claude review as already performed.
+- Verify the approved six-exhibit revision: all-nine-design allocation rules and
+  grid MSE/coverage tables; observed 2018/frozen-region map, compact six-design
+  grid accuracy/decomposition, and all-nine-design annual NC ratio heatmap.
+  Numbering follows first citation (map first). Check the read-only export
+  `code/20_manuscript_figure_revision.R` and plot-data CSVs: configuration/regime
+  separation, exact MSE=Bias²+(249/250)SD², and year/regime-matched SRS denominators.
+  Do not confuse ratio-of-means with mean setting-specific ratios. Chapter body
+  retains substantive tails/budgets; detailed displays are in Appendix A7/SI.
 - Inspect figures/tables/math/citations/page flow at readable size. Build success
   alone is insufficient. Confirm approved Chapter 3 sync occurred through its hook,
   no direct bios-dissertation edits, old outputs preserved, restricted sources not

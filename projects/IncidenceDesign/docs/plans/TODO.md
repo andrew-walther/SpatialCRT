@@ -38,9 +38,10 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Remaining author/submission work
 
-- [ ] Review both CTJ layouts and settle the proposed title restoration and six-exhibit
-  revision. Existing application figures remain dense; this is an editorial review,
-  not a new analysis. See [layout note](ctj_layout_review_2026-10-02.md).
+- [x] Implement approved title restoration and six-exhibit revision in both CTJ
+  layouts; carry applicable clarity changes into the chapter and derived supplement.
+  See [exhibit review](ctj_exhibit_revision_findings_2026-10-02.md).
+- [ ] Author full review of the revised chapter, both CTJ layouts and supplement.
 - [ ] Review the [HTML companion](../../application/report/real_sud_companion.html)
   and three full drafts; paste the [Claude prompt](claude_comprehensive_review_prompt_2026-10-02.md)
   for a comprehensive review. Claude review has not yet occurred.

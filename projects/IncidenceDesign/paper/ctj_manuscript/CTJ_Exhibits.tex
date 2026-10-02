@@ -1,8 +1,31 @@
-% Shared exhibit definitions for both CTJ layouts.
-% Author: Codex (reviewed by Andrew Walther). Created: 2026-10-02.
-% Captions, table cells and graphics are unchanged from the verified draft.
-% Starred floats span both columns in the reading preview and act as ordinary
-% floats in the one-column submission version. Each macro is called once per build.
+% Shared approved exhibit definitions for both CTJ layouts.
+% Author: Codex (reviewed by Andrew Walther). Updated: 2026-10-02.
+% Figure sources: code/20_manuscript_figure_revision.R; no simulation rerun.
+% Starred floats span both reading columns; every macro is called once per build.
+
+\newcommand{\CTJDesignTable}{%
+\begin{table*}[!htb]
+\small
+\centering
+\caption{Allocation rules on the 100-cluster grid and their North Carolina adaptations. Incidence means the simulated grid covariate or observed annual cluster rate, respectively. Detailed rounding, tie-breaking and partition rules are in the supplementary material.}
+\label{tab:allocation-rules}
+\begin{tabular}{p{0.24\linewidth}p{0.68\linewidth}}
+\toprule
+Design & Allocation rule \\
+\midrule
+Checkerboard & Alternate grid neighbors; deterministic greedy graph interspersion in NC. \\
+High Incidence Focus & Treat the highest-incidence half, randomizing ties. \\
+Saturation Quadrants & Randomly order 20/40/60/80\% saturation within four grid quadrants; four frozen geographic regions in NC. \\
+Isolation Buffer & Greedy random maximal independent set: treated clusters cannot be neighbors. \\
+$2\times2$ Blocking & Treat two of four within grid blocks; randomize rounded half-budgets in frozen NC spatial/incidence/population groups. \\
+Balanced Quartiles & Randomize half within each incidence-rank quartile, with exact overall half-budget. \\
+Balanced Halves & Randomize half within each incidence-rank half, with exact overall half-budget. \\
+Incidence-Guided Saturation & Order 80/60/40/20\% by quadrant mean incidence; by regional mean annual cluster rank in NC. \\
+SRS & Completely randomize half of clusters (50 grid; 29 NC). \\
+\bottomrule
+\end{tabular}
+\end{table*}
+}
 
 \newcommand{\CTJGridTable}{%
 \begin{table*}[!htb]
@@ -38,58 +61,34 @@ SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \end{table*}
 }
 
-\newcommand{\CTJAnnualTable}{%
-\begin{table*}[!htb]
-\small
+\newcommand{\CTJMapFigure}{%
+\begin{figure*}[tp]
 \centering
-
-\caption{Primary application yearly mean MSE, queen contiguity; equal weights over the six $\rho/\gamma$ pairs. Plain saturation and SRS repeat shared primary sources across years.}
-\label{tab:nc-year}
-% SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
-
-\begin{tabular}{lrrrrr}
-\toprule
-& \multicolumn{2}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
-Year & SRS & Guided sat. & SRS & Plain sat. & Guided sat. \\
-\midrule
-2018 & 0.07638 & 0.07428 & 0.30761 & 0.22329 & 0.24285 \\
-2019 & 0.07638 & 0.07628 & 0.30761 & 0.22329 & 0.21565 \\
-2020 & 0.07638 & 0.07682 & 0.30761 & 0.22329 & 0.22029 \\
-2021 & 0.07638 & 0.07450 & 0.30761 & 0.22329 & 0.23732 \\
-
-\bottomrule
-\end{tabular}
-\end{table*}
+\includegraphics[width=\linewidth]{figures/compact/nc_planning_map.pdf}
+\caption{Observed North Carolina planning inputs. (A) Illustrative 2018 SUD rates per 100,000 population aged 18--64 for the 58 service-area clusters; all four years are evaluated separately. (B) The frozen four-region partition used by both saturation strategies in every year. Incidence guides primary allocation only; it does not enter the education-outcome baseline. All-year maps and assignment examples are in the supplementary material.}\label{fig:nc-map}
+\end{figure*}
 }
 
 \newcommand{\CTJGridFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/fig_mse_by_design_6design_queen_journal.pdf}
-\caption{Grid MSE at $\tau=1$ under queen contiguity for the detailed six-design subset. Columns show outcome spatial dependence and rows spillover regimes. Bars overlay five incidence configurations, with horizontal lines marking their values; colors show spillover magnitude. Table~\ref{tab:grid-srs} additionally includes plain saturation, Balanced Halves and SRS. Regime scales differ.}\label{fig:grid}
+\includegraphics[width=\linewidth]{figures/compact/grid_accuracy.pdf}
+\caption{Grid mean MSE at $\tau=1$ with queen weights, for the detailed six-design subset. Points keep the five incidence configurations separate, averaging 16 outcome-dependence/spillover-magnitude settings within each configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Both panels use the same logarithmic scale. Table~\ref{tab:grid-srs} includes all nine designs. Parameter-specific displays remain in the supplementary material; no pooled Monte Carlo intervals are implied.}\label{fig:grid}
+\end{figure*}
+}
+
+\newcommand{\CTJBiasFigure}{%
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{figures/compact/grid_bias_variance.pdf}
+\caption{Composition of grid mean MSE for the six-design subset, Poisson incidence with $\rho_X=0.2$, $\tau=1$ and queen weights. Squared bias and empirical error variance are averaged over 16 settings separately in each spillover regime, then divided by mean MSE. Labels show the squared-bias percentage. Empirical variance uses $(249/250)\mathrm{SD}^2$, so its sum with squared bias equals reported MSE exactly. This figure describes one incidence configuration, not all grid settings.}\label{fig:grid-bias}
 \end{figure*}
 }
 
 \newcommand{\CTJMeanFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/real_sud/primary_yearly_mse_journal.pdf}
-\caption{Completed primary application mean MSE by design, observed planning year and spillover regime, queen weights and education outcome. Each point equally averages six $\rho/\gamma$ pairs on a common logarithmic scale; gold marks SRS. Shared sources repeat across years and are not independent replications. No pooled MC intervals are supplied.}\label{fig:nc-mse}
-\end{figure*}
-}
-
-\newcommand{\CTJRiskFigure}{%
-\begin{figure*}[tp]
-\centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/real_sud/refined_allocation_risk_journal.pdf}
-\caption{Refined allocation-risk estimates at primary queen $\rho=0.5,\gamma=0.8$. Mean MSE, estimated allocation q90 and estimated worst-decile mean refer to the same 100 sampled assignments, using 400 outcomes per stochastic assignment or 1,000 for singleton supports. Finite-outcome tails and membership remain uncertain; this extension is not fresh allocation confirmation.}\label{fig:nc-risk}
-\end{figure*}
-}
-
-\newcommand{\CTJBudgetFigure}{%
-\begin{figure*}[tp]
-\centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/real_sud/population_shares_journal.pdf}
-\caption{Treated annual working-age population shares under primary queen assignments. Points are means and segments show sampled allocation ranges; the dashed line marks 50\%. Budgets use the both-arms run, with allocation support unchanged by regime. Population is geographic reach, not healthcare-professional enrollment or implementation cost.}\label{fig:nc-pop}
+\includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy.pdf}
+\caption{Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE, for all nine designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS, orange higher error; colors use a logarithmic ratio scale and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Shared annual sources are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in the supplementary material.}\label{fig:nc-mse}
 \end{figure*}
 }

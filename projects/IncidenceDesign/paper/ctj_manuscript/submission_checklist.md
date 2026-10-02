@@ -3,7 +3,8 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 2,184 prose/heading words (2,217 including mathematical-expression units);
+- [x] Body 3,215 prose/heading words; 3,381 including end declarations
+  (3,419 with mathematical-expression units as well);
   structured abstract 283 words; six keywords.
 - [x] Six main exhibits: two tables and four figures; extra detail in supplement.
 - [x] Standalone introduction and citation to verified preceding BMC publication.
@@ -14,7 +15,9 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [x] Generative-assistance disclosure draft included for author review.
 - [x] Current numerical/source verification and fresh rendered PDFs.
 - [x] Separate shared-source two-column reading preview; submission layout retained.
-- [ ] Settle title and main-exhibit selection following author visual review.
+- [x] Restore approved original title and revise six exhibits for two-column readability.
+- [x] Author-approved order: Walther, Habib, Simpson, Lin; Lin corresponding.
+- [ ] Author review of the revised full drafts and chosen exhibits.
 - [ ] Replace author-approved ethics/data-use placeholder with institutional determination,
   appropriate protocol/approval/waiver details, consent determination and source/aggregate
   publication permissions. No approval or exemption is presently asserted.

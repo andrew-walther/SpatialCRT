@@ -1,0 +1,2 @@
+PASS: exact error decomposition, configuration/regime separation, named annual SRS denominators, and wrong-value fixtures.
+PASS: expanded manuscript effect-size crossover, omitted-spillover sensitivity and variance-share claims match current outputs.

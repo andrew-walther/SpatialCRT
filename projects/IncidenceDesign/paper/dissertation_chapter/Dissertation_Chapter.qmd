@@ -27,7 +27,7 @@ format:
       \newcommand{\applabel}[2]{\def\@currentlabel{#1}\label{#2}}
       \makeatother
       \AtBeginDocument{
-        \author{Andrew Walther$^1$, Ross Joseph Simpson, Jr.$^2$, Ashkan Habib$^1$, and Feng-Chang Lin$^1$}
+        \author{Andrew Walther$^1$, Ashkan Habib$^1$, Ross Joseph Simpson, Jr.$^2$, and Feng-Chang Lin$^1$}
         \date{
             $^1$Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC, USA\\
             $^2$Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA\\
@@ -633,13 +633,10 @@ Population shares contextualize performance. High Incidence Focus treats 29 clus
 
 ```{=latex}
 \begin{figure}[!htb]
-
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/primary_yearly_mse.pdf}
-
-\caption{Completed primary application: mean MSE by design, planning year and spillover regime, queen contiguity and education outcome. Each entry equally averages the six $\rho/\gamma$ pairs. Both regime columns use a common logarithmic MSE scale. Shared annual sources are repeated reporting, not independent replications; pooled Monte Carlo intervals are not supplied.}
+\includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy.pdf}
+\caption{Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE, for all nine designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS, orange higher error; colors use a logarithmic ratio scale and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Shared annual sources are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in Appendix \ref{app:nc}.}
 \label{fig:nc-mse}
-
 \end{figure}
 ```
 
@@ -669,21 +666,10 @@ Year & SRS & Guided sat. & SRS & Plain sat. & Guided sat. \\
 
 ## Allocation downside and sensitivity
 
-At the two refined queen $\rho$ corners with $\gamma=0.8$, under control-only spillover, plain saturation's estimated q90 is 31.8--32.9\% below SRS and its estimated worst-decile mean 34.6--37.8\% below. Guided saturation's corresponding reductions are 20.8--38.6\% and 20.7--43.4\%. The pattern persists when one outcome half selects the worst decile and the opposite half evaluates it. Figure \ref{fig:nc-risk} shows the $\rho=0.5$ corner. This supports a descriptive downside benefit alongside lower average error, conditional on the studied model and sampled assignments.
+At the two refined queen $\rho$ corners with $\gamma=0.8$, under control-only spillover, plain saturation's estimated q90 is 31.8--32.9\% below SRS and its estimated worst-decile mean 34.6--37.8\% below. Guided saturation's corresponding reductions are 20.8--38.6\% and 20.7--43.4\%. The pattern persists when one outcome half selects the worst decile and the opposite half evaluates it. Figure \ref{fig:nc-risk} in Appendix \ref{app:nc} shows the $\rho=0.5$ corner. This supports a descriptive downside benefit alongside lower average error, conditional on the studied model and sampled assignments.
 
 Tail uncertainty remains material. With $J=100$, the worst decile contains only ten sampled draws; extra outcomes reduce noise in $\hat m(a)$ but do not enlarge the allocation sample. All 112 non-singleton reporting rows flag uncertain tail-boundary membership. Under both arms, guided saturation's half-sample worst-decile Jaccard overlap is 0--0.25 and approximately 61--86\% of raw estimated-risk variance is attributable to outcome Monte Carlo noise. Plain saturation has similarly unstable identities. Small both-arms tail differences therefore do not establish superior downside protection. Singleton Checkerboard and High Incidence Focus have no allocation variation for these inputs; their q90 and worst-decile mean equal conditional mean MSE, which does not imply low error or absence of outcome uncertainty.
 
-```{=latex}
-\begin{figure}[!htb]
-
-\centering
-\includegraphics[width=\linewidth]{figures/real_sud/refined_allocation_risk.pdf}
-
-\caption{Allocation-specific conditional MSE in the refined primary queen setting $\rho=0.5,\gamma=0.8$, by year and spillover regime. Mean MSE, estimated allocation q90 and estimated worst-decile mean summarize the same $J=100$ sampled assignments, with at least 400 independent outcomes per stochastic assignment or 1,000 for singleton supports. These finite-outcome tail estimates are descriptive, with uncertain membership; they are not quantiles of realized errors or a fresh allocation confirmation.}
-\label{fig:nc-risk}
-
-\end{figure}
-```
 
 In the matched hypothetical incidence-baseline/X-adjusted sensitivity, High Incidence Focus MSE rises to roughly 3.68--4.44 times its primary value under both arms and 1.42--2.52 times under control-only spillover. Treatment--incidence alignment leaves less residual treatment information after adjustment; this sensitivity changes baseline and adjustment jointly and does not imply that SUD incidence predicts education ability. Rook/queen comparisons matched at the same parameter corners preserve broad regime-specific conclusions. Alternative regional summaries change region ordering in some years; equal summaries with identical ordering/ties reuse the same distribution. We retain the prespecified mean-rank rule rather than select a summary retrospectively. Appendix \ref{app:nc} reports the matched sensitivity table and regional ordering.
 
@@ -1192,6 +1178,29 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 
 \caption{Primary queen setting-specific mean MSE ratios to year-matched SRS. Parameters and spillover regimes are kept separate; this plot does not pool neighbor definitions.}
 \label{fig:nc-setting-ratios}
+
+\end{figure}
+```
+
+Detailed absolute yearly MSE (Figure \ref{fig:nc-mse-detail}) and allocation-risk estimates (Figure \ref{fig:nc-risk}) support the compact application comparison in the body.
+
+```{=latex}
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=\linewidth]{figures/real_sud/primary_yearly_mse.pdf}
+
+\caption{Completed primary application: mean MSE by design, planning year and spillover regime, queen contiguity and education outcome. Each entry equally averages the six $\rho/\gamma$ pairs. Both regime columns use a common logarithmic MSE scale. Shared annual sources are repeated reporting, not independent replications; pooled Monte Carlo intervals are not supplied.}
+\label{fig:nc-mse-detail}
+
+\end{figure}
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=\linewidth]{figures/real_sud/refined_allocation_risk.pdf}
+
+\caption{Allocation-specific conditional MSE in the refined primary queen setting $\rho=0.5,\gamma=0.8$, by year and spillover regime. Mean MSE, estimated allocation q90 and estimated worst-decile mean summarize the same $J=100$ sampled assignments, with at least 400 independent outcomes per stochastic assignment or 1,000 for singleton supports. These finite-outcome tail estimates are descriptive, with uncertain membership; they are not quantiles of realized errors or a fresh allocation confirmation.}
+\label{fig:nc-risk}
 
 \end{figure}
 ```

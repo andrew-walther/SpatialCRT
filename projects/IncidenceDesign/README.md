@@ -10,9 +10,12 @@ uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-
 Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
 **CTJ layout review (October 2):** an [eight-page two-column reading preview](paper/ctj_manuscript/CTJ_Reading.pdf)
-now accompanies the [18-page submission draft](paper/ctj_manuscript/CTJ_Manuscript.pdf).
-Both use one master manuscript and shared exhibit definitions. Title and exhibit
-reselection remain author-review decisions; the current preview preserves them.
+now accompanies the [21-page submission draft](paper/ctj_manuscript/CTJ_Manuscript.pdf).
+Both use one master manuscript and shared exhibit definitions. The approved original title is restored. Six revised exhibits show all-nine-design
+rules/benchmark, compact simulation accuracy/decomposition, observed NC geography
+and annual NC accuracy. Detailed tail/budget/parameter displays remain in supporting
+material. Author order is Walther, Habib, Simpson, Lin. See the
+[exhibit revision and teach-back](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md).
 See [layout findings and build commands](docs/plans/ctj_layout_review_2026-10-02.md).
 
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
@@ -351,17 +354,31 @@ decomposition, rank/MSE heatmaps) that the CTJ manuscript and its SI figures wer
 
 The **dissertation chapter** is the canonical long-form source, with a full body
 and appendix. The **CTJ manuscript** is its standalone condensed derivative:
-2,184 prose/heading words (2,217 including mathematical-expression units), a 283-word structured abstract and exactly six exhibits
+3,215 prose/heading words (3,381 including end declarations), a 283-word structured abstract and exactly six exhibits
 (two tables/four figures). It includes all nine designs in the full benchmark
 and application while preserving the detailed six-design grid analysis as a
 labeled subset. The supplement retains full methods/results and all 22 chapter
 tables. April/synthetic application numbers are absent from the live drafts.
 
-Current main CTJ figures: `fig_mse_by_design_6design_queen_journal.pdf` and
-`real_sud/{primary_yearly_mse,refined_allocation_risk,population_shares}_journal.pdf`.
-Maps, setting-specific comparisons, bias/coverage and supporting grid diagnostics
-are retained in the chapter/supplement. Older unused figure assets remain
-preserved. Selection/provenance: [completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+Current CTJ figures are vector PDFs in `figures/compact/`: `nc_planning_map.pdf`,
+`grid_accuracy.pdf`, `grid_bias_variance.pdf`, and `nc_annual_accuracy.pdf`.
+They span both reading columns, with 9-point base fonts at their 174-mm export width.
+The chapter uses the compact annual comparison in its body and retains absolute
+MSE/tail displays in Appendix A7; full parameter grid figures remain in the chapter/SI.
+Older assets remain preserved. Recreate these displays without rerunning simulation:
+
+```sh
+Rscript code/20_manuscript_figure_revision.R
+Rscript code/tests/test_manuscript_exhibits.R
+python3 paper/tools/verify_manuscripts.py
+```
+
+The export reads completed results, writes traceable plot-data CSVs to
+`results/manuscript_exhibit_revision_20261002/`, and copies the selected PDFs to the
+manuscript figure directories (all four to CTJ; annual heatmap to the chapter). Its exact bias/variance decomposition corrects
+sample variance by 249/250; annual heatmap cells divide means by matched SRS means.
+It does not estimate pooled MC intervals or change computational outputs/weights.
+Selection/provenance: [exhibit findings](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md).
 Submission components: [checklist](paper/ctj_manuscript/submission_checklist.md),
 [cover letter](paper/ctj_manuscript/Cover_Letter_Draft.md) and separate figure legends.
 

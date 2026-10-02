@@ -14,8 +14,8 @@
 \newcommand{\applabel}[2]{\def\@currentlabel{#1}\label{#2}}
 \renewcommand{\l@section}{\@dottedtocline{1}{0em}{2.8em}}
 \makeatother
-\title{Supplementary material: Treatment allocation under spatial spillover}
-\author{Andrew Walther, Ross Joseph Simpson, Jr., Ashkan Habib and Feng-Chang Lin}
+\title{Supplementary material: Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence}
+\author{Andrew Walther, Ashkan Habib, Ross Joseph Simpson, Jr. and Feng-Chang Lin}
 \date{October 2, 2026}
 \emergencystretch=2em
 \begin{document}
@@ -1291,13 +1291,10 @@ complete budgets and shares are reported in Table \ref{tab:nc-budgets}
 and the appendix.
 
 \begin{figure}[!htb]
-
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/primary_yearly_mse.pdf}
-
-\caption{Completed primary application: mean MSE by design, planning year and spillover regime, queen contiguity and education outcome. Each entry equally averages the six $\rho/\gamma$ pairs. Both regime columns use a common logarithmic MSE scale. Shared annual sources are repeated reporting, not independent replications; pooled Monte Carlo intervals are not supplied.}
+\includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy.pdf}
+\caption{Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE, for all nine designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS, orange higher error; colors use a logarithmic ratio scale and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Shared annual sources are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in Section \ref{app:nc}.}
 \label{fig:nc-mse}
-
 \end{figure}
 
 \begin{table}[!htb]
@@ -1348,15 +1345,7 @@ Checkerboard and High Incidence Focus have no allocation variation for
 these inputs; their q90 and worst-decile mean equal conditional mean
 MSE, which does not imply low error or absence of outcome uncertainty.
 
-\begin{figure}[!htb]
 
-\centering
-\includegraphics[width=\linewidth]{figures/real_sud/refined_allocation_risk.pdf}
-
-\caption{Allocation-specific conditional MSE in the refined primary queen setting $\rho=0.5,\gamma=0.8$, by year and spillover regime. Mean MSE, estimated allocation q90 and estimated worst-decile mean summarize the same $J=100$ sampled assignments, with at least 400 independent outcomes per stochastic assignment or 1,000 for singleton supports. These finite-outcome tail estimates are descriptive, with uncertain membership; they are not quantiles of realized errors or a fresh allocation confirmation.}
-\label{fig:nc-risk}
-
-\end{figure}
 
 In the matched hypothetical incidence-baseline/X-adjusted sensitivity,
 High Incidence Focus MSE rises to roughly 3.68--4.44 times its primary
@@ -2090,6 +2079,25 @@ precision components, residual treatment information and individual
 warnings/failures tables are supplied as the reproducible aggregate CSV
 outputs. Zero warning/failure rows are explicit verified results, not
 evidence that diagnostics were skipped.
+
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=\linewidth]{figures/real_sud/primary_yearly_mse.pdf}
+
+\caption{Completed primary application: mean MSE by design, planning year and spillover regime, queen contiguity and education outcome. Each entry equally averages the six $\rho/\gamma$ pairs. Both regime columns use a common logarithmic MSE scale. Shared annual sources are repeated reporting, not independent replications; pooled Monte Carlo intervals are not supplied.}
+\label{fig:nc-mse-detail}
+
+\end{figure}
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=\linewidth]{figures/real_sud/refined_allocation_risk.pdf}
+
+\caption{Allocation-specific conditional MSE in the refined primary queen setting $\rho=0.5,\gamma=0.8$, by year and spillover regime. Mean MSE, estimated allocation q90 and estimated worst-decile mean summarize the same $J=100$ sampled assignments, with at least 400 independent outcomes per stochastic assignment or 1,000 for singleton supports. These finite-outcome tail estimates are descriptive, with uncertain membership; they are not quantiles of realized errors or a fresh allocation confirmation.}
+\label{fig:nc-risk}
+
+\end{figure}
 
 \begin{table}[!htb]
 \small

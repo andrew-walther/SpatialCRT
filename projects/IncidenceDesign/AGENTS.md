@@ -12,8 +12,12 @@ Full chapter/appendix and derived CTJ/SI drafts are complete and verified; autho
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
 in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
-PDFs: submission 18 pp, reading 8 pp. The author approved both layouts; proposed
-title restoration/exhibit reselection remains pending. See
+PDFs: submission 21 pp, reading 8 pp, chapter 66 pp, supplement 44 pp. The author
+approved original-title restoration and the six-exhibit revision. Main figures
+are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
+parameter/tail/budget graphics remain supporting material. Author order is
+Walther, Habib, Simpson, Lin, with Lin corresponding. See
+[exhibit revision](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md) and
 [layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -38,7 +42,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   smoke/pilot outputs are verification stages, not full-study conclusions.
   Finish the full chapter/appendix and derived CTJ/SI, then prepare the requested
   comprehensive Claude review prompt. Old deadline dates no longer govern work.
-- **CTJ author declarations (October 2):** retain Walther, Simpson, Habib and Lin,
+- **CTJ author declarations (October 2):** retain Walther, Habib, Simpson and Lin in that order,
   with Lin corresponding. Author confirmed no current funding or conflicts.
   IRB/data-use details are pending; retain an explicit author-approved placeholder
   instead of inventing a protocol number or claiming approval/exemption.
@@ -303,11 +307,13 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - Full thesis chapter/appendix and derived CTJ/SI: complete, independently reviewed,
   rendered and numerically checked. Old application comments resolved by focused
   rewriting or agreed implementation, not by claiming unsupported facts confirmed.
-- CTJ: standalone preceding-work citation verified; 2,184 prose/heading words
-  (2,217 including mathematical-expression units)/283 structured
+- CTJ: standalone preceding-work citation verified; 3,215 prose/heading words
+  (3,381 including end declarations)/283 structured
   abstract words, six exhibits, full detailed supplement and submission checklist.
-- `code/19_manuscript_exhibits.R` exports current grid/journal figure; run
-  `python3 paper/tools/verify_manuscripts.py` for table/asset/reference consistency.
+- `code/20_manuscript_figure_revision.R` exports four compact figures and plot-data
+  CSVs without simulation; `code/19_manuscript_exhibits.R` retains the prior detailed
+  export. Run `Rscript code/tests/test_manuscript_exhibits.R` and
+  `python3 paper/tools/verify_manuscripts.py` for numerical/exhibit consistency.
 - Chapter checkpoint `58c1c82` synced through the approved hook to bios-dissertation
   `fc63326`; final manuscript checkpoint `a47b0ae` resynced to `6b07b95`
   (72 pp, 31 citekeys); no push.
