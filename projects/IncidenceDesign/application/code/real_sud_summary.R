@@ -121,6 +121,7 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
     ggplot2::labs(x = "Mean MSE across six rho/gamma settings (log scale)", y = NULL,
       title = "Primary education-outcome performance by observed planning year", subtitle = "Equal-weight descriptive parameter averages; gold identifies SRS. No pooled MC intervals.")
   ggplot2::ggsave(file.path(dest, "primary_yearly_mse.pdf"), g, width = 11, height = 10)
+  ggplot2::ggsave(file.path(dest, "primary_yearly_mse_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 10)
   ggplot2::ggsave(file.path(dest, "primary_yearly_mse.png"), g, width = 11, height = 10, dpi = 150)
   g <- ggplot2::ggplot(comparisons, ggplot2::aes(x = Design_Label, y = Parameter, fill = log10(MSE_Ratio_SRS))) +
     ggplot2::geom_tile() + ggplot2::facet_grid(Year ~ Regime_Label) +
@@ -129,6 +130,7 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
     ggplot2::labs(x = NULL, y = NULL, title = "Every primary queen setting compared with SRS", subtitle = "Teal: lower MSE; red: higher MSE. Setting-specific MC errors are in the source table.") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 65, hjust = 1, size = 8))
   ggplot2::ggsave(file.path(dest, "primary_setting_ratios.pdf"), g, width = 13, height = 10)
+  ggplot2::ggsave(file.path(dest, "primary_setting_ratios_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 13, height = 10)
   ggplot2::ggsave(file.path(dest, "primary_setting_ratios.png"), g, width = 13, height = 10, dpi = 150)
   g <- ggplot2::ggplot(yearly[yearly$Regime == "both", ], ggplot2::aes(x = Mean_Population_Share, y = Design_Label)) +
     ggplot2::geom_segment(ggplot2::aes(x = Min_Population_Share, xend = Max_Population_Share, yend = Design_Label), color = "#b9cdd1") +
@@ -137,6 +139,7 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
     ggplot2::labs(x = "Treated working-age population share", y = NULL, title = "Cluster budgets and population budgets differ",
       subtitle = "Both-arms run budgets (support is regime-independent); points: mean; lines: sampled allocation range.")
   ggplot2::ggsave(file.path(dest, "population_shares.pdf"), g, width = 11, height = 7)
+  ggplot2::ggsave(file.path(dest, "population_shares_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 7)
   ggplot2::ggsave(file.path(dest, "population_shares.png"), g, width = 11, height = 7, dpi = 150)
   tail <- NULL
   tp <- file.path(root, "tail_confirmation", "performance.csv")
@@ -151,11 +154,13 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
       ggplot2::geom_segment(ggplot2::aes(x = Mean_MSE, xend = Q90_Estimated, yend = Design_Label), color = "#b9cdd1") +
       ggplot2::geom_point(ggplot2::aes(x = Mean_MSE, shape = "Mean"), color = "#167c80", size = 2) +
       ggplot2::geom_point(ggplot2::aes(x = Q90_Estimated, shape = "Estimated q90"), color = "#b77812", size = 2) +
+      ggplot2::geom_point(ggplot2::aes(x = Worst10_Mean_Estimated, shape = "Estimated worst decile"), color = "#9f5362", size = 2) +
       ggplot2::facet_grid(Year ~ Regime_Label) + ggplot2::scale_x_log10() +
-      ggplot2::scale_shape_manual(values = c(Mean = 16, "Estimated q90" = 17), name = NULL) +
+      ggplot2::scale_shape_manual(values = c(Mean = 16, "Estimated q90" = 17, "Estimated worst decile" = 15), name = NULL) +
       ggplot2::labs(x = "Conditional allocation MSE (log scale)", y = NULL, title = "Average accuracy and allocation downside are different criteria",
         subtitle = "rho=0.5, gamma=0.8; same sampled allocations, R >= 400. Finite-sample tails remain uncertain.")
     ggplot2::ggsave(file.path(dest, "refined_allocation_risk.pdf"), g, width = 11, height = 10)
+    ggplot2::ggsave(file.path(dest, "refined_allocation_risk_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 10)
     ggplot2::ggsave(file.path(dest, "refined_allocation_risk.png"), g, width = 11, height = 10, dpi = 150)
   }
   physical <- p[!duplicated(p$Source_ID), ]
