@@ -42,9 +42,12 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   Chapter 3 appendix; fix CTJ reading bibliography flow/last-page columns.
   See [assembly/reference review](prelim_assembly_ctj_reference_review_2026-10-02.md).
 - [x] Add author-requested List of Tables and List of Figures to the full prelim;
-  verify all 64 exhibit page references and preserve main-matter numbering.
-- [ ] Author review of full prelim and initial front abstract; reconcile Chapter 4
-  source timeline separately. Rebuild the assembly after later chapter syncs.
+  verify all 63 current exhibit page references and preserve main-matter numbering.
+- [x] Remove Chapter 4's fixed-date timeline in canonical multiomicsGEP source,
+  sync and rebuild the prelim; frame continuing work as methodology and expected evidence.
+- [ ] Author review of full prelim and initial front abstract. Chapter 4's later
+  substantive revision will follow its October 2 plan and verified new results.
+  Rebuild the assembly after later chapter syncs.
 
 - [x] Implement approved title restoration and six-exhibit revision in both CTJ
   layouts; carry applicable clarity changes into the chapter and derived supplement.

@@ -657,3 +657,14 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
   reviewed, five assembly tests and manifest PDF hash check pass.
 - Front-matter master edits only; no chapter/template/scientific or CTJ changes.
   Pending literature-review/bib revisions remain unstaged; no push.
+
+### 2026-10-02 — Chapter 4 narrative continuing-work revision
+
+- At author request, removed the fixed-date timeline from canonical SSBMF
+  chapter source, retained cut material in multiomicsGEP notes, verified hook
+  sync and rebuilt the full prelim. Planned advances are described directly
+  in prose informed by the October 2 plan, without meeting references.
+- Full prelim remains 187 pages; Chapter 4 body 18 pages. Lists now have
+  28 tables/35 figures and all 63 references verified. Five assembly tests,
+  PDF hash and visual review pass; other chapters/appendices/reference page
+  text unchanged. No Project 2 scientific or CTJ changes; no push.

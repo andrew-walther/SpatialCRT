@@ -25,7 +25,9 @@ Figures. Chapter 3 remains 42 body + 25 appendix pages. CTJ
 reading references now flow from page 7 into both columns of page 8. See
 [assembly/reference review and rebuild commands](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).
 The individual Chapter 3 sync hook remains unchanged; rerun the full assembly
-builder after chapter syncs. This full-length draft awaits author review.
+builder after chapter syncs. Chapter 4's dated timeline is removed; continuing
+work describes additional methodology and expected results in prose. This
+full-length draft awaits author review.
 
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 

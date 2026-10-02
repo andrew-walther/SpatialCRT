@@ -55,9 +55,10 @@ publisher proof formatting. No R dependencies or computation were changed.
 
 - Review full prelim and its initial front abstract; pending literature-review
   revisions remain working content, not implied author approval.
-- Chapter 4 source timeline mentions Summer 2027 defense while bios-dissertation
-  records an April 2027 target. Flag for author/source-owner review, without
-  rewriting Project 3 here. No scientific Project 3 claims were strengthened.
+- Chapter 4's dated timeline has now been removed at the author's request.
+  Continuing work describes methodology and expected evidence without dates
+  or meeting references. A later substantive update follows its October 2 plan
+  and verified results. No scientific Project 3 claims were strengthened.
 - Full prelim assembly must be rerun after chapter syncs or literature-review
   updates; existing Project 2/3 sync hooks still generate their individual
   chapters. The hooks were not expanded to auto-render the full document.
@@ -80,3 +81,20 @@ pass. All 167 chapter/appendix/reference pages have identical extracted text
 and unchanged printed numbering; only their PDF positions move by ten pages.
 Pending literature-review/bib edits remain unstaged. No scientific changes
 or changes to CTJ were needed. No push.
+
+## Chapter 4 continuing-work revision
+
+Author requested removal of the fixed-date timeline. Canonical multiomicsGEP
+source now describes survival-informed discovery, feature-count and screening
+sensitivity, multimodal rank selection, and expected simulation/external
+evidence in prose. The October 2 follow-up plan informed this wording; no
+advisor-meeting references appear in the chapter. Existing summary, methods,
+results and limitations are preserved. Cut material is retained in that
+repository's `paper/prelim/notes/removed-timeline-2026-10-02.md`.
+
+The installed hook regenerated the prelim chapter successfully, and the full
+prelim remains 187 pages. Its contents/table list omit the timeline; all 63
+current exhibit references (28 tables, 35 figures) match body captions. Five
+assembly tests, manifest PDF hash and visual review pass. Chapters 1–3, both
+appendices and combined reference pages have unchanged extracted text. No
+Project 2 scientific or CTJ edits were needed; no push.
