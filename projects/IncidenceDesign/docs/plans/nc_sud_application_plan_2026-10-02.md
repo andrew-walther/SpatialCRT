@@ -46,10 +46,13 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
 1. **Outcome model and units — settled October 2.** The author chose to retain the
    continuous SAR model and τ on the grid study's simulation scale, using real SUD
    incidence as the underlying information informing treatment/control allocation.
-   For the matched primary analysis, the agreed incidence transformation also feeds
-   the outcome baseline and fitted covariate. Do not label a simulation-scale τ as
+   For the matched primary analysis, the same observed incidence surface informs
+   allocation, the outcome baseline and the fitted covariate; their numerical
+   representations need not be identical. Do not label a simulation-scale τ as
    deaths prevented per 100,000. A calibrated death-count model is not primary.
-   **Pending:** rank normalization versus common scaling of actual rate magnitudes.
+   **Pending:** the scale of X in the simulated outcome/fitted model and the
+   regional incidence summary for saturation. Transforming rates is not required
+   merely to rank clusters for allocation.
 2. **Which incidence informs allocation?** Recommended primary: use each year's
    observed surface for that year's allocations, outcomes and fitted baseline
    covariate, evaluating four fixed real settings. Optional secondary: allocate
@@ -77,12 +80,20 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
       S(Z) = γ(1 − Z)WZ         (control-only)
       ε ~ N(0, I), β = 1, τ = 1 in the primary comparison.
 
-- Proposed incidence transformation: `(average rank(rate) − 0.5)/58`, matching
-  the main study's Poisson-mode transformation. The older application uses
-  `rank(rate)/58`; make the convention explicit. This preserves incidence ordering
-  and spatial pattern, but does not preserve absolute rate differences. If the
-  author instead wants actual magnitude retained, agree a common transformation
-  and the resulting β/σ calibration before running.
+- **Allocation inputs:** retain observed rates. High Incidence Focus, Balanced
+  Quartiles and Balanced Halves can compute ranks directly; converting rates to
+  numbers in [0,1] adds no allocation requirement. Keep existing tie handling.
+  Incidence-guided saturation also needs a regional summary: the existing code
+  averages normalized cluster ranks. Ranking regions by mean observed rate can
+  give a different order. Agree that rule explicitly, including whether regional
+  rates are cluster averages or deaths divided by person-years.
+- **Outcome-model input X:** separately agree its scale relative to β and σ.
+  One proposal is `(average rank(rate) − 0.5)/58`, matching the grid study's
+  Poisson mode; the older application uses `rank(rate)/58`. This represents
+  incidence ordering rather than absolute rate gaps. Raw or commonly rescaled
+  rates are also possible, with an agreed β/σ calibration. Rank-based allocation
+  does not itself determine this outcome-model choice. Do not silently change
+  regional allocation rules when changing X's numerical representation.
 - Fit existing validated SAR ML with true spillover covariate as primary. Fit the
   same engine omitting spillover as a clearly labeled sensitivity if included in
   the agreed scope. τ is the structural treatment coefficient; spatially propagated

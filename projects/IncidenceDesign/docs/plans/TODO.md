@@ -7,8 +7,10 @@ the session ends print the remaining items and a ready-to-paste prompt for the n
 [continuation_prompt_2026-10-02.md](continuation_prompt_2026-10-02.md).
 The author requested a short application design document and interview before
 implementation: [NC SUD application plan](nc_sud_application_plan_2026-10-02.md).
-Continuous SAR using real incidence information is approved; incidence
-transformation and the remaining proposed study details are under discussion.
+Continuous SAR using real incidence information is approved; the SAR baseline
+covariate scale, regional incidence summary and remaining proposed study details
+are under discussion. Rank-based allocation can use ranks of observed rates
+directly and does not require rate normalization.
 The eleven September 27 commits were pushed; earlier "not pushed" statements in
 conversation history are superseded. New commits still require push authorization.
 

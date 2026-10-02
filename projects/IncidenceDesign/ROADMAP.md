@@ -253,8 +253,11 @@ checkpoints here, not in `AGENTS.md`.
   `continuation_prompt_2026-10-02.md`, as requested by the author. They combine
   Project 1 continuity, open manuscript decisions, and application execution.
 - Author chose the existing continuous SAR approach, with observed NC SUD
-  incidence informing allocation. Incidence transformation and remaining study
-  details await agreement; no application code or manuscripts changed.
+  incidence informing allocation. Clarified after the author's follow-up:
+  rank-based allocation does not require rate normalization. The outcome-model
+  covariate scale and the regional saturation summary are separate choices.
+  Remaining study details await agreement; no application code or manuscripts
+  changed.
 - Read-only input check: 58 finite cluster rates in each of 2018–2021 and the
   pooled period; named queen/rook weights available. Existing runner uses only
   both-arms spillover, suppresses fit warnings and has old cache/seeding behavior.

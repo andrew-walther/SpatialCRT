@@ -28,7 +28,10 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > First, interview me on the outstanding application decisions in its design
 > document. The author chose the existing continuous SAR approach on October 2,
 > using observed SUD incidence to inform allocation, with τ on the simulation
-> scale. Keep the study focused. Agree the incidence transformation, which
+> scale. Cluster ranks for allocation can be computed directly from observed
+> rates: transformation is not required for rank-based assignment. Separately
+> agree the SAR baseline covariate scale and regional incidence summary (the
+> current saturation code averages cluster ranks). Keep the study focused. Agree which
 > year's incidence informs allocation, treatment-budget/design adaptations,
 > fixed geographic partition and any historical-incidence sensitivity. Present
 > the concrete implementation plan and obtain the required approval before code.
