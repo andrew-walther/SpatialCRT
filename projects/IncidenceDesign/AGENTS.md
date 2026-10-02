@@ -37,6 +37,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   versus proposed choices. The integrated prompt is
   `docs/plans/continuation_prompt_2026-10-02.md`. Do not treat proposals as approved
   model/design changes.
+- **Application outcome (author clarification 2026-10-02):** primary continuous
+  education outcomes have no SUD-incidence baseline term (β = 0); observed rates
+  inform allocation. An explicitly hypothetical β = 1 baseline sensitivity is
+  accepted, with scale/extent and fitted covariates pending. τ is constant within
+  a scenario in both cases. This supersedes older matched-primary β = 1 proposals;
+  the completed grid study remains unchanged.
 
 ---
 

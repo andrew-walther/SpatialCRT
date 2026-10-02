@@ -1,5 +1,16 @@
 # Integrated continuation prompt — IncidenceDesign, 2026-10-02
 
+**Later interview decisions supersede the older prompt below:** Checkerboard
+stays in Project 2's main comparison, with detailed diagnostics in the appendix;
+the Chapter 2 link is approved and CTJ must cite the verified Project 1 paper.
+Retain the grid allocation-risk pilot as support and use NC as the next
+confirmation, without first extending the grid pilot. Primary NC outcomes are
+continuous education responses with no SUD-incidence baseline term (β = 0);
+observed incidence informs allocation. An explicitly hypothetical β = 1 baseline
+sensitivity is accepted, with scale/extent and fitted covariates still to agree.
+τ remains constant within a scenario in both versions. Read the updated
+application plan before interpreting older matched-primary model proposals.
+
 This updates the September 27 prompt with the October 2 application-study request.
 The eleven September-session commits were successfully pushed through `e4599ca`;
 the earlier automatic approval rejection was resolved by explicit author approval.

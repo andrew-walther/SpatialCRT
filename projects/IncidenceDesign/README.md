@@ -6,7 +6,10 @@
 [NC SUD application design](docs/plans/nc_sud_application_plan_2026-10-02.md)
 and [integrated continuation prompt](docs/plans/continuation_prompt_2026-10-02.md)
 combine the earlier manuscript decisions with the real-data application request.
-The author chose the continuous SAR approach; remaining study choices are under
+The author chose continuous SAR education outcomes, using observed SUD incidence
+for allocation without an assumed incidence–education baseline relationship.
+An incidence-related baseline is a hypothetical sensitivity; the grid study
+continues to include its incidence baseline term. Remaining study choices are under
 discussion before implementation. The plan covers verification, results and
 subsequent chapter/appendix and CTJ/supplement updates.
 

@@ -249,6 +249,18 @@ checkpoints here, not in `AGENTS.md`.
 
 ### SRS interpretation interview follow-up (2026-10-02)
 
+- Outcome clarification: author accepted an education-focused NC primary model
+  with observed incidence used for allocation, β = 0 in the outcome baseline,
+  and an explicitly hypothetical β = 1 baseline sensitivity. Scale/extent and
+  fitted covariates remain to settle before implementation. τ is constant within
+  each scenario in both versions; βX does not make τ incidence-dependent.
+- Read-only source check confirms both April and revised grid simulations, and
+  the older synthetic application, included βX in outcomes and adjusted for X.
+  Chapter 3 already states the revised grid equation and heterogeneous-baseline
+  extension; the later manuscript pass should make the notation change from
+  Chapter 2 and the distinct NC primary model explicit. No existing grid results
+  or manuscript text changed.
+
 - Author approved retaining the completed allocation-risk grid pilot as supporting
   evidence and using the real-SUD NC application as the next confirmation, without
   first expanding the grid comparison to all ten incidence surfaces.

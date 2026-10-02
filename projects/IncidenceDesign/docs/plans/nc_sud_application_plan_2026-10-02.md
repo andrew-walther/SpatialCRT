@@ -85,21 +85,26 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
 
 ## Author decisions to settle
 
-1. **Outcome model and units — settled October 2.** The author chose to retain the
-   continuous SAR model and τ on the grid study's simulation scale, using real SUD
-   incidence as the underlying information informing treatment/control allocation.
-   For the matched primary analysis, the same observed incidence surface informs
-   allocation, the outcome baseline and the fitted covariate; their numerical
-   representations need not be identical. Do not label a simulation-scale τ as
-   deaths prevented per 100,000. A calibrated death-count model is not primary.
-   **Pending:** the scale of X in the simulated outcome/fitted model and the
-   regional incidence summary for saturation. Transforming rates is not required
-   merely to rank clusters for allocation.
+1. **Outcome model and units — revised by author clarification October 2.**
+   The primary application simulates a continuous education outcome: observed
+   SUD incidence informs allocation, but does not enter the outcome baseline
+   (β = 0). Do not assume an incidence–baseline-education relationship. The known
+   structural treatment effect τ is constant across clusters within a scenario,
+   independent of their SUD rates; spatial propagation and spillover remain.
+   The author also accepted retaining an incidence-related baseline (β = 1) as
+   an explicitly hypothetical sensitivity for continuity with the grid model.
+   This is not a measured incidence–education relationship. Neither analysis
+   estimates an observed education effect or establishes a reduction in SUD.
+   Do not label simulation-scale τ as deaths prevented per 100,000.
+   **Pending:** sensitivity X scale and extent, primary fitted covariates, and
+   regional incidence summary for saturation. No primary outcome X scaling is
+   required. This supersedes the earlier matched-primary β = 1 proposal.
 2. **Which incidence informs allocation?** Recommended primary: use each year's
-   observed surface for that year's allocations, outcomes and fitted baseline
-   covariate, evaluating four fixed real settings. Optional secondary: allocate
-   using year t and simulate outcomes under year t+1 (three consecutive pairs).
-   Agree the analysis covariate for this sensitivity before implementing it.
+   observed surface for that year's allocations, evaluating four fixed planning
+   settings. Only the β = 1 sensitivity uses incidence in simulated outcomes.
+   An earlier-year/later-year incidence sensitivity must have a distinct purpose
+   under this revised primary model; the former proposal to generate primary
+   outcomes from the later year's incidence no longer applies automatically.
 3. **Adaptations and treatment budget.** Recommended: retain existing adaptations
    initially and report their treatment counts and treated population shares.
    SRS and incidence quartiles enforce 29 treated; graph coloring, rounded spatial
@@ -120,10 +125,15 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
   independent replicates. An average across years must be labeled as such.
 - Continuous cluster-level SAR DGP:
 
-      Y = (I − ρW)^−1 [τZ + S(Z) + βX + ε]
+      Y = (I − ρW)^−1 [τZ + S(Z) + ε]
       S(Z) = γWZ                 (both arms)
       S(Z) = γ(1 − Z)WZ         (control-only)
-      ε ~ N(0, I), β = 1, τ = 1 in the primary comparison.
+      ε ~ N(0, I); τ = 1 is proposed for the primary comparison.
+
+  The accepted hypothetical sensitivity adds βX with β = 1. X is fixed observed
+  incidence on a scale still to be agreed. The grid study already used βX, both
+  before and after the September revision; τ was constant within a scenario in
+  that study too. βX changes baseline outcomes, not the treatment-effect coefficient.
 
 - **Allocation inputs:** retain observed rates. High Incidence Focus, Balanced
   Quartiles and Balanced Halves can compute ranks directly; converting rates to
@@ -132,7 +142,7 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
   averages normalized cluster ranks. Ranking regions by mean observed rate can
   give a different order. Agree that rule explicitly, including whether regional
   rates are cluster averages or deaths divided by person-years.
-- **Outcome-model input X:** separately agree its scale relative to β and σ.
+- **Sensitivity outcome-model input X:** separately agree its scale relative to β and σ.
   One proposal is `(average rank(rate) − 0.5)/58`, matching the grid study's
   Poisson mode; the older application uses `rank(rate)/58`. This represents
   incidence ordering rather than absolute rate gaps. Raw or commonly rescaled
@@ -143,6 +153,10 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
   same engine omitting spillover as a clearly labeled sensitivity if included in
   the agreed scope. τ is the structural treatment coefficient; spatially propagated
   total impact is a different quantity and is not the primary estimand here.
+  Proposal to settle in the implementation plan: omit incidence X from the
+  primary fitted model, which has no incidence-related baseline; include X in
+  the matched β = 1 sensitivity. Incidence adjustment in the primary analysis
+  would be a separate choice, not implied by using incidence for allocation.
 - Proposed starting grid: queen, ρ = {0, 0.2, 0.5}, γ = {0.5, 0.8}, both spillover
   regimes, all nine designs: 432 design/year/parameter blocks. Rook is a planned
   sensitivity, with its extent agreed after the queen pilot; a full τ sweep is
