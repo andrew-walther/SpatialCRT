@@ -13,6 +13,22 @@ incidence. This is a simulation-based application of the design study to real
 geography and baseline incidence. There are no observed intervention outcomes
 from which to estimate an actual intervention effect.
 
+**Author clarification (October 2):** use the observed NC SUD incidence surfaces;
+do not generate synthetic incidence for this application. Each year's observed
+rates are fixed inputs. Simulation concerns treatment allocations and outcomes
+under known intervention/spillover parameters, enabling estimation-error assessment.
+Resampling incidence or introducing a latent/noisy incidence surface is not part
+of the primary application.
+
+**SRS alignment remains open.** The author wants Project 1's practical
+allocation-consistency argument represented: BSS offered reasonably good accuracy
+while limiting poor-allocation downside in its studied settings. Project 2 must
+assess that criterion for its own designs, not equate low pooled mean MSE with
+uniform allocation quality or assume the earlier BSS recommendation transfers.
+The completed benchmark and selected-setting allocation-risk pilot inform this
+discussion; manuscript framing and any broader allocation-risk confirmation are
+still pending. The NC comparison must include SRS and carry this question forward.
+
 Agree this document before changing the simulation. Then implement, verify, run,
 interpret results, and revise the written application sections and exhibits.
 The application can proceed before the full CTJ rewrite; final recommendations

@@ -19,6 +19,9 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > Our goal is a clear, defensible treatment-design recommendation supported by
 > the revised grid study, the allocation-risk findings, and a completed application
 > on the 58 NC community-college service-area clusters using 2018–2021 SUD incidence.
+> Use observed NC incidence as fixed input; generate no synthetic incidence for
+> the primary application. Simulate treatment allocations and outcomes to assess
+> estimation error under known parameters.
 > The allocation-risk pilot and R=400 refinement are complete. They support
 > saturation designs under control-only spillover; SRS remains competitive/better
 > under both-arms spillover. They use selected settings and do not establish exact
@@ -38,8 +41,13 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > Continue independent input checks and documentation while answers are pending.
 >
 > Also settle SRS framing by spillover regime, Checkerboard body/appendix placement,
-> and the neutral Chapter 2 link before substantive manuscript edits. Preserve
-> Project 1 as accepted/final and read-only; do not reopen the audit or claim its
+> and the neutral Chapter 2 link before substantive manuscript edits.
+> Keep the author's Project 1 allocation-consistency argument central: BSS offered
+> reasonably good accuracy and limited poor-allocation downside in its studied
+> settings. Project 2 must compare both mean accuracy and allocation risk with SRS;
+> neither SRS's pooled mean nor the earlier BSS recommendation settles that question.
+> The application complements this unfinished alignment work.
+> Preserve Project 1 as accepted/final and read-only; do not reopen the audit or claim its
 > historical numerical discrepancy has been reconciled. The shared question is
 > whether allocation restrictions improve accuracy and limit poor-allocation risk;
 > design rankings need not transport unchanged across the two settings.
