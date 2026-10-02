@@ -10,15 +10,24 @@ implementation: [NC SUD application plan](nc_sud_application_plan_2026-10-02.md)
 Continuous SAR is approved. In the author's follow-up the primary outcome is
 education: observed SUD incidence guides allocation but does not enter the
 simulated outcome baseline (β = 0); τ is constant within a scenario. An explicitly
-hypothetical β = 1 baseline sensitivity is accepted, with scale/extent and fitted
-covariates still to settle. Regional mean cluster incidence ranks are approved
+hypothetical β = 1 baseline sensitivity uses rank-scaled X and an X-adjusted fit;
+the primary fit uses treatment and spillover without X. The proposed queen grid,
+focused sensitivities and precision targets are accepted. The author-requested
+[independent alignment review](nc_sud_independent_review_2026-10-02.md) is complete:
+no scientific scope change needed. The [implementation plan](nc_sud_implementation_plan_2026-10-02.md)
+addresses singleton precision, frozen geography, correct model matrices,
+identification, duplicate covariance and cross-year primary reuse; awaiting approval.
+Regional mean cluster incidence ranks are approved
 for primary incidence-guided saturation: per-capita rates → cluster ranks → mean
 regional rank → 80/60/40/20% saturation. The author requested consideration of
 mean-rate and population-weighted regional-rate sensitivity; a focused proposal
-is in the application plan, awaiting its final scope approval. One fixed four-region
+is accepted in the application scope. One fixed four-region
 partition across years is approved, using the existing geographic/balance criterion
-and pooled person-years divided by four as reference population. Other study details
-remain under discussion. Rank-based allocation can use ranks of observed rates
+and pooled person-years divided by four as reference population. The author also
+approved existing design adaptations and budget differences, year-specific spatial
+blocks frozen within each year, and Balanced Halves treating 14+15 (randomly
+choosing the half with 15), exactly 29 overall. Next: implementation-plan approval,
+code/tests, verified production, chapter/appendix and CTJ/SI. Rank-based allocation can use ranks of observed rates
 directly and does not require rate normalization.
 The eleven September 27 commits were pushed; earlier "not pushed" statements in
 conversation history are superseded. New commits still require push authorization.
@@ -26,8 +35,9 @@ conversation history are superseded. New commits still require push authorizatio
 **Completion goal reaffirmed October 2:** finish the NC application; integrate
 its findings into a full thesis chapter and appendix; then trim/reorganize that
 long-form source into full CTJ manuscript and supplementary-material drafts.
-CTJ remains a required deliverable even though chapter/prelim work has schedule
-priority. Planning and pilot runs are intermediate milestones.
+CTJ remains a required deliverable. The latest author instruction is to disregard
+the recorded deadline dates and finish the application/chapter promptly, then
+derive CTJ/SI for submission soon afterward. Planning and pilot runs are intermediate milestones.
 
 **October 2 interview decisions:** retain the completed allocation-risk grid pilot
 as supporting evidence and use the NC application as the next confirmation;

@@ -7,9 +7,19 @@ Retain the grid allocation-risk pilot as support and use NC as the next
 confirmation, without first extending the grid pilot. Primary NC outcomes are
 continuous education responses with no SUD-incidence baseline term (β = 0);
 observed incidence informs allocation. An explicitly hypothetical β = 1 baseline
-sensitivity is accepted, with scale/extent and fitted covariates still to agree.
+sensitivity uses rank-scaled X with β = 1 and adjusts for X; the primary model
+fits treatment and spillover without X. The primary queen grid and focused
+sensitivities/starting precision targets are accepted, subject to the requested
+independent alignment review (now complete) and concrete implementation-plan
+approval. Read `nc_sud_independent_review_2026-10-02.md` and
+`nc_sud_implementation_plan_2026-10-02.md`; no scientific scope expansion is
+required. Singleton production starts at R = 1,000, and all precision gates must
+account for cached duplicates and be assessed per setting.
 τ remains constant within a scenario in both versions. Read the updated
 application plan before interpreting older matched-primary model proposals.
+The author now says to disregard the recorded deadline dates: complete the
+application and chapter/appendix ASAP, then derive CTJ/SI promptly for submission.
+Older date-based scheduling instructions in the prompt below are superseded.
 
 This updates the September 27 prompt with the October 2 application-study request.
 The eleven September-session commits were successfully pushed through `e4599ca`;

@@ -33,16 +33,14 @@ where the plan mischaracterized its own cited precedent. Nothing found
 undermined the chapter-first decision itself; the review was explicitly
 scoped not to re-litigate that.
 
-## Deadline
+## Current schedule — author update October 2
 
-The prelim package is due to the committee **2026-11-16**. Only steps
-0–4 and 7 below feed that deadline — **steps 5 and 6 (deriving and
-retiring the old CTJ files) are explicitly post-deadline work**; CTJ
-submission is a soft target (`ROADMAP.md`'s own Per-Project Status table),
-not something to spend November on at the expense of the chapter. Target
-steps 0–4 and 7 complete by **~2026-11-01** to leave room for full prelim
-assembly (lit review + Chapter 2 + Chapter 3 + front matter as one
-document, which has never been attempted) before the 11/16 deadline.
+Disregard the previously recorded November target/deadline dates for this work.
+The author wants Project 2 completed as soon as possible, followed promptly by
+the CTJ manuscript and submission. Preserve the chapter-first source hierarchy:
+complete the application, integrate it into chapter/appendix and verify the sync,
+then derive CTJ/SI. Do not defer CTJ to a calendar deadline. Historical
+"post-deadline" labels later in this plan are superseded by this instruction.
 
 ## The four deliverables and their hierarchy
 

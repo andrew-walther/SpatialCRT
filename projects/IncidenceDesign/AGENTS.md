@@ -40,7 +40,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Application outcome (author clarification 2026-10-02):** primary continuous
   education outcomes have no SUD-incidence baseline term (β = 0); observed rates
   inform allocation. An explicitly hypothetical β = 1 baseline sensitivity is
-  accepted, with scale/extent and fitted covariates pending. τ is constant within
+  accepted with rank-scaled X and an X-adjusted fit; primary ML fits treatment and
+  spillover without X. τ is constant within
   a scenario in both cases. This supersedes older matched-primary β = 1 proposals;
   the completed grid study remains unchanged.
 
@@ -273,9 +274,11 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - **Allocation-risk pilot:** complete; `docs/plans/allocation_risk_findings_2026-09-27.md`.
 - **CTJ manuscript + SI:** still carry the April numbers until manuscript step 5
   (`docs/plans/manuscript-unification-plan.md`).
-- **Next:** settle SRS/Checkerboard manuscript framing and the real-SUD application
-  design, implement/verify the application, then integrate results and derive CTJ.
-  SRS code/results and the allocation-risk pilot are already complete.
+- **Next:** independent alignment review complete; approve the concrete
+  `docs/plans/nc_sud_implementation_plan_2026-10-02.md`, implement/verify/run the
+  application, integrate chapter/appendix and derive CTJ/SI. SRS framing and
+  Checkerboard placement are agreed. Work ASAP; the author superseded the earlier
+  deadline dates. SRS code/results and the allocation-risk pilot are complete.
 
 ## Dissertation Chapter 3 Sync
 

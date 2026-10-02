@@ -249,6 +249,32 @@ checkpoints here, not in `AGENTS.md`.
 
 ### SRS interpretation interview follow-up (2026-10-02)
 
+- Author accepted the proposed primary queen grid, one-feature-at-a-time
+  sensitivities (rank-based β = 1 baseline, regional summaries, rook corners),
+  and starting Monte Carlo targets, while requesting an independent reviewer
+  to check alignment with earlier simulations before implementation. Review
+  completed read-only; no production code or runs yet. Verdict and safeguards are
+  in `docs/plans/nc_sud_independent_review_2026-10-02.md`: ready for implementation
+  planning, no extra scientific sweep. Concrete plan saved as
+  `nc_sud_implementation_plan_2026-10-02.md`, awaiting author approval.
+- Reviewer verified singleton High Incidence Focus in all four observed years;
+  start singleton production at R = 1,000 and refine using empirical MC targets.
+  Stochastic designs need duplicate-aware joint MSE/coverage uncertainty and
+  allocation-versus-outcome refinement. Primary Designs 1/3/4/9 are cross-year
+  invariant with fixed W/regions and β = 0; disclose reused performance and keep
+  annual population/incidence diagnostics separate. The β = 1 analysis is a
+  matched baseline/adjustment sensitivity, not an isolated β comparison.
+- Author superseded the date-based schedule: finish Project 2 ASAP, then derive
+  CTJ/SI promptly for submission. Chapter-first hierarchy remains; disregard
+  earlier November dates as scheduling constraints for this work.
+
+- Author approved retaining the irregular-map adaptations and reporting their
+  differing treatment counts/population shares. Spatial blocks use existing
+  location/incidence-rank/population grouping, formed once per year and frozen
+  within that year. Balanced Halves will treat 14+15, randomly choosing which
+  half gets 15, to avoid the existing 28-treated rounding outcome. No code yet;
+  remaining model/sensitivity/precision details and implementation plan pending.
+
 - Author approved one fixed four-region map across all four yearly analyses,
   selected by the existing compactness and population/cluster/county-balance
   criterion using pooled person-years divided by four. Save before performance

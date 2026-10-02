@@ -2,8 +2,11 @@
 
 Author: Andrew Walther
 Date: 2026-10-02
-Status: continuous SAR approach approved; remaining design decisions under interview;
-implementation has not started.
+Status: study scope accepted October 2; independent alignment review complete;
+concrete implementation plan awaiting approval; no implementation yet.
+
+Read the [independent review](nc_sud_independent_review_2026-10-02.md) and
+[concrete implementation plan](nc_sud_implementation_plan_2026-10-02.md).
 
 ## Purpose and place in the project
 
@@ -20,7 +23,7 @@ under known intervention/spillover parameters, enabling estimation-error assessm
 Resampling incidence or introducing a latent/noisy incidence surface is not part
 of the primary application.
 
-**SRS interpretation and placement agreed; application choices remain open.** The author wants Project 1's practical
+**SRS interpretation and placement agreed.** The author wants Project 1's practical
 allocation-consistency argument represented: BSS offered reasonably good accuracy
 while limiting poor-allocation downside in its studied settings. Project 2 must
 assess that criterion for its own designs, not equate low pooled mean MSE with
@@ -96,8 +99,9 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
    This is not a measured incidence–education relationship. Neither analysis
    estimates an observed education effect or establishes a reduction in SUD.
    Do not label simulation-scale τ as deaths prevented per 100,000.
-   **Pending:** sensitivity X scale and extent and primary fitted covariates.
-   The regional mean-rank summary is approved below. No primary outcome X scaling is
+   The accepted sensitivity uses `(average rank(rate) − 0.5)/58` with β = 1,
+   on the same queen settings; its fitted model includes X. The primary fitted
+   model includes treatment and true spillover without X. No primary outcome X scaling is
    required. This supersedes the earlier matched-primary β = 1 proposal.
 2. **Which incidence informs allocation?** Recommended primary: use each year's
    observed surface for that year's allocations, evaluating four fixed planning
@@ -105,8 +109,9 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
    An earlier-year/later-year incidence sensitivity must have a distinct purpose
    under this revised primary model; the former proposal to generate primary
    outcomes from the later year's incidence no longer applies automatically.
-3. **Adaptations and treatment budget.** Recommended: retain existing adaptations
-   initially and report their treatment counts and treated population shares.
+3. **Adaptations and treatment budget — approved October 2.** Retain existing
+   adaptations and report their treatment counts and treated population shares,
+   with the Balanced Halves correction below.
    SRS and incidence quartiles enforce 29 treated; graph coloring, rounded spatial
    blocks and region saturation may differ, and Isolation Buffer generally treats
    fewer. A universal 29-cluster budget would require new rules for some designs
@@ -114,10 +119,10 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
    Read-only count check (seeded 100-draw preview, 2018 rates): queen graph
    assignment treats 27; Isolation Buffer treats 13–19 (mean 16.02); High
    Incidence Focus, Balanced Quartiles and SRS treat exactly 29. Current Balanced
-   Halves treats 28 because R rounds 29/2 = 14.5 to 14 in each half. Proposal to
-   discuss: treat 14 and 15 in the two halves, randomly choosing which gets 15,
-   to retain exactly half of 58 overall. Preview counts are not production results
-   or approved design changes.
+   Halves currently treats 28 because R rounds 29/2 = 14.5 to 14 in each half.
+   **Author-approved correction:** treat 14 and 15 in the two halves, randomly
+   choosing which gets 15, to retain exactly half of 58 overall. Preview counts
+   are not production results; this correction has not yet been implemented.
 4. **Manuscript decisions settled.** Keep SRS framing conditional on spillover
    regime, retain the grid pilot as supporting evidence and use the NC application
    as the next confirmation. Retain Checkerboard in the main Project 2 comparison,
@@ -135,7 +140,7 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
       Y = (I − ρW)^−1 [τZ + S(Z) + ε]
       S(Z) = γWZ                 (both arms)
       S(Z) = γ(1 − Z)WZ         (control-only)
-      ε ~ N(0, I); τ = 1 is proposed for the primary comparison.
+      ε ~ N(0, I); τ = 1 is accepted for the primary comparison.
 
   The accepted hypothetical sensitivity adds βX with β = 1. X is fixed observed
   incidence on a scale still to be agreed. The grid study already used βX, both
@@ -156,7 +161,7 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
   procedure explicitly in the application methods; it is not a pooled regional
   death rate and does not average raw counts.
 
-  **Focused sensitivity proposed after the author's question:** compare this
+  **Focused sensitivity accepted with study scope; implementation pending:** compare this
   primary regional rule with (a) mean cluster rate and (b) summed regional
   deaths/summed regional population × 100,000. Freeze the same partition and all
   other study choices. First report yearly summary values, regional orderings and
@@ -170,30 +175,39 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
   (2 summaries × 4 years × 3 rho × 2 gamma × 2 regimes); scope remains subject
   to the concrete implementation-plan approval. No full factorial crossing with
   every other sensitivity is implied.
-- **Sensitivity outcome-model input X:** separately agree its scale relative to β and σ.
-  One proposal is `(average rank(rate) − 0.5)/58`, matching the grid study's
-  Poisson mode; the older application uses `rank(rate)/58`. This represents
-  incidence ordering rather than absolute rate gaps. Raw or commonly rescaled
-  rates are also possible, with an agreed β/σ calibration. Rank-based allocation
-  does not itself determine this outcome-model choice. Do not silently change
-  regional allocation rules when changing X's numerical representation.
-- Fit existing validated SAR ML with true spillover covariate as primary. Fit the
-  same engine omitting spillover as a clearly labeled sensitivity if included in
-  the agreed scope. τ is the structural treatment coefficient; spatially propagated
+- **Accepted sensitivity X:** `(average rank(rate) − 0.5)/58`, matching the grid
+  Poisson mode, with β = 1 and residual SD = 1. This preserves incidence ordering,
+  not absolute rate gaps; it is hypothetical rather than an estimated education
+  relationship. It does not change the approved regional allocation rule.
+- Fit existing validated SAR ML with true spillover covariate. τ is the structural treatment coefficient; spatially propagated
   total impact is a different quantity and is not the primary estimand here.
-  Proposal to settle in the implementation plan: omit incidence X from the
-  primary fitted model, which has no incidence-related baseline; include X in
-  the matched β = 1 sensitivity. Incidence adjustment in the primary analysis
-  would be a separate choice, not implied by using incidence for allocation.
-- Proposed starting grid: queen, ρ = {0, 0.2, 0.5}, γ = {0.5, 0.8}, both spillover
-  regimes, all nine designs: 432 design/year/parameter blocks. Rook is a planned
-  sensitivity, with its extent agreed after the queen pilot; a full τ sweep is
-  optional and not required to establish the application.
-- Proposed replication: smoke verifies mechanics; pilot measures speed and
-  Monte Carlo precision; starting production request is 100 assignment draws and
-  100 outcomes per unique allocation. Refine selected allocation-risk comparisons
-  to 400 outcomes if necessary. Report achieved precision before choosing further
-  replication, rather than assuming these counts resolve tail uncertainty.
+  Accepted fits: primary `Y ~ Z + Spill`; hypothetical β = 1 sensitivity
+  `Y ~ Z + Spill + X`, both with SAR dependence. The reviewer will assess how to
+  explain differences as sensitivity to the matched baseline/adjustment
+  specification, not a pure β effect. The reviewer found no need for an additional
+  β = 0/X-adjusted bridge sweep.
+- Accepted primary grid: queen, τ = 1, residual SD = 1, ρ = {0, 0.2, 0.5},
+  γ = {0.5, 0.8}, both spillover regimes, all nine designs: 432
+  design/year/parameter blocks. Rook sensitivity uses ρ = {0, 0.5}, γ = {0.5, 0.8}
+  on all four years/nine designs, both regimes (288 blocks). The β = 1 sensitivity
+  uses the same queen settings. Regional-summary alternatives apply to Design 8
+  under the primary education model. Geographic/allocation sensitivities change
+  one feature at a time; the baseline sensitivity deliberately changes the
+  baseline and corresponding nuisance adjustment together.
+- Accepted starting replication/precision targets: 100 assignment draws and 100
+  outcomes per unique allocation; increase where needed to target mean-MSE
+  Monte Carlo SE ≤5% of estimated MSE and coverage Monte Carlo SE ≤0.01.
+  Fixed/near-fixed designs need additional outcomes, not redundant allocation
+  draws treated as independent evidence. Use split-half tail diagnostics and
+  targeted 400-outcome refinement, retaining remaining tail uncertainty.
+  Independent review requires proven singleton designs to start production at
+  1,000 outcomes, then use empirical precision gates. High Incidence Focus has
+  one eligible allocation in every observed year (58 distinct rates), even though
+  its generic helper metadata is not deterministic. For stochastic supports,
+  use joint allocation/outcome SEs with duplicate-cache covariance for MSE and
+  coverage; increase draws or outcomes according to the dominant uncertainty.
+  Prespecified tiers and gates are in the implementation plan. Smoke and pilot
+  precede production. No replication rule depends on a preferred ranking.
 
 ## Design adaptations and comparison fairness
 
@@ -204,8 +218,11 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
 - Rank region means using the agreed incidence signal separately each year for
   incidence-guided saturation; use the same partition for plain saturation.
 - Spatial blocks are an adaptation of grid 2×2 blocking, not literal 2×2 cells.
-  Record their formation rules, incidence inputs and random seeds. Agree whether
-  they remain year-specific or are frozen before running the comparison.
+  **Author-approved October 2:** retain the existing location/incidence-rank/
+  population grouping method. Form blocks once per year and freeze them across
+  that year's allocation/outcome simulations and scenarios. Record block
+  membership, input ranks, populations and reproducible seeds. Their year-specific
+  formation differs from the four-region map, which stays fixed across years.
 - Graph coloring on the irregular contiguity graph is an adapted interspersed
   assignment, not a rectangular checkerboard with guaranteed WZ = 1 − Z.
   Record its actual exposure structure, rank and treatment count. Preserve the
@@ -213,6 +230,10 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
 - Report treatment fraction, treated population share, incidence balance,
   treatment/spillover overlap and identification diagnostics beside MSE. Population
   imbalance does not silently turn τ into a population-weighted estimand.
+- Verify cross-year primary equivalence for Designs 1/3/4/9 with fixed W/regions
+  and β = 0. Reuse equivalent performance with explicit source IDs while computing
+  annual population/incidence diagnostics separately; shared rows are not
+  independent yearly confirmations. Do not assume equivalent β = 1 outcomes.
 
 ## Performance and uncertainty
 
@@ -260,10 +281,10 @@ incidence is a separately agreed sensitivity.
    Render and review in fresh passes. Commit logical steps, update README/AGENTS
    and ROADMAP/TODO; push only with explicit permission for these new commits.
 
-The manuscript-unification plan records a November 16, 2026 committee deadline
-and approximately November 1 chapter/prelim target; confirm these with the author.
-Chapter/prelim completion has priority, with CTJ derivation scheduled afterward.
-The application plan does not override that schedule.
+**Schedule superseded by author October 2:** disregard the earlier deadline dates.
+Complete this project as soon as possible, finishing the application and chapter/
+appendix promptly, then derive CTJ and its supplement for submission soon afterward.
+CTJ remains a required endpoint; do not defer it to a historical deadline.
 
 ## Project 1 connection and publication boundaries
 
