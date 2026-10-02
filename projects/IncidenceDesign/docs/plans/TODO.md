@@ -11,8 +11,12 @@ Continuous SAR is approved. In the author's follow-up the primary outcome is
 education: observed SUD incidence guides allocation but does not enter the
 simulated outcome baseline (β = 0); τ is constant within a scenario. An explicitly
 hypothetical β = 1 baseline sensitivity is accepted, with scale/extent and fitted
-covariates still to settle. Regional incidence summary and remaining study details
-are under discussion. Rank-based allocation can use ranks of observed rates
+covariates still to settle. Regional mean cluster incidence ranks are approved
+for primary incidence-guided saturation: per-capita rates → cluster ranks → mean
+regional rank → 80/60/40/20% saturation. The author requested consideration of
+mean-rate and population-weighted regional-rate sensitivity; a focused proposal
+is in the application plan, awaiting its final scope approval. Other study details
+remain under discussion. Rank-based allocation can use ranks of observed rates
 directly and does not require rate normalization.
 The eleven September 27 commits were pushed; earlier "not pushed" statements in
 conversation history are superseded. New commits still require push authorization.

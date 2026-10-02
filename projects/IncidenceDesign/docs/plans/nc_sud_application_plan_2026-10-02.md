@@ -96,8 +96,8 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
    This is not a measured incidence–education relationship. Neither analysis
    estimates an observed education effect or establishes a reduction in SUD.
    Do not label simulation-scale τ as deaths prevented per 100,000.
-   **Pending:** sensitivity X scale and extent, primary fitted covariates, and
-   regional incidence summary for saturation. No primary outcome X scaling is
+   **Pending:** sensitivity X scale and extent and primary fitted covariates.
+   The regional mean-rank summary is approved below. No primary outcome X scaling is
    required. This supersedes the earlier matched-primary β = 1 proposal.
 2. **Which incidence informs allocation?** Recommended primary: use each year's
    observed surface for that year's allocations, evaluating four fixed planning
@@ -138,10 +138,31 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
 - **Allocation inputs:** retain observed rates. High Incidence Focus, Balanced
   Quartiles and Balanced Halves can compute ranks directly; converting rates to
   numbers in [0,1] adds no allocation requirement. Keep existing tie handling.
-  Incidence-guided saturation also needs a regional summary: the existing code
-  averages normalized cluster ranks. Ranking regions by mean observed rate can
-  give a different order. Agree that rule explicitly, including whether regional
-  rates are cluster averages or deaths divided by person-years.
+  **Regional summary approved October 2:** calculate each year's cluster rates
+  as deaths/population aged 18–64 × 100,000; assign average ranks to tied rates
+  across all 58 clusters; average these ranks with equal cluster weights within
+  each fixed region. Rank regions by that mean and assign 80%, 60%, 40%, 20%
+  saturation from highest to lowest. Break regional-mean ties randomly per draw,
+  retaining the existing rule. Affine scaling of ranks to approximately 0–1
+  gives the same regional ordering. This follows the grid Poisson implementation,
+  which averages its rank-normalized per-capita incidence covariate. Explain this
+  procedure explicitly in the application methods; it is not a pooled regional
+  death rate and does not average raw counts.
+
+  **Focused sensitivity proposed after the author's question:** compare this
+  primary regional rule with (a) mean cluster rate and (b) summed regional
+  deaths/summed regional population × 100,000. Freeze the same partition and all
+  other study choices. First report yearly summary values, regional orderings and
+  assigned saturation levels. If an alternative has identical ordering and tie
+  structure, verify identical allocation support and reuse the corresponding
+  performance results with explicit provenance. Simulate changed rules for
+  incidence-guided saturation only, using matched random streams and reporting
+  differences in MSE, coverage, allocation risk and treatment/population shares.
+  Do not choose the primary rule after inspecting performance. At the proposed
+  queen grid, two fully distinct alternatives would add at most 96 blocks
+  (2 summaries × 4 years × 3 rho × 2 gamma × 2 regimes); scope remains subject
+  to the concrete implementation-plan approval. No full factorial crossing with
+  every other sensitivity is implied.
 - **Sensitivity outcome-model input X:** separately agree its scale relative to β and σ.
   One proposal is `(average rank(rate) − 0.5)/58`, matching the grid study's
   Poisson mode; the older application uses `rank(rate)/58`. This represents

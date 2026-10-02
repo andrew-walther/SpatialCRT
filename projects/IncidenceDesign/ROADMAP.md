@@ -249,6 +249,16 @@ checkpoints here, not in `AGENTS.md`.
 
 ### SRS interpretation interview follow-up (2026-10-02)
 
+- Regional allocation summary approved: observed per-capita cluster rates →
+  average ranks across 58 clusters → equal-weight mean rank within each fixed
+  region → 80/60/40/20% saturation, with existing regional tie randomization.
+  Explain explicitly in the application methods. This follows the grid Poisson
+  version's mean of rank-normalized incidence, rather than mean raw rates.
+- Author raised summary-method sensitivity. Added a focused proposal comparing
+  mean cluster rates and pooled regional death/population rates on the same
+  partition, first checking yearly orderings and then simulating changed
+  incidence-guided rules. Scope awaits implementation-plan approval; no code/run.
+
 - Outcome clarification: author accepted an education-focused NC primary model
   with observed incidence used for allocation, β = 0 in the outcome baseline,
   and an explicitly hypothetical β = 1 baseline sensitivity. Scale/extent and
