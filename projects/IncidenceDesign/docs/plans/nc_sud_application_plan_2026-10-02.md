@@ -111,6 +111,13 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
    blocks and region saturation may differ, and Isolation Buffer generally treats
    fewer. A universal 29-cluster budget would require new rules for some designs
    and is a separate scientific choice, not an automatic correction.
+   Read-only count check (seeded 100-draw preview, 2018 rates): queen graph
+   assignment treats 27; Isolation Buffer treats 13–19 (mean 16.02); High
+   Incidence Focus, Balanced Quartiles and SRS treat exactly 29. Current Balanced
+   Halves treats 28 because R rounds 29/2 = 14.5 to 14 in each half. Proposal to
+   discuss: treat 14 and 15 in the two halves, randomly choosing which gets 15,
+   to retain exactly half of 58 overall. Preview counts are not production results
+   or approved design changes.
 4. **Manuscript decisions settled.** Keep SRS framing conditional on spillover
    regime, retain the grid pilot as supporting evidence and use the NC application
    as the next confirmation. Retain Checkerboard in the main Project 2 comparison,
@@ -190,9 +197,9 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
 
 ## Design adaptations and comparison fairness
 
-- Use one fixed four-region partition across years, selected by the existing
-  compactness/population/cluster/county-balance criterion. Proposed reference
-  population is the pooled period's person-years divided by four. Freeze and save
+- **Approved October 2:** use one fixed four-region partition across years,
+  selected by the existing compactness/population/cluster/county-balance criterion.
+  Reference population is the pooled period's person-years divided by four. Freeze and save
   the partition before evaluating performance; never select it by achieved MSE.
 - Rank region means using the agreed incidence signal separately each year for
   incidence-guided saturation; use the same partition for plain saturation.

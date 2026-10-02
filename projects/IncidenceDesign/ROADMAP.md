@@ -249,6 +249,11 @@ checkpoints here, not in `AGENTS.md`.
 
 ### SRS interpretation interview follow-up (2026-10-02)
 
+- Author approved one fixed four-region map across all four yearly analyses,
+  selected by the existing compactness and population/cluster/county-balance
+  criterion using pooled person-years divided by four. Save before performance
+  evaluation; yearly incidence changes saturation ranking, not region membership.
+
 - Regional allocation summary approved: observed per-capita cluster rates →
   average ranks across 58 clusters → equal-weight mean rank within each fixed
   region → 80/60/40/20% saturation, with existing regional tie randomization.

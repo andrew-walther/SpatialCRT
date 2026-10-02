@@ -15,7 +15,9 @@ covariates still to settle. Regional mean cluster incidence ranks are approved
 for primary incidence-guided saturation: per-capita rates → cluster ranks → mean
 regional rank → 80/60/40/20% saturation. The author requested consideration of
 mean-rate and population-weighted regional-rate sensitivity; a focused proposal
-is in the application plan, awaiting its final scope approval. Other study details
+is in the application plan, awaiting its final scope approval. One fixed four-region
+partition across years is approved, using the existing geographic/balance criterion
+and pooled person-years divided by four as reference population. Other study details
 remain under discussion. Rank-based allocation can use ranks of observed rates
 directly and does not require rate normalization.
 The eleven September 27 commits were pushed; earlier "not pushed" statements in
