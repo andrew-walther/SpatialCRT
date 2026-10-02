@@ -1,0 +1,14 @@
+NC application exhibit extract
+Reporting rows: 1248
+Distinct sources: 936
+Physical independent outcome fits: 7598000
+Maximum relative MCSE(mean MSE): 0.0487114977009598
+Maximum MCSE(coverage): 0.00891686663074592
+J range: 100 to 100
+R range: 100 to 2000
+Yearly tables equally average rho/gamma pairs. Reused years and shared allocation streams are not independent replications.
+Tail extension refines the same sampled allocations; it is not a fresh allocation confirmation.
+Primary yearly MSE: yearly_primary_design_means.csv, Mean_MSE; full parameter ratios: primary_setting_srs_comparison.csv.
+Sensitivity comparisons: yearly_sensitivity_means.csv; rook/queen contrasts match the same rho/gamma corners.
+No independent-error pooled or cross-model MC intervals are supplied: allocation streams may be shared.
+Tail plot/table: refined_tail_comparison.csv if present.

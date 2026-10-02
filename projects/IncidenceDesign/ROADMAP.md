@@ -247,6 +247,22 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Completed observed-incidence application (2026-10-02)
+
+- Completed production and the prespecified allocation-risk refinement; all
+  1,248 main and 144 tail reporting settings verified. Combined distinct
+  outcome effort is 9,878,000 fits, with copied tail prefixes counted once.
+- Independent reviewer checked matching, actual estimator equivalence and all
+  96 tail prefixes. Behavioral suites, independent cache recomputation and the
+  saved companion's JavaScript checks pass.
+- Primary control-only results favor saturation; both-arms SRS remains competitive.
+  Undercoverage, budget differences and finite-tail uncertainty remain explicit.
+- Traced publication exhibits and the production/refined HTML companion are built.
+  Findings: `docs/plans/nc_sud_application_findings_2026-10-02.md`.
+- Next required deliverables: full Chapter 3/appendix integration, fresh rendering
+  and approved sync, then full standalone CTJ/SI and comprehensive Claude prompt.
+  Author declarations confirmed except the authorized IRB/data-use placeholder.
+
 ### Observed-incidence implementation and visual companion (2026-10-02)
 
 - Author approved the concrete plan, added a continuously updated HTML companion

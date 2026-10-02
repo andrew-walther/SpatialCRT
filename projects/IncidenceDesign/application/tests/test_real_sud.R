@@ -70,8 +70,17 @@ check("Exact treatment/spillover alias is flagged", !rs_model(vv, z, ss, c)$Iden
 b <- rs_block(v, s, c, 3, 8)
 extended <- rs_block(v, s, c, 5, 13, b); fresh <- rs_block(v, s, c, 5, 13)
 check("Cached J/R extension equals a fresh run exactly", identical(extended, fresh))
+parallel_blocks <- parallel::mclapply(1:2, function(i) rs_block(v, s, c, 5, 13),
+  mc.cores = 2, mc.set.seed = FALSE)
+check("Worker count/order cannot change keyed allocations or outcomes",
+  all(vapply(parallel_blocks, function(b) identical(b, fresh), logical(1))))
 check("Extension preserves allocation and outcome prefixes",
   identical(b$Z, extended$Z[, 1:3, drop = FALSE]) && all(vapply(names(b$fits), function(h) identical(b$fits[[h]], extended$fits[[h]][1:8, ]), logical(1))))
+vb <- u[which(u$Design_ID == 4 & u$Rho == 0.5 & u$Regime == "both")[1], ]
+zb <- rs_draws(vb, s, 1)[, 1]; vc <- vb; vc$Regime <- "control_only"
+check("Buffer has exactly equal SAR mean/matrix under both spillover regimes",
+  identical(rs_model(vb, zb, s, c)$mean, rs_model(vc, zb, s, c)$mean) &&
+  identical(rs_model(vb, zb, s, c)$xm, rs_model(vc, zb, s, c)$xm))
 vv <- v; vv$Year <- "2021"
 check("Primary SRS shares performance source across years", identical(rs_block_key(v, s, c), rs_block_key(vv, s, c)))
 rr <- rs_reporting_rows(vv, b, s)

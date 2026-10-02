@@ -1,5 +1,21 @@
 # IncidenceDesign open to-dos (ordered)
 
+**Verified completion checkpoint (2026-10-02):** the observed-incidence application
+and focused tail refinement are complete. Production: 1,248 reporting rows,
+936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+adds 2,280,000 outcomes on the same allocations. All settings pass completeness
+and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
+boundary fits or failures. Coverage remains below 95% and allocation tails remain
+uncertain. See [completed findings](nc_sud_application_findings_2026-10-02.md).
+Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+
+Earlier execution/pending statements below are historical and superseded by this checkpoint.
+
+**Author-only submission item:** IRB/data-use wording/protocol is pending. The
+author explicitly requests a placeholder. Author list and corresponding author
+(Lin), no current funding and no conflicts were confirmed October 2; do not ask
+for those again unless circumstances change.
+
 Maintained by each Claude session. Update it when an item finishes or changes, and before
 the session ends print the remaining items and a ready-to-paste prompt for the next one.
 

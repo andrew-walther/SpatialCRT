@@ -1,7 +1,8 @@
 # NC observed-incidence implementation: verification and walkthrough
 
 Status: implementation approved; smoke and behavioral verification passed;
-larger pilot complete; production running. This note is not a report of completed production findings.
+larger pilot complete; production assembled with all targets met, independent
+verification running. This note has not yet been updated with scientific conclusions.
 The full application, thesis chapter/appendix and derived CTJ/SI remain required.
 
 ## What is implemented and why
@@ -218,3 +219,28 @@ update this note and companion with verified findings. Then integrate the full
 chapter/appendix, render/sync/review, derive the full standalone CTJ/SI, check live
 journal rules/verified Project 1 citation, and prepare the comprehensive Claude
 review prompt. Never push without asking. Project 1 remains accepted/final/read-only.
+
+## Completed reporting deliverables: teach-back
+
+`real_sud_summary.R` turns independently verified results into manuscript-ready
+CSV tables and standard ggplot2 PNG/PDF figures. It validates manifests and gates,
+joins SRS within exactly matched settings, joins sensitivity references at the
+same year/parameters, and exports annual descriptive averages. Inputs are main
+and refined results bundles; outputs are tables, figures, aggregate inputs and
+an exhibit manifest. It deliberately omits pooled MC intervals because shared
+allocations make independence inappropriate. Singleton risks and main versus
+refined outcome replication must remain distinct.
+
+`test_real_sud_summary.R` uses actual and incomplete-reference fixtures to verify
+SRS differences/SEs, zero self-comparison error and matched sensitivity contrasts.
+`test_companion.mjs` executes the actual saved JavaScript in a small DOM fixture,
+changes evidence/year/model/neighbor/summary/regime/parameter controls and metrics,
+and checks nonconstant SVG bars, absent unplanned cells and all seven image assets.
+Inputs are the HTML and its referenced files; failures throw assertions. Node's
+built-in fs/vm/assert modules add no dependency. This is a behavior check, not a
+browser visual review. The in-app browser blocks local file URLs, so no actual
+browser rendering is claimed. Local scientific/map PNGs were visually reviewed.
+
+Full scientific findings and completed verification counts are in
+`nc_sud_application_findings_2026-10-02.md`. Production and tail outputs are
+complete; chapter/appendix and CTJ/SI drafting are now the active work.

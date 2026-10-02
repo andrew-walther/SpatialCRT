@@ -1,0 +1,10 @@
+Profile: production
+Reporting rows: 1248
+Distinct sources: 936
+Independent outcome fits: 7598000
+Incomplete rows: 0
+Precision-unresolved rows: 0
+Warning fits: 0
+Boundary fits: 0
+PASS: reporting grid, CSV/RDS, every unique allocation/draw/fit count, conditional metrics,
+joint uncertainty and annual diagnostics independently reconciled to cached sources.

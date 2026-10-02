@@ -1,5 +1,14 @@
 # Modular Incidence Simulation for Spatial CRT Design Evaluation
 
+**Verified completion checkpoint (2026-10-02):** the observed-incidence application
+and focused tail refinement are complete. Production: 1,248 reporting rows,
+936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+adds 2,280,000 outcomes on the same allocations. All settings pass completeness
+and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
+boundary fits or failures. Coverage remains below 95% and allocation tails remain
+uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
+Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
 **Application planning (2026-10-02):** the

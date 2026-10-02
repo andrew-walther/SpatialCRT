@@ -1,5 +1,14 @@
 # NC SUD Application
 
+**Verified completion checkpoint (2026-10-02):** the observed-incidence application
+and focused tail refinement are complete. Production: 1,248 reporting rows,
+936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+adds 2,280,000 outcomes on the same allocations. All settings pass completeness
+and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
+boundary fits or failures. Coverage remains below 95% and allocation tails remain
+uncertain. See [completed findings](../docs/plans/nc_sud_application_findings_2026-10-02.md).
+Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+
 **Revised study planning (2026-10-02):** see the
 [application design document](../docs/plans/nc_sud_application_plan_2026-10-02.md).
 The author chose a continuous SAR application using observed SUD incidence to
@@ -17,6 +26,7 @@ VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript applic
 VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/run_real_sud.R smoke 4
 VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/run_real_sud.R pilot 8
 VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/run_real_sud.R production 8
+Rscript application/code/real_sud_summary.R
 Rscript application/code/render_real_sud_companion.R production
 Rscript application/tests/verify_real_sud.R production
 VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/refine_real_sud_tail.R 8
@@ -42,7 +52,7 @@ the earlier profile and use a new output location when computation changes.
 
 The offline [HTML companion](report/real_sud_companion.html) displays aggregate
 maps, model diagrams and interactive result filters. Only authorized 58-cluster
-aggregates are displayed. Its smoke/pilot results are explicitly preliminary.
+aggregates are displayed. The current display uses completed production and separately identified refined-tail results.
 The new behavioral suite verifies model meaning, exact budgets, fixed-prefix
 extensions, duplicate covariance, annual reuse diagnostics and estimator agreement.
 See [implementation findings](../docs/plans/nc_sud_implementation_findings_2026-10-02.md)
@@ -238,3 +248,12 @@ The current working recommendation is to carry Balanced Quartiles, Balanced Halv
   seeds, 6 manuscript designs, queen/rook). Decide which surface feeds X and the τ/ρ/γ grid.
 - Confirm the remaining source-data items with Ashkan Habib (listed above).
 - Then update the report, the recommendation, and the manuscripts' Application text.
+
+Exhibit generation: `Rscript application/code/real_sud_summary.R` requires verified
+production and tail outputs and writes traced tables/PNG/PDF figures under
+`results/real_sud_rev_20261002/exhibits/`. It matches sensitivity references at the
+same year and parameters, avoiding mismatched rook/queen averages. Run
+`Rscript application/tests/test_real_sud_summary.R` and
+`node application/tests/test_companion.mjs` to check reference matching and the
+actual saved HTML's filters/data/figure assets. The DOM fixture does not verify
+visual rendering in a browser; local PNG figures have been visually reviewed.

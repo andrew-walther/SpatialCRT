@@ -1,5 +1,14 @@
 # AGENTS.md
 
+**Verified completion checkpoint (2026-10-02):** the observed-incidence application
+and focused tail refinement are complete. Production: 1,248 reporting rows,
+936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+adds 2,280,000 outcomes on the same allocations. All settings pass completeness
+and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
+boundary fits or failures. Coverage remains below 95% and allocation tails remain
+uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
+Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 > Provides ~80% of the context needed to be immediately productive without
@@ -22,6 +31,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   smoke/pilot outputs are verification stages, not full-study conclusions.
   Finish the full chapter/appendix and derived CTJ/SI, then prepare the requested
   comprehensive Claude review prompt. Old deadline dates no longer govern work.
+- **CTJ author declarations (October 2):** retain Walther, Simpson, Habib and Lin,
+  with Lin corresponding. Author confirmed no current funding or conflicts.
+  IRB/data-use details are pending; retain an explicit author-approved placeholder
+  instead of inventing a protocol number or claiming approval/exemption.
 
 - **Reference rule (author-confirmed 2026-09-27):** dissertation prose may refer directly
   to "Chapter 2". CTJ must use self-contained wording (e.g., "In previous work...")
