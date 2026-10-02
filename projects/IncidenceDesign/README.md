@@ -2,12 +2,12 @@
 
 **Verified completion checkpoint (2026-10-02):** the observed-incidence application
 and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
@@ -19,7 +19,7 @@ The author chose continuous SAR education outcomes, using observed SUD incidence
 for allocation without an assumed incidence–education baseline relationship.
 An incidence-related baseline is a hypothetical sensitivity; the grid study
 continues to include its incidence baseline term. The implementation plan is
-approved and execution is underway. The independent alignment review is
+approved and execution is complete. The independent alignment review is
 complete; see the [review](docs/plans/nc_sud_independent_review_2026-10-02.md) and
 [implementation plan](docs/plans/nc_sud_implementation_plan_2026-10-02.md). The
 author requests ASAP completion rather than the earlier date-based schedule.
@@ -28,11 +28,10 @@ subsequent chapter/appendix and CTJ/supplement updates.
 
 The [visual application companion](application/report/real_sud_companion.html)
 shows observed-rate maps, model meaning, adaptations and filterable performance.
-Current smoke/pilot displays are labeled preliminary. Run instructions and
+The current companion displays verified production and separate refined-risk results. Smoke/pilot outputs remain preliminary engineering checks. Run instructions and
 verification are in [application/README.md](application/README.md); the
 [implementation findings](docs/plans/nc_sud_implementation_findings_2026-10-02.md)
-record the code walkthrough and evidence. Full application and manuscript
-completion remain active work.
+record the code walkthrough and evidence. Full application and manuscript drafts are complete; author review is next.
 
 **Manuscript continuation (2026-09-27):** The [Chapter 2 check and accepted-manuscript
 review](docs/plans/ch2_check_findings_2026-09-27.md) records the evidence, limits and
@@ -40,8 +39,8 @@ open decisions for the SRS benchmark and Checkerboard discussion. Project 1 rema
 finalized and read-only. October 2 decisions retain Checkerboard in the main
 Project 2 comparison, with detailed diagnostics in the appendix, and approve a
 brief Chapter 2 extension reference. CTJ will stand alone and cite Project 1.
-The allocation-risk pilot remains supporting evidence; the NC application is the
-next confirmation, without expanding the grid pilot first. See
+The allocation-risk pilot remains supporting evidence; the completed NC application provides the
+focused confirmation, without expanding the grid pilot first. See
 [TODO](docs/plans/TODO.md) for remaining work.
 
 **Allocation-risk analysis (2026-09-27):** the author authorized a nested pilot
@@ -113,6 +112,8 @@ The predecessor Rmd is preserved untouched.
 | `12_six_design_statistical_comparisons.R` | ~180 | Re-runs Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs, regenerates named-label figures | Outputs to `results/six_design_manuscript/` |
 | `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode/per-parameter/robustness numbers for the dissertation chapter | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `14_manuscript_supplement_figures.R` | ~470 | Fresh 8-design consolidation test (justifies dropping 2 designs) + CTJ Supplementary Information figure suite + reordered/merged main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/` |
+| `19_manuscript_exhibits.R` | ~60 | Export current full nine-design grid regime means and a six-design journal figure | `results/srs_benchmark/` and CTJ figures |
+| `paper/tools/verify_manuscripts.py` | ~175 | Reconcile current manuscript cells, derived supplement and assets | Aggregate CSV inputs; fails on drift |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
 
 ---
@@ -268,8 +269,7 @@ has the full detail.
 
 The April tau-sweep and March baseline results (e.g. "D8 MSE 0.079, D1 0.802") rest on the
 implementation oversights fixed by the revision. They're archived in
-`results/archive/pre_revision_20260924/` (see its README) and must not be cited. **The CTJ
-manuscript and SI still carry those numbers** until they're rewritten (manuscript plan step 5).
+`results/archive/pre_revision_20260924/` (see its README) and must not be cited. The live CTJ/SI drafts now use the verified revised results and completed application; old drafts are archived.
 
 ### Results Directory Structure
 
@@ -322,13 +322,13 @@ paper/
     IncidenceDesign_ProjectSummary.qmd        # Brief project summary report (ranked figures)
     IncidenceDesign_ProjectSummary.pdf        # Rendered PDF summary
   ctj_manuscript/                             # PRIMARY — Clinical Trials (SAGE) submission draft
-    CTJ_Manuscript.{tex,pdf}                  # 6-design main text, exactly 6 exhibits (journal cap)
+    CTJ_Manuscript.{tex,pdf}                  # Full benchmark/application plus detailed subset; 6 exhibits (journal cap)
     Supplementary_Information.{tex,pdf}       # SI: reproducibility, full 8-design comparison,
                                                #   metric formulas, per-parameter sensitivity,
                                                #   NC application maps + table (S1-S11)
     figures/                                  # Main-text + SI figures (incl. application_maps/,
                                                #   si_figures/ subdirectories)
-  dissertation_chapter/                       # Longer-form chapter, 6 designs, no length ceiling
+  dissertation_chapter/                       # Canonical full chapter and appendix, no length ceiling
     Dissertation_Chapter.{qmd,pdf}
     shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink (Quarto underscore workaround)
   archive_manuscript/                         # Retired modular-Quarto manuscript (reference only)
@@ -343,25 +343,27 @@ The **project summary report** (`paper/report/IncidenceDesign_ProjectSummary.{qm
 is a shorter companion document with the ranked-figure suite (clean CD diagrams, bias-variance
 decomposition, rank/MSE heatmaps) that the CTJ manuscript and its SI figures were adapted from.
 
-The **CTJ manuscript** (`paper/ctj_manuscript/`) is the primary submission target: a short
-draft for *Clinical Trials* (SAGE), 6 designs, exactly 6 exhibits (the journal's cap), with
-a companion Supplementary Information document covering everything the main text defers to
-"online supplementary material" (full parameter grid, metric formulas, the complete 8-design
-comparison, and per-parameter sensitivity detail) — see `code/14_manuscript_supplement_figures.R`
-for how its figures/tables are generated.
+The **dissertation chapter** is the canonical long-form source, with a full body
+and appendix. The **CTJ manuscript** is its standalone condensed derivative:
+2,217 body words, a 283-word structured abstract and exactly six exhibits
+(two tables/four figures). It includes all nine designs in the full benchmark
+and application while preserving the detailed six-design grid analysis as a
+labeled subset. The supplement retains full methods/results and all 22 chapter
+tables. April/synthetic application numbers are absent from the live drafts.
 
-The **dissertation chapter** (`paper/dissertation_chapter/`) is a longer-form version with no
-length ceiling and a fuller Results section, sharing the same bibliography and verified facts
-as the CTJ manuscript but not its prose.
+Current main CTJ figures: `fig_mse_by_design_6design_queen_journal.pdf` and
+`real_sud/{primary_yearly_mse,refined_allocation_risk,population_shares}_journal.pdf`.
+Maps, setting-specific comparisons, bias/coverage and supporting grid diagnostics
+are retained in the chapter/supplement. Older unused figure assets remain
+preserved. Selection/provenance: [completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+Submission components: [checklist](paper/ctj_manuscript/submission_checklist.md),
+[cover letter](paper/ctj_manuscript/Cover_Letter_Draft.md) and separate figure legends.
 
-Figures available in `paper/ctj_manuscript/figures/`:
-- `fig_mse_by_design_6design.pdf` — main-text Figure 1, designs ordered best-to-worst
-- `fig_biasvar_6design.pdf` — ranked bias-variance decomposition (Figure 2)
-- `fig_coverage_tau_6design.pdf` — combined coverage + tau-sensitivity 2-panel figure (Figure 3)
-- `application_maps/` — the 3 NC application maps (service-area clusters, synthetic incidence
-  surface, k-means saturation regions), used in the main text (Figure 4) and SI (Figures S8-S10)
-  — **currently a placeholder, pending the real SUDDEN-derived county dataset**
-- `si_figures/` — the SI-only figure suite (CD diagrams, heatmaps, two-panel, tau lines)
+Regenerate journal grid exhibits: `Rscript code/19_manuscript_exhibits.R`.
+Verify document tables/figures/references: `python3 paper/tools/verify_manuscripts.py`.
+The checker reads authorized aggregate outputs and rejects incorrect values.
+Chapter builds use the approved Quarto/sync workflow; CTJ/SI use TinyTeX/latexmk
+with the existing Sage template paths (see AGENTS).
 
 ---
 
@@ -492,45 +494,29 @@ The core simulation is complete. The following extensions would strengthen the s
 
 ### Manuscript Development
 
-Both manuscripts (`paper/ctj_manuscript/`, `paper/dissertation_chapter/`), plus the CTJ
-Supplementary Information, now have complete first drafts — see Status & Next Steps
-above. Remaining work:
-
-| Priority | Task | Description |
-|----------|------|-------------|
-| **NEXT UP** | **Plan the application simulation study** | Paused 2026-09-25, not started. The real data are aggregated (`application/data/derived/`) and the queen/rook weights are built (`application/data/nc_cluster_weights.rds`). To do: plan and run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers *and* maps in both manuscripts |
-| **High** | **Write, revise, and submit the manuscript(s)** | With explicit consideration for how this material gets reused in the user's **preliminary oral exam** (literature review & project proposal) and **final thesis** (as a thesis chapter) — not scoped to journal submission alone |
-| High | **Consolidated review** | Bring all three documents (CTJ main text, CTJ SI, dissertation chapter) to the user for one combined review/revision cycle |
-| High | **Figure list review** | Deliberately review the full main-text + SI figure list and decide what to keep/drop/combine — the 2026-07-03 coverage+tau merge was a quick fit to make room for the new NC incidence map, not a considered final selection |
-| Medium | **UNC dissertation template** | Reformat `Dissertation_Chapter.qmd` to the UNC Graduate School template once all dissertation chapters are ready to merge (currently a simple double-spaced format matching Project 1's manuscript, per user direction) |
-| Medium | **CD diagram bug** | `plot_cd_diagram()` in `10_statistical_comparisons.R` has a label-collision bug for designs with adjacent ranks, independent of image width — worked around throughout (dissertation chapter omits it; the CTJ SI uses a clean re-implementation lifted from `IncidenceDesign_ProjectSummary.qmd` instead); worth fixing upstream so future work can call the shared function directly |
-| Low | **Presentation slides** | Expand `SpatialCRT_IncidenceDesign_Presentation.qmd` scaffold into full conference slides |
-
-### Code Quality / Infrastructure
-
-| Priority | Task | Description |
-|----------|------|-------------|
-| Low | **`add_mc_ses()` doc fix** | The Roxygen comment says N_Valid_Est=0 produces NA but actually produces Inf; minor documentation inaccuracy |
-| Low | **`06_visualizations.R` comment** | Clarify that `_combined_` preference in `load_latest_results()` applies per estimation-mode (not globally) — no behavior change needed, just comment clarity |
-| Low | **DIM/MLE join note** | The compare-table in `07_results_summary.Rmd` left-joins DIM (6 designs) onto MLE (8 designs); D7/D8 DIM columns show NA. Caption should mention this asymmetry explicitly. |
+The application and all required full drafts are complete. Next: consolidated
+author/Claude review, author-only ethics/data-use and corresponding-author details,
+coauthor consent, then approved submission. No new full simulation is required by
+the independent review. Calendar deadlines were superseded by ASAP completion;
+CTJ remains the submission target. UNC thesis-template integration and conference
+slides are future work, not omitted deliverables of this study completion.
 
 ---
 
 ## Application to Real NC Geography
 
-`application/` (see [application/README.md](application/README.md) for full detail) adapts
-this simulation framework from the abstract 10×10 grid to North Carolina's actual 58
-Community College service areas — the real geography for the planned SUD prevention pilot
-described in both manuscripts' Application sections. It re-implements all 8 designs for this
-irregular geometry (e.g., Checkerboard becomes "Block Stratified Sampling"; the 2×2 saturation
-quadrants become 4 population-balanced k-means regions) and has completed a full 640-scenario,
-160,000-fit synthetic-incidence run. **All current application-scale results and maps are an
-explicitly labeled synthetic placeholder.** The real data arrived and were aggregated on
-2026-09-25: Habib's (2026) sudden unexpected out-of-hospital deaths among NC adults aged 18–64,
-2018–2021 (21,147 deaths, from death certificates via a SUDDEN-validated algorithm), with SEER
-denominators, aggregated to the 58 clusters by `application/code/run_sud_aggregation.R`.
-The data are restricted and gitignored. The design comparison on the real surfaces is the next
-planned step.
+`application/` adapts all eight strategies and SRS to 58 community-college
+clusters partitioning NC's 100 counties. The observed 2018–2021 corrected SUD
+counts and populations are fixed; no primary synthetic incidence is generated.
+Incidence directs allocation; the primary education DGP has β = 0 and constant
+τ = 1. The hypothetical β = 1/X-adjusted sensitivity, rook corners and alternative
+regional summaries are separate. Production comprises 1,248 yearly reporting rows
+and 7,598,000 independent fits; tail refinement adds 2,280,000 outcomes for the
+same sampled allocations. Results, models, budgets, precision and limitations
+are in [application README](application/README.md) and the
+[HTML companion](application/report/real_sud_companion.html). Restricted county
+sources/derived files and fit caches remain ignored. The old synthetic run is
+preserved as historical output and unused in current documents.
 
 ---
 

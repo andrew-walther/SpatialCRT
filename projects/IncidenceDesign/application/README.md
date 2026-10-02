@@ -2,18 +2,18 @@
 
 **Verified completion checkpoint (2026-10-02):** the observed-incidence application
 and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
 uncertain. See [completed findings](../docs/plans/nc_sud_application_findings_2026-10-02.md).
-Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../docs/plans/manuscript_completion_findings_2026-10-02.md).
 
 **Revised study planning (2026-10-02):** see the
 [application design document](../docs/plans/nc_sud_application_plan_2026-10-02.md).
 The author chose a continuous SAR application using observed SUD incidence to
 inform allocation. The concrete implementation plan is approved and execution
-has started. The older synthetic results below are historical, not results of
+is complete. The older synthetic results below are historical, not results of
 the revised real-SUD comparison.
 
 ## Revised observed-incidence pipeline
@@ -40,10 +40,10 @@ spatial blocks. `real_sud_simulation.R` simulates education outcomes with known
 allocation only in the primary model. The separate matched baseline sensitivity
 adds rank-scaled X to the DGP and fitted matrix.
 
-`run_real_sud.R` runs each distinct allocation/outcome distribution once, refines
+`run_real_sud.R` runs each manifest-keyed computational source once, refines
 Monte Carlo precision, and expands results into separately reported years with
 annual treatment/population diagnostics and shared Source_ID provenance.
-Production has 1,248 reporting blocks and 936 distinct distributions before any
+Production has 1,248 reporting blocks and 936 computational sources before any
 additional focused tail confirmation. Outputs live under
 `results/real_sud_rev_20261002/{smoke,pilot,production}/`: `performance.csv`,
 `allocation_metrics.csv`, `warnings_failures.csv`, `results.rds`, and manifest.

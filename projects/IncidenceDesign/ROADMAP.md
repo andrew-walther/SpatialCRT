@@ -1,5 +1,7 @@
 # IncidenceDesign — Future Work Roadmap
 
+> **Current status (2026-10-02):** observed application and full chapter/appendix, CTJ/SI drafts complete. Next: author/Claude review and author-only submission metadata; see current progress log and TODO. Historical statuses below are retained by date.
+>
 > A living task list of potential extensions, methodological improvements, and dissemination
 > goals for the IncidenceDesign project. Organized by theme. Add, edit, and check off items
 > as the project evolves.
@@ -233,12 +235,10 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 | Priority | Task | File |
 |----------|------|------|
-| **NEXT UP** | **Plan the application simulation study** (paused 2026-09-25; data and weights ready, see Current State): plan + run the design comparison on the four yearly surfaces on the revised engine, then replace the placeholder Application-section numbers AND maps | `application/code/`; `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` (Section S11), `paper/dissertation_chapter/Dissertation_Chapter.qmd` |
-| **High** | **Write, revise, and submit the manuscript(s)** with explicit consideration for reuse in the user's preliminary oral exam (literature review & project proposal) and final thesis (as a thesis chapter) — not scoped to journal submission alone | `paper/ctj_manuscript/`, `paper/dissertation_chapter/` |
-| High | Consolidated user review/revision pass on all three documents together (CTJ main text, CTJ SI, dissertation chapter) | All |
-| High | Full review of the main-text + SI figure list to deliberately decide what to keep/drop/combine (the coverage+tau merge done 2026-07-03 was a quick fit for the new NC incidence map, not a considered final selection) | `paper/ctj_manuscript/CTJ_Manuscript.tex`, `paper/ctj_manuscript/Supplementary_Information.tex` |
-| Medium | Fix the pre-existing `plot_cd_diagram()` label-collision bug (designs with adjacent ranks overlap regardless of image width) — currently worked around by omitting the CD diagram from the dissertation chapter's inline exhibits | `code/10_statistical_comparisons.R` |
-| Low | Expand presentation scaffold into full conference slides | `SpatialCRT_IncidenceDesign_Presentation.qmd` |
+| **NEXT UP** | Consolidated author/Claude review of completed study and full drafts; finish author-only ethics/data-use and submission metadata | `docs/plans/claude_comprehensive_review_prompt_2026-10-02.md`; `paper/ctj_manuscript/submission_checklist.md` |
+| **High** | Coauthor approval, mandatory reviewer corrections if any, then approved CTJ submission | Full chapter, CTJ and supplement |
+| Medium | Final UNC dissertation-template integration when chapters are combined | Canonical Chapter 3 source and approved sync |
+| Low | Expand conference presentation scaffold | `paper/SpatialCRT_IncidenceDesign_Presentation.qmd` |
 
 ---
 
@@ -246,6 +246,28 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
+
+### Complete chapter/appendix and derived CTJ/SI drafts (2026-10-02)
+
+- Completed the observed-incidence application and same-allocation risk extension,
+  then integrated full methods/results into the canonical Chapter 3 and appendix.
+- Derived a standalone full CTJ article and detailed supplement from that source;
+  replaced April/synthetic results. CTJ has 2,217 body words/283 structured-abstract
+  words and six exhibits. Live journal requirements and preceding BMC citation verified.
+- Independent reviewer cleared scientific wording after three scoped corrections;
+  36 grid/20 primary MSE cells in all three sources, 360 annual cells/72 budget cells/
+  32 matched-sensitivity cells and all 22 supplement tables reconciled.
+- Fresh chapter/CTJ/SI renders and visual passes complete. Updated offline HTML,
+  figure exports, declarations, submission checklist/cover letter, teach-back and
+  comprehensive ready-to-paste Claude review prompt. Claude review remains future work.
+- Author confirmed current authors/Lin corresponding and no funding/conflicts;
+  author-approved IRB/data-use placeholder remains. Telephone/ORCID/contributions,
+  coauthor approval and submission attestations remain author-side work.
+- Project 1 unchanged/read-only; no audit or resolution claim. Restricted source
+  data/caches remain ignored, older outputs preserved. No push or submission.
+- Chapter checkpoint `58c1c82` synced successfully through the existing hook to
+  bios-dissertation `fc63326` (72 pp, seven new assets, 31 citekeys); no push.
+  Detailed evidence: `docs/plans/manuscript_completion_findings_2026-10-02.md`.
 
 ### Completed observed-incidence application (2026-10-02)
 

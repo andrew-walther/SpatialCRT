@@ -1,0 +1,5 @@
+Source: sim_results_MLE_tau_sweep_combined_20260927_000502.rds
+Source MD5: eb1d391a45dd4d52fc44f1afb71f1d72
+Benchmark: tau=1, queen, 80 scenarios/design/regime; 18 rows.
+Figure: 960 current scenario values, detailed six-design subset.
+No simulation outputs or checkpoints changed.

@@ -2,12 +2,12 @@
 
 **Verified completion checkpoint (2026-10-02):** the observed-incidence application
 and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -90,8 +90,7 @@ SE_Power), Mean_Treated, and flags N_Aliased / N_Warn / Z_WZ_rank_deficient.
 
 ## Research Focus and Framing (IMPORTANT)
 
-**Primary goal: compare the treatment sampling designs** (6 in the manuscripts, 8 in the
-reports) under realistic spatial conditions. The key question is which designs estimate
+**Primary goal: compare the treatment sampling designs** (eight strategies plus SRS in the full benchmark/application; six in detailed grid rankings) under realistic spatial conditions. The key question is which designs estimate
 the treatment effect well under heterogeneous incidence (low MSE, valid coverage). It is
 NOT which estimator is better, and NOT whether knowing prior incidence is necessary
 (user framing, 2026-09-24).
@@ -135,6 +134,8 @@ the reasoning behind this distinction.
 | `12_six_design_statistical_comparisons.R` | ~180 | Re-run Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs + named-label figures | Outputs to `results/six_design_manuscript/` |
 | `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `14_manuscript_supplement_figures.R` | ~400 | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
+| `19_manuscript_exhibits.R` | ~60 | Current nine-design grid regime CSV, provenance and six-design CTJ vector figure | Reads verified September 27 oracle outputs only |
+| `paper/tools/verify_manuscripts.py` | ~175 | CSV-to-table and chapter-to-supplement reconciliation; assets/references/citations/exhibit count | Stdlib; deliberately wrong-number fixture must fail |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **application/** | | | |
 | `application/code/run_sud_aggregation.R` | ~65 | Entry script: real SUD data → county + 58-cluster rates per 100k (by year, total, average) → `application/data/derived/` | Sources the three `sud_*.R` files below |
@@ -148,10 +149,10 @@ the reasoning behind this distinction.
 | **paper/archive_manuscript/** | | | |
 | (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
 | **paper/ctj_manuscript/** | | | |
-| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, 6 designs, condensed, exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas for `TEXINPUTS`/`BSTINPUTS` setup |
-| `Supplementary_Information.tex` | ~400 | SI: reproducibility/seeding (S1), parameter grid (S2), metric formulas (S3), estimation model (S4), full 8-design table (S5), 8-design consolidation justification (S6, only 8-design section), 6-design rankings/sensitivity/robustness/application (S7-S11) | Plain `article` class, S-prefixed numbering, no bibtex needed |
+| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, full nine-design benchmark/application, condensed, exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas for `TEXINPUTS`/`BSTINPUTS` setup |
+| `Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
 | **paper/dissertation_chapter/** | | | |
-| `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, 6 designs, full detail, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
+| `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
 | **paper/** | | | |
 | `SpatialCRT_IncidenceDesign.bib` | ~99K, 81 entries | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`; `habib_temporal_2026` added 2026-09-24 = Ashkan Habib's unpublished BIOS master's paper, source of the SUD county data) | Zotero base + SUD/SUDDEN citations + design-theory citations |
 | `SAGE_Journal_Template/` | — | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
@@ -285,22 +286,26 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 
 ---
 
-## Current State (summary; dated detail in ROADMAP.md "Progress log")
+## Current State (summary; dated detail in ROADMAP.md)
 
-- **Simulation:** revised and re-run 2026-09-24 (12,800 scenarios × 250 fits × oracle and
-  non-oracle ML). These are the current numbers; the April 2026 numbers are superseded
-  (`results/archive/pre_revision_20260924/`).
-- **Dissertation chapter:** rewritten on the revised run (Phase D) and synced to
-  `bios-dissertation` as Chapter 3. Inline `NEEDS-AUTHOR-CONFIRMATION` items remain in the
-  Application section.
-- **Allocation-risk pilot:** complete; `docs/plans/allocation_risk_findings_2026-09-27.md`.
-- **CTJ manuscript + SI:** still carry the April numbers until manuscript step 5
-  (`docs/plans/manuscript-unification-plan.md`).
-- **Next:** independent alignment review complete; approve the concrete
-  `docs/plans/nc_sud_implementation_plan_2026-10-02.md`, implement/verify/run the
-  application, integrate chapter/appendix and derive CTJ/SI. SRS framing and
-  Checkerboard placement are agreed. Work ASAP; the author superseded the earlier
-  deadline dates. SRS code/results and the allocation-risk pilot are complete.
+- Original revised grid: 12,800 eight-design scenarios; SRS benchmark extends to
+  14,400 per estimator. September 24/27 current outputs, no checkpoint edits.
+- Observed NC education application and tail extension: complete/verified;
+  1,248 main/144 tail reporting rows, 9,878,000 distinct outcomes across stages.
+- Full thesis chapter/appendix and derived CTJ/SI: complete, independently reviewed,
+  rendered and numerically checked. Old application comments resolved by focused
+  rewriting or agreed implementation, not by claiming unsupported facts confirmed.
+- CTJ: standalone preceding-work citation verified; 2,217 body words/283 structured
+  abstract words, six exhibits, full detailed supplement and submission checklist.
+- `code/19_manuscript_exhibits.R` exports current grid/journal figure; run
+  `python3 paper/tools/verify_manuscripts.py` for table/asset/reference consistency.
+- Chapter checkpoint `58c1c82` synced through the approved hook to bios-dissertation
+  `fc63326` (72 pp); no push.
+- Next: consolidated author/Claude review and author-only submission metadata.
+  Prompt: `docs/plans/claude_comprehensive_review_prompt_2026-10-02.md`.
+  IRB/data-use placeholder is approved, not an asserted approval/exemption.
+- Full figure selection, code teach-back, source mapping and live journal check:
+  `docs/plans/manuscript_completion_findings_2026-10-02.md`.
 
 ## Dissertation Chapter 3 Sync
 

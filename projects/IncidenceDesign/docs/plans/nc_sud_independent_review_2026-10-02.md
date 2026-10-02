@@ -115,3 +115,17 @@ allocation and noise. Do not alter the completed grid modules/results or reuse
 old application caches.
 
 Implementation response: `nc_sud_implementation_plan_2026-10-02.md`.
+
+
+## Completed-study/manuscript review follow-up
+
+The fresh independent reviewer verified actual NC estimator equivalence and
+all 96 refined outcome prefixes, reconciled application inputs/metrics and
+reviewed the completed chapter/CTJ/SI. Three mandatory CTJ wording fixes were
+applied: application-scoped zero warning/alias/precision claims; rook-only
+nonidentification; application mean ranks versus grid mean X. Final read-only
+source review found no scientifically mandatory issue. Both main tables and
+all 22 supplement tables agree with the chapter; the ethics placeholder
+asserts no approval/exemption. No claim of an external Claude review is made.
+Fresh PDF layout review and source-to-CSV checks are recorded separately in
+`manuscript_completion_findings_2026-10-02.md`. No new analysis was required.

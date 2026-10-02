@@ -1,9 +1,11 @@
 # NC observed-incidence implementation: verification and walkthrough
 
-Status: implementation approved; smoke and behavioral verification passed;
-larger pilot complete; production assembled with all targets met, independent
-verification running. This note has not yet been updated with scientific conclusions.
-The full application, thesis chapter/appendix and derived CTJ/SI remain required.
+Status: approved implementation, full production and same-allocation tail extension
+are complete and independently verified. Full chapter/appendix and derived CTJ/SI
+drafts are complete. Scientific findings: `nc_sud_application_findings_2026-10-02.md`;
+document provenance, review and export/checker teach-back:
+`manuscript_completion_findings_2026-10-02.md`. Historical pilot/execution entries
+below remain engineering history, not current study status.
 
 ## What is implemented and why
 
@@ -15,7 +17,7 @@ mean and fits X. This implements the author's education-outcome clarification.
 
 There are 1,248 production reporting rows: 432 primary queen, 432 matched baseline
 queen, 288 primary rook corners and 96 Design 8 summary alternatives. Content
-keys reduce these to 936 distinct simulated distributions. Shared yearly rows
+keys reduce these to 936 computational sources. Shared yearly rows
 are repeated reporting, not independent yearly evidence. Annual population
 shares and incidence contrasts are recalculated even when performance is reused.
 
@@ -167,7 +169,7 @@ identity WZ = 1 − Z automatically.
   fit rows. Its 115 unresolved precision rows are expected at J3/R8; never cite its
   performance as study evidence. An initial earlier-code smoke is preserved under
   `smoke_initial/`; source manifests distinguish it from the current smoke.
-- Larger pilot: 928 reporting rows from 688 distinct distributions, no incomplete
+- Larger pilot: 928 reporting rows from 688 computational sources, no incomplete
   rows or warning/failure records; 524 precision misses at deliberately small
   J20/R100 (singletons R200). Production uses the approved refinement tiers.
   A roxygen-only addition followed the pilot; no scientific behavior changed.

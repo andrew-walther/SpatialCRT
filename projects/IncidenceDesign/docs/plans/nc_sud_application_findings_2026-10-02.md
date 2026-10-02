@@ -1,8 +1,8 @@
 # Completed NC SUD education application — 2026-10-02
 
 The observed-incidence application and its focused allocation-risk extension are
-complete and independently verified. Thesis/appendix integration and CTJ/SI
-derivation remain unfinished. No restricted county data were released or staged.
+complete and independently verified. Full thesis/appendix and derived CTJ/SI drafts are now complete; see
+`manuscript_completion_findings_2026-10-02.md`. No restricted county data were released or staged.
 
 ## Verified study and provenance
 
@@ -13,7 +13,7 @@ Incidence informs allocation. Queen weights are primary; both spillover regimes
 and all eight strategies plus SRS are reported. The matched β = 1/X-adjusted,
 rook-corner and regional-summary sensitivities follow the approved plan.
 
-Production has **1,248 reporting rows from 936 distinct distributions** and
+Production has **1,248 reporting rows from 936 computational sources** and
 **7,598,000 independent outcome fits**. Every setting is complete, with no
 warnings, aliases, boundary fits or failures. All allocation draws use J100.
 Outcomes use R100 for stochastic assignments, R1000 for proven singletons, and

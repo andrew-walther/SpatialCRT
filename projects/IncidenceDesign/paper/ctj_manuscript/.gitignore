@@ -1,0 +1,10 @@
+# Reproducible LaTeX intermediates; source, shared bibliography and PDFs are tracked.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz

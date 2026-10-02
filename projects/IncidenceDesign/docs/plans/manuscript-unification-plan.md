@@ -1,6 +1,8 @@
 # Plan: Write Project 2 long-form first; derive CTJ + supplementary
 # material from it
 
+**Completion update, 2026-10-02:** all required full drafts and the verified observed-incidence study are complete; see `manuscript_completion_findings_2026-10-02.md`. The source-to-CTJ direction below was followed. Old deadline dates are superseded.
+
 **Author reaffirmation, 2026-10-02:** complete the real NC SUD application and use
 its findings to finish the thesis chapter and appendix first, then trim/reorganize
 that source into full CTJ manuscript and supplementary-material drafts. All four
@@ -113,10 +115,10 @@ corrected as each component is actually drafted:
 
 | Component | Chapter body | Chapter appendix | CTJ manuscript | CTJ supplementary |
 |---|---|---|---|---|
-| Standalone abstract | **No** — remove the chapter's current ~430-word abstract explicitly (step 0); the dissertation's own front matter carries its abstract | — | **Yes** — but SAGE's guidelines call for an **unstructured abstract ≤250 words**, and the current draft is a ~300-word structured one; this needs rewriting, not trimming (double-check against the live journal page, not this plan, since guidance pages go stale) | — |
+| Standalone abstract | **No** — remove the chapter's current ~430-word abstract explicitly (step 0); the dissertation's own front matter carries its abstract | — | **Yes** — but SAGE's guidelines call for an **structured abstract ≤425 words**, and the current draft is a ~300-word structured one; confirmed against live instructions October 2; current abstract has 283 words | — |
 | Introduction / Methods / Results / Discussion | Yes, in full | Overflow only (per the body-vs-appendix test in step 3) | Yes, condensed | Overflow from condensing |
 | Full parameter-grid tables, robustness breakdowns | No | Yes | No | Yes |
-| Application section | Yes, reframed as a proposal (step 2) | — | Placeholder, until real data | — |
+| Application section | Yes, completed observed-incidence methods/results | — | Completed observed-incidence application | — |
 | Ethics / consent / competing interests / author contributions | No | No | **To be written**, if and when SAGE requires it — CTJ's own Declarations currently has only "Declaration of conflicting interests" and "Funding," no ethics/consent/authorship content exists to copy from anywhere; verify against SAGE's actual checklist, don't assume Project 1's BMC set applies | No |
 | Funding / Data Availability Statement | **No for the prelim** — matching Chapter 2, which dropped all seven; Amber's two-unnumbered-section treatment is a thesis-stage decision to make for Chapters 2 and 3 together, not a default to apply here alone | — | Yes (CTJ already has a Funding section) | — |
 | Acknowledgments | **No** — Project 1's chapter dropped this too (it thanked the editor/reviewers, meaningless outside a journal submission) | — | Yes | — |

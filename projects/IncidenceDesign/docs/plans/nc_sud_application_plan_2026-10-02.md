@@ -2,21 +2,21 @@
 
 **Verified completion checkpoint (2026-10-02):** the observed-incidence application
 and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 distinct sources, 7,598,000 independent outcome fits; separate tail refinement
+936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
 uncertain. See [completed findings](nc_sud_application_findings_2026-10-02.md).
-Chapter/appendix integration and derived CTJ/SI are the active remaining work.
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](manuscript_completion_findings_2026-10-02.md).
 
 Earlier execution/pending statements below are historical and superseded by this checkpoint.
 
 Author: Andrew Walther
 Date: 2026-10-02
 Status: study scope and concrete implementation plan approved October 2;
-independent alignment review complete; implementation/verification underway.
+independent alignment review, implementation and full verification complete.
 The HTML visual companion is an additional approved deliverable. Production
-findings and full thesis/CTJ drafts remain unfinished.
+findings and full thesis/CTJ drafts are complete; author submission review remains.
 
 Read the [independent review](nc_sud_independent_review_2026-10-02.md) and
 [concrete implementation plan](nc_sud_implementation_plan_2026-10-02.md).
