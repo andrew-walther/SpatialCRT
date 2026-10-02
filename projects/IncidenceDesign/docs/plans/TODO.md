@@ -20,6 +20,19 @@ long-form source into full CTJ manuscript and supplementary-material drafts.
 CTJ remains a required deliverable even though chapter/prelim work has schedule
 priority. Planning and pilot runs are intermediate milestones.
 
+**October 2 interview decisions:** retain the completed allocation-risk grid pilot
+as supporting evidence and use the NC application as the next confirmation;
+no extension to all ten grid incidence surfaces is needed first. The Chapter 2
+linking sentence is approved and saved in the application plan. The author does
+not require a direct Project 1/2 results comparison in the body; a brief reference
+may explain the extension and inclusion of SRS/BSS alongside other designs.
+Checkerboard remains in Project 2's main design comparison, with detailed
+identification diagnostics in the appendix (author-approved follow-up). CTJ must
+stand alone and cite the verified Project 1 publication as the work being extended.
+Historical statements below that the linking sentence, Checkerboard placement or
+grid-extension decision are pending are superseded by this update. Application
+implementation decisions remain open.
+
 1. **Simple Random Sampling (SRS) benchmark.** Add it to the simulation, regenerate the
    results, and update the chapter. Added by the author 2026-09-25.
    Plan: `~/.claude/plans/pasted-content-id-a3af-you-are-synchronous-seal.md`.

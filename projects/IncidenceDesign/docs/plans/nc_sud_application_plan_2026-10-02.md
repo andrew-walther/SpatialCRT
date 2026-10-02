@@ -20,14 +20,35 @@ under known intervention/spillover parameters, enabling estimation-error assessm
 Resampling incidence or introducing a latent/noisy incidence surface is not part
 of the primary application.
 
-**SRS alignment remains open.** The author wants Project 1's practical
+**SRS interpretation and placement agreed; application choices remain open.** The author wants Project 1's practical
 allocation-consistency argument represented: BSS offered reasonably good accuracy
 while limiting poor-allocation downside in its studied settings. Project 2 must
 assess that criterion for its own designs, not equate low pooled mean MSE with
 uniform allocation quality or assume the earlier BSS recommendation transfers.
 The completed benchmark and selected-setting allocation-risk pilot inform this
-discussion; manuscript framing and any broader allocation-risk confirmation are
-still pending. The NC comparison must include SRS and carry this question forward.
+discussion. On October 2 the author approved retaining that pilot as supporting
+evidence and using the NC application as the next confirmation, without first
+extending the grid comparison to all ten incidence surfaces. The NC comparison
+must include SRS and carry this question forward.
+
+**Writing decisions (October 2 follow-up):** the author approved this Chapter 2
+linking sentence:
+
+> Chapter 2 examined block-stratified allocation as a practical way to obtain
+> reasonably good estimation while limiting poor-allocation risk in its studied
+> settings; this chapter evaluates both criteria across a broader set of designs
+> under heterogeneous incidence.
+
+The body does not need a direct numerical comparison with Project 1. A brief
+introduction/discussion reference may explain the extension and inclusion of SRS
+and BSS (Checkerboard) alongside the other designs. An appendix comparison is
+optional only if relevant and necessary; none is commissioned. The author
+approved retaining Checkerboard in Project 2's main design comparison, with
+detailed identification diagnostics in the appendix. Describe the NC graph-based
+adaptation explicitly; it is not a literal rectangular checkerboard.
+Chapter 3 follows Chapter 2 in the prelim/thesis, whereas CTJ must stand alone
+and cite the verified Project 1 publication to establish the extension. This
+citation is required, not merely optional. No manuscript text has yet been changed.
 
 Agree this document before changing the simulation. Then implement, verify, run,
 interpret results, and revise the written application sections and exhibits.
@@ -85,9 +106,12 @@ Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
    blocks and region saturation may differ, and Isolation Buffer generally treats
    fewer. A universal 29-cluster budget would require new rules for some designs
    and is a separate scientific choice, not an automatic correction.
-4. **Manuscript decisions carried forward.** Agree SRS framing by regime,
-   Checkerboard body versus appendix placement, and the neutral Chapter 2 link.
-   These do not need to delay input validation or planning of all-design analyses.
+4. **Manuscript decisions settled.** Keep SRS framing conditional on spillover
+   regime, retain the grid pilot as supporting evidence and use the NC application
+   as the next confirmation. Retain Checkerboard in the main Project 2 comparison,
+   with detailed diagnostics in the appendix. Use the approved Chapter 2 link and
+   a verified Project 1 citation in standalone CTJ prose. No direct cross-project
+   numerical comparison is required.
 
 ## Recommended primary analysis; remaining details require agreement
 

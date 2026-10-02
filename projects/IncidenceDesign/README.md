@@ -13,7 +13,11 @@ subsequent chapter/appendix and CTJ/supplement updates.
 **Manuscript continuation (2026-09-27):** The [Chapter 2 check and accepted-manuscript
 review](docs/plans/ch2_check_findings_2026-09-27.md) records the evidence, limits and
 open decisions for the SRS benchmark and Checkerboard discussion. Project 1 remains
-finalized and read-only; Chapter 3 framing has not yet been settled. See
+finalized and read-only. October 2 decisions retain Checkerboard in the main
+Project 2 comparison, with detailed diagnostics in the appendix, and approve a
+brief Chapter 2 extension reference. CTJ will stand alone and cite Project 1.
+The allocation-risk pilot remains supporting evidence; the NC application is the
+next confirmation, without expanding the grid pilot first. See
 [TODO](docs/plans/TODO.md) for remaining work.
 
 **Allocation-risk analysis (2026-09-27):** the author authorized a nested pilot

@@ -19,6 +19,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   with a citation to the Project 1 BMC Medical Research Methodology paper, never
   "Chapter 2" or "Project 1" as reader-facing references. Describe findings within
   their studied conditions; verify final bibliographic details before adding the citation.
+- **Comparison placement (author-confirmed 2026-10-02):** retain Checkerboard in
+  Project 2's main design comparison, with detailed identification diagnostics in
+  the appendix. A brief Chapter 2 link motivates the extension; no direct numerical
+  cross-project comparison is required. CTJ must cite the verified Project 1
+  publication to establish the extension while remaining self-contained.
 - **Project 1 is final.** Treat `projects/SpillSpatialDepSim/` as read-only. Changes
   reach `bios-dissertation` only through the Chapter 3 sync (below) unless the author
   asks otherwise.

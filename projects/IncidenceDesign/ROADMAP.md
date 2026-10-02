@@ -247,6 +247,24 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### SRS interpretation interview follow-up (2026-10-02)
+
+- Author approved retaining the completed allocation-risk grid pilot as supporting
+  evidence and using the real-SUD NC application as the next confirmation, without
+  first expanding the grid comparison to all ten incidence surfaces.
+- Approved the Chapter 2 linking sentence, recorded verbatim in
+  `docs/plans/nc_sud_application_plan_2026-10-02.md`. The author does not need a
+  direct cross-project numerical comparison in the body. A brief extension
+  reference and inclusion of SRS/BSS can appear in the introduction/discussion;
+  an appendix comparison is optional if necessary. In the follow-up the author
+  approved retaining Checkerboard in Project 2's main comparison, with detailed
+  identification diagnostics in the appendix. CTJ must stand alone and cite the
+  verified Project 1 publication as the work being extended.
+- Read-only checks passed: application data test suite; unique named cluster sets
+  in every year and pooled period match cached queen/rook weights; finite rates,
+  positive denominators and row-standardized weights verified. Restricted source
+  and derived files remain ignored. No code or manuscript changes.
+
 ### Application design and integrated continuation (2026-10-02)
 
 - Created `docs/plans/nc_sud_application_plan_2026-10-02.md` and an integrated
