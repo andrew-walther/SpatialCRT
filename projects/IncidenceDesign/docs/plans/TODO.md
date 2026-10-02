@@ -41,6 +41,8 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 - [x] Assemble full-length prelim in bios-dissertation, retaining the full
   Chapter 3 appendix; fix CTJ reading bibliography flow/last-page columns.
   See [assembly/reference review](prelim_assembly_ctj_reference_review_2026-10-02.md).
+- [x] Add author-requested List of Tables and List of Figures to the full prelim;
+  verify all 64 exhibit page references and preserve main-matter numbering.
 - [ ] Author review of full prelim and initial front abstract; reconcile Chapter 4
   source timeline separately. Rebuild the assembly after later chapter syncs.
 

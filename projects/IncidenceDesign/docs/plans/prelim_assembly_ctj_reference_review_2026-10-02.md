@@ -1,6 +1,6 @@
 # Full prelim and CTJ reference-flow checkpoint
 
-Author approved implementation October 2. The full-length working prelim is
+Author approved implementation October 2. The initial full-length working prelim was
 `bios-dissertation/prelim/prelim.pdf`: 177 pages using the existing bios-prelim
 class and identity file. Bodies are 24 pages for Chapter 1, 42 for Chapter 2,
 42 for Chapter 3 and 18 for Chapter 4. Appendices A/B are 4/25 pages; references
@@ -64,3 +64,19 @@ publisher proof formatting. No R dependencies or computation were changed.
 - Any condensed committee version is a separate later deliverable. No final
   department-submission/ETD compliance claim is made. Author review, CTJ
   declarations and submission approval remain pending. No push performed.
+
+## Author-requested tables and figures lists
+
+The updated prelim is 187 pages. Its master calls `\listoftables` and
+`\listoffigures` after the contents and before main matter, overriding the
+class default for prelim mode without editing the class or chapter sources.
+The List of Tables has 29 entries on printed pages xi–xv; the List of Figures
+has 35 entries on xvi–xx. Both include appendix exhibits and appear in the
+contents. Existing full captions remain the single source for each entry.
+
+All ten new pages were visually reviewed, and all 64 entry page references
+match the body captions. Five assembly tests and the PDF manifest hash check
+pass. All 167 chapter/appendix/reference pages have identical extracted text
+and unchanged printed numbering; only their PDF positions move by ten pages.
+Pending literature-review/bib edits remain unstaged. No scientific changes
+or changes to CTJ were needed. No push.

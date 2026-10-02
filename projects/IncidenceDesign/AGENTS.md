@@ -21,8 +21,10 @@ Walther, Habib, Simpson, Lin, with Lin corresponding. See
 [layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
 
 **Full prelim/reference-flow checkpoint:** bios-dissertation's
-`prelim/prelim.pdf` is the 177-page working assembly; Chapter 3 retains 42 body
-and 25 appendix pages. Rebuild there with `prelim/tools/build_prelim.py` after
+`prelim/prelim.pdf` is the 187-page working assembly; Chapter 3 retains 42 body
+and 25 appendix pages. The master explicitly includes the author-requested
+List of Tables (29 entries) and List of Figures (35 entries) even in prelim mode.
+Rebuild there with `prelim/tools/build_prelim.py` after
 individual chapter syncs; source ownership and hooks are unchanged. CTJ reading
 uses the installed `flushend` package and no forced bibliography page breaks;
 references begin on page 7 and occupy both columns on page 8. The review layout

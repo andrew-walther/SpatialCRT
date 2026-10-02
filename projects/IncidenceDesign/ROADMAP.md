@@ -647,3 +647,13 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
   Numerical/exhibit checks and visual review pass; no scientific result changes.
 - Findings/teach-back: `docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md`.
   No pushes; full-draft review remains.
+
+### 2026-10-02 — full prelim exhibit lists
+
+- Added the author-requested List of Tables (29 entries) and List of Figures
+  (35 entries) in bios-dissertation, including appendix exhibits and contents
+  entries. Full prelim now 187 pages; chapter-body lengths and printed numbers
+  unchanged. All 64 page references checked, all ten list pages visually
+  reviewed, five assembly tests and manifest PDF hash check pass.
+- Front-matter master edits only; no chapter/template/scientific or CTJ changes.
+  Pending literature-review/bib revisions remain unstaged; no push.
