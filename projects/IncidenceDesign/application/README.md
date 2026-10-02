@@ -3,9 +3,57 @@
 **Revised study planning (2026-10-02):** see the
 [application design document](../docs/plans/nc_sud_application_plan_2026-10-02.md).
 The author chose a continuous SAR application using observed SUD incidence to
-inform allocation. Remaining design choices are under interview; new implementation
-has not started. The older synthetic results below are historical, not results of
-the planned real-SUD comparison.
+inform allocation. The concrete implementation plan is approved and execution
+has started. The older synthetic results below are historical, not results of
+the revised real-SUD comparison.
+
+## Revised observed-incidence pipeline
+
+From the IncidenceDesign project directory:
+
+```sh
+Rscript application/tests/test_application_data.R
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/tests/test_real_sud.R
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/run_real_sud.R smoke 4
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/run_real_sud.R pilot 8
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/run_real_sud.R production 8
+Rscript application/code/render_real_sud_companion.R production
+Rscript application/tests/verify_real_sud.R production
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript application/code/refine_real_sud_tail.R 8
+Rscript application/tests/verify_real_sud.R tail_confirmation
+```
+
+`real_sud_setup.R` validates observed annual/pooled cluster inputs, cached queen/
+rook weights and legal-boundary geography, and freezes four regions plus yearly
+spatial blocks. `real_sud_simulation.R` simulates education outcomes with known
+τ = 1 and estimates τ with the validated SAR ML engine. Incidence informs
+allocation only in the primary model. The separate matched baseline sensitivity
+adds rank-scaled X to the DGP and fitted matrix.
+
+`run_real_sud.R` runs each distinct allocation/outcome distribution once, refines
+Monte Carlo precision, and expands results into separately reported years with
+annual treatment/population diagnostics and shared Source_ID provenance.
+Production has 1,248 reporting blocks and 936 distinct distributions before any
+additional focused tail confirmation. Outputs live under
+`results/real_sud_rev_20261002/{smoke,pilot,production}/`: `performance.csv`,
+`allocation_metrics.csv`, `warnings_failures.csv`, `results.rds`, and manifest.
+Fit checkpoints are ignored. Code/input changes refuse checkpoint reuse; preserve
+the earlier profile and use a new output location when computation changes.
+
+The offline [HTML companion](report/real_sud_companion.html) displays aggregate
+maps, model diagrams and interactive result filters. Only authorized 58-cluster
+aggregates are displayed. Its smoke/pilot results are explicitly preliminary.
+The new behavioral suite verifies model meaning, exact budgets, fixed-prefix
+extensions, duplicate covariance, annual reuse diagnostics and estimator agreement.
+See [implementation findings](../docs/plans/nc_sud_implementation_findings_2026-10-02.md)
+for the walkthrough and current verification evidence.
+
+`refine_real_sud_tail.R` separately extends outcomes to at least R400 for all
+designs at primary queen corners (rho 0/0.5, gamma 0.8, both regimes, all years).
+It validates the parent manifest and preserves main outputs and allocation/fit
+prefixes. This refines the same allocation sample; it is not independent
+confirmatory allocations. Cross-selected outcome-half diagnostics show selection
+uncertainty. `test_real_sud_tail.R` checks those diagnostics with a hand fixture.
 
 This directory adapts the IncidenceDesign simulation framework from a regular 10x10 grid to the North Carolina Community College service-area application. The application uses 58 irregular spatial clusters, Queen-contiguity neighbors, and population-balanced design adaptations to evaluate treatment assignment strategies for a future SUD intervention study.
 

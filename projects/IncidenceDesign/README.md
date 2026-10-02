@@ -9,13 +9,21 @@ combine the earlier manuscript decisions with the real-data application request.
 The author chose continuous SAR education outcomes, using observed SUD incidence
 for allocation without an assumed incidence–education baseline relationship.
 An incidence-related baseline is a hypothetical sensitivity; the grid study
-continues to include its incidence baseline term. Study scope is accepted, pending
-concrete implementation-plan approval. The independent alignment review is
+continues to include its incidence baseline term. The implementation plan is
+approved and execution is underway. The independent alignment review is
 complete; see the [review](docs/plans/nc_sud_independent_review_2026-10-02.md) and
 [implementation plan](docs/plans/nc_sud_implementation_plan_2026-10-02.md). The
 author requests ASAP completion rather than the earlier date-based schedule.
 The plan covers verification, results and
 subsequent chapter/appendix and CTJ/supplement updates.
+
+The [visual application companion](application/report/real_sud_companion.html)
+shows observed-rate maps, model meaning, adaptations and filterable performance.
+Current smoke/pilot displays are labeled preliminary. Run instructions and
+verification are in [application/README.md](application/README.md); the
+[implementation findings](docs/plans/nc_sud_implementation_findings_2026-10-02.md)
+record the code walkthrough and evidence. Full application and manuscript
+completion remain active work.
 
 **Manuscript continuation (2026-09-27):** The [Chapter 2 check and accepted-manuscript
 review](docs/plans/ch2_check_findings_2026-09-27.md) records the evidence, limits and

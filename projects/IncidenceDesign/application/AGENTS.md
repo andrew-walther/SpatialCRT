@@ -3,6 +3,26 @@
 > Loaded only when working under `application/` (via the `@AGENTS.md` stub in `CLAUDE.md`).
 > Moved from the project-level [../AGENTS.md](../AGENTS.md) "Current State (2026-09-25)" section.
 
+## Revised application pipeline
+
+- Implementation is approved. `real_sud_setup.R` freezes observed inputs/regions/
+  yearly blocks; `real_sud_simulation.R` runs nested allocations and outcomes;
+  `run_real_sud.R` writes yearly reports with explicit canonical source reuse.
+- Primary education outcomes have β = 0 and fit intercept/Z/Spill. The matched
+  β = 1 sensitivity adds rank-scaled X to both DGP and fit. τ = 1 throughout.
+- Source manifests cover computation files, not the display renderer. Do not
+  alter computation and reuse its checkpoints. Boundary fits invalidate complete
+  comparisons; aliases/warnings/failures remain recorded. Mean MSE/coverage
+  precision accounts for duplicate frequencies; singleton repeats are not extra
+  independent fits. Allocation streams are shared across equivalent supports,
+  so cross-setting pooled MC SEs cannot assume independent allocation randomness.
+- Outputs: `results/real_sud_rev_20261002/`; ignored fit caches; tracked cluster
+  summaries and aggregate maps. `render_real_sud_companion.R` updates the offline
+  HTML companion. Run commands are in README; behavioral tests are in
+  `tests/test_real_sud.R`. Smoke/pilot are preliminary engineering stages.
+- Findings and full function/script teach-back:
+  `../docs/plans/nc_sud_implementation_findings_2026-10-02.md`.
+
 ## Real NC SUD data (as of 2026-09-25)
 
 - **Sources** (gitignored: restricted death-certificate data, public repo; originals in

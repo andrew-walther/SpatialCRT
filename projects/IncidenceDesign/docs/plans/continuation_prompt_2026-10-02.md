@@ -1,5 +1,15 @@
 # Integrated continuation prompt — IncidenceDesign, 2026-10-02
 
+**Latest execution authorization:** the author approved the concrete implementation
+plan and asks to keep proceeding in this session after context compaction. Do not
+repeat the interview or ask for that approval again. Build/update
+`application/report/real_sud_companion.html` alongside the study, then prepare a
+ready-to-paste comprehensive Claude review prompt after the analyses and full
+thesis/CTJ drafts. Implementation checkpoint and teach-back:
+`nc_sud_implementation_findings_2026-10-02.md`. Read current Git state and running
+processes before resuming; code and smoke verification are underway, not completed
+scientific results. All old deadline dates are superseded by ASAP completion.
+
 **Later interview decisions supersede the older prompt below:** Checkerboard
 stays in Project 2's main comparison, with detailed diagnostics in the appendix;
 the Chapter 2 link is approved and CTJ must cite the verified Project 1 paper.

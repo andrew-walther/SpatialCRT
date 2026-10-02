@@ -14,6 +14,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Standing Author Rules
 
+- **Application execution:** implementation approved October 2. Continue the
+  approved plan without re-interviewing settled choices. The companion is
+  `application/report/real_sud_companion.html`; computation lives in
+  `application/code/real_sud_{setup,simulation}.R` and `run_real_sud.R`.
+  Follow `application/README.md` and the implementation findings for run status;
+  smoke/pilot outputs are verification stages, not full-study conclusions.
+  Finish the full chapter/appendix and derived CTJ/SI, then prepare the requested
+  comprehensive Claude review prompt. Old deadline dates no longer govern work.
+
 - **Reference rule (author-confirmed 2026-09-27):** dissertation prose may refer directly
   to "Chapter 2". CTJ must use self-contained wording (e.g., "In previous work...")
   with a citation to the Project 1 BMC Medical Research Methodology paper, never

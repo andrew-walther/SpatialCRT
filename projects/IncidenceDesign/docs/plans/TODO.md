@@ -16,7 +16,11 @@ focused sensitivities and precision targets are accepted. The author-requested
 [independent alignment review](nc_sud_independent_review_2026-10-02.md) is complete:
 no scientific scope change needed. The [implementation plan](nc_sud_implementation_plan_2026-10-02.md)
 addresses singleton precision, frozen geography, correct model matrices,
-identification, duplicate covariance and cross-year primary reuse; awaiting approval.
+identification, duplicate covariance and cross-year primary reuse; approved and
+being implemented. Build/update the HTML visual companion as analyses proceed.
+Finish full application, chapter/appendix and derived CTJ/SI, then prepare the
+requested comprehensive Claude review prompt. Current verification and code
+walkthrough: [implementation findings](nc_sud_implementation_findings_2026-10-02.md).
 Regional mean cluster incidence ranks are approved
 for primary incidence-guided saturation: per-capita rates → cluster ranks → mean
 regional rank → 80/60/40/20% saturation. The author requested consideration of

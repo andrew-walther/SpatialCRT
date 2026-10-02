@@ -1,7 +1,8 @@
 # NC SUD implementation and completion plan — 2026-10-02
 
-Status: concrete plan awaiting author approval before code. Scientific scope is
-accepted; the requested independent alignment review is complete. Authority:
+Status: author approved implementation and uninterrupted FAST execution, with
+an HTML visual companion added as a deliverable. Implementation and verification
+are underway; production results and manuscripts are not complete. Authority:
 `nc_sud_application_plan_2026-10-02.md`; review:
 `nc_sud_independent_review_2026-10-02.md`.
 

@@ -2,8 +2,10 @@
 
 Author: Andrew Walther
 Date: 2026-10-02
-Status: study scope accepted October 2; independent alignment review complete;
-concrete implementation plan awaiting approval; no implementation yet.
+Status: study scope and concrete implementation plan approved October 2;
+independent alignment review complete; implementation/verification underway.
+The HTML visual companion is an additional approved deliverable. Production
+findings and full thesis/CTJ drafts remain unfinished.
 
 Read the [independent review](nc_sud_independent_review_2026-10-02.md) and
 [concrete implementation plan](nc_sud_implementation_plan_2026-10-02.md).

@@ -247,6 +247,29 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Observed-incidence implementation and visual companion (2026-10-02)
+
+- Author approved the concrete plan, added a continuously updated HTML companion
+  and requested a comprehensive Claude review prompt after the completed analyses
+  and full thesis/CTJ drafts. Continue here after context compaction; no repeated
+  approval needed. Old deadlines are superseded by ASAP completion.
+- Setup validates named observations, pooled/annual cluster totals, cached
+  nb/adjacency/W consistency and legal geometry. Regions are frozen across years;
+  spatial blocks are frozen within each year. Balanced Halves now treats 29.
+- New nested runner preserves allocation/outcome prefixes, handles duplicates
+  and singleton precision, withholds complete comparisons on invalid boundary
+  fits, and reports shared yearly provenance plus separate annual budgets.
+- Behavioral suite and existing application data tests passed. Smoke: 116 rows,
+  no incomplete settings or warning/failure fit rows; deliberately insufficient
+  replication for conclusions. Larger pilot completed 928 rows/688 sources,
+  no incomplete rows or warning records, and 524 expected precision misses.
+  Production is running with approved refinement. Production verification, tail review,
+  chapter integration and CTJ derivation remain unfinished.
+- Offline companion saved with model flow, observed-year maps, example assignments
+  and interactive performance filters. Maps reviewed as local images; in-app
+  browser blocks file URLs, so interactive browser rendering is not yet verified.
+- Details: `docs/plans/nc_sud_implementation_findings_2026-10-02.md`.
+
 ### SRS interpretation interview follow-up (2026-10-02)
 
 - Author accepted the proposed primary queen grid, one-feature-at-a-time

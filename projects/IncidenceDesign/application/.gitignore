@@ -1,0 +1,5 @@
+# Independent outcome-fit checkpoints are intermediate, not publication outputs.
+results/real_sud_rev_20261002/*/checkpoints/
+results/real_sud_rev_20261002/*/*.log
+results/real_sud_rev_20261002/*.log
+results/real_sud_rev_20261002/smoke_initial/

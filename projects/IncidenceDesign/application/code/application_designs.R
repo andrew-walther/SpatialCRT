@@ -202,6 +202,26 @@ make_kmeans_regions <- function(coords,
   list(region_id = best_region, diagnostics = region_summary)
 }
 
+#' Draw adapted NC assignments, optionally using frozen design objects
+#'
+#' The revised application freezes spatial blocks outside scenario loops. Design 8
+#' ordinarily averages incidence ranks; an explicit regional summary is used only
+#' for the approved summary-method sensitivity. Balanced Halves enforces N/2.
+#' @param design_id Integer design ID, 1 through 9.
+#' @param n_resamples Number of allocation draws.
+#' @param incidence Numeric cluster incidence signal (ranks in the revised study).
+#' @param nb_list Named-order neighbor list.
+#' @param coords Cluster coordinate data frame with x/y columns.
+#' @param population Positive cluster populations in the same order.
+#' @param county_count Number of counties per cluster.
+#' @param region_id Fixed region membership, required for designs 3 and 8.
+#' @param block_id Optional fixed spatial-block membership for design 5.
+#' @param region_summary Optional named summary by region for design 8.
+#' @return Integer N by n_resamples treatment matrix.
+#' @family application_designs
+#' @seealso make_spatial_blocks, assign_by_region_saturation
+#' @examples
+#' # Z <- get_application_designs(9, 10, ranks, nb, coords, pop, counties)
 get_application_designs <- function(design_id,
                                     n_resamples,
                                     incidence,
@@ -209,7 +229,9 @@ get_application_designs <- function(design_id,
                                     coords,
                                     population,
                                     county_count,
-                                    region_id = NULL) {
+                                    region_id = NULL,
+                                    block_id = NULL,
+                                    region_summary = NULL) {
   N <- length(incidence)
   mat <- matrix(0L, nrow = N, ncol = n_resamples)
 
@@ -233,7 +255,8 @@ get_application_designs <- function(design_id,
       mat[, i] <- isolation_buffer_assignment(nb_list)
     }
   } else if (design_id == 5) {
-    block_id <- make_spatial_blocks(coords, incidence, population)
+    if (is.null(block_id)) block_id <- make_spatial_blocks(coords, incidence, population)
+    stopifnot(length(block_id) == N, !anyNA(block_id))
     for (i in seq_len(n_resamples)) {
       z <- integer(N)
       for (block in sort(unique(block_id))) {
@@ -262,16 +285,24 @@ get_application_designs <- function(design_id,
   } else if (design_id == 7) {
     for (i in seq_len(n_resamples)) {
       half <- dplyr::ntile(application_random_tie_rank(incidence), 2)
+      sizes <- tabulate(half, nbins = 2)
+      n_trt <- floor(sizes / 2)
+      extra <- floor(N / 2) - sum(n_trt)
+      if (extra > 0) {
+        chosen <- sample(which(sizes %% 2 == 1), extra)
+        n_trt[chosen] <- n_trt[chosen] + 1L
+      }
       z <- integer(N)
       for (h in sort(unique(half))) {
         idx <- which(half == h)
-        z[idx] <- make_balanced_assignment(idx, 0.5)
+        z[idx] <- sample(c(rep(1L, n_trt[h]), rep(0L, length(idx) - n_trt[h])))
       }
       mat[, i] <- z
     }
   } else if (design_id == 8) {
     stopifnot(!is.null(region_id))
-    means <- tapply(incidence, region_id, mean)
+    means <- if (is.null(region_summary)) tapply(incidence, region_id, mean) else region_summary
+    stopifnot(setequal(names(means), as.character(sort(unique(region_id)))), all(is.finite(means)))
     sat_levels <- c(0.80, 0.60, 0.40, 0.20)
     for (i in seq_len(n_resamples)) {
       # Highest regional mean -> 0.80; ties broken at random per resample (M3)
