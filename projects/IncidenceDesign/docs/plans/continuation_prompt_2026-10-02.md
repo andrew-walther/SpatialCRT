@@ -12,7 +12,9 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > Work directly in the checkout. Read the root and project AGENTS.md, ROADMAP.md,
 > docs/plans/TODO.md, docs/plans/ch2_check_findings_2026-09-27.md,
 > docs/plans/allocation_risk_findings_2026-09-27.md, and
-> docs/plans/nc_sud_application_plan_2026-10-02.md. Read application/AGENTS.md
+> docs/plans/nc_sud_application_plan_2026-10-02.md. Also read
+> docs/plans/manuscript-unification-plan.md for writing priorities and deliverables.
+> Read application/AGENTS.md
 > and README before working there. Verify current Git and project state;
 > historical progress paragraphs may be superseded by later notes.
 >
@@ -27,6 +29,10 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > under both-arms spillover. They use selected settings and do not establish exact
 > true tails or a unique incremental benefit from incidence guidance. Keep their
 > numbers distinct from the full-study results.
+> Confirm the recorded November 16, 2026 committee deadline and approximately
+> November 1 chapter/prelim target. The existing plan prioritizes chapter/prelim
+> completion; CTJ derivation is scheduled afterward. Do not let journal work
+> displace that priority without discussing a schedule change with me.
 >
 > First, interview me on the outstanding application decisions in its design
 > document. The author chose the existing continuous SAR approach on October 2,
@@ -47,6 +53,10 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > settings. Project 2 must compare both mean accuracy and allocation risk with SRS;
 > neither SRS's pooled mean nor the earlier BSS recommendation settles that question.
 > The application complements this unfinished alignment work.
+> Review the proposed mechanism/identification diagnostics, existing non-oracle
+> sensitivity and plain-versus-incidence-guided saturation comparisons in the
+> allocation-risk note. Agree which focused analyses are necessary for the final
+> claims; avoid treating every optional roadmap extension as required work.
 > Preserve Project 1 as accepted/final and read-only; do not reopen the audit or claim its
 > historical numerical discrepancy has been reconciled. The shared question is
 > whether allocation restrictions improve accuracy and limit poor-allocation risk;
@@ -69,6 +79,18 @@ Copy the following into Codex or Claude with the IncidenceDesign project open:
 > cite the verified BMC Medical Research Methodology paper and stand alone.
 > Edit Chapter 3 only in IncidenceDesign and use the approved sync hook for the
 > bios-dissertation copy. Do not modify Project 1.
+> Resolve the chapter's remaining NEEDS-AUTHOR-CONFIRMATION comments through
+> evidence or author discussion; do not silently delete uncertainty markers.
+> Review the complete figure/table list and placement across chapter, appendix,
+> CTJ and SI. Keep substantive results in the chapter body in line with recorded
+> advisor guidance. Trace every final number/exhibit to current outputs, replace
+> superseded April/synthetic results, and complete a consolidated consistency
+> and render review of all three documents. When preparing CTJ, check live journal
+> requirements and finish the abstract, references, declarations, data/code
+> availability and submission checklist before claiming submission readiness.
+> Prelim Q&A materials/presentation work and broader simulation extensions are
+> separately scoped follow-ups; preserve them in TODO rather than silently
+> dropping them or making them prerequisites for the current study.
 >
 > Keep restricted county-level source and derived data ignored. Authorized
 > cluster-level results and aggregate statistics may be tracked. Save key

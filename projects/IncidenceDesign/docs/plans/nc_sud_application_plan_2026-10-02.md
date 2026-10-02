@@ -179,12 +179,20 @@ incidence is a separately agreed sensitivity.
 4. **Interpret and assemble exhibits.** Report yearly results by regime, SRS
    comparisons, coverage/bias and design constraints. Write a source-linked results
    extract so every manuscript number can be traced to a current output.
-5. **Revise writing after results.** Chapter body: concise methods, cluster map,
-   main regime-specific comparison and conclusions. Appendix: design adaptations,
-   yearly/corner results, allocation-risk precision and sensitivities. Derive CTJ
+5. **Revise writing after results.** Chapter body: methods, cluster map,
+   substantive yearly/regime comparisons and conclusions. Keep relevant findings
+   in the body, following recorded advisor guidance; use the appendix for exhaustive
+   breakdowns, mechanical adaptation details and precision diagnostics. Resolve
+   remaining author-confirmation comments and review figure/table placement.
+   Derive CTJ
    application text from the agreed chapter; detailed material goes to CTJ SI.
    Render and review in fresh passes. Commit logical steps, update README/AGENTS
    and ROADMAP/TODO; push only with explicit permission for these new commits.
+
+The manuscript-unification plan records a November 16, 2026 committee deadline
+and approximately November 1 chapter/prelim target; confirm these with the author.
+Chapter/prelim completion has priority, with CTJ derivation scheduled afterward.
+The application plan does not override that schedule.
 
 ## Project 1 connection and publication boundaries
 
