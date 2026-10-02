@@ -86,7 +86,7 @@
     "application/results/real_sud_rev_20261002/frozen_partitions.csv": "0d66d51fff02c5dce7477881e89d6ca5060238d86354173046aa413f7dabf818",
     "code/20_manuscript_figure_revision.R": "399a8397318e5ba64039cd1ad4809aa8aab5a6850c16abb655b99253ed0393eb",
     "code/tests/test_manuscript_exhibits.R": "b4011d4d3294216c0a3266ebdb48ed2388ca933ccb33d3b2d78e8201ecea94d1",
-    "docs/plans/ctj_exhibit_revision_findings_2026-10-02.md": "5ed6f866d5fd8d2ef94683b721c0cd61c3d4af1b43f7c7d47924fb899262c24e",
+    "docs/plans/ctj_exhibit_revision_findings_2026-10-02.md": "c400bb04caf86b3f082e5a1411f87ffe94ef6a810d2d0c6ac28f0f7c20dc8aad",
     "paper/ctj_manuscript/Cover_Letter_Draft.md": "93225d9a6d12868188f2697433faf15767188be7ea3a209f244108b1054c5a14",
     "paper/ctj_manuscript/figures/compact/grid_accuracy.pdf": "af2215e7301bbb88ac01fabcc57ca4372f424dc8a44176df08072ea3c519172f",
     "paper/ctj_manuscript/figures/compact/grid_bias_variance.pdf": "938e7ca0868e3b9132f007bf2b0feffae22574a6e894f477884abf5d98bf898c",
@@ -107,5 +107,7 @@
   "initial_chapter_checkpoint": "58c1c82",
   "initial_approved_prelim_sync": "fc63326",
   "completed_manuscript_checkpoint": "a47b0ae",
-  "final_chapter_prelim_sync": "6b07b95"
+  "final_chapter_prelim_sync": "6b07b95",
+  "editorial_checkpoint": "3fc8385",
+  "editorial_chapter_prelim_sync": "fa49f47"
 }

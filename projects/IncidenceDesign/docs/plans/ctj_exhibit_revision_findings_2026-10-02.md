@@ -162,8 +162,15 @@ outcome simulation or estimator code was edited.
   The final author-order changes were re-rendered and inspected separately.
 - Existing grid/benchmark/main-application/tail source hashes match their earlier
   provenance record exactly. Current source/figure hashes are in
-  `paper/manuscript_provenance_20261002.json`. Chapter 3 hook sync is recorded
-  below when the checkpoint commit finishes.
+  `paper/manuscript_provenance_20261002.json`. The approved hook synced
+  Chapter 3 from `3fc8385` to bios-dissertation `fa49f47`: 72 pp, 31 verified
+  citekeys, one new figure copied, no figure removed, no push. The sync commit
+  touches only the authorized Chapter 3 paths.
 
 Remaining work is author review and submission-only metadata, including the
 explicitly approved IRB/data-use placeholder. No push or journal submission.
+
+Checkpoint: `3fc8385`. Current aggregate/source checks pass (87 hashes), and the
+added effect-size and sensitivity values match completed outputs. The author can
+now review the fuller article and updated exhibits; the Claude prompt names the
+new source/export checks.

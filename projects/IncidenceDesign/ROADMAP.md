@@ -267,6 +267,8 @@ checkpoints here, not in `AGENTS.md`.
   3,215 body prose/heading words (3,381 with end declarations); abstract 283.
   Added mechanisms, effect-size crossover, omitted-spillover sensitivity, allocation
   risk interpretation and NC trial-planning implications; added numbers checked.
+- Checkpoint `3fc8385` synced through the approved hook to bios-dissertation
+  `fa49f47` (72 pp, 31 citekeys, one figure copied; Chapter 3 paths only).
 - Next: author full draft review and requested Claude review; institutional metadata
   remain explicit placeholders. Nothing pushed or submitted.
 

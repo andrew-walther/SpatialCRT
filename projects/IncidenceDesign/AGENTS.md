@@ -316,7 +316,8 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
   `python3 paper/tools/verify_manuscripts.py` for numerical/exhibit consistency.
 - Chapter checkpoint `58c1c82` synced through the approved hook to bios-dissertation
   `fc63326`; final manuscript checkpoint `a47b0ae` resynced to `6b07b95`
-  (72 pp, 31 citekeys); no push.
+  (72 pp, 31 citekeys); editorial revision `3fc8385` resynced to `fa49f47`
+  (72 pp, one compact figure copied); no push.
 - Next: consolidated author/Claude review and author-only submission metadata.
   Prompt: `docs/plans/claude_comprehensive_review_prompt_2026-10-02.md`.
   IRB/data-use placeholder is approved, not an asserted approval/exemption.
