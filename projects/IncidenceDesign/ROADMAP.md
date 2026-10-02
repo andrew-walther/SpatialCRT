@@ -633,3 +633,17 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
   replaced the wrong "~100,000 death certificates" and "epidemiology co-investigator" wording.
 - (Superseded: Phase C and Phase D are done; see Current State above. The single
   recommended design for investigators is still the author's decision to make.)
+
+### 2026-10-02 — full prelim assembly and CTJ reference flow
+
+- Approved full-length prelim assembled in bios-dissertation: 177 pages, four
+  chapter bodies (24/42/42/18), appendices A/B (4/25), one combined bibliography.
+  Existing source prose/math/captions preserved; five assembly tests pass.
+- Author retains Chapter 3’s full appendix pending content review. New initial
+  front abstract is 299 words. Current literature-review working revisions are
+  included without staging or overwriting them.
+- CTJ reading references flow from page 7 across both final-page columns; eight
+  pages retained. Submission remains 21 pages with identical extracted text.
+  Numerical/exhibit checks and visual review pass; no scientific result changes.
+- Findings/teach-back: `docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md`.
+  No pushes; full-draft review remains.

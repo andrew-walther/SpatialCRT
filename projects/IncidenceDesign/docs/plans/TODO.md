@@ -38,6 +38,12 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Remaining author/submission work
 
+- [x] Assemble full-length prelim in bios-dissertation, retaining the full
+  Chapter 3 appendix; fix CTJ reading bibliography flow/last-page columns.
+  See [assembly/reference review](prelim_assembly_ctj_reference_review_2026-10-02.md).
+- [ ] Author review of full prelim and initial front abstract; reconcile Chapter 4
+  source timeline separately. Rebuild the assembly after later chapter syncs.
+
 - [x] Implement approved title restoration and six-exhibit revision in both CTJ
   layouts; carry applicable clarity changes into the chapter and derived supplement.
   See [exhibit review](ctj_exhibit_revision_findings_2026-10-02.md).

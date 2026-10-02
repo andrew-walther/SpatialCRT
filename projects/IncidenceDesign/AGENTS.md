@@ -20,6 +20,15 @@ Walther, Habib, Simpson, Lin, with Lin corresponding. See
 [exhibit revision](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md) and
 [layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
 
+**Full prelim/reference-flow checkpoint:** bios-dissertation's
+`prelim/prelim.pdf` is the 177-page working assembly; Chapter 3 retains 42 body
+and 25 appendix pages. Rebuild there with `prelim/tools/build_prelim.py` after
+individual chapter syncs; source ownership and hooks are unchanged. CTJ reading
+uses the installed `flushend` package and no forced bibliography page breaks;
+references begin on page 7 and occupy both columns on page 8. The review layout
+alone loads `lastpage`. See
+[checkpoint/teach-back](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 > Provides ~80% of the context needed to be immediately productive without

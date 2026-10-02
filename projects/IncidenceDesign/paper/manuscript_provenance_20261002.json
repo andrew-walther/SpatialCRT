@@ -14,7 +14,7 @@
     "including_end_declarations_and_math_units": 3419,
     "structured_abstract": 283
   },
-  "notes": "SHA-256 provenance for the author-approved compact exhibit revision and expanded chapter-derived CTJ content. Paired CTJ layouts share one master and six exhibits; original title and Walther/Habib/Simpson/Lin order restored. All source scientific outputs retained their earlier hashes. Restricted county data and individual-fit caches are excluded. The new map uses authorized aggregate rates and frozen regions; cached geometry simplifies only for display. PDF bytes include render metadata; author preview is not publisher proofs.",
+  "notes": "SHA-256 provenance for the author-approved compact exhibit revision and expanded chapter-derived CTJ content. Paired CTJ layouts share one master and six exhibits; original title and Walther/Habib/Simpson/Lin order restored. All source scientific outputs retained their earlier hashes. Restricted county data and individual-fit caches are excluded. The new map uses authorized aggregate rates and frozen regions; cached geometry simplifies only for display. PDF bytes include render metadata; author preview is not publisher proofs. October 2: reading bibliography flows from page 7 across both final-page columns; full prelim working assembly generated in bios-dissertation. No scientific source changes.",
   "sha256": {
     "application/results/real_sud_rev_20261002/exhibits/refined_tail_comparison.csv": "db975ecc554814dc20ca6d3ed85e9904cf8ce5262e3ccb1897317ae54ead2068",
     "application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv": "bd23f300caca0557ce42240004bf71bfb9a0300e1a16a42a5d9107abdc5e6c06",
@@ -24,9 +24,9 @@
     "code/19_manuscript_exhibits.R": "40071eb22e436a4b212d39905bf5c6b45e789f2a44caa1c5f0390c8e16858a07",
     "paper/SpatialCRT_IncidenceDesign.bib": "7891f041e75693cff1c885c44f50f8c49dfc30e80b114251c532a4c71d04c540",
     "paper/ctj_manuscript/CTJ_Exhibits.tex": "3e70a6ecd8f5e07b0b9b5610e1e849ae0466edad58ea26110454497a4e675700",
-    "paper/ctj_manuscript/CTJ_Manuscript.pdf": "08e806f0701b0603f0be95c28425d1935ccfcdd8b603b961f35f1c68098ce612",
-    "paper/ctj_manuscript/CTJ_Manuscript.tex": "2af4329d7aabbc8a77d077ad5a7889ab625b23012a73826b64bdd9c915d53c42",
-    "paper/ctj_manuscript/CTJ_Reading.pdf": "95925f399cb6da1561802f112c9e30dcab23f83cf25a1361a01c57b59cd35424",
+    "paper/ctj_manuscript/CTJ_Manuscript.pdf": "2eeb4c5d003075f2a0b9c6f882ee685d87677567c0ee3d6a7b1e2a4a96d3bf35",
+    "paper/ctj_manuscript/CTJ_Manuscript.tex": "d44151e9641a1c0d3a5f68b6369fe09cc086ba0dd57ea054f8c6b316d9072917",
+    "paper/ctj_manuscript/CTJ_Reading.pdf": "8c3daf5112b30e1177e2d20fb00f891ed75becf55e461d96f9546a4ade9cbafb",
     "paper/ctj_manuscript/CTJ_Reading.tex": "bbec45d5091ad2625a0dd5b48b8495ae84d1483da152bd637474d92c15fe6d2e",
     "paper/ctj_manuscript/Figure_Legends.md": "86f0d31fbd825426425deab2c524792476ba44150fb17911572134610d91f2d2",
     "paper/ctj_manuscript/Supplementary_Information.pdf": "48b7e55411025e6473ce0c14905c6838297aaf749292a9bdddba522056845263",

@@ -9,12 +9,15 @@
   \ctjreadingfalse
   \documentclass[Review,sagev,times,doublespace,12pt]{sagej}
 \fi
-\usepackage{amsmath,booktabs,graphicx,lastpage}
+\usepackage{amsmath,booktabs,graphicx}
 \ifctjreading
+  % Balance the final reading-page columns, including the bibliography.
+  \usepackage{flushend}
   \geometry{headheight=20pt}
   \setlength{\emergencystretch}{2em}
   \raggedbottom
 \else
+  \usepackage{lastpage}
   \geometry{a4paper,margin=25mm,headheight=20pt}
 \fi
 \ifctjreading
@@ -251,16 +254,14 @@ Simulation code, manifests and aggregate outputs are maintained in the SpatialCR
 \section*{Supplementary material}
 The supplementary document supplies exact design rules, parameter grids, estimation diagnostics, detailed grid results, application maps, annual performance/budgets and matched sensitivities. The offline HTML companion additionally displays application development, models and filterable findings.
 \ifctjreading
-% Finish embedded exhibits before starting references; wide floats may otherwise
-% drift into the bibliography when several tall application graphics queue up.
-\clearpage
+% Continue references after declarations; balance the last page's columns.
+% Embedded-exhibit placement is checked in the rendered reading PDF.
 \fi
 \bibliographystyle{SageV}
 \bibliography{../SpatialCRT_IncidenceDesign}
 
 \ifctjreading
-% Flush outstanding embedded exhibits before the document ends.
-\clearpage
+% Let end-of-document column balancing handle the final bibliography page.
 \else
 % Submission tables/figures remain on separate sheets after the references.
 \clearpage
