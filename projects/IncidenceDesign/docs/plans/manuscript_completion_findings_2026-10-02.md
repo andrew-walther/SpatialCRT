@@ -239,3 +239,10 @@ Final geographic wording uses “projected cluster coordinates,” not geometric
 centroids: the frozen setup uses polygon representative interior points. This
 clarifies the compactness/distance description without changing any allocation,
 result, seed or manifest. The final chapter revision is synced by the same hook.
+
+Final manuscript checkpoint: `a47b0ae`; its approved hook resynced the coordinate
+wording to bios-dissertation `6b07b95` (72 pp, no figure changes, 31 citekeys).
+Generated chapter/appendix numbering was checked in extracted text and sampled
+rendered pages. Project Git status was clean after the manuscript checkpoint.
+The final metadata checkpoint records this result and refreshes the source hashes;
+no data, allocation, estimator or manuscript finding changed.

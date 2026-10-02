@@ -1,7 +1,7 @@
 # ============================================================
 # Script: 19_manuscript_exhibits.R
 # Purpose: Export the current grid benchmark and a legible CTJ grid figure.
-# Author: Andrew Walther
+# Author: Codex (reviewed by Andrew Walther)
 # Created: 2026-10-02
 # Dependencies: existing visualization modules (ggplot2, dplyr, tidyr, viridis)
 # ============================================================

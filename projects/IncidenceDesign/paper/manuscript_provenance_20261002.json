@@ -17,7 +17,7 @@
     "application/results/real_sud_rev_20261002/exhibits/yearly_sensitivity_means.csv": "d56cd0c76a62d6ab6592bca506d2e12af1ec5262d4ba1f8250d6aad09357ecc8",
     "application/results/real_sud_rev_20261002/production/performance.csv": "5f23c29450cf0e154b02bb6c389af870af676b0eef442cac6773fe405bedfa2b",
     "application/results/real_sud_rev_20261002/tail_confirmation/performance.csv": "db975ecc554814dc20ca6d3ed85e9904cf8ce5262e3ccb1897317ae54ead2068",
-    "code/19_manuscript_exhibits.R": "044357eb966d380830376dc002df22d41f8b26e2828c3f06499e06a0c05c2baf",
+    "code/19_manuscript_exhibits.R": "40071eb22e436a4b212d39905bf5c6b45e789f2a44caa1c5f0390c8e16858a07",
     "paper/SpatialCRT_IncidenceDesign.bib": "7891f041e75693cff1c885c44f50f8c49dfc30e80b114251c532a4c71d04c540",
     "paper/ctj_manuscript/CTJ_Manuscript.pdf": "f8008702febd9ef3528b4d29e39603948d05915fa75dd94f90c404ded2a91008",
     "paper/ctj_manuscript/CTJ_Manuscript.tex": "891eb3b352dfad42ab5653c85d1cfe19049b2aa01aeff995e0671a536296e678",
@@ -71,10 +71,12 @@
     "paper/dissertation_chapter/figures/real_sud/refined_allocation_risk.pdf": "2a7e4f2f89c7add86519a00e5990f001107fbca0a95aa4e966a2e957d993f519",
     "paper/dissertation_chapter/figures/real_sud/regions.png": "961020bcc324360514a998449cd5d9838c3038c17aed8d84d33adaac66976a28",
     "paper/dissertation_chapter/manuscript-declarations.md": "fa311be6155650f48bbca173780e1e6cda293ad9ea73534e05c3d4b3246d7d9e",
-    "paper/tools/verify_manuscripts.py": "22a6c1282b16db4b1c48bbb89592ab14fa053350b6f191c0b6f79fe70d6c2b1f",
+    "paper/tools/verify_manuscripts.py": "76e4bd284b16446e9d3e6b54fd6abe99aa325c2d30d2f6eda0d24a650a800a5b",
     "results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds": "7835ff186c77babfdd0048fd7886d58e8d998b3ee8b0a483b2bbdb2ce5ce2cd3",
     "results/srs_benchmark/manuscript_regime_means.csv": "bddc084af20f5e52216b4ba8e009222da16460060a2e41abe2db9f67808cadb8"
   },
   "initial_chapter_checkpoint": "58c1c82",
-  "initial_approved_prelim_sync": "fc63326"
+  "initial_approved_prelim_sync": "fc63326",
+  "completed_manuscript_checkpoint": "a47b0ae",
+  "final_chapter_prelim_sync": "6b07b95"
 }

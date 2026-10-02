@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Check current manuscript tables against verified aggregate outputs.
 
+Author: Codex (reviewed by Andrew Walther). Created: 2026-10-02.
+Dependencies: Python standard library.
+
 Run from any directory: python3 paper/tools/verify_manuscripts.py
 Only aggregate CSVs and document sources are read. This does not assert that
 all prose claims are correct: independent scientific review covers their scope.

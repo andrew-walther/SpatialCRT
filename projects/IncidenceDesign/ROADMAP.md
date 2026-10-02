@@ -266,7 +266,9 @@ checkpoints here, not in `AGENTS.md`.
 - Project 1 unchanged/read-only; no audit or resolution claim. Restricted source
   data/caches remain ignored, older outputs preserved. No push or submission.
 - Chapter checkpoint `58c1c82` synced successfully through the existing hook to
-  bios-dissertation `fc63326` (72 pp, seven new assets, 31 citekeys); no push.
+  bios-dissertation `fc63326` (72 pp, seven new assets, 31 citekeys). Final
+  manuscript checkpoint `a47b0ae` resynced the coordinate wording to `6b07b95`
+  (72 pp, 31 citekeys); no push.
   Detailed evidence: `docs/plans/manuscript_completion_findings_2026-10-02.md`.
 
 ### Completed observed-incidence application (2026-10-02)
