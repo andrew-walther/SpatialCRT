@@ -4,6 +4,9 @@ The observed-incidence application, full thesis chapter/appendix and full CTJ
 manuscript/supplement drafts are complete. This means analyses and reviewable
 manuscripts, not journal submission or author approval of the final text.
 Author-only ethics/data-use documentation remains an explicit placeholder.
+Subsequent author layout feedback is recorded in
+[CTJ layout review](ctj_layout_review_2026-10-02.md): both layouts are built from
+one source; title/exhibit reselection remains pending. Scientific content is unchanged.
 The author superseded older calendar deadlines: complete promptly, with CTJ
 remaining a required deliverable.
 
@@ -138,8 +141,9 @@ Checked October 2 against [Clinical Trials instructions](https://journals.sagepu
 original articles permit 3,500 body words and six exhibits; structured abstracts
 permit 425 words (Background/Aims, Methods, Results, Conclusions). The older
 plan's 250-word unstructured abstract expectation is superseded. The draft has
-2,217 main-text words and a 283-word abstract (texcount fragments; body includes
-headings, excludes abstract/declarations/references/exhibits). It has six keywords,
+2,184 prose/heading words and a 283-word abstract (texcount fragments; the earlier
+2,217 count additionally included 33 mathematical-expression units). Body excludes
+abstract/declarations/references/exhibits. It has six keywords,
 a separate author/title page, a 33-character running head, double-spaced review
 text, tables/figures after references, Vancouver references and declarations.
 

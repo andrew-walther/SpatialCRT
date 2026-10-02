@@ -4,13 +4,15 @@
   "standalone_pages": {
     "chapter": 65,
     "ctj": 18,
-    "supplement": 43
+    "supplement": 43,
+    "ctj_reading": 8
   },
   "ctj_word_count": {
-    "main_text_including_headings": 2217,
+    "main_text_including_headings": 2184,
+    "including_math_expression_units": 2217,
     "structured_abstract": 283
   },
-  "notes": "SHA-256 provenance for completed drafts and aggregate scientific inputs. PDF bytes include render metadata; this is a record of the reviewed artifacts, not a semantic equivalence test. Restricted county source data and fit caches are excluded.",
+  "notes": "SHA-256 provenance for completed drafts and aggregate scientific inputs. PDF bytes include render metadata; this is a record of the reviewed artifacts, not a semantic equivalence test. Restricted county source data and fit caches are excluded. Paired layouts share CTJ_Manuscript.tex and CTJ_Exhibits.tex; CTJ_Reading.tex selects an author preview, not publisher proofs. Scientific content retained; proposed title/exhibit changes remain pending.",
   "sha256": {
     "application/results/real_sud_rev_20261002/exhibits/refined_tail_comparison.csv": "db975ecc554814dc20ca6d3ed85e9904cf8ce5262e3ccb1897317ae54ead2068",
     "application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv": "bd23f300caca0557ce42240004bf71bfb9a0300e1a16a42a5d9107abdc5e6c06",
@@ -19,8 +21,11 @@
     "application/results/real_sud_rev_20261002/tail_confirmation/performance.csv": "db975ecc554814dc20ca6d3ed85e9904cf8ce5262e3ccb1897317ae54ead2068",
     "code/19_manuscript_exhibits.R": "40071eb22e436a4b212d39905bf5c6b45e789f2a44caa1c5f0390c8e16858a07",
     "paper/SpatialCRT_IncidenceDesign.bib": "7891f041e75693cff1c885c44f50f8c49dfc30e80b114251c532a4c71d04c540",
-    "paper/ctj_manuscript/CTJ_Manuscript.pdf": "f8008702febd9ef3528b4d29e39603948d05915fa75dd94f90c404ded2a91008",
-    "paper/ctj_manuscript/CTJ_Manuscript.tex": "891eb3b352dfad42ab5653c85d1cfe19049b2aa01aeff995e0671a536296e678",
+    "paper/ctj_manuscript/CTJ_Exhibits.tex": "649a85637c11effd28adf1be193a190ece86128d9fa32d655d099e7301af3717",
+    "paper/ctj_manuscript/CTJ_Manuscript.pdf": "b7b27812814cbbdb7a8e33ffe4dd698a05f7f54628e485f14ab355631b81d312",
+    "paper/ctj_manuscript/CTJ_Manuscript.tex": "a8c7a7d211c8ae6ca45726d141f0b42083e6b13a17cf4e8f886a261f2468d59f",
+    "paper/ctj_manuscript/CTJ_Reading.pdf": "dec49607469df1963b14d942c3628b93e1b9a4876cbf671110e76f134c72c9b0",
+    "paper/ctj_manuscript/CTJ_Reading.tex": "bbec45d5091ad2625a0dd5b48b8495ae84d1483da152bd637474d92c15fe6d2e",
     "paper/ctj_manuscript/Figure_Legends.md": "840b0a9babc1cfd4824d9108c222f420d7b8b8a59b6d36ead2e8055d0ab3669c",
     "paper/ctj_manuscript/Supplementary_Information.pdf": "08c4c55fa29bf8b8119cdc7764fff7737bd01395685b284de48958f6c863fc5c",
     "paper/ctj_manuscript/Supplementary_Information.tex": "794c27b7a97ccebb63919df3cb10502643f7b2ff78a70116d9d39a55043bf3a1",
@@ -71,7 +76,7 @@
     "paper/dissertation_chapter/figures/real_sud/refined_allocation_risk.pdf": "2a7e4f2f89c7add86519a00e5990f001107fbca0a95aa4e966a2e957d993f519",
     "paper/dissertation_chapter/figures/real_sud/regions.png": "961020bcc324360514a998449cd5d9838c3038c17aed8d84d33adaac66976a28",
     "paper/dissertation_chapter/manuscript-declarations.md": "fa311be6155650f48bbca173780e1e6cda293ad9ea73534e05c3d4b3246d7d9e",
-    "paper/tools/verify_manuscripts.py": "76e4bd284b16446e9d3e6b54fd6abe99aa325c2d30d2f6eda0d24a650a800a5b",
+    "paper/tools/verify_manuscripts.py": "cbf2c506c372955e5fcd143bf08e6da8c75c69171baeecaa17541ecaaa22c78b",
     "results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds": "7835ff186c77babfdd0048fd7886d58e8d998b3ee8b0a483b2bbdb2ce5ce2cd3",
     "results/srs_benchmark/manuscript_regime_means.csv": "bddc084af20f5e52216b4ba8e009222da16460060a2e41abe2db9f67808cadb8"
   },

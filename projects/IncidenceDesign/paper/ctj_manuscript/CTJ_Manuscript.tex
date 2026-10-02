@@ -1,9 +1,27 @@
 % Derived from the completed Dissertation_Chapter.qmd, 2026-10-02.
 % Numeric sources and exhibit fates: docs/plans/manuscript_completion_findings_2026-10-02.md.
-\documentclass[Review,sagev,times,doublespace,12pt]{sagej}
+% CTJ_Reading.tex selects the reading layout; this file defaults to submission.
+\newif\ifctjreading
+\ifdefined\CTJReadingVersion
+  \ctjreadingtrue
+  \documentclass[Afour,sagev,times]{sagej}
+\else
+  \ctjreadingfalse
+  \documentclass[Review,sagev,times,doublespace,12pt]{sagej}
+\fi
 \usepackage{amsmath,booktabs,graphicx,lastpage}
-\geometry{a4paper,margin=25mm,headheight=20pt}
-\usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=blue,urlcolor=blue]{hyperref}
+\ifctjreading
+  \geometry{headheight=20pt}
+  \setlength{\emergencystretch}{2em}
+  \raggedbottom
+\else
+  \geometry{a4paper,margin=25mm,headheight=20pt}
+\fi
+\ifctjreading
+  \usepackage[hidelinks,bookmarksopen,bookmarksnumbered]{hyperref}
+\else
+  \usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=blue,urlcolor=blue]{hyperref}
+\fi
 \usepackage[switch]{lineno}
 \renewcommand\linenumberfont{\normalfont\tiny\sffamily}
 \setlength\linenumbersep{3pt}
@@ -11,7 +29,60 @@
 \def\journalname{Clinical Trials}
 \def\volumenumber{Submission draft}
 \def\issuenumber{review}
+% One source owns the title, abstract, authors, body and all exhibit content.
+\newcommand{\CTJTitle}{Treatment allocation under spatial spillover: heterogeneous incidence and education-pilot planning}
+\newcommand{\CTJAuthorLine}{Andrew Walther\textsuperscript{1}, Ross Joseph Simpson, Jr.\textsuperscript{2}, Ashkan Habib\textsuperscript{1}, and Feng-Chang Lin\textsuperscript{1}}
+\newcommand{\CTJAffilOne}{\textsuperscript{1}Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC, USA}
+\newcommand{\CTJAffilTwo}{\textsuperscript{2}Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA}
+\newcommand{\CTJContact}{Feng-Chang Lin, Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599, USA.}
+\newcommand{\CTJKeywords}{cluster randomized trial; spatial spillover; treatment allocation; simulation; mean squared error; sudden unexpected death.}
+\newcommand{\CTJAbstract}{%
+\textbf{Background/Aims:} Spatial spillover can make treatment-effect estimation depend on how clusters are assigned to treatment. We compared average estimation error and allocation-specific downside across eight assignment strategies and simple random sampling (SRS), including a completed application for planning a sudden unexpected death (SUD) prevention education pilot.
+
+\textbf{Methods:} A 100-cluster grid study varied incidence heterogeneity, spatial dependence, spillover magnitude, spillover regime and treatment-effect size. Maximum likelihood spatial autoregressive models estimated a known structural intervention effect. A focused nested pilot estimated conditional MSE across allocations. The application held observed 2018--2021 SUD incidence fixed for 58 North Carolina community-college service-area clusters and simulated continuous education outcomes. Primary application incidence guided assignment without entering the outcome baseline. Queen weights were primary; rook, hypothetical baseline/adjustment and regional-summary sensitivities were assessed.
+
+\textbf{Results:} On the grid at effect size one, incidence-guided saturation had control-only mean MSE 0.1355 versus SRS 0.2146, while SRS remained competitive under both-arms spillover. In the completed application, control-only mean MSE was 27.4\% lower for plain saturation and 21.1--29.9\% lower for guided saturation than SRS, depending on year. Refined allocation-tail estimates also favored saturation under control-only spillover, with uncertain worst-decile membership. Under both arms, SRS and several randomized strategies had similar mean accuracy. Application yearly mean coverage was approximately 92.6--93.6\%, below nominal 95\%. All prespecified application Monte Carlo precision gates passed, with no warnings, aliases, boundary fits or estimation failures.
+
+\textbf{Conclusions:} Saturation merits consideration when spillover primarily reaches controls; SRS remains competitive when both arms receive spillover. Incidence guidance did not establish an additional accuracy benefit over plain saturation. Recommendations require attention to model assumptions, treatment budgets, interval undercoverage and finite allocation-tail precision. The application evaluates trial design, not observed intervention effectiveness.
+}
+\input{CTJ_Exhibits.tex}
+\ifctjreading
+% The class's production title would print an invented DOI/volume. This local
+% preview header avoids those fields without modifying the supplied Sage class.
+\makeatletter
+\def\ps@sagepage{%
+  \def\@oddhead{\parbox{\textwidth}{\sffamily\small
+    Two-column reading preview\hfill\thepage\\[-4pt]\rule{\textwidth}{0.25pt}}}%
+  \let\@evenhead\@oddhead
+  \def\@oddfoot{\parbox{\textwidth}{\scriptsize\itshape
+    Author reading preview; not publisher proofs.}}%
+  \let\@evenfoot\@oddfoot}
+\makeatother
+\fi
 \begin{document}
+\ifctjreading
+\pagestyle{sagepage}
+\twocolumn[{%
+\begin{@twocolumnfalse}
+\begin{minipage}{\textwidth}
+\raggedright
+{\sffamily\titlesize\bfseries\CTJTitle\par}
+\medskip
+{\sffamily\bfseries\CTJAuthorLine\par}
+\smallskip
+{\footnotesize\CTJAffilOne\par\CTJAffilTwo\par
+\textbf{Correspondence:} \CTJContact{} Email: \url{flin33@email.unc.edu}.
+Telephone: [AUTHOR TO SUPPLY].\par}
+\medskip
+{\small\sffamily\textbf{Abstract}\par\CTJAbstract\par
+\medskip\textbf{Keywords:} \CTJKeywords\par}
+\medskip
+{\footnotesize\itshape Reading preview only. Ethics/data-use documentation and final author approval remain pending.\par}
+\medskip
+\end{minipage}
+\end{@twocolumnfalse}}]
+\label{FirstPage}
+\else
 \onecolumn
 \doublespacing
 \raggedright
@@ -24,17 +95,17 @@
 \renewenvironment{abstract}{\section*{Abstract}}{}
 \begin{titlepage}
 \singlespacing
-{\Large\bfseries Treatment allocation under spatial spillover: heterogeneous incidence and education-pilot planning\par}
+{\Large\bfseries\CTJTitle\par}
 \vspace{15mm}
-Andrew Walther\textsuperscript{1}, Ross Joseph Simpson, Jr.\textsuperscript{2}, Ashkan Habib\textsuperscript{1}, and Feng-Chang Lin\textsuperscript{1}
+\CTJAuthorLine
 \vspace{8mm}
 
-\textsuperscript{1}Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC, USA
+\CTJAffilOne
 
-\textsuperscript{2}Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA
+\CTJAffilTwo
 \vspace{8mm}
 
-Corresponding author: Feng-Chang Lin, Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599, USA.
+Corresponding author: \CTJContact
 
 Email: \url{flin33@email.unc.edu}
 
@@ -43,21 +114,16 @@ Telephone: [AUTHOR TO SUPPLY].
 
 Running head: Allocation under spatial spillover
 
-Main-text word count: 2217. Abstract word count: 283.
+Main-text word count: 2184. Abstract word count: 283.
 \vfill
 Clinical Trials submission draft. Author-supplied ethics/data-use documentation and final submission approval remain pending.
 \end{titlepage}
 \doublespacing
 \begin{abstract}
-\textbf{Background/Aims:} Spatial spillover can make treatment-effect estimation depend on how clusters are assigned to treatment. We compared average estimation error and allocation-specific downside across eight assignment strategies and simple random sampling (SRS), including a completed application for planning a sudden unexpected death (SUD) prevention education pilot.
-
-\textbf{Methods:} A 100-cluster grid study varied incidence heterogeneity, spatial dependence, spillover magnitude, spillover regime and treatment-effect size. Maximum likelihood spatial autoregressive models estimated a known structural intervention effect. A focused nested pilot estimated conditional MSE across allocations. The application held observed 2018--2021 SUD incidence fixed for 58 North Carolina community-college service-area clusters and simulated continuous education outcomes. Primary application incidence guided assignment without entering the outcome baseline. Queen weights were primary; rook, hypothetical baseline/adjustment and regional-summary sensitivities were assessed.
-
-\textbf{Results:} On the grid at effect size one, incidence-guided saturation had control-only mean MSE 0.1355 versus SRS 0.2146, while SRS remained competitive under both-arms spillover. In the completed application, control-only mean MSE was 27.4\% lower for plain saturation and 21.1--29.9\% lower for guided saturation than SRS, depending on year. Refined allocation-tail estimates also favored saturation under control-only spillover, with uncertain worst-decile membership. Under both arms, SRS and several randomized strategies had similar mean accuracy. Application yearly mean coverage was approximately 92.6--93.6\%, below nominal 95\%. All prespecified application Monte Carlo precision gates passed, with no warnings, aliases, boundary fits or estimation failures.
-
-\textbf{Conclusions:} Saturation merits consideration when spillover primarily reaches controls; SRS remains competitive when both arms receive spillover. Incidence guidance did not establish an additional accuracy benefit over plain saturation. Recommendations require attention to model assumptions, treatment budgets, interval undercoverage and finite allocation-tail precision. The application evaluates trial design, not observed intervention effectiveness.
+\CTJAbstract
 \end{abstract}
-\noindent\textbf{Keywords:} cluster randomized trial; spatial spillover; treatment allocation; simulation; mean squared error; sudden unexpected death.\clearpage
+\noindent\textbf{Keywords:} \CTJKeywords\clearpage
+\fi
 
 \section{Introduction}
 Cluster randomized trials assign groups rather than individuals when interventions operate through clinics, schools or geographic areas.\cite{donner_design_2000,hayes_cluster_2017} Spatial interference challenges the assumption that a cluster's outcome depends only on its own treatment: adjacent populations can share services, information or environmental exposures.\cite{hudgens_toward_2008,jarvis_spatial_2017} An allocation may therefore provide substantially different information about a treatment effect than another allocation with the same number of treated clusters.
@@ -72,7 +138,15 @@ Our application supports planning an education intervention for healthcare profe
 \subsection{Grid model and assignments}
 We used a $10\times10$ grid with row-standardized weights $W$. Queen neighbors share an edge or corner; rook neighbors share an edge. Queen was primary, with rook assessed separately. Outcomes followed
 \begin{equation}
-Y=(I-\rho W)^{-1}[\tau Z+S(Z)+\beta X+\epsilon],\qquad \epsilon\sim N(0,I),\label{eq:grid}
+\ifctjreading
+\begin{aligned}
+Y&=(I-\rho W)^{-1}[\tau Z+S(Z)+\beta X+\epsilon],\\
+\epsilon&\sim N(0,I),
+\end{aligned}
+\else
+Y=(I-\rho W)^{-1}[\tau Z+S(Z)+\beta X+\epsilon],\qquad \epsilon\sim N(0,I),
+\fi
+\label{eq:grid}
 \end{equation}
 where $Z$ is treatment and $\tau$ its structural coefficient before spatial propagation. It is not an average total effect after applying the spatial multiplier. We set $\beta=1$ in the grid study. Spillover was $S(Z)=\gamma WZ$ for both arms or $S(Z)=\gamma(1-Z)\circ WZ$ for controls only, with elementwise product $\circ$. The parameter grid crossed $\rho=0,0.01,0.2,0.5$, $\gamma=0.5,0.6,0.7,0.8$ and $\tau=0.8,1,1.5,2,3$.
 
@@ -103,6 +177,10 @@ We drew 100 assignments and 100 independent outcomes per unique assignment, usin
 \section{Results}
 \subsection{Grid accuracy and pilot downside}
 Table~\ref{tab:grid-srs} reports the full queen benchmark at $\tau=1$; Figure~\ref{fig:grid} illustrates regime differences in the detailed six-design subset. Guided saturation's pooled mean MSE was 0.0907 against SRS 0.1285, but regime separation was essential: control-only MSE was 0.1355 against 0.2146 (ratio 0.631), whereas both-arms MSE was 0.0459 against 0.0424 (ratio 1.083). Plain saturation had similar accuracy; an extra benefit from incidence guidance was not established. SRS and incidence balancing were competitive under both arms. Identified designs' coverage was approximately 94\%, below 95\%; rook Checkerboard was nonidentified and substantially biased. Rook results and effect-size/configuration breakdowns are reported separately in the supplement.
+\ifctjreading
+\CTJGridTable
+\CTJGridFigure
+\fi
 
 The selected-surface grid pilot supported saturation's control-only downside pattern. Guided saturation's estimated worst-decile conditional MSE was 0.1936 against SRS 0.3486; under both arms it was 0.0582 against 0.0544. Outcome refinement preserved the control-only direction but did not remove uncertainty about allocation tails. These are pilot values and do not replace full-study estimates.
 
@@ -110,10 +188,20 @@ The selected-surface grid pilot supported saturation's control-only downside pat
 All 1,248 application reporting settings completed and passed precision gates. Production used 7,598,000 independent outcome fits; the separate extension added 2,280,000, for 9,878,000 distinct outcomes after counting copied prefixes once. Maximum relative MCSE(mean MSE) was 0.04871 and maximum MCSE(coverage) 0.00892. There were no warnings, aliases, boundary fits or estimation failures. All main stochastic sources passed at 100 assignments and 100 outcomes; two singleton baseline-sensitivity sources required 2,000 outcomes.
 
 Under control-only spillover, plain saturation's yearly descriptive mean MSE was 0.22329 against SRS 0.30761, a 27.4\% reduction. Guided saturation's reductions were 21.1--29.9\% depending on year (Table~\ref{tab:nc-year}, Figure~\ref{fig:nc-mse}). Both saturation designs had lower MSE than SRS in every primary parameter setting, including setting-specific approximate MC intervals. Neither was uniquely best. High Incidence Focus's control-only accuracy varied markedly across years. Under both arms, SRS mean MSE was 0.07638, plain saturation 0.07518 and guided saturation 0.07428--0.07682. These small differences do not establish equivalence or universal optimality. Primary yearly mean coverage was approximately 92.6--93.6\%, below nominal; passing precision targets did not repair undercoverage.
+\ifctjreading
+\CTJAnnualTable
+\CTJMeanFigure
+\fi
 
 At the refined queen corners with $\gamma=0.8$, control-only plain saturation had estimated q90 31.8--32.9\% below SRS and worst-decile mean 34.6--37.8\% below; guided saturation reductions were 20.8--38.6\% and 20.7--43.4\%. Cross-selected outcome halves retained this pattern (Figure~\ref{fig:nc-risk}). However, only ten sampled draws formed the worst decile. All 112 non-singleton reporting rows flagged uncertain tail-boundary membership. Both-arms guided saturation had half-sample Jaccard overlap 0--0.25, with about 61--86\% of raw estimated-risk variance attributable to outcome MC noise. Small both-arms tail differences cannot support superior downside protection. Singleton Checkerboard and High Incidence Focus have no allocation variation for these inputs, but can still have substantial estimation error.
+\ifctjreading
+\CTJRiskFigure
+\fi
 
 Budgets differed (Figure~\ref{fig:nc-pop}). Graph Checkerboard treated 27 clusters under queen; buffer averaged 15.89; spatial blocking treated 28/31/27/29 by year, including a singleton group always assigned control under the retained rounding rule. High Incidence Focus treated 29 clusters but approximately 22--24\% of working-age population; buffer reached about 27\%. These shares describe geographic reach, not healthcare-professional enrollment or cost. Graph Checkerboard was identified but imprecise, unlike the exact rectangular-rook alias.
+\ifctjreading
+\CTJBudgetFigure
+\fi
 
 The hypothetical baseline/X-adjusted sensitivity increased High Incidence Focus MSE roughly 3.68--4.44-fold under both arms and 1.42--2.52-fold control-only. Treatment--incidence alignment reduced information after adjustment; baseline and adjustment changed jointly. Matched rook/queen corners preserved broad conclusions. Alternative regional summaries changed some region orders, with no retrospective replacement of the prespecified mean-rank rule.
 
@@ -128,6 +216,10 @@ Wald coverage remained below nominal even when Monte Carlo precision was adequat
 
 The education application is a completed design evaluation, not an implemented intervention or evidence that education reduces SUD. Final decisions require a specified education endpoint, eligible professionals, budget and plausible communication network. Within the evaluated assumptions, saturation offers favorable average and descriptive downside performance under control-only spillover; SRS remains a reasonable comparator and candidate under both-arms exposure.
 
+\ifctjreading
+% Short declarations and reference URLs read better without stretched spacing.
+\raggedright
+\fi
 \section*{Acknowledgements}
 OpenAI Codex assisted with code implementation and checking, data visualization and manuscript drafting. Numerical results were generated by the documented R simulations and maximum likelihood fits. The authors retain responsibility for verification, interpretation and the final submitted text.
 \section*{Declaration of conflicting interests}
@@ -138,88 +230,31 @@ This research received no specific grant from any funding agency in the public, 
 Simulation code, manifests and aggregate outputs are maintained in the SpatialCRT repository (\url{https://github.com/andrew-walther/SpatialCRT}), under projects/IncidenceDesign. Restricted county death-certificate source files and individual-fit caches are excluded. Authorized 58-cluster summaries and reproducible aggregate results accompany the application; access to restricted sources is subject to institutional permissions. The submission checklist records the remaining ethics/data-use documentation.
 \section*{Supplementary material}
 The supplementary document supplies exact design rules, parameter grids, estimation diagnostics, detailed grid results, application maps, annual performance/budgets and matched sensitivities. The offline HTML companion additionally displays application development, models and filterable findings.
+\ifctjreading
+% Finish embedded exhibits before starting references; wide floats may otherwise
+% drift into the bibliography when several tall application graphics queue up.
+\clearpage
+\fi
 \bibliographystyle{SageV}
 \bibliography{../SpatialCRT_IncidenceDesign}
 
+\ifctjreading
+% Flush outstanding embedded exhibits before the document ends.
 \clearpage
-% Tables and figures follow references as requested by the journal.
-% MAIN EXHIBITS INSERTED BELOW FROM THE AGREED CHAPTER.
-\begin{table}[!htb]
-
-\small
-\centering
-
-\caption{Full grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE and coverage use the oracle fit. SRS is complete randomization of 50 clusters. No value pools queen and rook.}
-\label{tab:grid-srs}
-% SOURCE: results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds
-
-\begin{tabular}{lrrrr}
-
-\toprule
-& \multicolumn{2}{c}{Both arms} & \multicolumn{2}{c}{Control only} \\
-Design & MSE & Coverage & MSE & Coverage \\
-
-\midrule
-Checkerboard & 0.0624 & 0.940 & 2.1114 & 0.942 \\
-High Incidence Focus & 0.1617 & 0.941 & 0.3292 & 0.935 \\
-Saturation Quadrants & 0.0442 & 0.942 & 0.1359 & 0.929 \\
-Isolation Buffer & 0.1608 & 0.939 & 0.1595 & 0.939 \\
-$2\times2$ Blocking & 0.0623 & 0.937 & 0.5761 & 0.941 \\
-Balanced Quartiles & 0.0421 & 0.940 & 0.2195 & 0.932 \\
-Balanced Halves & 0.0420 & 0.939 & 0.2179 & 0.933 \\
-Incidence-Guided Saturation & 0.0459 & 0.939 & 0.1355 & 0.934 \\
-SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
-
-\bottomrule
-
-\end{tabular}
-
-\end{table}
+\else
+% Submission tables/figures remain on separate sheets after the references.
 \clearpage
-\begin{table}[!htb]
-\small
-\centering
-
-\caption{Primary application yearly mean MSE, queen contiguity; equal weights over the six $\rho/\gamma$ pairs. Plain saturation and SRS repeat shared primary sources across years.}
-\label{tab:nc-year}
-% SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
-
-\begin{tabular}{lrrrrr}
-\toprule
-& \multicolumn{2}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
-Year & SRS & Guided sat. & SRS & Plain sat. & Guided sat. \\
-\midrule
-2018 & 0.07638 & 0.07428 & 0.30761 & 0.22329 & 0.24285 \\
-2019 & 0.07638 & 0.07628 & 0.30761 & 0.22329 & 0.21565 \\
-2020 & 0.07638 & 0.07682 & 0.30761 & 0.22329 & 0.22029 \\
-2021 & 0.07638 & 0.07450 & 0.30761 & 0.22329 & 0.23732 \\
-
-\bottomrule
-\end{tabular}
-\end{table}
+\CTJGridTable
 \clearpage
-\begin{figure}[p]
-\centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/fig_mse_by_design_6design_queen_journal.pdf}
-\caption{Grid MSE at $\tau=1$ under queen contiguity for the detailed six-design subset. Columns show outcome spatial dependence and rows spillover regimes. Bars overlay five incidence configurations, with horizontal lines marking their values; colors show spillover magnitude. Table~\ref{tab:grid-srs} additionally includes plain saturation, Balanced Halves and SRS. Regime scales differ.}\label{fig:grid}
-\end{figure}
+\CTJAnnualTable
 \clearpage
-\begin{figure}[p]
-\centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/real_sud/primary_yearly_mse_journal.pdf}
-\caption{Completed primary application mean MSE by design, observed planning year and spillover regime, queen weights and education outcome. Each point equally averages six $\rho/\gamma$ pairs on a common logarithmic scale; gold marks SRS. Shared sources repeat across years and are not independent replications. No pooled MC intervals are supplied.}\label{fig:nc-mse}
-\end{figure}
+\CTJGridFigure
 \clearpage
-\begin{figure}[p]
-\centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/real_sud/refined_allocation_risk_journal.pdf}
-\caption{Refined allocation-risk estimates at primary queen $\rho=0.5,\gamma=0.8$. Mean MSE, estimated allocation q90 and estimated worst-decile mean refer to the same 100 sampled assignments, using 400 outcomes per stochastic assignment or 1,000 for singleton supports. Finite-outcome tails and membership remain uncertain; this extension is not fresh allocation confirmation.}\label{fig:nc-risk}
-\end{figure}
+\CTJMeanFigure
 \clearpage
-\begin{figure}[p]
-\centering
-\includegraphics[width=0.98\linewidth,height=0.74\textheight,keepaspectratio]{figures/real_sud/population_shares_journal.pdf}
-\caption{Treated annual working-age population shares under primary queen assignments. Points are means and segments show sampled allocation ranges; the dashed line marks 50\%. Budgets use the both-arms run, with allocation support unchanged by regime. Population is geographic reach, not healthcare-professional enrollment or implementation cost.}\label{fig:nc-pop}
-\end{figure}
+\CTJRiskFigure
 \clearpage
+\CTJBudgetFigure
+\clearpage
+\fi
 \end{document}

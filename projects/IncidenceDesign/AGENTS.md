@@ -9,6 +9,13 @@ boundary fits or failures. Coverage remains below 95% and allocation tails remai
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
 Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
+**CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
+`CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
+in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
+PDFs: submission 18 pp, reading 8 pp. The author approved both layouts; proposed
+title restoration/exhibit reselection remains pending. See
+[layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 > Provides ~80% of the context needed to be immediately productive without
@@ -150,6 +157,7 @@ the reasoning behind this distinction.
 | (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
 | **paper/ctj_manuscript/** | | | |
 | `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, full nine-design benchmark/application, condensed, exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas for `TEXINPUTS`/`BSTINPUTS` setup |
+| `CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
 | `Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
 | **paper/dissertation_chapter/** | | | |
 | `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
@@ -295,7 +303,8 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - Full thesis chapter/appendix and derived CTJ/SI: complete, independently reviewed,
   rendered and numerically checked. Old application comments resolved by focused
   rewriting or agreed implementation, not by claiming unsupported facts confirmed.
-- CTJ: standalone preceding-work citation verified; 2,217 body words/283 structured
+- CTJ: standalone preceding-work citation verified; 2,184 prose/heading words
+  (2,217 including mathematical-expression units)/283 structured
   abstract words, six exhibits, full detailed supplement and submission checklist.
 - `code/19_manuscript_exhibits.R` exports current grid/journal figure; run
   `python3 paper/tools/verify_manuscripts.py` for table/asset/reference consistency.

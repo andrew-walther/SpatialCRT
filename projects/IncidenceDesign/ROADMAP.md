@@ -247,6 +247,22 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Paired CTJ reading and submission layouts (2026-10-02)
+
+- Author approved building both layouts to assess the eventual article appearance.
+  Created an 8-page two-column reading preview with embedded shared exhibits;
+  retained the 18-page double-spaced submission version with exhibits at the end.
+- One master owns prose, abstract and metadata; a small wrapper selects reading
+  layout, and six shared exhibit definitions prevent drift in captions/cells/assets.
+- Scientific body/abstract unchanged, all numerical/table/citation checks passed;
+  both builds and all reading/submission pages visually reviewed. No new simulations.
+- Clarified word-count convention: 2,184 prose/heading words; prior 2,217 also
+  counted 33 math expressions. Abstract remains 283 words.
+- Title restoration and less repetitive exhibit selection are proposed, pending
+  author review. Preview charts deliberately retain current verified figures.
+  Source/provenance/build details and teach-back:
+  `docs/plans/ctj_layout_review_2026-10-02.md`. No push or submission.
+
 ### Complete chapter/appendix and derived CTJ/SI drafts (2026-10-02)
 
 - Completed the observed-incidence application and same-allocation risk extension,

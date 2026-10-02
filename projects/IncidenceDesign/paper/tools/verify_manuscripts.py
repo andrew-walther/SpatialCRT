@@ -15,6 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CHAPTER = ROOT / 'paper/dissertation_chapter/Dissertation_Chapter.qmd'
 MAIN = ROOT / 'paper/ctj_manuscript/CTJ_Manuscript.tex'
+MAIN_EXHIBITS = MAIN.with_name('CTJ_Exhibits.tex')
+READING = MAIN.with_name('CTJ_Reading.tex')
 SUPPLEMENT = ROOT / 'paper/ctj_manuscript/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
 LABELS = ['Graph Checkerboard', 'High Incidence Focus', 'Plain saturation',
@@ -61,6 +63,28 @@ def require_equal(actual, expected, context):
 def verify():
     """Check application/grid tables, chapter derivation, assets and citations."""
     sources = {p: p.read_text() for p in (CHAPTER, MAIN, SUPPLEMENT)}
+    # The master owns prose; both layouts use these exact exhibit definitions.
+    master = sources[MAIN]
+    shared_exhibits = MAIN_EXHIBITS.read_text()
+    reading = READING.read_text()
+    require_equal(reading.count('\\input{CTJ_Manuscript.tex}'), 1,
+                  'Reading preview uses the master manuscript')
+    require_equal(reading.count('\\def\\CTJReadingVersion{1}'), 1,
+                  'Reading preview selects the alternate layout')
+    if re.search(r'\\(?:section|caption|includegraphics)\b', reading):
+        raise AssertionError('Reading wrapper duplicates manuscript content')
+    require_equal(master.count('\\input{CTJ_Exhibits.tex}'), 1,
+                  'Master loads the shared exhibit definitions')
+    for name in ('CTJGridTable', 'CTJAnnualTable', 'CTJGridFigure',
+                 'CTJMeanFigure', 'CTJRiskFigure', 'CTJBudgetFigure'):
+        calls = [m.start() for m in re.finditer(r'\\' + name + r'\b', master)]
+        require_equal(len(calls), 2, name + ': one call in each layout branch')
+        bibliography = master.index('\\bibliographystyle')
+        if not calls[0] < bibliography < calls[1]:
+            raise AssertionError(name + ': embedded/end-positioned placement')
+        require_equal(shared_exhibits.count('\\newcommand{\\' + name + '}'), 1,
+                      name + ': one shared definition')
+    sources[MAIN] += '\n' + shared_exhibits
     chapter, main, supplement = (sources[p] for p in (CHAPTER, MAIN, SUPPLEMENT))
     annual = csv_rows(EXHIBITS / 'yearly_primary_design_means.csv')
     yearly = {(r['Year'], r['Regime'], int(r['Design_ID'])): r for r in annual}
@@ -151,7 +175,7 @@ def verify():
             prose = source.split('---', 2)[-1]
             cites.extend(re.findall(r'(?<![\w])@([\w:.-]+)', prose))
         require_equal(set(cites) - keys, set(), f'{path.name}: unknown bibliography keys')
-    require_equal(len(re.findall(r'\\begin\{(?:table|figure)\}', main)), 6, 'CTJ exhibit cap')
+    require_equal(len(re.findall(r'\\begin\{(?:table|figure)\*?\}', main)), 6, 'CTJ exhibit cap')
     for source in (main, supplement):
         if re.search(r'Chapter 2|Project 1|NEEDS-AUTHOR-CONFIRMATION|\bDIM\b', source):
             raise AssertionError('Stale/non-standalone CTJ wording')
@@ -168,6 +192,8 @@ def verify():
     print('360 annual performance cells, 72 budget cells, 32 sensitivity cells, all ' + str(len(table_labels)) +
           ' supplement table bodies; figures, references, citations and six-exhibit cap.')
     print('PASS: deliberate incorrect-number fixture rejected. Scientific prose reviewed separately.')
+    print('PASS: reading/submission share one master and six exhibit definitions; '
+          'embedded/end-positioned calls checked.')
 
 
 if __name__ == '__main__':

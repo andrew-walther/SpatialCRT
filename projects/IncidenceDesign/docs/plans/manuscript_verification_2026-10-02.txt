@@ -1,3 +1,4 @@
 PASS: 36 grid cells and 20 annual primary MSE cells in all three sources;
 360 annual performance cells, 72 budget cells, 32 sensitivity cells, all 22 supplement table bodies; figures, references, citations and six-exhibit cap.
 PASS: deliberate incorrect-number fixture rejected. Scientific prose reviewed separately.
+PASS: reading/submission share one master and six exhibit definitions; embedded/end-positioned calls checked.

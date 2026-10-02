@@ -31,7 +31,8 @@ Read in order:
    `manuscript_completion_findings_2026-10-02.md`.
 5. `application/AGENTS.md`, `application/README.md` and project `README.md`.
 6. The canonical `paper/dissertation_chapter/Dissertation_Chapter.qmd` and its PDF,
-   `paper/ctj_manuscript/CTJ_Manuscript.tex`/PDF and
+   `paper/ctj_manuscript/CTJ_Manuscript.tex`/PDF, shared `CTJ_Exhibits.tex`,
+   the `CTJ_Reading.tex`/PDF layout preview and
    `Supplementary_Information.tex`/PDF, plus submission checklist, figure legends,
    cover letter and updated manuscript declarations.
 7. The saved `application/report/real_sud_companion.html` and current output
@@ -148,7 +149,8 @@ Review all document sources AND rendered PDFs:
 - Verify live journal requirements: original-research body ≤3,500 words, structured
   abstract ≤425 with appropriate headings, six main exhibits, keywords, review
   formatting/title page, legends, reference style, declarations and submission parts.
-  Draft counts are 2,217 body/283 abstract; two tables/four figures. Old plan's
+  Draft counts are 2,184 prose/heading words (2,217 including mathematical-expression
+  units)/283 abstract; two tables/four figures. Old plan's
   250-word unstructured-abstract instruction was superseded by the live check.
 - Author confirmed Walther, Simpson, Habib and Lin with Lin corresponding, currently
   no funding/conflicts. IRB/data-use/consent documentation is unavailable and the

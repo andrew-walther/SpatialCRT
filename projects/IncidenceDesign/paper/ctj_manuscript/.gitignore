@@ -8,3 +8,6 @@
 *.out
 *.toc
 *.synctex.gz
+# Master companions are editable sources, despite the repository-wide TeX ignore.
+!CTJ_Reading.tex
+!CTJ_Exhibits.tex

@@ -33,9 +33,14 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 - [x] Independent scientific source review, aggregate-to-table verification,
   fresh document builds and visual review.
 - [x] Requested comprehensive Claude review prompt saved.
+- [x] Author-requested paired CTJ layouts: shared-source two-column reading preview
+  and double-spaced submission draft, rendered and numerically checked.
 
 ## Remaining author/submission work
 
+- [ ] Review both CTJ layouts and settle the proposed title restoration and six-exhibit
+  revision. Existing application figures remain dense; this is an editorial review,
+  not a new analysis. See [layout note](ctj_layout_review_2026-10-02.md).
 - [ ] Review the [HTML companion](../../application/report/real_sud_companion.html)
   and three full drafts; paste the [Claude prompt](claude_comprehensive_review_prompt_2026-10-02.md)
   for a comprehensive review. Claude review has not yet occurred.

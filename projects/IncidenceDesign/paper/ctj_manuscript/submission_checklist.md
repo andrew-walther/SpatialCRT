@@ -3,7 +3,8 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 2,217 words; structured abstract 283 words; six keywords.
+- [x] Body 2,184 prose/heading words (2,217 including mathematical-expression units);
+  structured abstract 283 words; six keywords.
 - [x] Six main exhibits: two tables and four figures; extra detail in supplement.
 - [x] Standalone introduction and citation to verified preceding BMC publication.
 - [x] Author/title page, affiliations, corresponding email and short running head.
@@ -12,6 +13,8 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [x] Data-availability statement preserves restricted sources; aggregate outputs linked.
 - [x] Generative-assistance disclosure draft included for author review.
 - [x] Current numerical/source verification and fresh rendered PDFs.
+- [x] Separate shared-source two-column reading preview; submission layout retained.
+- [ ] Settle title and main-exhibit selection following author visual review.
 - [ ] Replace author-approved ethics/data-use placeholder with institutional determination,
   appropriate protocol/approval/waiver details, consent determination and source/aggregate
   publication permissions. No approval or exemption is presently asserted.
@@ -32,3 +35,7 @@ Files: `CTJ_Manuscript.{tex,pdf}`, `Supplementary_Information.{tex,pdf}`,
 `Figure_Legends.md`, the four referenced vector PDFs and the shared bibliography.
 Rebuild from this directory with TinyTeX on PATH, `TEXINPUTS` and `BSTINPUTS`
 including `../SAGE_Journal_Template`; run `latexmk -pdf` on each TeX source.
+
+`CTJ_Reading.tex`/PDF is an author preview, not a submission file or publisher
+proof. It selects a layout branch in `CTJ_Manuscript.tex`; both layouts load
+`CTJ_Exhibits.tex`. Rebuild both after changing the master or exhibit definitions.

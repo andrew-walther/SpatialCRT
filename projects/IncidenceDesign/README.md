@@ -9,6 +9,12 @@ boundary fits or failures. Coverage remains below 95% and allocation tails remai
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
 Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
+**CTJ layout review (October 2):** an [eight-page two-column reading preview](paper/ctj_manuscript/CTJ_Reading.pdf)
+now accompanies the [18-page submission draft](paper/ctj_manuscript/CTJ_Manuscript.pdf).
+Both use one master manuscript and shared exhibit definitions. Title and exhibit
+reselection remain author-review decisions; the current preview preserves them.
+See [layout findings and build commands](docs/plans/ctj_layout_review_2026-10-02.md).
+
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
 **Application planning (2026-10-02):** the
@@ -345,7 +351,7 @@ decomposition, rank/MSE heatmaps) that the CTJ manuscript and its SI figures wer
 
 The **dissertation chapter** is the canonical long-form source, with a full body
 and appendix. The **CTJ manuscript** is its standalone condensed derivative:
-2,217 body words, a 283-word structured abstract and exactly six exhibits
+2,184 prose/heading words (2,217 including mathematical-expression units), a 283-word structured abstract and exactly six exhibits
 (two tables/four figures). It includes all nine designs in the full benchmark
 and application while preserving the detailed six-design grid analysis as a
 labeled subset. The supplement retains full methods/results and all 22 chapter
