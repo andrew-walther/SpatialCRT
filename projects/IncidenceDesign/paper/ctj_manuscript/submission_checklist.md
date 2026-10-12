@@ -3,11 +3,11 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,165 prose/heading words; 3,314 including end declarations
-  (3,353 with mathematical-expression units as well);
-  structured abstract 279 words; six keywords. Recounted 2026-10-12 with
-  texcount on the body, declaration and abstract fragments, the same method
-  that gave the earlier 3,215/3,381/283.
+- [x] Body 3,279 prose/heading words; 3,424 including end declarations
+  (3,478 with mathematical-expression units as well); limit 3,500.
+  Structured abstract 317 words (limit 425); six keywords. Recounted 2026-10-12
+  after the comprehensive-review edits (abbreviations defined in the body, plain
+  language), using texcount on the body, declaration and abstract fragments.
   The body count excludes the abstract, declarations, references and exhibits.
 - [x] Six main exhibits: two tables and four figures; extra detail in supplement. Main text
   shows the six detailed designs and SRS; the two related variants are in the supplement
@@ -22,17 +22,19 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [x] Separate shared-source two-column reading preview; submission layout retained.
 - [x] Restore approved original title and revise six exhibits for two-column readability.
 - [x] Author-approved order: Walther, Habib, Simpson, Lin; Lin corresponding.
+- [x] Comprehensive review completed 2026-10-12 (see docs/plans/ctj_comprehensive_review_findings_2026-10-12.md).
 - [ ] Author review of the revised full drafts and chosen exhibits.
-- [ ] Ethics/data-use statement: the in-text placeholder was removed (author, 2026-10-12).
-  Before submission, check whether the journal requires an ethics statement and, if so,
-  add the IRB determination for the death-certificate data.
-- [ ] Corresponding-author telephone removed; email only. Check whether the submission
-  system requires a telephone number.
+- [ ] Ethics/data-use statement: CTJ requires an IRB statement in Methods for human data.
+  Obtain the IRB determination for the death-certificate data (Habib/Simpson), including
+  permission to publish 58-cluster aggregates, and add it to Methods.
+- [x] Corresponding-author telephone (919) 966-9431 on the title page and cover letter
+  (from Lin's UNC Gillings profile; the journal requires it).
 - [ ] ORCIDs: Walther 0000-0002-1932-9653 is on the title page; collect the coauthors'
   ORCIDs in the submission system if required.
 - [x] Author contributions statement added (author-supplied roles, 2026-10-12).
-- [ ] Acknowledgements omitted for now. Check whether the journal requires a
-  generative-AI disclosure.
+- [ ] Generative-AI disclosure: Sage policy requires one (methods or acknowledgements)
+  for AI-assisted code, code checking and visualization. Author will write it before
+  submission.
 - [ ] Obtain every coauthor's approval of the final text.
 - [ ] Confirm originality, exclusivity and permissions; disclose dissertation availability
   as applicable. No essential material from the preceding accepted study was copied.
