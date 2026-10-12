@@ -7,7 +7,7 @@ adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
@@ -159,6 +159,7 @@ the reasoning behind this distinction.
 | `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `14_manuscript_supplement_figures.R` | ~400 | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
 | `19_manuscript_exhibits.R` | ~60 | Current nine-design grid regime CSV, provenance and six-design CTJ vector figure | Reads verified September 27 oracle outputs only |
+| `21_downside_by_design.R` | ~75 | Per-design mean and worst-decile conditional MSE as ratios to SRS (grid pilot; refined NC corners) for Table `tab:downside` | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/downside_by_design.csv` |
 | `paper/tools/verify_manuscripts.py` | ~175 | CSV-to-table and chapter-to-supplement reconciliation; assets/references/citations/exhibit count | Stdlib; deliberately wrong-number fixture must fail |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **application/** | | | |
