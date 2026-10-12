@@ -3,7 +3,7 @@
 # Purpose: Compare every design with SRS on mean allocation MSE and on
 #          allocation downside (worst-10% mean), by spillover regime, for the
 #          grid pilot and the refined NC application corners.
-# Author: Andrew Walther (drafted with Claude Code)
+# Author: Andrew Walther
 # Created: 2026-10-11
 # Dependencies: base R; ggplot2 for the distribution figure
 # ============================================================
@@ -134,8 +134,9 @@ write.csv(dist, "results/allocation_risk/summary/allocation_distribution_by_desi
 # Figure: six detailed designs and SRS; vector PDF in the default Helvetica, like Figure 4.
 ids <- c(8, 6, 4, 2, 5, 1, 9)
 # "\u00ad" prints as a true hyphen; R's pdf() device draws "-" as a minus sign.
-labels <- c("Incidence\u00adguided saturation", "Balanced quartiles", "Isolation buffer",
-            "High incidence focus", "2 x 2 blocking", "Checkerboard", "Simple random sampling")
+# Names match CTJ Table 1 and Figure 4 (Title Case).
+labels <- c("Incidence\u00adGuided Saturation", "Balanced Quartiles", "Isolation Buffer",
+            "High Incidence Focus", "2\u00d72 Blocking", "Checkerboard", "Simple Random Sampling")
 f <- dist[dist$Design_ID %in% ids, ]
 f$Label <- factor(f$Design_ID, levels = rev(ids), labels = rev(labels))
 f$Study <- factor(f$Source, c("grid_pilot", "nc_refined"), c("Simulation study", "Application study"))

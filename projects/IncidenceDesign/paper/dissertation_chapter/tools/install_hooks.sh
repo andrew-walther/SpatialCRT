@@ -3,7 +3,7 @@
 # Script: install_hooks.sh
 # Purpose: Install SpatialCRT's post-commit hook, which keeps
 #          bios-dissertation's Chapter 3 in sync (tools/post_commit_hook.sh).
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-25
 # Dependencies: bash, git
 # ============================================================

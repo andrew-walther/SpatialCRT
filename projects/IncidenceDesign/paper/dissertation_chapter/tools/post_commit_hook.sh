@@ -4,7 +4,7 @@
 # Purpose: SpatialCRT post-commit logic. If HEAD touched the Chapter 3
 #          sources, run sync_to_prelim.sh. Never blocks, fails, or undoes the
 #          SpatialCRT commit (the commit already exists when this runs).
-# Author: Claude Code (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-09-25
 # Dependencies: POSIX sh, git
 # ============================================================

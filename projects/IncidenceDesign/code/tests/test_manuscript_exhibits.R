@@ -1,7 +1,7 @@
 # ============================================================
 # Script: test_manuscript_exhibits.R
 # Purpose: Verify compact exhibit aggregation, exact decomposition and matched ratios.
-# Author: Codex (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-10-02
 # Dependencies: base R
 # ============================================================

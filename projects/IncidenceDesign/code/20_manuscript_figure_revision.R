@@ -1,7 +1,7 @@
 # ============================================================
 # Script: 20_manuscript_figure_revision.R
 # Purpose: Export compact, traceable manuscript figures from completed studies.
-# Author: Codex (reviewed by Andrew Walther)
+# Author: Andrew Walther
 # Created: 2026-10-02
 # Dependencies: ggplot2, sf, grid (existing project dependencies)
 # ============================================================
@@ -66,14 +66,15 @@ export_compact_exhibits <- function(project_dir) {
 
   # Plot labels are presentation only; numeric IDs remain in the exported records.
   ids <- c(8, 6, 4, 2, 5, 1)
-  short <- c("Guided saturation", "Balanced quartiles", "Isolation buffer",
-             "High incidence focus", "2 x 2 blocking", "Checkerboard")
+  # Names match CTJ Table 1 (Title Case; NC adaptations are described there).
+  short <- c("Incidence\u00adGuided Saturation", "Balanced Quartiles", "Isolation Buffer",
+             "High Incidence Focus", "2\u00d72 Blocking", "Checkerboard")
   d <- m[m$Design %in% paste("Design", ids), ]
   # Figure 2 adds simple random sampling (ID 9) as the benchmark row
   # (author 2026-10-12). Vector PDF in the default Helvetica, like Figure 4.
   ids2 <- c(ids, 9)
   # "\u00ad" prints as a true hyphen; R's pdf() device draws "-" as a minus sign.
-  short2 <- c("Incidence\u00adguided saturation", short[-1], "Simple random sampling")
+  short2 <- c(short, "Simple Random Sampling")
   d2 <- m[m$Design %in% paste("Design", ids2), ]
   d2$Label <- factor(d2$Design, levels = paste("Design", rev(ids2)), labels = rev(short2))
   d2$Regime <- factor(d2$Spillover_Type, levels = c("both", "control_only"),
@@ -139,9 +140,9 @@ export_compact_exhibits <- function(project_dir) {
 
   # A diverging log-ratio scale is symmetric about SRS=1; printed cells retain
   # actual ratios. Saturation below SRS and very imprecise designs both remain visible.
-  names <- c("Graph Checkerboard", "High incidence focus", "Plain saturation", "Isolation buffer",
-             "Spatial blocking", "Balanced quartiles", "Balanced halves", "Guided saturation",
-             "Simple random sampling")
+  names <- c("Checkerboard", "High Incidence Focus", "Plain Saturation", "Isolation Buffer",
+             "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
+             "Incidence\u00adGuided Saturation", "Simple Random Sampling")
   annual$Label <- factor(annual$Design_ID, levels = 9:1, labels = rev(names))
   annual$Regime_Label <- factor(annual$Regime, levels = c("both", "control_only"),
                                 labels = c("Both arms", "Control only"))
@@ -222,7 +223,7 @@ export_compact_exhibits <- function(project_dir) {
   }
   writeLines(c("Read-only export of completed oracle/primary aggregate results.",
                "PDF widths: 174 mm; fonts 9 pt (cell labels approximately 7.7 pt).",
-               "Grid accuracy: six-design subset, tau=1, queen; 16 settings/configuration/regime.",
+               "Grid accuracy: six designs plus simple random sampling, tau=1, queen; 16 settings/configuration/regime.",
                "Bias/variance: Poisson rho_X=0.2, each regime separate; exact empirical decomposition.",
                "NC means: 6 queen parameter pairs/year/regime/design; shared years not independent.",
                "Map: pooled 2018-2021 rates (deaths / person-years), authorized 58-cluster aggregates, fixed partition."),
@@ -234,5 +235,5 @@ export_compact_exhibits <- function(project_dir) {
 if (sys.nframe() == 0L) {
   script_file <- sub("--file=", "", grep("--file=", commandArgs(FALSE), value = TRUE)[1])
   export_compact_exhibits(dirname(dirname(normalizePath(script_file))))
-  cat("PASS: four compact exhibits and numerical records exported; simulation unchanged.\n")
+  cat("PASS: compact exhibits and numerical records exported; simulation unchanged.\n")
 }

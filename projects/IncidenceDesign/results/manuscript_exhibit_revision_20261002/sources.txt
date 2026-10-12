@@ -1,6 +1,6 @@
 Read-only export of completed oracle/primary aggregate results.
 PDF widths: 174 mm; fonts 9 pt (cell labels approximately 7.7 pt).
-Grid accuracy: six-design subset, tau=1, queen; 16 settings/configuration/regime.
+Grid accuracy: six designs plus simple random sampling, tau=1, queen; 16 settings/configuration/regime.
 Bias/variance: Poisson rho_X=0.2, each regime separate; exact empirical decomposition.
 NC means: 6 queen parameter pairs/year/regime/design; shared years not independent.
 Map: pooled 2018-2021 rates (deaths / person-years), authorized 58-cluster aggregates, fixed partition.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check current manuscript tables against verified aggregate outputs.
 
-Author: Codex (reviewed by Andrew Walther). Created: 2026-10-02.
+Author: Andrew Walther. Created: 2026-10-02.
 Dependencies: Python standard library.
 
 Run from any directory: python3 paper/tools/verify_manuscripts.py
@@ -19,9 +19,9 @@ MAIN_EXHIBITS = MAIN.with_name('CTJ_Exhibits.tex')
 READING = MAIN.with_name('CTJ_Reading.tex')
 SUPPLEMENT = ROOT / 'paper/ctj_manuscript/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
-LABELS = ['Graph Checkerboard', 'High Incidence Focus', 'Plain saturation',
-          'Isolation Buffer', 'Spatial blocking', 'Balanced Quartiles',
-          'Balanced Halves', 'Guided saturation', 'Simple Random Sampling']
+LABELS = ['Checkerboard', 'High Incidence Focus', 'Plain Saturation',
+          'Isolation Buffer', '$2\\times2$ Blocking', 'Balanced Quartiles',
+          'Balanced Halves', 'Incidence-Guided Saturation', 'Simple Random Sampling']
 
 
 def csv_rows(path):
