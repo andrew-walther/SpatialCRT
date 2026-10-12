@@ -68,16 +68,16 @@ Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \newcommand{\CTJGridFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/grid_accuracy.pdf}
-\caption{Grid mean MSE at $\tau=1$ with queen weights, for the detailed six-design subset. Points keep the five incidence configurations separate, averaging 16 outcome-dependence/spillover-magnitude settings within each configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Both panels use the same logarithmic scale. Table~\ref{tab:grid-srs} adds simple random sampling. Parameter-specific displays remain in the supplementary material; no pooled Monte Carlo intervals are implied.}\label{fig:grid}
+\includegraphics[width=\linewidth]{figures/compact/grid_accuracy_srs.png}
+\caption{Grid mean MSE at $\tau=1$ with queen weights, for the six designs and simple random sampling. Points keep the five incidence configurations separate, averaging 16 outcome-dependence/spillover-magnitude settings within each configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Both panels use the same logarithmic scale. Parameter-specific displays remain in the supplementary material; no pooled Monte Carlo intervals are implied.}\label{fig:grid}
 \end{figure*}
 }
 
-\newcommand{\CTJBiasFigure}{%
+\newcommand{\CTJAllocationFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/grid_bias_variance.pdf}
-\caption{Composition of grid mean MSE for the six-design subset, Poisson incidence with $\rho_X=0.2$, $\tau=1$ and queen weights. Squared bias and empirical error variance are averaged over 16 settings separately in each spillover regime, then divided by mean MSE. Labels show the squared-bias percentage. Empirical variance uses $(249/250)\mathrm{SD}^2$, so its sum with squared bias equals reported MSE exactly. This figure describes one incidence configuration, not all grid settings.}\label{fig:grid-bias}
+\includegraphics[width=\linewidth]{figures/compact/allocation_distribution_by_design.png}
+\caption{Distribution of allocation-specific MSE for the six designs and simple random sampling (SRS), relative to the mean MSE of SRS in the same setting (queen weights). Simulation study: focused grid pilot at $\tau=1$, 40 fixed surface/parameter settings per spillover regime. Application study: refined NC settings ($\rho=0, 0.5$; $\gamma=0.8$) in each year 2018--2021. For each allocation, MSE is estimated from repeated simulated outcomes (100 in the simulation study, at least 400 in the application study). Thin lines span the 5th to 95th percentiles of allocations and thick bars the 25th to 75th; circles mark the mean. Percentiles are computed within each setting and then averaged, so bars show allocation-to-allocation spread; a design with one allocation per setting appears as a circle only. Outcome Monte Carlo noise in the per-allocation estimates widens the bars slightly.}\label{fig:alloc-dist}
 \end{figure*}
 }
 

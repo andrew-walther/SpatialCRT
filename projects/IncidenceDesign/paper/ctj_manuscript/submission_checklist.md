@@ -3,8 +3,8 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,177 prose/heading words; 3,326 including end declarations
-  (3,365 with mathematical-expression units as well);
+- [x] Body 3,165 prose/heading words; 3,314 including end declarations
+  (3,353 with mathematical-expression units as well);
   structured abstract 279 words; six keywords. Recounted 2026-10-12 with
   texcount on the body, declaration and abstract fragments, the same method
   that gave the earlier 3,215/3,381/283.

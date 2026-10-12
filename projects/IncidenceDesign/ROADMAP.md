@@ -247,6 +247,19 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### CTJ Figures 2 and 3 replaced (2026-10-12)
+
+- Figure 2 adds a simple random sampling row (`grid_accuracy_srs.png`, from code/20).
+- Figure 3 now shows the distribution of allocation-specific MSE relative to the SRS
+  mean (5th-95th and 25th-75th percentiles within each setting, averaged over settings;
+  `allocation_distribution_by_design.png`, from code/21). It is also in the chapter
+  and SI (`fig:alloc-dist`). The previous bias/variance figure is dropped from the CTJ;
+  SI Figure S4 already shows that decomposition, and the text cites it.
+- Both new figures use Verdana (distinct i, l, I) and are 600-dpi PNGs because R's
+  pdf() device cannot embed system fonts and Cairo is unavailable on this machine.
+- Counts: CTJ body 3,165 words, 3,314 with end declarations; abstract 279. PDFs:
+  submission 20 pp, reading 8 pp, chapter 69 pp, SI 47 pp.
+
 ### CTJ exhibit and terminology revision (2026-10-12)
 
 - CTJ main text and exhibits now show the six detailed designs and simple random

@@ -5,11 +5,13 @@
 #          grid pilot and the refined NC application corners.
 # Author: Andrew Walther (drafted with Claude Code)
 # Created: 2026-10-11
-# Dependencies: base R only
+# Dependencies: base R; ggplot2 and ragg for the distribution figure
 # ============================================================
 # Run from the project root: Rscript code/21_downside_by_design.R
 # Reads completed aggregate outputs only; it neither simulates nor changes
-# checkpoints. Output: results/allocation_risk/summary/downside_by_design.csv
+# checkpoints. Outputs: results/allocation_risk/summary/downside_by_design.csv,
+# allocation_distribution_by_design.csv and allocation_distribution_by_design.png
+# (CTJ Figure 3; also copied to the chapter/SI figure folders).
 #
 # For allocation a, m(a) = E_eps[(tau_hat - tau)^2 | a, X] is its conditional
 # MSE. Each source row already summarizes the sampled allocations of one
@@ -71,3 +73,93 @@ result <- result[order(result$Source, result$Regime, result$Design_ID),
 out_file <- "results/allocation_risk/summary/downside_by_design.csv"
 write.csv(result, out_file, row.names = FALSE)
 cat("Wrote", nrow(result), "rows to", out_file, "\n")
+
+# Allocation-to-allocation distribution (CTJ Figure 3; added 2026-10-12) ----
+# Per-allocation conditional MSE estimates m(a), each divided by the
+# frequency-weighted SRS mean in the same unit. Percentiles are computed within
+# each unit and then averaged over units, so the bars show allocation spread
+# only, not differences between units. A design with one allocation per unit has
+# q05 = q95. m(a) is estimated from 100 (grid) or >= 400 (NC) outcomes, so the
+# spreads include some outcome Monte Carlo noise and slightly overstate the
+# true allocation spread.
+
+#' Weighted quantile with frequency weights (how often an allocation was drawn)
+#' @param x Numeric values. @param w Nonnegative weights. @param p Probabilities.
+#' @return Values at the requested weighted quantiles.
+weighted_quantile <- function(x, w, p) {
+  o <- order(x); x <- x[o]; w <- w[o]; cw <- cumsum(w) / sum(w)
+  sapply(p, function(q) x[which(cw >= q)[1]])
+}
+
+#' Divide each allocation's m(a) by the weighted SRS (ID 9) mean in its unit
+#' @param d Per-allocation rows with MSE, Frequency, Design_ID.
+#' @param unit_cols Columns that identify one fixed setting.
+#' @return d with Unit and Ratio columns.
+relative_to_srs <- function(d, unit_cols) {
+  d$Unit <- do.call(paste, c(d[unit_cols], sep = "/"))
+  srs <- d[d$Design_ID == 9, ]
+  ref <- tapply(srs$MSE * srs$Frequency, srs$Unit, sum) / tapply(srs$Frequency, srs$Unit, sum)
+  stopifnot(all(d$Unit %in% names(ref)))
+  d$Ratio <- d$MSE / ref[d$Unit]
+  d
+}
+
+ga <- read.csv("results/allocation_risk/pilot/allocation_metrics.csv", stringsAsFactors = FALSE)
+ga <- ga[ga$Neighbor_Type == "queen" & ga$True_Tau == 1 & ga$Estimator == "oracle", ]
+ga$Design_ID <- as.integer(sub("Design ", "", ga$Design))
+ga$Regime <- ga$Spillover_Type
+ga <- relative_to_srs(ga, c("Incidence_Mode", "Rho_Incidence", "Surface", "Rho", "Gamma", "Regime"))
+ga$Source <- "grid_pilot"
+na <- read.csv(paste0("application/results/real_sud_rev_20261002/tail_confirmation/",
+                      "allocation_metrics.csv"), stringsAsFactors = FALSE)
+na <- na[na$Model == "education" & na$Neighbor == "queen" & na$Summary == "mean_rank" &
+           na$Gamma == 0.8, ]
+na <- relative_to_srs(na, c("Year", "Rho", "Regime"))
+na$Source <- "nc_refined"
+keep <- c("Source", "Regime", "Design_ID", "Unit", "Ratio", "Frequency")
+alloc <- rbind(ga[keep], na[keep])
+stopifnot(all(is.finite(alloc$Ratio)), length(unique(ga$Unit)) == 80,
+          length(unique(na$Unit)) == 16)
+per_unit <- do.call(rbind, lapply(split(alloc, list(alloc$Source, alloc$Regime, alloc$Design_ID,
+                                                    alloc$Unit), drop = TRUE), function(x) {
+  q <- weighted_quantile(x$Ratio, x$Frequency, c(0.05, 0.25, 0.5, 0.75, 0.95))
+  data.frame(Source = x$Source[1], Regime = x$Regime[1], Design_ID = x$Design_ID[1],
+             Q05 = q[1], Q25 = q[2], Q50 = q[3], Q75 = q[4], Q95 = q[5],
+             Mean = sum(x$Ratio * x$Frequency) / sum(x$Frequency))
+}))
+dist <- aggregate(cbind(Q05, Q25, Q50, Q75, Q95, Mean) ~ Source + Regime + Design_ID, per_unit, mean)
+dist <- dist[order(dist$Source, dist$Regime, dist$Design_ID), ]
+write.csv(dist, "results/allocation_risk/summary/allocation_distribution_by_design.csv", row.names = FALSE)
+
+# Figure: six detailed designs and SRS; Verdana keeps i, l and I distinct.
+ids <- c(8, 6, 4, 2, 5, 1, 9)
+labels <- c("Incidence-guided saturation", "Balanced quartiles", "Isolation buffer",
+            "High incidence focus", "2 x 2 blocking", "Checkerboard", "Simple random sampling")
+f <- dist[dist$Design_ID %in% ids, ]
+f$Label <- factor(f$Design_ID, levels = rev(ids), labels = rev(labels))
+f$Study <- factor(f$Source, c("grid_pilot", "nc_refined"), c("Simulation study", "Application study"))
+f$Regime <- factor(f$Regime, c("both", "control_only"),
+                   c("Spillover reaches both arms", "Spillover reaches controls only"))
+f$Benchmark <- f$Design_ID == 9
+fig <- ggplot2::ggplot(f, ggplot2::aes(y = Label)) +
+  ggplot2::geom_vline(xintercept = 1, linetype = 2, color = "grey45") +
+  ggplot2::geom_linerange(ggplot2::aes(xmin = Q05, xmax = Q95, color = Benchmark), linewidth = 0.5) +
+  ggplot2::geom_linerange(ggplot2::aes(xmin = Q25, xmax = Q75, color = Benchmark), linewidth = 2.6) +
+  ggplot2::geom_point(ggplot2::aes(x = Mean), shape = 21, fill = "white", color = "black", size = 1.8) +
+  ggplot2::facet_grid(Study ~ Regime) +
+  ggplot2::scale_x_log10(breaks = c(0.5, 1, 2, 4, 8), labels = c("0.5", "1", "2", "4", "8")) +
+  ggplot2::scale_color_manual(values = c("FALSE" = "#0072B2", "TRUE" = "#E69F00"), guide = "none") +
+  ggplot2::labs(x = "Allocation MSE relative to the mean MSE of simple random sampling (log scale)",
+                y = NULL) +
+  ggplot2::theme_minimal(base_size = 9, base_family = "Verdana") +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank(),
+                 strip.text = ggplot2::element_text(face = "bold"),
+                 strip.text.y = ggplot2::element_text(angle = 0, hjust = 0))
+fig_file <- "results/allocation_risk/summary/allocation_distribution_by_design.png"
+ggplot2::ggsave(fig_file, fig, width = 174, height = 105, units = "mm", dpi = 600,
+                device = ragg::agg_png)
+for (folder in c("paper/ctj_manuscript/figures/compact", "paper/dissertation_chapter/figures/compact")) {
+  stopifnot(file.copy(fig_file, folder, overwrite = TRUE))
+}
+cat("Wrote allocation distribution summary and figure\n")
+

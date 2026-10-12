@@ -92,7 +92,7 @@ def verify():
     require_equal(master.count('\\input{CTJ_Exhibits.tex}'), 1,
                   'Master loads the shared exhibit definitions')
     for name in ('CTJDesignTable', 'CTJGridTable', 'CTJMapFigure',
-                 'CTJGridFigure', 'CTJBiasFigure', 'CTJMeanFigure'):
+                 'CTJGridFigure', 'CTJAllocationFigure', 'CTJMeanFigure'):
         calls = [m.start() for m in re.finditer(r'\\' + name + r'\b', master)]
         require_equal(len(calls), 2, name + ': one call in each layout branch')
         bibliography = master.index('\\bibliographystyle')

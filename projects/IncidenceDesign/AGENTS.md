@@ -12,7 +12,7 @@ Full chapter/appendix and derived CTJ/SI drafts are complete and verified; autho
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
 in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
-PDFs: submission 20 pp, reading 8 pp, chapter 68 pp, supplement 46 pp. The author
+PDFs: submission 20 pp, reading 8 pp, chapter 69 pp, supplement 47 pp. The author
 approved original-title restoration and the six-exhibit revision. Main figures
 are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
 parameter/tail/budget graphics remain supporting material. Author order is
@@ -159,7 +159,7 @@ the reasoning behind this distinction.
 | `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `14_manuscript_supplement_figures.R` | ~400 | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
 | `19_manuscript_exhibits.R` | ~60 | Current nine-design grid regime CSV, provenance and six-design CTJ vector figure | Reads verified September 27 oracle outputs only |
-| `21_downside_by_design.R` | ~75 | Per-design mean and worst-decile conditional MSE as ratios to SRS (grid pilot; refined NC corners) for Table `tab:downside` | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/downside_by_design.csv` |
+| `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile conditional MSE as ratios to SRS (Table `tab:downside`) and the allocation-distribution figure (CTJ Figure 3, chapter/SI `fig:alloc-dist`; Verdana via ragg PNG) | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/downside_by_design.csv` |
 | `paper/tools/verify_manuscripts.py` | ~175 | CSV-to-table and chapter-to-supplement reconciliation; assets/references/citations/exhibit count | Stdlib; deliberately wrong-number fixture must fail |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **application/** | | | |
@@ -321,8 +321,8 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - Full thesis chapter/appendix and derived CTJ/SI: complete, independently reviewed,
   rendered and numerically checked. Old application comments resolved by focused
   rewriting or agreed implementation, not by claiming unsupported facts confirmed.
-- CTJ: standalone preceding-work citation verified; 3,177 prose/heading words
-  (3,326 including end declarations)/279 structured
+- CTJ: standalone preceding-work citation verified; 3,165 prose/heading words
+  (3,314 including end declarations)/279 structured
   abstract words, six exhibits, full detailed supplement and submission checklist.
 - `code/20_manuscript_figure_revision.R` exports four compact figures and plot-data
   CSVs without simulation; `code/19_manuscript_exhibits.R` retains the prior detailed

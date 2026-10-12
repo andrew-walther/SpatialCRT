@@ -3,7 +3,7 @@
 # Purpose: Export compact, traceable manuscript figures from completed studies.
 # Author: Codex (reviewed by Andrew Walther)
 # Created: 2026-10-02
-# Dependencies: ggplot2, sf, grid (existing project dependencies)
+# Dependencies: ggplot2, sf, grid, ragg (existing project dependencies)
 # ============================================================
 # Run from the project root: Rscript code/20_manuscript_figure_revision.R
 # This is a read-only analysis export: no simulation, checkpoint or weights change.
@@ -69,6 +69,19 @@ export_compact_exhibits <- function(project_dir) {
   short <- c("Guided saturation", "Balanced quartiles", "Isolation buffer",
              "High incidence focus", "2 x 2 blocking", "Checkerboard")
   d <- m[m$Design %in% paste("Design", ids), ]
+  # Figure 2 adds simple random sampling (ID 9) as the benchmark row and uses
+  # Verdana, whose i, l and I are distinct (author 2026-10-12).
+  ids2 <- c(ids, 9)
+  short2 <- c("Incidence-guided saturation", short[-1], "Simple random sampling")
+  d2 <- m[m$Design %in% paste("Design", ids2), ]
+  d2$Label <- factor(d2$Design, levels = paste("Design", rev(ids2)), labels = rev(short2))
+  d2$Regime <- factor(d2$Spillover_Type, levels = c("both", "control_only"),
+                      labels = c("Spillover reaches both arms", "Spillover reaches controls only"))
+  d2$Configuration <- factor(paste(d2$Incidence_Mode, d2$Rho_Incidence, sep = "/"),
+                             levels = c("iid/0", "spatial/0.2", "spatial/0.5", "poisson/0.2", "poisson/0.5"),
+                             labels = c("Independent uniform", "Spatial (0.2)",
+                                        "Spatial (0.5)", "Poisson (0.2)", "Poisson (0.5)"))
+  stopifnot(nrow(d2) == 70, !anyNA(d2$Configuration))
   d$Label <- factor(d$Design, levels = paste("Design", rev(ids)), labels = rev(short))
   d$Regime <- factor(d$Spillover_Type, levels = c("both", "control_only"),
                      labels = c("Both arms", "Control only"))
@@ -92,6 +105,18 @@ export_compact_exhibits <- function(project_dir) {
     ggplot2::guides(color = ggplot2::guide_legend(nrow = 2),
                     shape = ggplot2::guide_legend(nrow = 2))
   ggplot2::ggsave(file.path(out, "grid_accuracy.pdf"), p, width = 174, height = 93, units = "mm")
+  p2 <- ggplot2::ggplot(d2, ggplot2::aes(MSE, Label, color = Configuration, shape = Configuration)) +
+    ggplot2::geom_point(position = ggplot2::position_dodge(width = 0.6), size = 1.8) +
+    ggplot2::facet_wrap(~Regime, nrow = 1) +
+    ggplot2::scale_x_log10(breaks = c(0.03, 0.1, 0.3, 1, 3)) +
+    ggplot2::scale_color_manual(values = colors) +
+    ggplot2::labs(x = "Mean MSE (log scale)", y = NULL) + theme +
+    ggplot2::theme(text = ggplot2::element_text(family = "Verdana")) +
+    ggplot2::guides(color = ggplot2::guide_legend(nrow = 2),
+                    shape = ggplot2::guide_legend(nrow = 2))
+  # ragg renders the system Verdana font; R's built-in pdf() device cannot embed it.
+  ggplot2::ggsave(file.path(out, "grid_accuracy_srs.png"), p2, width = 174, height = 100,
+                  units = "mm", dpi = 600, device = ragg::agg_png)
 
   # Decomposition: selected configuration, 16 rho/gamma settings in each regime.
   b <- d[d$Incidence_Mode == "poisson" & d$Rho_Incidence == 0.2, ]
@@ -190,7 +215,8 @@ export_compact_exhibits <- function(project_dir) {
   for (folder in c("ctj_manuscript", "dissertation_chapter")) {
     destination <- file.path(project_dir, "paper", folder, "figures/compact")
     dir.create(destination, recursive = TRUE, showWarnings = FALSE)
-    selected <- if (folder == "ctj_manuscript") list.files(out, pattern = "[.]pdf$", full.names = TRUE) else
+    selected <- if (folder == "ctj_manuscript") c(list.files(out, pattern = "[.]pdf$", full.names = TRUE),
+                                                 file.path(out, "grid_accuracy_srs.png")) else
       file.path(out, "nc_annual_accuracy.pdf")
     stopifnot(all(file.copy(selected, destination, overwrite = TRUE)))
   }

@@ -116,7 +116,7 @@ ORCID: Andrew Walther, 0000-0002-1932-9653
 
 Running head: Sampling design for spatial CRTs
 
-Main-text word count: 3326 (including end declarations). Abstract word count: 279.
+Main-text word count: 3314 (including end declarations). Abstract word count: 279.
 \vfill
 Clinical Trials submission draft. Final submission approval remains pending.
 \end{titlepage}
@@ -190,20 +190,20 @@ We drew 100 assignments and 100 independent outcomes per unique assignment, usin
 
 \section{Results}
 \subsection{Grid accuracy and pilot downside}
-Table~\ref{tab:grid-srs} reports the full queen benchmark at $\tau=1$; Figure~\ref{fig:grid} separates incidence configurations in the detailed six-design subset. Figure~\ref{fig:grid-bias} shows the error decomposition for one prespecified Poisson configuration; variance dominates its queen MSE in both regimes. Incidence-guided saturation's pooled mean MSE was 0.0907 against SRS 0.1285, but regime separation was essential: control-only MSE was 0.1355 against 0.2146 (ratio 0.631), whereas both-arms MSE was 0.0459 against 0.0424 (ratio 1.083). SRS and incidence balancing were competitive under both arms. Identified designs' coverage was approximately 94\%, below 95\%; rook Checkerboard was nonidentified and substantially biased. Rook results and effect-size/configuration breakdowns are reported separately in the supplement.
+Table~\ref{tab:grid-srs} reports the full queen benchmark at $\tau=1$; Figure~\ref{fig:grid} separates the five incidence configurations, which changed each design's MSE only slightly. Incidence-guided saturation's pooled mean MSE was 0.0907 against SRS 0.1285, but regime separation was essential: control-only MSE was 0.1355 against 0.2146 (ratio 0.631), whereas both-arms MSE was 0.0459 against 0.0424 (ratio 1.083). SRS and incidence balancing were competitive under both arms. Identified designs' coverage was approximately 94\%, below 95\%; rook Checkerboard was nonidentified and substantially biased. Rook results and effect-size/configuration breakdowns are reported separately in the supplement.
 \ifctjreading
 \CTJGridTable
 \CTJGridFigure
-\CTJBiasFigure
+\CTJAllocationFigure
 \fi
 
-The regime difference was especially large for interspersed assignments. Checkerboard MSE increased from 0.0624 under both arms to 2.1114 control-only; blocking increased from 0.0623 to 0.5761. Their poorer control-only accuracy reflects imprecision rather than a comparable increase in bias. In the selected Poisson configuration, empirical variance accounts for more than 97\% of mean MSE for every displayed design and regime (Figure~\ref{fig:grid-bias}). Buffer behaves differently: no treated cluster has a treated neighbor, so multiplying its neighboring-treatment exposure by the control indicator leaves that exposure unchanged. Its two spillover regimes therefore define the same outcome model; small observed mean differences arise from separate Monte Carlo draws.
+The regime difference was especially large for interspersed assignments. Checkerboard MSE increased from 0.0624 under both arms to 2.1114 control-only; blocking increased from 0.0623 to 0.5761. Their poorer control-only accuracy reflects imprecision rather than a comparable increase in bias. In the selected Poisson configuration, empirical variance accounts for more than 97\% of mean MSE for every displayed design and regime (supplementary material). Buffer behaves differently: no treated cluster has a treated neighbor, so multiplying its neighboring-treatment exposure by the control indicator leaves that exposure unchanged. Its two spillover regimes therefore define the same outcome model; small observed mean differences arise from separate Monte Carlo draws.
 
 The detailed six-design queen pooled MSE ordering was stable across the five incidence configurations and five treatment-effect sizes. This does not imply a fixed conditional ranking. Under control-only spillover, buffer and guided saturation were nearly level at $\tau=2$ (MSE 0.1596 and 0.1604); at $\tau=3$, buffer was lower (0.1596 versus 0.1822). Guided saturation remained lowest in pooled MSE within that subset, but the crossover limits a blanket claim across effect sizes. Effect-size comparisons also reused assignments and noise, so they are sensitivity comparisons rather than independent confirmations. Full parameter/configuration and rook breakdowns in the supplement retain these distinctions.
 
 The grid sensitivity omitting spillover illustrates why an apparently favorable error metric is insufficient. Among the six-design comparisons at $\tau=1$, excluding nonidentified rook Checkerboard, pooled bias ranged from approximately $-0.12$ to $-0.40$ and coverage from 0.51 to 0.90. Some designs had lower MSE under this misspecified fit because their reduced variance outweighed increased bias. That trade-off did not restore valid treatment-effect inference. These sensitivity results concern omission of spillover; they do not establish robustness to an incorrectly specified exposure network or spillover functional form.
 
-The selected-surface grid pilot supported saturation's control-only downside pattern. Guided saturation's estimated worst-decile conditional MSE was 0.1936 against SRS 0.3486; under both arms it was 0.0582 against 0.0544. Outcome refinement preserved the control-only direction but did not remove uncertainty about allocation tails. These are pilot values and do not replace full-study estimates.
+The selected-surface grid pilot supported saturation's control-only downside pattern (Figure~\ref{fig:alloc-dist}). Guided saturation's estimated worst-decile conditional MSE was 0.1936 against SRS 0.3486; under both arms it was 0.0582 against 0.0544. Outcome refinement preserved the control-only direction but did not remove uncertainty about allocation tails. These are pilot values and do not replace full-study estimates.
 
 \subsection{Completed application}
 All 1,248 application reporting settings completed and passed precision gates. Production used 7,598,000 independent outcome fits; the separate extension added 2,280,000, for 9,878,000 distinct outcomes after counting copied prefixes once. Maximum relative MCSE(mean MSE) was 0.04871 and maximum MCSE(coverage) 0.00892. There were no warnings, aliases, boundary fits or estimation failures. All main stochastic sources passed at 100 assignments and 100 outcomes; two singleton baseline-sensitivity sources required 2,000 outcomes.
@@ -270,7 +270,7 @@ The supplementary document supplies exact design rules, parameter grids, estimat
 \clearpage
 \CTJGridFigure
 \clearpage
-\CTJBiasFigure
+\CTJAllocationFigure
 \clearpage
 \CTJMeanFigure
 \clearpage
