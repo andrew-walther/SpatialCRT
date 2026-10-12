@@ -178,6 +178,21 @@ def verify():
                 for year in ('2018', '2019', '2020', '2021')])
     require_equal([n for _, n in numerical_rows(table(chapter, 'tab:nc-summary-sens'))],
                   expected_sensitivity, '32 parameter-matched sensitivity ratio cells')
+    # Per-design downside table: mean and worst-decile ratios to SRS
+    # (code/21_downside_by_design.R), grid pilot then NC, both arms then control-only.
+    downside = csv_rows(ROOT / 'results/allocation_risk/summary/downside_by_design.csv')
+    downside = {(r['Source'], r['Regime'], int(r['Design_ID'])): r for r in downside}
+    expected_downside = []
+    for design in range(1, 10):
+        cells = []
+        for source_name in ('grid_pilot', 'nc_refined'):
+            for regime in ('both', 'control_only'):
+                row = downside[(source_name, regime, design)]
+                cells.extend([f"{float(row['Mean_Ratio_SRS']):.2f}",
+                              f"{float(row['Worst10_Ratio_SRS']):.2f}"])
+        expected_downside.append(cells)
+    require_equal([n for _, n in numerical_rows(table(chapter, 'tab:downside'))],
+                  expected_downside, 'Per-design downside ratios to SRS')
     # Check every supplement table body against its long-form chapter source.
     table_labels = re.findall(r'\\label\{(tab:[^}]+)\}', chapter)
     for label in table_labels:

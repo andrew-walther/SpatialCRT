@@ -530,7 +530,7 @@ SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 
 To assess allocation risk, we additionally conducted a focused grid pilot with queen weights, $\tau=1$, two fixed surfaces from each incidence configuration and the parameter corners $\rho\in\{0,0.5\}$ and $\gamma\in\{0.5,0.8\}$. For assignment $a$, its risk is $m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,X]$. Nested outcome replication estimates this conditional MSE before comparing its distribution across allocations. This is different from the distribution of squared errors in a single allocation or MSE across parameter scenarios. The pilot uses 100 assignment draws for stochastic designs and 100 outcomes per unique assignment, with a selected same-allocation refinement to 400 outcomes; singleton supports receive their own outcome replication.
 
-Averaged over the 40 fixed-surface/corner units per regime in the pilot, guided saturation's control-only mean MSE is 0.1409 against SRS 0.2172, estimated allocation q90 is 0.1747 against 0.2980, and estimated worst-decile mean is 0.1936 against 0.3486. Under both arms, the corresponding mean MSE is 0.0458 against 0.0428 and worst-decile mean 0.0582 against 0.0544. Plain saturation also performs favorably under control-only spillover. These selected-unit results support a qualified downside argument for saturation; they are not the full-study grid estimates. The focused refinement preserves the control-only direction but reveals substantial outcome-noise contributions to estimated allocation variation, especially under both arms. Finite-outcome quantiles and worst-decile membership remain uncertain. We therefore use the completed NC application below as the next setting-specific assessment rather than extrapolate exact tail protection from this pilot.
+Averaged over the 40 fixed-surface/corner units per regime in the pilot, guided saturation's control-only mean MSE is 0.1409 against SRS 0.2172, estimated allocation q90 is 0.1747 against 0.2980, and estimated worst-decile mean is 0.1936 against 0.3486. Under both arms, the corresponding mean MSE is 0.0458 against 0.0428 and worst-decile mean 0.0582 against 0.0544. Plain saturation also performs favorably under control-only spillover; Table \ref{tab:downside} in the application section compares every design with SRS on both criteria. These selected-unit results support a qualified downside argument for saturation; they are not the full-study grid estimates. The focused refinement preserves the control-only direction but reveals substantial outcome-noise contributions to estimated allocation variation, especially under both arms. Finite-outcome quantiles and worst-decile membership remain uncertain. We therefore use the completed NC application below as the next setting-specific assessment rather than extrapolate exact tail protection from this pilot.
 
 # Application: Observed NC SUD Incidence for Education-Pilot Planning
 
@@ -668,6 +668,44 @@ Year & SRS & Guided sat. & SRS & Plain sat. & Guided sat. \\
 
 At the two refined queen $\rho$ corners with $\gamma=0.8$, under control-only spillover, plain saturation's estimated q90 is 31.8--32.9\% below SRS and its estimated worst-decile mean 34.6--37.8\% below. Guided saturation's corresponding reductions are 20.8--38.6\% and 20.7--43.4\%. The pattern persists when one outcome half selects the worst decile and the opposite half evaluates it. Figure \ref{fig:nc-risk} in Appendix \ref{app:nc} shows the $\rho=0.5$ corner. This supports a descriptive downside benefit alongside lower average error, conditional on the studied model and sampled assignments.
 
+Table \ref{tab:downside} compares every design with SRS on both criteria, mean conditional MSE and the mean of the worst 10\% of sampled allocations, in the grid pilot and at the refined NC corners. Under control-only spillover, both saturation designs had lower mean and worst-decile MSE than SRS in both settings. Isolation Buffer also had a lower worst decile than SRS under control-only spillover (0.62 of SRS in the grid pilot and 0.91 in NC), but under both-arms spillover its mean was 3.79 and 3.69 times that of SRS, and it treated fewer clusters. High Incidence Focus has a single allocation in NC. That allocation's MSE was below the SRS worst-decile mean under both regimes (0.76 under both arms and 0.64 under control-only spillover), with mean MSE close to SRS (0.93 and 1.03). In the grid pilot, however, its both-arms mean was 3.91 times that of SRS, and its NC result depends on the incidence model (next paragraph). Balanced Quartiles and Balanced Halves matched SRS on both criteria. Checkerboard and $2\times2$ Blocking (spatial blocking in NC) did not improve on SRS on either criterion in any setting.
+
+```{=latex}
+\begin{table}[!htb]
+
+\footnotesize
+\centering
+\setlength{\tabcolsep}{4pt}
+
+\caption{Mean conditional MSE and worst-decile mean conditional MSE of each design, as ratios to SRS in the same setting and spillover regime (below 1 is lower error than SRS). Grid: focused pilot, queen contiguity, $\tau=1$, averaged over 40 fixed surface/corner units. NC: refined queen corners $\rho\in\{0,0.5\}$, $\gamma=0.8$, averaged with equal weight over 2018--2021 and both corners; NC designs are the graph adaptations (graph Checkerboard, spatial blocking, regional saturation). A design with one allocation has worst-decile mean equal to its mean.}
+\label{tab:downside}
+% SOURCE: results/allocation_risk/summary/downside_by_design.csv (code/21_downside_by_design.R)
+
+\begin{tabular}{lrrrrrrrr}
+
+\toprule
+& \multicolumn{4}{c}{Grid pilot} & \multicolumn{4}{c}{NC application} \\
+& \multicolumn{2}{c}{Both arms} & \multicolumn{2}{c}{Control only} & \multicolumn{2}{c}{Both arms} & \multicolumn{2}{c}{Control only} \\
+Design & Mean & Worst 10\% & Mean & Worst 10\% & Mean & Worst 10\% & Mean & Worst 10\% \\
+
+\midrule
+Checkerboard & 1.41 & 1.10 & 9.80 & 6.11 & 2.68 & 2.20 & 3.02 & 1.88 \\
+High Incidence Focus & 3.91 & 3.11 & 1.38 & 0.87 & 0.93 & 0.76 & 1.03 & 0.64 \\
+Saturation Quadrants & 1.06 & 1.05 & 0.62 & 0.53 & 0.99 & 0.94 & 0.73 & 0.64 \\
+Isolation Buffer & 3.79 & 3.93 & 0.75 & 0.62 & 3.69 & 4.75 & 0.93 & 0.91 \\
+$2\times2$ Blocking & 1.44 & 1.57 & 2.68 & 2.63 & 1.00 & 1.02 & 1.15 & 1.18 \\
+Balanced Quartiles & 0.99 & 1.00 & 1.00 & 1.00 & 0.98 & 0.96 & 0.95 & 1.01 \\
+Balanced Halves & 0.99 & 1.00 & 1.00 & 0.98 & 0.98 & 0.96 & 0.97 & 0.99 \\
+Incidence-Guided Saturation & 1.07 & 1.07 & 0.65 & 0.56 & 0.98 & 0.93 & 0.75 & 0.68 \\
+SRS & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+```
+
 Tail uncertainty remains material. With $J=100$, the worst decile contains only ten sampled draws; extra outcomes reduce noise in $\hat m(a)$ but do not enlarge the allocation sample. All 112 non-singleton reporting rows flag uncertain tail-boundary membership. Under both arms, guided saturation's half-sample worst-decile Jaccard overlap is 0--0.25 and approximately 61--86\% of raw estimated-risk variance is attributable to outcome Monte Carlo noise. Plain saturation has similarly unstable identities. Small both-arms tail differences therefore do not establish superior downside protection. Singleton Checkerboard and High Incidence Focus have no allocation variation for these inputs; their q90 and worst-decile mean equal conditional mean MSE, which does not imply low error or absence of outcome uncertainty.
 
 
@@ -681,13 +719,15 @@ The application supports considering either saturation strategy when control-onl
 
 We compared six treatment assignment designs for a spatial cluster randomized trial on a grid of 100 clusters, under three mechanisms of heterogeneous baseline incidence, two spillover regimes, and a range of values for spatial dependence, spillover magnitude, and the treatment effect. Some findings held across the incidence configurations and the values of $\rho$, $\gamma$, and $\tau$ under queen contiguity. Others depended on the spillover regime, which a trial team may not know in advance.
 
+We judged each design on two criteria: its average MSE, and the spread of MSE across the allocations it can produce. A trial realizes one allocation, so a design with a low average MSE can still give a poor estimate if some of its allocations perform badly. Chapter 2 compared simple random and block stratified sampling on the same two criteria. The spread matters most for SRS under control-only spillover: in the grid pilot, the worst 10\% of SRS allocations had mean conditional MSE 0.3486, against 0.2172 for SRS allocations overall.
+
 Under queen contiguity, Incidence-Guided Saturation Quadrants had the lowest mean squared error (0.091) and Balanced Quartiles the second lowest (0.131). The order of the six designs was the same in each of the five incidence configurations and at every value of $\tau$, and neither the strength of spatial dependence in the outcome nor the spillover magnitude changed it. The mechanism that generated the incidence surface changed each design's MSE only slightly. The same two designs also led under rook contiguity (0.072 and 0.084). Coverage of the 95\% intervals was close to 0.94 for every design under both neighbor types, except Checkerboard under rook contiguity, so the designs differed in precision and coverage did not separate them.
 
 Under queen contiguity, Checkerboard and $2\times2$ Blocking were close to the best designs when spillover reached both arms and were the two worst when it reached only control clusters: at $\tau = 1$, Checkerboard's MSE was 0.062 under the both-arms regime and 2.111 under the control-only regime, and that of $2\times2$ Blocking was 0.062 and 0.576. Balanced Quartiles also lost ground under the control-only regime (0.042 and 0.219), while Incidence-Guided Saturation Quadrants was first or second under both regimes at every value of $\tau$. Its control-only MSE did rise with $\tau$, and Isolation Buffer, whose MSE did not, matched it under that regime at $\tau = 2$ and passed it at $\tau = 3$. A design whose performance depends on the regime carries a risk that its average MSE does not show.
 
 Checkerboard failed for different reasons under the two neighbor types. Under queen contiguity, its high MSE was variance, not bias: under the control-only regime, only the boundary clusters separate the spillover effect from the treatment effect (Methods). The estimates stayed centered on $\tau$ (bias 0.004 under the control-only regime at $\tau = 1$) and their intervals kept close to nominal coverage (0.942), but they were imprecise. Under rook contiguity, $\tau$ is not identified (Methods): the estimates were centered on $\tau - \gamma$, so rook Checkerboard's MSE grew with $\gamma$, and its coverage at $\tau = 1$ was 0.150. Checkerboard intersperses treated and control clusters as finely as the grid allows; both failures come from the dependence this pattern creates between $Z$ and the spillover covariate, which is a linear combination of the intercept and $Z$ at every cluster under rook contiguity and at every interior cluster under queen contiguity and the control-only regime.
 
-The expanded benchmark and completed NC application support a regime-specific recommendation. Saturation performs favorably on average and estimated allocation downside under control-only spillover. Under both arms, SRS remains competitive and the evidence does not justify a universal recommendation for incidence-guided saturation. Plain saturation also performs well, so incidence guidance itself has not established an accuracy gain. The NC model assesses education outcomes rather than assuming that historical SUD incidence predicts education ability or a heterogeneous intervention effect.
+Together, the grid benchmark, the allocation-risk results (Table \ref{tab:downside}) and the NC application give guidance by scenario. When spillover is expected to reach mainly control clusters, incidence-guided saturation and plain saturation had the lowest mean MSE and among the lowest worst-decile MSE, so they are the designs we recommend over SRS. Isolation Buffer also limited downside in that regime, but it should be considered only when both-arms spillover is implausible and a smaller treated budget is acceptable. When spillover is expected to reach both arms, the spread of MSE across allocations was small for every randomized design, and SRS, Balanced Quartiles, Balanced Halves and the saturation designs performed about equally, so SRS remains a reasonable choice. High Incidence Focus gave one fixed allocation whose MSE in NC was below the SRS worst-decile mean under both regimes. Its accuracy is model-based rather than randomization-based, however: it was about four times worse than SRS under both arms in the grid, and its MSE rose 1.4--4.4-fold when baseline outcomes were related to incidence. It is a candidate only when historical incidence can be assumed unrelated to the outcome. Checkerboard and $2\times2$ Blocking did not improve on SRS on either criterion. The NC model assesses education outcomes rather than assuming that historical SUD incidence predicts education ability or a heterogeneous intervention effect.
 
 The saturation design did as well when its saturations were assigned without reference to incidence (Saturation Quadrants; see Treatment assignment designs). Both designs treat the four quadrants at saturations from 20\% to 80\%. Their performance relative to the expanded SRS benchmark supports evaluating the saturation approach, while their near comparison does not establish that incidence guidance improves estimation.
 
