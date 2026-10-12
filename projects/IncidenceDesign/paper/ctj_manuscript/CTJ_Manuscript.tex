@@ -13,7 +13,7 @@
 \usepackage{url}
 \ifctjreading
   % Balance the final reading-page columns, including the bibliography.
-  \usepackage{flushend}
+  \usepackage{balance}
   \geometry{headheight=20pt}
   \setlength{\emergencystretch}{2em}
   \raggedbottom
@@ -256,6 +256,7 @@ The supplementary document supplies exact design rules, parameter grids, estimat
 \ifctjreading
 % Continue references after declarations; balance the last page's columns.
 % Embedded-exhibit placement is checked in the rendered reading PDF.
+\balance
 \fi
 \bibliographystyle{SageV}
 \bibliography{../SpatialCRT_IncidenceDesign}

@@ -77,7 +77,7 @@ pct <- function(x, d = 1) paste0(formatC(100 * round(x, d + 2), format = "f", di
 # in the adaptation table (Section 4).
 # Names match CTJ Table 1 and the regenerated figures.
 lab <- c("1" = "Checkerboard", "2" = "High Incidence Focus",
-         "3" = "Plain Saturation", "4" = "Isolation Buffer",
+         "3" = "Saturation Quadrants", "4" = "Isolation Buffer",
          "5" = "2×2 Blocking", "6" = "Balanced Quartiles",
          "7" = "Balanced Halves", "8" = "Incidence-Guided Saturation",
          "9" = "Simple Random Sampling")
@@ -152,12 +152,12 @@ n_rows <- xnum("Reporting rows"); n_src <- xnum("Distinct sources"); n_fits <- x
 
 **Key results (queen contiguity, primary model):**
 
-1. **Control-only spillover — saturation wins.** Plain saturation lowered mean squared error (MSE) by `r pct(psat_ctrl_red)` relative to SRS; incidence-guided saturation by `r pct(min(gsat_ctrl_red))`--`r pct(max(gsat_ctrl_red))` across years. Both beat SRS in every parameter setting, and at the settings examined for downside ($\rho=0,0.5$; $\gamma=0.8$) both also reduced the *downside* (90th percentile and worst-10% mean of allocation MSE) by about 21--43%.
+1. **Control-only spillover — saturation wins.** Saturation Quadrants lowered mean squared error (MSE) by `r pct(psat_ctrl_red)` relative to SRS; incidence-guided saturation by `r pct(min(gsat_ctrl_red))`--`r pct(max(gsat_ctrl_red))` across years. Both beat SRS in every parameter setting, and at the settings examined for downside ($\rho=0,0.5$; $\gamma=0.8$) both also reduced the *downside* (90th percentile and worst-10% mean of allocation MSE) by about 21--43%.
 2. **Both-arms spillover — SRS is competitive.** SRS (MSE `r f(srs_both,4)`), balancing and saturation designs performed about equally; no design is clearly better.
 3. **Designs to avoid.** Checkerboard was never better than SRS; blocking was never clearly better and was up to 1.4$\times$ worse under control-only spillover; Isolation Buffer treats far fewer clusters and is poor under both-arms spillover; High Incidence Focus is a single deterministic allocation whose accuracy depends on the outcome model.
 4. **Coverage** of nominal 95% intervals is `r pct(cov_rng[1])`--`r pct(cov_rng[2])` in every design, slightly below nominal (as in the grid study).
 
-**Bottom line.** The application reproduces the grid study's central, regime-dependent conclusion on real geography and real incidence: *saturation designs are the recommended choice when spillover is expected mainly in control clusters, and SRS remains a reasonable default when spillover reaches both arms.* Incidence-guided saturation was about as accurate as plain saturation, so incidence can steer the highest treatment saturations to the highest-burden regions at little or no cost in precision.
+**Bottom line.** The application reproduces the grid study's central, regime-dependent conclusion on real geography and real incidence: *saturation designs are the recommended choice when spillover is expected mainly in control clusters, and SRS remains a reasonable default when spillover reaches both arms.* Incidence-guided saturation was about as accurate as Saturation Quadrants, so incidence can steer the highest treatment saturations to the highest-burden regions at little or no cost in precision.
 
 \begin{keybox}
 \textbf{How to read this report.} Sections 1--8 (the main body) tell the full story. Section 9 holds additional results for reference. Appendix A lists what changed since the May 2026 synthetic-data proposal; Appendix B lists decisions and open items for discussion.
@@ -187,7 +187,7 @@ report_table(grid_show, align = "lrrrr",
 
 The grid study's findings that motivate the application:
 
-- **Spillover regime decides the ranking.** Under control-only spillover, plain and incidence-guided saturation had the lowest MSE (about `r f(gv(8,"control_only","Ratio"),2)` times SRS); checkerboard (`r f(gv(1,"control_only","Ratio"),1)`$\times$) and $2\times2$ blocking (`r f(gv(5,"control_only","Ratio"),1)`$\times$) failed badly, plausibly because fine interspersion leaves little information to separate treatment from spillover. Under both-arms spillover, SRS, Balanced Quartiles/Halves and saturation were within about 8% of one another.
+- **Spillover regime decides the ranking.** Under control-only spillover, Saturation Quadrants and Incidence-Guided Saturation had the lowest MSE (about `r f(gv(8,"control_only","Ratio"),2)` times SRS); checkerboard (`r f(gv(1,"control_only","Ratio"),1)`$\times$) and $2\times2$ blocking (`r f(gv(5,"control_only","Ratio"),1)`$\times$) failed badly, plausibly because fine interspersion leaves little information to separate treatment from spillover. Under both-arms spillover, SRS, Balanced Quartiles/Halves and saturation were within about 8% of one another.
 - **Average MSE is not the whole story.** A trial realizes one allocation. A focused pilot showed that SRS's worst 10% of allocations were much worse than its mean under control-only spillover, while saturation reduced that downside.
 - **Open question for the application:** do these conclusions survive an irregular real map, unequal cluster populations and *observed* incidence?
 
@@ -231,7 +231,7 @@ The grid designs rely on rows, columns and quadrants that do not exist on an irr
 
 ```{r tab-adapt}
 adapt <- data.frame(
-  Design = c("Simple Random Sampling", "Plain Saturation", "Incidence-Guided Saturation",
+  Design = c("Simple Random Sampling", "Saturation Quadrants", "Incidence-Guided Saturation",
              "Balanced Quartiles", "Balanced Halves", "2×2 Blocking",
              "Checkerboard", "Isolation Buffer", "High Incidence Focus"),
   Grid = c("Random 50 of 100", "Random 20/40/60/80% per quadrant",
@@ -268,7 +268,7 @@ report_table(bud, align = "lrrrr", escape = TRUE,
   caption = "Treatment budgets: mean treated clusters / percent of the year's population aged 18--64. Population share measures geographic reach, not the number of professionals educated.\\label{tab:budgets}")
 ```
 
-```{r fig-examples, out.width="96%", fig.align="center", fig.pos="H", fig.cap="Example allocations under each design (2018 inputs). Treated clusters are shaded. Panel names: Saturation Regions = Plain Saturation; Incidence-Guided Saturation Regions = Incidence-Guided Saturation; 2x2 Blocking uses spatial blocks on the NC map."}
+```{r fig-examples, out.width="96%", fig.align="center", fig.pos="H", fig.cap="Example allocations under each design (2018 inputs). Treated clusters are shaded. On the NC map, Saturation Quadrants and Incidence-Guided Saturation use four fixed regions and 2×2 Blocking uses spatial blocks."}
 knitr::include_graphics(file.path(report_dir, "real_sud_assets/design_examples.png"))
 ```
 
@@ -311,11 +311,11 @@ main_tab <- nc |>
   select(Design, MSE_control_only, Ratio_control_only, Cov_control_only, MSE_both, Ratio_both, Cov_both)
 report_table(main_tab, align = "lrrrrrr", escape = FALSE,
   col.names = c("Design", "MSE", "Ratio to SRS", "Coverage", "MSE", "Ratio to SRS", "Coverage"),
-  caption = "Primary results by design and spillover regime. MSE and ratio give the range over the four planning years; coverage is the four-year mean. Designs whose allocation does not use incidence (SRS, plain saturation, checkerboard, buffer) have identical results across years.") |>
+  caption = "Primary results by design and spillover regime. MSE and ratio give the range over the four planning years; coverage is the four-year mean. Designs whose allocation does not use incidence (SRS, Saturation Quadrants, checkerboard, buffer) have identical results across years.") |>
   kableExtra::add_header_above(c(" " = 1, "Control-only spillover" = 3, "Both-arms spillover" = 3))
 ```
 
-- **Control-only spillover.** Plain saturation (`r f(ncv(3,"control_only",2018),4)` vs SRS `r f(srs_ctrl,4)`) and incidence-guided saturation were the most accurate designs averaged over years (High Incidence Focus was better in 2018 alone, ratio 0.70, but ranged up to 1.40). Both had lower MSE than SRS in all `r ctrl_n` year-by-setting combinations, with the upper Monte Carlo bound of every difference below zero (`r ctrl_ok` of `r 2*ctrl_n` comparisons). The two saturation designs performed similarly (incidence-guided yearly MSE within about $-3\%$ to $+9\%$ of plain; equal on the grid), so **incidence guidance targets high-burden regions at little or no cost in accuracy.** Balanced designs and Isolation Buffer were close to or slightly below SRS; checkerboard (about 3$\times$ SRS) was much worse, and blocking and High Incidence Focus were worse in some years.
+- **Control-only spillover.** Saturation Quadrants (`r f(ncv(3,"control_only",2018),4)` vs SRS `r f(srs_ctrl,4)`) and incidence-guided saturation were the most accurate designs averaged over years (High Incidence Focus was better in 2018 alone, ratio 0.70, but ranged up to 1.40). Both had lower MSE than SRS in all `r ctrl_n` year-by-setting combinations, with the upper Monte Carlo bound of every difference below zero (`r ctrl_ok` of `r 2*ctrl_n` comparisons). The two saturation designs performed similarly (incidence-guided yearly MSE within about $-3\%$ to $+9\%$ of Saturation Quadrants; equal on the grid), so **incidence guidance targets high-burden regions at little or no cost in accuracy.** Balanced designs and Isolation Buffer were close to or slightly below SRS; checkerboard (about 3$\times$ SRS) was much worse, and blocking and High Incidence Focus were worse in some years.
 - **Both-arms spillover.** SRS, the balanced designs, blocking and both saturation designs were within a few percent of each other; small differences should not be read as equivalence or superiority. Checkerboard (about 2.8$\times$) and Isolation Buffer (about 3.7$\times$) were far worse. High Incidence Focus had slightly lower MSE than SRS, but it is one deterministic allocation (see Section 7).
 - **Bias and coverage.** Bias was small throughout (|bias| $\le$ `r f(max(abs(nc$Bias)),2)`). Coverage averaged about `r pct(mean(nc$Coverage))`, slightly below 95% for every design, as in the grid study. Passing the precision gates does not repair this finite-sample undercoverage.
 
@@ -325,7 +325,7 @@ report_table(main_tab, align = "lrrrrrr", escape = FALSE,
 knitr::include_graphics(file.path(fig_compact, "allocation_distribution_by_design.pdf"))
 ```
 
-Under **control-only** spillover, plain saturation's estimated q90 was `r pct(min(trng(3,"control_only","Q90_red")))`--`r pct(max(trng(3,"control_only","Q90_red")))` below SRS and its worst-decile mean `r pct(min(trng(3,"control_only","W10_red")))`--`r pct(max(trng(3,"control_only","W10_red")))` below; incidence-guided saturation's reductions were `r pct(min(trng(8,"control_only","Q90_red")))`--`r pct(max(trng(8,"control_only","Q90_red")))` and `r pct(min(trng(8,"control_only","W10_red")))`--`r pct(max(trng(8,"control_only","W10_red")))`. The pattern held when one half of the outcomes picked the worst allocations and the other half evaluated them. So saturation lowers both the average error and the chance of drawing a poor allocation. Under **both-arms** spillover, allocation-to-allocation spread was small for SRS and the balancing and saturation designs (Isolation Buffer's was wide), and tail differences among them were within simulation noise.
+Under **control-only** spillover, Saturation Quadrants's estimated q90 was `r pct(min(trng(3,"control_only","Q90_red")))`--`r pct(max(trng(3,"control_only","Q90_red")))` below SRS and its worst-decile mean `r pct(min(trng(3,"control_only","W10_red")))`--`r pct(max(trng(3,"control_only","W10_red")))` below; incidence-guided saturation's reductions were `r pct(min(trng(8,"control_only","Q90_red")))`--`r pct(max(trng(8,"control_only","Q90_red")))` and `r pct(min(trng(8,"control_only","W10_red")))`--`r pct(max(trng(8,"control_only","W10_red")))`. The pattern held when one half of the outcomes picked the worst allocations and the other half evaluated them. So saturation lowers both the average error and the chance of drawing a poor allocation. Under **both-arms** spillover, allocation-to-allocation spread was small for SRS and the balancing and saturation designs (Isolation Buffer's was wide), and tail differences among them were within simulation noise.
 
 These tail estimates are descriptive. With $J=100$ allocations, the worst decile contains only ten draws; extra outcomes reduce noise in each allocation's risk but do not enlarge the allocation sample.
 
@@ -357,7 +357,7 @@ report_table(cmp, align = "lrrrr",
 **What held.**
 
 - **Regime dependence.** In both studies the spillover regime, not the incidence pattern, determined which designs did well.
-- **Saturation under control-only spillover.** Plain and incidence-guided saturation were the best designs under control-only spillover in both studies, on average and in the downside.
+- **Saturation under control-only spillover.** Saturation Quadrants and Incidence-Guided Saturation were the best designs under control-only spillover in both studies, on average and in the downside.
 - **Balancing tracks SRS.** Balanced Quartiles/Halves were indistinguishable from SRS in both.
 - **Fine interspersion fails under control-only spillover.** Checkerboard did poorly in both studies; blocking was worse than SRS on the grid and in some NC years.
 
@@ -373,9 +373,9 @@ report_table(cmp, align = "lrrrr",
 
 **For the education pilot.**
 
-- **Control-only spillover plausible:** if spillover is expected mainly among untreated clusters (e.g., professionals in control areas hearing about the training), a saturation design (plain or guided) is the recommended choice. It lowers average error by about a quarter and reduces the chance of a poor allocation.
+- **Control-only spillover plausible:** if spillover is expected mainly among untreated clusters (e.g., professionals in control areas hearing about the training), a saturation design (Saturation Quadrants or Incidence-Guided Saturation) is the recommended choice. It lowers average error by about a quarter and reduces the chance of a poor allocation.
 - **Both-arms spillover expected:** SRS is a reasonable, simple default, with balanced and saturation designs as equivalent alternatives.
-- **Incidence guidance:** incidence-guided saturation treats high-burden regions most intensively while keeping about the same accuracy as plain saturation, which makes it a natural choice when reaching high-burden areas is also a program goal.
+- **Incidence guidance:** incidence-guided saturation treats high-burden regions most intensively while keeping about the same accuracy as Saturation Quadrants, which makes it a natural choice when reaching high-burden areas is also a program goal.
 
 **For the method.** The application shows that the grid study's design guidance transfers to a real, irregular geography with unequal populations and observed incidence, once designs are adapted with prespecified rules. The key design question for a trial team is the expected spillover regime, not the incidence pattern.
 
@@ -396,7 +396,7 @@ report_table(cmp, align = "lrrrr",
 
 ## Setting-level ratios to SRS
 
-```{r fig-setting, out.width="100%", fig.align="center", fig.pos="H", fig.cap="Setting-specific mean MSE ratios to year-matched SRS for each $\\rho/\\gamma$ setting, year and regime (queen). Abbreviated column names follow Figure 8 (e.g., Sat. Regions = Plain Saturation)."}
+```{r fig-setting, out.width="100%", fig.align="center", fig.pos="H", fig.cap="Setting-specific mean MSE ratios to year-matched SRS for each $\\rho/\\gamma$ setting, year and regime (queen)."}
 knitr::include_graphics(file.path(ex_dir, "primary_setting_ratios.pdf"))
 ```
 
@@ -431,7 +431,7 @@ reg <- sens |> filter(Model == "education", Neighbor == "queen", Summary != "mea
 
 ## Tail-refinement detail
 
-```{r fig-tail, out.width="88%", fig.align="center", fig.pos="H", fig.cap="Refined allocation-specific risk at queen $\\rho=0.5$, $\\gamma=0.8$ ($R\\geq400$ outcomes per allocation; 1,000 for single-allocation designs). Design names in this figure: Sat. Regions = Plain Saturation; Incidence Sat. Regions = Incidence-Guided Saturation; Spatial Blocking = 2×2 Blocking."}
+```{r fig-tail, out.width="88%", fig.align="center", fig.pos="H", fig.cap="Refined allocation-specific risk at queen $\\rho=0.5$, $\\gamma=0.8$ ($R\\geq400$ outcomes per allocation; 1,000 for single-allocation designs)."}
 knitr::include_graphics(file.path(ex_dir, "refined_allocation_risk.pdf"))
 ```
 
@@ -439,7 +439,7 @@ All `r sum(tail_r$Tail_Boundary_Uncertain & !tail_r$Proven_Singleton)` refined s
 
 ## Population reach
 
-```{r fig-pop, out.width="80%", fig.align="center", fig.pos="H", fig.cap="Share of the working-age population in treated clusters, by design and year. Abbreviations: Hi-Inc. Focus = High Incidence Focus; Sat. Regions = Plain Saturation; Iso. Buffer = Isolation Buffer; Spatial Blocking = 2×2 Blocking; Bal. = Balanced; Incidence Sat. Regions = Incidence-Guided Saturation; Simple Random = SRS."}
+```{r fig-pop, out.width="80%", fig.align="center", fig.pos="H", fig.cap="Share of the working-age population in treated clusters, by design and year."}
 knitr::include_graphics(file.path(ex_dir, "population_shares.pdf"))
 ```
 
@@ -474,7 +474,7 @@ The premise is unchanged from the May 2026 proposal: apply the spatial-lag desig
 5. **High Incidence Focus** is deterministic for fixed inputs; reported but not recommended because its accuracy depends on the outcome model.
 6. **Coverage reported as observed** (about 93%) rather than switching estimators after seeing results.
 7. **Recommendations are regime-specific** rather than naming one overall winner.
-8. **CTJ presentation:** main text shows six designs + SRS; plain saturation and Balanced Halves are in the supplement (they performed like incidence-guided saturation and Balanced Quartiles).
+8. **CTJ presentation:** main text shows six designs + SRS; Saturation Quadrants and Balanced Halves are in the supplement (they performed like incidence-guided saturation and Balanced Quartiles).
 
 **Open items**
 

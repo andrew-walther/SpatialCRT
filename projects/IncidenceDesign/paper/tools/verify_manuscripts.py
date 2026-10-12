@@ -19,7 +19,7 @@ MAIN_EXHIBITS = MAIN.with_name('CTJ_Exhibits.tex')
 READING = MAIN.with_name('CTJ_Reading.tex')
 SUPPLEMENT = ROOT / 'paper/ctj_manuscript/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
-LABELS = ['Checkerboard', 'High Incidence Focus', 'Plain Saturation',
+LABELS = ['Checkerboard', 'High Incidence Focus', 'Saturation Quadrants',
           'Isolation Buffer', '$2\\times2$ Blocking', 'Balanced Quartiles',
           'Balanced Halves', 'Incidence-Guided Saturation', 'Simple Random Sampling']
 

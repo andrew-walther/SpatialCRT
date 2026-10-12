@@ -140,7 +140,7 @@ export_compact_exhibits <- function(project_dir) {
 
   # A diverging log-ratio scale is symmetric about SRS=1; printed cells retain
   # actual ratios. Saturation below SRS and very imprecise designs both remain visible.
-  names <- c("Checkerboard", "High Incidence Focus", "Plain Saturation", "Isolation Buffer",
+  names <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
              "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
              "Incidence\u00adGuided Saturation", "Simple Random Sampling")
   annual$Label <- factor(annual$Design_ID, levels = 9:1, labels = rev(names))
@@ -163,7 +163,7 @@ export_compact_exhibits <- function(project_dir) {
     ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.title = ggplot2::element_text(size = 9))
   ggplot2::ggsave(file.path(out, "nc_annual_accuracy.pdf"), p, width = 174, height = 87, units = "mm")
   # CTJ variant: the six detailed designs only (drops the two related
-  # variants, plain saturation ID 3 and balanced halves ID 7; author 2026-10-12).
+  # variants, Saturation Quadrants ID 3 and balanced halves ID 7; author 2026-10-12).
   # Same ratios and color limits as the nine-design figure.
   p_six <- p
   p_six$data <- shown[!shown$Design_ID %in% c(3, 7), ]

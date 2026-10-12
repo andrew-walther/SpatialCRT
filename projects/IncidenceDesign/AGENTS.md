@@ -28,7 +28,7 @@ Rebuild there with `prelim/tools/build_prelim.py` after
 individual chapter syncs; source ownership and hooks are unchanged. Chapter 4
 continuing work now uses narrative aims/expected evidence without a dated
 timeline or advisor-meeting references. CTJ reading
-uses the installed `flushend` package and no forced bibliography page breaks;
+uses the `balance` package (`\balance` before the bibliography) and no forced page breaks;
 references begin on page 7 and occupy both columns on page 8. The review layout
 alone loads `lastpage`. See
 [checkpoint/teach-back](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).

@@ -63,14 +63,18 @@ rs_companion <- function(root = file.path(.rs_app, "results", "real_sud_rev_2026
   ggplot2::ggsave(file.path(assets, "observed_years.png"), map, width = 11, height = 7, dpi = 150)
   g$Region <- factor(s$regions)
   map <- ggplot2::ggplot(g) + ggplot2::geom_sf(ggplot2::aes(fill = Region), color = "white", linewidth = 0.2) +
-    ggplot2::scale_fill_brewer(palette = "Set2") + ggplot2::labs(title = "One frozen region partition for all four years", subtitle = "Selected by geography and balance before outcome performance is evaluated") +
+    ggplot2::scale_fill_brewer(palette = "Set2") + ggplot2::labs(title = "One fixed region partition for all four years", subtitle = "Selected by geography and balance before outcome performance is evaluated") +
     ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(), panel.grid = ggplot2::element_blank())
   ggplot2::ggsave(file.path(assets, "regions.png"), map, width = 10, height = 4, dpi = 150)
   c <- rs_config("smoke"); units <- rs_units(c)
   examples <- do.call(rbind, lapply(1:9, function(id) {
     u <- units[which(units$Design_ID == id)[1], ]
     a <- g; z <- rs_draws(u, s, 1)[, 1]
-    a$Design <- paste0(id, ". ", u$Design, " (", sum(z), "/58)")
+    # Display names match the manuscripts (author 2026-10-12).
+    shown <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
+               "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
+               "Incidence-Guided Saturation", "Simple Random Sampling")[id]
+    a$Design <- paste0(id, ". ", shown, " (", sum(z), "/58)")
     a$Treatment <- factor(z, levels = 0:1, labels = c("Control", "Treatment")); a
   }))
   map <- ggplot2::ggplot(examples) + ggplot2::geom_sf(ggplot2::aes(fill = Treatment), color = "white", linewidth = 0.12) +

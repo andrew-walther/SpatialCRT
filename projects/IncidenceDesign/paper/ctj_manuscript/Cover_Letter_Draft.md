@@ -34,8 +34,8 @@ The authors currently declare no funding and no conflicts of interest.
 
 Sincerely,
 
-Feng-Chang Lin, corresponding author
-Department of Biostatistics, University of North Carolina at Chapel Hill
-flin33@email.unc.edu
-Telephone: (919) 966-9431
+Feng-Chang Lin, corresponding author\
+Department of Biostatistics, University of North Carolina at Chapel Hill\
+flin33@email.unc.edu\
+Telephone: (919) 966-9431\
 [Signature — author to supply]

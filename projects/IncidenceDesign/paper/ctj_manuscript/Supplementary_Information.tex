@@ -139,11 +139,11 @@ of a retained design, and in the eight-design comparison at \(\tau = 1\)
 neither could be distinguished from its counterpart under either
 neighbor type, by the Nemenyi and Holm-adjusted Wilcoxon signed-rank
 tests described under Simulation design, resampling, and metrics below,
-applied here to all eight designs. Saturation Quadrants assigns the saturations 20\%, 40\%, 60\%, and 80\% to the four quadrants in random order, without reference to incidence; its retained counterpart, Incidence-Guided Saturation Quadrants, assigns the higher saturations to the quadrants with higher mean incidence (Table \ref{tab:designs}). We shorten these names to Plain Saturation and Incidence-Guided Saturation in the rest of this supplement, as in the figures. Plain Saturation's mean squared error was 0.0900, against 0.0907 for Incidence-Guided Saturation, under
+applied here to all eight designs. Saturation Quadrants assigns the saturations 20\%, 40\%, 60\%, and 80\% to the four quadrants in random order, without reference to incidence; its retained counterpart, Incidence-Guided Saturation Quadrants, assigns the higher saturations to the quadrants with higher mean incidence (Table \ref{tab:designs}). We shorten the second name to Incidence-Guided Saturation in the rest of this supplement, as in the figures. Saturation Quadrants's mean squared error was 0.0900, against 0.0907 for Incidence-Guided Saturation, under
 queen contiguity (Nemenyi \(p = 0.98\); Holm-adjusted Wilcoxon
 signed-rank \(p = 0.41\)), and 0.0708 against 0.0717 under rook
 contiguity (Nemenyi \(p = 1.00\); Wilcoxon \(p = 0.82\)). We retain one
-representative of the saturation mechanism, Incidence-Guided Saturation. Plain Saturation had the marginally lower mean under both
+representative of the saturation mechanism, Incidence-Guided Saturation. Saturation Quadrants had the marginally lower mean under both
 neighbor types and the better average rank in the eight-design
 comparison (2.100 against 2.350 under queen contiguity and 2.281 against
 2.306 under rook contiguity), so this choice does not rest on performance. The two saturation designs performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants with little or no loss of estimation accuracy; the accuracy advantage of both designs over simple random sampling (SRS), which arises under control-only spillover (see SRS benchmark and allocation-specific risk), comes from the saturation structure they share.
@@ -942,7 +942,7 @@ Saturation combines low pooled MSE with comparatively favorable
 control-only performance. The SRS benchmark below changes the practical
 interpretation: recommend the saturation approach when control-only
 spillover is plausible, while retaining SRS as a competitive option
-under both-arms spillover. Plain Saturation performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants with little or no loss of estimation accuracy. Scenario-level worst cases summarize variation across
+under both-arms spillover. Saturation Quadrants performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants with little or no loss of estimation accuracy. Scenario-level worst cases summarize variation across
 parameter settings; they are distinct from conditional risk across
 assignments within one setting.
 
@@ -951,7 +951,7 @@ risk}\label{srs-benchmark-and-allocation-specific-risk}
 
 At \(\tau=1\) under queen contiguity, pooled over the five incidence
 configurations and all spatial/spillover settings, Incidence-Guided Saturation has
-mean MSE 0.0907 against SRS 0.1285; Plain Saturation has 0.0900. Table
+mean MSE 0.0907 against SRS 0.1285; Saturation Quadrants has 0.0900. Table
 \ref{tab:grid-srs} separates the regimes and includes all eight
 strategies. Incidence-Guided Saturation's control-only ratio to SRS is 0.631,
 whereas its both-arms ratio is 1.083. SRS, Balanced Quartiles and
@@ -980,7 +980,7 @@ Design & MSE & Coverage & MSE & Coverage \\
 \midrule
 Checkerboard & 0.0624 & 0.940 & 2.1114 & 0.942 \\
 High Incidence Focus & 0.1617 & 0.941 & 0.3292 & 0.935 \\
-Plain Saturation & 0.0442 & 0.942 & 0.1359 & 0.929 \\
+Saturation Quadrants & 0.0442 & 0.942 & 0.1359 & 0.929 \\
 Isolation Buffer & 0.1608 & 0.939 & 0.1595 & 0.939 \\
 $2\times2$ Blocking & 0.0623 & 0.937 & 0.5761 & 0.941 \\
 Balanced Quartiles & 0.0421 & 0.940 & 0.2195 & 0.932 \\
@@ -1001,7 +1001,7 @@ scenarios. The pilot used 100 assignment draws for each randomized design and 10
 
 Averaged over the 40 units per regime in the pilot (fixed surfaces crossed with the extreme combinations of $\rho$ and $\gamma$), Incidence-Guided Saturation's control-only mean MSE is 0.1409 against SRS 0.2172, the estimated 90th percentile of allocation-specific MSE is 0.1747 against 0.2980, and the estimated worst-decile mean is 0.1936 against 0.3486. Under both arms, the
 corresponding mean MSE is 0.0458 against 0.0428 and worst-decile mean
-0.0582 against 0.0544. Plain Saturation also performs favorably under
+0.0582 against 0.0544. Saturation Quadrants also performs favorably under
 control-only spillover; Table \ref{tab:downside} in the application section compares every design with SRS on both criteria. These selected-unit results support a qualified
 downside argument for saturation; they are not the full-study grid
 estimates. The focused refinement preserves the control-only direction
@@ -1093,7 +1093,7 @@ The two saturation designs use one fixed four-region partition for all
 years. A geographic $k$-means procedure generates 250 candidates, selecting the partition by compactness and balance in
 reference population, cluster count and county count, without consulting
 outcomes. Reference population is pooled person-years divided by four.
-Plain Saturation randomly assigns 20/40/60/80\% to these regions each
+Saturation Quadrants randomly assigns 20/40/60/80\% to these regions each
 draw. Incidence-Guided Saturation first ranks clusters by annual per-capita rates,
 averages their ranks equally within each region, ranks those four means,
 and assigns 80/60/40/20\% from highest to lowest. Regional ties are
@@ -1124,7 +1124,7 @@ Design & 2018 & 2019 & 2020 & 2021 \\
 \midrule
 Checkerboard & 27.00 / 50.4 & 27.00 / 50.4 & 27.00 / 50.4 & 27.00 / 50.7 \\
 High Incidence Focus & 29.00 / 22.2 & 29.00 / 23.5 & 29.00 / 23.3 & 29.00 / 22.4 \\
-Plain Saturation & 29.03 / 49.2 & 29.03 / 49.2 & 29.03 / 49.1 & 29.03 / 49.1 \\
+Saturation Quadrants & 29.03 / 49.2 & 29.03 / 49.2 & 29.03 / 49.1 & 29.03 / 49.1 \\
 Isolation Buffer & 15.89 / 26.7 & 15.89 / 26.7 & 15.89 / 26.7 & 15.89 / 26.7 \\
 $2\times2$ Blocking & 28.00 / 50.0 & 31.00 / 55.1 & 27.00 / 48.0 & 29.00 / 50.3 \\
 Balanced Quartiles & 29.00 / 48.5 & 29.00 / 49.7 & 29.00 / 50.6 & 29.00 / 49.8 \\
@@ -1158,7 +1158,7 @@ to both the outcome baseline and the fitted covariates (432 settings). It
 changes baseline and adjustment together and is not an empirical
 incidence--education association. A rook-contiguity sensitivity analysis of the primary model uses the extreme values $\rho=0,0.5$ (288 settings), and the two alternative regional summaries add 96 Incidence-Guided Saturation settings. The full application reports 1,248 settings, computed from 936 distinct simulation settings, because reported settings with the same allocations and outcome model share one simulation.
 
-We initially sampled $J=100$ assignments and simulated $R=100$ independent outcomes per distinct assignment. A design whose set of possible assignments contains only one assignment instead received $R=1,000$ outcomes for that assignment, rather than 100 repeated copies of it counted as separate allocations. An adaptive, prespecified replication schedule extended allocations or outcomes until the Monte Carlo standard error of mean MSE was at most 5\% of mean MSE and that of coverage at most 0.01. Two single-assignment settings in the matched sensitivity analysis required $R=2,000$; all randomized designs met these targets at $J=100$ and $R=100$. Each random draw used a fixed, reproducible seed. Settings with the same set of possible assignments shared their simulations, with annual treatment counts and population shares recalculated. In the primary model, Checkerboard, Plain Saturation, Isolation Buffer and SRS reuse the same simulations across years, because annual incidence enters neither their allocation nor the outcome model. These repeated values are not independent
+We initially sampled $J=100$ assignments and simulated $R=100$ independent outcomes per distinct assignment. A design whose set of possible assignments contains only one assignment instead received $R=1,000$ outcomes for that assignment, rather than 100 repeated copies of it counted as separate allocations. An adaptive, prespecified replication schedule extended allocations or outcomes until the Monte Carlo standard error of mean MSE was at most 5\% of mean MSE and that of coverage at most 0.01. Two single-assignment settings in the matched sensitivity analysis required $R=2,000$; all randomized designs met these targets at $J=100$ and $R=100$. Each random draw used a fixed, reproducible seed. Settings with the same set of possible assignments shared their simulations, with annual treatment counts and population shares recalculated. In the primary model, Checkerboard, Saturation Quadrants, Isolation Buffer and SRS reuse the same simulations across years, because annual incidence enters neither their allocation nor the outcome model. These repeated values are not independent
 annual confirmation.
 
 For each allocation $a$, the repeated outcomes estimate the conditional MSE \(m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,\text{observed inputs}]\). We report its distribution across sampled allocations, its estimated 90th percentile and the estimated mean among the worst 10\% of sampled allocations, alongside unconditional mean MSE, bias and coverage. An allocation drawn more than once keeps its sampled frequency but uses one conditional estimate, and the Monte Carlo uncertainty accounts for the resulting covariance. A separate tail refinement at queen $\rho=0,0.5$, $\gamma=0.8$, both regimes and all years and designs kept the same allocations and extended the randomized designs to $R=400$ outcomes per allocation, keeping $R=1,000$ for single-assignment designs. Worst-decile assignments were identified with one half of the simulated outcomes and evaluated with the other half, to avoid selection bias. The refinement is not a new allocation sample. The rank of the fitted design matrix, residual treatment information, aliased columns, warnings, invalid estimates or intervals, and estimates of $\rho$ at the boundary of its parameter space were recorded. Section
@@ -1172,13 +1172,13 @@ uncertainty in simulated performance; it does not certify interval
 calibration.
 
 Figure \ref{fig:nc-mse} compares the eight designs with SRS by year and regime.
-Under control-only spillover, Plain Saturation has descriptive mean MSE
+Under control-only spillover, Saturation Quadrants has descriptive mean MSE
 0.22329 against SRS 0.30761, a 27.4\% reduction. Incidence-Guided Saturation
 reduces mean MSE by 21.1--29.9\% across the four observed years (Table
 \ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best: the two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share. High Incidence Focus is year-sensitive
 under control-only spillover and cannot be recommended uniformly.
 
-Under both-arms spillover, SRS mean MSE is 0.07638, Plain Saturation
+Under both-arms spillover, SRS mean MSE is 0.07638, Saturation Quadrants
 0.07518, and Incidence-Guided Saturation ranges from 0.07428 to 0.07682 across
 years. SRS remains competitive with balancing, blocking and saturation.
 Small point differences do not establish equivalence or universal
@@ -1213,14 +1213,14 @@ and the appendix.
 \small
 \centering
 
-\caption{Primary application yearly mean MSE, queen contiguity; equal weights over the six $\rho/\gamma$ pairs. Plain Saturation and SRS reuse the same simulations across years.}
+\caption{Primary application yearly mean MSE, queen contiguity; equal weights over the six $\rho/\gamma$ pairs. Saturation Quadrants and SRS reuse the same simulations across years.}
 \label{tab:nc-year}
 % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
 
 \begin{tabular}{lrrrrr}
 \toprule
 & \multicolumn{2}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
-Year & SRS & \shortstack{Incidence-Guided\\Saturation} & SRS & \shortstack{Plain\\Saturation} & \shortstack{Incidence-Guided\\Saturation} \\
+Year & SRS & \shortstack{Incidence-Guided\\Saturation} & SRS & \shortstack{Saturation\\Quadrants} & \shortstack{Incidence-Guided\\Saturation} \\
 \midrule
 2018 & 0.07638 & 0.07428 & 0.30761 & 0.22329 & 0.24285 \\
 2019 & 0.07638 & 0.07628 & 0.30761 & 0.22329 & 0.21565 \\
@@ -1234,7 +1234,7 @@ Year & SRS & \shortstack{Incidence-Guided\\Saturation} & SRS & \shortstack{Plain
 \subsection{Allocation downside and
 sensitivity}\label{allocation-downside-and-sensitivity}
 
-At the two refined queen settings, $\rho=0$ and $\rho=0.5$ with $\gamma=0.8$, under control-only spillover, Plain Saturation's estimated 90th percentile of allocation-specific MSE is 31.8--32.9\%
+At the two refined queen settings, $\rho=0$ and $\rho=0.5$ with $\gamma=0.8$, under control-only spillover, Saturation Quadrants's estimated 90th percentile of allocation-specific MSE is 31.8--32.9\%
 below SRS and its estimated worst-decile mean 34.6--37.8\% below. Incidence-Guided
 Saturation's corresponding reductions are 20.8--38.6\% and 20.7--43.4\%.
 The pattern persists when worst-decile assignments are identified with one half of the simulated outcomes and evaluated with the other half, which avoids selection bias. Figure \ref{fig:nc-risk} shows the $\rho=0.5$ setting. This supports a descriptive downside benefit
@@ -1263,7 +1263,7 @@ Design & Mean & Worst 10\% & Mean & Worst 10\% & Mean & Worst 10\% & Mean & Wors
 \midrule
 Checkerboard & 1.41 & 1.10 & 9.80 & 6.11 & 2.68 & 2.20 & 3.02 & 1.88 \\
 High Incidence Focus & 3.91 & 3.11 & 1.38 & 0.87 & 0.93 & 0.76 & 1.03 & 0.64 \\
-Plain Saturation & 1.06 & 1.05 & 0.62 & 0.53 & 0.99 & 0.94 & 0.73 & 0.64 \\
+Saturation Quadrants & 1.06 & 1.05 & 0.62 & 0.53 & 0.99 & 0.94 & 0.73 & 0.64 \\
 Isolation Buffer & 3.79 & 3.93 & 0.75 & 0.62 & 3.69 & 4.75 & 0.93 & 0.91 \\
 $2\times2$ Blocking & 1.44 & 1.57 & 2.68 & 2.63 & 1.00 & 1.02 & 1.15 & 1.18 \\
 Balanced Quartiles & 0.99 & 1.00 & 1.00 & 1.00 & 0.98 & 0.96 & 0.95 & 1.01 \\
@@ -1289,7 +1289,7 @@ Figure \ref{fig:alloc-dist} shows the full allocation-to-allocation distribution
 
 Tail uncertainty remains material. With \(J=100\), the worst decile
 contains only ten sampled draws; extra outcomes reduce noise in
-\(\hat m(a)\) but do not enlarge the allocation sample. All 112 reported settings in the tail refinement for designs with more than one possible assignment flag uncertain worst-decile membership. Under both arms, the overlap between the worst deciles identified by the two outcome halves (the Jaccard index: allocations in both divided by allocations in either) was 0--0.25 for Incidence-Guided Saturation, and approximately 61--86\% of the raw variance of estimated risk across allocations was attributable to outcome Monte Carlo noise. Plain Saturation's worst-decile membership was similarly unstable. Small both-arms tail differences therefore do not establish superior downside protection. Checkerboard and High Incidence Focus each have only one possible assignment for these inputs; their 90th percentile and worst-decile mean equal their conditional mean MSE, which does not imply low error or absence of outcome uncertainty.
+\(\hat m(a)\) but do not enlarge the allocation sample. All 112 reported settings in the tail refinement for designs with more than one possible assignment flag uncertain worst-decile membership. Under both arms, the overlap between the worst deciles identified by the two outcome halves (the Jaccard index: allocations in both divided by allocations in either) was 0--0.25 for Incidence-Guided Saturation, and approximately 61--86\% of the raw variance of estimated risk across allocations was attributable to outcome Monte Carlo noise. Saturation Quadrants's worst-decile membership was similarly unstable. Small both-arms tail differences therefore do not establish superior downside protection. Checkerboard and High Incidence Focus each have only one possible assignment for these inputs; their 90th percentile and worst-decile mean equal their conditional mean MSE, which does not imply low error or absence of outcome uncertainty.
 
 
 
@@ -1327,7 +1327,7 @@ the primary scenario, \(\tau = 1\).
 \small
 \centering
 
-\caption{The two related variants outside the detailed six-design grid ranking, in the format of Table \ref{tab:designs}. Plain Saturation shares its mechanism with Incidence-Guided Saturation, and Balanced Halves with Balanced Quartiles (see Treatment assignment designs). A cluster's incidence rank is its rank by the baseline incidence surface $X_k$, with ties broken at random in every draw. Clusters treated is the number of clusters treated per assignment.}
+\caption{The two related variants outside the detailed six-design grid ranking, in the format of Table \ref{tab:designs}. Saturation Quadrants shares its mechanism with Incidence-Guided Saturation, and Balanced Halves with Balanced Quartiles (see Treatment assignment designs). A cluster's incidence rank is its rank by the baseline incidence surface $X_k$, with ties broken at random in every draw. Clusters treated is the number of clusters treated per assignment.}
 \label{tab:excluded-designs}
 
 \begin{tabular}{p{3.4cm}p{6.4cm}p{2.0cm}p{2.3cm}}
@@ -1336,7 +1336,7 @@ the primary scenario, \(\tau = 1\).
 Design & Assignment rule & Clusters treated & Deterministic \\
 
 \midrule
-Plain Saturation & The grid is divided into its four $5\times5$ coordinate quadrants, which are given saturations of 20\%, 40\%, 60\%, and 80\% in an order drawn at random for each assignment, without reference to incidence; within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
+Saturation Quadrants & The grid is divided into its four $5\times5$ coordinate quadrants, which are given saturations of 20\%, 40\%, 60\%, and 80\% in an order drawn at random for each assignment, without reference to incidence; within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
 Balanced Halves & Clusters are divided by incidence rank into two strata of 50; 25 clusters are treated at random in each stratum & 50 & No \\
 
 \bottomrule
@@ -1345,7 +1345,7 @@ Balanced Halves & Clusters are divided by incidence rank into two strata of 50; 
 
 \end{table}
 
-The argument for leaving Plain Saturation and Balanced Halves out of
+The argument for leaving Saturation Quadrants and Balanced Halves out of
 the detailed grid analysis, with the Nemenyi and Wilcoxon results for
 each pair, is given under Treatment assignment designs in Methods; Table
 \ref{tab:eight-design} supplies the rest of the eight-design comparison.
@@ -1369,7 +1369,7 @@ Design & Retained & MSE & Coverage & Average rank \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Queen contiguity (primary)}} \\
-Plain Saturation & No & 0.0900 & 0.936 & 2.100 \\
+Saturation Quadrants & No & 0.0900 & 0.936 & 2.100 \\
 Incidence-Guided Saturation & Yes & 0.0907 & 0.937 & 2.350 \\
 Balanced Halves & No & 0.1299 & 0.936 & 3.312 \\
 Balanced Quartiles & Yes & 0.1308 & 0.936 & 3.356 \\
@@ -1380,7 +1380,7 @@ Checkerboard & Yes & 1.0869 & 0.941 & 6.737 \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Plain Saturation & No & 0.0708 & 0.940 & 2.281 \\
+Saturation Quadrants & No & 0.0708 & 0.940 & 2.281 \\
 Incidence-Guided Saturation & Yes & 0.0717 & 0.942 & 2.306 \\
 Balanced Halves & No & 0.0842 & 0.940 & 3.038 \\
 Balanced Quartiles & Yes & 0.0837 & 0.940 & 2.919 \\
@@ -2023,7 +2023,7 @@ Design & MSE & Bias & Coverage & Treated & Pop.\% \\
 \multicolumn{6}{l}{\textit{Both arms}} \\
 Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
 High Incidence Focus & 0.07172 & 0.0160 & 0.934 & 29.00 & 22.2 \\
-Plain Saturation & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
+Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
 Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.07609 & 0.0099 & 0.933 & 28.00 & 50.0 \\
 Balanced Quartiles & 0.07610 & 0.0170 & 0.933 & 29.00 & 48.5 \\
@@ -2033,7 +2033,7 @@ Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
 High Incidence Focus & 0.21426 & 0.0237 & 0.932 & 29.00 & 22.2 \\
-Plain Saturation & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
+Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
 Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.30622 & 0.0281 & 0.929 & 28.00 & 50.0 \\
 Balanced Quartiles & 0.29352 & 0.0315 & 0.929 & 29.00 & 48.5 \\
@@ -2060,7 +2060,7 @@ Design & MSE & Bias & Coverage & Treated & Pop.\% \\
 \multicolumn{6}{l}{\textit{Both arms}} \\
 Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
 High Incidence Focus & 0.07180 & 0.0063 & 0.936 & 29.00 & 23.5 \\
-Plain Saturation & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
+Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
 Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.07808 & 0.0143 & 0.930 & 31.00 & 55.1 \\
 Balanced Quartiles & 0.07624 & 0.0175 & 0.933 & 29.00 & 49.7 \\
@@ -2070,7 +2070,7 @@ Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
 High Incidence Focus & 0.43019 & 0.0227 & 0.931 & 29.00 & 23.5 \\
-Plain Saturation & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
+Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
 Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.43630 & 0.0314 & 0.928 & 31.00 & 55.1 \\
 Balanced Quartiles & 0.30616 & 0.0367 & 0.929 & 29.00 & 49.7 \\
@@ -2097,7 +2097,7 @@ Design & MSE & Bias & Coverage & Treated & Pop.\% \\
 \multicolumn{6}{l}{\textit{Both arms}} \\
 Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
 High Incidence Focus & 0.07292 & 0.0094 & 0.931 & 29.00 & 23.3 \\
-Plain Saturation & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
+Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
 Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.07764 & 0.0122 & 0.933 & 27.00 & 48.0 \\
 Balanced Quartiles & 0.07530 & 0.0158 & 0.933 & 29.00 & 50.6 \\
@@ -2107,7 +2107,7 @@ Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
 High Incidence Focus & 0.25918 & 0.0327 & 0.930 & 29.00 & 23.3 \\
-Plain Saturation & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
+Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
 Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.31848 & 0.0281 & 0.930 & 27.00 & 48.0 \\
 Balanced Quartiles & 0.28932 & 0.0356 & 0.927 & 29.00 & 50.6 \\
@@ -2134,7 +2134,7 @@ Design & MSE & Bias & Coverage & Treated & Pop.\% \\
 \multicolumn{6}{l}{\textit{Both arms}} \\
 Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.7 \\
 High Incidence Focus & 0.07031 & 0.0104 & 0.934 & 29.00 & 22.4 \\
-Plain Saturation & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
+Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
 Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.07736 & 0.0107 & 0.931 & 29.00 & 50.3 \\
 Balanced Quartiles & 0.07453 & 0.0175 & 0.934 & 29.00 & 49.8 \\
@@ -2144,7 +2144,7 @@ Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.7 \\
 High Incidence Focus & 0.35318 & 0.0296 & 0.929 & 29.00 & 22.4 \\
-Plain Saturation & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
+Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
 Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
 $2\times2$ Blocking & 0.36168 & 0.0289 & 0.928 & 29.00 & 50.3 \\
 Balanced Quartiles & 0.28439 & 0.0354 & 0.929 & 29.00 & 49.8 \\

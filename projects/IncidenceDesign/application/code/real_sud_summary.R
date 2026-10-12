@@ -108,7 +108,10 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
       Primary_Source_IDs = paste(unique(x$Primary_Source_ID), collapse = " | "))
   }))
   write.csv(sensitivity, file.path(dest, "yearly_sensitivity_means.csv"), row.names = FALSE)
-  labels <- unname(application_design_names(1:9, "short")); labels[1] <- "Graph Checkerboard"; labels[5] <- "Spatial Blocking"
+  # Plot labels match the manuscripts' design names (author 2026-10-12); CSVs keep their own names.
+  labels <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
+              "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
+              "Incidence\u00adGuided Saturation", "Simple Random Sampling")
   yearly$Design_Label <- factor(yearly$Design_ID, levels = 9:1, labels = rev(labels))
   yearly$Regime_Label <- ifelse(yearly$Regime == "both", "Both arms", "Control only")
   comparisons$Design_Label <- factor(comparisons$Design_ID, levels = 1:9, labels = labels)
