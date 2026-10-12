@@ -3,13 +3,15 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,263 prose/heading words; 3,412 including end declarations
-  (3,450 with mathematical-expression units as well);
-  structured abstract 285 words; six keywords. Recounted 2026-10-12 with
+- [x] Body 3,177 prose/heading words; 3,326 including end declarations
+  (3,365 with mathematical-expression units as well);
+  structured abstract 279 words; six keywords. Recounted 2026-10-12 with
   texcount on the body, declaration and abstract fragments, the same method
   that gave the earlier 3,215/3,381/283.
   The body count excludes the abstract, declarations, references and exhibits.
-- [x] Six main exhibits: two tables and four figures; extra detail in supplement.
+- [x] Six main exhibits: two tables and four figures; extra detail in supplement. Main text
+  shows the six detailed designs and SRS; the two related variants are in the supplement
+  (author 2026-10-12).
 - [x] Standalone introduction and citation to verified preceding BMC publication.
 - [x] Author/title page, affiliations, corresponding email and short running head.
 - [x] Double-spaced single-column review text; end-positioned exhibits and separate legends.

@@ -247,6 +247,22 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### CTJ exhibit and terminology revision (2026-10-12)
+
+- CTJ main text and exhibits now show the six detailed designs and simple random
+  sampling; the two related variants (plain saturation, balanced halves) are
+  reported in the SI and chapter only. Table 1 rewritten with separate grid and NC
+  rules; Table 2 caption defines MSE, coverage and the oracle fit; Figure 4 uses
+  `nc_annual_accuracy_six.pdf`.
+- Figure 1A shows pooled 2018-2021 rates (deaths / person-years); "frozen" is now
+  "fixed" in all prose and figures. Tables and figures in the CTJ, SI and chapter label
+  SRS as "Simple Random Sampling" (prose keeps the abbreviation). `code/20` also
+  regenerates `figures/real_sud/regions.png`; application figure text relabeled in
+  `application/code/real_sud_summary.R` (CSVs unchanged).
+- `verify_manuscripts.py` checks the seven-row CTJ grid table and the new Table 1.
+- Counts: CTJ body 3,177 words, 3,326 with end declarations (3,365 with math units);
+  abstract 279. PDFs: submission 20 pp, reading 8 pp, chapter 68 pp, SI 46 pp.
+
 ### Per-design downside comparison and count update (2026-10-11/12)
 
 - Added `code/21_downside_by_design.R` and

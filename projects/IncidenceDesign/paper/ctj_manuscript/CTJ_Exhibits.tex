@@ -7,21 +7,19 @@
 \begin{table*}[!htb]
 \small
 \centering
-\caption{Allocation rules on the 100-cluster grid and their North Carolina adaptations. Incidence means the simulated grid covariate or observed annual cluster rate, respectively. Detailed rounding, tie-breaking and partition rules are in the supplementary material.}
+\caption{Treatment assignment designs on the 100-cluster grid and their North Carolina (NC) adaptations. Incidence is the simulated grid covariate or the observed annual cluster rate. Two related variants, saturation with randomly ordered quadrants and balancing within incidence halves, performed similarly to their retained counterparts and are reported in the supplementary material.}
 \label{tab:allocation-rules}
-\begin{tabular}{p{0.24\linewidth}p{0.68\linewidth}}
+\begin{tabular}{p{0.17\linewidth}p{0.42\linewidth}p{0.33\linewidth}}
 \toprule
-Design & Allocation rule \\
+Design & Grid (100 clusters) & NC (58 clusters) \\
 \midrule
-Checkerboard & Alternate grid neighbors; deterministic greedy graph interspersion in NC. \\
-High Incidence Focus & Treat the highest-incidence half, randomizing ties. \\
-Saturation Quadrants & Randomly order 20/40/60/80\% saturation within four grid quadrants; four frozen geographic regions in NC. \\
-Isolation Buffer & Greedy random maximal independent set: treated clusters cannot be neighbors. \\
-$2\times2$ Blocking & Treat two of four within grid blocks; randomize rounded half-budgets in frozen NC spatial/incidence/population groups. \\
-Balanced Quartiles & Randomize half within each incidence-rank quartile, with exact overall half-budget. \\
-Balanced Halves & Randomize half within each incidence-rank half, with exact overall half-budget. \\
-Incidence-Guided Saturation & Order 80/60/40/20\% by quadrant mean incidence; by regional mean annual cluster rank in NC. \\
-SRS & Completely randomize half of clusters (50 grid; 29 NC). \\
+Checkerboard & Treat alternating clusters in a checkerboard pattern, so no two clusters that share an edge are in the same arm (50 treated). & Deterministic graph version: visit clusters from most to fewest neighbors and give each the arm less common among its assigned neighbors (27 treated). \\
+High Incidence Focus & Treat the 50 clusters with the highest incidence; ties are broken at random. & Treat the 29 clusters with the highest observed rate. \\
+Isolation Buffer & Treat clusters one at a time, each chosen at random from the untreated clusters with no treated neighbor, until none remain; no two treated clusters are neighbors (about 21 treated). & Same rule on the NC adjacency graph (about 16 treated). \\
+$2\times2$ Blocking & Divide the grid into 25 blocks of $2\times2$ clusters and treat two randomly chosen clusters in each block (50 treated). & Treat a random half (rounded) of each of 14 fixed groups formed by $k$-means clustering on location, incidence rank and population (27--31 treated by year). \\
+Balanced Quartiles & Divide clusters into quartiles of incidence rank and treat a random half of each quartile (50 treated). & Same rule with observed rates (29 treated). \\
+Incidence-Guided Saturation & Treat a random 80\%, 60\%, 40\% and 20\% of the clusters in the four $5\times5$ quadrants, ordered from highest to lowest mean incidence (50 treated). & Same rule with four fixed geographic regions, ordered by the mean rank of their clusters' observed rates (29 treated). \\
+Simple Random Sampling & Treat a completely random half of the clusters (50 treated). & Same rule (29 treated). \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -33,7 +31,7 @@ SRS & Completely randomize half of clusters (50 grid; 29 NC). \\
 \small
 \centering
 
-\caption{Full grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE and coverage use the oracle fit. SRS is complete randomization of 50 clusters. No value pools queen and rook.}
+\caption{Grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE is the mean squared error of the estimate of $\tau$; coverage is the proportion of nominal 95\% confidence intervals that contain $\tau$. Both use the oracle fit, the spatial lag model that includes the true spillover term. Simple random sampling is complete randomization of 50 clusters.}
 \label{tab:grid-srs}
 % SOURCE: results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds
 
@@ -46,13 +44,11 @@ Design & MSE & Coverage & MSE & Coverage \\
 \midrule
 Checkerboard & 0.0624 & 0.940 & 2.1114 & 0.942 \\
 High Incidence Focus & 0.1617 & 0.941 & 0.3292 & 0.935 \\
-Saturation Quadrants & 0.0442 & 0.942 & 0.1359 & 0.929 \\
 Isolation Buffer & 0.1608 & 0.939 & 0.1595 & 0.939 \\
 $2\times2$ Blocking & 0.0623 & 0.937 & 0.5761 & 0.941 \\
 Balanced Quartiles & 0.0421 & 0.940 & 0.2195 & 0.932 \\
-Balanced Halves & 0.0420 & 0.939 & 0.2179 & 0.933 \\
 Incidence-Guided Saturation & 0.0459 & 0.939 & 0.1355 & 0.934 \\
-SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
+Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 
 \bottomrule
 
@@ -65,7 +61,7 @@ SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \begin{figure*}[tp]
 \centering
 \includegraphics[width=\linewidth]{figures/compact/nc_planning_map.pdf}
-\caption{Observed North Carolina planning inputs. (A) Illustrative 2018 SUD rates per 100,000 population aged 18--64 for the 58 service-area clusters; all four years are evaluated separately. (B) The frozen four-region partition used by both saturation strategies in every year. Incidence guides primary allocation only; it does not enter the education-outcome baseline. All-year maps and assignment examples are in the supplementary material.}\label{fig:nc-map}
+\caption{Observed North Carolina planning inputs. (A) Observed SUD rates per 100,000 population aged 18--64 for the 58 service-area clusters, pooled over 2018--2021 (deaths divided by person-years); the analysis evaluates each year separately. (B) The fixed four-region partition used by incidence-guided saturation in every year. Incidence guides primary allocation only; it does not enter the education-outcome baseline. All-year maps and assignment examples are in the supplementary material.}\label{fig:nc-map}
 \end{figure*}
 }
 
@@ -73,7 +69,7 @@ SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \begin{figure*}[tp]
 \centering
 \includegraphics[width=\linewidth]{figures/compact/grid_accuracy.pdf}
-\caption{Grid mean MSE at $\tau=1$ with queen weights, for the detailed six-design subset. Points keep the five incidence configurations separate, averaging 16 outcome-dependence/spillover-magnitude settings within each configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Both panels use the same logarithmic scale. Table~\ref{tab:grid-srs} includes all nine designs. Parameter-specific displays remain in the supplementary material; no pooled Monte Carlo intervals are implied.}\label{fig:grid}
+\caption{Grid mean MSE at $\tau=1$ with queen weights, for the detailed six-design subset. Points keep the five incidence configurations separate, averaging 16 outcome-dependence/spillover-magnitude settings within each configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Both panels use the same logarithmic scale. Table~\ref{tab:grid-srs} adds simple random sampling. Parameter-specific displays remain in the supplementary material; no pooled Monte Carlo intervals are implied.}\label{fig:grid}
 \end{figure*}
 }
 
@@ -88,7 +84,7 @@ SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \newcommand{\CTJMeanFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy.pdf}
-\caption{Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE, for all nine designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS, orange higher error; colors use a logarithmic ratio scale and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Shared annual sources are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in the supplementary material.}\label{fig:nc-mse}
+\includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy_six.pdf}
+\caption{Completed primary application: yearly mean MSE divided by year- and regime-matched simple random sampling (SRS) MSE, for the six designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS, orange higher error; colors use a logarithmic ratio scale and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Shared annual sources are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in the supplementary material.}\label{fig:nc-mse}
 \end{figure*}
 }

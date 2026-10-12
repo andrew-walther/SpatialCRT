@@ -12,7 +12,7 @@ Full chapter/appendix and derived CTJ/SI drafts are complete and verified; autho
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
 in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
-PDFs: submission 21 pp, reading 8 pp, chapter 68 pp, supplement 45 pp. The author
+PDFs: submission 20 pp, reading 8 pp, chapter 68 pp, supplement 46 pp. The author
 approved original-title restoration and the six-exhibit revision. Main figures
 are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
 parameter/tail/budget graphics remain supporting material. Author order is
@@ -321,8 +321,8 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - Full thesis chapter/appendix and derived CTJ/SI: complete, independently reviewed,
   rendered and numerically checked. Old application comments resolved by focused
   rewriting or agreed implementation, not by claiming unsupported facts confirmed.
-- CTJ: standalone preceding-work citation verified; 3,263 prose/heading words
-  (3,412 including end declarations)/285 structured
+- CTJ: standalone preceding-work citation verified; 3,177 prose/heading words
+  (3,326 including end declarations)/279 structured
   abstract words, six exhibits, full detailed supplement and submission checklist.
 - `code/20_manuscript_figure_revision.R` exports four compact figures and plot-data
   CSVs without simulation; `code/19_manuscript_exhibits.R` retains the prior detailed

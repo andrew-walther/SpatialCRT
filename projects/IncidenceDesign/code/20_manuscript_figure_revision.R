@@ -117,7 +117,8 @@ export_compact_exhibits <- function(project_dir) {
   # A diverging log-ratio scale is symmetric about SRS=1; printed cells retain
   # actual ratios. Saturation below SRS and very imprecise designs both remain visible.
   names <- c("Graph Checkerboard", "High incidence focus", "Plain saturation", "Isolation buffer",
-             "Spatial blocking", "Balanced quartiles", "Balanced halves", "Guided saturation", "SRS")
+             "Spatial blocking", "Balanced quartiles", "Balanced halves", "Guided saturation",
+             "Simple random sampling")
   annual$Label <- factor(annual$Design_ID, levels = 9:1, labels = rev(names))
   annual$Regime_Label <- factor(annual$Regime, levels = c("both", "control_only"),
                                 labels = c("Both arms", "Control only"))
@@ -129,16 +130,25 @@ export_compact_exhibits <- function(project_dir) {
     ggplot2::facet_wrap(~Regime_Label, nrow = 1) +
     ggplot2::scale_fill_gradient2(low = "#56B4E9", mid = "#F7F7F7", high = "#D55E00",
       midpoint = 0, limits = c(-span, span), breaks = log2(c(0.25, 0.5, 1, 2, 4)),
-      labels = c("0.25", "0.5", "1", "2", "4"), name = "MSE / SRS") +
+      labels = c("0.25", "0.5", "1", "2", "4"),
+      name = "MSE relative to\nsimple random sampling") +
     ggplot2::labs(x = "Observed planning year", y = NULL) + theme +
     ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.title = ggplot2::element_text(size = 9))
   ggplot2::ggsave(file.path(out, "nc_annual_accuracy.pdf"), p, width = 174, height = 93, units = "mm")
+  # CTJ variant: the six detailed designs and SRS only (drops the two related
+  # variants, plain saturation ID 3 and balanced halves ID 7; author 2026-10-12).
+  # Same ratios and color limits as the nine-design figure.
+  p_six <- p
+  p_six$data <- annual[!annual$Design_ID %in% c(3, 7), ]
+  ggplot2::ggsave(file.path(out, "nc_annual_accuracy_six.pdf"), p_six,
+                  width = 174, height = 80, units = "mm")
 
   # Named joins prevent an unnoticed permutation of observed rates or regions.
   # Simplification is display only and never feeds the cached queen/rook weights.
   setup <- readRDS(file.path(app_root, "setup.rds"))
   observed <- read.csv(file.path(app_root, "exhibits/observed_cluster_inputs.csv"))
-  observed <- observed[observed$period == 2018, ]
+  # Pooled 2018-2021 rate: total deaths / total person-years (author 2026-10-12).
+  observed <- observed[observed$period == "2018-2021", ]
   partition <- read.csv(file.path(app_root, "frozen_partitions.csv"))
   g <- sf::st_simplify(setup$clusters, dTolerance = 250)
   stopifnot(nrow(g) == 58, !anyDuplicated(g$Primary_College),
@@ -153,15 +163,30 @@ export_compact_exhibits <- function(project_dir) {
     plot.margin = ggplot2::margin(2, 2, 2, 2))
   rates <- ggplot2::ggplot(g) + ggplot2::geom_sf(ggplot2::aes(fill = Rate), color = "white", linewidth = 0.12) +
     ggplot2::scale_fill_viridis_c(name = "SUD per 100,000", option = "C") +
-    ggplot2::labs(title = "A. Observed 2018 rates") + map_theme
+    ggplot2::labs(title = "A. Observed 2018-2021 rates") + map_theme
   regions <- ggplot2::ggplot(g) + ggplot2::geom_sf(ggplot2::aes(fill = Region), color = "white", linewidth = 0.12) +
     ggplot2::scale_fill_manual(values = c("#0072B2", "#E69F00", "#009E73", "#CC79A7"), name = "Region") +
-    ggplot2::labs(title = "B. Frozen saturation regions") + map_theme
+    ggplot2::labs(title = "B. Fixed saturation regions") + map_theme
   grDevices::pdf(file.path(out, "nc_planning_map.pdf"), width = 174/25.4, height = 64/25.4)
   grid::grid.newpage()
   print(rates, vp = grid::viewport(x = 0.25, width = 0.5))
   print(regions, vp = grid::viewport(x = 0.75, width = 0.5))
   grDevices::dev.off()
+  # Chapter/SI region map (figures/real_sud/regions.png). Same layout as the
+  # application companion's version, with "fixed" wording (author 2026-10-12).
+  region_map <- ggplot2::ggplot(g) +
+    ggplot2::geom_sf(ggplot2::aes(fill = Region), color = "white", linewidth = 0.2) +
+    ggplot2::scale_fill_brewer(palette = "Set2") +
+    ggplot2::labs(title = "One fixed region partition for all four years",
+                  subtitle = "Selected by geography and balance before outcome performance is evaluated") +
+    ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(),
+                   panel.grid = ggplot2::element_blank())
+  ggplot2::ggsave(file.path(out, "regions.png"), region_map, width = 10, height = 4, dpi = 150)
+  for (folder in c("ctj_manuscript", "dissertation_chapter")) {
+    stopifnot(file.copy(file.path(out, "regions.png"),
+                        file.path(project_dir, "paper", folder, "figures/real_sud"), overwrite = TRUE))
+  }
   for (folder in c("ctj_manuscript", "dissertation_chapter")) {
     destination <- file.path(project_dir, "paper", folder, "figures/compact")
     dir.create(destination, recursive = TRUE, showWarnings = FALSE)
@@ -174,7 +199,7 @@ export_compact_exhibits <- function(project_dir) {
                "Grid accuracy: six-design subset, tau=1, queen; 16 settings/configuration/regime.",
                "Bias/variance: Poisson rho_X=0.2, each regime separate; exact empirical decomposition.",
                "NC means: 6 queen parameter pairs/year/regime/design; shared years not independent.",
-               "Map: observed 2018 rates, authorized 58-cluster aggregates, frozen partition."),
+               "Map: pooled 2018-2021 rates (deaths / person-years), authorized 58-cluster aggregates, fixed partition."),
              file.path(out, "sources.txt"))
   invisible(out)
 }

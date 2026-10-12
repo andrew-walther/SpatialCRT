@@ -21,7 +21,7 @@ SUPPLEMENT = ROOT / 'paper/ctj_manuscript/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
 LABELS = ['Graph Checkerboard', 'High Incidence Focus', 'Plain saturation',
           'Isolation Buffer', 'Spatial blocking', 'Balanced Quartiles',
-          'Balanced Halves', 'Guided saturation', 'SRS']
+          'Balanced Halves', 'Guided saturation', 'Simple Random Sampling']
 
 
 def csv_rows(path):
@@ -124,9 +124,14 @@ def verify():
                                         ('control_only', 9), ('control_only', 3),
                                         ('control_only', 8)]]
         expected_year.append(cells)
+    # The CTJ main table shows the six detailed designs and SRS (IDs 3 and 7, the
+    # two related variants, are omitted; author 2026-10-12); chapter/SI keep all nine.
+    ctj_grid = [row for design_id, row in zip(range(1, 10), expected_grid)
+                if design_id not in (3, 7)]
     for path, source in sources.items():
         require_equal([n for _, n in numerical_rows(table(source, 'tab:grid-srs'))],
-                      expected_grid, f'{path.name}: grid benchmark')
+                      ctj_grid if path == MAIN else expected_grid,
+                      f'{path.name}: grid benchmark')
         if path != MAIN:
             require_equal([n for _, n in numerical_rows(table(source, 'tab:nc-year'))],
                           expected_year, f'{path.name}: primary annual MSE')
@@ -140,8 +145,8 @@ def verify():
         expected = float(yearly[key]['Mean_MSE']) / float(yearly[(key[0], key[1], 9)]['Mean_MSE'])
         if abs(float(row['Ratio']) - expected) > 1e-10:
             raise AssertionError(f'Compact annual figure: wrong ratio {key}')
-    require_equal(len(re.findall(r' & ', table(main, 'tab:allocation-rules'))), 10,
-                  'Allocation-rule table: header plus nine strategies')
+    require_equal(len(re.findall(r' & ', table(main, 'tab:allocation-rules'))), 16,
+                  'Allocation-rule table: three-column header plus seven designs')
     for year in ('2018', '2019', '2020', '2021'):
         expected = []
         for regime in ('both', 'control_only'):
@@ -236,8 +241,8 @@ def verify():
         pass
     else:
         raise AssertionError('Wrong-value fixture was silently accepted')
-    print('PASS: 36 grid cells in all three sources; 20 annual MSE cells in chapter/SI;')
-    print('72 matched annual figure ratios and all-nine-design allocation-rule table;')
+    print('PASS: 36 grid cells in chapter/SI and 28 in the CTJ (six designs + SRS); 20 annual MSE cells in chapter/SI;')
+    print('72 matched annual figure ratios and the seven-row CTJ allocation-rule table;')
     print('360 annual performance cells, 72 budget cells, 32 sensitivity cells, all ' + str(len(table_labels)) +
           ' supplement table bodies; figures, references, citations and six-exhibit cap.')
     print('PASS: deliberate incorrect-number fixture rejected. Scientific prose reviewed separately.')

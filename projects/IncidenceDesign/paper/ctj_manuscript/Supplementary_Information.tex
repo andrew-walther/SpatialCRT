@@ -987,7 +987,7 @@ rankings elsewhere describe that subset only.
 \small
 \centering
 
-\caption{Full grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE and coverage use the oracle fit. SRS is complete randomization of 50 clusters. No value pools queen and rook.}
+\caption{Full grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE is the mean squared error of the estimate of $\tau$; coverage is the proportion of nominal 95\% confidence intervals that contain $\tau$. Both use the oracle fit, the spatial lag model that includes the true spillover term. Simple random sampling is complete randomization of 50 clusters. No value pools queen and rook.}
 \label{tab:grid-srs}
 % SOURCE: results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds
 
@@ -1006,7 +1006,7 @@ $2\times2$ Blocking & 0.0623 & 0.937 & 0.5761 & 0.941 \\
 Balanced Quartiles & 0.0421 & 0.940 & 0.2195 & 0.932 \\
 Balanced Halves & 0.0420 & 0.939 & 0.2179 & 0.933 \\
 Incidence-Guided Saturation & 0.0459 & 0.939 & 0.1355 & 0.934 \\
-SRS & 0.0424 & 0.941 & 0.2146 & 0.936 \\
+Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 
 \bottomrule
 
@@ -1130,7 +1130,7 @@ odd-size strata receive their necessary extra treatments at random. In
 Balanced Halves, one half receives 14 treatments and the other 15, with
 the extra-treatment half chosen randomly.
 
-The two saturation designs use one frozen four-region partition for all
+The two saturation designs use one fixed four-region partition for all
 years. The existing geographic \(k\)-means procedure generates 250
 candidates, selecting the partition by compactness and balance in
 reference population, cluster count and county count, without consulting
@@ -1150,12 +1150,12 @@ performance. The grid rule averages \(X\) directly: mean ranks align with its ra
 The grid's \(2\times2\) Blocking becomes spatial blocking on 14
 irregular groups, formed once per year by \(k\)-means on standardized
 projected coordinates, incidence ranks and log(1+population), then
-frozen. Half of each group, rounded, is treated randomly. This is not a
+fixed. Half of each group, rounded, is treated randomly. This is not a
 set of literal square blocks. In each year one singleton group remains
 control under round(0.5)=0. Budgets differ across designs and are
 disclosed rather than forced into an unapproved equal-budget
 modification (Table \ref{tab:nc-budgets}). Section \ref{app:nc} maps the
-frozen regions and example assignments.
+fixed regions and example assignments.
 
 \begin{table}[!htb]
 \small
@@ -1177,7 +1177,7 @@ Spatial blocking & 28.00 / 50.0 & 31.00 / 55.1 & 27.00 / 48.0 & 29.00 / 50.3 \\
 Balanced Quartiles & 29.00 / 48.5 & 29.00 / 49.7 & 29.00 / 50.6 & 29.00 / 49.8 \\
 Balanced Halves & 29.00 / 50.0 & 29.00 / 50.5 & 29.00 / 49.2 & 29.00 / 49.4 \\
 Guided saturation & 29.00 / 53.2 & 29.00 / 45.1 & 29.00 / 47.9 & 29.00 / 51.8 \\
-SRS & 29.00 / 49.5 & 29.00 / 49.5 & 29.00 / 49.5 & 29.00 / 49.5 \\
+Simple Random Sampling & 29.00 / 49.5 & 29.00 / 49.5 & 29.00 / 49.5 & 29.00 / 49.5 \\
 
 \bottomrule
 \end{tabular}
@@ -1308,7 +1308,7 @@ and the appendix.
 \begin{tabular}{lrrrrr}
 \toprule
 & \multicolumn{2}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
-Year & SRS & Guided sat. & SRS & Plain sat. & Guided sat. \\
+Year & Random sampling & Guided sat. & Random sampling & Plain sat. & Guided sat. \\
 \midrule
 2018 & 0.07638 & 0.07428 & 0.30761 & 0.22329 & 0.24285 \\
 2019 & 0.07638 & 0.07628 & 0.30761 & 0.22329 & 0.21565 \\
@@ -1360,7 +1360,7 @@ $2\times2$ Blocking & 1.44 & 1.57 & 2.68 & 2.63 & 1.00 & 1.02 & 1.15 & 1.18 \\
 Balanced Quartiles & 0.99 & 1.00 & 1.00 & 1.00 & 0.98 & 0.96 & 0.95 & 1.01 \\
 Balanced Halves & 0.99 & 1.00 & 1.00 & 0.98 & 0.98 & 0.96 & 0.97 & 0.99 \\
 Incidence-Guided Saturation & 1.07 & 1.07 & 0.65 & 0.56 & 0.98 & 0.93 & 0.75 & 0.68 \\
-SRS & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
 
 \bottomrule
 
@@ -2051,8 +2051,8 @@ directions are then reversed. Their Jaccard overlap describes sampled
 tail membership, not a confidence interval or population tail
 probability. A singleton's overlap of one is vacuous.
 
-The frozen regional criterion is \(C=3s_P+1.5s_K+1.5s_D+c/d_{\max}\), where \(s_P\), \(s_K\) and \(s_D\) are the standard deviations of regional population, cluster and county shares. Here \(c\) averages within-region distances to regional centers and \(d_{\max}\) is the maximum pairwise distance between the projected cluster coordinates. Candidates use standardized projected coordinates and are selected
-without outcome performance. Frozen block sizes range from one to eight,
+The fixed regional criterion is \(C=3s_P+1.5s_K+1.5s_D+c/d_{\max}\), where \(s_P\), \(s_K\) and \(s_D\) are the standard deviations of regional population, cluster and county shares. Here \(c\) averages within-region distances to regional centers and \(d_{\max}\) is the maximum pairwise distance between the projected cluster coordinates. Candidates use standardized projected coordinates and are selected
+without outcome performance. Fixed block sizes range from one to eight,
 with one singleton per year; yearly total treatments are 28,31,27,29.
 Table \ref{tab:nc-order} documents alternative summaries before
 performance evaluation.
@@ -2061,7 +2061,7 @@ performance evaluation.
 \small
 \centering
 
-\caption{Regional ordering from highest to lowest summary, using the frozen region IDs in Figure \ref{fig:nc-regions}. Primary mean ranks weight clusters equally; pooled regional rates weight cluster rates by population.}
+\caption{Regional ordering from highest to lowest summary, using the fixed region IDs in Figure \ref{fig:nc-regions}. Primary mean ranks weight clusters equally; pooled regional rates weight cluster rates by population.}
 \label{tab:nc-order}
 
 \begin{tabular}{lrrr}
@@ -2080,7 +2080,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 \centering
 \includegraphics[width=0.85\linewidth]{figures/real_sud/regions.png}
 
-\caption{Frozen four-region partition used by both saturation strategies in all years, chosen from 250 geographic candidates before outcome evaluation.}
+\caption{Fixed four-region partition used by both saturation strategies in all years, chosen from 250 geographic candidates before outcome evaluation.}
 \label{fig:nc-regions}
 
 \end{figure}
@@ -2088,7 +2088,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 \centering
 \includegraphics[width=\linewidth]{figures/real_sud/design_examples.png}
 
-\caption{One illustrative queen assignment from each application strategy using 2018 observed incidence and frozen geography. These illustrative masks explain adaptation; they are not selected by observed performance.}
+\caption{One illustrative queen assignment from each application strategy using 2018 observed incidence and fixed geography. These illustrative masks explain adaptation; they are not selected by observed performance.}
 \label{fig:nc-examples}
 
 \end{figure}
@@ -2156,7 +2156,7 @@ Spatial blocking & 0.07609 & 0.0099 & 0.933 & 28.00 & 50.0 \\
 Balanced Quartiles & 0.07610 & 0.0170 & 0.933 & 29.00 & 48.5 \\
 Balanced Halves & 0.07458 & 0.0158 & 0.934 & 29.00 & 50.0 \\
 Guided saturation & 0.07428 & 0.0174 & 0.935 & 29.00 & 53.2 \\
-SRS & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Graph Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
 High Incidence Focus & 0.21426 & 0.0237 & 0.932 & 29.00 & 22.2 \\
@@ -2166,7 +2166,7 @@ Spatial blocking & 0.30622 & 0.0281 & 0.929 & 28.00 & 50.0 \\
 Balanced Quartiles & 0.29352 & 0.0315 & 0.929 & 29.00 & 48.5 \\
 Balanced Halves & 0.29101 & 0.0395 & 0.930 & 29.00 & 50.0 \\
 Guided saturation & 0.24285 & 0.0464 & 0.928 & 29.00 & 53.2 \\
-SRS & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
 
 \bottomrule
 \end{tabular}
@@ -2193,7 +2193,7 @@ Spatial blocking & 0.07808 & 0.0143 & 0.930 & 31.00 & 55.1 \\
 Balanced Quartiles & 0.07624 & 0.0175 & 0.933 & 29.00 & 49.7 \\
 Balanced Halves & 0.07517 & 0.0167 & 0.934 & 29.00 & 50.5 \\
 Guided saturation & 0.07628 & 0.0233 & 0.935 & 29.00 & 45.1 \\
-SRS & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Graph Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
 High Incidence Focus & 0.43019 & 0.0227 & 0.931 & 29.00 & 23.5 \\
@@ -2203,7 +2203,7 @@ Spatial blocking & 0.43630 & 0.0314 & 0.928 & 31.00 & 55.1 \\
 Balanced Quartiles & 0.30616 & 0.0367 & 0.929 & 29.00 & 49.7 \\
 Balanced Halves & 0.29955 & 0.0360 & 0.930 & 29.00 & 50.5 \\
 Guided saturation & 0.21565 & 0.0522 & 0.926 & 29.00 & 45.1 \\
-SRS & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
 
 \bottomrule
 \end{tabular}
@@ -2230,7 +2230,7 @@ Spatial blocking & 0.07764 & 0.0122 & 0.933 & 27.00 & 48.0 \\
 Balanced Quartiles & 0.07530 & 0.0158 & 0.933 & 29.00 & 50.6 \\
 Balanced Halves & 0.07466 & 0.0150 & 0.934 & 29.00 & 49.2 \\
 Guided saturation & 0.07682 & 0.0209 & 0.933 & 29.00 & 47.9 \\
-SRS & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Graph Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
 High Incidence Focus & 0.25918 & 0.0327 & 0.930 & 29.00 & 23.3 \\
@@ -2240,7 +2240,7 @@ Spatial blocking & 0.31848 & 0.0281 & 0.930 & 27.00 & 48.0 \\
 Balanced Quartiles & 0.28932 & 0.0356 & 0.927 & 29.00 & 50.6 \\
 Balanced Halves & 0.30610 & 0.0372 & 0.930 & 29.00 & 49.2 \\
 Guided saturation & 0.22029 & 0.0474 & 0.926 & 29.00 & 47.9 \\
-SRS & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
 
 \bottomrule
 \end{tabular}
@@ -2267,7 +2267,7 @@ Spatial blocking & 0.07736 & 0.0107 & 0.931 & 29.00 & 50.3 \\
 Balanced Quartiles & 0.07453 & 0.0175 & 0.934 & 29.00 & 49.8 \\
 Balanced Halves & 0.07584 & 0.0160 & 0.932 & 29.00 & 49.4 \\
 Guided saturation & 0.07450 & 0.0197 & 0.936 & 29.00 & 51.8 \\
-SRS & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
 \multicolumn{6}{l}{\textit{Control only}} \\
 Graph Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.7 \\
 High Incidence Focus & 0.35318 & 0.0296 & 0.929 & 29.00 & 22.4 \\
@@ -2277,7 +2277,7 @@ Spatial blocking & 0.36168 & 0.0289 & 0.928 & 29.00 & 50.3 \\
 Balanced Quartiles & 0.28439 & 0.0354 & 0.929 & 29.00 & 49.8 \\
 Balanced Halves & 0.29089 & 0.0340 & 0.929 & 29.00 & 49.4 \\
 Guided saturation & 0.23732 & 0.0451 & 0.926 & 29.00 & 51.8 \\
-SRS & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
 
 \bottomrule
 \end{tabular}
@@ -2293,7 +2293,7 @@ analyses.
 \small
 \centering
 
-\caption{Guided saturation sensitivity MSE / matched primary MSE by year and regime. Baseline adds rank-scaled $X$ to both generation and fit; rook uses matched corners. Regional-summary alternatives preserve frozen regions.}
+\caption{Guided saturation sensitivity MSE / matched primary MSE by year and regime. Baseline adds rank-scaled $X$ to both generation and fit; rook uses matched corners. Regional-summary alternatives preserve fixed regions.}
 \label{tab:nc-summary-sens}
 % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_sensitivity_means.csv
 
