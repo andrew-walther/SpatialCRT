@@ -150,12 +150,12 @@ fig <- ggplot2::ggplot(f, ggplot2::aes(y = Label)) +
   ggplot2::facet_grid(Study ~ Regime) +
   ggplot2::scale_x_log10(breaks = c(0.5, 1, 2, 4, 8), labels = c("0.5", "1", "2", "4", "8")) +
   ggplot2::scale_color_manual(values = c("FALSE" = "#0072B2", "TRUE" = "#E69F00"), guide = "none") +
-  ggplot2::labs(x = "Allocation MSE relative to the mean MSE of simple random sampling (log scale)",
+  ggplot2::labs(x = "MSE relative to simple random sampling (log scale)",
                 y = NULL) +
   ggplot2::theme_minimal(base_size = 9) +
   ggplot2::theme(panel.grid.minor = ggplot2::element_blank(),
                  strip.text = ggplot2::element_text(face = "bold"),
-                 strip.text.y = ggplot2::element_text(angle = 0, hjust = 0))
+                 strip.text.y = ggplot2::element_text(angle = -90))
 fig_file <- "results/allocation_risk/summary/allocation_distribution_by_design.pdf"
 ggplot2::ggsave(fig_file, fig, width = 174, height = 105, units = "mm")
 for (folder in c("paper/ctj_manuscript/figures/compact", "paper/dissertation_chapter/figures/compact")) {

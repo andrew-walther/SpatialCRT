@@ -147,7 +147,10 @@ export_compact_exhibits <- function(project_dir) {
                                 labels = c("Both arms", "Control only"))
   annual$Log_Ratio <- log2(annual$Ratio)
   span <- max(abs(annual$Log_Ratio))
-  p <- ggplot2::ggplot(annual, ggplot2::aes(factor(Year), Label, fill = Log_Ratio)) +
+  # The SRS row (ID 9) is the reference and would print 1.00 in every cell, so
+  # the figures omit it; captions report SRS's absolute MSE (author 2026-10-12).
+  shown <- annual[annual$Design_ID != 9, ]
+  p <- ggplot2::ggplot(shown, ggplot2::aes(factor(Year), Label, fill = Log_Ratio)) +
     ggplot2::geom_tile(color = "white", linewidth = 0.5) +
     ggplot2::geom_text(ggplot2::aes(label = sprintf("%.2f", Ratio)), size = 2.7) +
     ggplot2::facet_wrap(~Regime_Label, nrow = 1) +
@@ -157,14 +160,14 @@ export_compact_exhibits <- function(project_dir) {
       name = "MSE relative to\nsimple random sampling") +
     ggplot2::labs(x = "Observed planning year", y = NULL) + theme +
     ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.title = ggplot2::element_text(size = 9))
-  ggplot2::ggsave(file.path(out, "nc_annual_accuracy.pdf"), p, width = 174, height = 93, units = "mm")
-  # CTJ variant: the six detailed designs and SRS only (drops the two related
+  ggplot2::ggsave(file.path(out, "nc_annual_accuracy.pdf"), p, width = 174, height = 87, units = "mm")
+  # CTJ variant: the six detailed designs only (drops the two related
   # variants, plain saturation ID 3 and balanced halves ID 7; author 2026-10-12).
   # Same ratios and color limits as the nine-design figure.
   p_six <- p
-  p_six$data <- annual[!annual$Design_ID %in% c(3, 7), ]
+  p_six$data <- shown[!shown$Design_ID %in% c(3, 7), ]
   ggplot2::ggsave(file.path(out, "nc_annual_accuracy_six.pdf"), p_six,
-                  width = 174, height = 80, units = "mm")
+                  width = 174, height = 74, units = "mm")
 
   # Named joins prevent an unnoticed permutation of observed rates or regions.
   # Simplification is display only and never feeds the cached queen/rook weights.
