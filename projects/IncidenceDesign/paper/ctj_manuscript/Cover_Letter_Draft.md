@@ -1,41 +1,26 @@
-[Submission date — author to supply]
+Andrew Walther & Dr. Feng-Chang Lin\
+University of North Carolina at Chapel Hill, Department of Biostatistics\
+McGavran-Greenberg Hall, 3101, Chapel Hill, NC 27599
 
-Dear Editors of Clinical Trials,
+[Editor name], [Title]\
+*Clinical Trials*
 
-Please consider “Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence” as an original research article.
+Month Day, 2026
 
-The study compares six treatment assignment designs and simple random sampling
-(SRS) under heterogeneous incidence and spatial spillover; two related variants
-are reported in the supplement. It extends our
-preceding BMC Medical Research Methodology publication (DOI
-10.1186/s12874-026-02968-0) to a larger grid, additional assignments and a completed
-observed-incidence application on 58 North Carolina community-college service
-areas. The application evaluates estimation of a known simulated education
-intervention effect; it reports no implemented trial or intervention efficacy.
+Dear [Editor name],
 
-We assess both average mean squared error (MSE) and allocation-specific downside. Saturation performs
-favorably under control-only spillover, while SRS remains competitive under
-both-arms spillover. The manuscript explicitly reports interval undercoverage,
-unequal treatment budgets and finite tail uncertainty. These findings inform
-trial design without assuming a universally preferred allocation strategy.
+We wish to submit an original research article entitled “Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence” for consideration by *Clinical Trials*. We confirm that this work is original and has not been published elsewhere, nor is it currently under consideration for publication elsewhere. The study extends our recent work in *BMC Medical Research Methodology* (DOI 10.1186/s12874-026-02968-0) on how the treatment assignment design of a spatial cluster randomized trial shapes estimation when spillover effects and spatial dependence are present.
 
-The manuscript has a structured abstract and six main exhibits, with detailed
-reproducibility and application results in the supplement. Simulation data and
-code are available from the authors on request; the restricted county
-death-certificate data are not publicly available.
+In this paper, we report a simulation study that compares six treatment assignment designs and simple random sampling (SRS) on a 100-cluster grid under heterogeneous baseline incidence, spatial dependence and two spillover regimes. We pair it with a completed application that uses observed 2018–2021 sudden unexpected death (SUD) incidence for 58 North Carolina community-college service areas to plan an education pilot for healthcare professionals. Because a trial realizes only one allocation, we evaluate each design by both its average mean squared error (MSE) and the spread of error across the allocations it can produce.
 
-[AUTHOR TO COMPLETE BEFORE SUBMISSION: all coauthors' consent and approved final
-version; originality/exclusivity and prior dissertation dissemination as applicable;
-permissions for any reused material; institutional ethics/consent and data-use
-determination for restricted source data; coauthor ORCIDs if requested; any
-additional required disclosure, including generative-AI use. Do not treat these attestations as already made.]
+Our findings show that the best design depends on where spillover is expected to reach. When spillover reaches mainly control clusters, saturation designs, which treat different proportions of clusters in different regions, reduced mean MSE by roughly 21–30% relative to SRS in the application and also lowered the risk of a poor allocation; incidence-guided saturation achieved this while directing the highest treatment saturations to the highest-burden regions. When spillover reaches both arms, SRS remained competitive. We believe this manuscript is appropriate for publication by *Clinical Trials* because it gives investigators practical, scenario-specific guidance for choosing an allocation strategy in spatial cluster randomized trials, demonstrated on a real planning problem, while transparently reporting its limitations, including interval undercoverage and unequal treatment budgets.
 
-The authors currently declare no funding and no conflicts of interest.
+We have no conflicts of interest to disclose, and this research received no specific funding.
+
+Please address all correspondence concerning this manuscript to the corresponding author, Dr. Feng-Chang Lin, at [flin33@email.unc.edu](mailto:flin33@email.unc.edu) or (919) 966-9431, and to me at [awalther@unc.edu](mailto:awalther@unc.edu).
+
+Thank you for your consideration of this manuscript.
 
 Sincerely,
 
-Feng-Chang Lin, corresponding author\
-Department of Biostatistics, University of North Carolina at Chapel Hill\
-flin33@email.unc.edu\
-Telephone: (919) 966-9431\
-[Signature — author to supply]
+Andrew Walther
