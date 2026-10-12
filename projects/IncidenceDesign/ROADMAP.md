@@ -247,6 +247,23 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Per-design downside comparison and count update (2026-10-11/12)
+
+- Added `code/21_downside_by_design.R` and
+  `results/allocation_risk/summary/downside_by_design.csv`: each design's mean and
+  worst-decile conditional MSE as ratios to SRS (grid pilot; refined NC corners).
+- Chapter and SI: new Table `tab:downside` (SI Table S12) with a results paragraph.
+  The chapter Discussion now leads with mean-plus-spread criteria and gives guidance
+  by spillover scenario. The CTJ condenses the same point. The CTJ abstract
+  conclusion describes incidence-guided saturation's performance. Fixed the CTJ
+  typo (plain saturation 0.22329, was 0.32159). `verify_manuscripts.py` checks
+  the new table against its CSV (commit `d1be46d`).
+- Watson 2026 / Cai 2024 bib entries now match the verified bios-dissertation
+  master bib (`b20179b`).
+- Counts (texcount fragments, same method as before): CTJ body 3,304 prose/heading
+  words, 3,470 with end declarations (3,508 also counting 38 math units); abstract
+  285. PDFs: submission 21 pp, reading 8 pp, chapter 68 pp, SI 45 pp.
+
 ### Approved compact exhibit revision and author order (2026-10-02)
 
 - Restored *Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous
