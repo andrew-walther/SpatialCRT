@@ -247,6 +247,23 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Comprehensive review and advisor-meeting report (2026-10-12)
+
+- Four read-only review tracks (numbers, live journal compliance/clarity, chapter vs
+  CTJ/SI, code + tests) found no numeric or code errors; findings and author decisions:
+  `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`.
+- Approved fixes applied to CTJ, SI, chapter, exhibits, bib and cover letter:
+  abbreviations defined at first body use; pipeline jargon rewritten; one design-name
+  set across text, tables and figures (code/20 and code/21 labels regenerated); positive,
+  accurate incidence-guidance framing in SI/chapter; SI data/ethics wording aligned with
+  the CTJ (no repository link); two chapter overstatements qualified; Cai bib note and
+  Baird DOI fixed; Lin telephone added; Codex/Claude mentions removed from code headers
+  and documents. Habib citation unchanged (author).
+- Counts: CTJ body 3,280 words, 3,425 with declarations (limit 3,500); abstract 317.
+  PDFs: submission 21 pp, reading 8 pp, chapter 72 pp, SI 47 pp. Both verifiers pass.
+- New advisor-meeting report: `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`.
+- Open (TODO): IRB statement, generative-AI disclosure, coauthor approval.
+
 ### CTJ Figures 2 and 3 replaced (2026-10-12)
 
 - Figure 2 adds a simple random sampling row (`grid_accuracy_srs.pdf`, from code/20).

@@ -11,7 +11,9 @@ Full chapter/appendix and derived CTJ/SI drafts are complete and verified; autho
 
 **CTJ layout review (October 2):** an [eight-page two-column reading preview](paper/ctj_manuscript/CTJ_Reading.pdf)
 now accompanies the [21-page submission draft](paper/ctj_manuscript/CTJ_Manuscript.pdf).
-Both use one master manuscript and shared exhibit definitions. The approved original title is restored. Six revised exhibits show all-nine-design
+Comprehensive review completed 2026-10-12 (see `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`);
+the advisor-meeting application report is `application/report/IncidenceDesign_Application_Study_Report.pdf`.
+Both use one master manuscript and shared exhibit definitions. The approved original title is restored. Six revised exhibits show six-design-plus-SRS
 rules/benchmark, compact simulation accuracy/decomposition, observed NC geography
 and annual NC accuracy. Detailed tail/budget/parameter displays remain in supporting
 material. Author order is Walther, Habib, Simpson, Lin. See the
@@ -531,7 +533,7 @@ The core simulation is complete. The following extensions would strengthen the s
 ### Manuscript Development
 
 The application and all required full drafts are complete. Next: consolidated
-author/Claude review, author-only ethics/data-use and corresponding-author details,
+author review, author-only ethics/data-use and corresponding-author details,
 coauthor consent, then approved submission. No new full simulation is required by
 the independent review. Calendar deadlines were superseded by ASAP completion;
 CTJ remains the submission target. UNC thesis-template integration and conference

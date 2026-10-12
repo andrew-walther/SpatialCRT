@@ -67,3 +67,21 @@ Four read-only tracks run against the state after commit `2b142f9` (brief:
   clutter; unreferenced figure files; companion `regions.png` still pre-"fixed" label;
   `sources.txt`, `CTJ_Exhibits.tex` header date, AGENTS page counts stale.
 - Optional: ADEMP reporting clause; cite SEER and Mirzaei base rate; name data custodian.
+
+## Author decisions and resolution (2026-10-12)
+
+- Applied: A1, A4–A13, A15–A26 and the chapter items; Lin telephone (919) 966-9431 from
+  his UNC Gillings profile (B3 resolved); Codex/Claude mentions removed from code headers,
+  TeX comments, cover letter, declarations draft and companion (Tier C headers).
+- A2 reframed per author: no "no benefit" caveat in the CTJ. SI/chapter/report now say plain
+  and incidence-guided saturation performed similarly, so incidence guidance targets
+  high-burden regions without loss of accuracy; the advantage over SRS comes from the
+  shared saturation structure.
+- A3 not changed: Habib produced the corrected counts after amending the adjudication method.
+- A14 (all-authors-approved sentence) deferred to coauthor approval.
+- B1 (IRB), B2 (AI disclosure) moved to TODO; B4 presumed acceptable pending IRB permission
+  to publish aggregates.
+- BMC reference (A12): no volume/article number yet (online-first); title's " - " matches
+  the publisher record, so it is unchanged.
+- Deferred hygiene: code/21 NA guards, figure axis ticks, reference ISBN clutter, unused
+  figure files, Balanced Halves `sample()` hazard, killed-worker handling.

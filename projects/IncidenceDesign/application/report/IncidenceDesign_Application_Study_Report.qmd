@@ -1,0 +1,484 @@
+---
+title: "NC SUD Application Study: Completed Results"
+subtitle: "Treatment assignment designs for a spatial cluster randomized education pilot on observed North Carolina SUD incidence, 2018--2021"
+author: "Andrew Walther"
+date: 2026-10-12
+date-format: long
+format:
+  pdf:
+    toc: true
+    toc-depth: 1
+    number-sections: true
+    geometry:
+      - top=0.55in
+      - left=0.6in
+      - right=0.6in
+      - bottom=0.82in
+      - footskip=0.32in
+    fontsize: 10pt
+    include-in-header:
+      text: |
+        \usepackage{float}
+        \usepackage{needspace}
+        \usepackage{booktabs}
+        \usepackage{tcolorbox}
+        \newtcolorbox{keybox}{colback=gray!6,colframe=gray!45,boxrule=0.4pt,arc=1pt,left=6pt,right=6pt,top=4pt,bottom=4pt}
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+# ============================================================
+# Script: IncidenceDesign_Application_Study_Report.qmd
+# Purpose: End-to-end report of the completed NC SUD application study
+#          (data -> clusters -> design adaptations -> methods -> results
+#          -> comparison with the grid simulation -> implications).
+# Author: Andrew Walther
+# Created: 2026-10-12
+# Dependencies: dplyr, tidyr, knitr, kableExtra
+# ============================================================
+# Reads ONLY tracked aggregate outputs (58-cluster exhibits, grid summary
+# RDS, allocation-risk summaries). Never reads application/data/ (restricted
+# county death-certificate sources). No simulation is run here.
+library(dplyr)
+library(tidyr)
+library(knitr)
+
+options(knitr.kable.NA = "")
+
+# Report directory = this file's folder; project root is two levels up.
+report_dir <- normalizePath(".")
+root <- normalizePath(file.path(report_dir, "..", ".."))
+ex_dir <- file.path(root, "application/results/real_sud_rev_20261002/exhibits")
+fig_compact <- file.path(root, "paper/ctj_manuscript/figures/compact")
+
+#' Format a kable table for the PDF in the proposal report's style.
+#' @param x data frame to print.
+#' @param ... passed to knitr::kable (caption, col.names, align, digits).
+#' @param font_size LaTeX font size in points.
+#' @return a knitr_kable object.
+report_table <- function(x, ..., font_size = 8.5) {
+  tab <- knitr::kable(x, ..., booktabs = TRUE)
+  kableExtra::kable_styling(tab, full_width = FALSE, position = "center",
+    font_size = font_size, latex_options = c("hold_position", "scale_down"))
+}
+
+#' Format a number with fixed decimals (inline-text helper).
+#' @param x numeric; @param d decimals. @return character.
+f <- function(x, d = 3) formatC(x, format = "f", digits = d, big.mark = ",")
+#' Percent helper: 0.274 -> "27.4%". @param x proportion; @param d decimals.
+# Round once with R (round-half-even on ties, e.g. 0.9365 -> 93.6%) so the text matches the manuscripts.
+pct <- function(x, d = 1) paste0(formatC(100 * round(x, d + 2), format = "f", digits = d), "\\%")
+
+# Common design labels, keyed by Design_ID, used for BOTH grid and NC.
+# Grid and NC versions differ in geometry; the NC adaptation is in parentheses
+# in the adaptation table (Section 4).
+# Names match CTJ Table 1 and the regenerated figures.
+lab <- c("1" = "Checkerboard", "2" = "High Incidence Focus",
+         "3" = "Plain Saturation", "4" = "Isolation Buffer",
+         "5" = "2×2 Blocking", "6" = "Balanced Quartiles",
+         "7" = "Balanced Halves", "8" = "Incidence-Guided Saturation",
+         "9" = "Simple Random Sampling")
+ord <- c(9, 8, 3, 6, 7, 5, 1, 4, 2)  # display order: SRS, saturation, balancing, spatial, other
+
+# ---- Load tracked aggregate exhibits ------------------------------------
+yearly  <- read.csv(file.path(ex_dir, "yearly_primary_design_means.csv"))
+setting <- read.csv(file.path(ex_dir, "primary_setting_srs_comparison.csv"))
+tail_r  <- read.csv(file.path(ex_dir, "refined_tail_comparison.csv"))
+sens    <- read.csv(file.path(ex_dir, "yearly_sensitivity_means.csv"))
+blocks  <- read.csv(file.path(ex_dir, "spatial_block_diagnostics.csv"))
+inputs  <- read.csv(file.path(ex_dir, "observed_cluster_inputs.csv"))
+extract <- readLines(file.path(ex_dir, "manuscript_extract.txt"))
+down    <- read.csv(file.path(root, "results/allocation_risk/summary/downside_by_design.csv"))
+grid    <- readRDS(file.path(root,
+  "results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds"))
+
+# ---- Grid benchmark (tau = 1, queen, oracle fit), regime-specific -------
+grid_tab <- grid |>
+  filter(True_Tau == 1, Neighbor_Type == "queen", Estimator == "oracle") |>
+  mutate(ID = as.integer(sub("Design ", "", Design))) |>
+  group_by(ID, Spillover_Type) |>
+  summarise(MSE = mean(MSE), Coverage = mean(Coverage), .groups = "drop") |>
+  group_by(Spillover_Type) |>
+  mutate(Ratio = MSE / MSE[ID == 9]) |>
+  ungroup()
+gv <- function(id, reg, col = "MSE") grid_tab[[col]][grid_tab$ID == id & grid_tab$Spillover_Type == reg]
+
+# ---- NC data summaries (rates only; no raw counts printed) --------------
+state <- inputs |> group_by(period) |>
+  summarise(deaths = sum(deaths), py = sum(person_years), .groups = "drop") |>
+  mutate(rate = 1e5 * deaths / py)
+pooled <- inputs |> filter(period == "2018-2021")
+srate <- function(p) state$rate[state$period == p]
+
+# ---- NC primary yearly means --------------------------------------------
+nc <- yearly |> mutate(ID = Design_ID)
+ncv <- function(id, reg, yr, col = "Mean_MSE") nc[[col]][nc$ID == id & nc$Regime == reg & nc$Year == yr]
+ctrl_rows <- setting |> filter(Neighbor == "queen", Model == "education", Summary == "mean_rank",
+                                Regime == "control_only", Design_ID %in% c(3, 8))
+ctrl_n <- sum(ctrl_rows$Design_ID == 8); ctrl_ok <- sum(ctrl_rows$MC_Upper_Difference < 0)
+srs_both <- ncv(9, "both", 2018); srs_ctrl <- ncv(9, "control_only", 2018)
+gsat_ctrl_red <- 1 - nc$Mean_MSE[nc$ID == 8 & nc$Regime == "control_only"] / srs_ctrl
+psat_ctrl_red <- 1 - ncv(3, "control_only", 2018) / srs_ctrl
+cov_rng <- range(nc$Coverage)
+
+# ---- Refined tail (queen rho corners, gamma = 0.8) ----------------------
+tq <- tail_r |> filter(Neighbor == "queen", Model == "education") |>
+  group_by(Year, Rho, Regime) |>
+  mutate(Q90_red = 1 - Q90_Estimated / Q90_Estimated[Design_ID == 9],
+         W10_red = 1 - Worst10_Mean_Estimated / Worst10_Mean_Estimated[Design_ID == 9]) |>
+  ungroup()
+trng <- function(id, reg, col) range(tq[[col]][tq$Design_ID == id & tq$Regime == reg])
+
+# Counts of production effort, read from the exhibit extract (not retyped).
+xnum <- function(key) as.numeric(sub(".*: ", "", grep(key, extract, value = TRUE)[1]))
+n_rows <- xnum("Reporting rows"); n_src <- xnum("Distinct sources"); n_fits <- xnum("Physical independent")
+```
+
+\clearpage
+
+# Executive summary {.unnumbered}
+
+\begin{keybox}
+\textbf{Question.} When an education intervention for healthcare professionals is randomized across North Carolina's (NC's) 58 community-college service areas, which treatment assignment design estimates the intervention effect most accurately, given spatial spillover and the option of using historical sudden unexpected death (SUD) incidence to direct treatment?
+\end{keybox}
+
+- **Data.** Restricted county-level sudden unexpected death (SUD) death-certificate counts (A. Habib) and Surveillance, Epidemiology, and End Results (SEER) program populations aged 18--64 for 2018--2021: `r f(state$deaths[state$period=="2018-2021"],0)` deaths over `r f(state$py[state$period=="2018-2021"],0)` person-years, aggregated to 58 service-area clusters. Statewide rates rose from `r f(srate("2018"),1)` (2018) to `r f(srate("2021"),1)` (2021) per 100,000; pooled cluster rates span `r f(min(pooled$rate_per_100k),1)`--`r f(max(pooled$rate_per_100k),1)`. Each year is a fixed, observed planning input; **no synthetic incidence is used.**
+- **Designs.** All eight grid-study designs plus Simple Random Sampling (SRS) were adapted to the irregular 58-cluster map (graph checkerboard, regional saturation, spatial blocks, etc.).
+- **Model.** Simulated education outcomes follow the same spatial-lag model as the grid study with a known effect ($\tau=1$), spatial dependence $\rho\in\{0,0.2,0.5\}$, spillover $\gamma\in\{0.5,0.8\}$, and two spillover regimes (control-only, both arms). **Incidence directs allocation only; it does not enter the education outcome** ($\beta=0$).
+- **Scale and quality.** `r f(n_rows,0)` reported settings from `r f(n_src,0)` distinct simulations and `r f(n_fits,0)` independent fits, plus 2,280,000 tail-refinement outcomes. Every setting is complete and passes prespecified Monte Carlo precision gates, with no warnings, aliasing, boundary fits or failures.
+
+**Key results (queen contiguity, primary model):**
+
+1. **Control-only spillover — saturation wins.** Plain saturation lowered mean squared error (MSE) by `r pct(psat_ctrl_red)` relative to SRS; incidence-guided saturation by `r pct(min(gsat_ctrl_red))`--`r pct(max(gsat_ctrl_red))` across years. Both beat SRS in every parameter setting, and at the settings examined for downside ($\rho=0,0.5$; $\gamma=0.8$) both also reduced the *downside* (90th percentile and worst-10% mean of allocation MSE) by about 21--43%.
+2. **Both-arms spillover — SRS is competitive.** SRS (MSE `r f(srs_both,4)`), balancing and saturation designs performed about equally; no design is clearly better.
+3. **Designs to avoid.** Checkerboard was never better than SRS; blocking was never clearly better and was up to 1.4$\times$ worse under control-only spillover; Isolation Buffer treats far fewer clusters and is poor under both-arms spillover; High Incidence Focus is a single deterministic allocation whose accuracy depends on the outcome model.
+4. **Coverage** of nominal 95% intervals is `r pct(cov_rng[1])`--`r pct(cov_rng[2])` in every design, slightly below nominal (as in the grid study).
+
+**Bottom line.** The application reproduces the grid study's central, regime-dependent conclusion on real geography and real incidence: *saturation designs are the recommended choice when spillover is expected mainly in control clusters, and SRS remains a reasonable default when spillover reaches both arms.* Incidence-guided saturation was about as accurate as plain saturation, so incidence can steer the highest treatment saturations to the highest-burden regions at little or no cost in precision.
+
+\begin{keybox}
+\textbf{How to read this report.} Sections 1--8 (the main body) tell the full story. Section 9 holds additional results for reference. Appendix A lists what changed since the May 2026 synthetic-data proposal; Appendix B lists decisions and open items for discussion.
+\end{keybox}
+
+\clearpage
+
+# Background: what the grid simulation showed
+
+The grid study compared treatment assignment designs for a spatial cluster randomized trial (CRT) on a $10\times10$ grid of 100 clusters. Outcomes followed a spatial-lag model,
+$$Y=(I-\rho W)^{-1}\left[\tau Z+S(Z)+\beta X+\epsilon\right],\qquad \epsilon\sim N(0,\sigma^2 I),$$
+where $Z$ is treatment, $X$ is baseline incidence (three generating mechanisms), $W$ is a row-standardized contiguity matrix (queen primary, rook sensitivity), and $S(Z)$ is spillover of magnitude $\gamma$ reaching either **control clusters only** or **both arms**. The eight designs were evaluated over 12,800 scenarios (1,600 per design, plus 1,600 for an SRS benchmark), fitting the spatial-lag model by maximum likelihood with the true spillover term.
+
+```{r tab-grid}
+grid_show <- grid_tab |>
+  select(ID, Spillover_Type, MSE, Ratio) |>
+  pivot_wider(names_from = Spillover_Type, values_from = c(MSE, Ratio)) |>
+  mutate(Design = lab[as.character(ID)]) |>
+  arrange(match(ID, ord)) |>
+  transmute(Design, MSE_both = f(MSE_both, 4), Ratio_both = f(Ratio_both, 2),
+            MSE_ctrl = f(MSE_control_only, 4), Ratio_ctrl = f(Ratio_control_only, 2))
+report_table(grid_show, align = "lrrrr",
+  col.names = c("Design", "MSE", "Ratio to SRS", "MSE", "Ratio to SRS"),
+  caption = "Grid study benchmark at $\\tau=1$, queen contiguity: mean MSE over 80 scenarios per regime (five incidence configurations $\\times$ four $\\rho$ $\\times$ four $\\gamma$).") |>
+  kableExtra::add_header_above(c(" " = 1, "Both arms" = 2, "Control only" = 2))
+```
+
+The grid study's findings that motivate the application:
+
+- **Spillover regime decides the ranking.** Under control-only spillover, plain and incidence-guided saturation had the lowest MSE (about `r f(gv(8,"control_only","Ratio"),2)` times SRS); checkerboard (`r f(gv(1,"control_only","Ratio"),1)`$\times$) and $2\times2$ blocking (`r f(gv(5,"control_only","Ratio"),1)`$\times$) failed badly, plausibly because fine interspersion leaves little information to separate treatment from spillover. Under both-arms spillover, SRS, Balanced Quartiles/Halves and saturation were within about 8% of one another.
+- **Average MSE is not the whole story.** A trial realizes one allocation. A focused pilot showed that SRS's worst 10% of allocations were much worse than its mean under control-only spillover, while saturation reduced that downside.
+- **Open question for the application:** do these conclusions survive an irregular real map, unequal cluster populations and *observed* incidence?
+
+# Data and preparation
+
+**Sources.** County-year SUD death counts come from North Carolina death-certificate data prepared by A. Habib (restricted; not publicly available). The numerator uses Habib's corrected case filtering, which retains heart-failure deaths that an earlier filter excluded as presumed non-sudden; the earlier counts (21,147 deaths) are kept only to reconcile with Habib's unpublished report. The denominator is the SEER population aged 18--64 for each county and year.
+
+**Rates.** For cluster $i$ and year $y$, annual incidence is $100{,}000\,D_{iy}/P_{iy}$; pooled incidence is $100{,}000\sum_y D_{iy}/\sum_y P_{iy}$ (per 100,000 person-years). All 100 counties and 58 clusters are present in every year, and counts and populations sum back to statewide totals.
+
+```{r tab-data}
+data_tab <- inputs |>
+  group_by(period) |>
+  summarise(Min = min(rate_per_100k), Median = median(rate_per_100k), Max = max(rate_per_100k), .groups = "drop") |>
+  left_join(state |> select(period, rate), by = "period") |>
+  transmute(Period = ifelse(period == "2018-2021", "2018--2021 pooled", period),
+            Statewide = f(rate, 1), Min = f(Min, 1), Median = f(Median, 1), Max = f(Max, 1))
+report_table(data_tab, align = "lrrrr", escape = FALSE,
+  col.names = c("Period", "Statewide rate", "Cluster min", "Cluster median", "Cluster max"),
+  caption = "Observed SUD incidence per 100,000 adults aged 18--64: statewide and across the 58 service-area clusters. Only rates are shown; restricted counts are not reported.")
+```
+
+Rates rose over the period, especially in 2020--2021, and cluster rankings are fairly but not perfectly stable from year to year. The analysis therefore treats **each year as a separate planning scenario** rather than averaging years, so that the incidence-guided designs are evaluated on four realistic but different inputs.
+
+```{r fig-observed, out.width="92%", fig.align="center", fig.pos="H", fig.cap="Observed annual SUD incidence per 100,000 adults aged 18--64 in the 58 service-area clusters. These fixed inputs direct incidence-aware allocation; they are not simulated outcomes or measures of education ability."}
+knitr::include_graphics(file.path(report_dir, "real_sud_assets/observed_years.png"))
+```
+
+# Clusters and spatial weights
+
+**Clusters.** The randomization units are 58 community-college service areas that partition North Carolina's 100 counties. Three counties served by more than one college were assigned by convention: Northampton to Halifax Community College, Bertie to Martin Community College, and Hertford alone to Roanoke-Chowan Community College. These are analysis conventions, not exclusive service commitments.
+
+**Spatial weights.** Adjacency comes from legal county boundaries dissolved to service areas. Queen contiguity (clusters sharing any boundary point are neighbors) is primary, and rook contiguity (sharing a boundary segment) is a sensitivity analysis. Queen degree ranges from 1 to 8 (mean 4.93). Legal (not shoreline-clipped) boundaries were chosen deliberately: clusters facing each other across sounds and rivers count as neighbors, because an education intervention can plausibly reach across water. Adjacency is a proxy for professional communication, not a measured network.
+
+```{r fig-clusters, out.width="88%", fig.align="center", fig.pos="H", fig.cap="The 58 community-college service-area clusters (counties colored by primary serving college). Hatching marks Northampton and Bertie counties, which also lie in Roanoke-Chowan Community College's wider network."}
+knitr::include_graphics(file.path(report_dir, "figures/community_college_service_area_clusters.png"))
+```
+
+# Adapting the designs to the NC map
+
+The grid designs rely on rows, columns and quadrants that do not exist on an irregular map. Each was adapted to keep its *allocation mechanism* while respecting the geography. All partitions were fixed **before** looking at any simulated performance.
+
+```{r tab-adapt}
+adapt <- data.frame(
+  Design = c("Simple Random Sampling", "Plain Saturation", "Incidence-Guided Saturation",
+             "Balanced Quartiles", "Balanced Halves", "2×2 Blocking",
+             "Checkerboard", "Isolation Buffer", "High Incidence Focus"),
+  Grid = c("Random 50 of 100", "Random 20/40/60/80% per quadrant",
+           "80/60/40/20% by quadrant mean incidence", "Equal treatment within incidence quartiles",
+           "Equal treatment within incidence halves", "2 of 4 in each 2x2 block",
+           "Alternating (x+y) mod 2", "Random maximal independent set",
+           "Treat 50 highest-incidence"),
+  NC = c("Random 29 of 58", "Same saturations on 4 fixed geographic regions (k-means)",
+         "Regions ranked by mean within-region incidence rank", "Same; 29 treated, random extra in odd strata",
+         "14/15 split; random choice of the 15-treated half", "Half of each of 14 irregular k-means groups (one singleton stays control)",
+         "Deterministic greedy graph coloring by degree", "Same, on the NC queen graph",
+         "Treat 29 highest-rate clusters (deterministic)"))
+report_table(adapt, align = "lll", col.names = c("Design", "Grid rule", "NC adaptation"),
+  caption = "How each design was adapted from the grid to the 58-cluster NC map.") |>
+  kableExtra::column_spec(1, width = "3.2cm") |>
+  kableExtra::column_spec(2, width = "5.0cm") |>
+  kableExtra::column_spec(3, width = "7.6cm")
+```
+
+Three adaptations matter for interpretation:
+
+- **Two designs become deterministic.** Graph checkerboard and High Incidence Focus each produce one allocation per year. Their accuracy is conditional on the assumed outcome model, not protected by randomization.
+- **Regions and blocks are irregular.** Saturation uses one fixed four-region partition for all years, chosen from 250 geographic $k$-means candidates by compactness and balance in population, cluster and county counts. Spatial blocking uses 14 groups per year; one singleton group in each year is always control (rounding $0.5$ down).
+- **Budgets differ.** Most designs treat 29 clusters (about half of the population), but treated *population* varies, so the study reports both (Table \ref{tab:budgets}).
+
+```{r tab-budget}
+bud <- nc |> filter(Regime == "both") |>
+  mutate(cell = paste0(f(Mean_Treated, 1), " / ", f(100 * Mean_Population_Share, 1), "%")) |>
+  select(ID, Year, cell) |>
+  pivot_wider(names_from = Year, values_from = cell) |>
+  mutate(Design = lab[as.character(ID)]) |>
+  arrange(match(ID, ord)) |> select(Design, `2018`, `2019`, `2020`, `2021`)
+report_table(bud, align = "lrrrr", escape = TRUE,
+  caption = "Treatment budgets: mean treated clusters / percent of the year's population aged 18--64. Population share measures geographic reach, not the number of professionals educated.\\label{tab:budgets}")
+```
+
+```{r fig-examples, out.width="96%", fig.align="center", fig.pos="H", fig.cap="Example allocations under each design (2018 inputs). Treated clusters are shaded. Panel names: Saturation Regions = Plain Saturation; Incidence-Guided Saturation Regions = Incidence-Guided Saturation; 2x2 Blocking uses spatial blocks on the NC map."}
+knitr::include_graphics(file.path(report_dir, "real_sud_assets/design_examples.png"))
+```
+
+# Methods
+
+**Outcome model.** For the education pilot, the primary model sets $\beta=0$:
+$$Y=(I-\rho W)^{-1}\left[\tau Z+S(Z)+\epsilon\right],\qquad \tau=1,\ \sigma=1,$$
+with the 58-cluster $W$. Observed incidence affects *who is treated* (for incidence-aware designs) but neither baseline education nor the treatment effect. This reflects the substantive premise that SUD incidence is a reason to target the intervention, not a predictor of education ability. A matched hypothetical sensitivity with $\beta=1$ (rank-scaled incidence in both the outcome and the fit) is reported in Section 9.
+
+**Estimation.** $\tau$ is estimated by maximum likelihood for the spatial-lag model with an intercept, $Z$ and the true regime-specific spillover term, using the validated estimation engine from the grid study (cross-checked against `spatialreg::lagsarlm` on the NC weights).
+
+**Parameter grid.** Queen weights; $\rho\in\{0, 0.2, 0.5\}$; $\gamma\in\{0.5, 0.8\}$; two spillover regimes; four years; nine designs, giving 432 primary settings. Sensitivity analyses (rook weights at $\rho\in\{0,0.5\}$ and $\gamma\in\{0.5,0.8\}$; $\beta=1$; alternative regional summaries) bring the total to `r f(n_rows,0)` reported settings.
+
+**Monte Carlo design.** For each setting, $J=100$ allocations are drawn and $R=100$ independent outcomes simulated per unique allocation (deterministic designs: $R=1{,}000$ outcomes for their single allocation). Replication was extended until the Monte Carlo standard error (MCSE) of mean MSE was at most 5% of its value and the MCSE of coverage at most 0.01; every setting passed. Every random draw used a fixed, reproducible seed.
+
+**Performance measures.** Mean MSE, bias and 95% confidence interval coverage for $\hat\tau$, each compared with SRS in the same setting. Because a real trial realizes *one* allocation, we also estimate each allocation's risk $m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a]$ and summarize its distribution across allocations by the 90th percentile (q90) and the mean of the worst 10% of allocations. A separate tail refinement re-used the same allocations with $R=400$ outcomes at $\rho\in\{0,0.5\}$, $\gamma=0.8$.
+
+# Results
+
+## Average accuracy
+
+```{r fig-annual, out.width="92%", fig.align="center", fig.pos="H", fig.cap=paste0("Yearly mean MSE relative to SRS in the same year and regime (queen; six $\\rho/\\gamma$ settings averaged equally). Blue = lower error than SRS. SRS mean MSE is ", f(srs_both,5), " (both arms) and ", f(srs_ctrl,5), " (control only).")}
+knitr::include_graphics(file.path(fig_compact, "nc_annual_accuracy.pdf"))
+```
+
+\Needspace{16\baselineskip}
+
+```{r tab-main}
+main_tab <- nc |>
+  group_by(ID, Regime) |>
+  summarise(lo = min(Mean_MSE), hi = max(Mean_MSE), rlo = min(Ratio_of_Mean_MSE_SRS), rhi = max(Ratio_of_Mean_MSE_SRS),
+            cov = mean(Coverage), .groups = "drop") |>
+  mutate(MSE = ifelse(abs(hi - lo) < 5e-6, f(lo, 4), paste0(f(lo, 4), "--", f(hi, 4))),
+         Ratio = ifelse(abs(rhi - rlo) < 5e-4, f(rlo, 2), paste0(f(rlo, 2), "--", f(rhi, 2))),
+         Cov = f(cov, 3)) |>
+  select(ID, Regime, MSE, Ratio, Cov) |>
+  pivot_wider(names_from = Regime, values_from = c(MSE, Ratio, Cov)) |>
+  mutate(Design = lab[as.character(ID)]) |>
+  arrange(match(ID, ord)) |>
+  select(Design, MSE_control_only, Ratio_control_only, Cov_control_only, MSE_both, Ratio_both, Cov_both)
+report_table(main_tab, align = "lrrrrrr", escape = FALSE,
+  col.names = c("Design", "MSE", "Ratio to SRS", "Coverage", "MSE", "Ratio to SRS", "Coverage"),
+  caption = "Primary results by design and spillover regime. MSE and ratio give the range over the four planning years; coverage is the four-year mean. Designs whose allocation does not use incidence (SRS, plain saturation, checkerboard, buffer) have identical results across years.") |>
+  kableExtra::add_header_above(c(" " = 1, "Control-only spillover" = 3, "Both-arms spillover" = 3))
+```
+
+- **Control-only spillover.** Plain saturation (`r f(ncv(3,"control_only",2018),4)` vs SRS `r f(srs_ctrl,4)`) and incidence-guided saturation were the most accurate designs averaged over years (High Incidence Focus was better in 2018 alone, ratio 0.70, but ranged up to 1.40). Both had lower MSE than SRS in all `r ctrl_n` year-by-setting combinations, with the upper Monte Carlo bound of every difference below zero (`r ctrl_ok` of `r 2*ctrl_n` comparisons). The two saturation designs performed similarly (incidence-guided yearly MSE within about $-3\%$ to $+9\%$ of plain; equal on the grid), so **incidence guidance targets high-burden regions at little or no cost in accuracy.** Balanced designs and Isolation Buffer were close to or slightly below SRS; checkerboard (about 3$\times$ SRS) was much worse, and blocking and High Incidence Focus were worse in some years.
+- **Both-arms spillover.** SRS, the balanced designs, blocking and both saturation designs were within a few percent of each other; small differences should not be read as equivalence or superiority. Checkerboard (about 2.8$\times$) and Isolation Buffer (about 3.7$\times$) were far worse. High Incidence Focus had slightly lower MSE than SRS, but it is one deterministic allocation (see Section 7).
+- **Bias and coverage.** Bias was small throughout (|bias| $\le$ `r f(max(abs(nc$Bias)),2)`). Coverage averaged about `r pct(mean(nc$Coverage))`, slightly below 95% for every design, as in the grid study. Passing the precision gates does not repair this finite-sample undercoverage.
+
+## Downside risk across allocations
+
+```{r fig-alloc, out.width="94%", fig.align="center", fig.pos="H", fig.cap="Distribution of allocation-specific MSE relative to SRS mean MSE, for six designs and SRS. Top: focused grid pilot (simulation study); bottom: refined NC settings ($\\rho=0,0.5$; $\\gamma=0.8$; all years). Columns are the spillover regimes; SRS is in orange. Thin lines: 5th--95th percentiles; thick bars: 25th--75th; circles: mean. Deterministic designs appear as a single point."}
+knitr::include_graphics(file.path(fig_compact, "allocation_distribution_by_design.pdf"))
+```
+
+Under **control-only** spillover, plain saturation's estimated q90 was `r pct(min(trng(3,"control_only","Q90_red")))`--`r pct(max(trng(3,"control_only","Q90_red")))` below SRS and its worst-decile mean `r pct(min(trng(3,"control_only","W10_red")))`--`r pct(max(trng(3,"control_only","W10_red")))` below; incidence-guided saturation's reductions were `r pct(min(trng(8,"control_only","Q90_red")))`--`r pct(max(trng(8,"control_only","Q90_red")))` and `r pct(min(trng(8,"control_only","W10_red")))`--`r pct(max(trng(8,"control_only","W10_red")))`. The pattern held when one half of the outcomes picked the worst allocations and the other half evaluated them. So saturation lowers both the average error and the chance of drawing a poor allocation. Under **both-arms** spillover, allocation-to-allocation spread was small for SRS and the balancing and saturation designs (Isolation Buffer's was wide), and tail differences among them were within simulation noise.
+
+These tail estimates are descriptive. With $J=100$ allocations, the worst decile contains only ten draws; extra outcomes reduce noise in each allocation's risk but do not enlarge the allocation sample.
+
+## Reach
+
+High Incidence Focus treats 29 clusters but only about 22--24% of the working-age population (its high-rate clusters tend to have smaller populations); Isolation Buffer treats about 16 clusters and 27% of the population. All other designs reach roughly half the population (Table \ref{tab:budgets}).
+
+# Comparison with the grid findings
+
+\Needspace{14\baselineskip}
+
+```{r tab-compare}
+cmp_ids <- c(8, 3, 6, 5, 1, 4, 2)
+nc_rat <- nc |> group_by(ID, Regime) |> summarise(r = mean(Ratio_of_Mean_MSE_SRS), .groups = "drop")
+nr <- function(id, reg) nc_rat$r[nc_rat$ID == id & nc_rat$Regime == reg]
+cmp <- data.frame(ID = cmp_ids) |>
+  mutate(Design = lab[as.character(ID)],
+         g_c = sapply(ID, gv, reg = "control_only", col = "Ratio"),
+         n_c = sapply(ID, nr, reg = "control_only"),
+         g_b = sapply(ID, gv, reg = "both", col = "Ratio"),
+         n_b = sapply(ID, nr, reg = "both")) |>
+  transmute(Design, g_c = f(g_c, 2), n_c = f(n_c, 2), g_b = f(g_b, 2), n_b = f(n_b, 2))
+report_table(cmp, align = "lrrrr",
+  col.names = c("Design", "Grid", "NC", "Grid", "NC"),
+  caption = "Mean MSE relative to SRS: grid benchmark ($\\tau=1$, queen) versus NC application (mean over years). Values below 1 mean lower error than SRS.") |>
+  kableExtra::add_header_above(c(" " = 1, "Control-only" = 2, "Both arms" = 2))
+```
+
+**What held.**
+
+- **Regime dependence.** In both studies the spillover regime, not the incidence pattern, determined which designs did well.
+- **Saturation under control-only spillover.** Plain and incidence-guided saturation were the best designs under control-only spillover in both studies, on average and in the downside.
+- **Balancing tracks SRS.** Balanced Quartiles/Halves were indistinguishable from SRS in both.
+- **Fine interspersion fails under control-only spillover.** Checkerboard did poorly in both studies; blocking was worse than SRS on the grid and in some NC years.
+
+**What changed, and why.**
+
+- **Saturation's advantage is smaller in NC** (about 0.70--0.79$\times$ SRS vs about 0.63 on the grid). A plausible explanation, not tested directly, is that four irregular regions of unequal size give less contrast in local treatment intensity than the grid's equal quadrants.
+- **Blocking is much closer to SRS in NC** (about 1.0--1.4$\times$ under control-only spillover vs 2.7$\times$ on the grid). Plausibly, the 14 irregular spatial groups are larger and looser than $2\times2$ squares, so treated and control clusters are less finely interspersed.
+- **Checkerboard changed in both directions.** Under control-only spillover it is less extreme (about 3$\times$ SRS vs about 10$\times$), likely because a graph coloring cannot alternate perfectly on an irregular map; under both arms it is worse (about 2.8$\times$ vs 1.5$\times$). Its effect is identified on the NC graph but estimated imprecisely.
+- **High Incidence Focus looks much better in NC under both arms** (about SRS level vs 3.8$\times$ on the grid). Under $\beta=0$ the incidence it targets is unrelated to the outcome, so a fixed, roughly balanced-size allocation does fine. When outcomes are related to incidence ($\beta=1$ sensitivity), its MSE rises 1.4--4.4-fold across settings. Its NC result is therefore model-dependent, not robust.
+- **Isolation Buffer** remains poor under both-arms spillover (about 3.7--3.8$\times$ SRS in both studies) and treats only about 16 clusters.
+
+# Implications and limitations
+
+**For the education pilot.**
+
+- **Control-only spillover plausible:** if spillover is expected mainly among untreated clusters (e.g., professionals in control areas hearing about the training), a saturation design (plain or guided) is the recommended choice. It lowers average error by about a quarter and reduces the chance of a poor allocation.
+- **Both-arms spillover expected:** SRS is a reasonable, simple default, with balanced and saturation designs as equivalent alternatives.
+- **Incidence guidance:** incidence-guided saturation treats high-burden regions most intensively while keeping about the same accuracy as plain saturation, which makes it a natural choice when reaching high-burden areas is also a program goal.
+
+**For the method.** The application shows that the grid study's design guidance transfers to a real, irregular geography with unequal populations and observed incidence, once designs are adapted with prespecified rules. The key design question for a trial team is the expected spillover regime, not the incidence pattern.
+
+**Limitations.**
+
+- **Simulation, not efficacy.** These are design-stage simulations with a known spillover form and constant effect. They do not show that education reduces SUD.
+- **Population is not the sample.** Working-age population is a geographic denominator, not the number of healthcare professionals educated.
+- **Fixed incidence inputs.** Historical rates are held fixed; measurement error and change between planning and implementation are not propagated.
+- **Undercoverage.** Coverage of about 93% is below nominal and would need calibration in an actual protocol.
+- **Tail uncertainty.** Allocation-tail estimates rest on 100 sampled allocations per setting.
+- **Unequal budgets.** Budgets differ by design; this is an evaluation of retained strategies, not an equal-cost optimization.
+
+\clearpage
+
+# Additional results
+
+*Reference material; not required for the main story.*
+
+## Setting-level ratios to SRS
+
+```{r fig-setting, out.width="100%", fig.align="center", fig.pos="H", fig.cap="Setting-specific mean MSE ratios to year-matched SRS for each $\\rho/\\gamma$ setting, year and regime (queen). Abbreviated column names follow Figure 8 (e.g., Sat. Regions = Plain Saturation)."}
+knitr::include_graphics(file.path(ex_dir, "primary_setting_ratios.pdf"))
+```
+
+## Sensitivity analyses
+
+```{r tab-sens}
+# Primary rows (education/queen/mean_rank) carry ratio 1 by construction: drop them.
+sens_tab <- sens |>
+  filter(!(Model == "education" & Neighbor == "queen" & Summary == "mean_rank")) |>
+  mutate(Label = case_when(Model == "baseline_sensitivity" ~ "beta1",
+                           Neighbor == "rook" ~ "rook",
+                           TRUE ~ "region")) |>
+  filter(Label != "region") |>
+  group_by(Label, ID = Design_ID, Regime) |>
+  summarise(lo = min(Ratio_of_Matched_Mean_MSE), hi = max(Ratio_of_Matched_Mean_MSE), .groups = "drop") |>
+  mutate(R = ifelse(abs(hi - lo) < 0.005, f(lo, 2), paste0(f(lo, 2), "--", f(hi, 2)))) |>
+  select(Label, ID, Regime, R) |>
+  pivot_wider(names_from = c(Label, Regime), values_from = R) |>
+  mutate(Design = lab[as.character(ID)]) |>
+  arrange(match(ID, ord)) |>
+  select(Design, beta1_control_only, beta1_both, rook_control_only, rook_both)
+report_table(sens_tab, align = "lrrrr", escape = FALSE,
+  col.names = c("Design", "Control only", "Both arms", "Control only", "Both arms"),
+  caption = "Sensitivity MSE as a ratio to the primary-model MSE at exactly matched year, $\\rho$, $\\gamma$ and regime (range over years). The rook comparison covers $\\rho\\in\\{0,0.5\\}$ and $\\gamma\\in\\{0.5,0.8\\}$.") |>
+  kableExtra::add_header_above(c(" " = 1, "$\\\\beta=1$, incidence-adjusted" = 2, "Rook weights" = 2), escape = FALSE)
+reg <- sens |> filter(Model == "education", Neighbor == "queen", Summary != "mean_rank")
+```
+
+- **$\beta=1$ (incidence in the outcome, adjusted in the fit).** High Incidence Focus is most affected: its treatment is aligned with the adjusted covariate, leaving little residual information about $\tau$. Other designs change by a few percent (checkerboard by up to about 22% under both arms). This changes the baseline and the adjustment together; it is not a claim that SUD incidence predicts education ability.
+- **Rook weights.** At matched corners, rook mainly raises checkerboard MSE (about 15--23% on yearly averages); other designs change by up to about 11%, and the regime-specific conclusions are unchanged.
+- **Regional summaries (incidence-guided saturation only).** Ranking regions by mean raw rate or pooled deaths/population sometimes changes their order; matched MSE ratios range `r f(min(reg$Ratio_of_Matched_Mean_MSE),2)`--`r f(max(reg$Ratio_of_Matched_Mean_MSE),2)`. The prespecified mean-rank rule is retained rather than chosen by performance.
+
+## Tail-refinement detail
+
+```{r fig-tail, out.width="88%", fig.align="center", fig.pos="H", fig.cap="Refined allocation-specific risk at queen $\\rho=0.5$, $\\gamma=0.8$ ($R\\geq400$ outcomes per allocation; 1,000 for single-allocation designs). Design names in this figure: Sat. Regions = Plain Saturation; Incidence Sat. Regions = Incidence-Guided Saturation; Spatial Blocking = 2×2 Blocking."}
+knitr::include_graphics(file.path(ex_dir, "refined_allocation_risk.pdf"))
+```
+
+All `r sum(tail_r$Tail_Boundary_Uncertain & !tail_r$Proven_Singleton)` refined settings with more than one possible assignment flag uncertain membership at the worst-decile boundary. For the two saturation designs under both-arms spillover, the worst-decile allocations chosen by the two outcome halves overlap little (Jaccard index, a 0--1 overlap measure, of 0--0.25), and about 61--86% of the apparent allocation variation is outcome noise. Small both-arms tail differences are therefore not evidence of superiority.
+
+## Population reach
+
+```{r fig-pop, out.width="80%", fig.align="center", fig.pos="H", fig.cap="Share of the working-age population in treated clusters, by design and year. Abbreviations: Hi-Inc. Focus = High Incidence Focus; Sat. Regions = Plain Saturation; Iso. Buffer = Isolation Buffer; Spatial Blocking = 2×2 Blocking; Bal. = Balanced; Incidence Sat. Regions = Incidence-Guided Saturation; Simple Random = SRS."}
+knitr::include_graphics(file.path(ex_dir, "population_shares.pdf"))
+```
+
+\clearpage
+
+# Appendix A: from proposal to completed study {.unnumbered}
+
+The premise is unchanged from the May 2026 proposal: apply the spatial-lag design comparison to the 58 NC service-area clusters, using SUD incidence to guide incidence-aware allocation. What changed:
+
+| Proposal (May 2026, synthetic) | Completed study | Why |
+|---|---|---|
+| Synthetic spatially correlated Poisson incidence | Observed 2018--2021 rates, each year separately | Real data arrived; years differ |
+| 2024 NC state population estimates (all ages) | SEER population aged 18--64, year-specific | Matches the death-certificate denominator |
+| Outcome included incidence ($\beta \neq 0$) | Primary $\beta=0$; $\beta=1$ as sensitivity | Incidence targets the intervention; it is not an education baseline |
+| $\tau$ sweep, 25 design $\times$ 10 outcome draws (160,000 fits) | $\tau=1$; $J=100$ allocations $\times$ $R\geq100$ outcomes; precision gates (7.6M fits) | Precision targets; allocation-level risk |
+| Both-arms spillover only | Control-only and both-arms spillover regimes | The regime turned out to decide the ranking |
+| 8 designs | 8 designs + SRS benchmark | SRS is the natural reference |
+| Shoreline-clipped boundaries, queen only | Legal boundaries; queen primary, rook sensitivity | Cross-water exposure; continuity with grid |
+| Mean MSE only | Mean MSE plus allocation downside (q90, worst decile) | A trial realizes one allocation |
+| Balanced Quartiles/Halves led (synthetic) | Saturation leads under control-only; ties under both arms | Observed inputs and regime-specific reporting |
+
+# Appendix B: decisions and open items for discussion {.unnumbered}
+
+*Quick-reference context for questions that may come up.*
+
+**Analytic decisions made during implementation**
+
+1. **$\beta=0$ primary.** Incidence directs allocation but is not modeled as affecting education outcomes; $\beta=1$ is a labeled hypothetical sensitivity.
+2. **Each year analyzed separately** rather than pooled, so incidence-guided designs face four realistic inputs.
+3. **Geographic adaptations fixed in advance**: one four-region saturation partition; 14 yearly spatial blocks (one singleton always control); Balanced Halves 14/15 split; deterministic graph checkerboard.
+4. **Unequal budgets disclosed, not forced equal.** Reach is reported alongside accuracy.
+5. **High Incidence Focus** is deterministic for fixed inputs; reported but not recommended because its accuracy depends on the outcome model.
+6. **Coverage reported as observed** (about 93%) rather than switching estimators after seeing results.
+7. **Recommendations are regime-specific** rather than naming one overall winner.
+8. **CTJ presentation:** main text shows six designs + SRS; plain saturation and Balanced Halves are in the supplement (they performed like incidence-guided saturation and Balanced Quartiles).
+
+**Open items**
+
+- **IRB/data use:** institutional review board determination for the restricted death-certificate data and permission to publish 58-cluster aggregates and maps (Habib, Simpson).
+- **Pilot description:** confirm with Simpson that the education-pilot framing (endpoint, eligible professionals) is accurate.
+- **Coauthor review** of the *Clinical Trials* (CTJ) manuscript draft and contribution statement (Habib, Simpson, Lin).
+- **Submission requirements:** CTJ requires an institutional review board (IRB) statement and a generative-AI disclosure (both to do); Lin's telephone is now on the title page; coauthor ORCIDs if requested.

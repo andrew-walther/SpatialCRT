@@ -146,7 +146,7 @@ contiguity (Nemenyi \(p = 1.00\); Wilcoxon \(p = 0.82\)). We retain one
 representative of the saturation mechanism, Incidence-Guided Saturation. Plain Saturation had the marginally lower mean under both
 neighbor types and the better average rank in the eight-design
 comparison (2.100 against 2.350 under queen contiguity and 2.281 against
-2.306 under rook contiguity), so this choice does not rest on performance. The two saturation designs performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants without a loss of estimation accuracy; the accuracy advantage of both designs over simple random sampling (SRS), which arises under control-only spillover (see SRS benchmark and allocation-specific risk), comes from the saturation structure they share.
+2.306 under rook contiguity), so this choice does not rest on performance. The two saturation designs performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants with little or no loss of estimation accuracy; the accuracy advantage of both designs over simple random sampling (SRS), which arises under control-only spillover (see SRS benchmark and allocation-specific risk), comes from the saturation structure they share.
 Balanced Halves divides clusters into two halves by incidence rank and
 treats 25 at random in each. Its mean squared error was 0.1299, against
 0.1308 for Balanced Quartiles, under queen contiguity (Nemenyi
@@ -942,7 +942,7 @@ Saturation combines low pooled MSE with comparatively favorable
 control-only performance. The SRS benchmark below changes the practical
 interpretation: recommend the saturation approach when control-only
 spillover is plausible, while retaining SRS as a competitive option
-under both-arms spillover. Plain Saturation performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants without a loss of estimation accuracy. Scenario-level worst cases summarize variation across
+under both-arms spillover. Plain Saturation performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants with little or no loss of estimation accuracy. Scenario-level worst cases summarize variation across
 parameter settings; they are distinct from conditional risk across
 assignments within one setting.
 
@@ -1175,7 +1175,7 @@ Figure \ref{fig:nc-mse} compares the eight designs with SRS by year and regime.
 Under control-only spillover, Plain Saturation has descriptive mean MSE
 0.22329 against SRS 0.30761, a 27.4\% reduction. Incidence-Guided Saturation
 reduces mean MSE by 21.1--29.9\% across the four observed years (Table
-\ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best: the two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions without a loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share. High Incidence Focus is year-sensitive
+\ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best: the two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share. High Incidence Focus is year-sensitive
 under control-only spillover and cannot be recommended uniformly.
 
 Under both-arms spillover, SRS mean MSE is 0.07638, Plain Saturation

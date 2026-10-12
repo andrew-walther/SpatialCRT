@@ -53,15 +53,21 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   layouts; carry applicable clarity changes into the chapter and derived supplement.
   See [exhibit review](ctj_exhibit_revision_findings_2026-10-02.md).
 - [ ] Author full review of the revised chapter, both CTJ layouts and supplement.
-- [ ] Review the [HTML companion](../../application/report/real_sud_companion.html)
-  and three full drafts; paste the [Claude prompt](claude_comprehensive_review_prompt_2026-10-02.md)
-  for a comprehensive review. Claude review has not yet occurred.
-- [ ] Supply institutional IRB/data-use/consent determination, applicable protocol
-  details and permissions for restricted sources/aggregate publication. The author
-  approved a visible placeholder; no approval or exemption was inferred.
-- [ ] Supply corresponding telephone/ORCIDs; confirm contribution wording and
-  assistance disclosure; obtain all coauthors' final approval and submission attestations.
-- [ ] Address any mandatory review findings, then submit CTJ with the author-completed
+- [x] Comprehensive review (four tracks: numbers, journal compliance/clarity,
+  chapter consistency, code) completed 2026-10-12; approved fixes applied. See
+  [findings](ctj_comprehensive_review_findings_2026-10-12.md).
+- [x] Application study report for the advisor meeting:
+  `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`.
+- [ ] **Ethics/IRB statement** (CTJ requires one in Methods): obtain the IRB
+  determination for the restricted death-certificate data from Habib/Simpson,
+  including permission to publish 58-cluster aggregates and maps.
+- [ ] **Generative-AI disclosure** (Sage policy requires one for AI-assisted code,
+  code checking and visualization): author will write it before submission.
+- [ ] Coauthor ORCIDs if the submission system requests them (Walther's is on the
+  title page). Lin's telephone (919) 966-9431 added from his UNC profile.
+- [ ] Confirm contribution wording; obtain all coauthors' final approval and
+  submission attestations; confirm the pilot description with Simpson.
+- [ ] Submit CTJ with the author-completed
   [checklist](../../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` after a fresh fetch
   (verified 2026-10-11). Future pushes still require explicit author authorization.

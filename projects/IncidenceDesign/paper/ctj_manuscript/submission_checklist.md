@@ -3,8 +3,8 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,279 prose/heading words; 3,424 including end declarations
-  (3,478 with mathematical-expression units as well); limit 3,500.
+- [x] Body 3,280 prose/heading words; 3,425 including end declarations
+  (about 3,480 with mathematical-expression units); limit 3,500.
   Structured abstract 317 words (limit 425); six keywords. Recounted 2026-10-12
   after the comprehensive-review edits (abbreviations defined in the body, plain
   language), using texcount on the body, declaration and abstract fragments.

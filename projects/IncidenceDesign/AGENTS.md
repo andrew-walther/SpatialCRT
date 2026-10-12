@@ -12,7 +12,7 @@ Full chapter/appendix and derived CTJ/SI drafts are complete and verified; autho
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
 in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
-PDFs: submission 20 pp, reading 8 pp, chapter 69 pp, supplement 47 pp. The author
+PDFs: submission 21 pp, reading 8 pp, chapter 72 pp, supplement 47 pp (2026-10-12). The author
 approved original-title restoration and the six-exhibit revision. Main figures
 are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
 parameter/tail/budget graphics remain supporting material. Author order is
@@ -53,12 +53,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   `application/code/real_sud_{setup,simulation}.R` and `run_real_sud.R`.
   Follow `application/README.md` and the implementation findings for run status;
   smoke/pilot outputs are verification stages, not full-study conclusions.
-  Finish the full chapter/appendix and derived CTJ/SI, then prepare the requested
-  comprehensive Claude review prompt. Old deadline dates no longer govern work.
+  The full chapter/appendix, CTJ/SI and comprehensive review (2026-10-12) are done.
+  Old deadline dates no longer govern work.
 - **CTJ author declarations (October 2):** retain Walther, Habib, Simpson and Lin in that order,
   with Lin corresponding. Author confirmed no current funding or conflicts.
-  IRB/data-use details are pending; retain an explicit author-approved placeholder
-  instead of inventing a protocol number or claiming approval/exemption.
+  The in-text ethics placeholder was removed (author, 2026-10-12); the IRB statement
+  is a TODO before submission. Never invent a protocol number or claim approval/exemption.
+- **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first
+  body use and avoid internal pipeline jargon; one design-name set everywhere
+  (Checkerboard, High Incidence Focus, Plain Saturation, Isolation Buffer, 2×2 Blocking,
+  Balanced Quartiles, Balanced Halves, Incidence-Guided Saturation, Simple Random Sampling);
+  frame incidence guidance as matching plain saturation's accuracy while targeting
+  high-burden regions (do not call it "no benefit"); no repository hyperlink in manuscripts;
+  no Codex/Claude mentions in code headers or documents (AI disclosure is a later TODO).
 
 - **Reference rule (author-confirmed 2026-09-27):** dissertation prose may refer directly
   to "Chapter 2". CTJ must use self-contained wording (e.g., "In previous work...")
@@ -174,7 +181,7 @@ the reasoning behind this distinction.
 | **paper/archive_manuscript/** | | | |
 | (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
 | **paper/ctj_manuscript/** | | | |
-| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, full nine-design benchmark/application, condensed, exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas for `TEXINPUTS`/`BSTINPUTS` setup |
+| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas for `TEXINPUTS`/`BSTINPUTS` setup |
 | `CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
 | `Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
 | **paper/dissertation_chapter/** | | | |
@@ -324,7 +331,7 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - CTJ: standalone preceding-work citation verified; 3,165 prose/heading words
   (3,314 including end declarations)/279 structured
   abstract words, six exhibits, full detailed supplement and submission checklist.
-- `code/20_manuscript_figure_revision.R` exports four compact figures and plot-data
+- `code/20_manuscript_figure_revision.R` exports the compact figures and plot-data
   CSVs without simulation; `code/19_manuscript_exhibits.R` retains the prior detailed
   export. Run `Rscript code/tests/test_manuscript_exhibits.R` and
   `python3 paper/tools/verify_manuscripts.py` for numerical/exhibit consistency.
@@ -332,9 +339,12 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
   `fc63326`; final manuscript checkpoint `a47b0ae` resynced to `6b07b95`
   (72 pp, 31 citekeys); editorial revision `3fc8385` resynced to `fa49f47`
   (72 pp, one compact figure copied); no push.
-- Next: consolidated author/Claude review and author-only submission metadata.
-  Prompt: `docs/plans/claude_comprehensive_review_prompt_2026-10-02.md`.
-  IRB/data-use placeholder is approved, not an asserted approval/exemption.
+- Comprehensive four-track review completed and approved fixes applied (2026-10-12):
+  `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`. CTJ body 3,280 words
+  (3,425 with declarations; limit 3,500), abstract 317.
+- Advisor-meeting report: `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`
+  (reads tracked aggregates only; inline numbers computed from CSVs).
+- Next: author review; IRB statement, AI disclosure, coauthor approval (docs/plans/TODO.md).
 - Full figure selection, code teach-back, source mapping and live journal check:
   `docs/plans/manuscript_completion_findings_2026-10-02.md`.
 
