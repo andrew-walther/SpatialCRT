@@ -63,7 +63,8 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   assistance disclosure; obtain all coauthors' final approval and submission attestations.
 - [ ] Address any mandatory review findings, then submit CTJ with the author-completed
   [checklist](../../paper/ctj_manuscript/submission_checklist.md)/cover letter.
-- [ ] Authorize any Git push explicitly. This completion work has not been pushed.
+- [x] Completion work is pushed: `main` matches `origin/main` after a fresh fetch
+  (verified 2026-10-11). Future pushes still require explicit author authorization.
 
 No additional analysis was required by the final independent source review.
 Actual pilot endpoint/enrollment/budget/network specification and interval
