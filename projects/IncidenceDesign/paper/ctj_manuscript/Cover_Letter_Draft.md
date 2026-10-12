@@ -2,12 +2,12 @@ Andrew Walther & Dr. Feng-Chang Lin\
 University of North Carolina at Chapel Hill, Department of Biostatistics\
 McGavran-Greenberg Hall, 3101, Chapel Hill, NC 27599
 
-[Editor name], [Title]\
+Colin Begg, PhD, Editor-in-Chief\
 *Clinical Trials*
 
 Month Day, 2026
 
-Dear [Editor name],
+Dear Dr. Begg,
 
 We wish to submit an original research article entitled “Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence” for consideration by *Clinical Trials*. We confirm that this work is original and has not been published elsewhere, nor is it currently under consideration for publication elsewhere. The study extends our recent work in *BMC Medical Research Methodology* (DOI 10.1186/s12874-026-02968-0) on how the treatment assignment design of a spatial cluster randomized trial shapes estimation when spillover effects and spatial dependence are present.
 
