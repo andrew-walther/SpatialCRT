@@ -366,7 +366,7 @@ decomposition, rank/MSE heatmaps) that the CTJ manuscript and its SI figures wer
 
 The **dissertation chapter** is the canonical long-form source, with a full body
 and appendix. The **CTJ manuscript** is its standalone condensed derivative:
-3,275 prose/heading words (3,402 including end declarations), a 285-word structured abstract and exactly six exhibits
+3,263 prose/heading words (3,412 including end declarations), a 285-word structured abstract and exactly six exhibits
 (two tables/four figures). It includes all nine designs in the full benchmark
 and application while preserving the detailed six-design grid analysis as a
 labeled subset. The supplement retains full methods/results and all 22 chapter

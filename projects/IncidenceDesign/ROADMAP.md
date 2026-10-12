@@ -265,9 +265,11 @@ checkpoints here, not in `AGENTS.md`.
   285. PDFs: submission 21 pp, reading 8 pp, chapter 68 pp, SI 45 pp.
 - 2026-10-12 author edits to the CTJ: removed the ethics placeholder, the telephone
   placeholder and the generative-assistance acknowledgement (acknowledgements
-  omitted for now); added Walther's ORCID; Methods credits Habib for the data
-  and IRB documentation. Counts: body 3,275, 3,402 with declarations (3,440 with
-  math units); abstract 285. Submission PDF now 20 pp.
+  omitted for now); added Walther's ORCID and an author-supplied contributions
+  statement (AW, AH, RS, FL); Methods credits Habib for preparing the data. Data
+  availability: simulation data/code on request, NC death-certificate data restricted,
+  no repository link. Counts: body 3,263, 3,412 with declarations (3,450 with math
+  units); abstract 285.
 
 ### Approved compact exhibit revision and author order (2026-10-02)
 
