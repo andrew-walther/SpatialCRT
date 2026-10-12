@@ -3,8 +3,8 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,304 prose/heading words; 3,470 including end declarations
-  (3,508 with mathematical-expression units as well);
+- [x] Body 3,275 prose/heading words; 3,402 including end declarations
+  (3,440 with mathematical-expression units as well);
   structured abstract 285 words; six keywords. Recounted 2026-10-12 with
   texcount on the body, declaration and abstract fragments, the same method
   that gave the earlier 3,215/3,381/283.
@@ -15,18 +15,24 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [x] Double-spaced single-column review text; end-positioned exhibits and separate legends.
 - [x] Confirmed current author list, corresponding author, no funding/conflicts.
 - [x] Data-availability statement preserves restricted sources; aggregate outputs linked.
-- [x] Generative-assistance disclosure draft included for author review.
+- [x] Generative-assistance acknowledgement removed from the draft (author, 2026-10-12).
 - [x] Current numerical/source verification and fresh rendered PDFs.
 - [x] Separate shared-source two-column reading preview; submission layout retained.
 - [x] Restore approved original title and revise six exhibits for two-column readability.
 - [x] Author-approved order: Walther, Habib, Simpson, Lin; Lin corresponding.
 - [ ] Author review of the revised full drafts and chosen exhibits.
-- [ ] Replace author-approved ethics/data-use placeholder with institutional determination,
-  appropriate protocol/approval/waiver details, consent determination and source/aggregate
-  publication permissions. No approval or exemption is presently asserted.
-- [ ] Supply Lin's telephone and author ORCIDs for submission.
-- [ ] Confirm contribution wording and obtain every coauthor's approval of the final text.
-- [ ] Review assistance disclosure for accuracy/completeness, including any other tools used.
+- [ ] Ethics/data-use statement: the in-text placeholder was removed (author, 2026-10-12).
+  Before submission, check whether the journal requires an ethics statement and, if so,
+  add the IRB determination for the death-certificate data (Habib prepared the IRB
+  documentation; Methods credits him).
+- [ ] Corresponding-author telephone removed; email only. Check whether the submission
+  system requires a telephone number.
+- [ ] ORCIDs: Walther 0000-0002-1932-9653 is on the title page; collect the coauthors'
+  ORCIDs in the submission system if required.
+- [ ] Acknowledgements omitted for now. Check whether the journal requires an author
+  contributions statement or a generative-AI disclosure; if so, confirm each author's
+  role (Habib: data preparation and IRB documentation).
+- [ ] Obtain every coauthor's approval of the final text.
 - [ ] Confirm originality, exclusivity and permissions; disclose dissertation availability
   as applicable. No essential material from the preceding accepted study was copied.
 - [ ] Complete the author-side cover letter, date/signature and any requested reviewer fields.

@@ -18,7 +18,7 @@ both-arms spillover. The manuscript explicitly reports interval undercoverage,
 unequal treatment budgets and finite tail uncertainty. These findings inform
 trial design without assuming a universally preferred allocation strategy.
 
-The full draft has 3,470 main-text words including end declarations, a structured 285-word abstract and six
+The full draft has 3,402 main-text words including end declarations, a structured 285-word abstract and six
 main exhibits, with detailed reproducibility and application results in the
 supplement. Code and authorized aggregate outputs accompany the work; restricted
 county source data are excluded from public distribution.
