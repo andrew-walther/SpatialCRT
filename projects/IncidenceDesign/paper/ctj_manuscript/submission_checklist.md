@@ -3,9 +3,12 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,215 prose/heading words; 3,381 including end declarations
-  (3,419 with mathematical-expression units as well);
-  structured abstract 283 words; six keywords.
+- [x] Body 3,304 prose/heading words; 3,470 including end declarations
+  (3,508 with mathematical-expression units as well);
+  structured abstract 285 words; six keywords. Recounted 2026-10-12 with
+  texcount on the body, declaration and abstract fragments, the same method
+  that gave the earlier 3,215/3,381/283.
+  The body count excludes the abstract, declarations, references and exhibits.
 - [x] Six main exhibits: two tables and four figures; extra detail in supplement.
 - [x] Standalone introduction and citation to verified preceding BMC publication.
 - [x] Author/title page, affiliations, corresponding email and short running head.
@@ -27,7 +30,8 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [ ] Confirm originality, exclusivity and permissions; disclose dissertation availability
   as applicable. No essential material from the preceding accepted study was copied.
 - [ ] Complete the author-side cover letter, date/signature and any requested reviewer fields.
-- [ ] Submit after author approval; no submission, public release or Git push was performed.
+- [ ] Submit after author approval; no submission or public release was performed.
+  (Repository commits are pushed to `origin/main`, verified 2026-10-11.)
 
 This is a completed simulation-based design study using historical geographic
 inputs. It reports no implemented education trial or clinical efficacy results;
