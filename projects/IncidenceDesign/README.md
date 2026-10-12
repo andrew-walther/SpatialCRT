@@ -133,7 +133,7 @@ The predecessor Rmd is preserved untouched.
 | `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode/per-parameter/robustness numbers for the dissertation chapter | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
 | `14_manuscript_supplement_figures.R` | ~470 | Fresh 8-design consolidation test (justifies dropping 2 designs) + CTJ Supplementary Information figure suite + reordered/merged main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/` |
 | `19_manuscript_exhibits.R` | ~60 | Export current full nine-design grid regime means and a six-design journal figure | `results/srs_benchmark/` and CTJ figures |
-| `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile MSE ratios to SRS, and the allocation-to-allocation MSE distribution figure (CTJ Figure 3) | `results/allocation_risk/summary/downside_by_design.csv`, `allocation_distribution_by_design.{csv,png}` |
+| `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile MSE ratios to SRS, and the allocation-to-allocation MSE distribution figure (CTJ Figure 3) | `results/allocation_risk/summary/downside_by_design.csv`, `allocation_distribution_by_design.{csv,pdf}` |
 | `paper/tools/verify_manuscripts.py` | ~175 | Reconcile current manuscript cells, derived supplement and assets | Aggregate CSV inputs; fails on drift |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
 

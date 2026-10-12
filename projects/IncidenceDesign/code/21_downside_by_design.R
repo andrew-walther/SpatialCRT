@@ -5,12 +5,12 @@
 #          grid pilot and the refined NC application corners.
 # Author: Andrew Walther (drafted with Claude Code)
 # Created: 2026-10-11
-# Dependencies: base R; ggplot2 and ragg for the distribution figure
+# Dependencies: base R; ggplot2 for the distribution figure
 # ============================================================
 # Run from the project root: Rscript code/21_downside_by_design.R
 # Reads completed aggregate outputs only; it neither simulates nor changes
 # checkpoints. Outputs: results/allocation_risk/summary/downside_by_design.csv,
-# allocation_distribution_by_design.csv and allocation_distribution_by_design.png
+# allocation_distribution_by_design.csv and allocation_distribution_by_design.pdf
 # (CTJ Figure 3; also copied to the chapter/SI figure folders).
 #
 # For allocation a, m(a) = E_eps[(tau_hat - tau)^2 | a, X] is its conditional
@@ -131,9 +131,10 @@ dist <- aggregate(cbind(Q05, Q25, Q50, Q75, Q95, Mean) ~ Source + Regime + Desig
 dist <- dist[order(dist$Source, dist$Regime, dist$Design_ID), ]
 write.csv(dist, "results/allocation_risk/summary/allocation_distribution_by_design.csv", row.names = FALSE)
 
-# Figure: six detailed designs and SRS; Verdana keeps i, l and I distinct.
+# Figure: six detailed designs and SRS; vector PDF in the default Helvetica, like Figure 4.
 ids <- c(8, 6, 4, 2, 5, 1, 9)
-labels <- c("Incidence-guided saturation", "Balanced quartiles", "Isolation buffer",
+# "\u00ad" prints as a true hyphen; R's pdf() device draws "-" as a minus sign.
+labels <- c("Incidence\u00adguided saturation", "Balanced quartiles", "Isolation buffer",
             "High incidence focus", "2 x 2 blocking", "Checkerboard", "Simple random sampling")
 f <- dist[dist$Design_ID %in% ids, ]
 f$Label <- factor(f$Design_ID, levels = rev(ids), labels = rev(labels))
@@ -151,13 +152,12 @@ fig <- ggplot2::ggplot(f, ggplot2::aes(y = Label)) +
   ggplot2::scale_color_manual(values = c("FALSE" = "#0072B2", "TRUE" = "#E69F00"), guide = "none") +
   ggplot2::labs(x = "Allocation MSE relative to the mean MSE of simple random sampling (log scale)",
                 y = NULL) +
-  ggplot2::theme_minimal(base_size = 9, base_family = "Verdana") +
+  ggplot2::theme_minimal(base_size = 9) +
   ggplot2::theme(panel.grid.minor = ggplot2::element_blank(),
                  strip.text = ggplot2::element_text(face = "bold"),
                  strip.text.y = ggplot2::element_text(angle = 0, hjust = 0))
-fig_file <- "results/allocation_risk/summary/allocation_distribution_by_design.png"
-ggplot2::ggsave(fig_file, fig, width = 174, height = 105, units = "mm", dpi = 600,
-                device = ragg::agg_png)
+fig_file <- "results/allocation_risk/summary/allocation_distribution_by_design.pdf"
+ggplot2::ggsave(fig_file, fig, width = 174, height = 105, units = "mm")
 for (folder in c("paper/ctj_manuscript/figures/compact", "paper/dissertation_chapter/figures/compact")) {
   stopifnot(file.copy(fig_file, folder, overwrite = TRUE))
 }

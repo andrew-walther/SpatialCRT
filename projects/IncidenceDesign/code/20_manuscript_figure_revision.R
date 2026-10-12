@@ -3,7 +3,7 @@
 # Purpose: Export compact, traceable manuscript figures from completed studies.
 # Author: Codex (reviewed by Andrew Walther)
 # Created: 2026-10-02
-# Dependencies: ggplot2, sf, grid, ragg (existing project dependencies)
+# Dependencies: ggplot2, sf, grid (existing project dependencies)
 # ============================================================
 # Run from the project root: Rscript code/20_manuscript_figure_revision.R
 # This is a read-only analysis export: no simulation, checkpoint or weights change.
@@ -69,10 +69,11 @@ export_compact_exhibits <- function(project_dir) {
   short <- c("Guided saturation", "Balanced quartiles", "Isolation buffer",
              "High incidence focus", "2 x 2 blocking", "Checkerboard")
   d <- m[m$Design %in% paste("Design", ids), ]
-  # Figure 2 adds simple random sampling (ID 9) as the benchmark row and uses
-  # Verdana, whose i, l and I are distinct (author 2026-10-12).
+  # Figure 2 adds simple random sampling (ID 9) as the benchmark row
+  # (author 2026-10-12). Vector PDF in the default Helvetica, like Figure 4.
   ids2 <- c(ids, 9)
-  short2 <- c("Incidence-guided saturation", short[-1], "Simple random sampling")
+  # "\u00ad" prints as a true hyphen; R's pdf() device draws "-" as a minus sign.
+  short2 <- c("Incidence\u00adguided saturation", short[-1], "Simple random sampling")
   d2 <- m[m$Design %in% paste("Design", ids2), ]
   d2$Label <- factor(d2$Design, levels = paste("Design", rev(ids2)), labels = rev(short2))
   d2$Regime <- factor(d2$Spillover_Type, levels = c("both", "control_only"),
@@ -111,12 +112,9 @@ export_compact_exhibits <- function(project_dir) {
     ggplot2::scale_x_log10(breaks = c(0.03, 0.1, 0.3, 1, 3)) +
     ggplot2::scale_color_manual(values = colors) +
     ggplot2::labs(x = "Mean MSE (log scale)", y = NULL) + theme +
-    ggplot2::theme(text = ggplot2::element_text(family = "Verdana")) +
     ggplot2::guides(color = ggplot2::guide_legend(nrow = 2),
                     shape = ggplot2::guide_legend(nrow = 2))
-  # ragg renders the system Verdana font; R's built-in pdf() device cannot embed it.
-  ggplot2::ggsave(file.path(out, "grid_accuracy_srs.png"), p2, width = 174, height = 100,
-                  units = "mm", dpi = 600, device = ragg::agg_png)
+  ggplot2::ggsave(file.path(out, "grid_accuracy_srs.pdf"), p2, width = 174, height = 100, units = "mm")
 
   # Decomposition: selected configuration, 16 rho/gamma settings in each regime.
   b <- d[d$Incidence_Mode == "poisson" & d$Rho_Incidence == 0.2, ]
@@ -215,8 +213,7 @@ export_compact_exhibits <- function(project_dir) {
   for (folder in c("ctj_manuscript", "dissertation_chapter")) {
     destination <- file.path(project_dir, "paper", folder, "figures/compact")
     dir.create(destination, recursive = TRUE, showWarnings = FALSE)
-    selected <- if (folder == "ctj_manuscript") c(list.files(out, pattern = "[.]pdf$", full.names = TRUE),
-                                                 file.path(out, "grid_accuracy_srs.png")) else
+    selected <- if (folder == "ctj_manuscript") list.files(out, pattern = "[.]pdf$", full.names = TRUE) else
       file.path(out, "nc_annual_accuracy.pdf")
     stopifnot(all(file.copy(selected, destination, overwrite = TRUE)))
   }
