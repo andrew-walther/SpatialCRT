@@ -7,7 +7,7 @@ adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). 2026-10-13: the Chapter 3 length review was independently reviewed and adopted (prelim body 45.5 to 41 pp, no result dropped; CTJ Figure 2 added to the chapter; SI annual tables merged); see the ROADMAP progress log. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
@@ -167,7 +167,7 @@ the reasoning behind this distinction.
 | `14_manuscript_supplement_figures.R` | ~400 | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
 | `19_manuscript_exhibits.R` | ~60 | Current nine-design grid regime CSV, provenance and six-design CTJ vector figure | Reads verified September 27 oracle outputs only |
 | `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile conditional MSE as ratios to SRS (Table `tab:downside`) and the allocation-distribution figure (CTJ Figure 3, chapter/SI `fig:alloc-dist`) | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/downside_by_design.csv` |
-| `paper/tools/verify_manuscripts.py` | ~175 | CSV-to-table and chapter-to-supplement reconciliation; assets/references/citations/exhibit count | Stdlib; deliberately wrong-number fixture must fail |
+| `paper/tools/verify_manuscripts.py` | ~290 | CSV-to-table and chapter-to-supplement reconciliation (incl. merged `tab:nc-annual`); assets/references/citations/exhibit count; `--chapter`, `--pending-si` for candidate copies | Stdlib; deliberately wrong-number fixture must fail |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **application/** | | | |
 | `application/code/run_sud_aggregation.R` | ~65 | Entry script: real SUD data → county + 58-cluster rates per 100k (by year, total, average) → `application/data/derived/` | Sources the three `sud_*.R` files below |
@@ -344,6 +344,10 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
   (3,425 with declarations; limit 3,500), abstract 317.
 - Advisor-meeting report: `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`
   (reads tracked aggregates only; inline numbers computed from CSVs).
+- Chapter 3 length review adopted (2026-10-13): reviewed concise chapter is canonical
+  (prelim body 70-110, Appendix B 133-159; standalone 68 pp; SI 45 pp); synced to
+  bios-dissertation `f4e36b0`, full prelim rebuilt `81802a0` (192 pp); both repos pushed.
+  Cut/moved text: `paper/dissertation_chapter/notes/trimmed-material.md`.
 - Next: author review; IRB statement, AI disclosure, coauthor approval (docs/plans/TODO.md).
 - Full figure selection, code teach-back, source mapping and live journal check:
   `docs/plans/manuscript_completion_findings_2026-10-02.md`.

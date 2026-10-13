@@ -260,6 +260,10 @@ checkpoints here, not in `AGENTS.md`.
   `f4e36b0` (draft 76 -> 73 pp, 29 citekeys); full prelim rebuilt `81802a0` (194 -> 192 pp;
   Ch3 body 70-110, Appendix B 133-159; 26 tables, 35 figures); prelim tests pass.
   Standalone chapter 72 -> 68 pp; SI 47 -> 45 pp. The CTJ is unchanged and cites no SI table numbers.
+- Both repositories pushed (SpatialCRT `f69a626`, bios-dissertation `81802a0`).
+- Reference-list check (bios-dissertation): entries are longer than Eric Zhang's prelim because
+  APA 7 prints DOIs and up to 20 authors (same font and spacing; Amber Young's dissertation
+  matches ours). A first-six-then-et-al. variant saved 31 lines and no pages, so it was reverted.
 
 ### Concise Chapter 3 copy for length review (2026-10-12)
 
