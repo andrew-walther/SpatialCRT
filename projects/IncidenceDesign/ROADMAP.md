@@ -248,7 +248,7 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
-### CTJ folder cleanup (2026-10-13)
+### CTJ and paper/ folder cleanup (2026-10-13)
 
 - Build intermediates: a local `latexmkrc` sends latexmk's `.aux/.log/.bbl/...` to a hidden,
   gitignored `.build/`; symlinks to `sagej.cls`, `SageV.bst` and the shared bib replace the
@@ -260,6 +260,15 @@ checkpoints here, not in `AGENTS.md`.
   Verifier, exhibit test, companion-report links and current docs updated; dated plan docs
   keep their historical paths. Rebuilt PDFs matched the committed text (21/8/45 pp); the
   committed PDFs were kept. Commit `7d6558f`; both commits pushed.
+- `paper/` tidied (`35f16d9`): `archive_manuscript/` renamed `archive/` with the April-July
+  manuscript grouped into `pre_unification_20260702/` and the Oct 2 provenance JSON moved
+  in; empty `manuscript/`, `.gitkeep` and the default presentation scaffold removed (slides
+  are built in `bios-dissertation/slides/`); chapter figures: two current MSE figures kept,
+  three July pre-revision figures removed (copies in `results/archive/pre_revision_20260924/`).
+- Chapter folder and files renamed (`96a7b68`): `paper/thesis_chapter/Thesis_Chapter.{qmd,pdf}`
+  (was `dissertation_chapter/Dissertation_Chapter`). Sync tools, scripts 20/21, verifier and
+  current docs updated; hook reinstalled; its sync (bios-dissertation `4c20a57`) changed only
+  path comments (73 pp). Dated logs and plans keep the old names.
 
 ### Concise Chapter 3 adopted (2026-10-13)
 
