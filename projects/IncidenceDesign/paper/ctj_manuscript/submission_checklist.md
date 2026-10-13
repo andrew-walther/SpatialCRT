@@ -47,10 +47,11 @@ inputs. It reports no implemented education trial or clinical efficacy results;
 trial registration/CONSORT results must not be fabricated. Interval undercoverage
 and finite allocation-tail uncertainty remain scientific limitations in the text.
 
-Files: `CTJ_Manuscript.{tex,pdf}`, `Supplementary_Information.{tex,pdf}`,
-`Figure_Legends.md`, the four referenced vector PDFs and the shared bibliography.
-Rebuild from this directory with TinyTeX on PATH: run `latexmk` on each TeX source.
-The local `latexmkrc` and template symlinks need no extra path setup.
+Files: `manuscript_ctj/CTJ_Manuscript.{tex,pdf}`, `supplementary_info/Supplementary_Information.{tex,pdf}`,
+`figures/Figure_Legends.md`, the four referenced vector PDFs in `figures/compact/`, the
+cover letter in `cover_letter/` and the shared bibliography. Rebuild with TinyTeX on PATH:
+run `latexmk` on each TeX source inside its folder. The local `latexmkrc` and
+template symlinks need no extra path setup.
 
 `CTJ_Reading.tex`/PDF is an author preview, not a submission file or publisher
 proof. It selects a layout branch in `CTJ_Manuscript.tex`; both layouts load

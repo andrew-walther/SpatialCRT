@@ -9,8 +9,8 @@ boundary fits or failures. Coverage remains below 95% and allocation tails remai
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
 Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
-**CTJ layout review (October 2):** an [eight-page two-column reading preview](paper/ctj_manuscript/CTJ_Reading.pdf)
-now accompanies the [21-page submission draft](paper/ctj_manuscript/CTJ_Manuscript.pdf).
+**CTJ layout review (October 2):** an [eight-page two-column reading preview](paper/ctj_manuscript/manuscript_ctj/CTJ_Reading.pdf)
+now accompanies the [21-page submission draft](paper/ctj_manuscript/manuscript_ctj/CTJ_Manuscript.pdf).
 Comprehensive review completed 2026-10-12 (see `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`);
 the advisor-meeting application report is `application/report/IncidenceDesign_Application_Study_Report.pdf`.
 Both use one master manuscript and shared exhibit definitions. The approved original title is restored. Six revised exhibits show six-design-plus-SRS
@@ -345,12 +345,15 @@ paper/
     IncidenceDesign_ProjectSummary.qmd        # Brief project summary report (ranked figures)
     IncidenceDesign_ProjectSummary.pdf        # Rendered PDF summary
   ctj_manuscript/                             # PRIMARY — Clinical Trials (SAGE) submission draft
-    CTJ_Manuscript.{tex,pdf}                  # Full benchmark/application plus detailed subset; 6 exhibits (journal cap)
-    Supplementary_Information.{tex,pdf}       # SI: reproducibility, full 8-design comparison,
-                                               #   metric formulas, per-parameter sensitivity,
-                                               #   NC application maps + table (S1-S11)
-    figures/                                  # Main-text + SI figures (incl. application_maps/,
-                                               #   si_figures/ subdirectories)
+    manuscript_ctj/                           # CTJ_Manuscript.{tex,pdf}: full benchmark/application plus
+                                               #   detailed subset; 6 exhibits (journal cap). CTJ_Reading.{tex,pdf}
+                                               #   two-column preview; CTJ_Exhibits.tex shared exhibits
+    supplementary_info/                       # Supplementary_Information.{tex,pdf}: reproducibility, full
+                                               #   8-design comparison, sensitivity, NC application detail
+    cover_letter/                             # Cover_Letter_Draft.{md,pdf}
+    figures/                                  # Main-text + SI figures and Figure_Legends.md (incl.
+                                               #   compact/, real_sud/, application_maps/, si_figures/)
+    submission_checklist.md
   dissertation_chapter/                       # Canonical full chapter and appendix, no length ceiling
     Dissertation_Chapter.{qmd,pdf}
     notes/trimmed-material.md                 # Text cut or moved by the length review
@@ -395,14 +398,16 @@ sample variance by 249/250; annual heatmap cells divide means by matched SRS mea
 It does not estimate pooled MC intervals or change computational outputs/weights.
 Selection/provenance: [exhibit findings](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md).
 Submission components: [checklist](paper/ctj_manuscript/submission_checklist.md),
-[cover letter](paper/ctj_manuscript/Cover_Letter_Draft.md) and separate figure legends.
+[cover letter](paper/ctj_manuscript/cover_letter/Cover_Letter_Draft.md) and separate
+[figure legends](paper/ctj_manuscript/figures/Figure_Legends.md).
 
 Regenerate journal grid exhibits: `Rscript code/19_manuscript_exhibits.R`.
 Regenerate the per-design downside table source (chapter Table `tab:downside`, SI Table S12): `Rscript code/21_downside_by_design.R`.
 Verify document tables/figures/references: `python3 paper/tools/verify_manuscripts.py`.
 The checker reads authorized aggregate outputs and rejects incorrect values.
 Chapter builds use the approved Quarto/sync workflow; CTJ/SI use TinyTeX/latexmk
-(`latexmk <file>.tex` in `paper/ctj_manuscript/`; intermediates go to the hidden `.build/`, see AGENTS).
+(`latexmk <file>.tex` in `paper/ctj_manuscript/manuscript_ctj/` or `supplementary_info/`;
+intermediates go to the hidden `.build/`, see AGENTS).
 
 ---
 

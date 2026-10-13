@@ -1,1 +1,0 @@
-../SAGE_Journal_Template/sagej.cls

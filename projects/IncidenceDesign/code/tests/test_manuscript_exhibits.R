@@ -44,7 +44,7 @@ for (i in seq_len(nrow(exported))) {
 }
 # Added manuscript details come from the long-form chapter, with fresh checks
 # against current outputs rather than relying on rounded historical prose.
-manuscript <- paste(readLines("paper/ctj_manuscript/CTJ_Manuscript.tex"), collapse = "\n")
+manuscript <- paste(readLines("paper/ctj_manuscript/manuscript_ctj/CTJ_Manuscript.tex"), collapse = "\n")
 for (tau in c(2, 3)) {
   values <- vapply(c("Design 4", "Design 8"), function(design) {
     mean(r$MSE[r$Neighbor_Type == "queen" & r$True_Tau == tau &

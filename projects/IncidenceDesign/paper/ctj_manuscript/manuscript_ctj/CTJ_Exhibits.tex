@@ -60,7 +60,7 @@ Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \newcommand{\CTJMapFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/nc_planning_map.pdf}
+\includegraphics[width=\linewidth]{../figures/compact/nc_planning_map.pdf}
 \caption{Observed North Carolina planning inputs. (A) Observed SUD rates per 100,000 population aged 18--64 for the 58 service-area clusters, pooled over 2018--2021 (deaths divided by person-years); the analysis evaluates each year separately. (B) The fixed four-region partition used by incidence-guided saturation in every year. Incidence guides primary allocation only; it does not enter the education-outcome baseline. All-year maps and assignment examples are in the supplementary material.}\label{fig:nc-map}
 \end{figure*}
 }
@@ -68,7 +68,7 @@ Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \newcommand{\CTJGridFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/grid_accuracy_srs.pdf}
+\includegraphics[width=\linewidth]{../figures/compact/grid_accuracy_srs.pdf}
 \caption{Grid mean MSE at $\tau=1$ with queen weights, for the six designs and simple random sampling. Points keep the five incidence configurations separate, averaging 16 outcome-dependence/spillover-magnitude settings within each configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Both panels use the same logarithmic scale. Parameter-specific displays remain in the supplementary material; no pooled Monte Carlo intervals are implied.}\label{fig:grid}
 \end{figure*}
 }
@@ -76,7 +76,7 @@ Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \newcommand{\CTJAllocationFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/allocation_distribution_by_design.pdf}
+\includegraphics[width=\linewidth]{../figures/compact/allocation_distribution_by_design.pdf}
 \caption{Distribution of allocation-specific MSE for the six designs and simple random sampling (SRS), relative to the mean MSE of SRS in the same setting (queen weights). Simulation study: focused grid pilot at $\tau=1$, 40 fixed surface/parameter settings per spillover regime. Application study: NC settings with extended outcome replication ($\rho=0, 0.5$; $\gamma=0.8$) in each year 2018--2021. For each allocation, MSE is estimated from repeated simulated outcomes (100 in the simulation study, at least 400 in the application study). Thin lines span the 5th to 95th percentiles of allocations and thick bars the 25th to 75th; circles mark the mean of the setting-specific ratios. SRS is shown in orange and the designs in blue. Percentiles are computed within each setting and then averaged, so bars show allocation-to-allocation spread; a design with one allocation per setting appears as a circle only. Outcome Monte Carlo noise in the per-allocation estimates widens the bars slightly.}\label{fig:alloc-dist}
 \end{figure*}
 }
@@ -84,7 +84,7 @@ Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
 \newcommand{\CTJMeanFigure}{%
 \begin{figure*}[tp]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy_six.pdf}
+\includegraphics[width=\linewidth]{../figures/compact/nc_annual_accuracy_six.pdf}
 \caption{Completed primary application: yearly mean MSE divided by year- and regime-matched simple random sampling (SRS) MSE, for the six designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS, orange higher error; colors use a logarithmic ratio scale and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Years that share one simulation (designs whose assignments do not use incidence) are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in the supplementary material.}\label{fig:nc-mse}
 \end{figure*}
 }

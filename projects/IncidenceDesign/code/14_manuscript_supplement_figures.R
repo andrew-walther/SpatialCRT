@@ -1,7 +1,7 @@
 # ==============================================================================
 # 14_manuscript_supplement_figures.R
 # Data and figures for the CTJ manuscript's Supplementary Information document
-# (paper/ctj_manuscript/Supplementary_Information.tex) and two main-text figure
+# (paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex) and two main-text figure
 # replacements.
 #
 # Three deliverables:

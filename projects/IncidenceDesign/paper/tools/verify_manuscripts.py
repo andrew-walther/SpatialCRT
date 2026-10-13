@@ -17,10 +17,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CHAPTER = ROOT / 'paper/dissertation_chapter/Dissertation_Chapter.qmd'
-MAIN = ROOT / 'paper/ctj_manuscript/CTJ_Manuscript.tex'
+MAIN = ROOT / 'paper/ctj_manuscript/manuscript_ctj/CTJ_Manuscript.tex'
 MAIN_EXHIBITS = MAIN.with_name('CTJ_Exhibits.tex')
 READING = MAIN.with_name('CTJ_Reading.tex')
-SUPPLEMENT = ROOT / 'paper/ctj_manuscript/Supplementary_Information.tex'
+SUPPLEMENT = ROOT / 'paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
 PENDING_SI = set()  # chapter tables allowed to be absent from the SI (--pending-si)
 LABELS = ['Checkerboard', 'High Incidence Focus', 'Saturation Quadrants',
@@ -71,7 +71,7 @@ def verify():
     master = sources[MAIN]
     shared_exhibits = MAIN_EXHIBITS.read_text()
     reading = READING.read_text()
-    legends = MAIN.with_name('Figure_Legends.md').read_text()
+    legends = (MAIN.parents[1] / 'figures/Figure_Legends.md').read_text()
     figure_blocks = re.findall(r'\\begin\{figure\*\}.*?\\end\{figure\*\}',
                                shared_exhibits, re.S)
     require_equal(len(figure_blocks), 4, 'Four main figures')

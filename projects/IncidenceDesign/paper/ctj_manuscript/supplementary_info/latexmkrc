@@ -1,0 +1,7 @@
+# latexmk settings for the supplementary information.
+# Author: Andrew Walther. Created: 2026-10-13.
+# Build intermediates go to the hidden, gitignored .build/ folder; the PDF is
+# still written next to the .tex file. SpatialCRT_IncidenceDesign.bib is a
+# symlink to the shared bibliography.
+$pdf_mode = 1;
+$aux_dir = '.build';

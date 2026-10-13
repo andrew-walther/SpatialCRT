@@ -1,0 +1,8 @@
+# latexmk settings for the CTJ manuscript and its reading layout.
+# Author: Andrew Walther. Created: 2026-10-13.
+# Build intermediates (.aux, .log, .bbl, ...) go to the hidden, gitignored
+# .build/ folder; the PDFs are still written next to the .tex files.
+# sagej.cls, SageV.bst and SpatialCRT_IncidenceDesign.bib are symlinks to the
+# shared copies, so no TEXINPUTS/BSTINPUTS/BIBINPUTS setup is needed.
+$pdf_mode = 1;
+$aux_dir = '.build';

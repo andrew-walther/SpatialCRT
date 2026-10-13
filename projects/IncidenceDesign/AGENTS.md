@@ -181,9 +181,10 @@ the reasoning behind this distinction.
 | **paper/archive_manuscript/** | | | |
 | (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
 | **paper/ctj_manuscript/** | | | |
-| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas |
-| `CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
-| `Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
+| `manuscript_ctj/CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas |
+| `manuscript_ctj/CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
+| `supplementary_info/Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
+| `cover_letter/`, `figures/` (incl. `Figure_Legends.md`), `submission_checklist.md` | — | Cover letter draft; shared main/SI figures written by the R scripts | Figure paths in both TeX sources are `../figures/...` |
 | **paper/dissertation_chapter/** | | | |
 | `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
 | **paper/** | | | |
@@ -370,9 +371,10 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 
 ## Build gotchas
 
-- **CTJ manuscript/SI:** need TinyTeX on `PATH`; run `latexmk <file>.tex` from `paper/ctj_manuscript/`.
-  Symlinks there (`sagej.cls`, `SageV.bst`, `SpatialCRT_IncidenceDesign.bib`) replace the old
-  `TEXINPUTS`/`BSTINPUTS` setup, and its `latexmkrc` sends intermediates to the gitignored `.build/`.
+- **CTJ manuscript/SI:** need TinyTeX on `PATH`; run `latexmk <file>.tex` inside
+  `paper/ctj_manuscript/manuscript_ctj/` or `.../supplementary_info/`. Symlinks there (`sagej.cls`,
+  `SageV.bst`, `SpatialCRT_IncidenceDesign.bib`) replace the old `TEXINPUTS`/`BSTINPUTS` setup,
+  and each folder's `latexmkrc` sends intermediates to its gitignored `.build/`.
   A plain `pdflatex` build also works but leaves intermediates beside the sources;
   `git clean -fX -- paper/ctj_manuscript` removes them (it only touches gitignored files).
 - **Dissertation chapter bibliography:** reference it via the `shared-refs.bib` symlink in `paper/dissertation_chapter/`, not `../SpatialCRT_IncidenceDesign.bib` directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib filenames referenced from YAML.

@@ -213,7 +213,7 @@ Checkerboard (strict Block Stratified Sampling allocation in the earlier small-g
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.85\linewidth]{figures/design_samples_6panel.pdf}
+\includegraphics[width=0.85\linewidth]{../figures/design_samples_6panel.pdf}
 
 \caption{One sample assignment from each of the six designs on the $10\times10$ grid, with panels in the order of Table \ref{tab:designs}. All six assignments use a single illustrative incidence surface of 100 independent Uniform$(0,1)$ values generated with a fixed seed; it is not one of the simulation's incidence surfaces. Tile fill shows baseline incidence (darker is higher), a ring marks a treated cluster, and an X marks a control. Isolation Buffer is shown under queen contiguity. The Checkerboard panel is labeled Block Stratified Sampling (Checkerboard), the earlier small-grid study's name for this allocation (see Treatment assignment designs).}
 \label{fig:design-samples}
@@ -412,7 +412,7 @@ block.
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.79\linewidth]{figures/fig_mse_by_design_ranked_6design_queen.pdf}
+\includegraphics[width=0.79\linewidth]{../figures/fig_mse_by_design_ranked_6design_queen.pdf}
 
 \caption{Mean squared error (MSE) of the oracle estimate of $\tau$ by design at $\tau = 1$, under queen contiguity. Columns of panels correspond to the four levels of outcome spatial dependence $\rho$, rows to the both-arms (top) and control-only (bottom) spillover regimes, and bar colors to the spillover magnitude $\gamma$. Each bar overlays the MSEs of the five incidence configurations for one combination of design, $\rho$, $\gamma$, and regime: the bar's height is the largest of the five, and the horizontal lines within it mark the other four. Designs are ordered by pooled mean MSE (Table \ref{tab:performance}). The vertical scale is set separately for each row. Figure \ref{fig:mse-rook} in Section \ref{app:rook-figures} shows rook contiguity.}
 \label{fig:mse}
@@ -443,7 +443,7 @@ signed-rank tests separated all 15 pairs.
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.6\linewidth]{figures/fig_coverage_by_design_6design_queen.pdf}
+\includegraphics[width=0.6\linewidth]{../figures/fig_coverage_by_design_6design_queen.pdf}
 
 \caption{Coverage of the 95\% confidence intervals by design at $\tau = 1$, under queen contiguity. Each box summarizes the coverage of the 160 scenarios of one design (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each estimated from 250 fits. Designs are ordered by median coverage, so the order differs from the MSE order used elsewhere. The dashed red line marks the nominal 0.95 level. Figure \ref{fig:coverage-rook} in Section \ref{app:rook-figures} shows rook contiguity.}
 \label{fig:coverage}
@@ -691,7 +691,7 @@ a bias of 0.016 under the control-only regime.
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.62\linewidth]{figures/fig_biasvar_6design_queen.pdf}
+\includegraphics[width=0.62\linewidth]{../figures/fig_biasvar_6design_queen.pdf}
 
 \caption{Decomposition of mean squared error into squared bias and variance by design at $\tau = 1$ for one incidence configuration, Poisson with $\rho_X = 0.20$, under queen contiguity. For each design, the two stacked components are the squared bias and the variance ($\text{SD}^2$) of $\hat\tau$, each averaged over the 32 scenarios of that configuration (4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes). Designs are ordered by pooled mean MSE (Table \ref{tab:performance}). Figure \ref{fig:biasvar-rook} in Section \ref{app:rook-figures} shows rook contiguity.}
 \label{fig:biasvar}
@@ -832,7 +832,7 @@ queen contiguity, the order did not change across the five values of
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.9\linewidth]{figures/fig_tau_sensitivity_6design_combined.pdf}
+\includegraphics[width=0.9\linewidth]{../figures/fig_tau_sensitivity_6design_combined.pdf}
 
 \caption{Mean squared error by design across the five values of the treatment effect, $\tau \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$, under (a) queen contiguity (primary) and (b) rook contiguity (sensitivity). Each point averages the 160 scenarios of one design at one value of $\tau$, pooled over the five incidence configurations. Shaded bands show $\pm 1$ times the average of the scenario-level Monte Carlo standard errors of MSE; they describe the precision of a single scenario's MSE, not of the plotted average, whose standard error is smaller (Table \ref{tab:performance}). The shared legend lists the designs in order of pooled mean MSE under queen contiguity at $\tau = 1$. The vertical scales of the two panels differ. The five values of $\tau$ share their assignments and noise.}
 \label{fig:tau-mse}
@@ -1053,7 +1053,7 @@ and report years separately (Figure \ref{fig:nc-observed}). The county death-cer
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=\linewidth]{figures/community_college_service_area_clusters.png}
+\includegraphics[width=\linewidth]{../figures/community_college_service_area_clusters.png}
 
 \caption{The assignment of North Carolina's 100 counties to the 58 community college service areas used as clusters in the planned application. Each county is colored by its primary serving college, and each service area carries a single number, keyed to the legend. Hatching marks the two counties that also lie within Roanoke-Chowan Community College's broader service network: Northampton County, assigned to Halifax Community College (24), and Bertie County, assigned to Martin Community College (30). Roanoke-Chowan Community College (41) serves Hertford County alone in this analysis. The map shows county boundaries and the county-to-college assignment only; it does not depend on the SUD data.}
 \label{fig:service-areas}
@@ -1063,7 +1063,7 @@ and report years separately (Figure \ref{fig:nc-observed}). The county death-cer
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/observed_years.png}
+\includegraphics[width=\linewidth]{../figures/real_sud/observed_years.png}
 
 \caption{Observed annual SUD incidence per 100,000 adults aged 18--64 in the 58 service-area clusters. These four fixed planning inputs direct incidence-aware allocation; they are not simulated outcomes or measures of education ability.}
 \label{fig:nc-observed}
@@ -1204,7 +1204,7 @@ and the appendix.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy.pdf}
+\includegraphics[width=\linewidth]{../figures/compact/nc_annual_accuracy.pdf}
 \caption{Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE, for the eight other designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS, orange higher error; colors use a logarithmic ratio scale and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Years that share the same simulations are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in Section \ref{app:nc}.}
 \label{fig:nc-mse}
 \end{figure}
@@ -1281,7 +1281,7 @@ Figure \ref{fig:alloc-dist} shows the full allocation-to-allocation distribution
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\linewidth]{figures/compact/allocation_distribution_by_design.pdf}
+\includegraphics[width=\linewidth]{../figures/compact/allocation_distribution_by_design.pdf}
 \caption{Distribution of allocation-specific MSE for the six designs and simple random sampling (SRS), relative to the mean MSE of SRS in the same setting (queen weights). Simulation study: focused grid pilot at $\tau=1$, 40 fixed surface/parameter settings per spillover regime. Application study: refined NC settings ($\rho=0, 0.5$; $\gamma=0.8$) in each year 2018--2021. For each allocation, MSE is estimated from repeated simulated outcomes (100 in the simulation study, at least 400 in the application study). Thin lines span the 5th to 95th percentiles of allocations and thick bars the 25th to 75th; circles mark the mean. Percentiles are computed within each setting and then averaged, so bars show allocation-to-allocation spread; a design with one allocation per setting appears as a circle only. Outcome Monte Carlo noise in the per-allocation estimates widens the bars slightly.}
 \label{fig:alloc-dist}
 \end{figure}
@@ -1556,7 +1556,7 @@ results stated in the detailed grid analysis.
 \begin{subfigure}{\linewidth}
 
 \centering
-\includegraphics[width=0.72\linewidth]{figures/app_cd_diagram_rank_queen.pdf}
+\includegraphics[width=0.72\linewidth]{../figures/app_cd_diagram_rank_queen.pdf}
 
 \caption{Queen contiguity (primary)}
 \label{fig:cd-queen}
@@ -1566,7 +1566,7 @@ results stated in the detailed grid analysis.
 \begin{subfigure}{\linewidth}
 
 \centering
-\includegraphics[width=0.72\linewidth]{figures/app_cd_diagram_rank_rook.pdf}
+\includegraphics[width=0.72\linewidth]{../figures/app_cd_diagram_rank_rook.pdf}
 
 \caption{Rook contiguity (sensitivity)}
 \label{fig:cd-rook}
@@ -1602,7 +1602,7 @@ estimates are kept and flagged.
 \begin{subfigure}{\linewidth}
 
 \centering
-\includegraphics[width=0.5\linewidth]{figures/app_tau_coverage_queen.pdf}
+\includegraphics[width=0.5\linewidth]{../figures/app_tau_coverage_queen.pdf}
 
 \caption{Queen contiguity (primary)}
 \label{fig:tau-coverage-queen}
@@ -1612,7 +1612,7 @@ estimates are kept and flagged.
 \begin{subfigure}{\linewidth}
 
 \centering
-\includegraphics[width=0.5\linewidth]{figures/app_tau_coverage_rook.pdf}
+\includegraphics[width=0.5\linewidth]{../figures/app_tau_coverage_rook.pdf}
 
 \caption{Rook contiguity (sensitivity)}
 \label{fig:tau-coverage-rook}
@@ -1651,7 +1651,7 @@ flagged. Figure \ref{fig:mse-rook} corresponds to Figure \ref{fig:mse}.
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.75\linewidth]{figures/fig_mse_by_design_ranked_6design_rook.pdf}
+\includegraphics[width=0.75\linewidth]{../figures/fig_mse_by_design_ranked_6design_rook.pdf}
 
 \caption{Mean squared error of the oracle estimate of $\tau$ by design at $\tau = 1$, under rook contiguity; layout as in Figure \ref{fig:mse}. Checkerboard is flagged ($\tau$ not identified).}
 \label{fig:mse-rook}
@@ -1666,7 +1666,7 @@ configurations (Table \ref{tab:performance}), is far below it.
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.55\linewidth]{figures/fig_coverage_by_design_6design_rook.pdf}
+\includegraphics[width=0.55\linewidth]{../figures/fig_coverage_by_design_6design_rook.pdf}
 
 \caption{Coverage of the 95\% confidence intervals by design at $\tau = 1$, under rook contiguity; layout as in Figure \ref{fig:coverage}. Checkerboard is flagged ($\tau$ not identified).}
 \label{fig:coverage-rook}
@@ -1680,7 +1680,7 @@ coefficient on \(Z\) estimates \(\tau - \gamma\) (Methods).
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.55\linewidth]{figures/fig_biasvar_6design_rook.pdf}
+\includegraphics[width=0.55\linewidth]{../figures/fig_biasvar_6design_rook.pdf}
 
 \caption{Squared bias and variance of $\hat\tau$ by design at $\tau = 1$ for the Poisson configuration with $\rho_X = 0.20$, under rook contiguity; layout as in Figure \ref{fig:biasvar}. Checkerboard is flagged ($\tau$ not identified).}
 \label{fig:biasvar-rook}
@@ -1954,7 +1954,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 \end{table}
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=0.85\linewidth]{figures/real_sud/regions.png}
+\includegraphics[width=0.85\linewidth]{../figures/real_sud/regions.png}
 
 \caption{Fixed four-region partition used by both saturation strategies in all years, chosen from 250 geographic candidates before outcome evaluation.}
 \label{fig:nc-regions}
@@ -1962,7 +1962,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 \end{figure}
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/design_examples.png}
+\includegraphics[width=\linewidth]{../figures/real_sud/design_examples.png}
 
 \caption{One illustrative queen assignment from each application strategy using 2018 observed incidence and fixed geography. These sampled assignments illustrate the adaptations; they were not selected by observed performance.}
 \label{fig:nc-examples}
@@ -1970,7 +1970,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 \end{figure}
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/population_shares.pdf}
+\includegraphics[width=\linewidth]{../figures/real_sud/population_shares.pdf}
 
 \caption{Annual population shares treated under primary queen assignments. Designs whose assignments do not depend on annual incidence share performance across years, but their annual population shares are recalculated. Population aged 18--64 is geographic reach rather than education-participant enrollment.}
 \label{fig:nc-pop}
@@ -1978,7 +1978,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 \end{figure}
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/primary_setting_ratios.pdf}
+\includegraphics[width=\linewidth]{../figures/real_sud/primary_setting_ratios.pdf}
 
 \caption{Primary queen setting-specific mean MSE ratios to year-matched SRS. Parameters and spillover regimes are kept separate; this plot does not pool neighbor definitions.}
 \label{fig:nc-setting-ratios}
@@ -1991,7 +1991,7 @@ precision components, residual treatment information and warning and failure rec
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/primary_yearly_mse.pdf}
+\includegraphics[width=\linewidth]{../figures/real_sud/primary_yearly_mse.pdf}
 
 \caption{Completed primary application: mean MSE by design, planning year and spillover regime, queen contiguity and education outcome. Each entry equally averages the six $\rho/\gamma$ pairs. Both regime columns use a common logarithmic MSE scale. Years that share the same simulations are repeated reporting, not independent replications; pooled Monte Carlo intervals are not supplied.}
 \label{fig:nc-mse-detail}
@@ -2000,7 +2000,7 @@ precision components, residual treatment information and warning and failure rec
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=\linewidth]{figures/real_sud/refined_allocation_risk.pdf}
+\includegraphics[width=\linewidth]{../figures/real_sud/refined_allocation_risk.pdf}
 
 \caption{Allocation-specific conditional MSE in the refined primary queen setting $\rho=0.5,\gamma=0.8$, by year and spillover regime. Mean MSE, the estimated 90th percentile of allocation-specific MSE and the estimated worst-decile mean summarize the same $J=100$ sampled assignments, with at least 400 independent outcomes per assignment of a randomized design or 1,000 for designs with a single possible assignment. These tail estimates, based on a finite number of outcomes, are descriptive, with uncertain membership; they are not quantiles of realized errors or a fresh allocation confirmation.}
 \label{fig:nc-risk}
@@ -2100,5 +2100,5 @@ Pooled regional rate & Control & 0.962 & 1.133 & 1.061 & 1.030 \\
 \end{table}
 \FloatBarrier
 \bibliographystyle{unsrtnat}
-\bibliography{../SpatialCRT_IncidenceDesign}
+\bibliography{SpatialCRT_IncidenceDesign}
 \end{document}
