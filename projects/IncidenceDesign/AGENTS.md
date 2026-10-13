@@ -7,7 +7,7 @@ adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
 uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). 2026-10-13: the Chapter 3 length review was independently reviewed and adopted (prelim body 45.5 to 41 pp, no result dropped; CTJ Figure 2 added to the chapter; SI annual tables merged); see the ROADMAP progress log. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
 
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
@@ -344,10 +344,6 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
   (3,425 with declarations; limit 3,500), abstract 317.
 - Advisor-meeting report: `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`
   (reads tracked aggregates only; inline numbers computed from CSVs).
-- Chapter 3 length review adopted (2026-10-13): reviewed concise chapter is canonical
-  (prelim body 70-110, Appendix B 133-159; standalone 68 pp; SI 45 pp); synced to
-  bios-dissertation `f4e36b0`, full prelim rebuilt `81802a0` (192 pp); both repos pushed.
-  Cut/moved text: `paper/dissertation_chapter/notes/trimmed-material.md`.
 - Next: author review; IRB statement, AI disclosure, coauthor approval (docs/plans/TODO.md).
 - Full figure selection, code teach-back, source mapping and live journal check:
   `docs/plans/manuscript_completion_findings_2026-10-02.md`.
