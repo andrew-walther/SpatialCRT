@@ -7,7 +7,7 @@ Steps 1-3 done on a separate copy at the author's request
 Body 70-115 -> 70-109 in the prelim preview. Step 4 is recorded in ROADMAP; the
 bios-dissertation records wait until the author adopts the copy (adoption steps in
 the ROADMAP 2026-10-12 entry). Author decisions: 36-38 pp acceptable target, Ch2-or-shorter
-is the guide; keep any result with real insight; keep B.7.2 (now B.7.2 technical notes)
+is the guide; keep any result with real insight; keep the error-vs-tau appendix (B.6.2, now B.7.2)
 unchanged; merge the annual NC tables listing every year for every design; keep the
 NC maps at full size; SI unchanged except the merged table at adoption.
 
