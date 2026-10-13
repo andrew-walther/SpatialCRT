@@ -138,3 +138,238 @@ Original text:
 Reason: holds the three moved tables unchanged; later appendix sections renumber (B.4-B.7 become B.5-B.8; labels unchanged).
 
 Note: Table 3.4/3.5/3.7 order in B.4 is rho, Checkerboard coverage, gamma, with a float barrier so all three stay in B.4.
+
+## 2026-10-12 — Batch 3 (application)
+
+### 3.4.2 Geographic adaptations and treatment budgets — procedural detail moved to Appendix B.8
+Reason: the step-by-step adaptation rules (graph-coloring order, stratum rounding, the 250-candidate regional search, regional ranking rationale and the 2x2 group construction) now appear in B.8 under "Design adaptations"; the body keeps one line per design and the budget table.
+
+Original text:
+
+> Queen contiguity between service areas, computed from legal county boundaries, defines primary adjacency, and rook contiguity is a sensitivity analysis. Before simulation, we checked the 58-cluster row-standardized contiguity matrix $W$, its binary adjacency and its row order against the boundary geometry. Shared legal boundaries across water can create adjacency; this is a prespecified geographic exposure proxy, not a measured professional communication network.
+>
+> All eight designs and SRS are evaluated under the names used on the grid, adapted to the map as follows. On the NC map, Checkerboard becomes a deterministic greedy graph-coloring assignment: visit clusters by decreasing degree, choose the arm that conflicts least with assigned neighbors, break equal conflicts toward control, and complement the assignment if more than half are treated. This is an interspersion analog, not a literal rectangular checkerboard or an exact bipartite coloring. High Incidence Focus treats the 29 highest annual-rate clusters. Isolation Buffer draws a greedy random maximal independent set on the NC adjacency graph. SRS treats a random 29 of 58 clusters. Balanced Quartiles and Balanced Halves stratify annual rate ranks and treat 29 overall; odd-size strata receive their necessary extra treatments at random. In Balanced Halves, one half receives 14 treatments and the other 15, with the extra-treatment half chosen randomly.
+>
+> The two saturation designs use one fixed four-region partition for all years. A geographic $k$-means procedure generates 250 candidates, selecting the partition by compactness and balance in reference population, cluster count and county count, without consulting outcomes. Reference population is pooled person-years divided by four. Saturation Quadrants randomly assigns 20/40/60/80\% to these regions each draw. Incidence-Guided Saturation first ranks clusters by annual per-capita rates, averages their ranks equally within each region, ranks those four means, and assigns 80/60/40/20\% from highest to lowest. Regional ties are broken randomly per allocation. Local treatment counts are rounded under the retained design rules. Per-capita cluster rates already account for population size; regional mean ranks answer an equally weighted cluster question, whereas pooled regional deaths/population weights larger clusters more heavily. Mean raw rates and pooled regional rates are evaluated as prespecified sensitivities rather than chosen by performance. The grid rule averages $X$ directly: mean ranks align with its rank-scaled Poisson cases but are a deliberate adaptation for the application, rather than the exact rule used for continuous grid incidence.
+>
+> On the NC map, $2\times2$ Blocking uses spatial blocks of nearby clusters: 14 irregular groups, formed once per year by $k$-means on standardized projected coordinates, incidence ranks and log(1+population), then held fixed. Half of each group, rounded, is treated randomly. This is not a set of literal square blocks. In each year one single-cluster group remains control, because half of one cluster rounds to zero. Budgets differ across designs; we report them rather than modify the designs to force equal budgets (Table \ref{tab:nc-budgets}). Appendix \ref{app:nc} maps the fixed regions and example assignments.
+
+### 3.4.3 Outcome model and Monte Carlo evaluation — replication and tail-method detail condensed
+Reason: the adaptive schedule, the R = 2,000 exception, shared-simulation accounting and the duplicate-allocation covariance are described in B.8; the body keeps J, R, the precision targets, the shared-years caveat, the definition of m(a) and the tail-refinement design.
+
+Original text:
+
+> We initially sampled $J=100$ assignments and simulated $R=100$ independent outcomes per distinct assignment. A design whose set of possible assignments contains only one assignment instead received $R=1,000$ outcomes for that assignment, rather than 100 repeated copies of it counted as separate allocations. An adaptive, prespecified replication schedule extended allocations or outcomes until the Monte Carlo standard error of mean MSE was at most 5\% of mean MSE and that of coverage at most 0.01. Two single-assignment settings in the matched sensitivity analysis required $R=2,000$; all randomized designs met these targets at $J=100$ and $R=100$. Each random draw used a fixed, reproducible seed. Settings with the same set of possible assignments shared their simulations, with annual treatment counts and population shares recalculated. In the primary model, Checkerboard, Saturation Quadrants, Isolation Buffer and SRS reuse the same simulations across years, because annual incidence enters neither their allocation nor the outcome model. These repeated values are not independent annual confirmation.
+>
+> For each allocation $a$, the repeated outcomes estimate the conditional MSE $m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,\text{observed inputs}]$. We report its distribution across sampled allocations, its estimated 90th percentile and the estimated mean among the worst 10\% of sampled allocations, alongside unconditional mean MSE, bias and coverage. An allocation drawn more than once keeps its sampled frequency but uses one conditional estimate, and the Monte Carlo uncertainty accounts for the resulting covariance. A separate tail refinement at queen $\rho=0,0.5$, $\gamma=0.8$, both regimes and all years and designs kept the same allocations and extended the randomized designs to $R=400$ outcomes per allocation, keeping $R=1,000$ for single-assignment designs. Worst-decile assignments were identified with one half of the simulated outcomes and evaluated with the other half, to avoid selection bias. The refinement is not a new allocation sample. The rank of the fitted design matrix, residual treatment information, aliased columns, warnings, invalid estimates or intervals, and estimates of $\rho$ at the boundary of its parameter space were recorded. Appendix \ref{app:nc} gives the reproducibility and precision details.
+
+### 3.4.4 repeated saturation sentence — shortened
+Reason: the "little or no loss" statement is made in Methods and the Discussion.
+
+Original text:
+
+> Neither is uniquely best: the two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share.
+
+### 3.4.4 population-share paragraph — condensed
+Reason: the budgets are in Table 3.10; the 2x2 yearly counts are in B.8.
+
+Original text:
+
+> Population shares contextualize performance. High Incidence Focus treats 29 clusters but only about 22--24\% of working-age population, while Isolation Buffer treats a mean of 15.89 clusters and about 27\%. These population denominators measure geographic reach, not the number of healthcare professionals educated, intervention cost or participant-level precision. $2\times2$ Blocking treatment counts are 28/31/27/29 by year; complete budgets and shares are reported in Table \ref{tab:nc-budgets} and the appendix.
+
+### 3.4.5 split-half sentence — shortened
+Reason: the split-half method is defined in 3.4.3.
+
+Original text:
+
+> The pattern persists when worst-decile assignments are identified with one half of the simulated outcomes and evaluated with the other half, which avoids selection bias.
+
+### B.8 Figure "Annual population shares treated" (fig:nc-pop) — cut from the chapter
+Reason: it repeats the population shares of Table 3.10 (body); it remains in the Supplementary Information.
+
+Original text:
+
+> \begin{figure}[!htb]
+> \centering
+> \includegraphics[width=\linewidth]{figures/real_sud/population_shares.pdf}
+>
+> \caption{Annual population shares treated under primary queen assignments. Designs whose assignments do not depend on annual incidence share performance across years, but their annual population shares are recalculated. Population aged 18--64 is geographic reach rather than education-participant enrollment.}
+> \label{fig:nc-pop}
+>
+> \end{figure}
+
+### B.8 Figure "mean MSE by design, planning year and spillover regime" (fig:nc-mse-detail) — cut from the chapter
+Reason: it plots the absolute MSEs listed in the merged annual table and summarized as SRS ratios in Figure 3.8; it remains in the Supplementary Information.
+
+Original text:
+
+> \begin{figure}[!htb]
+>
+> \centering
+> \includegraphics[width=\linewidth]{figures/real_sud/primary_yearly_mse.pdf}
+>
+> \caption{Completed primary application: mean MSE by design, planning year and spillover regime, queen contiguity and education outcome. Each entry equally averages the six $\rho/\gamma$ pairs. Both regime columns use a common logarithmic MSE scale. Years that share the same simulations are repeated reporting, not independent replications; pooled Monte Carlo intervals are not supplied.}
+> \label{fig:nc-mse-detail}
+>
+> \end{figure}
+
+### B.8 four annual tables (tab:nc-full-2018 ... 2021) — merged into tab:nc-annual
+Reason: author-approved merge: one table lists MSE, bias and coverage for every design in every year (36 rows); the Treated and Pop.% columns repeated Table 3.10 and are dropped here. Values regenerated from yearly_primary_design_means.csv with the original rounding; the verifier checks them.
+
+Original text:
+
+> ```{=latex}
+> \begin{table}[!htb]
+> \small
+> \centering
+>
+> \caption{Primary queen 2018 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
+> \label{tab:nc-full-2018}
+> % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
+>
+> \begin{tabular}{p{3.5cm}rrrrr}
+> \toprule
+> Design & MSE & Bias & Coverage & Treated & Pop.\% \\
+> \midrule
+> \multicolumn{6}{l}{\textit{Both arms}} \\
+> Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
+> High Incidence Focus & 0.07172 & 0.0160 & 0.934 & 29.00 & 22.2 \\
+> Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
+> Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.07609 & 0.0099 & 0.933 & 28.00 & 50.0 \\
+> Balanced Quartiles & 0.07610 & 0.0170 & 0.933 & 29.00 & 48.5 \\
+> Balanced Halves & 0.07458 & 0.0158 & 0.934 & 29.00 & 50.0 \\
+> Incidence-Guided Saturation & 0.07428 & 0.0174 & 0.935 & 29.00 & 53.2 \\
+> Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+> \multicolumn{6}{l}{\textit{Control only}} \\
+> Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
+> High Incidence Focus & 0.21426 & 0.0237 & 0.932 & 29.00 & 22.2 \\
+> Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
+> Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.30622 & 0.0281 & 0.929 & 28.00 & 50.0 \\
+> Balanced Quartiles & 0.29352 & 0.0315 & 0.929 & 29.00 & 48.5 \\
+> Balanced Halves & 0.29101 & 0.0395 & 0.930 & 29.00 & 50.0 \\
+> Incidence-Guided Saturation & 0.24285 & 0.0464 & 0.928 & 29.00 & 53.2 \\
+> Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+>
+> \bottomrule
+> \end{tabular}
+> \end{table}
+> ```
+>
+> ```{=latex}
+> \begin{table}[!htb]
+> \small
+> \centering
+>
+> \caption{Primary queen 2019 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
+> \label{tab:nc-full-2019}
+> % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
+>
+> \begin{tabular}{p{3.5cm}rrrrr}
+> \toprule
+> Design & MSE & Bias & Coverage & Treated & Pop.\% \\
+> \midrule
+> \multicolumn{6}{l}{\textit{Both arms}} \\
+> Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
+> High Incidence Focus & 0.07180 & 0.0063 & 0.936 & 29.00 & 23.5 \\
+> Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
+> Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.07808 & 0.0143 & 0.930 & 31.00 & 55.1 \\
+> Balanced Quartiles & 0.07624 & 0.0175 & 0.933 & 29.00 & 49.7 \\
+> Balanced Halves & 0.07517 & 0.0167 & 0.934 & 29.00 & 50.5 \\
+> Incidence-Guided Saturation & 0.07628 & 0.0233 & 0.935 & 29.00 & 45.1 \\
+> Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+> \multicolumn{6}{l}{\textit{Control only}} \\
+> Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
+> High Incidence Focus & 0.43019 & 0.0227 & 0.931 & 29.00 & 23.5 \\
+> Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
+> Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.43630 & 0.0314 & 0.928 & 31.00 & 55.1 \\
+> Balanced Quartiles & 0.30616 & 0.0367 & 0.929 & 29.00 & 49.7 \\
+> Balanced Halves & 0.29955 & 0.0360 & 0.930 & 29.00 & 50.5 \\
+> Incidence-Guided Saturation & 0.21565 & 0.0522 & 0.926 & 29.00 & 45.1 \\
+> Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+>
+> \bottomrule
+> \end{tabular}
+> \end{table}
+> ```
+>
+> ```{=latex}
+> \begin{table}[!htb]
+> \small
+> \centering
+>
+> \caption{Primary queen 2020 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
+> \label{tab:nc-full-2020}
+> % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
+>
+> \begin{tabular}{p{3.5cm}rrrrr}
+> \toprule
+> Design & MSE & Bias & Coverage & Treated & Pop.\% \\
+> \midrule
+> \multicolumn{6}{l}{\textit{Both arms}} \\
+> Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
+> High Incidence Focus & 0.07292 & 0.0094 & 0.931 & 29.00 & 23.3 \\
+> Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
+> Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.07764 & 0.0122 & 0.933 & 27.00 & 48.0 \\
+> Balanced Quartiles & 0.07530 & 0.0158 & 0.933 & 29.00 & 50.6 \\
+> Balanced Halves & 0.07466 & 0.0150 & 0.934 & 29.00 & 49.2 \\
+> Incidence-Guided Saturation & 0.07682 & 0.0209 & 0.933 & 29.00 & 47.9 \\
+> Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+> \multicolumn{6}{l}{\textit{Control only}} \\
+> Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
+> High Incidence Focus & 0.25918 & 0.0327 & 0.930 & 29.00 & 23.3 \\
+> Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
+> Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.31848 & 0.0281 & 0.930 & 27.00 & 48.0 \\
+> Balanced Quartiles & 0.28932 & 0.0356 & 0.927 & 29.00 & 50.6 \\
+> Balanced Halves & 0.30610 & 0.0372 & 0.930 & 29.00 & 49.2 \\
+> Incidence-Guided Saturation & 0.22029 & 0.0474 & 0.926 & 29.00 & 47.9 \\
+> Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+>
+> \bottomrule
+> \end{tabular}
+> \end{table}
+> ```
+>
+> ```{=latex}
+> \begin{table}[!htb]
+> \small
+> \centering
+>
+> \caption{Primary queen 2021 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
+> \label{tab:nc-full-2021}
+> % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
+>
+> \begin{tabular}{p{3.5cm}rrrrr}
+> \toprule
+> Design & MSE & Bias & Coverage & Treated & Pop.\% \\
+> \midrule
+> \multicolumn{6}{l}{\textit{Both arms}} \\
+> Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.7 \\
+> High Incidence Focus & 0.07031 & 0.0104 & 0.934 & 29.00 & 22.4 \\
+> Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
+> Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.07736 & 0.0107 & 0.931 & 29.00 & 50.3 \\
+> Balanced Quartiles & 0.07453 & 0.0175 & 0.934 & 29.00 & 49.8 \\
+> Balanced Halves & 0.07584 & 0.0160 & 0.932 & 29.00 & 49.4 \\
+> Incidence-Guided Saturation & 0.07450 & 0.0197 & 0.936 & 29.00 & 51.8 \\
+> Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
+> \multicolumn{6}{l}{\textit{Control only}} \\
+> Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.7 \\
+> High Incidence Focus & 0.35318 & 0.0296 & 0.929 & 29.00 & 22.4 \\
+> Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
+> Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
+> $2\times2$ Blocking & 0.36168 & 0.0289 & 0.928 & 29.00 & 50.3 \\
+> Balanced Quartiles & 0.28439 & 0.0354 & 0.929 & 29.00 & 49.8 \\
+> Balanced Halves & 0.29089 & 0.0340 & 0.929 & 29.00 & 49.4 \\
+> Incidence-Guided Saturation & 0.23732 & 0.0451 & 0.926 & 29.00 & 51.8 \\
+> Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
+>
+> \bottomrule
+> \end{tabular}
+> \end{table}
+> ```

@@ -4,7 +4,7 @@
 Author: Andrew Walther. Created: 2026-10-02.
 Dependencies: Python standard library.
 
-Run from any directory: python3 paper/tools/verify_manuscripts.py [--chapter PATH]
+Run from any directory: python3 paper/tools/verify_manuscripts.py [--chapter PATH] [--pending-si LABEL]
 --chapter checks another long-form chapter file (e.g. the concise review copy)
 in place of Dissertation_Chapter.qmd.
 Only aggregate CSVs and document sources are read. This does not assert that
@@ -22,6 +22,7 @@ MAIN_EXHIBITS = MAIN.with_name('CTJ_Exhibits.tex')
 READING = MAIN.with_name('CTJ_Reading.tex')
 SUPPLEMENT = ROOT / 'paper/ctj_manuscript/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
+PENDING_SI = set()  # chapter tables allowed to be absent from the SI (--pending-si)
 LABELS = ['Checkerboard', 'High Incidence Focus', 'Saturation Quadrants',
           'Isolation Buffer', '$2\\times2$ Blocking', 'Balanced Quartiles',
           'Balanced Halves', 'Incidence-Guided Saturation', 'Simple Random Sampling']
@@ -150,7 +151,26 @@ def verify():
             raise AssertionError(f'Compact annual figure: wrong ratio {key}')
     require_equal(len(re.findall(r' & ', table(main, 'tab:allocation-rules'))), 16,
                   'Allocation-rule table: three-column header plus seven designs')
-    for year in ('2018', '2019', '2020', '2021'):
+    if '\\label{tab:nc-annual}' in chapter:
+        # Merged annual table (concise chapter): one row per design and year,
+        # both-arms then control-only MSE/bias/coverage; budgets live in tab:nc-budgets.
+        expected, actual, design = [], [], None
+        for name_index, label in enumerate(LABELS, 1):
+            for year in ('2018', '2019', '2020', '2021'):
+                cells = [year]
+                for regime in ('both', 'control_only'):
+                    row = yearly[(year, regime, name_index)]
+                    cells.extend([f"{float(row['Mean_MSE']):.5f}", f"{float(row['Bias']):.4f}",
+                                  f"{float(row['Coverage']):.3f}"])
+                expected.append((label, cells))
+        for line in table(chapter, 'tab:nc-annual').splitlines():
+            cells = [c.strip() for c in line.split('&')]
+            if len(cells) < 8 or not re.fullmatch(r'20\d\d', cells[1]):
+                continue
+            design = cells[0] or design
+            actual.append((design, [cells[1]] + re.findall(r'-?\d+\.\d+', '&'.join(cells[2:]))))
+        require_equal(actual, expected, 'Merged annual performance (36 rows)')
+    for year in (() if '\\label{tab:nc-annual}' in chapter else ('2018', '2019', '2020', '2021')):
         expected = []
         for regime in ('both', 'control_only'):
             for design in range(1, 10):
@@ -208,6 +228,12 @@ def verify():
             """Ignore comments/whitespace, retaining every cell and table command."""
             body = body.replace('Chapter 2', 'the earlier small-grid study')
             return re.sub(r'\s+', '', re.sub(r'(?<!\\)%[^\n]*', '', body))
+        if label in PENDING_SI and '\\label{' + label + '}' not in supplement:
+            print(f'PENDING SI: {label} is not yet in Supplementary_Information.tex '
+                  '(allowed by --pending-si; add it when the concise chapter is adopted)')
+            continue
+        if '\\label{' + label + '}' not in supplement:
+            raise AssertionError(f'Supplement derivation: {label} is missing from the SI')
         require_equal(normalized(table(chapter, label)), normalized(table(supplement, label)),
                       f'Supplement derivation: {label}')
     bib = (ROOT / 'paper/SpatialCRT_IncidenceDesign.bib').read_text()
@@ -257,6 +283,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--chapter', type=Path, default=CHAPTER,
                         help='long-form chapter source to check (default: canonical chapter)')
-    CHAPTER = parser.parse_args().chapter.resolve()
+    parser.add_argument('--pending-si', action='append', default=[], metavar='LABEL',
+                        help='chapter table label allowed to be missing from the SI (reported, not silent)')
+    args = parser.parse_args()
+    CHAPTER = args.chapter.resolve()
+    PENDING_SI.update(args.pending_si)
     print(f'Chapter checked: {CHAPTER.relative_to(ROOT)}')
     verify()
