@@ -1,6 +1,8 @@
 # Chapter 3 length review: plan and kickoff prompt (2026-10-12)
 
-## Status (2026-10-12)
+## Status (2026-10-13): complete and adopted; see the ROADMAP progress log.
+
+### Earlier status (2026-10-12)
 
 Steps 1-3 done on a separate copy at the author's request
 (`paper/dissertation_chapter/Dissertation_Chapter_concise.qmd`, branch `ch3-concise`).

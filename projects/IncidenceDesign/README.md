@@ -22,8 +22,8 @@ See [layout findings and build commands](docs/plans/ctj_layout_review_2026-10-02
 
 **Full prelim assembly (October 2):** `bios-dissertation/prelim/prelim.pdf` now
 combines the current literature review, Chapters 2–4, appendices and one
-bibliography (187 pages), including the requested List of Tables and List of
-Figures. Chapter 3 remains 42 body + 25 appendix pages. CTJ
+bibliography (192 pages as of 2026-10-13), including the requested List of Tables and List of
+Figures. Chapter 3 is 41 body + 27 appendix pages after the length review. CTJ
 reading references now flow from page 7 into both columns of page 8. See
 [assembly/reference review and rebuild commands](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).
 The individual Chapter 3 sync hook remains unchanged; rerun the full assembly
@@ -353,7 +353,6 @@ paper/
                                                #   si_figures/ subdirectories)
   dissertation_chapter/                       # Canonical full chapter and appendix, no length ceiling
     Dissertation_Chapter.{qmd,pdf}
-    Dissertation_Chapter_concise.qmd          # Length-review candidate (not synced; awaiting approval)
     notes/trimmed-material.md                 # Text cut or moved by the length review
     shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink (Quarto underscore workaround)
   archive_manuscript/                         # Retired modular-Quarto manuscript (reference only)

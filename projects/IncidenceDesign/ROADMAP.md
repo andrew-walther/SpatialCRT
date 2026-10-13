@@ -247,6 +247,20 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Concise Chapter 3 adopted (2026-10-13)
+
+- Independent read-only review of the concise copy: 3 meaning drifts, 6 warnings, 7 notes;
+  all fixed (queen-only scope, replication-schedule wording, regional-summary antecedent,
+  tau/regime qualifiers, non-oracle rook contrast, citation placement, B.7 ordering).
+  The merged annual table matched the four old tables cell for cell.
+- CTJ Figure 2 (grid accuracy vs SRS, by configuration and regime) added to the SRS
+  benchmark subsection at the author's request.
+- Adopted: the copy replaced `Dissertation_Chapter.qmd`; SI's four annual tables replaced
+  by `tab:nc-annual`; verifier passes without `--pending-si`. Hook synced to bios-dissertation
+  `f4e36b0` (draft 76 -> 73 pp, 29 citekeys); full prelim rebuilt `81802a0` (194 -> 192 pp;
+  Ch3 body 70-110, Appendix B 133-159; 26 tables, 35 figures); prelim tests pass.
+  Standalone chapter 72 -> 68 pp; SI 47 -> 45 pp. The CTJ is unchanged and cites no SI table numbers.
+
 ### Concise Chapter 3 copy for length review (2026-10-12)
 
 - Author-approved length review (`docs/plans/chapter3_length_review_plan_2026-10-12.md`)

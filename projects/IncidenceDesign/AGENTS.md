@@ -12,7 +12,7 @@ Full chapter/appendix and derived CTJ/SI drafts are complete and verified; autho
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
 in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
-PDFs: submission 21 pp, reading 8 pp, chapter 72 pp, supplement 47 pp (2026-10-12). The author
+PDFs: submission 21 pp, reading 8 pp, chapter 68 pp, supplement 45 pp (2026-10-13, after the Chapter 3 length review). The author
 approved original-title restoration and the six-exhibit revision. Main figures
 are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
 parameter/tail/budget graphics remain supporting material. Author order is
@@ -21,10 +21,10 @@ Walther, Habib, Simpson, Lin, with Lin corresponding. See
 [layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
 
 **Full prelim/reference-flow checkpoint:** bios-dissertation's
-`prelim/prelim.pdf` is the 187-page working assembly; Chapter 3 retains 42 body
-and 25 appendix pages. The master explicitly includes the author-requested
-List of Tables (28 entries) and List of Figures (35 entries) even in prelim mode.
-Rebuild there with `prelim/tools/build_prelim.py` after
+`prelim/full-draft/prelim.pdf` is the 192-page working assembly (2026-10-13); Chapter 3 has 41 body
+and 27 appendix pages after the length review. The master explicitly includes the author-requested
+List of Tables (26 entries) and List of Figures (35 entries) even in prelim mode.
+Rebuild there with `prelim/full-draft/tools/build_prelim.py` after
 individual chapter syncs; source ownership and hooks are unchanged. Chapter 4
 continuing work now uses narrative aims/expected evidence without a dated
 timeline or advisor-meeting references. CTJ reading
@@ -362,11 +362,11 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - The prelim YAML header is `tools/prelim_header.yml` (`colorlinks: false`, so links print
   black). Cross-references are `\label`/`\ref`, so numbers read 3.x / B.x in the prelim.
 
-- **Length review (2026-10-12):** a concise candidate lives in
-  `Dissertation_Chapter_concise.qmd` (branch `ch3-concise`; body about 39.5 vs 45.5 prelim pp).
-  It is NOT synced; until the author adopts it, keep editing only the canonical file.
-  Verify it with `python3 paper/tools/verify_manuscripts.py --chapter paper/dissertation_chapter/Dissertation_Chapter_concise.qmd --pending-si tab:nc-annual`.
-  Adoption steps: ROADMAP progress log, 2026-10-12 entry.
+- **Length review (adopted 2026-10-13):** the chapter is the reviewed concise version
+  (prelim body 41 pp, was 45.5; Appendix B 27 pp). Detail moved to Appendix B; nothing
+  numeric was dropped. Cut or moved text: `notes/trimmed-material.md`. The four annual NC
+  tables are one merged `tab:nc-annual` in both chapter and SI. The verifier's `--chapter`
+  and `--pending-si` options remain for checking any future candidate copy.
 
 ## Build gotchas
 
