@@ -247,6 +247,19 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### CTJ folder cleanup (2026-10-13)
+
+- Build intermediates: a local `latexmkrc` sends latexmk's `.aux/.log/.bbl/...` to a hidden,
+  gitignored `.build/`; symlinks to `sagej.cls`, `SageV.bst` and the shared bib replace the
+  `TEXINPUTS`/`BSTINPUTS` setup, so plain `pdflatex` builds also work. Leftovers from plain
+  builds: `git clean -fX -- paper/ctj_manuscript` (gitignored files only). Commit `8838311`.
+- `paper/ctj_manuscript/` reorganized with `git mv`: `manuscript_ctj/` (CTJ_Manuscript,
+  CTJ_Reading, CTJ_Exhibits), `supplementary_info/`, `cover_letter/`; `Figure_Legends.md`
+  moved into `figures/`, which stays shared. TeX figure paths are now `../figures/...`.
+  Verifier, exhibit test, companion-report links and current docs updated; dated plan docs
+  keep their historical paths. Rebuilt PDFs matched the committed text (21/8/45 pp); the
+  committed PDFs were kept. Commit `7d6558f`; both commits pushed.
+
 ### Concise Chapter 3 adopted (2026-10-13)
 
 - Independent read-only review of the concise copy: 3 meaning drifts, 6 warnings, 7 notes;
