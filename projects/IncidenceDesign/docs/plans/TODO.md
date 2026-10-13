@@ -1,6 +1,6 @@
 # IncidenceDesign to-dos — completed study and drafts
 
-Updated 2026-10-02. The author superseded earlier deadline dates and requested ASAP
+Updated 2026-10-13. The author superseded earlier deadline dates and requested ASAP
 completion with CTJ remaining a required deliverable. Historical interview and
 execution to-dos are preserved in Git history; settled choices are not reopened.
 
@@ -52,7 +52,14 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 - [x] Implement approved title restoration and six-exhibit revision in both CTJ
   layouts; carry applicable clarity changes into the chapter and derived supplement.
   See [exhibit review](ctj_exhibit_revision_findings_2026-10-02.md).
-- [ ] Author full review of the revised chapter, both CTJ layouts and supplement.
+- [x] Chapter 3 length review (2026-10-12/13): concise version independently reviewed
+  and adopted (prelim body 45.5 to 41 pp; Appendix B 27 pp; standalone chapter 68 pp;
+  SI 45 pp with merged annual table); synced, full prelim rebuilt (192 pp), pushed.
+  See [plan/status](chapter3_length_review_plan_2026-10-12.md); cut text in
+  `paper/dissertation_chapter/notes/trimmed-material.md`.
+- [x] Reference-list length check: strict APA 7 with DOIs and full author lists kept
+  (a six-author et-al. variant saved no pages; reverted).
+- [ ] Author full review of the revised (concise) chapter, both CTJ layouts and supplement.
 - [x] Comprehensive review (four tracks: numbers, journal compliance/clarity,
   chapter consistency, code) completed 2026-10-12; approved fixes applied. See
   [findings](ctj_comprehensive_review_findings_2026-10-12.md).
@@ -69,8 +76,8 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   submission attestations; confirm the pilot description with Simpson.
 - [ ] Submit CTJ with the author-completed
   [checklist](../../paper/ctj_manuscript/submission_checklist.md)/cover letter.
-- [x] Completion work is pushed: `main` matches `origin/main` after a fresh fetch
-  (verified 2026-10-11). Future pushes still require explicit author authorization.
+- [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
+  SpatialCRT `f67ab4b`, bios-dissertation `7d10596`). Future pushes still require explicit author authorization.
 
 No additional analysis was required by the final independent source review.
 Actual pilot endpoint/enrollment/budget/network specification and interval
