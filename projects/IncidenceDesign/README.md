@@ -136,7 +136,7 @@ The predecessor Rmd is preserved untouched.
 | `14_manuscript_supplement_figures.R` | ~470 | Fresh 8-design consolidation test (justifies dropping 2 designs) + CTJ Supplementary Information figure suite + reordered/merged main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/` |
 | `19_manuscript_exhibits.R` | ~60 | Export current full nine-design grid regime means and a six-design journal figure | `results/srs_benchmark/` and CTJ figures |
 | `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile MSE ratios to SRS, and the allocation-to-allocation MSE distribution figure (CTJ Figure 3) | `results/allocation_risk/summary/downside_by_design.csv`, `allocation_distribution_by_design.{csv,pdf}` |
-| `paper/tools/verify_manuscripts.py` | ~175 | Reconcile current manuscript cells, derived supplement and assets | Aggregate CSV inputs; fails on drift |
+| `paper/tools/verify_manuscripts.py` | ~215 | Reconcile current manuscript cells, derived supplement and assets; `--chapter` checks another chapter file, `--pending-si` reports a table not yet in the SI | Aggregate CSV inputs; fails on drift |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
 
 ---
@@ -353,6 +353,8 @@ paper/
                                                #   si_figures/ subdirectories)
   dissertation_chapter/                       # Canonical full chapter and appendix, no length ceiling
     Dissertation_Chapter.{qmd,pdf}
+    Dissertation_Chapter_concise.qmd          # Length-review candidate (not synced; awaiting approval)
+    notes/trimmed-material.md                 # Text cut or moved by the length review
     shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink (Quarto underscore workaround)
   archive_manuscript/                         # Retired modular-Quarto manuscript (reference only)
 ```

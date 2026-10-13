@@ -1,5 +1,16 @@
 # Chapter 3 length review: plan and kickoff prompt (2026-10-12)
 
+## Status (2026-10-12)
+
+Steps 1-3 done on a separate copy at the author's request
+(`paper/dissertation_chapter/Dissertation_Chapter_concise.qmd`, branch `ch3-concise`).
+Body 70-115 -> 70-109 in the prelim preview. Step 4 is recorded in ROADMAP; the
+bios-dissertation records wait until the author adopts the copy (adoption steps in
+the ROADMAP 2026-10-12 entry). Author decisions: 36-38 pp acceptable target, Ch2-or-shorter
+is the guide; keep any result with real insight; keep B.7.2 (now B.7.2 technical notes)
+unchanged; merge the annual NC tables listing every year for every design; keep the
+NC maps at full size; SI unchanged except the merged table at adoption.
+
 ## Goal
 
 Make Chapter 3 (Project 2) shorter and easier to follow without losing results the

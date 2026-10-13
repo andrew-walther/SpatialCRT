@@ -247,6 +247,25 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Concise Chapter 3 copy for length review (2026-10-12)
+
+- Author-approved length review (`docs/plans/chapter3_length_review_plan_2026-10-12.md`)
+  carried out on a **separate copy**, `paper/dissertation_chapter/Dissertation_Chapter_concise.qmd`
+  (branch `ch3-concise`), awaiting author approval as the replacement; the canonical
+  chapter, the hook sync, bios-dissertation and the SI are unchanged.
+- Prelim-format preview (scratch build): Ch3 body 70-115 -> 70-109 (about 45.5 -> 39.5 pp;
+  Ch2 body is 42 pp); Appendix B 25 -> 27 pp. Five batches: intro/methods trims
+  (detail to B.1/B.2), merged queen results with test detail to B.3, rho/gamma/Checkerboard
+  coverage tables to a new B.4, condensed rook/non-oracle/tau text, application procedures
+  to B.8, four annual NC tables merged into one 36-row `tab:nc-annual`, two B.8 figures cut
+  (in SI), Discussion restatements condensed, queen coverage and bias-variance figures to B.5.
+  NC maps kept at full size (author). Cut text: `paper/dissertation_chapter/notes/trimmed-material.md`.
+- Checks: no number in the copy that is not in the canonical chapter; verifier
+  (`--chapter ... --pending-si tab:nc-annual`) and prelim assembly tests pass; no `??`.
+- On adoption: copy over `Dissertation_Chapter.qmd`, swap the SI's four `tab:nc-full-*`
+  tables for `tab:nc-annual`, rerun the verifier without `--pending-si`, let the hook sync,
+  rebuild the full prelim, update page counts here, in AGENTS.md and in bios-dissertation.
+
 ### Comprehensive review and advisor-meeting report (2026-10-12)
 
 - Four read-only review tracks (numbers, live journal compliance/clarity, chapter vs

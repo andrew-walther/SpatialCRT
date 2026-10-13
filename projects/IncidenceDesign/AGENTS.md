@@ -362,6 +362,12 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - The prelim YAML header is `tools/prelim_header.yml` (`colorlinks: false`, so links print
   black). Cross-references are `\label`/`\ref`, so numbers read 3.x / B.x in the prelim.
 
+- **Length review (2026-10-12):** a concise candidate lives in
+  `Dissertation_Chapter_concise.qmd` (branch `ch3-concise`; body about 39.5 vs 45.5 prelim pp).
+  It is NOT synced; until the author adopts it, keep editing only the canonical file.
+  Verify it with `python3 paper/tools/verify_manuscripts.py --chapter paper/dissertation_chapter/Dissertation_Chapter_concise.qmd --pending-si tab:nc-annual`.
+  Adoption steps: ROADMAP progress log, 2026-10-12 entry.
+
 ## Build gotchas
 
 - **CTJ manuscript:** needs TinyTeX on `PATH` plus `TEXINPUTS`/`BSTINPUTS=".:../SAGE_Journal_Template:"` to find `sagej.cls`/`SageV.bst`.
