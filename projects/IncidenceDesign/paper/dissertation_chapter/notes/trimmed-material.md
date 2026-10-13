@@ -74,7 +74,7 @@ Original text:
 Reason: both tables show that neither factor changes the ranking, which the text states with the ranges; the tables are unchanged in the new Appendix section "Additional sensitivity tables".
 
 ### 3.3.5 Rook contiguity — condensed
-Reason: the rook test statistics and within-configuration coverage ranges move to Appendix B.3; Table 3.7 (Checkerboard coverage by rho) moves to the new Appendix B.4 and its range is stated in the text. The Checkerboard tau - gamma explanation is kept in short form (it is derived in Methods and B.6.1).
+Reason: the rook test statistics and within-configuration coverage ranges move to Appendix B.3; Table 3.7 (Checkerboard coverage by rho) moves to the new Appendix B.4 and its range is stated in the text. The Checkerboard tau - gamma explanation is kept in short form (it is derived in Methods and concise B.7.1, canonical B.6.1).
 
 Original text:
 
@@ -108,7 +108,7 @@ Original text:
 > ```
 
 ### 3.3.6 Non-oracle sensitivity analysis — condensed to one paragraph
-Reason: design-by-design bias and coverage values are all in Table B.5 (Appendix B.6 in the concise copy).
+Reason: design-by-design bias and coverage values are all in the oracle/non-oracle table (tab:oracle-nonoracle; canonical B.5, concise B.6).
 
 Original text:
 
@@ -117,7 +117,7 @@ Original text:
 > Omitting the spillover term also removes a column that can be nearly collinear with $Z$, and the non-oracle estimates were accordingly less variable for some designs. Under queen contiguity, the non-oracle MSE was lower than the oracle MSE for every design, most of all for Checkerboard (oracle 1.087, non-oracle 0.108) and $2\times2$ Blocking (oracle 0.319, non-oracle 0.121). Under rook contiguity it was higher for every design except $2\times2$ Blocking (0.128 under both models) and Checkerboard (identical). These results do not change the recommendation. Incidence-Guided Saturation also had the lowest non-oracle MSE under both neighbor types (0.087 under queen contiguity and 0.086 under rook contiguity), and where a design's non-oracle MSE was lower, the estimate was biased and its intervals under-covered, so the lower MSE does not support valid inference.
 
 ### 3.3.7 Stability across treatment effect sizes — margins and coverage condensed
-Reason: block counts by tau, average-rank trajectories, the tau = 2 worst case and the rook margin detail move to Appendix B.6.2 (Block-level detail); the intermediate rook-Checkerboard coverage values move there too.
+Reason: block counts by tau, average-rank trajectories, the tau = 2 worst case and the rook margin detail move to the technical-notes appendix (concise B.7.2, canonical B.6.2; Block-level detail); the intermediate rook-Checkerboard coverage values move there too.
 
 Original text:
 
@@ -171,7 +171,7 @@ Original text:
 > Neither is uniquely best: the two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share.
 
 ### 3.4.4 population-share paragraph — condensed
-Reason: the budgets are in Table 3.10; the 2x2 yearly counts are in B.8.
+Reason: the budgets are in the body budget table (tab:nc-budgets; canonical Table 3.10); the 2x2 yearly counts are in B.8.
 
 Original text:
 
@@ -185,7 +185,7 @@ Original text:
 > The pattern persists when worst-decile assignments are identified with one half of the simulated outcomes and evaluated with the other half, which avoids selection bias.
 
 ### B.8 Figure "Annual population shares treated" (fig:nc-pop) — cut from the chapter
-Reason: it repeats the population shares of Table 3.10 (body); it remains in the Supplementary Information.
+Reason: it repeats the population shares of the body budget table (tab:nc-budgets); it remains in the Supplementary Information.
 
 Original text:
 
@@ -214,7 +214,7 @@ Original text:
 > \end{figure}
 
 ### B.8 four annual tables (tab:nc-full-2018 ... 2021) — merged into tab:nc-annual
-Reason: author-approved merge: one table lists MSE, bias and coverage for every design in every year (36 rows); the Treated and Pop.% columns repeated Table 3.10 and are dropped here. Values regenerated from yearly_primary_design_means.csv with the original rounding; the verifier checks them.
+Reason: author-approved merge: one table lists MSE, bias and coverage for every design in every year (36 rows); the Treated and Pop.% columns repeated the body budget table (tab:nc-budgets) and are dropped here. Values regenerated from yearly_primary_design_means.csv with the original rounding; the verifier checks them.
 
 Original text:
 
@@ -377,7 +377,7 @@ Original text:
 ## 2026-10-12 — Batch 4 (discussion)
 
 ### 3.5.1 Summary and relevance — restated results condensed
-Reason: the queen/rook, regime and Checkerboard paragraphs restated Results numbers at length; the condensed version keeps each finding and its headline numbers.
+Reason: the queen/rook, regime and Checkerboard paragraphs restated Results numbers at length; the condensed version keeps each finding with headline numbers, but drops the Checkerboard detail values (bias 0.004, coverage 0.942, rook coverage 0.150, MSE growing with gamma), all reported in the Results.
 
 Original text:
 
@@ -395,7 +395,7 @@ Original text:
 > Saturation Quadrants, which assigns the same saturations without reference to incidence, performed similarly to Incidence-Guided Saturation (see Treatment assignment designs). Both designs treat the four quadrants at saturations from 20\% to 80\%, and their accuracy advantage over SRS under control-only spillover comes from this shared saturation structure. Incidence guidance therefore lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy.
 
 ### 3.5.3 Limitation 1 — numbers trimmed
-Reason: the non-oracle bias and coverage ranges are reported in the Results and Table B.6.
+Reason: the non-oracle bias and coverage ranges are reported in the Results and the oracle/non-oracle table (tab:oracle-nonoracle).
 
 Original text:
 
@@ -412,3 +412,10 @@ Original text:
 
 ### Queen coverage figure (fig:coverage) and bias-variance figure (fig:biasvar) — moved to Appendix B.5
 Reason: both support statements made in the text (coverage 0.936-0.941 for every design; MSE increase is variance, not bias) and sit next to their rook counterparts; B.5 retitled "Coverage, bias-variance and rook contiguity figures" (label app:rook-figures unchanged). Captions unchanged except the pointer to the rook figure.
+
+## 2026-10-13 — Review fixes and grid figure
+
+### Review fixes (independent read-only review, 2026-10-13)
+Reason: three meaning-drift errors (queen-only order claim in the Discussion, replication schedule wording, antecedent for the alternative regional summaries), worst-case/regime and tau qualifiers, the non-oracle rook contrast, the bivand citation and intro wording restored; block-level detail moved to the end of B.7; duplicate 2x2 statement removed. Grid-accuracy figure (CTJ Figure 2, grid_accuracy_srs.pdf) added to 3.3.9 at the author's request.
+
+Numbering note (2026-10-13): appendix and table numbers above are labelled canonical or concise where they differ; LaTeX labels are given where numbering shifts.
