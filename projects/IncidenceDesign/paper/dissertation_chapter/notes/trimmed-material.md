@@ -373,3 +373,42 @@ Original text:
 > \end{tabular}
 > \end{table}
 > ```
+
+## 2026-10-12 — Batch 4 (discussion)
+
+### 3.5.1 Summary and relevance — restated results condensed
+Reason: the queen/rook, regime and Checkerboard paragraphs restated Results numbers at length; the condensed version keeps each finding and its headline numbers.
+
+Original text:
+
+> Under queen contiguity, Incidence-Guided Saturation had the lowest mean squared error (0.091) and Balanced Quartiles the second lowest (0.131). The order of the six designs was the same in each of the five incidence configurations and at every value of $\tau$, and neither the strength of spatial dependence in the outcome nor the spillover magnitude changed it. The mechanism that generated the incidence surface changed each design's MSE modestly (by under 10\%, except High Incidence Focus). The same two designs also led under rook contiguity (0.072 and 0.084). Coverage of the 95\% intervals was close to 0.94 for every design under both neighbor types, except Checkerboard under rook contiguity, so the designs differed in precision and coverage did not separate them.
+>
+> Under queen contiguity, Checkerboard and $2\times2$ Blocking were close to the best designs when spillover reached both arms and were the two worst when it reached only control clusters: at $\tau = 1$, Checkerboard's MSE was 0.062 under the both-arms regime and 2.111 under the control-only regime, and that of $2\times2$ Blocking was 0.062 and 0.576. Balanced Quartiles also lost ground under the control-only regime (0.042 and 0.219), while Incidence-Guided Saturation was first or second among the six detailed designs under both regimes at every value of $\tau$ and remained competitive with SRS under both-arms spillover. Its control-only MSE did rise with $\tau$, and Isolation Buffer, whose MSE did not, matched it under that regime at $\tau = 2$ and passed it at $\tau = 3$. A design whose performance depends on the regime carries a risk that its average MSE does not show.
+>
+> Checkerboard failed for different reasons under the two neighbor types. Under queen contiguity, its high MSE was variance, not bias: under the control-only regime, only the boundary clusters separate the spillover effect from the treatment effect (Methods). The estimates stayed centered on $\tau$ (bias 0.004 under the control-only regime at $\tau = 1$) and their intervals kept close to nominal coverage (0.942), but they were imprecise. Under rook contiguity, $\tau$ is not identified (Methods): the estimates were centered on $\tau - \gamma$, so rook Checkerboard's MSE grew with $\gamma$, and its coverage at $\tau = 1$ was 0.150. Checkerboard intersperses treated and control clusters as finely as the grid allows; both failures come from the dependence this pattern creates between $Z$ and the spillover covariate, which is a linear combination of the intercept and $Z$ at every cluster under rook contiguity and at every interior cluster under queen contiguity and the control-only regime.
+
+### 3.5.1 Saturation Quadrants paragraph — shortened
+Reason: same statement as in Methods and the application; kept once in short form here.
+
+Original text:
+
+> Saturation Quadrants, which assigns the same saturations without reference to incidence, performed similarly to Incidence-Guided Saturation (see Treatment assignment designs). Both designs treat the four quadrants at saturations from 20\% to 80\%, and their accuracy advantage over SRS under control-only spillover comes from this shared saturation structure. Incidence guidance therefore lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy.
+
+### 3.5.3 Limitation 1 — numbers trimmed
+Reason: the non-oracle bias and coverage ranges are reported in the Results and Table B.6.
+
+Original text:
+
+> We fit a non-oracle model that omits the spillover term as a sensitivity analysis. At $\tau = 1$, setting aside Checkerboard under rook contiguity, it was biased for every design, with bias between $-0.12$ and $-0.40$ and coverage between 0.51 and 0.90, and Incidence-Guided Saturation still had the lowest MSE under both neighbor types.
+
+### 3.5.3 Limitation 6 — shortened
+Reason: the reason for keeping the base rate is given in Heterogeneous baseline incidence.
+
+Original text:
+
+> Sixth, the simulation's base rate of 35 per 100,000 is not the rate of the county data described in the Application (see Heterogeneous baseline incidence). We kept it deliberately, because the simulation is a general design study, not a calibration to one data set. In the Poisson mechanism, incidence enters the designs and the fitted model only through the ranks of the observed rates, so the base rate affects the simulation only through the spatial pattern of those ranks and the number of tied rates.
+
+## 2026-10-12 — Batch 5 (figure placement)
+
+### Queen coverage figure (fig:coverage) and bias-variance figure (fig:biasvar) — moved to Appendix B.5
+Reason: both support statements made in the text (coverage 0.936-0.941 for every design; MSE increase is variance, not bias) and sit next to their rook counterparts; B.5 retitled "Coverage, bias-variance and rook contiguity figures" (label app:rook-figures unchanged). Captions unchanged except the pointer to the rook figure.
