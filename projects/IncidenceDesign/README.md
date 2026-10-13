@@ -402,7 +402,7 @@ Regenerate the per-design downside table source (chapter Table `tab:downside`, S
 Verify document tables/figures/references: `python3 paper/tools/verify_manuscripts.py`.
 The checker reads authorized aggregate outputs and rejects incorrect values.
 Chapter builds use the approved Quarto/sync workflow; CTJ/SI use TinyTeX/latexmk
-with the existing Sage template paths (see AGENTS).
+(`latexmk <file>.tex` in `paper/ctj_manuscript/`; intermediates go to the hidden `.build/`, see AGENTS).
 
 ---
 

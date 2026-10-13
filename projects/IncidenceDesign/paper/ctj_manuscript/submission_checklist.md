@@ -49,8 +49,8 @@ and finite allocation-tail uncertainty remain scientific limitations in the text
 
 Files: `CTJ_Manuscript.{tex,pdf}`, `Supplementary_Information.{tex,pdf}`,
 `Figure_Legends.md`, the four referenced vector PDFs and the shared bibliography.
-Rebuild from this directory with TinyTeX on PATH, `TEXINPUTS` and `BSTINPUTS`
-including `../SAGE_Journal_Template`; run `latexmk -pdf` on each TeX source.
+Rebuild from this directory with TinyTeX on PATH: run `latexmk` on each TeX source.
+The local `latexmkrc` and template symlinks need no extra path setup.
 
 `CTJ_Reading.tex`/PDF is an author preview, not a submission file or publisher
 proof. It selects a layout branch in `CTJ_Manuscript.tex`; both layouts load

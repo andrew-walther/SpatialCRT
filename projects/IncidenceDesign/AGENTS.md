@@ -181,7 +181,7 @@ the reasoning behind this distinction.
 | **paper/archive_manuscript/** | | | |
 | (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
 | **paper/ctj_manuscript/** | | | |
-| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas for `TEXINPUTS`/`BSTINPUTS` setup |
+| `CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas |
 | `CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
 | `Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
 | **paper/dissertation_chapter/** | | | |
@@ -370,7 +370,11 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 
 ## Build gotchas
 
-- **CTJ manuscript:** needs TinyTeX on `PATH` plus `TEXINPUTS`/`BSTINPUTS=".:../SAGE_Journal_Template:"` to find `sagej.cls`/`SageV.bst`.
+- **CTJ manuscript/SI:** need TinyTeX on `PATH`; run `latexmk <file>.tex` from `paper/ctj_manuscript/`.
+  Symlinks there (`sagej.cls`, `SageV.bst`, `SpatialCRT_IncidenceDesign.bib`) replace the old
+  `TEXINPUTS`/`BSTINPUTS` setup, and its `latexmkrc` sends intermediates to the gitignored `.build/`.
+  A plain `pdflatex` build also works but leaves intermediates beside the sources;
+  `git clean -fX -- paper/ctj_manuscript` removes them (it only touches gitignored files).
 - **Dissertation chapter bibliography:** reference it via the `shared-refs.bib` symlink in `paper/dissertation_chapter/`, not `../SpatialCRT_IncidenceDesign.bib` directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib filenames referenced from YAML.
 - Dated progress logs moved to `ROADMAP.md` ("Progress log") on 2026-10-01; logs from
   2026-04-08 to 2026-09-04 are in `git log -p AGENTS.md`.
