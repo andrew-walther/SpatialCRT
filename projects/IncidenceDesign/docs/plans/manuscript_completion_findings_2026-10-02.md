@@ -74,7 +74,7 @@ S1–S10. All 22 source table bodies are retained. CTJ omits dissertation-only
 references and uses a self-contained literature link.
 
 Earlier live chapter/CTJ/SI sources and the old declaration abstract were saved
-in `paper/archive_manuscript/pre_completion_20261002/`. Previously generated
+in `paper/archive/pre_completion_20261002/`. Previously generated
 synthetic/application results remain preserved and unused in the revised drafts.
 The current declaration file now carries the current abstract rather than
 copying its superseded April results into bios-dissertation.
@@ -242,7 +242,7 @@ rejects it. This does not replace prose review or a PDF layout inspection.
 Final standalone PDFs: chapter 65 pp, CTJ 18 pp, supplement 43 pp. The generated
 prelim copy has 72 pp under its own chapter/appendix layout. Final verification
 text is `manuscript_verification_2026-10-02.txt`; a SHA-256 source/output manifest
-is `paper/manuscript_provenance_20261002.json`. LaTeX intermediates are scoped
+is `paper/archive/manuscript_provenance_20261002.json`. LaTeX intermediates are scoped
 ignored; frozen archived TeX sources are explicitly retained.
 
 Final geographic wording uses “projected cluster coordinates,” not geometric

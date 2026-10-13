@@ -46,7 +46,7 @@ projects/
   SpillSpatialDepSim/   code/ data/ results/ paper/
   IncidenceDesign/      code/ results/ docs/ longleaf_setup/
     application/        data/ (restricted files ignored) code/ results/ report/
-    paper/              dissertation_chapter/ ctj_manuscript/ report/ archive_manuscript/
+    paper/              dissertation_chapter/ ctj_manuscript/ report/ archive/
 archive/                legacy work, not maintained
 ```
 

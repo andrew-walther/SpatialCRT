@@ -24,7 +24,7 @@ The supplied `sagej.cls` is unchanged. No DOI, volume or publication status was
 invented in the reading header.
 
 The earlier two-column CTJ source is preserved at
-`paper/archive_manuscript/pre_completion_20261002/CTJ_Manuscript.tex`; its PDF
+`paper/archive/pre_completion_20261002/CTJ_Manuscript.tex`; its PDF
 is recoverable from Git before `a47b0ae`. Its title was *Sampling Design for
 Spatial Cluster Randomized Trials Under Heterogeneous Incidence*. Its colorful
 grid figures and other assets are still present. The older numerical claims and

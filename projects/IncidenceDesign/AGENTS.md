@@ -178,8 +178,9 @@ the reasoning behind this distinction.
 | `application/tests/test_application_data.R` | ~130 | 23 checks: rate formulas (fixture), bad input, real data vs Habib (2026), weights | Real-data part skips if the gitignored sources are absent |
 | **paper/report/** | | | |
 | `IncidenceSpatialCRT_Report.qmd` | ~1100 | Unified project report (50+ pages, 8-design) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
-| **paper/archive_manuscript/** | | | |
-| (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
+| **paper/archive/** | | | |
+| `pre_unification_20260702/` (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
+| `pre_completion_20261002/`, `manuscript_provenance_20261002.json` | — | Sources before the Oct 2 completion pass; Oct 2 SHA-256 manifest | Frozen provenance; do not reuse numbers |
 | **paper/ctj_manuscript/** | | | |
 | `manuscript_ctj/CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas |
 | `manuscript_ctj/CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
@@ -190,7 +191,6 @@ the reasoning behind this distinction.
 | **paper/** | | | |
 | `SpatialCRT_IncidenceDesign.bib` | ~99K, 81 entries | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`; `habib_temporal_2026` added 2026-09-24 = Ashkan Habib's unpublished BIOS master's paper, source of the SUD county data) | Zotero base + SUD/SUDDEN citations + design-theory citations |
 | `SAGE_Journal_Template/` | — | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
-| `SpatialCRT_IncidenceDesign_Presentation.qmd` | ~26 | Presentation template | Quarto revealjs slides (scaffold) |
 
 ---
 

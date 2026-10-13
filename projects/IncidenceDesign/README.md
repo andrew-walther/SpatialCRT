@@ -331,14 +331,13 @@ reported **separately**; pooled numbers appear only when labeled as pooled. The 
 > **Note:** the modular Quarto manuscript framework described in earlier versions of
 > this README (`paper/manuscript/` with `_abstract.qmd`/`_methods.qmd`/etc. child
 > sections) was retired 2026-07-02 in favor of two manuscripts written fresh from
-> scratch (see below). That structure is preserved read-only as `paper/archive_manuscript/`
+> scratch (see below). That structure is preserved read-only as `paper/archive/pre_unification_20260702/`
 > for reference/fact-checking only.
 
 ```
 paper/
   SpatialCRT_IncidenceDesign.bib              # Single bibliography shared by both manuscripts
   SAGE_Journal_Template/                      # sagej.cls, SageH.bst, SageV.bst (CTJ render dependency)
-  SpatialCRT_IncidenceDesign_Presentation.qmd # Presentation slides (scaffold)
   report/
     IncidenceSpatialCRT_Report.qmd            # Unified project report (sources R modules)
     IncidenceSpatialCRT_Report.pdf            # Rendered PDF
@@ -358,7 +357,12 @@ paper/
     Dissertation_Chapter.{qmd,pdf}
     notes/trimmed-material.md                 # Text cut or moved by the length review
     shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink (Quarto underscore workaround)
-  archive_manuscript/                         # Retired modular-Quarto manuscript (reference only)
+  tools/verify_manuscripts.py                 # Table/figure/reference consistency checker
+  archive/                                    # Frozen snapshots, reference only (do not edit)
+    pre_unification_20260702/                 # Retired modular-Quarto manuscript + section drafts
+    pre_completion_20261002/                  # Chapter/CTJ/SI sources before the Oct 2 completion pass
+    manuscript_provenance_20261002.json       # Oct 2 SHA-256 source/output manifest
+(Slides live in bios-dissertation/slides/, not here.)
 ```
 
 The **unified report** (`paper/report/`) consolidates all code-side reports into a single

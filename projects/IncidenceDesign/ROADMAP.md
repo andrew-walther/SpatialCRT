@@ -14,7 +14,7 @@
 > study (NC's 58 Community College service areas) has a complete synthetic-incidence run;
 > real SUDDEN-derived data is still pending. The modular Quarto manuscript framework
 > referenced by older items below (`paper/manuscript/_application.qmd` etc.) was retired
-> 2026-07-02 in favor of the two manuscripts written fresh — see `paper/archive_manuscript/`.
+> 2026-07-02 in favor of the two manuscripts written fresh — see `paper/archive/pre_unification_20260702/`.
 >
 > **Status as of 2026-09-24 (later): simulation revised and re-run; downstream regeneration
 > (Phase C) in progress.**
@@ -135,7 +135,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 > obsolete — target journal (*Clinical Trials*, SAGE) is chosen, both the Application and
 > Discussion sections are fully written in `CTJ_Manuscript.tex` and `Dissertation_Chapter.qmd`,
 > and manuscript figures are finalized (see README "Manuscript Development" for the current
-> figure inventory). See `paper/archive_manuscript/` for the retired framework.
+> figure inventory). See `paper/archive/pre_unification_20260702/` for the retired framework.
 
 - [ ] **Consolidated review of all three manuscript documents** `[Priority: High]` `[Effort: Medium]`
   CTJ main text, CTJ Supplementary Information, and the dissertation chapter all have complete
@@ -169,7 +169,8 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   into `code/14_manuscript_supplement_figures.R` for the CTJ SI) rather than fixed at the source.
 
 - [ ] **Presentation slides** `[Priority: Low]` `[Effort: Medium]`
-  Expand `SpatialCRT_IncidenceDesign_Presentation.qmd` scaffold into full conference slides.
+  Slides are built in `bios-dissertation/slides/` (prelim deck in per-part pieces; a Project 1
+  talk would be trimmed from its prelim section). The unused scaffold here was deleted 2026-10-13.
 
 ## 2026-09 Simulation Revision (step 0.5)
 
@@ -200,7 +201,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 - [x] **Run full 2,560-scenario MLE simulation** *(SUPERSEDED 2026-09-24 by the revision)* — 8 designs × 4 gamma levels × 4 rho levels × 4 incidence configs × 2 spillover types × `n_sim` reps. Best: D8 (MSE 0.079), Worst: D1 (MSE 0.744). *(2026-03-22)*
 - [x] **Formal statistical comparisons** — Friedman test, Nemenyi post-hoc, pairwise Wilcoxon, CD diagrams; rendered to `11_statistical_comparisons_report.{html,pdf}`. *(2026-03-25)*
 - [x] **Comprehensive unified project report** — 50+ page `IncidenceSpatialCRT_Report.qmd` covering full pipeline through design recommendations. *(2026-03-23)*
-- [x] **Modular Quarto manuscript framework** — Master + child sections (abstract, intro, methods, simulation, application skeleton, discussion skeleton). Retired 2026-07-02 in favor of two manuscripts written fresh; preserved as `paper/archive_manuscript/`. *(2026-03-23)*
+- [x] **Modular Quarto manuscript framework** — Master + child sections (abstract, intro, methods, simulation, application skeleton, discussion skeleton). Retired 2026-07-02 in favor of two manuscripts written fresh; preserved as `paper/archive/pre_unification_20260702/`. *(2026-03-23)*
 - [x] **HPC setup for Longleaf** — SLURM job array scripts for per-scenario parallelization (2,560 tasks), ready to scale. *(2026-03-23)*
 - [x] **8-panel design sample figures** — Generated and integrated into manuscript and README. *(2026-03-24)*
 - [x] **Tau-sweep: vary `true_tau` across the full parameter grid** *(results SUPERSEDED 2026-09-24; the sweep is kept in the revised run)* — 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}; design ranking (D3/D8 dominance) stable at every τ level (all conditional Friedman p < 2.2×10⁻¹⁶). *(2026-04-08)*
@@ -238,7 +239,7 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 | **NEXT UP** | Consolidated author/Claude review of completed study and full drafts; finish author-only ethics/data-use and submission metadata | `docs/plans/claude_comprehensive_review_prompt_2026-10-02.md`; `paper/ctj_manuscript/submission_checklist.md` |
 | **High** | Coauthor approval, mandatory reviewer corrections if any, then approved CTJ submission | Full chapter, CTJ and supplement |
 | Medium | Final UNC dissertation-template integration when chapters are combined | Canonical Chapter 3 source and approved sync |
-| Low | Expand conference presentation scaffold | `paper/SpatialCRT_IncidenceDesign_Presentation.qmd` |
+| Low | Project 2 prelim/conference slides | `bios-dissertation/slides/` |
 
 ---
 

@@ -19,5 +19,6 @@ paper/**/*.tex
 .claude/worktrees/
 
 # Frozen pre-completion manuscript sources, not generated Quarto intermediates.
-!paper/archive_manuscript/pre_completion_20261002/CTJ_Manuscript.tex
-!paper/archive_manuscript/pre_completion_20261002/Supplementary_Information.tex
+!paper/archive/pre_completion_20261002/CTJ_Manuscript.tex
+!paper/archive/pre_completion_20261002/Supplementary_Information.tex
+!paper/archive/pre_unification_20260702/section_drafts/*.tex

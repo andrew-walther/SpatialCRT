@@ -1,7 +1,7 @@
 # Current Manuscript Abstract and Declarations
 
 Updated 2026-10-02 from the completed standalone CTJ draft. The old abstract
-is preserved in `paper/archive_manuscript/pre_completion_20261002/`;
+is preserved in `paper/archive/pre_completion_20261002/`;
 its April results must not be reused. This file is copied by the approved
 Chapter 3 sync; edit it here only. It is separate from dissertation chapter prose.
 

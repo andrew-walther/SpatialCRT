@@ -162,7 +162,7 @@ outcome simulation or estimator code was edited.
   The final author-order changes were re-rendered and inspected separately.
 - Existing grid/benchmark/main-application/tail source hashes match their earlier
   provenance record exactly. Current source/figure hashes are in
-  `paper/manuscript_provenance_20261002.json`. The approved hook synced
+  `paper/archive/manuscript_provenance_20261002.json`. The approved hook synced
   Chapter 3 from `3fc8385` to bios-dissertation `fa49f47`: 72 pp, 31 verified
   citekeys, one new figure copied, no figure removed, no push. The sync commit
   touches only the authorized Chapter 3 paths.
