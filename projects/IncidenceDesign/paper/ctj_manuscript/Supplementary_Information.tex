@@ -1985,8 +1985,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 
 \end{figure}
 
-The following annual tables retain bias, coverage and both budget
-measures for all designs. More granular setting-specific results,
+Table \ref{tab:nc-annual} retains MSE, bias and coverage for every design in every year; budgets are in Table \ref{tab:nc-budgets}. More granular setting-specific results,
 precision components, residual treatment information and warning and failure records are kept as aggregate output tables. The absence of warnings and failures is a verified result, not a sign that diagnostics were skipped.
 
 \begin{figure}[!htb]
@@ -2009,149 +2008,63 @@ precision components, residual treatment information and warning and failure rec
 \end{figure}
 
 \begin{table}[!htb]
-\small
+\footnotesize
 \centering
 
-\caption{Primary queen 2018 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
-\label{tab:nc-full-2018}
+\caption{Primary queen application performance by design and planning year. Each entry averages the six $\rho/\gamma$ pairs of one spillover regime with equal weight; MSE, bias and coverage are Monte Carlo estimates. Checkerboard, Saturation Quadrants, Isolation Buffer and SRS use the same simulations in every year, because annual incidence enters neither their allocation nor the outcome model, so their rows repeat; repeated values are not independent annual confirmation. Treatment counts and population shares are in Table \ref{tab:nc-budgets}.}
+\label{tab:nc-annual}
 % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
 
-\begin{tabular}{p{3.5cm}rrrrr}
+\begin{tabular}{llrrrrrr}
 \toprule
-Design & MSE & Bias & Coverage & Treated & Pop.\% \\
+& & \multicolumn{3}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+Design & Year & MSE & Bias & Coverage & MSE & Bias & Coverage \\
 \midrule
-\multicolumn{6}{l}{\textit{Both arms}} \\
-Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
-High Incidence Focus & 0.07172 & 0.0160 & 0.934 & 29.00 & 22.2 \\
-Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
-Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.07609 & 0.0099 & 0.933 & 28.00 & 50.0 \\
-Balanced Quartiles & 0.07610 & 0.0170 & 0.933 & 29.00 & 48.5 \\
-Balanced Halves & 0.07458 & 0.0158 & 0.934 & 29.00 & 50.0 \\
-Incidence-Guided Saturation & 0.07428 & 0.0174 & 0.935 & 29.00 & 53.2 \\
-Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
-\multicolumn{6}{l}{\textit{Control only}} \\
-Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
-High Incidence Focus & 0.21426 & 0.0237 & 0.932 & 29.00 & 22.2 \\
-Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
-Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.30622 & 0.0281 & 0.929 & 28.00 & 50.0 \\
-Balanced Quartiles & 0.29352 & 0.0315 & 0.929 & 29.00 & 48.5 \\
-Balanced Halves & 0.29101 & 0.0395 & 0.930 & 29.00 & 50.0 \\
-Incidence-Guided Saturation & 0.24285 & 0.0464 & 0.928 & 29.00 & 53.2 \\
-Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
-
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[!htb]
-\small
-\centering
-
-\caption{Primary queen 2019 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
-\label{tab:nc-full-2019}
-% SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
-
-\begin{tabular}{p{3.5cm}rrrrr}
-\toprule
-Design & MSE & Bias & Coverage & Treated & Pop.\% \\
-\midrule
-\multicolumn{6}{l}{\textit{Both arms}} \\
-Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
-High Incidence Focus & 0.07180 & 0.0063 & 0.936 & 29.00 & 23.5 \\
-Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.2 \\
-Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.07808 & 0.0143 & 0.930 & 31.00 & 55.1 \\
-Balanced Quartiles & 0.07624 & 0.0175 & 0.933 & 29.00 & 49.7 \\
-Balanced Halves & 0.07517 & 0.0167 & 0.934 & 29.00 & 50.5 \\
-Incidence-Guided Saturation & 0.07628 & 0.0233 & 0.935 & 29.00 & 45.1 \\
-Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
-\multicolumn{6}{l}{\textit{Control only}} \\
-Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
-High Incidence Focus & 0.43019 & 0.0227 & 0.931 & 29.00 & 23.5 \\
-Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.2 \\
-Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.43630 & 0.0314 & 0.928 & 31.00 & 55.1 \\
-Balanced Quartiles & 0.30616 & 0.0367 & 0.929 & 29.00 & 49.7 \\
-Balanced Halves & 0.29955 & 0.0360 & 0.930 & 29.00 & 50.5 \\
-Incidence-Guided Saturation & 0.21565 & 0.0522 & 0.926 & 29.00 & 45.1 \\
-Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
-
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[!htb]
-\small
-\centering
-
-\caption{Primary queen 2020 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
-\label{tab:nc-full-2020}
-% SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
-
-\begin{tabular}{p{3.5cm}rrrrr}
-\toprule
-Design & MSE & Bias & Coverage & Treated & Pop.\% \\
-\midrule
-\multicolumn{6}{l}{\textit{Both arms}} \\
-Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.4 \\
-High Incidence Focus & 0.07292 & 0.0094 & 0.931 & 29.00 & 23.3 \\
-Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
-Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.07764 & 0.0122 & 0.933 & 27.00 & 48.0 \\
-Balanced Quartiles & 0.07530 & 0.0158 & 0.933 & 29.00 & 50.6 \\
-Balanced Halves & 0.07466 & 0.0150 & 0.934 & 29.00 & 49.2 \\
-Incidence-Guided Saturation & 0.07682 & 0.0209 & 0.933 & 29.00 & 47.9 \\
-Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
-\multicolumn{6}{l}{\textit{Control only}} \\
-Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.4 \\
-High Incidence Focus & 0.25918 & 0.0327 & 0.930 & 29.00 & 23.3 \\
-Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
-Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.31848 & 0.0281 & 0.930 & 27.00 & 48.0 \\
-Balanced Quartiles & 0.28932 & 0.0356 & 0.927 & 29.00 & 50.6 \\
-Balanced Halves & 0.30610 & 0.0372 & 0.930 & 29.00 & 49.2 \\
-Incidence-Guided Saturation & 0.22029 & 0.0474 & 0.926 & 29.00 & 47.9 \\
-Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
-
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[!htb]
-\small
-\centering
-
-\caption{Primary queen 2021 application performance. Equal weights over six parameter pairs within each regime; bias, MSE and coverage are Monte Carlo estimates. Treatment count and population share describe the allocation budget.}
-\label{tab:nc-full-2021}
-% SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
-
-\begin{tabular}{p{3.5cm}rrrrr}
-\toprule
-Design & MSE & Bias & Coverage & Treated & Pop.\% \\
-\midrule
-\multicolumn{6}{l}{\textit{Both arms}} \\
-Checkerboard & 0.21591 & -0.0074 & 0.936 & 27.00 & 50.7 \\
-High Incidence Focus & 0.07031 & 0.0104 & 0.934 & 29.00 & 22.4 \\
-Saturation Quadrants & 0.07518 & 0.0208 & 0.935 & 29.03 & 49.1 \\
-Isolation Buffer & 0.28591 & 0.0088 & 0.932 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.07736 & 0.0107 & 0.931 & 29.00 & 50.3 \\
-Balanced Quartiles & 0.07453 & 0.0175 & 0.934 & 29.00 & 49.8 \\
-Balanced Halves & 0.07584 & 0.0160 & 0.932 & 29.00 & 49.4 \\
-Incidence-Guided Saturation & 0.07450 & 0.0197 & 0.936 & 29.00 & 51.8 \\
-Simple Random Sampling & 0.07638 & 0.0135 & 0.932 & 29.00 & 49.5 \\
-\multicolumn{6}{l}{\textit{Control only}} \\
-Checkerboard & 0.92036 & 0.0100 & 0.933 & 27.00 & 50.7 \\
-High Incidence Focus & 0.35318 & 0.0296 & 0.929 & 29.00 & 22.4 \\
-Saturation Quadrants & 0.22329 & 0.0464 & 0.926 & 29.03 & 49.1 \\
-Isolation Buffer & 0.28575 & 0.0106 & 0.931 & 15.89 & 26.7 \\
-$2\times2$ Blocking & 0.36168 & 0.0289 & 0.928 & 29.00 & 50.3 \\
-Balanced Quartiles & 0.28439 & 0.0354 & 0.929 & 29.00 & 49.8 \\
-Balanced Halves & 0.29089 & 0.0340 & 0.929 & 29.00 & 49.4 \\
-Incidence-Guided Saturation & 0.23732 & 0.0451 & 0.926 & 29.00 & 51.8 \\
-Simple Random Sampling & 0.30761 & 0.0378 & 0.929 & 29.00 & 49.5 \\
-
+Checkerboard & 2018 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
+ & 2019 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
+ & 2020 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
+ & 2021 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
+\addlinespace
+High Incidence Focus & 2018 & 0.07172 & 0.0160 & 0.934 & 0.21426 & 0.0237 & 0.932 \\
+ & 2019 & 0.07180 & 0.0063 & 0.936 & 0.43019 & 0.0227 & 0.931 \\
+ & 2020 & 0.07292 & 0.0094 & 0.931 & 0.25918 & 0.0327 & 0.930 \\
+ & 2021 & 0.07031 & 0.0104 & 0.934 & 0.35318 & 0.0296 & 0.929 \\
+\addlinespace
+Saturation Quadrants & 2018 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
+ & 2019 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
+ & 2020 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
+ & 2021 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
+\addlinespace
+Isolation Buffer & 2018 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
+ & 2019 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
+ & 2020 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
+ & 2021 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
+\addlinespace
+$2\times2$ Blocking & 2018 & 0.07609 & 0.0099 & 0.933 & 0.30622 & 0.0281 & 0.929 \\
+ & 2019 & 0.07808 & 0.0143 & 0.930 & 0.43630 & 0.0314 & 0.928 \\
+ & 2020 & 0.07764 & 0.0122 & 0.933 & 0.31848 & 0.0281 & 0.930 \\
+ & 2021 & 0.07736 & 0.0107 & 0.931 & 0.36168 & 0.0289 & 0.928 \\
+\addlinespace
+Balanced Quartiles & 2018 & 0.07610 & 0.0170 & 0.933 & 0.29352 & 0.0315 & 0.929 \\
+ & 2019 & 0.07624 & 0.0175 & 0.933 & 0.30616 & 0.0367 & 0.929 \\
+ & 2020 & 0.07530 & 0.0158 & 0.933 & 0.28932 & 0.0356 & 0.927 \\
+ & 2021 & 0.07453 & 0.0175 & 0.934 & 0.28439 & 0.0354 & 0.929 \\
+\addlinespace
+Balanced Halves & 2018 & 0.07458 & 0.0158 & 0.934 & 0.29101 & 0.0395 & 0.930 \\
+ & 2019 & 0.07517 & 0.0167 & 0.934 & 0.29955 & 0.0360 & 0.930 \\
+ & 2020 & 0.07466 & 0.0150 & 0.934 & 0.30610 & 0.0372 & 0.930 \\
+ & 2021 & 0.07584 & 0.0160 & 0.932 & 0.29089 & 0.0340 & 0.929 \\
+\addlinespace
+Incidence-Guided Saturation & 2018 & 0.07428 & 0.0174 & 0.935 & 0.24285 & 0.0464 & 0.928 \\
+ & 2019 & 0.07628 & 0.0233 & 0.935 & 0.21565 & 0.0522 & 0.926 \\
+ & 2020 & 0.07682 & 0.0209 & 0.933 & 0.22029 & 0.0474 & 0.926 \\
+ & 2021 & 0.07450 & 0.0197 & 0.936 & 0.23732 & 0.0451 & 0.926 \\
+\addlinespace
+Simple Random Sampling & 2018 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
+ & 2019 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
+ & 2020 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
+ & 2021 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
 \bottomrule
 \end{tabular}
 \end{table}

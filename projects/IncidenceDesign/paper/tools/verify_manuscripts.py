@@ -272,7 +272,8 @@ def verify():
         raise AssertionError('Wrong-value fixture was silently accepted')
     print('PASS: 36 grid cells in chapter/SI and 28 in the CTJ (six designs + SRS); 20 annual MSE cells in chapter/SI;')
     print('72 matched annual figure ratios and the seven-row CTJ allocation-rule table;')
-    print('360 annual performance cells, 72 budget cells, 32 sensitivity cells, all ' + str(len(table_labels)) +
+    annual_cells = '216 merged annual performance cells' if '\\label{tab:nc-annual}' in chapter else '360 annual performance cells'
+    print(annual_cells + ', 72 budget cells, 32 sensitivity cells, all ' + str(len(table_labels)) +
           ' supplement table bodies; figures, references, citations and six-exhibit cap.')
     print('PASS: deliberate incorrect-number fixture rejected. Scientific prose reviewed separately.')
     print('PASS: reading/submission share one master and six exhibit definitions; '
