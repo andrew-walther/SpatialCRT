@@ -6,7 +6,7 @@ Dependencies: Python standard library.
 
 Run from any directory: python3 paper/tools/verify_manuscripts.py [--chapter PATH] [--pending-si LABEL]
 --chapter checks another long-form chapter file (e.g. the concise review copy)
-in place of Dissertation_Chapter.qmd.
+in place of Thesis_Chapter.qmd.
 Only aggregate CSVs and document sources are read. This does not assert that
 all prose claims are correct: independent scientific review covers their scope.
 """
@@ -16,7 +16,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-CHAPTER = ROOT / 'paper/dissertation_chapter/Dissertation_Chapter.qmd'
+CHAPTER = ROOT / 'paper/thesis_chapter/Thesis_Chapter.qmd'
 MAIN = ROOT / 'paper/ctj_manuscript/manuscript_ctj/CTJ_Manuscript.tex'
 MAIN_EXHIBITS = MAIN.with_name('CTJ_Exhibits.tex')
 READING = MAIN.with_name('CTJ_Reading.tex')

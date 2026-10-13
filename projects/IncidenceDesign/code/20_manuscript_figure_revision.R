@@ -210,11 +210,11 @@ export_compact_exhibits <- function(project_dir) {
     ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(),
                    panel.grid = ggplot2::element_blank())
   ggplot2::ggsave(file.path(out, "regions.png"), region_map, width = 10, height = 4, dpi = 150)
-  for (folder in c("ctj_manuscript", "dissertation_chapter")) {
+  for (folder in c("ctj_manuscript", "thesis_chapter")) {
     stopifnot(file.copy(file.path(out, "regions.png"),
                         file.path(project_dir, "paper", folder, "figures/real_sud"), overwrite = TRUE))
   }
-  for (folder in c("ctj_manuscript", "dissertation_chapter")) {
+  for (folder in c("ctj_manuscript", "thesis_chapter")) {
     destination <- file.path(project_dir, "paper", folder, "figures/compact")
     dir.create(destination, recursive = TRUE, showWarnings = FALSE)
     selected <- if (folder == "ctj_manuscript") list.files(out, pattern = "[.]pdf$", full.names = TRUE) else

@@ -22,7 +22,7 @@ UNC-Chapel Hill). The dissertation text itself lives in the separate
 | **Estimator** | SAR (`lagsarlm`) | Oracle ML spatial lag (`fit_sar_lag()`), non-oracle sensitivity fit |
 | **Application** | NC probation (judicial districts) | Sudden unexpected death (SUD) prevention across NC's 58 community college service areas |
 | **Status** | **Accepted** at *BMC Medical Research Methodology* | Simulation revised and re-run 2026-09-24 (12,800 scenarios); dissertation chapter rewritten; real-data application in progress |
-| **Paper** | `paper/Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf` | `paper/dissertation_chapter/` (chapter); `paper/ctj_manuscript/` (*Clinical Trials* draft, still April 2026 numbers) |
+| **Paper** | `paper/Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf` | `paper/thesis_chapter/` (chapter); `paper/ctj_manuscript/` (*Clinical Trials* draft, still April 2026 numbers) |
 
 SpillSpatialDepSim is the applied predecessor: it set up the simulation
 framework (SAR model, spillover types, block stratification).
@@ -51,7 +51,7 @@ SpatialCRT/
       code/  results/  docs/  longleaf_setup/
       application/              # NC community-college application (data/, code/, results/)
       paper/
-        dissertation_chapter/   # chapter source + tools/ that sync it to bios-dissertation
+        thesis_chapter/   # chapter source + tools/ that sync it to bios-dissertation
         ctj_manuscript/         # Clinical Trials manuscript + supplement
         report/                 # project report
   archive/                      # legacy and exploratory work (not maintained)

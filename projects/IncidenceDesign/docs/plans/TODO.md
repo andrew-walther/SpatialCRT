@@ -56,7 +56,7 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   and adopted (prelim body 45.5 to 41 pp; Appendix B 27 pp; standalone chapter 68 pp;
   SI 45 pp with merged annual table); synced, full prelim rebuilt (192 pp), pushed.
   See [plan/status](chapter3_length_review_plan_2026-10-12.md); cut text in
-  `paper/dissertation_chapter/notes/trimmed-material.md`.
+  `paper/thesis_chapter/notes/trimmed-material.md`.
 - [x] Reference-list length check: strict APA 7 with DOIs and full author lists kept
   (a six-author et-al. variant saved no pages; reverted).
 - [ ] Author full review of the revised (concise) chapter, both CTJ layouts and supplement.

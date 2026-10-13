@@ -133,7 +133,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 > The items below superseded the pre-2026-07-02 modular-Quarto-manuscript items
 > (`_application.qmd`, `_discussion.qmd`, target-journal selection, etc.), which are now
 > obsolete — target journal (*Clinical Trials*, SAGE) is chosen, both the Application and
-> Discussion sections are fully written in `CTJ_Manuscript.tex` and `Dissertation_Chapter.qmd`,
+> Discussion sections are fully written in `CTJ_Manuscript.tex` and `Thesis_Chapter.qmd`,
 > and manuscript figures are finalized (see README "Manuscript Development" for the current
 > figure inventory). See `paper/archive/pre_unification_20260702/` for the retired framework.
 
@@ -157,7 +157,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   places since it blocks manuscript finalization specifically.*
 
 - [ ] **UNC Graduate School dissertation template** `[Priority: Medium]` `[Effort: Small]`
-  `Dissertation_Chapter.qmd` currently renders to a simple double-spaced `article`-class PDF
+  `Thesis_Chapter.qmd` currently renders to a simple double-spaced `article`-class PDF
   matching the SpillSpatialDepSim (Project 1) manuscript format, per user direction. Apply the
   actual UNC template once all dissertation chapters are ready to merge.
 
@@ -208,7 +208,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 - [x] **Statistical power added as a primary metric** — P(reject H₀: τ=0) tracked per scenario; power curves computed as a function of τ per design. *(2026-04-08)*
 - [x] **Monte Carlo SEs for MSE/coverage estimates** *(SUPERSEDED 2026-09-24: SEs now come from the 10 surface-level means, stored by 05)* — Delta-method `SE_MSE`, `SE_Coverage`, `SE_Bias` via `add_mc_ses()`; confirmed small and uniform across designs at current rep counts. *(2026-04-08)*
 - [x] **NC application study (irregular geometry)** — Full design-comparison pipeline re-implemented for NC's actual 58 Community College service areas (`application/`), all 8 designs adapted, 640-scenario/160,000-fit synthetic-incidence run complete. Real SUDDEN-derived data still pending (tracked above). *(2026-06, ongoing)*
-- [x] **Two manuscripts drafted from scratch** — Short *Clinical Trials* (SAGE) submission (`paper/ctj_manuscript/`) and longer-form dissertation chapter (`paper/dissertation_chapter/`), both presenting 6 of the 8 designs (2 dropped as statistically redundant), no DIM-vs-MLE comparison, full design names throughout. *(2026-07-02)*
+- [x] **Two manuscripts drafted from scratch** — Short *Clinical Trials* (SAGE) submission (`paper/ctj_manuscript/`) and longer-form dissertation chapter (`paper/thesis_chapter/`), both presenting 6 of the 8 designs (2 dropped as statistically redundant), no DIM-vs-MLE comparison, full design names throughout. *(2026-07-02)*
 - [x] **CTJ Supplementary Information drafted and reviewed** — Fulfills the main text's 3 deferred "online supplementary material" items (reproducibility/code, full 8-design comparison, metric formulas/parameter grid); reviewed by a fresh agent against the plan's hard constraints. *(2026-07-03)*
 - [x] **NC application maps added to both manuscript documents** — 3 maps from `application/` added to the SI (Figures S8-S10) and main text (Figure 4); coverage + tau-sensitivity figures merged into one to preserve the CTJ's 6-exhibit cap. *(2026-07-03)*
 
@@ -232,7 +232,7 @@ Moved verbatim from `AGENTS.md` "Extensions & Future Work Roadmap" (done rows re
 
 First full drafts of both manuscripts, plus the CTJ Supplementary Information,
 are complete (see Current State above: `paper/ctj_manuscript/`,
-`paper/dissertation_chapter/`). Remaining work:
+`paper/thesis_chapter/`). Remaining work:
 
 | Priority | Task | File |
 |----------|------|------|

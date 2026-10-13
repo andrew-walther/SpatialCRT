@@ -136,7 +136,7 @@ and spillover ($\gamma$) are both present in the outcome DGP. The non-oracle ML 
 sanity-check simulation mechanics and as a secondary comparator. All substantive
 design recommendations should be based on MLE results.
 
-**Manuscript prose rule (both `paper/ctj_manuscript/` and `paper/dissertation_chapter/`):
+**Manuscript prose rule (both `paper/ctj_manuscript/` and `paper/thesis_chapter/`):
 no DIM-vs-MLE comparison, ever.** DIM was always an internal validation baseline,
 never a scientific comparator — MLE (`lagsarlm`) is simply presented as *the*
 estimator. This is a stricter rule than the codebase/report language above, which is
@@ -186,8 +186,8 @@ the reasoning behind this distinction.
 | `manuscript_ctj/CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
 | `supplementary_info/Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
 | `cover_letter/`, `figures/` (incl. `Figure_Legends.md`), `submission_checklist.md` | — | Cover letter draft; shared main/SI figures written by the R scripts | Figure paths in both TeX sources are `../figures/...` |
-| **paper/dissertation_chapter/** | | | |
-| `Dissertation_Chapter.qmd` | ~330 | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
+| **paper/thesis_chapter/** | | | |
+| `Thesis_Chapter.qmd` | ~330 | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
 | **paper/** | | | |
 | `SpatialCRT_IncidenceDesign.bib` | ~99K, 81 entries | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`; `habib_temporal_2026` added 2026-09-24 = Ashkan Habib's unpublished BIOS master's paper, source of the SUD county data) | Zotero base + SUD/SUDDEN citations + design-theory citations |
 | `SAGE_Journal_Template/` | — | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
@@ -351,9 +351,9 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 
 ## Dissertation Chapter 3 Sync
 
-- `paper/dissertation_chapter/Dissertation_Chapter.qmd` is the only file anyone edits
+- `paper/thesis_chapter/Thesis_Chapter.qmd` is the only file anyone edits
   (author decision 2026-09-25).
-- `paper/dissertation_chapter/tools/sync_to_prelim.sh` generates
+- `paper/thesis_chapter/tools/sync_to_prelim.sh` generates
   `bios-dissertation/prelim/project-proposals/project2-incidence/draft/project2-incidence-draft.qmd`
   (CHAPTER 3 / APPENDIX B). It checks every citekey against the master bib, failing loud,
   renders with RStudio's Quarto 1.10, and commits only `project2-incidence/` paths there.
@@ -377,7 +377,7 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
   and each folder's `latexmkrc` sends intermediates to its gitignored `.build/`.
   A plain `pdflatex` build also works but leaves intermediates beside the sources;
   `git clean -fX -- paper/ctj_manuscript` removes them (it only touches gitignored files).
-- **Dissertation chapter bibliography:** reference it via the `shared-refs.bib` symlink in `paper/dissertation_chapter/`, not `../SpatialCRT_IncidenceDesign.bib` directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib filenames referenced from YAML.
+- **Dissertation chapter bibliography:** reference it via the `shared-refs.bib` symlink in `paper/thesis_chapter/`, not `../SpatialCRT_IncidenceDesign.bib` directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib filenames referenced from YAML.
 - Dated progress logs moved to `ROADMAP.md` ("Progress log") on 2026-10-01; logs from
   2026-04-08 to 2026-09-04 are in `git log -p AGENTS.md`.
 

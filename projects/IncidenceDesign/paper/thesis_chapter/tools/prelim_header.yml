@@ -4,8 +4,8 @@ author: "Andrew J Walther"
 
 # ---------------------------------------------------------------------------
 # GENERATED FILE -- DO NOT EDIT. This YAML comes from
-# SpatialCRT/projects/IncidenceDesign/paper/dissertation_chapter/tools/prelim_header.yml
-# and the body from Dissertation_Chapter.qmd, via tools/sync_to_prelim.sh.
+# SpatialCRT/projects/IncidenceDesign/paper/thesis_chapter/tools/prelim_header.yml
+# and the body from Thesis_Chapter.qmd, via tools/sync_to_prelim.sh.
 #
 # Modelled on Chapter 2's draft YAML
 # (prelim/project-proposals/project1-spillover/draft/project1-spillover-draft.qmd):
@@ -57,7 +57,7 @@ format:
 
         \setcounter{tocdepth}{2}
 
-        % Appendix-subsection anchor; see Dissertation_Chapter.qmd's header.
+        % Appendix-subsection anchor; see Thesis_Chapter.qmd's header.
         \newcommand{\applabel}[2]{\label{#2}}
 
 crossref:

@@ -353,8 +353,8 @@ paper/
     figures/                                  # Main-text + SI figures and Figure_Legends.md (incl.
                                                #   compact/, real_sud/, application_maps/, si_figures/)
     submission_checklist.md
-  dissertation_chapter/                       # Canonical full chapter and appendix, no length ceiling
-    Dissertation_Chapter.{qmd,pdf}
+  thesis_chapter/                       # Canonical full chapter and appendix, no length ceiling
+    Thesis_Chapter.{qmd,pdf}
     notes/trimmed-material.md                 # Text cut or moved by the length review
     shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink (Quarto underscore workaround)
   tools/verify_manuscripts.py                 # Table/figure/reference consistency checker

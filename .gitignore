@@ -19,4 +19,4 @@ projects/IncidenceDesign/application/data/sudden_county_year.csv
 projects/IncidenceDesign/application/data/derived/
 
 # Log of the Chapter 3 -> bios-dissertation sync (post-commit hook)
-projects/IncidenceDesign/paper/dissertation_chapter/tools/sync.log
+projects/IncidenceDesign/paper/thesis_chapter/tools/sync.log

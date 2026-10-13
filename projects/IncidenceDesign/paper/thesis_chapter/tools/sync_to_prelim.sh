@@ -2,7 +2,7 @@
 # ============================================================
 # Script: sync_to_prelim.sh
 # Purpose: Regenerate bios-dissertation's Chapter 3 draft from
-#          Dissertation_Chapter.qmd (the ONLY file anyone edits), render it,
+#          Thesis_Chapter.qmd (the ONLY file anyone edits), render it,
 #          and commit the generated copy in bios-dissertation.
 # Author: Andrew Walther
 # Created: 2026-09-25
@@ -54,7 +54,7 @@ fail() { echo "sync_to_prelim: FAILED: $*" >&2; exit 1; }
 TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHAPTER_DIR="$(dirname "$TOOLS_DIR")"
 PAPER_DIR="$(dirname "$CHAPTER_DIR")"
-CHAPTER_QMD="$CHAPTER_DIR/Dissertation_Chapter.qmd"
+CHAPTER_QMD="$CHAPTER_DIR/Thesis_Chapter.qmd"
 CHAPTER_BIB="$PAPER_DIR/SpatialCRT_IncidenceDesign.bib"
 DECLARATIONS="$CHAPTER_DIR/manuscript-declarations.md"
 SPATIAL_ROOT="$(git -C "$CHAPTER_DIR" rev-parse --show-toplevel)"

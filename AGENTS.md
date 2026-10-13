@@ -29,9 +29,9 @@ IncidenceDesign's current results and design list are in `README.md` and
   be tracked, and aggregate statistics in docs are acceptable (author
   decision 2026-10-01).
 - **Dissertation Chapter 3 sync.**
-  `projects/IncidenceDesign/paper/dissertation_chapter/Dissertation_Chapter.qmd`
+  `projects/IncidenceDesign/paper/thesis_chapter/Thesis_Chapter.qmd`
   is the only copy anyone edits. A post-commit hook
-  (`dissertation_chapter/tools/`, installed by `install_hooks.sh`) runs
+  (`thesis_chapter/tools/`, installed by `install_hooks.sh`) runs
   `sync_to_prelim.sh`, which renders it with RStudio's Quarto 1.10 and
   commits the result in `~/GithubProjects/bios-dissertation`. The prelim
   YAML header is `tools/prelim_header.yml` (sets `colorlinks: false`, so
@@ -46,7 +46,7 @@ projects/
   SpillSpatialDepSim/   code/ data/ results/ paper/
   IncidenceDesign/      code/ results/ docs/ longleaf_setup/
     application/        data/ (restricted files ignored) code/ results/ report/
-    paper/              dissertation_chapter/ ctj_manuscript/ report/ archive/
+    paper/              thesis_chapter/ ctj_manuscript/ report/ archive/
 archive/                legacy work, not maintained
 ```
 

@@ -159,7 +159,7 @@ fig <- ggplot2::ggplot(f, ggplot2::aes(y = Label)) +
                  strip.text.y = ggplot2::element_text(angle = -90))
 fig_file <- "results/allocation_risk/summary/allocation_distribution_by_design.pdf"
 ggplot2::ggsave(fig_file, fig, width = 174, height = 105, units = "mm")
-for (folder in c("paper/ctj_manuscript/figures/compact", "paper/dissertation_chapter/figures/compact")) {
+for (folder in c("paper/ctj_manuscript/figures/compact", "paper/thesis_chapter/figures/compact")) {
   stopifnot(file.copy(fig_file, folder, overwrite = TRUE))
 }
 cat("Wrote allocation distribution summary and figure\n")

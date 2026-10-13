@@ -12,20 +12,20 @@
 # from the current worktree, so the logic stays versioned here.
 #
 # Trigger paths (relative to the SpatialCRT root):
-#   projects/IncidenceDesign/paper/dissertation_chapter/Dissertation_Chapter.qmd
-#   projects/IncidenceDesign/paper/dissertation_chapter/figures/
-#   projects/IncidenceDesign/paper/dissertation_chapter/tools/
+#   projects/IncidenceDesign/paper/thesis_chapter/Thesis_Chapter.qmd
+#   projects/IncidenceDesign/paper/thesis_chapter/figures/
+#   projects/IncidenceDesign/paper/thesis_chapter/tools/
 #   projects/IncidenceDesign/paper/SpatialCRT_IncidenceDesign.bib
 # Output is appended to tools/sync.log (gitignored).
 
 root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
-tools="$root/projects/IncidenceDesign/paper/dissertation_chapter/tools"
+tools="$root/projects/IncidenceDesign/paper/thesis_chapter/tools"
 log="$tools/sync.log"
 sync="$tools/sync_to_prelim.sh"
 
 # Files changed by HEAD (first parent for merges; --root for a first commit).
 changed=$(git diff-tree --no-commit-id --name-only -r --root -m --first-parent HEAD 2>/dev/null)
-echo "$changed" | grep -q -E '^projects/IncidenceDesign/paper/(dissertation_chapter/(Dissertation_Chapter\.qmd$|figures/|tools/)|SpatialCRT_IncidenceDesign\.bib$)' || exit 0
+echo "$changed" | grep -q -E '^projects/IncidenceDesign/paper/(thesis_chapter/(Thesis_Chapter\.qmd$|figures/|tools/)|SpatialCRT_IncidenceDesign\.bib$)' || exit 0
 
 sha=$(git rev-parse --short HEAD 2>/dev/null)
 
