@@ -4,10 +4,13 @@
 Author: Andrew Walther. Created: 2026-10-02.
 Dependencies: Python standard library.
 
-Run from any directory: python3 paper/tools/verify_manuscripts.py
+Run from any directory: python3 paper/tools/verify_manuscripts.py [--chapter PATH]
+--chapter checks another long-form chapter file (e.g. the concise review copy)
+in place of Dissertation_Chapter.qmd.
 Only aggregate CSVs and document sources are read. This does not assert that
 all prose claims are correct: independent scientific review covers their scope.
 """
+import argparse
 import csv
 import re
 from pathlib import Path
@@ -251,4 +254,9 @@ def verify():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--chapter', type=Path, default=CHAPTER,
+                        help='long-form chapter source to check (default: canonical chapter)')
+    CHAPTER = parser.parse_args().chapter.resolve()
+    print(f'Chapter checked: {CHAPTER.relative_to(ROOT)}')
     verify()
