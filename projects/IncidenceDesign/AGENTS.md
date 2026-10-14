@@ -358,6 +358,11 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
   (CHAPTER 3 / APPENDIX B). It checks every citekey against the master bib, failing loud,
   renders with RStudio's Quarto 1.10, and commits only `project2-incidence/` paths there.
   It never pushes and skips PDF-only re-renders.
+- `paper/thesis_chapter/tools/sync_ctj_to_bios.sh` (same post-commit hook, triggered by
+  `paper/ctj_manuscript/manuscript_ctj/`) copies the committed `CTJ_Manuscript.tex`,
+  `CTJ_Exhibits.tex` and `CTJ_Reading.pdf` to `bios-dissertation/manuscripts/project2-incidence/`
+  as `project_2_paper.tex`, `project_2_paper_exhibits.tex` and `project_2_paper.pdf`, and
+  commits them there. No render; it warns if the `.tex` was committed after the reading PDF.
 - A `post-commit` hook (install with `tools/install_hooks.sh`) runs it when a commit touches
   the chapter, its figures, `tools/` or the bib. Its log is `tools/sync.log` (gitignored).
 - The prelim YAML header is `tools/prelim_header.yml` (`colorlinks: false`, so links print

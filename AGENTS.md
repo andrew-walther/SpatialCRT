@@ -36,6 +36,11 @@ IncidenceDesign's current results and design list are in `README.md` and
   commits the result in `~/GithubProjects/bios-dissertation`. The prelim
   YAML header is `tools/prelim_header.yml` (sets `colorlinks: false`, so
   links print black). The sync never pushes.
+  The same hook runs `sync_ctj_to_bios.sh` when a commit touches
+  `IncidenceDesign/paper/ctj_manuscript/manuscript_ctj/`: it copies the
+  committed CTJ `.tex` files and `CTJ_Reading.pdf` (no render) to
+  `bios-dissertation/manuscripts/project2-incidence/` as `project_2_paper.*`
+  and commits them there.
 - **Commits:** stage specific paths, never `git commit -a`.
 - License: MIT (`LICENSE`).
 
