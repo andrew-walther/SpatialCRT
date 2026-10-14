@@ -78,12 +78,15 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   submission attestations; confirm the pilot description with Simpson.
 - [ ] **Coverage below nominal (~93%; added 2026-10-14):** Wald intervals
   τ̂ ± 1.96·SE are slightly too narrow in every design (likely ML SE ignoring
-  uncertainty in ρ̂; untested). Prefer the quick fix: recompute coverage with a
-  t critical value (application df = 58 − 4 = 54, t ≈ 2.005), with no new
-  simulation if the fit caches store τ̂ and SE (check first). Heavier options only if
-  needed: parametric bootstrap; randomization inference (not possible for the
-  single-allocation designs). Ask Lin whether a quick check is expected or a
-  stated limitation suffices.
+  uncertainty in ρ̂; untested). Quick fix tried 2026-10-14 (application only): a
+  t critical value (df = 58 − 4 = 54, t ≈ 2.005; 53 for β = 1) recomputed from the
+  stored production fits (stored Wald coverage reproduced exactly, 936/936 sources)
+  raised primary coverage only from ~93.1% to ~93.7% (per design/regime
+  92.6–93.6% → 93.2–94.1%; β = 1: 92.9% → 93.5%); rankings unchanged, ~1.3 points
+  of the gap remain. Grid not checked. Closing the gap would need a heavier option:
+  parametric bootstrap; randomization inference (not possible for the
+  single-allocation designs). Ask Lin whether a stated limitation (optionally with
+  one sentence on the t-value check) suffices.
 - [ ] Submit CTJ with the author-completed
   [checklist](../../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
