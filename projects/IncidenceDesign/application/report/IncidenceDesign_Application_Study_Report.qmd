@@ -9,6 +9,7 @@ format:
     toc: true
     toc-depth: 1
     number-sections: true
+    colorlinks: false
     geometry:
       - top=0.55in
       - left=0.6in
