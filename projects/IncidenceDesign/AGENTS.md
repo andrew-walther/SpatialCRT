@@ -77,6 +77,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   the appendix. A brief Chapter 2 link motivates the extension; no direct numerical
   cross-project comparison is required. CTJ must cite the verified Project 1
   publication to establish the extension while remaining self-contained.
+- **No single recommended design (author decision 2026-10-14):** the chapter and
+  manuscripts report the best designs by scenario, mainly by spillover regime, instead of
+  naming one design for all settings. The rankings change with the regime (e.g., Checkerboard
+  and 2×2 Blocking are near the best under both-arms spillover and the worst under
+  control-only), so a scenario-specific answer is more robust. This replaces the "one
+  recommended design" in `docs/plans/simulation-revision-plan.md` and the Phase D ROADMAP
+  item; the guidance is in the chapter's Discussion (added 2026-10-11).
 - **Project 1 is final.** Treat `projects/SpillSpatialDepSim/` as read-only. Changes
   reach `bios-dissertation` only through the Chapter 3 sync (below) unless the author
   asks otherwise.
