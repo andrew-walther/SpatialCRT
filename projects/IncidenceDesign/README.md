@@ -447,10 +447,26 @@ intermediates go to the hidden `.build/`, see AGENTS).
 |---|-------|-----------|-----|
 | 1 | PDF render failure | `\u03c1` (Unicode rho) unsupported by `pdf()` device | Replace with literal `"rho"` text |
 | 2 | Pairwise dominance NaN | `make.names()` mangled column names in `pivot_wider` output | Use `wide[[designs[i]]]` direct bracket access |
-| 3 | Eta-squared > 1.0 | `var(group_means)/var(total)` incorrect formula | Proper: `SS_between/SS_total` |
+| 3 | Eta-squared > 1.0 | `var(group_means)/var(total)` incorrect formula | Proper: `SS_between/SS_total`, where `SS_between = sum(n_j*(mean_j - grand_mean)^2)` |
 | 4 | `I()` namespace conflict | `I <- diag(N)` shadowed `base::I()` | Renamed to `I_mat` |
 | 5 | Degenerate Z crash | Designs occasionally produce all-treated or all-control | Early `NA` return in `estimate_tau()` |
 | 6 | R sprintf 10k limit | `complete_after_mle.R` format string too long | Write docs via Claude Code `Write` tool |
+
+Added 2026-10-14 from AGENTS.md (simulation revision and later):
+
+| Bug | Symptom | Fix |
+|-----|---------|-----|
+| Design/outcome incidence mismatch (fixed 2026-09) | Designs used `X[,1]`; outcome replicate k used `X[,k]` (cor ≈ 0) | Matched surfaces (M1) |
+| Poisson ties (fixed 2026-09) | 1,000 per cluster → ~5 distinct X; High Incidence Focus treated 14–50; `ntile()` broke ties by grid position | 100,000 per cluster; `random_tie_rank()` per draw; exact N/2 |
+| Unreproducible seeds (fixed 2026-09) | X and eps drawn before the per-scenario seed; forked workers reseeded | Key-based `set_seed_key()` for every draw |
+| Overstated MC precision (fixed 2026-09) | Deterministic designs copied 25× against 10 noise draws | One noise column per fit; SEs from surface means |
+| Silent aliasing (fixed 2026-09) | Checkerboard × rook: WZ = 1 − Z; `lagsarlm` dropped Spill, and `suppressWarnings` hid it | `withCallingHandlers`; `N_Aliased`, `Z_WZ_rank_deficient` |
+| Stale checkpoints (fixed 2026-09) | Old checkpoints loaded silently on re-run | Manifest check refuses mismatches |
+| `lagsarlm` slowness | ~76 ms/fit, ~94% of it an unconditional `gc()` on exit | `fit_sar_lag()` (validated, ~0.6 ms/fit) |
+| Rank-trajectory axis (fixed 2026-09) | `plot_rank_trajectories()` y-limits hard-coded to 6 silently dropped ranks 7–8 | Limits from `max(Rank)` |
+| Commentary pivot (fixed 2026-09) | `generate_commentary()` pivot lacked `True_Tau` → list-columns on tau-sweep files | `True_Tau` added to pivot keys |
+| Naive MC SEs (fixed 2026-09) | `add_mc_ses()` overwrote stored surface-level SEs | Returns stored SEs when present |
+
 
 ---
 

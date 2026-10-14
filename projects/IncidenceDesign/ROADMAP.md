@@ -246,6 +246,78 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### Status text moved from AGENTS.md (2026-10-14)
+
+Moved verbatim when `AGENTS.md` was trimmed to standing rules and reference material.
+
+**Verified completion checkpoint (2026-10-02):** the observed-incidence application
+and focused tail refinement are complete. Production: 1,248 reporting rows,
+936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
+adds 2,280,000 outcomes on the same allocations. All settings pass completeness
+and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
+boundary fits or failures. Coverage remains below 95% and allocation tails remain
+uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+
+**CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
+`CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
+in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
+PDFs: submission 21 pp, reading 8 pp, chapter 68 pp, supplement 45 pp (2026-10-13, after the Chapter 3 length review). The author
+approved original-title restoration and the six-exhibit revision. Main figures
+are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
+parameter/tail/budget graphics remain supporting material. Author order is
+Walther, Habib, Simpson, Lin, with Lin corresponding. See
+[exhibit revision](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md) and
+[layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
+
+**Full prelim/reference-flow checkpoint:** bios-dissertation's
+`prelim/full-draft/prelim.pdf` is the 192-page working assembly (2026-10-13); Chapter 3 has 41 body
+and 27 appendix pages after the length review. The master explicitly includes the author-requested
+List of Tables (26 entries) and List of Figures (35 entries) even in prelim mode.
+Rebuild there with `prelim/full-draft/tools/build_prelim.py` after
+individual chapter syncs; source ownership and hooks are unchanged. Chapter 4
+continuing work now uses narrative aims/expected evidence without a dated
+timeline or advisor-meeting references. CTJ reading
+uses the `balance` package (`\balance` before the bibliography) and no forced page breaks;
+references begin on page 7 and occupy both columns on page 8. The review layout
+alone loads `lastpage`. See
+[checkpoint/teach-back](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).
+
+**Current State (summary), as it stood in AGENTS.md:**
+
+- Original revised grid: 12,800 eight-design scenarios; SRS benchmark extends to
+  14,400 per estimator. September 24/27 current outputs, no checkpoint edits.
+- Observed NC education application and tail extension: complete/verified;
+  1,248 main/144 tail reporting rows, 9,878,000 distinct outcomes across stages.
+- Full thesis chapter/appendix and derived CTJ/SI: complete, independently reviewed,
+  rendered and numerically checked. Old application comments resolved by focused
+  rewriting or agreed implementation, not by claiming unsupported facts confirmed.
+- CTJ: standalone preceding-work citation verified; 3,165 prose/heading words
+  (3,314 including end declarations)/279 structured
+  abstract words, six exhibits, full detailed supplement and submission checklist.
+- `code/20_manuscript_figure_revision.R` exports the compact figures and plot-data
+  CSVs without simulation; `code/19_manuscript_exhibits.R` retains the prior detailed
+  export. Run `Rscript code/tests/test_manuscript_exhibits.R` and
+  `python3 paper/tools/verify_manuscripts.py` for numerical/exhibit consistency.
+- Chapter checkpoint `58c1c82` synced through the approved hook to bios-dissertation
+  `fc63326`; final manuscript checkpoint `a47b0ae` resynced to `6b07b95`
+  (72 pp, 31 citekeys); editorial revision `3fc8385` resynced to `fa49f47`
+  (72 pp, one compact figure copied); no push.
+- Comprehensive four-track review completed and approved fixes applied (2026-10-12):
+  `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`. CTJ body 3,280 words
+  (3,425 with declarations; limit 3,500), abstract 317.
+- Advisor-meeting report: `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`
+  (reads tracked aggregates only; inline numbers computed from CSVs).
+- Next: author review; IRB statement, AI disclosure, coauthor approval (docs/plans/TODO.md).
+- Full figure selection, code teach-back, source mapping and live journal check:
+  `docs/plans/manuscript_completion_findings_2026-10-02.md`.
+
+- **Length review (adopted 2026-10-13):** the chapter is the reviewed concise version
+  (prelim body 41 pp, was 45.5; Appendix B 27 pp). Detail moved to Appendix B; nothing
+  numeric was dropped. Cut or moved text: `notes/trimmed-material.md`. The four annual NC
+  tables are one merged `tab:nc-annual` in both chapter and SI. The verifier's `--chapter`
+  and `--pending-si` options remain for checking any future candidate copy.
+
 ### CTJ and paper/ folder cleanup (2026-10-13)
 
 - Build intermediates: a local `latexmkrc` sends latexmk's `.aux/.log/.bbl/...` to a hidden,

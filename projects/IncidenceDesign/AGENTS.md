@@ -1,38 +1,5 @@
 # AGENTS.md
 
-**Verified completion checkpoint (2026-10-02):** the observed-incidence application
-and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
-adds 2,280,000 outcomes on the same allocations. All settings pass completeness
-and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
-boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
-
-**CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
-`CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
-in `CTJ_Exhibits.tex`, never duplicate manuscript content in the wrapper. Current
-PDFs: submission 21 pp, reading 8 pp, chapter 68 pp, supplement 45 pp (2026-10-13, after the Chapter 3 length review). The author
-approved original-title restoration and the six-exhibit revision. Main figures
-are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
-parameter/tail/budget graphics remain supporting material. Author order is
-Walther, Habib, Simpson, Lin, with Lin corresponding. See
-[exhibit revision](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md) and
-[layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
-
-**Full prelim/reference-flow checkpoint:** bios-dissertation's
-`prelim/full-draft/prelim.pdf` is the 192-page working assembly (2026-10-13); Chapter 3 has 41 body
-and 27 appendix pages after the length review. The master explicitly includes the author-requested
-List of Tables (26 entries) and List of Figures (35 entries) even in prelim mode.
-Rebuild there with `prelim/full-draft/tools/build_prelim.py` after
-individual chapter syncs; source ownership and hooks are unchanged. Chapter 4
-continuing work now uses narrative aims/expected evidence without a dated
-timeline or advisor-meeting references. CTJ reading
-uses the `balance` package (`\balance` before the bibliography) and no forced page breaks;
-references begin on page 7 and occupy both columns on page 8. The review layout
-alone loads `lastpage`. See
-[checkpoint/teach-back](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).
-
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 > Provides ~80% of the context needed to be immediately productive without
@@ -47,18 +14,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Standing Author Rules
 
-- **Application execution:** implementation approved October 2. Continue the
-  approved plan without re-interviewing settled choices. The companion is
-  `application/report/real_sud_companion.html`; computation lives in
-  `application/code/real_sud_{setup,simulation}.R` and `run_real_sud.R`.
-  Follow `application/README.md` and the implementation findings for run status;
-  smoke/pilot outputs are verification stages, not full-study conclusions.
-  The full chapter/appendix, CTJ/SI and comprehensive review (2026-10-12) are done.
-  Old deadline dates no longer govern work.
-- **CTJ author declarations (October 2):** retain Walther, Habib, Simpson and Lin in that order,
-  with Lin corresponding. Author confirmed no current funding or conflicts.
-  The in-text ethics placeholder was removed (author, 2026-10-12); the IRB statement
-  is a TODO before submission. Never invent a protocol number or claim approval/exemption.
+Reasons and history for each rule: `DECISIONS.md`.
+
+- **Application (approved 2026-10-02):** continue the approved plan without
+  re-interviewing settled choices. Design authority:
+  `docs/plans/nc_sud_application_plan_2026-10-02.md` (its status separates settled from
+  proposed choices; never treat proposals as approved). Smoke/pilot outputs are
+  verification stages, not conclusions.
+- **Application outcome (2026-10-02):** the primary continuous education outcome has no
+  SUD-incidence baseline term (β = 0); observed rates inform allocation only. β = 1 is an
+  explicitly hypothetical sensitivity. τ is constant within a scenario.
+- **CTJ authors:** Walther, Habib, Simpson, Lin, in that order; Lin corresponding. Never
+  invent an IRB protocol number or claim approval/exemption.
 - **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first
   body use and avoid internal pipeline jargon; one design-name set everywhere
   (Checkerboard, High Incidence Focus, Plain Saturation, Isolation Buffer, 2×2 Blocking,
@@ -66,19 +33,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   frame incidence guidance as matching plain saturation's accuracy while targeting
   high-burden regions (do not call it "no benefit"); no repository hyperlink in manuscripts;
   no Codex/Claude mentions in code headers or documents (AI disclosure is a later TODO).
-
-- **Reference rule (author-confirmed 2026-09-27):** dissertation prose may refer directly
-  to "Chapter 2". CTJ must use self-contained wording (e.g., "In previous work...")
-  with a citation to the Project 1 BMC Medical Research Methodology paper, never
-  "Chapter 2" or "Project 1" as reader-facing references. Describe findings within
-  their studied conditions; verify final bibliographic details before adding the citation.
-- **Comparison placement (author-confirmed 2026-10-02):** retain Checkerboard in
-  Project 2's main design comparison, with detailed identification diagnostics in
-  the appendix. A brief Chapter 2 link motivates the extension; no direct numerical
-  cross-project comparison is required. CTJ must cite the verified Project 1
-  publication to establish the extension while remaining self-contained.
+- **References to Project 1 (2026-09-27):** the chapter may say "Chapter 2". CTJ must be
+  self-contained ("In previous work...") and cite the BMC Medical Research Methodology
+  paper, never "Chapter 2" or "Project 1".
+- **Checkerboard placement (2026-10-02):** keep it in the main design comparison, with
+  identification diagnostics in the appendix; no numerical cross-project comparison.
 - **No single recommended design (author, 2026-10-14):** report the best designs by
-  scenario (mainly spillover regime). Reasons: `DECISIONS.md`.
+  scenario (mainly spillover regime).
 - **Project 1 is final.** Treat `projects/SpillSpatialDepSim/` as read-only. Changes
   reach `bios-dissertation` only through the Chapter 3 sync (below) unless the author
   asks otherwise.
@@ -88,18 +49,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   `docs/plans/TODO.md`); dated progress checkpoints go in the progress log of
   `ROADMAP.md`; author decisions and their reasons go in `DECISIONS.md`, with only a
   one-line rule here. Restricted SUD data details: `application/AGENTS.md`.
-- **Application design authority:** start with
-  `docs/plans/nc_sud_application_plan_2026-10-02.md`; its status records settled
-  versus proposed choices. The integrated prompt is
-  `docs/plans/continuation_prompt_2026-10-02.md`. Do not treat proposals as approved
-  model/design changes.
-- **Application outcome (author clarification 2026-10-02):** primary continuous
-  education outcomes have no SUD-incidence baseline term (β = 0); observed rates
-  inform allocation. An explicitly hypothetical β = 1 baseline sensitivity is
-  accepted with rank-scaled X and an X-adjusted fit; primary ML fits treatment and
-  spillover without X. τ is constant within
-  a scenario in both cases. This supersedes older matched-primary β = 1 proposals;
-  the completed grid study remains unchanged.
 
 ---
 
@@ -323,34 +272,12 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 
 ---
 
-## Current State (summary; dated detail in ROADMAP.md)
+## Current State
 
-- Original revised grid: 12,800 eight-design scenarios; SRS benchmark extends to
-  14,400 per estimator. September 24/27 current outputs, no checkpoint edits.
-- Observed NC education application and tail extension: complete/verified;
-  1,248 main/144 tail reporting rows, 9,878,000 distinct outcomes across stages.
-- Full thesis chapter/appendix and derived CTJ/SI: complete, independently reviewed,
-  rendered and numerically checked. Old application comments resolved by focused
-  rewriting or agreed implementation, not by claiming unsupported facts confirmed.
-- CTJ: standalone preceding-work citation verified; 3,165 prose/heading words
-  (3,314 including end declarations)/279 structured
-  abstract words, six exhibits, full detailed supplement and submission checklist.
-- `code/20_manuscript_figure_revision.R` exports the compact figures and plot-data
-  CSVs without simulation; `code/19_manuscript_exhibits.R` retains the prior detailed
-  export. Run `Rscript code/tests/test_manuscript_exhibits.R` and
-  `python3 paper/tools/verify_manuscripts.py` for numerical/exhibit consistency.
-- Chapter checkpoint `58c1c82` synced through the approved hook to bios-dissertation
-  `fc63326`; final manuscript checkpoint `a47b0ae` resynced to `6b07b95`
-  (72 pp, 31 citekeys); editorial revision `3fc8385` resynced to `fa49f47`
-  (72 pp, one compact figure copied); no push.
-- Comprehensive four-track review completed and approved fixes applied (2026-10-12):
-  `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`. CTJ body 3,280 words
-  (3,425 with declarations; limit 3,500), abstract 317.
-- Advisor-meeting report: `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`
-  (reads tracked aggregates only; inline numbers computed from CSVs).
-- Next: author review; IRB statement, AI disclosure, coauthor approval (docs/plans/TODO.md).
-- Full figure selection, code teach-back, source mapping and live journal check:
-  `docs/plans/manuscript_completion_findings_2026-10-02.md`.
+Status and dated checkpoints: `ROADMAP.md` (Progress Log). Open items:
+`docs/plans/TODO.md`. Numerical/exhibit checks after any manuscript edit:
+`Rscript code/tests/test_manuscript_exhibits.R` and
+`python3 paper/tools/verify_manuscripts.py`.
 
 ## Dissertation Chapter 3 Sync
 
@@ -371,14 +298,17 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 - The prelim YAML header is `tools/prelim_header.yml` (`colorlinks: false`, so links print
   black). Cross-references are `\label`/`\ref`, so numbers read 3.x / B.x in the prelim.
 
-- **Length review (adopted 2026-10-13):** the chapter is the reviewed concise version
-  (prelim body 41 pp, was 45.5; Appendix B 27 pp). Detail moved to Appendix B; nothing
-  numeric was dropped. Cut or moved text: `notes/trimmed-material.md`. The four annual NC
-  tables are one merged `tab:nc-annual` in both chapter and SI. The verifier's `--chapter`
-  and `--pending-si` options remain for checking any future candidate copy.
+- **Length review (adopted 2026-10-13):** cut or moved text is in
+  `notes/trimmed-material.md`. The verifier's `--chapter` and `--pending-si` options
+  check any future candidate copy.
 
 ## Build gotchas
 
+- **CTJ layouts:** `CTJ_Manuscript.tex` is the master for both layouts;
+  `CTJ_Reading.tex` only selects the two-column reading layout. Edit captions and cells in
+  `CTJ_Exhibits.tex`; never duplicate manuscript content in the wrapper. Main figures are
+  `figures/compact/` exports from `code/20_manuscript_figure_revision.R`. The reading layout
+  uses the `balance` package (`\balance` before the bibliography) and no forced page breaks.
 - **CTJ manuscript/SI:** need TinyTeX on `PATH`; run `latexmk <file>.tex` inside
   `paper/ctj_manuscript/manuscript_ctj/` or `.../supplementary_info/`. Symlinks there (`sagej.cls`,
   `SageV.bst`, `SpatialCRT_IncidenceDesign.bib`) replace the old `TEXINPUTS`/`BSTINPUTS` setup,
@@ -424,24 +354,7 @@ Revised 2026-09-24 for the simulation revision (spec: `docs/plans/simulation-rev
 
 ## Bugs Previously Encountered & Fixed
 
-| Bug | Symptom | Fix |
-|-----|---------|-----|
-| Unicode rho in PDF | `pdf()` conversion failure on `\u03c1` | Use literal text `"rho"` |
-| Pairwise dominance NaN | `make.names("Design 1")` -> `"Design.1"` mismatched pivot column | Use `wide[[designs[i]]]` direct bracket access |
-| Eta-squared > 1.0 | `var(group_means)/var(total)` incorrect | Use `SS_between/SS_total` where `SS_between = sum(n_j*(mean_j - grand_mean)^2)` |
-| `I` shadows `base::I` | Subtle namespace errors | Renamed to `I_mat <- diag(N_clusters)` |
-| Degenerate Z (all 0 or 1) | `estimate_tau()` crash | Early-exit guard returning all `NA` |
-| R sprintf 10k char limit | `complete_after_mle.R` failed writing docs | Write docs directly via Claude Code `Write` tool instead |
-| Design/outcome incidence mismatch (fixed 2026-09) | Designs used `X[,1]`; outcome replicate k used `X[,k]` (cor ≈ 0) | Matched surfaces (M1) |
-| Poisson ties (fixed 2026-09) | 1,000 per cluster → ~5 distinct X; High Incidence Focus treated 14–50; `ntile()` broke ties by grid position | 100,000 per cluster; `random_tie_rank()` per draw; exact N/2 |
-| Unreproducible seeds (fixed 2026-09) | X and eps drawn before the per-scenario seed; forked workers reseeded | Key-based `set_seed_key()` for every draw |
-| Overstated MC precision (fixed 2026-09) | Deterministic designs copied 25× against 10 noise draws | One noise column per fit; SEs from surface means |
-| Silent aliasing (fixed 2026-09) | Checkerboard × rook: WZ = 1 − Z; `lagsarlm` dropped Spill, and `suppressWarnings` hid it | `withCallingHandlers`; `N_Aliased`, `Z_WZ_rank_deficient` |
-| Stale checkpoints (fixed 2026-09) | Old checkpoints loaded silently on re-run | Manifest check refuses mismatches |
-| `lagsarlm` slowness | ~76 ms/fit, ~94% of it an unconditional `gc()` on exit | `fit_sar_lag()` (validated, ~0.6 ms/fit) |
-| Rank-trajectory axis (fixed 2026-09) | `plot_rank_trajectories()` y-limits hard-coded to 6 silently dropped ranks 7–8 | Limits from `max(Rank)` |
-| Commentary pivot (fixed 2026-09) | `generate_commentary()` pivot lacked `True_Tau` → list-columns on tau-sweep files | `True_Tau` added to pivot keys |
-| Naive MC SEs (fixed 2026-09) | `add_mc_ses()` overwrote stored surface-level SEs | Returns stored SEs when present |
+Full table: `README.md` ("Known Issues & Bugs Fixed").
 
 ---
 
@@ -469,13 +382,9 @@ Revised 2026-09-24 for the simulation revision (spec: `docs/plans/simulation-rev
 
 ---
 
-## Known Minor Issues (low-priority cleanup)
+## Known Minor Issues
 
-- `02_incidence_generation.R`: `generate_incidence_poisson()` still defaults `pop_per_cluster = 1000` (and its roxygen says so). 05 always passes 100,000, so results aren't affected. It was left unchanged after the full run so the run manifest's code hash still matches.
-- `DESIGN_FULL_NAMES` in `00_design_names.R` (used only by the two design-sample figures) labels Design 1 "Block Stratified Sampling (Checkerboard)" (user decision 2026-09-24: Chapter 2's name plus this study's). The manuscripts, 03 and 12–14 say "Checkerboard", and `DESIGN_SHORT_NAMES` still says "Block Stratified". This is not a bug to fix: the author uses "Block Stratified Sampling" and "Checkerboard" interchangeably, and the chapter says so once (Phase D).
-- `load_latest_results()` comment (line ~87 of `06_visualizations.R`): clarify `_combined_` preference applies per estimation-mode, not globally
-- `07_results_summary.Rmd` compare-table caption: should note that DIM only ran 6 designs (D7/D8 NAs are expected)
-- `IncidenceSpatialCRT_Report.qmd` caption/text alignment: MC SEs table uses tau=1.0 slice (2,560 rows), not full 12,800 — prose now correctly clarifies this distinction
+Low-priority cleanup items: `docs/plans/TODO.md` ("Known minor code issues").
 
 ---
 
