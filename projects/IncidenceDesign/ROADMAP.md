@@ -174,11 +174,14 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   surface-level MC SEs, manifest-checked checkpoints, lean validated ML engine. Spec:
   `docs/plans/simulation-revision-spec.md`. *(2026-09-24)*
 - [x] **Full re-run + verification + 1% lagsarlm cross-check** *(2026-09-24)*
-- [ ] **Downstream regeneration (Phase C)** — 12/13/14 and the 06/08/10 PDFs done; still to do:
-  re-render reports 00/07/09/11 and the project Report/ProjectSummary, then the docs.
-- [ ] **Chapter Methods/Results rewrite (Phase D)** — robust vs. fragile; queen primary; rook
-  sensitivity including the Checkerboard-rook anomaly; non-oracle sensitivity; **one recommended
-  design (author's decision)**.
+- [x] **Downstream regeneration (Phase C)** — 12/13/14 and the 06/08/10 PDFs, reports
+  00/07/11 (`516e127`), 09 and the project Report/ProjectSummary (`6e3aaa0`), and the docs
+  (`fe4d65f`) regenerated. *(2026-09-24)*
+- [x] **Chapter Methods/Results rewrite (Phase D)** — robust vs. fragile; queen primary; rook
+  sensitivity including the Checkerboard-rook anomaly; non-oracle sensitivity. Chapter complete
+  2026-10-02 (`docs/plans/manuscript_completion_findings_2026-10-02.md`). Instead of one
+  recommended design, the Discussion gives guidance by spillover scenario (added 2026-10-11).
+  *(2026-10-02)*
 
 ### Future work surfaced by the revision
 - [ ] **Latent-risk / noisy-snapshot DGP** `[Priority: Medium]` — designs see a noisy snapshot of a
