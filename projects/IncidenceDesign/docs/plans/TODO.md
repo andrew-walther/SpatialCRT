@@ -76,6 +76,14 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   title page). Lin's telephone (919) 966-9431 added from his UNC profile.
 - [ ] Confirm contribution wording; obtain all coauthors' final approval and
   submission attestations; confirm the pilot description with Simpson.
+- [ ] **Coverage below nominal (~93%; added 2026-10-14):** Wald intervals
+  τ̂ ± 1.96·SE are slightly too narrow in every design (likely ML SE ignoring
+  uncertainty in ρ̂; untested). Prefer the quick fix: recompute coverage with a
+  t critical value (application df = 58 − 4 = 54, t ≈ 2.005), with no new
+  simulation if the fit caches store τ̂ and SE (check first). Heavier options only if
+  needed: parametric bootstrap; randomization inference (not possible for the
+  single-allocation designs). Ask Lin whether a quick check is expected or a
+  stated limitation suffices.
 - [ ] Submit CTJ with the author-completed
   [checklist](../../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
