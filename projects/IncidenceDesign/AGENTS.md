@@ -77,13 +77,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   the appendix. A brief Chapter 2 link motivates the extension; no direct numerical
   cross-project comparison is required. CTJ must cite the verified Project 1
   publication to establish the extension while remaining self-contained.
-- **No single recommended design (author decision 2026-10-14):** the chapter and
-  manuscripts report the best designs by scenario, mainly by spillover regime, instead of
-  naming one design for all settings. The rankings change with the regime (e.g., Checkerboard
-  and 2×2 Blocking are near the best under both-arms spillover and the worst under
-  control-only), so a scenario-specific answer is more robust. This replaces the "one
-  recommended design" in `docs/plans/simulation-revision-plan.md` and the Phase D ROADMAP
-  item; the guidance is in the chapter's Discussion (added 2026-10-11).
+- **No single recommended design (author, 2026-10-14):** report the best designs by
+  scenario (mainly spillover regime). Reasons: `DECISIONS.md`.
 - **Project 1 is final.** Treat `projects/SpillSpatialDepSim/` as read-only. Changes
   reach `bios-dissertation` only through the Chapter 3 sync (below) unless the author
   asks otherwise.
@@ -91,7 +86,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   are never substituted for full-study numbers.
 - **Where to write things down:** key findings go in `docs/plans/` (open items:
   `docs/plans/TODO.md`); dated progress checkpoints go in the progress log of
-  `ROADMAP.md`. Restricted SUD data details: `application/AGENTS.md`.
+  `ROADMAP.md`; author decisions and their reasons go in `DECISIONS.md`, with only a
+  one-line rule here. Restricted SUD data details: `application/AGENTS.md`.
 - **Application design authority:** start with
   `docs/plans/nc_sud_application_plan_2026-10-02.md`; its status records settled
   versus proposed choices. The integrated prompt is
