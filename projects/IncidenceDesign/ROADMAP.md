@@ -333,7 +333,9 @@ alone loads `lastpage`. See
 - CTJ ethics placeholder (Methods; assumes not-human-subjects, IRB number/date blank)
   and coauthor-approval placeholder sentence added (DECISIONS.md); offset by a
   word-neutral Methods trim; Acknowledgements AI disclosure draft added. Body 3,326;
-  3,526 with declarations (limit 3,500 if declarations count).
+  3,526 with declarations; author: the 3,500 limit applies to the body.
+  Placeholders highlighted yellow; AI disclosure states AI wrote code from author-specified
+  methods, no AI-generated data, all code and results validated by the authors.
 
 ### CTJ and paper/ folder cleanup (2026-10-13)
 

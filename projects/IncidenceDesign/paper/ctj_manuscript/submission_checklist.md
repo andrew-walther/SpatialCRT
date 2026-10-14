@@ -3,9 +3,9 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [ ] Body 3,326 prose/heading words; 3,526 including end declarations; limit 3,500
-  (2026-10-14, after adding the ethics/approval placeholders and the Acknowledgements AI
-  disclosure). Over by 26 only if declarations count; decide whether to trim the body.
+- [x] Body 3,326 prose/heading words; limit 3,500 applies to the body (author, 2026-10-14;
+  end declarations, abstract, references and exhibits excluded). 3,526 with declarations.
+  Placeholder text (ethics statement, coauthor-approval sentence) is highlighted yellow.
   Structured abstract 393 words (limit 425); six keywords. Recounted 2026-10-14
   after the heading/abstract revision (informative subheadings, Discussion
   subsections, plainer abstract), using texcount on the body, declaration and

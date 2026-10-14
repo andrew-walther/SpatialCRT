@@ -20,7 +20,9 @@ text editing; the authors reviewed and verified all output).
 **Why.** The author judged the 2026-10-12 removal of the ethics placeholder a mistake:
 the draft shared with Lin should show the required statements. The ethics and approval
 statements remain placeholders until Habib/Simpson confirm the determination and all
-coauthors approve. Still never invent a protocol number.
+coauthors approve. Still never invent a protocol number. Both are highlighted yellow
+(`\hl`) in the PDFs until finalized. The 3,500-word limit is taken to apply to the body
+(declarations excluded; author, 2026-10-14).
 
 **Replaces.** The 2026-10-12 removal of the in-text ethics placeholder (see the
 2026-10-02 CTJ author declarations entry).
