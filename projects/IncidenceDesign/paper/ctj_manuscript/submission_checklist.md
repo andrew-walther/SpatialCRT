@@ -3,7 +3,9 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,313 prose/heading words; 3,458 including end declarations; limit 3,500.
+- [ ] Body 3,326 prose/heading words; 3,526 including end declarations; limit 3,500
+  (2026-10-14, after adding the ethics/approval placeholders and the Acknowledgements AI
+  disclosure). Over by 26 only if declarations count; decide whether to trim the body.
   Structured abstract 393 words (limit 425); six keywords. Recounted 2026-10-14
   after the heading/abstract revision (informative subheadings, Discussion
   subsections, plainer abstract), using texcount on the body, declaration and
@@ -25,17 +27,19 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [x] Comprehensive review completed 2026-10-12 (see docs/plans/ctj_comprehensive_review_findings_2026-10-12.md).
 - [ ] Author review of the revised full drafts and chosen exhibits.
 - [ ] Ethics/data-use statement: CTJ requires an IRB statement in Methods for human data.
-  Obtain the IRB determination for the death-certificate data (Habib/Simpson), including
-  permission to publish 58-cluster aggregates, and add it to Methods.
+  **Placeholder in Methods (2026-10-14)** assumes a not-human-subjects determination with
+  `[IRB #XX-XXXX, date]`. Confirm with Habib/Simpson, fill in number/date (Sage also asks
+  for it on the title page), and confirm permission to publish 58-cluster aggregates.
 - [x] Corresponding-author telephone (919) 966-9431 on the title page and cover letter
   (from Lin's UNC Gillings profile; the journal requires it).
 - [ ] ORCIDs: Walther 0000-0002-1932-9653 is on the title page; collect the coauthors'
   ORCIDs in the submission system if required.
 - [x] Author contributions statement added (author-supplied roles, 2026-10-12).
-- [ ] Generative-AI disclosure: Sage policy requires one (methods or acknowledgements)
-  for AI-assisted code, code checking and visualization. Author will write it before
-  submission.
-- [ ] Obtain every coauthor's approval of the final text.
+- [x] Generative-AI disclosure: Sage policy requires one (methods or acknowledgements)
+  for AI-assisted code, code checking and visualization. Draft added as Acknowledgements
+  (2026-10-14); author to confirm the tool list and wording before submission.
+- [ ] Obtain every coauthor's approval of the final text, then delete
+  "[Placeholder: pending coauthor approval.]" after the approval sentence in Author contributions.
 - [ ] Confirm originality, exclusivity and permissions; disclose dissertation availability
   as applicable. No essential material from the preceding accepted study was copied.
 - [ ] Complete the author-side cover letter, date/signature and any requested reviewer fields.

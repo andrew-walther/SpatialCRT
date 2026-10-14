@@ -330,6 +330,10 @@ alone loads `lastpage`. See
 - Application report (`application/report/`): black links, layout tightened (non-splitting
   tables, floating/resized figures), Appendix A removed, Figures 7-8 redrawn in-report
   from the same CSVs (shared exhibits unchanged); 12 pp.
+- CTJ ethics placeholder (Methods; assumes not-human-subjects, IRB number/date blank)
+  and coauthor-approval placeholder sentence added (DECISIONS.md); offset by a
+  word-neutral Methods trim; Acknowledgements AI disclosure draft added. Body 3,326;
+  3,526 with declarations (limit 3,500 if declarations count).
 
 ### CTJ and paper/ folder cleanup (2026-10-13)
 

@@ -5,6 +5,28 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-14 — CTJ ethics and coauthor-approval placeholders
+
+**Decision.** Add a visible ethics placeholder at the end of the application
+Methods, assuming a UNC IRB not-human-subjects determination (deidentified data on
+deceased individuals), with the IRB number and date left as `[IRB #XX-XXXX, date]`.
+Add "All authors critically revised the manuscript and approved the final version."
+to Author contributions, followed by "[Placeholder: pending coauthor approval.]".
+
+Add an Acknowledgements section with the Sage-required generative-AI disclosure
+(draft wording: Claude Code and Codex assisted with code, code checking, figures and
+text editing; the authors reviewed and verified all output).
+
+**Why.** The author judged the 2026-10-12 removal of the ethics placeholder a mistake:
+the draft shared with Lin should show the required statements. The ethics and approval
+statements remain placeholders until Habib/Simpson confirm the determination and all
+coauthors approve. Still never invent a protocol number.
+
+**Replaces.** The 2026-10-12 removal of the in-text ethics placeholder (see the
+2026-10-02 CTJ author declarations entry).
+
+---
+
 ## 2026-10-14 — Best designs by scenario, not one recommended design
 
 **Decision.** The chapter and manuscripts report the best designs by scenario,

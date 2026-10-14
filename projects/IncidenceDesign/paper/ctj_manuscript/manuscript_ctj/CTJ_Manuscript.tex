@@ -119,7 +119,7 @@ ORCID: Andrew Walther, 0000-0002-1932-9653
 
 Running head: Sampling design for spatial CRTs
 
-Main-text word count: 3458 (including end declarations). Abstract word count: 393.
+Main-text word count: 3526 (including end declarations). Abstract word count: 393.
 \vfill
 Clinical Trials submission draft. Final submission approval remains pending.
 \end{titlepage}
@@ -185,11 +185,15 @@ Primary education outcomes used Equation~\ref{eq:grid} with $\beta=0$, $\tau=1$ 
 
 All designs were adapted before performance evaluation. Checkerboard became a deterministic graph version that alternates arms between neighboring clusters as far as the irregular map allows, not a literal checkerboard. Incidence-guided saturation used four fixed geographic regions selected from 250 $k$-means candidates by compactness and population/cluster/county balance, using average annual population (pooled person-years divided by four) as the reference population. Incidence-guided saturation ranked annual per-capita cluster rates, averaged cluster ranks equally within regions, then ordered regional saturations 80/60/40/20\%. The grid rule averages its incidence covariate directly. The application mean-rank rule aligns with rank-scaled Poisson surfaces but differs from continuous grid incidence; it also differs from pooling deaths/population. $2\times2$ Blocking became spatial blocking: a random half of each of 14 groups of nearby clusters, formed once per year by $k$-means clustering on standardized location, incidence rank and log-population. Other strategies retained their mechanisms. SRS, Balanced Quartiles and High Incidence Focus treated 29 clusters. Rounded local budgets were retained and reported rather than equalized retrospectively.
 
-These adaptations preserve each strategy's allocation mechanism while acknowledging the irregular graph and unequal populations. Geographic regions replace rectangular quadrants; fixed groups replace uniform four-cluster blocks. Cluster counts and working-age population shares accompany accuracy because treating half the clusters does not imply reaching half the population. The population denominator used to calculate historical rates is also distinct from the eventual sample of healthcare professionals whose education outcomes would be measured.
+These adaptations preserve each strategy's allocation mechanism while acknowledging the irregular graph and unequal populations. Cluster counts and working-age population shares accompany accuracy because treating half the clusters does not imply reaching half the population. The population denominator used to calculate historical rates is also distinct from the eventual sample of healthcare professionals whose education outcomes would be measured.
 
-Primary queen settings crossed $\rho=0,0.2,0.5$, $\gamma=0.5,0.8$, both regimes, four years, the six designs, the two variants and SRS. Sensitivities added a hypothetical rank-scaled incidence baseline together with incidence adjustment, used rook weights at $\rho\in\{0,0.5\}$ and $\gamma\in\{0.5,0.8\}$, or replaced incidence-guided saturation's regional mean rank with mean raw rates or pooled regional rates. In total, 1,248 settings were reported from 936 distinct simulations: settings with the same set of possible assignments (for example, SRS in different years) shared one simulation, with annual budgets and population shares recalculated. Such shared results are not independent confirmations.
+Primary queen settings crossed $\rho=0,0.2,0.5$, $\gamma=0.5,0.8$, both regimes, four years, the six designs, the two variants and SRS. Sensitivities added a hypothetical rank-scaled incidence baseline together with incidence adjustment, used rook weights at $\rho\in\{0,0.5\}$ and $\gamma\in\{0.5,0.8\}$, or replaced incidence-guided saturation's regional mean rank with mean raw rates or pooled regional rates. In total, 1,248 settings were reported from 936 distinct simulations: settings with the same set of possible assignments (for example, SRS in different years) shared one simulation, with annual budgets and population shares recalculated.
 
-We drew 100 assignments and simulated 100 independent outcomes for each distinct assignment, using 1,000 outcomes for designs with only one possible assignment. A prespecified rule increased replication until the Monte Carlo standard error (MCSE) of mean MSE was at most 5\% of its value and the MCSE of coverage was at most 0.01; these MCSEs accounted for repeated assignments and for both assignment and outcome variation. A separate extension at $\rho\in\{0,0.5\}$ and $\gamma=0.8$ kept the same assignments and increased outcomes to 400 per assignment. To avoid selection bias, worst-decile assignments were identified with one half of the simulated outcomes and evaluated with the other half. Every random draw used a fixed, reproducible seed. Further details, matched sensitivity tables and failure diagnostics are in the supplement.
+We drew 100 assignments and simulated 100 independent outcomes for each distinct assignment, using 1,000 outcomes for designs with only one possible assignment. A prespecified rule increased replication until the Monte Carlo standard error (MCSE) of mean MSE was at most 5\% of its value and the MCSE of coverage was at most 0.01; these MCSEs accounted for repeated assignments and for both assignment and outcome variation. A separate extension at $\rho\in\{0,0.5\}$ and $\gamma=0.8$ kept the same assignments and increased outcomes to 400 per assignment. To avoid selection bias, worst-decile assignments were identified with one half of the simulated outcomes and evaluated with the other half. Every random draw used a fixed, reproducible seed.
+
+% PLACEHOLDER (author, 2026-10-14): assumes a not-human-subjects determination;
+% confirm with Habib/Simpson and fill in the IRB number and date before submission.
+The application used deidentified death-certificate data on deceased individuals, aggregated to 58 clusters. The University of North Carolina at Chapel Hill Institutional Review Board determined that this work does not constitute human subjects research [IRB \#XX-XXXX, date]; informed consent was therefore not required.
 
 \section{Results}
 \subsection{Simulation study: the spillover regime decides which designs perform best}
@@ -247,8 +251,11 @@ The education application is a completed design evaluation, not an implemented i
 % Short declarations and reference URLs read better without stretched spacing.
 \raggedright
 \fi
+% Sage AI policy: disclosure in Methods or Acknowledgements. Draft wording (author, 2026-10-14).
+\section*{Acknowledgements}
+Generative AI tools (Claude Code, Anthropic; Codex, OpenAI) assisted with writing and checking analysis code, preparing figures and editing manuscript text. The authors reviewed and verified all AI-assisted output and take full responsibility for the content of this article.
 \section*{Author contributions}
-AW developed the method, designed the simulation study, implemented the application study, prepared all figures and wrote the manuscript. AH prepared the North Carolina SUD datasets for the application study. RS proposed the SUD prevention education pilot. FL provided methodological guidance and review.
+AW developed the method, designed the simulation study, implemented the application study, prepared all figures and wrote the manuscript. AH prepared the North Carolina SUD datasets for the application study. RS proposed the SUD prevention education pilot. FL provided methodological guidance and review. All authors critically revised the manuscript and approved the final version. [Placeholder: pending coauthor approval.]
 \section*{Declaration of conflicting interests}
 The authors declare that there is no conflict of interest.
 \section*{Funding}

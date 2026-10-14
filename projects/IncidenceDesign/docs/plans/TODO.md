@@ -65,11 +65,13 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   [findings](ctj_comprehensive_review_findings_2026-10-12.md).
 - [x] Application study report for the advisor meeting:
   `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`.
-- [ ] **Ethics/IRB statement** (CTJ requires one in Methods): obtain the IRB
-  determination for the restricted death-certificate data from Habib/Simpson,
-  including permission to publish 58-cluster aggregates and maps.
+- [ ] **Ethics/IRB statement** (CTJ requires one in Methods): placeholder added
+  2026-10-14 (assumes not-human-subjects; `[IRB #XX-XXXX, date]`). Confirm the
+  determination with Habib/Simpson, fill in number/date (also on the title page),
+  and confirm permission to publish 58-cluster aggregates and maps.
 - [ ] **Generative-AI disclosure** (Sage policy requires one for AI-assisted code,
-  code checking and visualization): author will write it before submission.
+  code checking and visualization): draft in CTJ Acknowledgements (2026-10-14);
+  author to confirm tool list and wording.
 - [ ] Coauthor ORCIDs if the submission system requests them (Walther's is on the
   title page). Lin's telephone (919) 966-9431 added from his UNC profile.
 - [ ] Confirm contribution wording; obtain all coauthors' final approval and
