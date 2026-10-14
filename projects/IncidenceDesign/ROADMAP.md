@@ -318,6 +318,19 @@ alone loads `lastpage`. See
   tables are one merged `tab:nc-annual` in both chapter and SI. The verifier's `--chapter`
   and `--pending-si` options remain for checking any future candidate copy.
 
+### CTJ headings, abstract and advisor-meeting report polish (2026-10-14)
+
+- CTJ subheadings rewritten to be informative (Methods: simulation study, estimating
+  treatment effect and allocation risk, NC sudden unexpected death application; Results
+  headings state the finding); Discussion split into Implications for trial design,
+  Limitations, Continued work for the education pilot, Conclusions (author wording).
+- Structured abstract rewritten for clarity; every number unchanged. Counts: body 3,458
+  with declarations (limit 3,500), abstract 393 (limit 425). PDFs: submission 22 pp,
+  reading 8 pp. Both verifiers pass. Chapter and SI unchanged.
+- Application report (`application/report/`): black links, layout tightened (non-splitting
+  tables, floating/resized figures), Appendix A removed, Figures 7-8 redrawn in-report
+  from the same CSVs (shared exhibits unchanged); 12 pp.
+
 ### CTJ and paper/ folder cleanup (2026-10-13)
 
 - Build intermediates: a local `latexmkrc` sends latexmk's `.aux/.log/.bbl/...` to a hidden,
