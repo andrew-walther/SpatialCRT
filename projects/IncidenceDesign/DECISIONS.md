@@ -321,6 +321,8 @@ per stratum).
 
 ## 2026-09-24 — Six-design set kept for detailed grid rankings
 
+**History (author, 2026-10-14).** 6 designs at first, expanded to 8, cut back to 6 because some were similar, then the SRS benchmark added. Now the CTJ main text has 6 + SRS and the thesis chapter 8 + SRS (6 in the detailed grid rankings).
+
 **Decision.** Keep the six-design set for detailed grid rankings; Saturation
 Quadrants and Balanced Halves stay out of them. The full benchmark and
 application cover eight strategies plus SRS.

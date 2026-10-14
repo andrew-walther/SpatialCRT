@@ -13,7 +13,7 @@ Chapter 3 sync; edit it here only. It is separate from dissertation chapter pros
 
 **Results:** On the grid at effect size one, incidence-guided saturation had control-only mean MSE 0.1355 versus SRS 0.2146, while SRS remained competitive under both-arms spillover. In the completed application, control-only mean MSE was 27.4% lower for plain saturation and 21.1–29.9% lower for guided saturation than SRS, depending on year. Refined allocation-tail estimates also favored saturation under control-only spillover, with uncertain worst-decile membership. Under both arms, SRS and several randomized strategies had similar mean accuracy. Application yearly mean coverage was approximately 92.6–93.6%, below nominal 95%. All prespecified application Monte Carlo precision gates passed, with no warnings, aliases, boundary fits or estimation failures.
 
-**Conclusions:** Saturation merits consideration when spillover primarily reaches controls; SRS remains competitive when both arms receive spillover. Incidence guidance did not establish an additional accuracy benefit over plain saturation. Recommendations require attention to model assumptions, treatment budgets, interval undercoverage and finite allocation-tail precision. The application evaluates trial design, not observed intervention effectiveness.
+**Conclusions:** Saturation merits consideration when spillover primarily reaches controls; SRS remains competitive when both arms receive spillover. Incidence-guided saturation performed well on both average error and allocation downside under control-only spillover. Recommendations require attention to model assumptions, treatment budgets, interval undercoverage and finite allocation-tail precision. The application evaluates trial design, not observed intervention effectiveness.
 
 ## Declarations
 
@@ -52,5 +52,5 @@ Chapel Hill, NC, USA
 Chapel Hill, NC, USA
 
 Corresponding author: Feng-Chang Lin, flin33@email.unc.edu.
-Telephone pending author input; ORCID and final contribution wording belong
+Telephone (919) 966-9431 (from Lin's UNC profile, author 2026-10-12); ORCID and final contribution wording belong
 in the submission checklist.

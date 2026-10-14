@@ -502,6 +502,8 @@ Added 2026-10-14 from AGENTS.md (simulation revision and later):
       `paper/ctj_manuscript/` and `paper/dissertation_chapter/`. Application-section
       numbers are an explicitly labeled simulated placeholder pending real
       SUDDEN-derived NC county data (in progress with an epidemiology collaborator).
+      *(Superseded: the CTJ main text now has 6 designs + SRS and the thesis chapter
+      8 designs + SRS; the application uses observed SUD data. See DECISIONS.md.)*
 - [x] **CTJ Supplementary Information drafted and reviewed** — completed 2026-07-03.
       `paper/ctj_manuscript/Supplementary_Information.tex` (14+ pages, S-prefixed
       numbering) fulfills the three items the main text defers to "online
