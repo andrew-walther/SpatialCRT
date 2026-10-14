@@ -82,14 +82,11 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 
 ## 🌍 Applicability & Generalizability
 
-- [ ] **Replace synthetic application incidence with real SUDDEN-derived data** `[Priority: High]` `[Effort: Medium]`
-  `application/` runs the full design comparison on NC's actual 58 Community College service
-  areas, but all current incidence numbers and maps are a synthetic Poisson SAR placeholder.
-  Real SUD incidence (~100,000 NC death certificates, 2018-2021, classified via the SUDDEN
-  algorithm, pooled to county level with SEER population denominators) is being finalized
-  with an epidemiology co-investigator under an active IRB protocol.
-  *Notes: same schema as the synthetic run — see `application/README.md` "Outstanding Work".
-  Affects both manuscripts' Application sections and the CTJ Supplementary Information (S11).*
+- [x] **Replace synthetic application incidence with real SUDDEN-derived data** *(2026-10-02)*
+  Done: the application now uses observed NC county SUD incidence (2018–2021, SEER
+  denominators; restricted source files gitignored) and the observed-incidence production run
+  is complete and verified. The synthetic Poisson SAR run is kept as historical. See
+  `application/README.md` and `docs/plans/nc_sud_application_findings_2026-10-02.md`.
 
 - [ ] **Add cluster-level baseline covariates to the DGP** `[Priority: Medium]` `[Effort: Medium]`
   Current DGP generates outcomes from spatial structure alone. Adding covariates
@@ -149,12 +146,10 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   what to keep, drop, or further combine.
   *Notes: see `code/14_manuscript_supplement_figures.R` for how main-text/SI figures are generated.*
 
-- [ ] **Real SUDDEN data + maps in the Application sections** `[Priority: High]` `[Effort: Medium]`
-  Both manuscripts' Application sections, plus SI Section S11, currently use an explicitly
-  labeled synthetic placeholder (incidence numbers *and* maps). Replace once the real
-  SUDDEN-derived NC county dataset is finalized.
-  *Notes: duplicate of the Applicability & Generalizability item above — tracked in both
-  places since it blocks manuscript finalization specifically.*
+- [x] **Real SUDDEN data + maps in the Application sections** *(2026-10-02)*
+  Done: the chapter, CTJ manuscript and SI Application sections use the observed-incidence
+  results (`docs/plans/manuscript_completion_findings_2026-10-02.md`). Duplicate of the
+  Applicability & Generalizability item above.
 
 - [ ] **UNC Graduate School dissertation template** `[Priority: Medium]` `[Effort: Small]`
   `Thesis_Chapter.qmd` currently renders to a simple double-spaced `article`-class PDF
