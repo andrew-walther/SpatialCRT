@@ -310,6 +310,8 @@ level 0.025. For both estimators, every one of the 250 fits in every
 scenario was valid, and the fitting routine raised no warning other than
 the aliasing flags described above.
 
+Because each metric is estimated from a finite number of simulated datasets, it carries simulation (Monte Carlo) error; its Monte Carlo standard error
+measures this uncertainty and shrinks as more datasets are simulated.
 Monte Carlo standard errors come from the surface-level metrics. For a
 metric \(m\), we computed \(m_k\) on the 25 fits from surface \(k\) and
 set \(\text{SE}(m) = \text{sd}(m_1, \dots, m_{10})/\sqrt{10}\), with
@@ -1107,7 +1109,7 @@ performance. The grid rule averages \(X\) directly: mean ranks align with its ra
 
 On the NC map, $2\times2$ Blocking uses spatial blocks of nearby clusters: 14 irregular groups, formed once per year by \(k\)-means on standardized
 projected coordinates, incidence ranks and log(1+population), then held fixed. Half of each group, rounded, is treated randomly. This is not a
-set of literal square blocks. In each year one single-cluster group remains control, because half of one cluster rounds to zero. Budgets differ across designs; we report them rather than modify the designs to force equal budgets (Table \ref{tab:nc-budgets}). Section \ref{app:nc} maps the
+set of literal square blocks. In each year one single-cluster group remains control, because half of one cluster rounds to zero. Treatment budgets (numbers of treated clusters) differ across designs; we report them rather than modify the designs to force equal budgets (Table \ref{tab:nc-budgets}). Section \ref{app:nc} maps the
 fixed regions and example assignments.
 
 \begin{table}[!htb]

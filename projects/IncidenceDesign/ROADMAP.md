@@ -336,6 +336,11 @@ alone loads `lastpage`. See
   3,526 with declarations; author: the 3,500 limit applies to the body.
   Placeholders highlighted yellow; AI disclosure states AI wrote code from author-specified
   methods, no AI-generated data, all code and results validated by the authors.
+- Monte Carlo error and Monte Carlo standard error (MCSE) now defined at first use in the
+  CTJ, SI and chapter (finite number of simulated datasets); later CTJ uses say MCSE or
+  explain the source of error. "Treatment budgets" defined at first use as numbers of
+  treated clusters (budget and allocation wording otherwise kept, author). Supplementary
+  material statement rewritten. CTJ body 3,362, abstract 394; SI 45 pp, chapter 68 pp.
 
 ### CTJ and paper/ folder cleanup (2026-10-13)
 
