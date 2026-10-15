@@ -318,6 +318,18 @@ alone loads `lastpage`. See
   tables are one merged `tab:nc-annual` in both chapter and SI. The verifier's `--chapter`
   and `--pending-si` options remain for checking any future candidate copy.
 
+### Advisor meeting with Dr. Lin (2026-10-14)
+
+- Reviewed the CTJ draft and application report. Main feedback: the outcome should
+  be correlated with the incidence that guides allocation; test partial
+  college participation, sample size/power and estimation-method sensitivity; group
+  the designs in Table 1. Prelim: Project 1/2/3 structure, brief literature review.
+- Record: `docs/plans/advisor_meeting_2026-10-14.md`; action items in
+  `docs/plans/TODO.md` ("Advisor meeting 2026-10-14 follow-ups"). Only quick checks
+  so far: equal-weight vs pooled rates make no meaningful difference, and the CTJ
+  words were recounted. The outcome–incidence decision (possibly reporting β = 0 and
+  β = 1 both) comes first.
+
 ### CTJ headings, abstract and advisor-meeting report polish (2026-10-14)
 
 - CTJ subheadings rewritten to be informative (Methods: simulation study, estimating

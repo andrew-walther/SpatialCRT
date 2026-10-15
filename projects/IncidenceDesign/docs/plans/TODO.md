@@ -101,6 +101,78 @@ Findings: [application](nc_sud_application_findings_2026-10-02.md),
 [manuscripts and teach-back](manuscript_completion_findings_2026-10-02.md).
 Commands and safeguards: project/application README and AGENTS.
 
+## Advisor meeting 2026-10-14 follow-ups
+
+Context, Lin's feedback, unanswered questions and fact-checks:
+[advisor_meeting_2026-10-14.md](advisor_meeting_2026-10-14.md). Not started.
+Items overlapping the submission list above (IRB, coauthor approval, pilot
+description, ORCIDs) are not repeated here.
+
+**Decide first (it shapes the rest)**
+- [ ] Outcome–incidence relationship (Lin's "big question"; needs careful
+  consideration, depends on how we frame incidence vs outcome): (a) keep β = 0 and
+  state the endpoint-tracks-SUD assumption, citing grid β = 1 and the existing NC
+  β = 1 runs; (b) promote the existing NC β = 1 runs (all 432 queen settings, no new
+  simulation; reverses the 2026-10-02 rule, numbers change across documents);
+  (c) model a future-incidence endpoint (new model/runs); (d) report both β = 0 and
+  β = 1 side by side (author's leaning, 2026-10-14; no new simulation; decide which
+  leads). Record the choice in DECISIONS.md.
+- [ ] Get Lin's sign-off on the open prep questions (design choices, regime-based
+  framing, six designs + SRS, deterministic designs as comparators, code availability,
+  target date/backup journal): list in the meeting record.
+
+**Coauthors and data (critical path)**
+- [ ] Meet with Habib and Simpson: review the application study, share the CTJ draft
+  and results, ask for approval.
+- [ ] From Habib/Simpson: IRB protocol holder and determination, permission to publish
+  58-cluster aggregates/maps, required disclosures for derived data, and funding
+  (does "no specific grant" hold?).
+- [ ] Replace "personal communication" for Habib's corrected counts with a citation
+  Lin finds acceptable (e.g. a data-preparation description or acknowledgement).
+- [ ] Frame the application as a statewide expansion of Simpson's small-scale (Lenoir
+  County) proposal; fix the "pilot" wording flagged before the meeting.
+
+**New analyses** (sample size/power and reduced participation must be addressed in the
+thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
+- [ ] Partial participation: sample subsets of colleges (about half; Zoom said ~20),
+  rebuild W on the possibly non-contiguous subset, and check whether the regime
+  guidance (incidence-guided saturation under control-only spillover) still holds.
+- [ ] Sample size and power: answer "how many clusters are needed?". Power at τ = 1 for
+  the current NC runs can be computed from stored fits (τ̂, SE) without new
+  simulation; subset runs would need it too. Candidate for the main CTJ text, not
+  only the SI.
+- [ ] Estimation-method sensitivity: design guidance under CAR and/or Bayesian fits
+  versus SAR (existing related evidence: grid non-oracle and omitted-spillover fits).
+  Likely committee question; scope with Lin.
+- [x] Equal-weight pooling check (2026-10-14): Σd/ΣP versus `mean_of_yearly_rates`
+  across 58 clusters: rank correlation 0.9999, 2 one-place rank swaps, no quartile or
+  top-29 changes. No meaningful impact; pooled rates do not drive yearly allocation.
+
+**Manuscript and exhibits (edit the chapter first, then re-derive CTJ/SI; run verifiers)**
+- [ ] Group the designs into categories in Table 1 (e.g. deterministic, random,
+  incidence-driven, saturation-driven; some designs span two). Consider one unified
+  table + illustration exhibit.
+- [ ] State explicitly that the endpoint is assumed correlated with the guiding
+  incidence (wording depends on the outcome decision).
+- [ ] Update keywords (drop "mean squared error"?).
+- [ ] Optional: one sentence contrasting this project's proportional spillover
+  (γ × share of treated neighbors) with Chapter 2's on/off indicator (keep brief).
+- [ ] Keep CTJ word counts current after every edit (texcount, text + headers, math
+  excluded; title page and checklist). 2026-10-14: body 3,362; 3,628 with
+  declarations; abstract 393 (394 counting "10×10").
+- [ ] Decide whether statistical tests of design differences belong in the CTJ/SI
+  (the SI has Nemenyi/Holm-Wilcoxon for variant consolidation; script 12 has six-design
+  Friedman/Nemenyi; none for the application).
+- [ ] Re-run the saved read-only review prompt
+  (`claude_comprehensive_review_prompt_2026-10-12.md`) after these edits.
+
+**Prelim and beyond**
+- [ ] Prelim slides (bios-dissertation/slides/): structure Project 1 / 2 / 3, brief
+  literature review, depth on completed projects; prepare for general-science
+  questions and the SAR vs CAR vs Bayesian question.
+- [ ] Ask Lin which project to submit as an ENAR 2027 abstract.
+- [ ] Final defense: focus on progress since the prelim (mainly Project 3).
+
 ## Known minor code issues (low priority; moved from AGENTS.md 2026-10-14)
 
 - `02_incidence_generation.R`: `generate_incidence_poisson()` still defaults `pop_per_cluster = 1000` (and its roxygen says so). 05 always passes 100,000, so results aren't affected. It was left unchanged after the full run so the run manifest's code hash still matches.

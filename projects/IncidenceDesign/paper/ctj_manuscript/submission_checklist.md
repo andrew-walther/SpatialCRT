@@ -4,7 +4,8 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
 - [x] Body 3,362 prose/heading words (after the 2026-10-14 Monte Carlo definition); limit 3,500 applies to the body (author, 2026-10-14;
-  end declarations, abstract, references and exhibits excluded). 3,526 with declarations.
+  end declarations, abstract, references and exhibits excluded). 3,628 with declarations
+  (266 declaration words; recounted 2026-10-14, texcount text + headers, math excluded).
   Placeholder text (ethics statement, coauthor-approval sentence) is highlighted yellow.
   Structured abstract 394 words (limit 425); six keywords. Recounted 2026-10-14
   after the heading/abstract revision (informative subheadings, Discussion
