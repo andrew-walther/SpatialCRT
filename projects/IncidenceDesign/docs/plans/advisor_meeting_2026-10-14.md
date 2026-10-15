@@ -137,6 +137,55 @@ forward:
    an "outcome correlated with incidence" version already exists in both studies; what's
    missing is an endpoint that *is* (future) incidence.
 
+## Follow-up reasoning (after the meeting, 2026-10-14)
+
+Reasoning only; nothing below has been simulated.
+
+**Would all-or-nothing (Project 1-style) spillover change the results? Probably yes.**
+- With queen neighbors (about 5–8 per cluster) and about half the clusters treated,
+  almost every control cluster has at least one treated neighbor.
+- An on/off spillover term would then nearly equal "is a control" under control-only
+  spillover, or a constant under both-arms spillover. τ would be poorly identified.
+- Only control clusters with no treated neighbors separate treatment from spillover.
+- Expected by design:
+  - **Isolation Buffer:** not identified. The maximal independent set guarantees every
+    untreated cluster touches a treated one, so spillover = γ(1 − Z) exactly.
+  - **Checkerboard:** the same problem.
+  - **SRS and the balanced designs:** worse, because few controls are fully isolated.
+  - **Saturation designs:** likely to gain, since the 20% region leaves some isolated
+    controls.
+- So the ranking would probably shift further toward saturation.
+- The proportional form (γ × share of treated neighbors) is identified because controls
+  vary in their treated-neighbor share. It is also the more plausible exposure model.
+- This is a candidate sensitivity analysis, or a prepared answer to "why not Project 1's
+  binary spillover?"
+
+**What β means, and how it depends on the outcome**
+- In Y = (I − ρW)⁻¹[τZ + S(Z) + βX + ε], β sets the outcome's *baseline level* by
+  incidence. It does not change the treatment effect: τ is constant across clusters for
+  every β.
+  - **β = 0:** a cluster's incidence has no effect on its outcome. Incidence only guides
+    which clusters the designs treat.
+  - **β = 1:** higher-incidence clusters have a higher outcome regardless of treatment.
+- The right β depends on what Y is:
+  - **Y is an education measure** (e.g. professionals' knowledge): β = 0 is plausible.
+    This is the current primary framing.
+  - **Y is future SUD incidence, reduced by the education:** past incidence predicts
+    future incidence, so β > 0 is natural. This is Dr. Lin's "outcome correlated with
+    the guiding incidence".
+- Under the second framing, the existing NC β = 1 runs approximate the setting:
+  rank-scaled incidence in the outcome, adjusted for in the fit, like a baseline
+  adjustment. Caveats: the outcome is continuous rather than counts, and the size β = 1
+  is arbitrary.
+- Support for reporting both ways (option d):
+  - The grid uses β = 1, and NC uses β = 0 with a β = 1 sensitivity. The regime
+    conclusions hold in both.
+  - In NC under β = 1, most designs change by only a few percent. High Incidence Focus
+    is the exception: its MSE rises 1.4–4.4×.
+- Not modeled anywhere: a treatment effect that grows with incidence (larger reductions
+  in high-burden areas, e.g. a Z·X interaction). That would be option (e) if the framing
+  goes that way.
+
 ## Synthesis: decisions needed before more work
 
 - **The outcome question comes first.** It determines what the remaining analyses and
@@ -152,6 +201,11 @@ forward:
   - (d) Report both ways, β = 0 and β = 1 side by side (Andrew's leaning, 2026-10-14).
     This needs no new simulation, since both run sets exist. The cost is more exhibits or
     space, and a framing choice about which version leads.
+  - (e) Model a treatment effect that grows with incidence (Z·X interaction). This is a
+    new model and new runs; τ is currently constant by author rule.
+
+  The choice among these hinges on what Y is: an education measure points to β = 0,
+  future SUD incidence to β > 0. See "Follow-up reasoning" above.
 
   Not decided yet: the choice depends on how we frame the incidence–outcome
   relationship and needs careful thought. Record the outcome in DECISIONS.md.

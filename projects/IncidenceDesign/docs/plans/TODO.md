@@ -116,7 +116,9 @@ description, ORCIDs) are not repeated here.
   simulation; reverses the 2026-10-02 rule, numbers change across documents);
   (c) model a future-incidence endpoint (new model/runs); (d) report both β = 0 and
   β = 1 side by side (author's leaning, 2026-10-14; no new simulation; decide which
-  leads). Record the choice in DECISIONS.md.
+  leads); (e) incidence-dependent treatment effect (Z·X; new runs). First settle what Y
+  is: an education measure (β = 0) or future SUD incidence (β > 0); see the meeting
+  record's "Follow-up reasoning". Record the choice in DECISIONS.md.
 - [ ] Get Lin's sign-off on the open prep questions (design choices, regime-based
   framing, six designs + SRS, deterministic designs as comparators, code availability,
   target date/backup journal): list in the meeting record.
@@ -144,6 +146,10 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 - [ ] Estimation-method sensitivity: design guidance under CAR and/or Bayesian fits
   versus SAR (existing related evidence: grid non-oracle and omitted-spillover fits).
   Likely committee question; scope with Lin.
+- [ ] (Optional) Binary-spillover sensitivity: refit with Project 1-style on/off
+  spillover (any treated neighbor). Expected without running it: Isolation Buffer and
+  Checkerboard not identified, SRS/balanced worse, saturation relatively better. Could
+  be a sensitivity analysis or a prepared committee answer.
 - [x] Equal-weight pooling check (2026-10-14): Σd/ΣP versus `mean_of_yearly_rates`
   across 58 clusters: rank correlation 0.9999, 2 one-place rank swaps, no quartile or
   top-29 changes. No meaningful impact; pooled rates do not drive yearly allocation.
