@@ -67,6 +67,32 @@ uncertainty. `test_real_sud_tail.R` checks those diagnostics with a hand fixture
 
 This directory adapts the IncidenceDesign simulation framework from a regular 10x10 grid to the North Carolina Community College service-area application. The application uses 58 irregular spatial clusters, Queen-contiguity neighbors, and population-balanced design adaptations to evaluate treatment assignment strategies for a future SUD intervention study.
 
+## Methods extensions (2026-10-20)
+
+Plan: [methods_extensions_plan_2026-10-20.md](../docs/plans/methods_extensions_plan_2026-10-20.md);
+findings and teach-back: [methods_extensions_findings_2026-10-20.md](../docs/plans/methods_extensions_findings_2026-10-20.md).
+New files only; the hashed production files are sourced, not edited (V9). From the
+project directory, BLAS pinned to one thread (`VECLIB_MAXIMUM_THREADS=1
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1`):
+
+```sh
+Rscript application/tests/test_methods_extensions.R          # V3-V7, V11 (SKIP_LAGSARLM=1 to skip V5's lagsarlm part)
+Rscript application/code/methods_ext_stored.R                # A0, A1, A2, A5 Stage 1 from stored fits
+Rscript application/code/methods_ext_participation.R a3 10   # A3 partial participation + power (pilot | a3 | a4)
+Rscript application/code/methods_ext_participation.R a4 10   # A4 unequal trained professionals
+Rscript application/code/methods_ext_summaries.R 10          # N80, MDE, translation, guidance, V1/V2/V8
+Rscript application/code/methods_ext_sensitivity.R a7 10     # also a5, a6car, a6bayes; add "smoke" for a quick run
+Rscript application/code/methods_ext_sensitivity_summary.R   # A5 Stage 2, A6 (V10), A7
+Rscript application/tests/verify_methods_ext_manifests.R     # V9
+```
+
+`run_methods_ext_queue.sh` chains the post-A3/A4 steps unattended (under `caffeinate`).
+Outputs: `results/methods_ext_2026-10/{stored,participation,summaries,a5,a6car,a6bayes,a7,sensitivity_summaries,verification}/`,
+each with a manifest; per-task checkpoints and per-fit tables are gitignored.
+`methods_ext_core.R` holds the shared helpers (key seeds in a new namespace,
+participant subsets, participant W with zero rows for islands, rule-A exposure,
+designs on subsets, manifests).
+
 ## Directory Structure
 
 ```text

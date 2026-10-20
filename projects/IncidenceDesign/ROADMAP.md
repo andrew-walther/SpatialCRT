@@ -246,6 +246,17 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-20 — methods extensions (post-advisor-meeting analyses), steps 1–6
+
+- Implemented the approved plan (`docs/plans/methods_extensions_plan_2026-10-20.md`)
+  in new files `application/code/methods_ext_*.R` and tests; production files unchanged (V9).
+- Ran A0–A2 and A5 Stage 1 on stored fits; A3 (301.8M fits) and A4 (98.5M) overnight
+  locally, all 576 tasks OK, no failed fits; then A7, A5 Stage 2, A6 CAR/reverse and
+  Bayesian CAR. Findings, failed checks (V2 at N <= 35, V6 small regions, V8 along N,
+  V5 guard deviation) and open author decisions:
+  `docs/plans/methods_extensions_findings_2026-10-20.md`.
+- No manuscript, chapter, CTJ, SI or slide edits (steps 7–8 await approval). No push.
+
 ### Status text moved from AGENTS.md (2026-10-14)
 
 Moved verbatim when `AGENTS.md` was trimmed to standing rules and reference material.

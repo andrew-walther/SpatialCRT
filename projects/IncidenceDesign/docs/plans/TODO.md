@@ -192,6 +192,19 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 - [ ] Ask Lin which project to submit as an ENAR 2027 abstract.
 - [ ] Final defense: focus on progress since the prelim (mainly Project 3).
 
+### Methods-extension decisions for the author (2026-10-20 run)
+
+Details: `methods_extensions_findings_2026-10-20.md`.
+- [ ] A5 coverage: adopt the t54 + df-corrected interval (meets the 94–96% rule on the
+  production fits; two Stage 2 cells at 92.8–93.8%) or keep Wald with the limitation.
+- [ ] A1/D2 targeting: on the NC map Incidence-Guided Saturation barely out-targets Plain
+  Saturation (rate share 0.511 vs 0.504; death share 0.492 vs 0.496). Decide the wording
+  of the targeting rationale before manuscript edits.
+- [ ] V6: saturation regions rebuilt at N = 15–20 can have 1–2 colleges (no material
+  effect on results). Keep, restrict, or rebuild with a minimum-size rule.
+- [ ] Power headline: use size-adjusted power (Wald size is 8–13% at N <= 35).
+- [ ] Steps 7–8 (manuscripts, slides) after review.
+
 ## Known minor code issues (low priority; moved from AGENTS.md 2026-10-14)
 
 - `02_incidence_generation.R`: `generate_incidence_poisson()` still defaults `pop_per_cluster = 1000` (and its roxygen says so). 05 always passes 100,000, so results aren't affected. It was left unchanged after the full run so the run manifest's code hash still matches.

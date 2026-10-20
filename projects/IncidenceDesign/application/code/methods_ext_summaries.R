@@ -373,8 +373,59 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
     say("A4: MSE ratio unequal/equal by design: %s",
         paste(sprintf("%s %.3f", me_design_name(1:9), tapply(a4w$MSE_Ratio[a4w$Tau > 0], a4w$Design_ID[a4w$Tau > 0], mean)), collapse = "; "))
   }
+  mu_headline(out)
   writeLines(c(sprintf("Run %s", format(Sys.time())), log), file.path(out, "summaries_log.txt"))
   invisible(list(a3 = a3, n80 = n80s, mde = mdes, guidance = gh, v1 = v1))
+}
+
+# Headline markdown tables ----
+#' Write the headline N80, MDE, guidance and translation tables as markdown
+#'
+#' Reads the summary CSVs written by mu_run() and formats: colleges for 80% power
+#' (size-adjusted and Wald, each kappa), MDE at N = 20/29/40/58, the guidance-holds
+#' ratios (random and incidence-weighted) and the m x ICC translation for SRS and
+#' Incidence-Guided Saturation at rho = 0.5, kappa = 0.8.
+#' @param out Summaries folder.
+#' @return Invisibly NULL; writes a3_headline_tables.md and a3_translation_headline.md.
+#' @family methods_ext_summaries
+#' @examples
+#' # mu_headline(file.path(.me_root, "summaries"))
+mu_headline <- function(out) {
+  n <- read.csv(file.path(out, "a3_n80_summary.csv")); m <- read.csv(file.path(out, "a3_mde_summary.csv")); g <- read.csv(file.path(out, "a3_guidance_ratio_to_srs.csv"))
+  ord <- c("Simple Random Sampling","High Incidence Focus","Balanced Halves","Balanced Quartiles","Plain Saturation","Incidence-Guided Saturation","2x2 Blocking","Checkerboard","Isolation Buffer")
+  fm <- function(mean, mn, mx) ifelse(is.infinite(mn) & mn > 0, ">58", ifelse(is.na(mean), sprintf("%s–%s", ifelse(is.infinite(mn), ifelse(mn<0,"≤15",">58"), sprintf("%.0f",mn)), ifelse(is.infinite(mx), ifelse(mx<0,"≤15",">58"), sprintf("%.0f",mx))), ifelse(mx - mn < 1.5, sprintf("%.0f", mean), sprintf("%.0f (%.0f–%.0f)", mean, mn, mx))))
+  L <- c()
+  for (adj in c(TRUE, FALSE)) for (k in c(0.8, 0.5)) {
+    pre <- if (adj) "N80_Adj_" else "N80_"
+    L <- c(L, sprintf("\n**Colleges for 80%% power (%s), κ = %.1f.** Mean over 2018–2021 (range when years differ by > 1); `>58` = not reached with all colleges.\n", if (adj) "size-adjusted" else "Wald", k))
+    cols <- expand.grid(Tau = c(1, 1.5, 2), Rho = c(0, 0.5), Regime = c("both", "control_only"), stringsAsFactors = FALSE)
+    L <- c(L, paste0("| Design | ", paste(sprintf("%s ρ=%.1f τ=%.2g", ifelse(cols$Regime=="both","Both","Ctrl"), cols$Rho, cols$Tau), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
+    for (d in ord) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- n[n$Design==d & n$Kappa==k & n$Tau==cols$Tau[i] & n$Rho==cols$Rho[i] & n$Regime==cols$Regime[i],]
+      fm(r[[paste0(pre,"Mean")]], r[[paste0(pre,"Min")]], r[[paste0(pre,"Max")]]) }); L <- c(L, paste0("| ", d, " | ", paste(v, collapse=" | "), " |")) }
+  }
+  L <- c(L, "\n**Minimum detectable effect (size-adjusted, cluster-SD units), κ = 0.8, mean over years; `>2` = above the grid.**\n")
+  cols <- expand.grid(N = c(20, 29, 40, 58), Regime = c("both","control_only"), Rho = c(0, 0.5), stringsAsFactors=FALSE)
+  L <- c(L, paste0("| Design | ", paste(sprintf("%s ρ=%.1f N=%d", ifelse(cols$Regime=="both","Both","Ctrl"), cols$Rho, cols$N), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
+  for (d in ord) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- m[m$Design==d & m$Kappa==0.8 & m$N==cols$N[i] & m$Rho==cols$Rho[i] & m$Regime==cols$Regime[i],]; if (is.infinite(r$MDE_Adj)) ">2" else sprintf("%.2f", r$MDE_Adj) }); L <- c(L, paste0("| ", d, " | ", paste(v, collapse=" | "), " |")) }
+  L <- c(L, "\n**Guidance holds? Mean-MSE ratio to SRS at τ = 1 (mean over 16 blocks: year × ρ × κ; range in brackets), random volunteering.**\n")
+  cols <- expand.grid(N = c(20, 29, 40, 58), Regime = c("both","control_only"), stringsAsFactors=FALSE)
+  L <- c(L, paste0("| Design | ", paste(sprintf("%s N=%d", ifelse(cols$Regime=="both","Both","Ctrl"), cols$N), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
+  for (d in ord[-1]) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- g[g$Design==d & g$Mechanism=="random" & g$N==cols$N[i] & g$Regime==cols$Regime[i],]; sprintf("%.2f [%.2f–%.2f]", r$Ratio.Mean, r$Ratio.Min, r$Ratio.Max) }); L <- c(L, paste0("| ", d, " | ", paste(v, collapse=" | "), " |")) }
+  L <- c(L, "\n**Incidence-weighted (3×) volunteering, same table.**\n")
+  cols <- expand.grid(N = c(20, 29), Regime = c("both","control_only"), stringsAsFactors=FALSE)
+  L <- c(L, paste0("| Design | ", paste(sprintf("%s N=%d", ifelse(cols$Regime=="both","Both","Ctrl"), cols$N), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
+  for (d in ord[-1]) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- g[g$Design==d & g$Mechanism=="incidence3x" & g$N==cols$N[i] & g$Regime==cols$Regime[i],]; sprintf("%.2f [%.2f–%.2f]", r$Ratio.Mean, r$Ratio.Min, r$Ratio.Max) }); L <- c(L, paste0("| ", d, " | ", paste(v, collapse=" | "), " |")) }
+  writeLines(L, file.path(out, "a3_headline_tables.md"))
+  t <- read.csv(file.path(out, "a3_translation_m_icc.csv")); t <- t[t$Rho==0.5 & t$Kappa==0.8,]
+  L <- "\n**Translation (size-adjusted power), ρ = 0.5, κ = 0.8, random volunteering.** Individual effect d (in individual-SD units), m trained professionals per college, ICC; σ_c = √(ICC + (1 − ICC)/m), τ = d/σ_c. `≥x` = effect beyond the simulated τ ≤ 2, power at least x.\n"
+  for (reg in c("both","control_only")) for (des in c("Simple Random Sampling","Incidence-Guided Saturation")) {
+    L <- c(L, sprintf("\n*%s, %s spillover*\n", des, if (reg=="both") "both-arms" else "control-only"))
+    cols <- expand.grid(N=c(20,29,40,58), d=c(0.1,0.2,0.3)); L <- c(L, paste0("| m | ICC | ", paste(sprintf("d=%.1f N=%d", cols$d, cols$N), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+2)))
+    for (m in c(10,25,50)) for (icc in c(0.01,0.05,0.10)) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- t[t$Design==des & t$Regime==reg & t$N==cols$N[i] & t$d==cols$d[i] & t$m==m & t$ICC==icc,]
+       if (r$Beyond_Grid) sprintf("≥%.2f", r$Power_At_Grid_Top) else sprintf("%.2f", r$Power_Adj) }); L <- c(L, sprintf("| %d | %.2f | %s |", m, icc, paste(v, collapse=" | "))) }
+  }
+  writeLines(L, file.path(out, "a3_translation_headline.md"))
+  invisible(NULL)
 }
 
 #' Task names of a profile, from its stored configuration

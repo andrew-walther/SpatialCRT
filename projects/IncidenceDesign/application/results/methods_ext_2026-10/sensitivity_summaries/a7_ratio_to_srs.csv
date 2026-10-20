@@ -1,0 +1,55 @@
+"Form","Regime","Design_ID","Design","Ratio_Mean","Ratio_Min","Ratio_Max","Blocks","Blocks_Unidentified","Min_Share_Identified","Min_Share_Identified_SRS"
+"binary","both",1,"Checkerboard",1.06784360818141,1.01144287824888,1.14648891199018,16,0,1,1
+"count","both",1,"Checkerboard",1.78496183272157,1.71143477651198,1.86249176315955,16,0,1,1
+"proportional","both",1,"Checkerboard",2.97488817477711,2.72670256712755,3.15109362911747,16,0,1,1
+"binary","control_only",1,"Checkerboard",NA,NA,NA,16,16,0,0.66
+"count","control_only",1,"Checkerboard",1.40710278550676,1.3576369234151,1.48654802791895,16,0,1,1
+"proportional","control_only",1,"Checkerboard",3.08561913913018,2.90260939554438,3.36409931084152,16,0,1,1
+"binary","both",2,"High Incidence Focus",0.955310104837359,0.902582310803832,0.992764713015489,16,0,1,1
+"count","both",2,"High Incidence Focus",0.921523016587618,0.852801479713094,0.991670095482003,16,0,1,1
+"proportional","both",2,"High Incidence Focus",0.90943939420334,0.850149596351164,0.977587472022622,16,0,1,1
+"binary","control_only",2,"High Incidence Focus",NA,NA,NA,16,8,0,0.66
+"count","control_only",2,"High Incidence Focus",1.04019033864766,0.898783035621407,1.39550279725882,16,0,1,1
+"proportional","control_only",2,"High Incidence Focus",1.03447338947232,0.718511425137035,1.37215395967677,16,0,1,1
+"binary","both",3,"Plain Saturation",1.03175257921379,1.00909324517742,1.06579857601847,16,0,1,1
+"count","both",3,"Plain Saturation",1.01997723059255,0.994375859169694,1.05336693310173,16,0,1,1
+"proportional","both",3,"Plain Saturation",1.01072354413132,0.97625177770627,1.05395278654726,16,0,1,1
+"binary","control_only",3,"Plain Saturation",0.695194982224344,0.624958301360189,0.788134422740816,16,0,0.88,0.66
+"count","control_only",3,"Plain Saturation",0.811965388968946,0.74221995841295,0.853044612134648,16,0,1,1
+"proportional","control_only",3,"Plain Saturation",0.761158182048734,0.725463117639995,0.807291303705514,16,0,1,1
+"binary","both",4,"Isolation Buffer",NA,NA,NA,16,16,0,1
+"count","both",4,"Isolation Buffer",3.8379863039678,3.74327961882486,3.94879264410881,16,0,1,1
+"proportional","both",4,"Isolation Buffer",3.82454130592368,3.68212708526492,3.94884847128509,16,0,1,1
+"binary","control_only",4,"Isolation Buffer",NA,NA,NA,16,16,0,0.66
+"count","control_only",4,"Isolation Buffer",1.16035043736697,1.11128156803884,1.20405172375114,16,0,1,1
+"proportional","control_only",4,"Isolation Buffer",0.951610789826873,0.922175496942594,0.977593981828787,16,0,1,1
+"binary","both",5,"2x2 Blocking",1.00182215778076,0.973408955621997,1.04233692520045,16,0,1,1
+"count","both",5,"2x2 Blocking",1.02704568632514,0.998679675219231,1.06887729847779,16,0,1,1
+"proportional","both",5,"2x2 Blocking",1.03621328672295,0.987738656188769,1.08153512044801,16,0,1,1
+"binary","control_only",5,"2x2 Blocking",1.14116050476492,1.03647377215614,1.24339674211166,16,0,0.28,0.66
+"count","control_only",5,"2x2 Blocking",1.06805671558389,0.986405781872188,1.19466070834124,16,0,1,1
+"proportional","control_only",5,"2x2 Blocking",1.16682894032562,1.04224600610837,1.28524745841132,16,0,1,1
+"binary","both",6,"Balanced Quartiles",1.00281207261743,0.980024111300602,1.0369216789344,16,0,1,1
+"count","both",6,"Balanced Quartiles",1.00760427692522,0.984505863447449,1.03796665509513,16,0,1,1
+"proportional","both",6,"Balanced Quartiles",1.01097821177624,0.975982415981937,1.04600856122396,16,0,1,1
+"binary","control_only",6,"Balanced Quartiles",0.956135435892328,0.882650515850994,1.08648398032046,16,0,0.6,0.66
+"count","control_only",6,"Balanced Quartiles",0.987852686351151,0.927921346150415,1.01824032982528,16,0,1,1
+"proportional","control_only",6,"Balanced Quartiles",0.986305256611948,0.965129954224729,1.00774945661018,16,0,1,1
+"binary","both",7,"Balanced Halves",1.02130887636277,1.00117595356381,1.04802502182948,16,0,1,1
+"count","both",7,"Balanced Halves",1.0238920793415,1.00712662461503,1.05029050417453,16,0,1,1
+"proportional","both",7,"Balanced Halves",1.02381315279374,1.0007703097745,1.03967952083258,16,0,1,1
+"binary","control_only",7,"Balanced Halves",0.948943230579485,0.822266657470641,1.04540328333753,16,0,0.59,0.66
+"count","control_only",7,"Balanced Halves",0.987411452594578,0.923798240727186,1.02861754192182,16,0,1,1
+"proportional","control_only",7,"Balanced Halves",0.983857298021581,0.954443900164478,1.04657366389428,16,0,1,1
+"binary","both",8,"Incidence-Guided Saturation",1.03800046310928,1.01501156587685,1.08035475161381,16,0,1,1
+"count","both",8,"Incidence-Guided Saturation",1.02603145358765,1.00604188521919,1.06063036531377,16,0,1,1
+"proportional","both",8,"Incidence-Guided Saturation",1.01392147857643,0.98661861107991,1.05233085440833,16,0,1,1
+"binary","control_only",8,"Incidence-Guided Saturation",0.705235336669504,0.605108828863171,0.894644468178912,16,0,0.86,0.66
+"count","control_only",8,"Incidence-Guided Saturation",0.785786881757084,0.721148994507773,0.853961969118327,16,0,1,1
+"proportional","control_only",8,"Incidence-Guided Saturation",0.751379888840957,0.648839312702726,0.817809513746193,16,0,1,1
+"binary","both",9,"Simple Random Sampling",1,1,1,16,0,1,1
+"count","both",9,"Simple Random Sampling",1,1,1,16,0,1,1
+"proportional","both",9,"Simple Random Sampling",1,1,1,16,0,1,1
+"binary","control_only",9,"Simple Random Sampling",1,1,1,16,0,0.66,0.66
+"count","control_only",9,"Simple Random Sampling",1,1,1,16,0,1,1
+"proportional","control_only",9,"Simple Random Sampling",1,1,1,16,0,1,1

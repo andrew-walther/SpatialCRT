@@ -1,0 +1,57 @@
+Run 2026-10-20 12:39:02
+A5 Stage 2: 72000 fits; failed SAR fits 0; profile intervals missing 0; bootstrap refits failed 0; max |profile LL at tau-hat - LL| 9.9e-14
+A5 Wald         design x regime 0.9118-0.9432; settings 0.8960-0.9580; adoption rule (94-96% every design x regime; rankings unchanged since tau-hat is unchanged): NOT MET
+A5 Stage1_t_df  design x regime 0.9280-0.9577; settings 0.9160-0.9740; adoption rule (94-96% every design x regime; rankings unchanged since tau-hat is unchanged): NOT MET
+A5 Percentile   design x regime 0.9015-0.9363; settings 0.8900-0.9580; adoption rule (94-96% every design x regime; rankings unchanged since tau-hat is unchanged): NOT MET
+A5 Bootstrap_t  design x regime 0.9325-0.9575; settings 0.9220-0.9720; adoption rule (94-96% every design x regime; rankings unchanged since tau-hat is unchanged): NOT MET
+A5 Profile      design x regime 0.9185-0.9467; settings 0.9020-0.9620; adoption rule (94-96% every design x regime; rankings unchanged since tau-hat is unchanged): NOT MET
+A6 CAR: 432000 fits; SAR failed 0 (boundary 0); CAR failed 35 (boundary 0, errors 35, warnings 1167); unidentified fits 0
+A6 car DGP, both: Spearman(SAR, CAR design MSE order) mean 0.89 (range 0.67-0.98) over 24 blocks; best design agrees in 17/24
+A6 car DGP, control_only: Spearman(SAR, CAR design MSE order) mean 0.97 (range 0.92-1.00) over 24 blocks; best design agrees in 15/24
+A6 sar DGP, both: Spearman(SAR, CAR design MSE order) mean 0.83 (range 0.52-0.98) over 24 blocks; best design agrees in 11/24
+A6 sar DGP, control_only: Spearman(SAR, CAR design MSE order) mean 0.90 (range 0.53-1.00) over 24 blocks; best design agrees in 11/24
+A6 car DGP, CAR fit, rho/lambda = 0.0: mean coverage 0.928, mean bias +0.004
+A6 sar DGP, CAR fit, rho/lambda = 0.0: mean coverage 0.928, mean bias +0.004
+A6 car DGP, SAR fit, rho/lambda = 0.0: mean coverage 0.932, mean bias +0.019
+A6 sar DGP, SAR fit, rho/lambda = 0.0: mean coverage 0.932, mean bias +0.019
+A6 car DGP, CAR fit, rho/lambda = 0.2: mean coverage 0.926, mean bias +0.004
+A6 sar DGP, CAR fit, rho/lambda = 0.2: mean coverage 0.923, mean bias +0.060
+A6 car DGP, SAR fit, rho/lambda = 0.2: mean coverage 0.932, mean bias -0.005
+A6 sar DGP, SAR fit, rho/lambda = 0.2: mean coverage 0.932, mean bias +0.024
+A6 car DGP, CAR fit, rho/lambda = 0.5: mean coverage 0.926, mean bias +0.003
+A6 sar DGP, CAR fit, rho/lambda = 0.5: mean coverage 0.901, mean bias +0.158
+A6 car DGP, SAR fit, rho/lambda = 0.5: mean coverage 0.928, mean bias -0.045
+A6 sar DGP, SAR fit, rho/lambda = 0.5: mean coverage 0.932, mean bias +0.036
+V10 CAR vs SAR at rho = 0 (same data): mean |diff| 0.0524, median 0.0285, correlation 0.9846, mean diff -0.0146 over 71991 fits
+A6 Bayes: 14400 MCMC fits (burn-in 5000, 25000 iterations, thin 5); errors 0; ESS < 400: 3637; |Geweke z| >= 1.96: 1477; not converged (either) 4378 (30.4%); ESS median 3044 (min 12)
+A6 Bayes: |Geweke| >= 1.96 is expected in about 5% of converged chains by chance
+A6 Bayes both: Spearman(SAR ML, Bayesian CAR design MSE order) mean 0.90 (range 0.40-1.00); best design agrees 7/8
+A6 Bayes control_only: Spearman(SAR ML, Bayesian CAR design MSE order) mean 0.83 (range 0.62-1.00); best design agrees 5/8
+A6 Bayes BCAR rho = 0.0: coverage 0.948, bias -0.009, MSE 0.220
+A6 Bayes SAR rho = 0.0: coverage 0.936, bias +0.007, MSE 0.228
+A6 Bayes BCAR rho = 0.5: coverage 0.890, bias +0.191, MSE 0.375
+A6 Bayes SAR rho = 0.5: coverage 0.933, bias +0.025, MSE 0.241
+V10 Bayes vs ML: correlation 0.950, mean |diff| 0.121, mean diff +0.075 over 14400 fits
+V10 hand check: 2019 rho=0.5 control_only Checkerboard: ML 1.844 (SE 0.927) vs posterior mean 1.835 [-0.176, 3.826], ESS 1017
+V10 hand check: 2020 rho=0.5 control_only High Incidence Focus: ML 1.458 (SE 0.554) vs posterior mean 1.850 [0.567, 3.139], ESS 371
+V10 hand check: 2021 rho=0.0 control_only Plain Saturation: ML 1.076 (SE 0.491) vs posterior mean 1.162 [0.201, 2.208], ESS 601
+V10 hand check: 2019 rho=0.5 control_only 2x2 Blocking: ML 1.226 (SE 0.631) vs posterior mean 1.188 [-0.119, 2.480], ESS 2377
+V10 hand check: 2021 rho=0.5 both Checkerboard: ML 0.762 (SE 0.423) vs posterior mean 0.677 [-0.175, 1.564], ESS 3805
+A7 binary control_only Checkerboard: identified in 0.0% of fits (aliased Spill 100.0%) - reported as not identified
+A7 binary control_only High Incidence Focus: identified in 50.0% of fits (aliased Spill 50.0%) - reported as not identified
+A7 binary control_only Plain Saturation: identified in 89.7% of fits (aliased Spill 10.3%) - reported as not identified
+A7 binary both Isolation Buffer: identified in 0.0% of fits (aliased Spill 100.0%) - reported as not identified
+A7 binary control_only Isolation Buffer: identified in 0.0% of fits (aliased Spill 100.0%) - reported as not identified
+A7 binary control_only 2x2 Blocking: identified in 46.0% of fits (aliased Spill 54.0%) - reported as not identified
+A7 binary control_only Balanced Quartiles: identified in 65.2% of fits (aliased Spill 34.8%) - reported as not identified
+A7 binary control_only Balanced Halves: identified in 66.0% of fits (aliased Spill 34.0%) - reported as not identified
+A7 binary control_only Incidence-Guided Saturation: identified in 91.7% of fits (aliased Spill 8.3%) - reported as not identified
+A7 binary control_only Simple Random Sampling: identified in 70.0% of fits (aliased Spill 30.0%) - reported as not identified
+A7 binary       both         best-to-worst (mean MSE ratio to SRS; identified share if < 1): High Incidence Focus 0.96, Simple Random Sampling 1.00, 2x2 Blocking 1.00, Balanced Quartiles 1.00, Balanced Halves 1.02, Plain Saturation 1.03, Incidence-Guided Saturation 1.04, Checkerboard 1.07
+A7 binary       control_only best-to-worst (mean MSE ratio to SRS; identified share if < 1): Plain Saturation 0.70 [id 0.88], Incidence-Guided Saturation 0.71 [id 0.86], Balanced Halves 0.95 [id 0.59], Balanced Quartiles 0.96 [id 0.60], Simple Random Sampling 1.00 [id 0.66], 2x2 Blocking 1.14 [id 0.28]
+A7 binary control_only: SRS reference itself identified in only 66.0% of fits in some block
+A7 count        both         best-to-worst (mean MSE ratio to SRS; identified share if < 1): High Incidence Focus 0.92, Simple Random Sampling 1.00, Balanced Quartiles 1.01, Plain Saturation 1.02, Balanced Halves 1.02, Incidence-Guided Saturation 1.03, 2x2 Blocking 1.03, Checkerboard 1.78, Isolation Buffer 3.84
+A7 count        control_only best-to-worst (mean MSE ratio to SRS; identified share if < 1): Incidence-Guided Saturation 0.79, Plain Saturation 0.81, Balanced Halves 0.99, Balanced Quartiles 0.99, Simple Random Sampling 1.00, High Incidence Focus 1.04, 2x2 Blocking 1.07, Isolation Buffer 1.16, Checkerboard 1.41
+A7 proportional both         best-to-worst (mean MSE ratio to SRS; identified share if < 1): High Incidence Focus 0.91, Simple Random Sampling 1.00, Plain Saturation 1.01, Balanced Quartiles 1.01, Incidence-Guided Saturation 1.01, Balanced Halves 1.02, 2x2 Blocking 1.04, Checkerboard 2.97, Isolation Buffer 3.82
+A7 proportional control_only best-to-worst (mean MSE ratio to SRS; identified share if < 1): Incidence-Guided Saturation 0.75, Plain Saturation 0.76, Isolation Buffer 0.95, Balanced Halves 0.98, Balanced Quartiles 0.99, Simple Random Sampling 1.00, High Incidence Focus 1.03, 2x2 Blocking 1.17, Checkerboard 3.09
+A7 proportional vs production MSE (V11 at N = 58): 288 settings, |z| > 2 in 9, max |z| 2.46
