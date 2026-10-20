@@ -3,3 +3,11 @@ results/real_sud_rev_20261002/*/checkpoints/
 results/real_sud_rev_20261002/*/*.log
 results/real_sud_rev_20261002/*.log
 results/real_sud_rev_20261002/smoke_initial/
+# Methods extensions (2026-10-20): fit caches, per-fit tables, smoke/test folders, logs.
+results/methods_ext_2026-10/**/checkpoints/
+results/methods_ext_2026-10/*/fits.rds
+results/methods_ext_2026-10/*_smoke/
+results/methods_ext_2026-10/summaries_pilot_test/
+results/methods_ext_2026-10/**/*_allocations_subsets.rds
+results/methods_ext_2026-10/stored/a1_burden_share_allocations.rds
+results/methods_ext_2026-10/**/*.log

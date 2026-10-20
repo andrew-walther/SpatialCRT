@@ -1,0 +1,37 @@
+"Setting","Design","Avg_Rank"
+"beta0_both","High Incidence Focus",1.875
+"beta0_both","Balanced Halves",3.16666666666667
+"beta0_both","Plain Saturation",3.83333333333333
+"beta0_both","Incidence-Guided Saturation",4
+"beta0_both","Balanced Quartiles",4.04166666666667
+"beta0_both","Simple Random Sampling",5.16666666666667
+"beta0_both","2x2 Blocking",5.91666666666667
+"beta0_both","Checkerboard",8
+"beta0_both","Isolation Buffer",9
+"beta0_control_only","Plain Saturation",1.66666666666667
+"beta0_control_only","Incidence-Guided Saturation",1.79166666666667
+"beta0_control_only","Isolation Buffer",3.79166666666667
+"beta0_control_only","High Incidence Focus",4.75
+"beta0_control_only","Balanced Quartiles",4.875
+"beta0_control_only","Balanced Halves",5.04166666666667
+"beta0_control_only","Simple Random Sampling",6.41666666666667
+"beta0_control_only","2x2 Blocking",7.66666666666667
+"beta0_control_only","Checkerboard",9
+"beta1_both","Balanced Quartiles",2.16666666666667
+"beta1_both","Balanced Halves",2.45833333333333
+"beta1_both","Plain Saturation",3.58333333333333
+"beta1_both","Incidence-Guided Saturation",3.91666666666667
+"beta1_both","Simple Random Sampling",4
+"beta1_both","2x2 Blocking",4.875
+"beta1_both","Checkerboard",7.04166666666667
+"beta1_both","High Incidence Focus",8.375
+"beta1_both","Isolation Buffer",8.58333333333333
+"beta1_control_only","Plain Saturation",1.29166666666667
+"beta1_control_only","Incidence-Guided Saturation",1.70833333333333
+"beta1_control_only","Isolation Buffer",3.5
+"beta1_control_only","Balanced Quartiles",4.33333333333333
+"beta1_control_only","Balanced Halves",4.54166666666667
+"beta1_control_only","Simple Random Sampling",5.95833333333333
+"beta1_control_only","2x2 Blocking",6.66666666666667
+"beta1_control_only","High Incidence Focus",8
+"beta1_control_only","Checkerboard",9

@@ -1,0 +1,24 @@
+Run 2026-10-20 03:18:06
+A2 p-values are a consistency summary (one map, four correlated years, shared allocation streams), not trial-level evidence.
+A0/A5: 864 production rows; excluded (boundary/error) fits: 0
+A0/A5: max |stored coverage - recomputed Wald coverage| = 5.55e-16
+A0: tau = 1 Wald power, min 0.1840, median 0.6420 (beta = 0); min 0.1800 (beta = 1)
+A5 Cov_Wald            design x regime mean 0.9230-0.9362; per setting 0.9150-0.9500; rule (94-96% every design x regime): NOT MET
+A5 Cov_t               design x regime mean 0.9297-0.9412; per setting 0.9220-0.9540; rule (94-96% every design x regime): NOT MET
+A5 Cov_dfvar           design x regime mean 0.9354-0.9447; per setting 0.9280-0.9590; rule (94-96% every design x regime): NOT MET
+A5 Cov_dfvar_both      design x regime mean 0.9411-0.9499; per setting 0.9330-0.9630; rule (94-96% every design x regime): MET
+A5 Cov_dfvar_meanonly  design x regime mean 0.9331-0.9428; per setting 0.9240-0.9570; rule (94-96% every design x regime): NOT MET
+A5 Stage 1 grid: not checked; the grid caches (results/checkpoints/rev_2026-09) keep surface-level summaries, not per-fit tau-hat/SE.
+A1 2x2 Blocking                 deaths 0.506, person-years 0.509, enrichment 0.99, rate share 0.492, treated/control rate 118.4/120.4, treated 0.496 (mean of years)
+A1 Balanced Halves              deaths 0.500, person-years 0.498, enrichment 1.01, rate share 0.501, treated/control rate 119.7/119.2, treated 0.500 (mean of years)
+A1 Balanced Quartiles           deaths 0.498, person-years 0.497, enrichment 1.01, rate share 0.500, treated/control rate 119.5/119.4, treated 0.500 (mean of years)
+A1 Checkerboard                 deaths 0.453, person-years 0.505, enrichment 0.90, rate share 0.431, treated/control rate 110.6/127.1, treated 0.466 (mean of years)
+A1 High Incidence Focus         deaths 0.354, person-years 0.229, enrichment 1.55, rate share 0.622, treated/control rate 148.6/90.3, treated 0.500 (mean of years)
+A1 Incidence-Guided Saturation  deaths 0.492, person-years 0.495, enrichment 1.01, rate share 0.511, treated/control rate 122.0/116.8, treated 0.500 (mean of years)
+A1 Isolation Buffer             deaths 0.265, person-years 0.267, enrichment 1.02, rate share 0.274, treated/control rate 119.4/119.4, treated 0.274 (mean of years)
+A1 Plain Saturation             deaths 0.496, person-years 0.491, enrichment 1.02, rate share 0.504, treated/control rate 120.2/118.6, treated 0.501 (mean of years)
+A1 Simple Random Sampling       deaths 0.497, person-years 0.495, enrichment 1.02, rate share 0.500, treated/control rate 119.5/119.4, treated 0.500 (mean of years)
+A2 beta0_both: 24 blocks, Friedman chi2 = 135.3 (df 8), p = 2.3e-25; best avg rank High Incidence Focus (1.88); CD = 2.45
+A2 beta0_control_only: 24 blocks, Friedman chi2 = 153.8 (df 8), p = 3.2e-29; best avg rank Plain Saturation (1.67); CD = 2.45
+A2 beta1_both: 24 blocks, Friedman chi2 = 150.7 (df 8), p = 1.4e-28; best avg rank Balanced Quartiles (2.17); CD = 2.45
+A2 beta1_control_only: 24 blocks, Friedman chi2 = 179.8 (df 8), p = 1.1e-34; best avg rank Plain Saturation (1.29); CD = 2.45
