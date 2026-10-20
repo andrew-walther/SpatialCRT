@@ -1,0 +1,32 @@
+Run 2026-10-20 08:12:25
+a3: 432 / 432 task checkpoints present
+a3: 301,824,000 fits in 432 tasks; total task time 36.2 core-h (0.431 ms/fit)
+a3 failures: estimates missing 0, CI missing 0, boundary 0, errors 0, aliased 38160, unidentified 0, warnings 38160 (of 321,408,000 fits)
+a4: 144 / 144 task checkpoints present
+a4: 98,496,000 fits in 144 tasks; total task time 11.7 core-h (0.428 ms/fit)
+a4 failures: estimates missing 0, CI missing 0, boundary 0, errors 0, aliased 2400, unidentified 0, warnings 2400 (of 109,440,000 fits)
+Subsets N = 15: islands mean 4.06 (max 9), subsets with islands 50/50, symmetric-W bypass 1, region <2: 1, <3: 22
+Subsets N = 20: islands mean 3.06 (max 7), subsets with islands 48/50, symmetric-W bypass 0, region <2: 0, <3: 3
+Subsets N = 25: islands mean 1.92 (max 6), subsets with islands 44/50, symmetric-W bypass 0, region <2: 0, <3: 0
+Subsets N = 29: islands mean 1.62 (max 4), subsets with islands 44/50, symmetric-W bypass 0, region <2: 0, <3: 0
+Subsets N = 30: islands mean 1.46 (max 5), subsets with islands 41/50, symmetric-W bypass 0, region <2: 0, <3: 0
+Subsets N = 35: islands mean 0.92 (max 3), subsets with islands 31/50, symmetric-W bypass 0, region <2: 0, <3: 0
+Subsets N = 40: islands mean 0.48 (max 2), subsets with islands 21/50, symmetric-W bypass 0, region <2: 0, <3: 0
+Subsets N = 45: islands mean 0.24 (max 2), subsets with islands 11/50, symmetric-W bypass 0, region <2: 0, <3: 0
+Subsets N = 50: islands mean 0.18 (max 1), subsets with islands 9/50, symmetric-W bypass 0, region <2: 0, <3: 0
+Subsets N = 58: islands mean 0.00 (max 0), subsets with islands 0/50, symmetric-W bypass 0, region <2: 0, <3: 0
+V1 PASS: 576 comparisons (MSE + coverage over 288 cells); |z| > 2: 25 (expected 26.2 by chance, one-sided binomial p = 0.623); |z| > 3: 0; max |z| 2.96
+V2 N = 15 (random): Wald size by design (mean over settings) 0.111-0.128, within 5-8% for every design: NO; settings 0.108-0.137; size-adjusted 0.050-0.050
+V2 N = 20 (random): Wald size by design (mean over settings) 0.095-0.104, within 5-8% for every design: NO; settings 0.093-0.113; size-adjusted 0.050-0.050
+V2 N = 25 (random): Wald size by design (mean over settings) 0.084-0.095, within 5-8% for every design: NO; settings 0.081-0.104; size-adjusted 0.050-0.050
+V2 N = 29 (random): Wald size by design (mean over settings) 0.083-0.088, within 5-8% for every design: NO; settings 0.077-0.095; size-adjusted 0.050-0.050
+V2 N = 30 (random): Wald size by design (mean over settings) 0.079-0.086, within 5-8% for every design: NO; settings 0.076-0.093; size-adjusted 0.050-0.050
+V2 N = 35 (random): Wald size by design (mean over settings) 0.076-0.081, within 5-8% for every design: NO; settings 0.071-0.088; size-adjusted 0.050-0.050
+V2 N = 40 (random): Wald size by design (mean over settings) 0.074-0.077, within 5-8% for every design: yes; settings 0.069-0.086; size-adjusted 0.050-0.050
+V2 N = 45 (random): Wald size by design (mean over settings) 0.069-0.075, within 5-8% for every design: yes; settings 0.067-0.083; size-adjusted 0.050-0.050
+V2 N = 50 (random): Wald size by design (mean over settings) 0.070-0.073, within 5-8% for every design: yes; settings 0.062-0.081; size-adjusted 0.050-0.050
+V2 N = 58 (random): Wald size by design (mean over settings) 0.063-0.070, within 5-8% for every design: yes; settings 0.052-0.088; size-adjusted 0.050-0.050
+V8: 1842 of 12096 power curves (Wald and size-adjusted, along tau and N) drop by more than 2 MC SEs (flagged, not smoothed)
+Translation: 2 of 36 (m, ICC, d) cells have standardized effects beyond tau = 2 (power reported as >= power at tau = 2)
+A4: unequal minus equal power at d > 0, by design (mean over settings): Checkerboard -0.083; High Incidence Focus -0.108; Plain Saturation -0.103; Isolation Buffer -0.076; 2x2 Blocking -0.097; Balanced Quartiles -0.100; Balanced Halves -0.101; Incidence-Guided Saturation -0.104; Simple Random Sampling -0.101
+A4: MSE ratio unequal/equal by design: Checkerboard 1.622; High Incidence Focus 1.460; Plain Saturation 1.578; Isolation Buffer 1.511; 2x2 Blocking 1.632; Balanced Quartiles 1.602; Balanced Halves 1.595; Incidence-Guided Saturation 1.559; Simple Random Sampling 1.598

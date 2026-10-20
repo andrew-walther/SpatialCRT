@@ -199,9 +199,9 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
   write.csv(v1, file.path(out, "v1_reproduction.csv"), row.names = FALSE)
   nz <- 2 * nrow(v1); n2 <- sum(abs(v1$Z_MSE) > 2) + sum(abs(v1$Z_Coverage) > 2); n3 <- sum(abs(c(v1$Z_MSE, v1$Z_Coverage)) > 3)
   p_binom <- stats::binom.test(n2, nz, 0.0455, alternative = "greater")$p.value
-  v1_pass <- nrow(v1) == 144 && p_binom > 0.01 && n3 <= 1
-  say("V1 %s: %d comparisons (MSE + coverage over 144 cells); |z| > 2: %d (expected %.1f by chance, one-sided binomial p = %.3f); |z| > 3: %d; max |z| %.2f",
-      if (v1_pass) "PASS" else "FAIL", nz, n2, 0.0455 * nz, p_binom, n3, max(abs(c(v1$Z_MSE, v1$Z_Coverage))))
+  v1_pass <- nrow(v1) == 288 && p_binom > 0.01 && n3 <= 1   # 4 years x 9 designs x 2 regimes x 2 rho x 2 kappa
+  say("V1 %s: %d comparisons (MSE + coverage over %d cells); |z| > 2: %d (expected %.1f by chance, one-sided binomial p = %.3f); |z| > 3: %d; max |z| %.2f",
+      if (v1_pass) "PASS" else "FAIL", nz, nrow(v1), n2, 0.0455 * nz, p_binom, n3, max(abs(c(v1$Z_MSE, v1$Z_Coverage))))
 
   ## V2 size ----
   v2 <- main[main$Tau == 0 & main$Kappa == cfg$kappa[1], ]   # tau = 0 rows are shared across kappa
@@ -209,8 +209,8 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
   v2r <- aggregate(cbind(Size_Min = Power) ~ Mechanism + N + Design, v2, min); v2x <- aggregate(cbind(Size_Max = Power) ~ Mechanism + N + Design, v2, max)
   v2s <- merge(merge(v2s, v2r), v2x); write.csv(v2s, file.path(out, "v2_size.csv"), row.names = FALSE)
   for (n in sort(unique(v2s$N))) { d <- v2s[v2s$N == n & v2s$Mechanism == "random", ]
-    say("V2 N = %2d (random): Wald size by design %.3f-%.3f (settings %.3f-%.3f); within 5-8%% for every design: %s; size-adjusted %.3f-%.3f",
-        n, min(d$Size), max(d$Size), min(d$Size_Min), max(d$Size_Max), if (all(d$Size_Min >= 0.04 & d$Size_Max <= 0.08)) "yes" else "NO",
+    say("V2 N = %2d (random): Wald size by design (mean over settings) %.3f-%.3f, within 5-8%% for every design: %s; settings %.3f-%.3f; size-adjusted %.3f-%.3f",
+        n, min(d$Size), max(d$Size), if (all(d$Size >= 0.05 & d$Size <= 0.08)) "yes" else "NO", min(d$Size_Min), max(d$Size_Max),
         min(d$Size_Adj), max(d$Size_Adj)) }
 
   ## V8 monotonicity ----

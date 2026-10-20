@@ -1,4 +1,4 @@
-Run 2026-10-20 03:17:17
+Run 2026-10-20 03:35:40
 V4 rule A: control with 4 neighbors (2 non-part., 1 treated, 1 control) = 0.25 PASS 
 V4 rule A: island exposure is 0 and its W_P row is zero                        PASS 
 V4 rule A: W_P rows sum to 1 for non-islands                                   PASS 
@@ -22,6 +22,8 @@ N = 58 design 9 reuses the frozen production rule (identical draw)             P
 V3 scale invariance: (0.5, 0.5) vs (1, 1) on 200 fits (tau-hat, SE, t)         PASS max |diff| = 5.62e-08
 V5 non-symmetric subset listw objects pass the can.be.simmed() guard           PASS islands per subset 1-8; symmetric W_P at N = 15: 76 / 2000 subsets
 V5 symmetric W_P subsets fail the guard and get an engine via me_engine_setup() PASS 
+V5 fit_sar_lag matches lagsarlm(zero.policy = TRUE) with islands (1,000 fits)  PASS max |dtau| = 3.72e-08, max |dSE| = 5.15e-09
+V5 symmetric W_P subsets match lagsarlm's symmetric branch (300 fits)          PASS max |dtau| = 1.62e-08, max |dSE| = 3.70e-09
 V6 fixed-budget designs (2, 6, 7, 9) treat floor(N/2) on 1,000 subsets         PASS 
 V6 Isolation Buffer: no two adjacent treated participants                      PASS 
 V6 Isolation Buffer: maximal (every control has a treated participant neighbor) PASS 
