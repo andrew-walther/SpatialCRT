@@ -24,6 +24,10 @@ Reasons and history for each rule: `DECISIONS.md`.
 - **Application outcome (2026-10-02):** the primary continuous education outcome has no
   SUD-incidence baseline term (β = 0); observed rates inform allocation only. β = 1 is an
   explicitly hypothetical sensitivity. τ is constant within a scenario.
+- **Methods extensions (author, 2026-10-20):** Y is the measured education endpoint, not
+  future SUD incidence (no count-outcome model); partial participation and power run on
+  NC only, with the fast fitter and new output folders, never editing hashed production
+  code. Plan: `docs/plans/methods_extensions_plan_2026-10-20.md`.
 - **CTJ authors:** Walther, Habib, Simpson, Lin, in that order; Lin corresponding. Never
   invent an IRB protocol number or claim approval/exemption.
 - **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first

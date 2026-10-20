@@ -5,6 +5,53 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-20 — Methods extensions after the 2026-10-14 advisor meeting
+
+**Decision.** Plan: `docs/plans/methods_extensions_plan_2026-10-20.md` (D1–D9).
+- **Outcome (reaffirms the 2026-10-02 rule, with reasoning).** The trial's outcome Y is
+  the measured education endpoint (an assessment of the trained first responders and
+  healthcare professionals, averaged per college). It is an intermediate endpoint,
+  hoped but not assumed to lower future SUD incidence; it is not future incidence.
+  β = 0 stays primary. β = 1 stays a hypothetical sensitivity analysis, reported side
+  by side: the endpoint tracks prior burden in both arms, which is not a claim that the
+  education works better in high-incidence areas. τ is constant (no Z·X term). No
+  future-incidence (count / rate-ratio) endpoint model; the manuscripts call it future
+  work. Revisit only if Dr. Lin or Dr. Simpson ask.
+- **Targeting.** Incidence guidance is justified by sending treatment to high-burden
+  areas at plain saturation's accuracy (ethical rationale). Report the share of SUD
+  burden in treated areas by design.
+- **Partial participation (NC only, not the grid).** Colleges volunteer after the
+  pilot. Primary: random volunteering. Sensitivity: the chance of joining rises with
+  incidence rank (top about 3× bottom). Spillover exposure = treated neighbors / all
+  geographic queen neighbors (non-participants count as untreated). The spatial lag
+  links participants only; islands get zero rows. Designs are rebuilt on the
+  participants. Full 58 stays primary.
+- **Power.** Standardized effects. Fixed trained professionals per college (m) as the
+  main case, translated to colleges × m × ICC tables; m proportional to population as
+  a sensitivity. Fast `fit_sar_lag()` fitter, run overnight locally.
+- **Tests.** Grid tests stay in the appendix/SI with one main-text sentence. NC tests
+  are added and labeled a consistency summary, since the four years are related
+  observed surfaces. Colleges needed for 80% power is the headline design comparison.
+- **Sensitivities.** Coverage: try the t value, df-corrected variance, parametric
+  bootstrap (percentile and studentized) and profile likelihood; adopt one only if
+  coverage is 94–96% for every design and regime with rankings unchanged, otherwise
+  state the limitation and what was tried. Estimation: CAR and Bayesian CAR
+  (`CARBayes` install approved). Spillover forms: binary and additive count besides
+  proportional; no second-order spillover.
+- **Placement.** CTJ: power in main-text prose, with the figure in the SI (six main
+  exhibits unchanged). Anything a committee member could ask about gets a main or
+  backup prelim slide.
+
+**Why.** Dr. Lin's questions (outcome versus incidence, partial participation, sample
+size, tests, estimation method). The project recommends a design for a hypothetical
+statewide trial with no future-incidence data, so the measurable endpoint is the
+education assessment. Monte Carlo replicates make any difference "significant", so the
+trial-relevant comparison is measured in colleges.
+
+**Source.** Author planning interview, 2026-10-19/20.
+
+---
+
 ## 2026-10-19 — Revisions apply to every manuscript version; versioned markups
 
 **Decision.** Every revision to the CTJ paper is applied to both the submission layout

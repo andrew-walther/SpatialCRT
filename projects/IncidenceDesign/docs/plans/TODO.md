@@ -76,7 +76,7 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   title page). Lin's telephone (919) 966-9431 added from his UNC profile.
 - [ ] Confirm contribution wording; obtain all coauthors' final approval and
   submission attestations; confirm the pilot description with Simpson.
-- [ ] **Coverage below nominal (~93%; added 2026-10-14):** Wald intervals
+- [ ] **Coverage below nominal (~93%; added 2026-10-14; plan A5):** Wald intervals
   τ̂ ± 1.96·SE are slightly too narrow in every design (likely ML SE ignoring
   uncertainty in ρ̂; untested). Quick fix tried 2026-10-14 (application only): a
   t critical value (df = 58 − 4 = 54, t ≈ 2.005; 53 for β = 1) recomputed from the
@@ -104,12 +104,17 @@ Commands and safeguards: project/application README and AGENTS.
 ## Advisor meeting 2026-10-14 follow-ups
 
 Context, Lin's feedback, unanswered questions and fact-checks:
-[advisor_meeting_2026-10-14.md](advisor_meeting_2026-10-14.md). Not started.
+[advisor_meeting_2026-10-14.md](advisor_meeting_2026-10-14.md).
+**Approved plan for the new analyses (2026-10-20):
+[methods_extensions_plan_2026-10-20.md](methods_extensions_plan_2026-10-20.md)**
+(decisions in DECISIONS.md, 2026-10-20). Analyses not started.
 Items overlapping the submission list above (IRB, coauthor approval, pilot
 description, ORCIDs) are not repeated here.
 
 **Decide first (it shapes the rest)**
-- [ ] Outcome–incidence relationship (Lin's "big question"; needs careful
+- [x] Outcome–incidence relationship, decided 2026-10-20: Y is the education
+  endpoint, β = 0 primary with β = 1 beside it, constant τ, no count model (plan D1).
+  Confirm with Lin/Simpson at the upcoming meeting. Original options: (Lin's "big question"; needs careful
   consideration, depends on how we frame incidence vs outcome): (a) keep β = 0 and
   state the endpoint-tracks-SUD assumption, citing grid β = 1 and the existing NC
   β = 1 runs; (b) promote the existing NC β = 1 runs (all 432 queen settings, no new
@@ -136,22 +141,22 @@ description, ORCIDs) are not repeated here.
 
 **New analyses** (sample size/power and reduced participation must be addressed in the
 thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
-- [ ] Partial participation: sample subsets of colleges (about half; Zoom said ~20),
+- [ ] Partial participation (plan A3): sample subsets of colleges (about half; Zoom said ~20),
   rebuild W on the possibly non-contiguous subset, and check whether the regime
   guidance (incidence-guided saturation under control-only spillover) still holds.
-- [ ] Sample size and power: answer "how many clusters are needed?". Power at τ = 1 for
+- [ ] Sample size and power (plan A0, A3, A4): answer "how many clusters are needed?". Power at τ = 1 for
   the current NC runs can be computed from stored fits (τ̂, SE) without new
   simulation; subset runs would need it too. Candidate for the main CTJ text, not
   only the SI.
-- [ ] Design comparisons with sample size (author, 2026-10-19): show with formal tests
+- [ ] Design comparisons with sample size (plan A2, A3; author, 2026-10-19): show with formal tests
   which designs are better or worse, and the number of participating colleges needed to
   make that claim (power curves by design). Note that more simulation replicates alone
   make any difference "significant". Planned-extensions reasoning is in the meeting record.
   The application report now lists these analyses (Section 8, "Planned extensions").
-- [ ] Estimation-method sensitivity: design guidance under CAR and/or Bayesian fits
+- [ ] Estimation-method sensitivity (plan A6): design guidance under CAR and/or Bayesian fits
   versus SAR (existing related evidence: grid non-oracle and omitted-spillover fits).
   Likely committee question; scope with Lin.
-- [ ] (Optional) Binary-spillover sensitivity: refit with Project 1-style on/off
+- [ ] Binary and additive-count spillover sensitivities (plan A7): refit with Project 1-style on/off
   spillover (any treated neighbor). Expected without running it: Isolation Buffer and
   Checkerboard not identified, SRS/balanced worse, saturation relatively better. Could
   be a sensitivity analysis or a prepared committee answer.
@@ -177,6 +182,8 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
   Friedman/Nemenyi; none for the application).
 - [ ] Re-run the saved read-only review prompt
   (`claude_comprehensive_review_prompt_2026-10-12.md`) after these edits.
+
+- [ ] Burden share treated by design (plan A1).
 
 **Prelim and beyond**
 - [ ] Prelim slides (bios-dissertation/slides/): structure Project 1 / 2 / 3, brief
