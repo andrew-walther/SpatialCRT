@@ -17,6 +17,7 @@ paper/**/*.tex
 
 # Author's annotated reading PDFs (personal revision markups, versioned _V1, _V2, ...)
 paper/ctj_manuscript/manuscript_ctj/revision_markup/
+application/report/revision_markup/
 
 # Worktrees
 .claude/worktrees/

@@ -161,7 +161,7 @@ n_rows <- xnum("Reporting rows"); n_src <- xnum("Distinct sources"); n_fits <- x
 **Bottom line.** The application reproduces the grid study's central, regime-dependent conclusion on real geography and real incidence: *saturation designs are the recommended choice when spillover is expected mainly in control clusters, and SRS remains a reasonable default when spillover reaches both arms.* Incidence-guided saturation was about as accurate as Saturation Quadrants, so incidence can steer the highest treatment saturations to the highest-burden regions at little or no cost in precision.
 
 \begin{keybox}
-\textbf{How to read this report.} Sections 1--8 (the main body) tell the full story. Section 9 holds additional results for reference. The appendix lists decisions and open items for discussion.
+\textbf{How to read this report.} Sections 1--8 (the main body) tell the full story. Section 9 holds additional results for reference. The final section lists key decisions made.
 \end{keybox}
 
 \clearpage
@@ -488,11 +488,7 @@ ggplot2::ggplot(pop_fig, ggplot2::aes(x = Mean_Population_Share, y = Design)) +
   ggplot2::theme(legend.position = "top", panel.grid.minor = ggplot2::element_blank())
 ```
 
-# Appendix: decisions and open items for discussion {.unnumbered}
-
-*Quick-reference context for questions that may come up.*
-
-**Analytic decisions made during implementation**
+# Key decisions made {.unnumbered}
 
 1. **$\beta=0$ primary.** Incidence directs allocation but is not modeled as affecting education outcomes; $\beta=1$ is a labeled hypothetical sensitivity.
 2. **Each year analyzed separately** rather than pooled, so incidence-guided designs face four realistic inputs.
@@ -502,10 +498,3 @@ ggplot2::ggplot(pop_fig, ggplot2::aes(x = Mean_Population_Share, y = Design)) +
 6. **Coverage reported as observed** (about 93%) rather than switching estimators after seeing results.
 7. **Recommendations are regime-specific** rather than naming one overall winner.
 8. **CTJ presentation:** main text shows six designs + SRS; Saturation Quadrants and Balanced Halves are in the supplement (they performed like incidence-guided saturation and Balanced Quartiles).
-
-**Open items**
-
-- **IRB/data use:** institutional review board determination for the restricted death-certificate data and permission to publish 58-cluster aggregates and maps (Habib, Simpson).
-- **Pilot description:** confirm with Simpson that the education-pilot framing (endpoint, eligible professionals) is accurate.
-- **Coauthor review** of the *Clinical Trials* (CTJ) manuscript draft and contribution statement (Habib, Simpson, Lin).
-- **Submission requirements:** CTJ requires an institutional review board (IRB) statement and a generative-AI disclosure (both to do); Lin's telephone is now on the title page; coauthor ORCIDs if requested.
