@@ -160,7 +160,8 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
   table + illustration exhibit.
 - [ ] State explicitly that the endpoint is assumed correlated with the guiding
   incidence (wording depends on the outcome decision).
-- [ ] Update keywords (drop "mean squared error"?).
+- [x] Update keywords (done 2026-10-19: dropped "simulation" and "mean squared error";
+  added interference, design-stage treatment allocation, incidence-guided design).
 - [ ] Optional: one sentence contrasting this project's proportional spillover
   (γ × share of treated neighbors) with Chapter 2's on/off indicator (keep brief).
 - [ ] Keep CTJ word counts current after every edit (texcount, text + headers, math
