@@ -5,6 +5,26 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-19 — Revisions apply to every manuscript version; versioned markups
+
+**Decision.** Every revision to the CTJ paper is applied to both the submission layout
+(`CTJ_Manuscript`) and the reading layout (`CTJ_Reading`), and both PDFs are rebuilt.
+Whenever either the CTJ paper or Chapter 3 is revised, check whether the other version
+needs the same edit. The author marks up a copy of the reading PDF saved as
+`manuscript_ctj/revision_markup/CTJ_Reading_Markup_V<n>.pdf` (gitignored), and the clean
+`CTJ_Reading.pdf` stays committed and current for sharing with collaborators.
+
+**Why.** Content edits often matter to both the paper and the chapter, while edits tied to
+the journal's structure may not; checking each time keeps the versions consistent. Markups
+are personal working copies referenced in revision requests, so a new numbered copy is
+made for each round of review.
+
+Same day: the ethics placeholder now reads "[Placeholder for the UNC IRB determination:
+protocol number and date]", and the AI acknowledgement says "testing code" and
+"reviewing manuscript text" (author wording). Chapter 3 has neither statement.
+
+---
+
 ## 2026-10-14 — CTJ ethics and coauthor-approval placeholders
 
 **Decision.** Add a visible ethics placeholder at the end of the application

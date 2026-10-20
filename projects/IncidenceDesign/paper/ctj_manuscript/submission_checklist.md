@@ -29,7 +29,7 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [ ] Author review of the revised full drafts and chosen exhibits.
 - [ ] Ethics/data-use statement: CTJ requires an IRB statement in Methods for human data.
   **Placeholder in Methods (2026-10-14)** assumes a not-human-subjects determination with
-  `[IRB #XX-XXXX, date]`. Confirm with Habib/Simpson, fill in number/date (Sage also asks
+  `[Placeholder for the UNC IRB determination: protocol number and date]` (wording 2026-10-19). Confirm with Habib/Simpson, fill in number/date (Sage also asks
   for it on the title page), and confirm permission to publish 58-cluster aggregates.
 - [x] Corresponding-author telephone (919) 966-9431 on the title page and cover letter
   (from Lin's UNC Gillings profile; the journal requires it).
