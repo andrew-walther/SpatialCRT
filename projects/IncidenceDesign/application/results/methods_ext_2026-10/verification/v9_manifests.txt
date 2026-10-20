@@ -1,0 +1,16 @@
+V9 run 2026-10-20 03:28:01: PASS
+OK   NC production  application/code/real_sud_setup.R
+OK   NC production  application/code/real_sud_simulation.R
+OK   NC production  application/code/run_real_sud.R
+OK   NC production  application/code/application_designs.R
+OK   NC production  code/01_spatial_setup.R
+OK   NC production  code/02_incidence_generation.R
+OK   NC production  code/03_designs.R
+OK   NC production  code/04_estimation.R
+OK   NC production  code/05_run_simulation.R
+OK   NC production  code/16_allocation_risk.R
+OK   grid full run   code/01_spatial_setup.R
+OK   grid full run   code/02_incidence_generation.R
+OK   grid full run   code/03_designs.R
+OK   grid full run   code/04_estimation.R
+OK   grid full run   code/05_run_simulation.R

@@ -1,0 +1,36 @@
+Run 2026-10-20 03:17:17
+V4 rule A: control with 4 neighbors (2 non-part., 1 treated, 1 control) = 0.25 PASS 
+V4 rule A: island exposure is 0 and its W_P row is zero                        PASS 
+V4 rule A: W_P rows sum to 1 for non-islands                                   PASS 
+V11 binary form: 1{any treated neighbor}                                       PASS 
+V11 count form: treated neighbors / dbar (dbar = 2)                            PASS 
+V11 proportional form equals rule A                                            PASS 
+N = 58 geometry: W_P equals production queen W, no islands                     PASS 
+V11 N = 58: proportional exposure equals production W z                        PASS 
+V11 N = 58: count form at full treatment equals degree / dbar                  PASS dbar = 4.9310
+V1/V11 N = 58 DGP mean and fitted Spill equal production (both)                PASS 
+V1/V11 N = 58 DGP mean and fitted Spill equal production (control_only)        PASS 
+N = 58 design 1 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 2 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 3 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 4 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 5 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 6 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 7 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 8 reuses the frozen production rule (identical draw)             PASS 
+N = 58 design 9 reuses the frozen production rule (identical draw)             PASS 
+V3 scale invariance: (0.5, 0.5) vs (1, 1) on 200 fits (tau-hat, SE, t)         PASS max |diff| = 5.62e-08
+V5 non-symmetric subset listw objects pass the can.be.simmed() guard           PASS islands per subset 1-8; symmetric W_P at N = 15: 76 / 2000 subsets
+V5 symmetric W_P subsets fail the guard and get an engine via me_engine_setup() PASS 
+V6 fixed-budget designs (2, 6, 7, 9) treat floor(N/2) on 1,000 subsets         PASS 
+V6 Isolation Buffer: no two adjacent treated participants                      PASS 
+V6 Isolation Buffer: maximal (every control has a treated participant neighbor) PASS 
+V6 Isolation Buffer: islands always treated                                    PASS 
+V6 saturation designs use their regional rules; 2x2 blocking balances each block PASS 
+V6 checkerboard deterministic given the subset (and treats <= N/2)             PASS 
+V6 four regions with >= 2 members each                                         FAIL min region size 1; subsets with a region < 2: 10, < 3: 53 / 1000
+V7 N = 20: realized inclusion probabilities match pi (max |diff|)              PASS 0.0071
+V7 N = 20: highest/lowest-burden inclusion ratio about 3                       PASS extreme 3.05; top/bottom decile 2.67 (design value 2.68)
+V7 N = 29: realized inclusion probabilities match pi (max |diff|)              PASS 0.0080
+V7 N = 29: highest/lowest-burden inclusion ratio about 3                       PASS extreme 2.99; top/bottom decile 2.67 (design value 2.68)
+FAILED: V6 four regions with >= 2 members each
