@@ -143,6 +143,11 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
   the current NC runs can be computed from stored fits (τ̂, SE) without new
   simulation; subset runs would need it too. Candidate for the main CTJ text, not
   only the SI.
+- [ ] Design comparisons with sample size (author, 2026-10-19): show with formal tests
+  which designs are better or worse, and the number of participating colleges needed to
+  make that claim (power curves by design). Note that more simulation replicates alone
+  make any difference "significant". Planned-extensions reasoning is in the meeting record.
+  The application report now lists these analyses (Section 8, "Planned extensions").
 - [ ] Estimation-method sensitivity: design guidance under CAR and/or Bayesian fits
   versus SAR (existing related evidence: grid non-oracle and omitted-spillover fits).
   Likely committee question; scope with Lin.

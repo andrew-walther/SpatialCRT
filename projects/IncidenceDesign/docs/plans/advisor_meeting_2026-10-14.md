@@ -32,6 +32,11 @@ Nothing below has been acted on yet.
   person-years) is appropriate. An equal-weight average of the four yearly rates is an
   alternative, but is unlikely to differ much, since populations were stable over
   2018–2021. Checked afterward: no meaningful difference (correction 2).
+  - Andrew's notes add: once incidence is known, a design can randomize further, e.g.
+    incidence-guided saturation randomizing treatment and control within each region.
+    That is how the design already works (saturation set by the region's incidence rank,
+    then clusters randomized within the region), so this reads as a description of the
+    current design, not a new task. Confirm with Dr. Lin if he meant more.
 - **Spillover modeling.** Spillover is modeled as a single effect where it exists, not
   added up per treated neighbor. See correction 1: it is proportional to the share of
   treated neighbors here, unlike Project 1's on/off indicator.
@@ -39,7 +44,9 @@ Nothing below has been acted on yet.
   guidance to the estimation method: SAR versus a conditional autoregressive (CAR) model
   or a Bayesian model? This is a robustness or sensitivity analysis.
 - **Statistical tests of design differences.** These may be needed. Some are already in
-  the supplement (see correction 6).
+  the supplement (see correction 6). Andrew (2026-10-19): the tests should show rigorously
+  which designs are better or worse, together with the number of clusters needed to make
+  that claim.
 - **Keywords.** Update them; "mean squared error" may not be needed.
 - **Prelim presentation.**
   - Use the Project 1 / 2 / 3 structure. That's more common than literature review first,
@@ -219,3 +226,26 @@ Reasoning only; nothing below has been simulated.
     CTJ manuscript.
 - **Manuscript edits route through the chapter.** `Thesis_Chapter.qmd` is canonical; the
   CTJ and supplement are derived from it. Run both verifiers after edits.
+
+## Planned extensions (added 2026-10-19)
+
+The application report (Section 8, "Planned extensions") now tells collaborators about
+three planned analyses: partial participation, sample size and power, and formal design
+comparisons. Points behind that plan (reasoning, nothing run yet):
+
+- **The outcome decision comes first.** Power needs an effect size on the outcome's scale.
+- **New simulations are needed.** All application runs use τ = 1 with σ = 1, a 1-SD
+  effect, so power with 58 clusters is likely near 100% and uninformative. Power curves
+  need smaller effects (e.g. 0.2–0.8 SD) and fewer clusters.
+- **Simulation replicates are not trial sample size.** Paired tests across settings become
+  significant for tiny differences if Monte Carlo replicates are added. Present the tests
+  as "consistently better across settings", and use power curves (in colleges) to answer
+  "how many colleges to make that claim".
+- **Partial-participation gotchas:**
+  - A participating college may have no participating neighbors, making it an island
+    with zero spatial weight.
+  - Saturation regions may have few participants.
+  - Non-participating areas are never treated, so they create no spillover.
+  - Still to decide: whether participation is random or informative (e.g. urban colleges
+    joining more often).
+

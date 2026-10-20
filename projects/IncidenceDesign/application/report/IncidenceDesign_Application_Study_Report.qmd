@@ -390,6 +390,16 @@ report_table(cmp, align = "lrrrr",
 - **Tail uncertainty.** Allocation-tail estimates rest on 100 sampled allocations per setting.
 - **Unequal budgets.** Budgets differ by design; this is an evaluation of retained strategies, not an equal-cost optimization.
 
+\Needspace{6\baselineskip}
+
+**Planned extensions.** The results above assume that all 58 service areas take part, and they compare designs mainly on accuracy. Three further analyses will address practical planning questions.
+
+- **Partial participation.** Not every community college may join the study. We will repeat the design comparison when only some colleges take part (for example, about half, or about 20 of 58), with subsets drawn at random and in patterns plausible in practice. Spatial neighbors are rebuilt among the participating areas, which may no longer form one connected region, and designs that rely on fixed geography (regions, spatial blocks, checkerboard) are re-adapted. The main question is whether the guidance by spillover regime still holds.
+- **Sample size and power.** For each design and spillover regime, we will simulate the power to detect a range of intervention effects as the number of participating colleges varies. This answers how many colleges are needed to detect a given effect with 80% power, and the smallest effect a fixed number of colleges can detect.
+- **Formal design comparisons.** Paired tests across matched settings (Friedman tests with post hoc comparisons, and Holm-adjusted Wilcoxon tests, as in the grid study) will show which differences between designs are statistically supported. The power curves will show at what number of colleges one design's advantage over SRS becomes large enough to matter in practice.
+
+\clearpage
+
 # Additional results
 
 ## Setting-level ratios to SRS
@@ -466,9 +476,11 @@ ggplot2::ggplot(tail_fig, ggplot2::aes(x = Ratio, y = Design, colour = Measure, 
 
 All `r sum(tail_r$Tail_Boundary_Uncertain & !tail_r$Proven_Singleton)` refined settings with more than one possible assignment flag uncertain membership at the worst-decile boundary. For the two saturation designs under both-arms spillover, the worst-decile allocations chosen by the two outcome halves overlap little (Jaccard index, a 0--1 overlap measure, of 0--0.25), and about 61--86% of the apparent allocation variation is outcome noise. Small both-arms tail differences are therefore not evidence of superiority.
 
+\clearpage
+
 ## Population reach
 
-```{r fig-pop, fig.width=7, fig.height=3.1, out.width="85%", fig.align="center", fig.pos="htbp", fig.cap="Share of the working-age population (ages 18--64) living in treated clusters, by design and planning year (mean over sampled allocations). The dashed line marks half of the population. Bars span the four years."}
+```{r fig-pop, fig.width=7, fig.height=3.1, out.width="85%", fig.align="center", fig.pos="H", fig.cap="Share of the working-age population (ages 18--64) living in treated clusters, by design and planning year (mean over sampled allocations). The dashed line marks half of the population. Bars span the four years."}
 # Report-only redraw of the shared population_shares exhibit, for legibility.
 # Budgets do not depend on the spillover regime, so the both-arms rows are used.
 pop_fig <- nc |>
