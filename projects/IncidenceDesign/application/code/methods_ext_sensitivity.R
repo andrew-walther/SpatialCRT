@@ -10,7 +10,7 @@
 # Run from the project root (BLAS pinned to one thread):
 #   VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
 #     Rscript application/code/methods_ext_sensitivity.R <analysis> <workers> [smoke]
-# analysis: a5 | a6car | a6bayes | a6bayeslong | a7 ; "smoke" runs a reduced replicate count.
+# analysis: a5 | a6car | a6bayes | a6bayeslong | a6bayeslag | a7 ; "smoke" runs a reduced replicate count.
 # Outputs: application/results/methods_ext_2026-10/<analysis>[_smoke]/ with
 #   manifest.rds, checkpoints/<year>_D<id>.rds (gitignored) and fits/summary CSVs.
 # One task = (year, design) [A7: (form, year, design)]; each worker holds one task.
@@ -50,11 +50,17 @@ mx_config <- function(analysis, smoke = FALSE) {
     # data as a6bayes (same seed prefix), so convergence is compared fit by fit.
     a6bayeslong = c(c0, list(rho = 0.5, gamma = 0.8, J = 10L, R = 10L, det_R = 100L,
                              burnin = 20000L, n_sample = 100000L, thin = 20L, ess_min = 400, check_frac = 1)),
+    # 2026-10-21 (author): Bayesian SAR lag (spatialreg::spBreg_lag), the correctly
+    # specified Bayesian model, on the same data as a6bayes (both rho), to separate
+    # "Bayesian" from "CAR" in the a6bayes results.
+    a6bayeslag = c(c0, list(rho = c(0, 0.5), gamma = 0.8, J = 10L, R = 10L, det_R = 100L,
+                            ndraw = 10000L, nomit = 2000L, ess_min = 400)),
     a7 = c(c0, list(rho = c(0, 0.5), gamma = c(0.5, 0.8), J = 100L, R = 100L, det_R = 1000L,
                     forms = c("proportional", "binary", "count"))),
     stop("Unknown analysis"))
   if (smoke) { cfg$years <- "2018"; cfg$designs <- c(1, 4, 8, 9); cfg$J <- 3L; cfg$R <- 4L; cfg$det_R <- 6L
     if (analysis == "a5") cfg$B <- 99L
+    if (analysis == "a6bayeslag") { cfg$ndraw <- 2000L; cfg$nomit <- 500L }
     if (analysis %in% c("a6bayes", "a6bayeslong")) { cfg$burnin <- 1000L; cfg$n_sample <- 3000L; cfg$thin <- 1L } }
   cfg
 }
@@ -170,6 +176,29 @@ mx_fit_bcar <- function(y, xm, A, cfg, key) {
     ess = unname(coda::effectiveSize(s)), geweke = unname(coda::geweke.diag(s)$z), error = 0)
 }
 
+#' Bayesian SAR lag fit (spatialreg::spBreg_lag) with convergence diagnostics
+#'
+#' Same model as the ML fit, y = rho W y + X b + e, estimated by MCMC with
+#' spBreg_lag's default priors, cfg$ndraw draws with the first cfg$nomit discarded.
+#' Returns the posterior mean and 2.5/97.5% quantiles of the Z coefficient, its
+#' effective sample size and Geweke z (coda).
+#' @param y,xm Outcome and model matrix. @param lw Row-standardized queen listw.
+#' @param cfg Configuration (ndraw, nomit). @param key Seed key.
+#' @return c(tau, lo, hi, ess, geweke, error).
+#' @family methods_ext_sensitivity
+#' @examples
+#' # mx_fit_blag(y, xm, lw, cfg, list("x"))
+mx_fit_blag <- function(y, xm, lw, cfg, key) {
+  do.call(me_seed, key)
+  df <- data.frame(y = y, xm[, -1, drop = FALSE])
+  f <- tryCatch(suppressMessages(spatialreg::spBreg_lag(stats::as.formula(paste("y ~", paste(colnames(xm)[-1], collapse = " + "))),
+         data = df, listw = lw, control = list(ndraw = cfg$ndraw, nomit = cfg$nomit))), error = function(e) NULL)
+  if (is.null(f)) return(c(tau = NA, lo = NA, hi = NA, ess = NA, geweke = NA, error = 1))
+  s <- coda::as.mcmc(as.numeric(f[, "Z"]))
+  c(tau = mean(s), lo = unname(stats::quantile(s, 0.025)), hi = unname(stats::quantile(s, 0.975)),
+    ess = unname(coda::effectiveSize(s)), geweke = unname(coda::geweke.diag(s)$z), error = 0)
+}
+
 # One task ----
 #' Run all settings for one (year, design) [or (form, year, design)] task
 #' @param task Task row. @param cfg Configuration. @param setup Frozen setup.
@@ -185,8 +214,9 @@ mx_task <- function(task, cfg, setup) {
   form <- if (is.null(task$Form)) "proportional" else task$Form
   dbar <- mean(rowSums(setup$weights$queen$adjacency))
   slw <- spatialreg::similar.listw(spdep::nb2listw(setup$weights$queen$nb, style = "W"))
+  g$lw_full <- spdep::nb2listw(setup$weights$queen$nb, style = "W")   # Bayesian SAR lag (a6bayeslag)
   S <- spdep::listw2mat(slw); A01 <- setup$weights$queen$adjacency
-  pref <- if (cfg$analysis == "a6bayeslong") "a6bayes" else cfg$analysis   # same data as a6bayes
+  pref <- if (cfg$analysis %in% c("a6bayeslong", "a6bayeslag")) "a6bayes" else cfg$analysis   # same data as a6bayes
   out <- list()
   for (j in seq_len(J)) {
     me_seed(paste0(pref, "-Z"), year, id, j); z <- me_draw_design(id, di)
@@ -229,6 +259,12 @@ mx_task <- function(task, cfg, setup) {
           bc <- t(vapply(seq_len(R), function(k) mx_fit_bcar(Y[, k], xm, A01, cfg, list("a6-mcmc", year, id, j, reg, gm, r, k)), numeric(6)))
           colnames(bc) <- paste0("BCAR_", c("tau", "lo", "hi", "ess", "geweke", "error"))
           d <- cbind(d, bc)
+        }
+        if (cfg$analysis == "a6bayeslag") {
+          bl <- t(vapply(seq_len(R), function(k) mx_fit_blag(Y[, k], xm, g$lw_full, cfg, list("a6-blag", year, id, j, reg, gm, r, k)), numeric(6)))
+          colnames(bl) <- paste0("BLAG_", c("tau", "lo", "hi", "ess", "geweke", "error"))
+          if (!ident) bl[, 1:3] <- NA
+          d <- cbind(d, bl)
         }
         out[[length(out) + 1L]] <- d
       }

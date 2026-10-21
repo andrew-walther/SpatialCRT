@@ -32,6 +32,11 @@ In brief:
   reproduce the saturation advantage (report, Section 2.6). This qualifies the
   "same ordering at the ends" sentence in Section 4: it holds for the poor designs,
   not for saturation under control-only spillover.
+- **Bayesian SAR lag (added at the author's request).** On the same data,
+  `spBreg_lag` reproduces ML: 95% of chains converge, bias is at most 0.04, coverage is
+  94.5–95.3%, the design ordering has Spearman 0.96–1.00, and the control-only
+  saturation advantage is unchanged at ρ = 0.5. The Bayesian CAR's problems come from
+  the CAR model, not from Bayesian estimation (report, Section 2.6).
 
 ## Summary (for the author)
 

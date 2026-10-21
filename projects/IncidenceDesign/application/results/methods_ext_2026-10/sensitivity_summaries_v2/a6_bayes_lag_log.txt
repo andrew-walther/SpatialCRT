@@ -1,0 +1,51 @@
+Run 2026-10-21 14:50:46
+Same data confirmed: 14400 fits, SAR ML estimates identical to a6bayes
+Bayesian SAR lag (spBreg_lag, 10000 draws, first 2000 discarded): errors 0; converged 94.9%; ESS median 8000 (min 5897); |Geweke z| >= 1.96 in 5.1% (about 5% expected by chance)
+  rho = 0.0: converged 95.1%
+  rho = 0.5: converged 94.7%
+Posterior mean vs ML: correlation 0.9989, mean |diff| 0.0165, mean diff -0.0034 over 14400 fits
+Bayesian CAR beside it: rho = 0.0 from a6bayes; rho = 0.5 from a6bayeslong
+rho = 0.0, both         BCAR_converged  coverage 0.948, bias -0.002, MSE 0.110
+rho = 0.0, both         BLAG            coverage 0.949, bias +0.001, MSE 0.109
+rho = 0.0, both         BLAG_converged  coverage 0.948, bias +0.000, MSE 0.109
+rho = 0.0, both         SAR             coverage 0.938, bias +0.008, MSE 0.111
+rho = 0.5, both         BCAR_converged  coverage 0.904, bias +0.138, MSE 0.165
+rho = 0.5, both         BLAG            coverage 0.948, bias +0.028, MSE 0.117
+rho = 0.5, both         BLAG_converged  coverage 0.948, bias +0.027, MSE 0.117
+rho = 0.5, both         SAR             coverage 0.935, bias +0.023, MSE 0.116
+rho = 0.0, control_only BCAR_converged  coverage 0.949, bias -0.013, MSE 0.330
+rho = 0.0, control_only BLAG            coverage 0.953, bias -0.016, MSE 0.334
+rho = 0.0, control_only BLAG_converged  coverage 0.953, bias -0.017, MSE 0.335
+rho = 0.0, control_only SAR             coverage 0.934, bias +0.005, MSE 0.345
+rho = 0.5, control_only BCAR_converged  coverage 0.877, bias +0.219, MSE 0.563
+rho = 0.5, control_only BLAG            coverage 0.946, bias +0.039, MSE 0.369
+rho = 0.5, control_only BLAG_converged  coverage 0.945, bias +0.037, MSE 0.369
+rho = 0.5, control_only SAR             coverage 0.932, bias +0.028, MSE 0.365
+MSE ratio to SRS, BCAR_converged, rho = 0.0, both: Balanced Halves 0.87, High Incidence Focus 0.91, Balanced Quartiles 0.95, Simple Random Sampling 1.00, 2x2 Blocking 1.02, Incidence-Guided Saturation 1.03, Plain Saturation 1.04, Checkerboard 2.99, Isolation Buffer 3.61
+MSE ratio to SRS, BCAR_converged, rho = 0.0, control_only: Incidence-Guided Saturation 0.74, Plain Saturation 0.76, Simple Random Sampling 1.00, Balanced Halves 1.10, Balanced Quartiles 1.12, Isolation Buffer 1.13, High Incidence Focus 1.34, 2x2 Blocking 1.47, Checkerboard 3.65
+MSE ratio to SRS, BCAR_converged, rho = 0.5, both: High Incidence Focus 0.83, Balanced Halves 0.99, Simple Random Sampling 1.00, Balanced Quartiles 1.05, 2x2 Blocking 1.11, Plain Saturation 1.11, Incidence-Guided Saturation 1.13, Checkerboard 2.90, Isolation Buffer 3.80
+MSE ratio to SRS, BCAR_converged, rho = 0.5, control_only: Isolation Buffer 0.87, Incidence-Guided Saturation 0.95, Simple Random Sampling 1.00, Balanced Halves 1.01, High Incidence Focus 1.04, Plain Saturation 1.05, Balanced Quartiles 1.15, 2x2 Blocking 1.34, Checkerboard 2.31
+MSE ratio to SRS, BLAG, rho = 0.0, both: Balanced Halves 0.93, High Incidence Focus 0.97, Balanced Quartiles 0.97, Simple Random Sampling 1.00, 2x2 Blocking 1.07, Plain Saturation 1.08, Incidence-Guided Saturation 1.09, Checkerboard 3.01, Isolation Buffer 3.69
+MSE ratio to SRS, BLAG, rho = 0.0, control_only: Incidence-Guided Saturation 0.76, Plain Saturation 0.81, Simple Random Sampling 1.00, Isolation Buffer 1.05, Balanced Halves 1.07, Balanced Quartiles 1.09, High Incidence Focus 1.24, 2x2 Blocking 1.52, Checkerboard 3.41
+MSE ratio to SRS, BLAG, rho = 0.5, both: High Incidence Focus 0.96, Balanced Halves 0.97, Simple Random Sampling 1.00, Balanced Quartiles 1.00, Plain Saturation 1.10, Incidence-Guided Saturation 1.10, 2x2 Blocking 1.14, Checkerboard 3.18, Isolation Buffer 3.94
+MSE ratio to SRS, BLAG, rho = 0.5, control_only: Incidence-Guided Saturation 0.81, Plain Saturation 0.86, Simple Random Sampling 1.00, Isolation Buffer 1.02, Balanced Halves 1.06, Balanced Quartiles 1.10, High Incidence Focus 1.19, 2x2 Blocking 1.48, Checkerboard 3.16
+MSE ratio to SRS, BLAG_converged, rho = 0.0, both: Balanced Halves 0.92, High Incidence Focus 0.96, Balanced Quartiles 0.97, Simple Random Sampling 1.00, Incidence-Guided Saturation 1.07, 2x2 Blocking 1.08, Plain Saturation 1.10, Checkerboard 3.01, Isolation Buffer 3.55
+MSE ratio to SRS, BLAG_converged, rho = 0.0, control_only: Incidence-Guided Saturation 0.74, Plain Saturation 0.79, Simple Random Sampling 1.00, Isolation Buffer 1.05, Balanced Quartiles 1.08, Balanced Halves 1.08, High Incidence Focus 1.25, 2x2 Blocking 1.52, Checkerboard 3.40
+MSE ratio to SRS, BLAG_converged, rho = 0.5, both: High Incidence Focus 0.98, Balanced Halves 0.99, Simple Random Sampling 1.00, Balanced Quartiles 1.02, 2x2 Blocking 1.10, Incidence-Guided Saturation 1.10, Plain Saturation 1.13, Checkerboard 3.19, Isolation Buffer 3.84
+MSE ratio to SRS, BLAG_converged, rho = 0.5, control_only: Incidence-Guided Saturation 0.76, Plain Saturation 0.84, Simple Random Sampling 1.00, Isolation Buffer 1.01, Balanced Halves 1.01, Balanced Quartiles 1.09, High Incidence Focus 1.12, 2x2 Blocking 1.42, Checkerboard 3.12
+MSE ratio to SRS, SAR, rho = 0.0, both: Balanced Halves 0.94, High Incidence Focus 0.97, Balanced Quartiles 0.98, Simple Random Sampling 1.00, Plain Saturation 1.08, Incidence-Guided Saturation 1.08, 2x2 Blocking 1.10, Checkerboard 3.08, Isolation Buffer 3.81
+MSE ratio to SRS, SAR, rho = 0.0, control_only: Incidence-Guided Saturation 0.77, Plain Saturation 0.82, Simple Random Sampling 1.00, Isolation Buffer 1.03, Balanced Halves 1.07, Balanced Quartiles 1.08, High Incidence Focus 1.22, 2x2 Blocking 1.50, Checkerboard 3.29
+MSE ratio to SRS, SAR, rho = 0.5, both: High Incidence Focus 0.96, Balanced Halves 0.97, Simple Random Sampling 1.00, Balanced Quartiles 1.00, Incidence-Guided Saturation 1.12, Plain Saturation 1.12, 2x2 Blocking 1.14, Checkerboard 3.14, Isolation Buffer 3.89
+MSE ratio to SRS, SAR, rho = 0.5, control_only: Incidence-Guided Saturation 0.81, Plain Saturation 0.86, Simple Random Sampling 1.00, Isolation Buffer 1.01, Balanced Halves 1.05, Balanced Quartiles 1.10, High Incidence Focus 1.19, 2x2 Blocking 1.48, Checkerboard 3.16
+Spearman SAR vs BLAG, rho = 0.0, both: mean 0.99 (range 0.98-1.00); best design agrees 4/4
+Spearman SAR vs BLAG, rho = 0.0, control_only: mean 0.96 (range 0.83-1.00); best design agrees 4/4
+Spearman SAR vs BLAG, rho = 0.5, both: mean 1.00 (range 0.98-1.00); best design agrees 4/4
+Spearman SAR vs BLAG, rho = 0.5, control_only: mean 1.00 (range 0.98-1.00); best design agrees 4/4
+Spearman SAR vs BLAG_converged, rho = 0.0, both: mean 0.97 (range 0.97-0.98); best design agrees 4/4
+Spearman SAR vs BLAG_converged, rho = 0.0, control_only: mean 0.98 (range 0.95-1.00); best design agrees 3/4
+Spearman SAR vs BLAG_converged, rho = 0.5, both: mean 0.92 (range 0.73-1.00); best design agrees 4/4
+Spearman SAR vs BLAG_converged, rho = 0.5, control_only: mean 0.96 (range 0.93-1.00); best design agrees 4/4
+Spearman SAR vs BCAR_converged, rho = 0.0, both: mean 0.94 (range 0.88-0.98); best design agrees 4/4
+Spearman SAR vs BCAR_converged, rho = 0.0, control_only: mean 0.91 (range 0.78-0.98); best design agrees 2/4
+Spearman SAR vs BCAR_converged, rho = 0.5, both: mean 0.87 (range 0.52-1.00); best design agrees 3/4
+Spearman SAR vs BCAR_converged, rho = 0.5, control_only: mean 0.77 (range 0.63-0.83); best design agrees 2/4

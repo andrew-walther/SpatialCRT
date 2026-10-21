@@ -19,6 +19,7 @@ Section 4 holds the proposed text, and Section 5 the proposed Part II slides.
 | A3 rerun `a3v2`: saturation regions of ≥ 2 colleges, plus the t + df-corrected test | 432/432 tasks, 301,824,000 fits, 0 failed, 03:50–07:30 |
 | Reproduction check vs the 2026-10-20 A3 run | **PASS after a correction to the check itself** (below) |
 | Bayesian CAR at ρ = 0.5, chains four times longer (`a6bayeslong`) | 36/36 tasks, 7,200 MCMC fits, 0 errors, 07:35–10:40; same data as 2026-10-20 confirmed |
+| Bayesian SAR lag (`a6bayeslag`, `spatialreg::spBreg_lag`) on the same ρ = 0 and 0.5 data, added at the author's request (13:00–14:50) | 36/36 tasks, 14,400 MCMC fits, 0 errors; same data confirmed; V9 PASS again at 14:50 |
 | Summaries (`summaries_v2/`), V1, V2, V8, V9 | V1 PASS (25 of 576 \|z\| > 2, 26.2 expected; none > 3). V9 PASS at 10:41 (queue ended `QUEUEDONE`) |
 
 **The reproduction check failed once, because of an error in the check, not in the
@@ -226,8 +227,30 @@ blocks.
   - **Reading.** Under strong SAR-lag dependence, a misspecified Bayesian CAR still
     identifies the poor designs but cannot resolve the control-only advantage of
     saturation. At ρ = 0, where the CAR model is close to correct, it agreed with ML on
-    2026-10-20. Slides and text should say this plainly rather than claim that the
-    ordering holds everywhere.
+    2026-10-20.
+- **Bayesian SAR lag: the Bayesian CAR's problem is the CAR model, not Bayesian
+  estimation.** This is the same model as the ML fit, estimated by MCMC with
+  `spatialreg::spBreg_lag` default priors: 10,000 draws, the first 2,000 discarded, on
+  the same 14,400 data sets at ρ = 0 and 0.5
+  (`sensitivity_summaries_v2/a6_bayes_lag_log.txt`).
+  - **Convergence.** 94.9% of chains converge; ESS for τ has median 8,000 and minimum
+    5,897, and \|Geweke z\| ≥ 1.96 in 5.1% (5% expected by chance). There were no
+    errors.
+  - **Agreement with ML.** Posterior means against ML: correlation 0.999, mean
+    \|difference\| 0.017.
+  - **Bias and coverage.** Bias is at most 0.04 in absolute value in every ρ × regime
+    cell. Credible-interval coverage is 94.5–95.3%. That is closer to nominal than the
+    Wald interval on the same fits (93.2–93.8%) and similar to the t + df interval.
+  - **Design ordering matches ML.** Ratio to SRS at ρ = 0.5 under control-only
+    spillover: Incidence-Guided Saturation 0.81, Saturation Quadrants 0.86 (ML 0.81,
+    0.86). At ρ = 0: 0.76 and 0.81 (ML 0.77, 0.82). Under both-arms spillover,
+    Checkerboard is 3.01–3.18 and Isolation Buffer 3.69–3.94. Spearman correlation with
+    ML is 0.96–1.00, and the best design agrees in every block.
+  - **Reading.** A correctly specified Bayesian analysis reproduces the design guidance
+    and its calibration. Only the CAR model, which assumes a different dependence
+    structure from the one that generated the data, loses the control-only saturation
+    advantage at ρ = 0.5. Slides and text should present the two Bayesian fits together
+    with this reading.
 
 ### 2.7 Checks
 
@@ -255,8 +278,8 @@ blocks.
    Chapter 3 and the SI say "Saturation Quadrants" (22 and 23 uses), and the CTJ main
    text uses neither name. The drafts use "Saturation Quadrants" to match the
    manuscripts. Which name should win everywhere?
-3. **Push.** Six commits on main are unpushed (23f1d7a, 72d5041, c63d96b, 40efbf8,
-   5922cf8, plus the one that records this report). Push them?
+3. **Push.** Seven commits on main are unpushed (23f1d7a, 72d5041, c63d96b, 40efbf8,
+   5922cf8, 4a4e167, and the Bayesian SAR-lag commit). Push them?
 
 ---
 
@@ -399,8 +422,10 @@ Subsections, each with one table or figure taken from the CSVs in Section 6:
 7. Interval calibration: the Stage 1 and Stage 2 tables, and the coverage-by-N table
    of Section 2.2.
 8. Estimation-method sensitivity: CAR, reverse misspecification and Bayesian CAR,
-   including the long-chain rerun. State that at ρ = 0.5 the Bayesian CAR is biased,
-   under-covers and does not reproduce the control-only saturation advantage.
+   including the long-chain rerun, and Bayesian SAR lag. State that the Bayesian SAR
+   lag reproduces ML (ordering, bias, 94.5–95.3% coverage). The Bayesian CAR is biased
+   at ρ = 0.5 and misses the control-only saturation advantage, which comes from the
+   CAR model, not from the Bayesian estimation.
 9. Spillover form: binary and count.
 
 ### 4.2 CTJ main text
@@ -463,7 +488,7 @@ Added to the ideas bank in `bios-dissertation/slides/prelim/OUTLINE.md`
 4. *Formal tests agree with the descriptive ranking.* Critical-difference plots
    (`stored/a2_cd_plots.pdf`).
 5. *The guidance survives CAR fitting and a CAR outcome model.* A6 table.
-6. *A Bayesian CAR fit flags the same poor designs, but under strong dependence it is biased.* A6 Bayes, long chains (Section 2.6).
+6. *A Bayesian fit of the same model gives the same answer; only the wrong spatial model changes it.* Bayesian SAR lag beside Bayesian CAR and ML (Section 2.6).
 7. *Binary spillover makes Isolation Buffer unidentifiable.* A7 table.
 8. *Unequal college sizes cost power for every design equally.* A4.
 9. *From college-level τ to trained professionals.* Translation table.
@@ -489,4 +514,5 @@ All paths are under `application/results/methods_ext_2026-10/` unless they start
 | A4 | `summaries/a4_summary.csv` |
 | A6 CAR, A7 | `sensitivity_summaries/a6_car_ratio_to_srs.csv`, `a7_ratio_to_srs.csv` |
 | Bayesian CAR, long chains | `sensitivity_summaries_v2/a6_bayes_long_log.txt`, `a6_bayes_long_*.csv` |
+| Bayesian SAR lag | `sensitivity_summaries_v2/a6_bayes_lag_log.txt`, `a6_bayes_lag_*.csv` |
 | Reproduction | `a3v2_reproduction.log` (first version, failed), `a3v2_reproduction_corrected.log` |
