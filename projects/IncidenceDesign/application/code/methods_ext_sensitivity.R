@@ -10,7 +10,7 @@
 # Run from the project root (BLAS pinned to one thread):
 #   VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
 #     Rscript application/code/methods_ext_sensitivity.R <analysis> <workers> [smoke]
-# analysis: a5 | a6car | a6bayes | a7 ; "smoke" runs a reduced replicate count.
+# analysis: a5 | a6car | a6bayes | a6bayeslong | a7 ; "smoke" runs a reduced replicate count.
 # Outputs: application/results/methods_ext_2026-10/<analysis>[_smoke]/ with
 #   manifest.rds, checkpoints/<year>_D<id>.rds (gitignored) and fits/summary CSVs.
 # One task = (year, design) [A7: (form, year, design)]; each worker holds one task.
@@ -46,12 +46,16 @@ mx_config <- function(analysis, smoke = FALSE) {
                        dgp = c("sar", "car"))),
     a6bayes = c(c0, list(rho = c(0, 0.5), gamma = 0.8, J = 10L, R = 10L, det_R = 100L,
                          burnin = 5000L, n_sample = 25000L, thin = 5L, ess_min = 400, check_frac = 1)),
+    # 2026-10-21 (author): rho = 0.5 cells again with chains 4x longer, on the same
+    # data as a6bayes (same seed prefix), so convergence is compared fit by fit.
+    a6bayeslong = c(c0, list(rho = 0.5, gamma = 0.8, J = 10L, R = 10L, det_R = 100L,
+                             burnin = 20000L, n_sample = 100000L, thin = 20L, ess_min = 400, check_frac = 1)),
     a7 = c(c0, list(rho = c(0, 0.5), gamma = c(0.5, 0.8), J = 100L, R = 100L, det_R = 1000L,
                     forms = c("proportional", "binary", "count"))),
     stop("Unknown analysis"))
   if (smoke) { cfg$years <- "2018"; cfg$designs <- c(1, 4, 8, 9); cfg$J <- 3L; cfg$R <- 4L; cfg$det_R <- 6L
     if (analysis == "a5") cfg$B <- 99L
-    if (analysis == "a6bayes") { cfg$burnin <- 1000L; cfg$n_sample <- 3000L; cfg$thin <- 1L } }
+    if (analysis %in% c("a6bayes", "a6bayeslong")) { cfg$burnin <- 1000L; cfg$n_sample <- 3000L; cfg$thin <- 1L } }
   cfg
 }
 
@@ -182,7 +186,7 @@ mx_task <- function(task, cfg, setup) {
   dbar <- mean(rowSums(setup$weights$queen$adjacency))
   slw <- spatialreg::similar.listw(spdep::nb2listw(setup$weights$queen$nb, style = "W"))
   S <- spdep::listw2mat(slw); A01 <- setup$weights$queen$adjacency
-  pref <- cfg$analysis
+  pref <- if (cfg$analysis == "a6bayeslong") "a6bayes" else cfg$analysis   # same data as a6bayes
   out <- list()
   for (j in seq_len(J)) {
     me_seed(paste0(pref, "-Z"), year, id, j); z <- me_draw_design(id, di)
@@ -221,7 +225,7 @@ mx_task <- function(task, cfg, setup) {
           if (!ident) cr[, 1:2] <- NA
           d <- cbind(d, cr)
         }
-        if (cfg$analysis == "a6bayes") {
+        if (cfg$analysis %in% c("a6bayes", "a6bayeslong")) {
           bc <- t(vapply(seq_len(R), function(k) mx_fit_bcar(Y[, k], xm, A01, cfg, list("a6-mcmc", year, id, j, reg, gm, r, k)), numeric(6)))
           colnames(bc) <- paste0("BCAR_", c("tau", "lo", "hi", "ess", "geweke", "error"))
           d <- cbind(d, bc)

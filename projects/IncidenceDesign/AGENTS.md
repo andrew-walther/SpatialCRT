@@ -28,6 +28,10 @@ Reasons and history for each rule: `DECISIONS.md`.
   future SUD incidence (no count-outcome model); partial participation and power run on
   NC only, with the fast fitter and new output folders, never editing hashed production
   code. Plan: `docs/plans/methods_extensions_plan_2026-10-20.md`.
+- **Methods-extension reporting (author, 2026-10-21):** headline power is size-adjusted,
+  with t + df-corrected power beside it and Wald in the SI; the reported interval is
+  t + df-corrected (Stage 1 main evidence, Stage 2 in the SI); targeting is the
+  per-college rate share with the death share beside it. Reasons: `DECISIONS.md`.
 - **CTJ authors:** Walther, Habib, Simpson, Lin, in that order; Lin corresponding. Never
   invent an IRB protocol number or claim approval/exemption.
 - **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first
@@ -35,7 +39,8 @@ Reasons and history for each rule: `DECISIONS.md`.
   (Checkerboard, High Incidence Focus, Plain Saturation, Isolation Buffer, 2×2 Blocking,
   Balanced Quartiles, Balanced Halves, Incidence-Guided Saturation, Simple Random Sampling);
   frame incidence guidance as matching plain saturation's accuracy while targeting
-  high-burden regions (do not call it "no benefit"); no repository hyperlink in manuscripts;
+  high-burden regions when burden differs between regions, with a small gain on the NC
+  map (revised 2026-10-21; never "no benefit"); no repository hyperlink in manuscripts;
   no Codex/Claude mentions in code headers or documents (AI disclosure is a later TODO).
 - **References to Project 1 (2026-09-27):** the chapter may say "Chapter 2". CTJ must be
   self-contained ("In previous work...") and cite the BMC Medical Research Methodology

@@ -1,0 +1,46 @@
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Loading required package: sf
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+Loading required package: Matrix
+
+Attaching package: ‘spatialreg’
+
+The following objects are masked from ‘package:spdep’:
+
+    get.ClusterOption, get.coresOption, get.mcOption,
+    get.VerboseOption, get.ZeroPolicyOption, set.ClusterOption,
+    set.coresOption, set.mcOption, set.VerboseOption,
+    set.ZeroPolicyOption
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Run 2026-10-21 03:44:55; production surfaces (K = 10) and allocations (J = 25 per surface) for 5 configs x 2 neighbor types x 32 blocks
+rook, iid: High Incidence Focus 0.758; Incidence-Guided Saturation 0.527; Plain Saturation 0.501; Balanced Quartiles 0.500; Balanced Halves 0.500; Simple Random Sampling 0.500; 2x2 Blocking 0.500; Checkerboard 0.500; Isolation Buffer 0.382
+rook, poisson rho_X=0.2: High Incidence Focus 0.750; Incidence-Guided Saturation 0.521; Checkerboard 0.503; Plain Saturation 0.500; Balanced Halves 0.500; Simple Random Sampling 0.500; Balanced Quartiles 0.500; 2x2 Blocking 0.500; Isolation Buffer 0.382
+rook, poisson rho_X=0.5: High Incidence Focus 0.750; Incidence-Guided Saturation 0.530; Checkerboard 0.504; Plain Saturation 0.500; Balanced Quartiles 0.500; 2x2 Blocking 0.500; Balanced Halves 0.500; Simple Random Sampling 0.500; Isolation Buffer 0.382
+rook, spatial rho_X=0.2: High Incidence Focus 0.766; Incidence-Guided Saturation 0.528; Checkerboard 0.503; Plain Saturation 0.500; Simple Random Sampling 0.500; Balanced Quartiles 0.500; Balanced Halves 0.500; 2x2 Blocking 0.499; Isolation Buffer 0.384
+rook, spatial rho_X=0.5: High Incidence Focus 0.748; Incidence-Guided Saturation 0.529; Balanced Halves 0.500; Plain Saturation 0.500; Balanced Quartiles 0.500; 2x2 Blocking 0.500; Simple Random Sampling 0.500; Checkerboard 0.491; Isolation Buffer 0.382
+queen, iid: High Incidence Focus 0.758; Incidence-Guided Saturation 0.528; Simple Random Sampling 0.500; Balanced Halves 0.500; 2x2 Blocking 0.500; Balanced Quartiles 0.500; Plain Saturation 0.500; Checkerboard 0.500; Isolation Buffer 0.213
+queen, poisson rho_X=0.2: High Incidence Focus 0.750; Incidence-Guided Saturation 0.522; Checkerboard 0.503; Plain Saturation 0.501; Simple Random Sampling 0.500; Balanced Halves 0.500; Balanced Quartiles 0.500; 2x2 Blocking 0.500; Isolation Buffer 0.214
+queen, poisson rho_X=0.5: High Incidence Focus 0.750; Incidence-Guided Saturation 0.531; Checkerboard 0.504; Simple Random Sampling 0.501; Plain Saturation 0.500; Balanced Halves 0.500; Balanced Quartiles 0.500; 2x2 Blocking 0.500; Isolation Buffer 0.214
+queen, spatial rho_X=0.2: High Incidence Focus 0.766; Incidence-Guided Saturation 0.528; Checkerboard 0.503; Balanced Halves 0.500; Balanced Quartiles 0.500; 2x2 Blocking 0.500; Simple Random Sampling 0.500; Plain Saturation 0.500; Isolation Buffer 0.217
+queen, spatial rho_X=0.5: High Incidence Focus 0.748; Incidence-Guided Saturation 0.529; Balanced Quartiles 0.500; Plain Saturation 0.500; Balanced Halves 0.500; Simple Random Sampling 0.500; 2x2 Blocking 0.500; Checkerboard 0.491; Isolation Buffer 0.214
+Quadrant spread iid: mean 0.162 (range 0.078-0.223); IGS - Plain gain mean +0.028 (range +0.015 to +0.038); corr(spread, gain) 0.88
+Quadrant spread poisson rho_X=0.2: mean 0.134 (range 0.065-0.217); IGS - Plain gain mean +0.021 (range +0.010 to +0.036); corr(spread, gain) 0.99
+Quadrant spread poisson rho_X=0.5: mean 0.197 (range 0.134-0.319); IGS - Plain gain mean +0.031 (range +0.020 to +0.049); corr(spread, gain) 0.99
+Quadrant spread spatial rho_X=0.2: mean 0.165 (range 0.094-0.263); IGS - Plain gain mean +0.029 (range +0.018 to +0.040); corr(spread, gain) 0.84
+Quadrant spread spatial rho_X=0.5: mean 0.180 (range 0.126-0.264); IGS - Plain gain mean +0.029 (range +0.018 to +0.051); corr(spread, gain) 0.88
+NC reference (A1, frozen regions): region mean-rank spread (max - min)/58 = 0.10-0.14 per year; IGS rate share 0.511 vs Plain 0.504
+VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript   78.15s user 1.48s system 98% cpu 1:20.70 total

@@ -32,6 +32,8 @@ source(file.path(.mu_dir, "methods_ext_stored.R"))   # sources core; me_design_t
 #' Reduce one task checkpoint to setting rows and unit-level counts
 #'
 #' Ratios per setting: Power = n_rej / n_ci, Power_Adj = n_rej_adj / n_ci,
+#' Power_Tdf = n_rej_tdf / n_ci and Coverage_Tdf = n_cov_tdf / n_ci (t + df-corrected
+#' test, 2026-10-21; NA for checkpoints written before it existed),
 #' Coverage = n_cov / n_ci, Bias = sum_err / n_est, MSE = sum_err2 / n_est.
 #' Fit-level SE of MSE for a single allocation uses the normal approximation
 #' Var(e^2) = 2 s^4 + 4 b^2 s^2 (b = bias, s^2 = error variance).
@@ -45,6 +47,7 @@ mu_reduce <- function(f) {
   x <- readRDS(f); st <- x$stats; tk <- x$task
   S <- dim(st)[2]; J <- dim(st)[3]
   unit_dim <- if (S > 1) 2 else if (J > 1) 3 else NA
+  has_tdf <- "n_rej_tdf" %in% dimnames(st)[[4]]
   tot <- apply(st, c(1, 4), sum)
   units <- lapply(seq_len(nrow(x$cells)), function(ci)
     if (is.na(unit_dim)) NULL else apply(st[ci, , , , drop = FALSE], c(unit_dim, 4), sum))
@@ -60,6 +63,10 @@ mu_reduce <- function(f) {
       Power = p, MCSE_Power = if (is.na(unit_dim)) fit_se(p) else se_ratio(u, "n_rej", "n_ci"),
       Power_Adj = pa, MCSE_Power_Adj = if (is.na(unit_dim)) fit_se(pa) else se_ratio(u, "n_rej_adj", "n_ci"),
       Coverage = cv, MCSE_Coverage = if (is.na(unit_dim)) fit_se(cv) else se_ratio(u, "n_cov", "n_ci"),
+      Power_Tdf = if (has_tdf) t[["n_rej_tdf"]] / t[["n_ci"]] else NA_real_,
+      MCSE_Power_Tdf = if (!has_tdf) NA_real_ else if (is.na(unit_dim)) fit_se(t[["n_rej_tdf"]] / t[["n_ci"]]) else se_ratio(u, "n_rej_tdf", "n_ci"),
+      Coverage_Tdf = if (has_tdf) t[["n_cov_tdf"]] / t[["n_ci"]] else NA_real_,
+      MCSE_Coverage_Tdf = if (!has_tdf) NA_real_ else if (is.na(unit_dim)) fit_se(t[["n_cov_tdf"]] / t[["n_ci"]]) else se_ratio(u, "n_cov_tdf", "n_ci"),
       Bias = b, MCSE_Bias = if (is.na(unit_dim)) sqrt(s2 / t[["n_est"]]) else se_ratio(u, "sum_err", "n_est"),
       MSE = mse, MCSE_MSE = if (is.na(unit_dim)) sqrt((2 * s2^2 + 4 * b^2 * s2) / t[["n_est"]]) else se_ratio(u, "sum_err2", "n_est"),
       N_Alias = t[["n_alias"]], N_Bound = t[["n_bound"]], N_Error = t[["n_error"]], N_Warn = t[["n_warn"]],
@@ -177,6 +184,8 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
   if (is.null(res$a3)) stop("No A3 results")
   a3 <- res$a3$rows; cfg <- res$a3$cfg
   main <- a3[a3$Beta == 0 & a3$Arm == "unit", ]
+  has_tdf <- any(is.finite(main$Power_Tdf))   # t + df-corrected test stored (a3v2 onward)
+  pmetrics <- c(Power = "n_rej", Power_Adj = "n_rej_adj", if (has_tdf) c(Power_Tdf = "n_rej_tdf"))
 
   ## Diagnostics: islands, guard bypass, small regions ----
   isl <- unique(main[main$Mechanism == "random", c("N", "Year", "Design_ID", "Islands_Mean", "Islands_Max",
@@ -207,7 +216,14 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
   v2 <- main[main$Tau == 0 & main$Kappa == cfg$kappa[1], ]   # tau = 0 rows are shared across kappa
   v2s <- aggregate(cbind(Size = Power, Size_Adj = Power_Adj, MCSE_Adj = MCSE_Power_Adj) ~ Mechanism + N + Design, v2, mean)
   v2r <- aggregate(cbind(Size_Min = Power) ~ Mechanism + N + Design, v2, min); v2x <- aggregate(cbind(Size_Max = Power) ~ Mechanism + N + Design, v2, max)
-  v2s <- merge(merge(v2s, v2r), v2x); write.csv(v2s, file.path(out, "v2_size.csv"), row.names = FALSE)
+  v2s <- merge(merge(v2s, v2r), v2x)
+  if (has_tdf) v2s <- merge(v2s, aggregate(cbind(Size_Tdf = Power_Tdf) ~ Mechanism + N + Design, v2, mean))
+  write.csv(v2s, file.path(out, "v2_size.csv"), row.names = FALSE)
+  if (has_tdf) for (n in sort(unique(v2s$N))) { d <- v2s[v2s$N == n & v2s$Mechanism == "random", ]
+    c1 <- main[main$N == n & main$Mechanism == "random" & main$Tau == 1, ]
+    say("t + df test N = %2d (random): size by design %.3f-%.3f; coverage at tau = 1 Wald %.3f vs t + df %.3f (design x regime range %.3f-%.3f)",
+        n, min(d$Size_Tdf), max(d$Size_Tdf), mean(c1$Coverage), mean(c1$Coverage_Tdf),
+        min(tapply(c1$Coverage_Tdf, paste(c1$Design_ID, c1$Regime), mean)), max(tapply(c1$Coverage_Tdf, paste(c1$Design_ID, c1$Regime), mean))) }
   for (n in sort(unique(v2s$N))) { d <- v2s[v2s$N == n & v2s$Mechanism == "random", ]
     say("V2 N = %2d (random): Wald size by design (mean over settings) %.3f-%.3f, within 5-8%% for every design: %s; settings %.3f-%.3f; size-adjusted %.3f-%.3f",
         n, min(d$Size), max(d$Size), if (all(d$Size >= 0.05 & d$Size <= 0.08)) "yes" else "NO", min(d$Size_Min), max(d$Size_Max),
@@ -216,7 +232,7 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
   ## V8 monotonicity ----
   key <- c("Mechanism", "Year", "Design_ID", "Rho", "Regime", "Kappa")
   v8 <- list()
-  for (metric in c("Power", "Power_Adj")) {
+  for (metric in names(pmetrics)) {
     se <- paste0("MCSE_", metric)
     sp <- split(main, main[c(key, "N")], drop = TRUE)
     for (d in sp) { d <- d[order(d$Tau), ]; dd <- diff(d[[metric]]); tol <- 2 * sqrt(head(d[[se]], -1)^2 + tail(d[[se]], -1)^2)
@@ -227,7 +243,7 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
   }
   v8 <- if (length(v8)) do.call(rbind, lapply(v8, function(x) { for (m in c("N", "Tau")) if (is.null(x[[m]])) x[[m]] <- NA; x })) else data.frame()
   write.csv(v8, file.path(out, "v8_monotonicity_violations.csv"), row.names = FALSE)
-  n_curves <- 2 * (nrow(unique(main[c(key, "N")])) + nrow(unique(main[main$Mechanism == "random", c(key, "Tau")])))
+  n_curves <- length(pmetrics) * (nrow(unique(main[c(key, "N")])) + nrow(unique(main[main$Mechanism == "random", c(key, "Tau")])))
   say("V8: %d of %d power curves (Wald and size-adjusted, along tau and N) drop by more than 2 MC SEs (flagged, not smoothed)", nrow(v8), n_curves)
 
   ## N80 and MDE with bootstrap over subsets ----
@@ -238,18 +254,17 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
   for (r in res$a3$red) red_index[[r$task]] <- paste(r$cells$Beta, r$cells$Rho, r$cells$Regime, r$cells$Arm, r$cells$Tau, ifelse(is.na(r$cells$Kappa), "NA", r$cells$Kappa))
   get_units <- function(d) { tk <- sprintf("%s_%s_N%02d_D%d", d$Mechanism, d$Year, d$N, d$Design_ID)
     lapply(seq_len(nrow(d)), function(i) res$a3$units[[paste(tk[i], match(cell_key(d[i, ]), red_index[[tk[i]]]), sep = "|")]]) }
-  boot_power <- function(u, adj) { if (is.null(u)) return(NULL)
-    num <- if (adj) "n_rej_adj" else "n_rej"
+  boot_power <- function(u, num) { if (is.null(u)) return(NULL)
     replicate(B, { i <- sample.int(nrow(u), replace = TRUE); sum(u[i, num]) / sum(u[i, "n_ci"]) }) }
   curves <- split(rnd[rnd$Tau > 0, ], rnd[rnd$Tau > 0, c("Year", "Design_ID", "Rho", "Regime", "Kappa", "Tau")], drop = TRUE)
   n80 <- parallel::mclapply(curves, function(d) {
     d <- d[order(d$N), ]; u <- get_units(d)
     o <- d[1, c("Year", "Design_ID", "Design", "Rho", "Regime", "Kappa", "Tau")]
-    for (adj in c(FALSE, TRUE)) {
-      p <- if (adj) d$Power_Adj else d$Power
-      bp <- sapply(seq_len(nrow(d)), function(i) { b <- boot_power(u[[i]], adj); if (is.null(b)) rep(p[i], B) else b })
+    for (metric in names(pmetrics)) {
+      p <- d[[metric]]
+      bp <- sapply(seq_len(nrow(d)), function(i) { b <- boot_power(u[[i]], pmetrics[[metric]]); if (is.null(b)) rep(p[i], B) else b })
       bn <- apply(bp, 1, function(pp) mu_cross(d$N, pp))
-      nm <- if (adj) "N80_Adj" else "N80"
+      nm <- sub("Power", "N80", metric)
       o[[nm]] <- mu_cross(d$N, p); o[[paste0(nm, "_lo")]] <- unname(stats::quantile(bn, 0.025, type = 1))
       o[[paste0(nm, "_hi")]] <- unname(stats::quantile(bn, 0.975, type = 1))
     }
@@ -265,27 +280,32 @@ mu_run <- function(workers = 8L, B = 500L, profiles = c(a3 = "a3", a4 = "a4"), o
     cbind(d[1, c("Design_ID", "Design", "Rho", "Regime", "Kappa", "Tau")],
           t(setNames(agg(d$N80), paste0("N80_", c("Mean", "Min", "Max", "Years_Above58", "Years_AtMost15")))),
           t(setNames(agg(d$N80_Adj), paste0("N80_Adj_", c("Mean", "Min", "Max", "Years_Above58", "Years_AtMost15")))),
+          if (has_tdf) t(setNames(agg(d$N80_Tdf), paste0("N80_Tdf_", c("Mean", "Min", "Max", "Years_Above58", "Years_AtMost15")))),
           N80_lo_min = min(d$N80_lo), N80_hi_max = max(d$N80_hi))))
   write.csv(n80s, file.path(out, "a3_n80_summary.csv"), row.names = FALSE)
 
   mde <- do.call(rbind, lapply(split(rnd, rnd[c("Year", "Design_ID", "Rho", "Regime", "Kappa", "N")], drop = TRUE), function(d) {
     d <- d[order(d$Tau), ]
     cbind(d[1, c("Year", "Design_ID", "Design", "Rho", "Regime", "Kappa", "N")],
-          MDE = mu_cross(d$Tau, d$Power), MDE_Adj = mu_cross(d$Tau, d$Power_Adj))
+          MDE = mu_cross(d$Tau, d$Power), MDE_Adj = mu_cross(d$Tau, d$Power_Adj),
+          MDE_Tdf = if (has_tdf) mu_cross(d$Tau, d$Power_Tdf) else NA_real_)
   }))
   write.csv(mde, file.path(out, "a3_mde_by_year.csv"), row.names = FALSE)
-  mdes <- aggregate(cbind(MDE, MDE_Adj) ~ Design_ID + Design + Rho + Regime + Kappa + N, mde,
-                    function(v) if (all(is.finite(v))) mean(v) else Inf)
+  mdes <- aggregate(cbind(MDE, MDE_Adj, MDE_Tdf) ~ Design_ID + Design + Rho + Regime + Kappa + N, mde,
+                    function(v) if (all(is.finite(v))) mean(v) else Inf, na.action = stats::na.pass)
+  if (!has_tdf) mdes$MDE_Tdf <- NA_real_
   write.csv(mdes, file.path(out, "a3_mde_summary.csv"), row.names = FALSE)
 
   ## Translation tables (beta = 0, random volunteering; exact by scale invariance, V3) ----
   grid <- expand.grid(m = c(10, 25, 50), ICC = c(0.01, 0.05, 0.10), d = c(0.1, 0.2, 0.3, 0.5))
   grid$Sigma_c <- sqrt(grid$ICC + (1 - grid$ICC) / grid$m); grid$Tau_c <- grid$d / grid$Sigma_c
-  pw <- aggregate(cbind(Power, Power_Adj) ~ Design_ID + Design + Rho + Regime + Kappa + N + Tau, rnd, mean)
+  pw <- aggregate(cbind(Power, Power_Adj, Power_Tdf) ~ Design_ID + Design + Rho + Regime + Kappa + N + Tau, rnd, mean,
+                  na.action = stats::na.pass)
   tr <- do.call(rbind, lapply(split(pw, pw[c("Design_ID", "Rho", "Regime", "Kappa", "N")], drop = TRUE), function(d) {
     d <- d[order(d$Tau), ]
     cbind(d[1, c("Design_ID", "Design", "Rho", "Regime", "Kappa", "N")][rep(1, nrow(grid)), ], grid,
           Power = mu_power_at(d$Tau, d$Power, grid$Tau_c), Power_Adj = mu_power_at(d$Tau, d$Power_Adj, grid$Tau_c),
+          Power_Tdf = if (has_tdf) mu_power_at(d$Tau, d$Power_Tdf, grid$Tau_c) else NA_real_,
           Beyond_Grid = grid$Tau_c > max(d$Tau), Power_At_Grid_Top = d$Power[nrow(d)])
   }))
   rownames(tr) <- NULL
@@ -395,9 +415,10 @@ mu_headline <- function(out) {
   ord <- c("Simple Random Sampling","High Incidence Focus","Balanced Halves","Balanced Quartiles","Plain Saturation","Incidence-Guided Saturation","2x2 Blocking","Checkerboard","Isolation Buffer")
   fm <- function(mean, mn, mx) ifelse(is.infinite(mn) & mn > 0, ">58", ifelse(is.na(mean), sprintf("%s–%s", ifelse(is.infinite(mn), ifelse(mn<0,"≤15",">58"), sprintf("%.0f",mn)), ifelse(is.infinite(mx), ifelse(mx<0,"≤15",">58"), sprintf("%.0f",mx))), ifelse(mx - mn < 1.5, sprintf("%.0f", mean), sprintf("%.0f (%.0f–%.0f)", mean, mn, mx))))
   L <- c()
-  for (adj in c(TRUE, FALSE)) for (k in c(0.8, 0.5)) {
-    pre <- if (adj) "N80_Adj_" else "N80_"
-    L <- c(L, sprintf("\n**Colleges for 80%% power (%s), κ = %.1f.** Mean over 2018–2021 (range when years differ by > 1); `>58` = not reached with all colleges.\n", if (adj) "size-adjusted" else "Wald", k))
+  variants <- c(Adj = "size-adjusted", if ("N80_Tdf_Mean" %in% names(n)) c(Tdf = "t + df-corrected test"), Wald = "Wald")
+  for (vt in names(variants)) for (k in c(0.8, 0.5)) {
+    pre <- if (vt == "Wald") "N80_" else paste0("N80_", vt, "_")
+    L <- c(L, sprintf("\n**Colleges for 80%% power (%s), κ = %.1f.** Mean over 2018–2021 (range when years differ by > 1); `>58` = not reached with all colleges.\n", variants[[vt]], k))
     cols <- expand.grid(Tau = c(1, 1.5, 2), Rho = c(0, 0.5), Regime = c("both", "control_only"), stringsAsFactors = FALSE)
     L <- c(L, paste0("| Design | ", paste(sprintf("%s ρ=%.1f τ=%.2g", ifelse(cols$Regime=="both","Both","Ctrl"), cols$Rho, cols$Tau), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
     for (d in ord) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- n[n$Design==d & n$Kappa==k & n$Tau==cols$Tau[i] & n$Rho==cols$Rho[i] & n$Regime==cols$Regime[i],]
@@ -407,6 +428,11 @@ mu_headline <- function(out) {
   cols <- expand.grid(N = c(20, 29, 40, 58), Regime = c("both","control_only"), Rho = c(0, 0.5), stringsAsFactors=FALSE)
   L <- c(L, paste0("| Design | ", paste(sprintf("%s ρ=%.1f N=%d", ifelse(cols$Regime=="both","Both","Ctrl"), cols$Rho, cols$N), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
   for (d in ord) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- m[m$Design==d & m$Kappa==0.8 & m$N==cols$N[i] & m$Rho==cols$Rho[i] & m$Regime==cols$Regime[i],]; if (is.infinite(r$MDE_Adj)) ">2" else sprintf("%.2f", r$MDE_Adj) }); L <- c(L, paste0("| ", d, " | ", paste(v, collapse=" | "), " |")) }
+  if (any(is.finite(m$MDE_Tdf)) || any(is.infinite(m$MDE_Tdf))) {
+    L <- c(L, "\n**Minimum detectable effect (t + df-corrected test), κ = 0.8, mean over years; `>2` = above the grid.**\n")
+    L <- c(L, paste0("| Design | ", paste(sprintf("%s ρ=%.1f N=%d", ifelse(cols$Regime=="both","Both","Ctrl"), cols$Rho, cols$N), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
+    for (d in ord) { v <- sapply(seq_len(nrow(cols)), function(i) { r <- m[m$Design==d & m$Kappa==0.8 & m$N==cols$N[i] & m$Rho==cols$Rho[i] & m$Regime==cols$Regime[i],]; if (is.infinite(r$MDE_Tdf)) ">2" else sprintf("%.2f", r$MDE_Tdf) }); L <- c(L, paste0("| ", d, " | ", paste(v, collapse=" | "), " |")) }
+  }
   L <- c(L, "\n**Guidance holds? Mean-MSE ratio to SRS at τ = 1 (mean over 16 blocks: year × ρ × κ; range in brackets), random volunteering.**\n")
   cols <- expand.grid(N = c(20, 29, 40, 58), Regime = c("both","control_only"), stringsAsFactors=FALSE)
   L <- c(L, paste0("| Design | ", paste(sprintf("%s N=%d", ifelse(cols$Regime=="both","Both","Ctrl"), cols$N), collapse=" | "), " |"), paste0("|", strrep("---|", nrow(cols)+1)))
@@ -441,5 +467,8 @@ mp_tasks_from <- function(cfg) {
 
 if (sys.nframe() == 0L) {
   args <- commandArgs(TRUE)
-  mu_run(if (length(args)) as.integer(args[1]) else 8L)
+  # Rscript methods_ext_summaries.R <workers> [a3 profile] [out folder], e.g. 10 a3v2 summaries_v2
+  mu_run(if (length(args)) as.integer(args[1]) else 8L,
+         profiles = c(a3 = if (length(args) > 1) args[2] else "a3", a4 = "a4"),
+         out_name = if (length(args) > 2) args[3] else "summaries")
 }

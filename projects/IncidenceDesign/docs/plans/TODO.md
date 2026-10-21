@@ -194,16 +194,19 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 
 ### Methods-extension decisions for the author (2026-10-20 run)
 
-Details: `methods_extensions_findings_2026-10-20.md`.
-- [ ] A5 coverage: adopt the t54 + df-corrected interval (meets the 94–96% rule on the
-  production fits; two Stage 2 cells at 92.8–93.8%) or keep Wald with the limitation.
-- [ ] A1/D2 targeting: on the NC map Incidence-Guided Saturation barely out-targets Plain
-  Saturation (rate share 0.511 vs 0.504; death share 0.492 vs 0.496). Decide the wording
-  of the targeting rationale before manuscript edits.
-- [ ] V6: saturation regions rebuilt at N = 15–20 can have 1–2 colleges (no material
-  effect on results). Keep, restrict, or rebuild with a minimum-size rule.
-- [ ] Power headline: use size-adjusted power (Wald size is 8–13% at N <= 35).
-- [ ] Steps 7–8 (manuscripts, slides) after review.
+Decided 2026-10-21 (`DECISIONS.md`). Details: `methods_extensions_findings_2026-10-20.md`.
+- [x] A5 coverage: report the t + df-corrected interval (Stage 1 main, Stage 2 in SI).
+- [x] A1/D2 targeting: reworded (small gain on NC; larger where burden is regional);
+  rate share primary, death share beside it.
+- [x] V6: ≥ 2-college region rule, in the A3 rerun.
+- [x] Power headline: size-adjusted, plus t + df-corrected power (A3 rerun); Wald in SI.
+- [x] V8: no rerun; report dips with subset-bootstrap intervals.
+- [x] Bayesian CAR: rerun ρ = 0.5 with 4× longer chains.
+- [ ] Overnight 2026-10-21: A3 rerun (`a3v2`), grid burden share, Bayesian CAR long
+  chains, summaries, V9. Plan: `overnight_plan_2026-10-21.md`.
+- [ ] Review the report with proposed drafts
+  (`methods_extensions_report_2026-10-21.md`), then steps 7–8 (manuscripts, slides).
+- [ ] Push the unpushed commits on main (ask the author).
 
 ## Known minor code issues (low priority; moved from AGENTS.md 2026-10-14)
 

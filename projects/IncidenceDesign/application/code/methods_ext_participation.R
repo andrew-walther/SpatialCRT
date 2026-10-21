@@ -9,7 +9,8 @@
 # Run from the project root (BLAS pinned to one thread; the runner refuses otherwise):
 #   VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
 #     Rscript application/code/methods_ext_participation.R <profile> <workers>
-# Profiles: pilot (timing/smoke), a3 (production A3), a4 (production A4).
+# Profiles: pilot (timing/smoke), a3 (production A3), a4 (production A4); a3v2 / pilotv2
+#   (2026-10-21: >= 2-college saturation regions; t + df-corrected test stats).
 # Outputs: application/results/methods_ext_2026-10/participation/<profile>/
 #   manifest.rds, checkpoints/<task>.rds (gitignored), run.log.
 # Memory: one task holds at most 10,000 outcomes x ~70 fit cells of doubles (~6 MB),
@@ -39,8 +40,15 @@ source(file.path(.mp_dir, "methods_ext_core.R"))
 #' @family methods_ext_participation
 #' @examples
 #' mp_config("pilot")
-mp_config <- function(profile = c("pilot", "a3", "a4")) {
+mp_config <- function(profile = c("pilot", "a3", "a4", "a3v2", "pilotv2")) {
   profile <- match.arg(profile)
+  # v2 profiles (author decision 2026-10-21): same settings, seeds and replicates as
+  # a3 / pilot, plus saturation regions of >= 2 colleges (V6). The t + df-corrected
+  # test is stored for every profile.
+  if (profile %in% c("a3v2", "pilotv2")) {
+    base <- mp_config(sub("v2$", "", profile)); base$profile <- profile; base$min_region <- 2L
+    return(base)
+  }
   base <- list(profile = profile, years = as.character(2018:2021), designs = 1:9,
                rho = c(0, 0.5), kappa = c(0.5, 0.8), regimes = c("both", "control_only"),
                S = 50L, J = 20L, R = 10L, J58 = 100L, R58 = 100L,
@@ -151,7 +159,8 @@ mp_task <- function(task, config, setup) {
   S <- if (N == 58) 1L else config$S
   a <- setup$annual[[year]]
   stat_names <- c("n_fit", "n_est", "n_ci", "n_rej", "n_cov", "sum_err", "sum_err2",
-                  "n_alias", "n_bound", "n_error", "n_warn", "n_unident", "n_rej_adj")
+                  "n_alias", "n_bound", "n_error", "n_warn", "n_unident", "n_rej_adj",
+                  "n_rej_tdf", "n_cov_tdf")
   JR <- function(det) if (det) c(1L, if (N == 58) config$det_R58 else config$det_R) else
     if (N == 58) c(config$J58, config$R58) else c(config$J, config$R)
   stats <- NULL; tabs <- replicate(nrow(cells), list(), simplify = FALSE); alloc_rows <- list(); sub_rows <- list()
@@ -160,7 +169,7 @@ mp_task <- function(task, config, setup) {
     P <- me_subset(mech, N, s, year, setup)
     g <- me_geometry(P, setup)
     key <- if (mech == "random") list(mech, N, s) else list(mech, N, s, year)
-    di <- me_design_inputs(g, year, setup, key)
+    di <- me_design_inputs(g, year, setup, key, min_region = config$min_region)
     det <- me_deterministic(id, di); jr <- JR(det)
     if (is.null(stats)) {
       stats <- array(0, dim = c(nrow(cells), S, jr[1], length(stat_names)),
@@ -174,7 +183,8 @@ mp_task <- function(task, config, setup) {
       N_Regions = length(unique(di$regions)), N_Blocks = length(unique(di$blocks)),
       Min_Block_Size = min(table(di$blocks)), Deterministic = det, J = jr[1], R = jr[2],
       Participant_Deaths = sum(a$deaths[P]), Participant_PY = sum(a$person_years[P]),
-      Mean_Participant_Rank = mean(a$rank[P]), stringsAsFactors = FALSE)
+      Mean_Participant_Rank = mean(a$rank[P]), Regions_Changed = isTRUE(di$regions_changed),
+      stringsAsFactors = FALSE)
     pop <- a$person_years[P]
     sig <- lapply(config$arms, mp_sigma, pop = pop, config = config); names(sig) <- config$arms
     XP <- a$X[P]                                  # college's own rank-scaled burden (beta = 1)
@@ -212,11 +222,15 @@ mp_task <- function(task, config, setup) {
                 err <- res[, 1] - tau; se <- res[, 2]
                 ok <- is.finite(err); okci <- ok & is.finite(se) & se > 0
                 tt <- abs(res[, 1] / se)
+                # t + df-corrected test (author decision 2026-10-21): p = coefficients + rho,
+                # SE x sqrt(n / (n - p)) and a t(n - p) critical value (t54 at N = 58)
+                df_t <- g$n - (ncol(xm) + 1); infl <- sqrt(g$n / df_t); ct <- stats::qt(0.975, df_t)
                 tabs[[ci]][[length(tabs[[ci]]) + 1L]] <- list(s = s, j = j, t = ifelse(okci, tt, NA_real_))
                 stats[ci, s, j, ] <- c(jr[2], sum(ok), sum(okci), sum(tt[okci] > config$crit),
                   sum(abs(err[okci]) <= config$crit * se[okci]), sum(err[ok]), sum(err[ok]^2),
                   sum(res[, 3] == 1), sum(res[, 4] == 1), sum(res[, 5] == 1),
-                  sum(res[, 6] == 1), if (ident) 0 else jr[2], NA)
+                  sum(res[, 6] == 1), if (ident) 0 else jr[2], NA,
+                  sum(tt[okci] / infl > ct), sum(abs(err[okci]) <= ct * infl * se[okci]))
               }
             }
           }

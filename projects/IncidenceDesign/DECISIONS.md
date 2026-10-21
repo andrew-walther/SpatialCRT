@@ -5,6 +5,49 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-21 — Methods-extension results: decisions after review
+
+**Decision.** Review of `docs/plans/methods_extensions_findings_2026-10-20.md`, one
+decision at a time.
+- **Targeting wording (D2 revised).** Incidence-Guided Saturation matches Plain
+  Saturation's accuracy and sends more treatment to high-burden regions when burden
+  differs between regions. On the NC map the four regions have similar mean incidence
+  ranks (about 24–34 of 58 in every year), so the targeting gain there is small (rate
+  share 0.511 vs 0.504). The per-college rate share is the primary targeting measure,
+  with the death share beside it and one sentence on why they differ (high-rate
+  colleges are small). A burden-share check on the stored grid surfaces tests whether
+  the gain is larger when incidence clusters spatially.
+- **Power headline.** Size-adjusted power, described as the power of a test with
+  correct size. Wald power goes in an SI table with one sentence that Wald is
+  anti-conservative below about 40 colleges. Also store and report power for the
+  t + df-corrected test (an A3 rerun), so the trial-usable test sits beside it.
+- **Story points adopted.** Under control-only spillover, power stops rising as
+  nearly every college joins, and τ = 1 is not detectable with 58 colleges. The
+  saturation designs' control-only advantage shrinks with fewer participants (22%
+  lower MSE than SRS at N = 58, 4–5% at N = 29).
+- **Coverage (A5).** Report the t + df-corrected interval: τ̂ ± t(0.975, n − p) ×
+  SE × √(n/(n − p)). Stage 1 (all production fits) is the main evidence: 94.1–95.0%
+  for every design × regime. The Stage 2 comparison (bootstrap, profile likelihood)
+  goes in the SI. A reasoned exception to the 94–96% rule: three smaller Stage 2
+  cells fall at 92.8–93.9%. No bootstrap rerun.
+- **V6.** Rebuilt saturation regions must have at least 2 colleges, through a wrapper
+  that replays the same 250 k-means candidates and skips smaller partitions;
+  included in the A3 rerun.
+- **V8.** No rerun. Report the dips along N with the subset-bootstrap intervals.
+- **Bayesian CAR.** Rerun the ρ = 0.5 cells with chains four times longer.
+- **Steps 7–8.** No unattended manuscript or slide edits. A report with proposed
+  appendix/SI/main-text drafts and Part II slide ideas comes first, plus a prelim
+  slide outline with an ideas bank.
+
+**Why.** The NC regions balance incidence, so targeting depends on the map, while
+the guidance is meant for maps where burden is regional. Stage 1 is the largest
+evidence and the expensive intervals do no better. Size adjustment removes the small-N
+Wald distortion, but a trial analyst needs a test they can compute.
+
+**Source.** Author review session, 2026-10-21.
+
+---
+
 ## 2026-10-20 — Methods extensions after the 2026-10-14 advisor meeting
 
 **Decision.** Plan: `docs/plans/methods_extensions_plan_2026-10-20.md` (D1–D9).

@@ -1,0 +1,9 @@
+Run 2026-10-21 03:46:42
+Wrapper equals production partition whenever production's has regions >= 2     PASS 399 of 400 subsets qualify
+Wrapper flags 'changed' exactly when production's partition had a region < 2   PASS changed 1
+Wrapper regions always >= 2 colleges, always 4 regions                         PASS 
+Wrapper leaves 2x2 blocks and ranks unchanged (RNG reseeded per key)           PASS 
+Changed share is small and falls with N (V6 rates 8% at 15, ~1% at 20)         PASS N=15 0.010; N=20 0.000; N=25 0.000; N=29 0.000
+t + df multiplier at N = 58, p = 4 is 2.078                                    PASS 2.0778
+Runner stores t + df stats; rejects no more and covers no less than Wald       PASS 
+Runner records Regions_Changed per subset                                      PASS 

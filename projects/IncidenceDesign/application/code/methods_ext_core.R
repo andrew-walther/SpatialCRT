@@ -234,11 +234,14 @@ me_exposure_form <- function(z, g, form, dbar = NULL) {
 #' @param setup Frozen setup.
 #' @param key List of key fields identifying the subset (mechanism, N, s, year if
 #'   the subset is year-specific).
+#' @param min_region NULL (production rule, any region size) or the minimum number
+#'   of colleges per saturation region (2, author decision 2026-10-21, V6); see
+#'   me_kmeans_regions_min().
 #' @return List of design inputs plus region/block diagnostics.
 #' @family methods_ext
 #' @examples
 #' # di <- me_design_inputs(g, "2018", setup, list("random", 20, 1))
-me_design_inputs <- function(g, year, setup, key) {
+me_design_inputs <- function(g, year, setup, key, min_region = NULL) {
   a <- setup$annual[[year]]; P <- g$P
   if (g$n == 58) {
     return(list(X = a$X, rank = a$rank, nb = setup$weights$queen$nb, coords = setup$coords,
@@ -250,14 +253,60 @@ me_design_inputs <- function(g, year, setup, key) {
   XP <- (rP - 0.5) / g$n
   pooled_pop <- setup$annual[["2018-2021"]]$person_years / 4
   rseed <- do.call(me_seed, c(list("pp-regions"), key))
-  reg <- make_kmeans_regions(setup$coords[P, , drop = FALSE], a$n_counties[P], pooled_pop[P], XP,
-                             seed = rseed)
+  reg <- if (is.null(min_region))
+    make_kmeans_regions(setup$coords[P, , drop = FALSE], a$n_counties[P], pooled_pop[P], XP,
+                        seed = rseed) else
+    me_kmeans_regions_min(setup$coords[P, , drop = FALSE], a$n_counties[P], pooled_pop[P],
+                          seed = rseed, min_size = min_region)
   do.call(me_seed, c(list("pp-blocks"), key, list(year)))
   blk <- make_spatial_blocks(setup$coords[P, , drop = FALSE], XP, a$person_years[P])
   list(X = XP, rank = rP, nb = g$nb, coords = setup$coords[P, , drop = FALSE],
        pop = a$person_years[P], county = a$n_counties[P], regions = reg$region_id,
        blocks = blk, region_summary = tapply(rP, reg$region_id, mean),
-       rates = a$rate_per_100k[P], frozen = FALSE)
+       rates = a$rate_per_100k[P], frozen = FALSE,
+       regions_changed = isTRUE(reg$changed))
+}
+
+#' Saturation regions with a minimum size (V6 fix, author decision 2026-10-21)
+#'
+#' Replays make_kmeans_regions() exactly (same seed, same 250 single-start k-means
+#' candidates, same score_region_partition() score, so the RNG stream is identical)
+#' but keeps the best-scoring candidate whose 4 regions all have >= min_size
+#' colleges. Whenever production's best candidate already satisfies the rule, the
+#' result is identical to make_kmeans_regions(). Fails loud if no candidate
+#' qualifies. application_designs.R is hashed production code, so the loop is
+#' copied here rather than edited there.
+#' @param coords Participant coordinates (data frame with x, y).
+#' @param county_count Counties per participant.
+#' @param population Pooled population per participant.
+#' @param n_regions Number of regions (4).
+#' @param n_candidates k-means candidates (250, as production).
+#' @param seed Integer seed (the subset key's seed).
+#' @param min_size Minimum colleges per region.
+#' @return list(region_id, changed = TRUE when the unrestricted best was rejected,
+#'   n_valid = qualifying candidates).
+#' @family methods_ext
+#' @seealso make_kmeans_regions
+#' @examples
+#' # me_kmeans_regions_min(coords, county, pop, seed = 1, min_size = 2)
+me_kmeans_regions_min <- function(coords, county_count, population, n_regions = 4,
+                                  n_candidates = 250, seed, min_size = 2) {
+  set.seed(seed)
+  best_all <- Inf; best_ok <- Inf; reg_ok <- NULL; n_valid <- 0L
+  scaled <- scale(coords[, c("x", "y")])
+  for (candidate in seq_len(n_candidates)) {
+    km <- stats::kmeans(scaled, centers = n_regions, nstart = 1, iter.max = 100)
+    score <- score_region_partition(km$cluster, coords, county_count, population)
+    if (!is.finite(score)) next
+    if (score < best_all) best_all <- score
+    if (min(tabulate(km$cluster, nbins = n_regions)) >= min_size) {
+      n_valid <- n_valid + 1L
+      if (score < best_ok) { best_ok <- score; reg_ok <- km$cluster }
+    }
+  }
+  if (is.null(reg_ok)) stop("me_kmeans_regions_min: no candidate partition has all regions >= ",
+                            min_size, " colleges (n = ", nrow(coords), ")")
+  list(region_id = reg_ok, changed = best_ok > best_all, n_valid = n_valid)
 }
 
 #' Is a design deterministic on this subset?
