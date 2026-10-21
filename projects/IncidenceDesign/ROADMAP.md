@@ -246,6 +246,15 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-21 — affiliation, Gan citation and IRB protocol in all versions
+
+- Habib → Department of Epidemiology (CTJ, Chapter 3); Gan et al. (2019) cited for the
+  SUD case-adjudication algorithm (CTJ, SI, Chapter 3); IRB 14-2036 stated in CTJ Methods
+  (determination still a placeholder) and Chapter 3. Rebuilt CTJ_Manuscript, CTJ_Reading,
+  SI and Thesis_Chapter PDFs; `verify_manuscripts.py` and `test_manuscript_exhibits.R` pass.
+- Awaiting Simpson: IRB disclosures/permissions and feedback on the application's fit
+  to his pilot idea (`docs/plans/TODO.md`).
+
 ### 2026-10-20 — methods extensions (post-advisor-meeting analyses), steps 1–6
 
 - Implemented the approved plan (`docs/plans/methods_extensions_plan_2026-10-20.md`)

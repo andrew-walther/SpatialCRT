@@ -38,9 +38,10 @@
 \def\issuenumber{review}
 % One source owns the title, abstract, authors, body and all exhibit content.
 \newcommand{\CTJTitle}{Sampling Design for Spatial Cluster Randomized Trials Under Heterogeneous Incidence}
-\newcommand{\CTJAuthorLine}{Andrew Walther\textsuperscript{1}, Ashkan Habib\textsuperscript{1}, Ross Joseph Simpson, Jr.\textsuperscript{2}, and Feng-Chang Lin\textsuperscript{1}}
+\newcommand{\CTJAuthorLine}{Andrew Walther\textsuperscript{1}, Ashkan Habib\textsuperscript{2}, Ross Joseph Simpson, Jr.\textsuperscript{3}, and Feng-Chang Lin\textsuperscript{1}}
 \newcommand{\CTJAffilOne}{\textsuperscript{1}Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC, USA}
-\newcommand{\CTJAffilTwo}{\textsuperscript{2}Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA}
+\newcommand{\CTJAffilTwo}{\textsuperscript{2}Department of Epidemiology, University of North Carolina at Chapel Hill, Chapel Hill, NC, USA}
+\newcommand{\CTJAffilThree}{\textsuperscript{3}Division of Cardiology, University of North Carolina School of Medicine, Chapel Hill, NC, USA}
 \newcommand{\CTJContact}{Feng-Chang Lin, Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599, USA.}
 \newcommand{\CTJKeywords}{cluster randomized trial; spatial spillover; interference; design-stage treatment allocation; incidence-guided design; sudden unexpected death.}
 \newcommand{\CTJAbstract}{%
@@ -77,7 +78,7 @@
 \medskip
 {\sffamily\bfseries\CTJAuthorLine\par}
 \smallskip
-{\footnotesize\CTJAffilOne\par\CTJAffilTwo\par
+{\footnotesize\CTJAffilOne\par\CTJAffilTwo\par\CTJAffilThree\par
 \textbf{Correspondence:} \CTJContact{} Email: \url{flin33@email.unc.edu}.\par}
 \medskip
 {\small\sffamily\textbf{Abstract}\par\CTJAbstract\par
@@ -109,6 +110,8 @@
 \CTJAffilOne
 
 \CTJAffilTwo
+
+\CTJAffilThree
 \vspace{8mm}
 
 Corresponding author: \CTJContact
@@ -179,7 +182,7 @@ For assignment $a$, allocation risk is $m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,
 Repeated outcomes are essential to interpreting downside: outcome noise alone can produce a large error for an assignment whose expected MSE is modest, so squared errors are averaged over outcomes before assignments are ranked. A design with one possible assignment has no spread across assignments, but its error can still be high, and finite outcome replication adds noise to estimated risks and to which assignments appear in the worst decile.
 
 \subsection{North Carolina sudden unexpected death application}
-We aggregated corrected county-year SUD counts prepared by Habib\cite{habib_temporal_2026} and Surveillance, Epidemiology, and End Results (SEER) program populations aged 18--64 into 58 community-college service-area clusters partitioning the 100 counties of North Carolina (NC). The corrected numerator includes heart-failure deaths previously excluded as presumed non-sudden (Habib, personal communication, September 25, 2026): 23,523 deaths over 25,594,321 person-years during 2018--2021. Annual rates were deaths/population per 100,000. Every county mapped to one cluster; annual cluster totals reproduced statewide totals. Observed rates were held fixed with no synthetic incidence generation (Figure~\ref{fig:nc-map}). The four years were separate planning inputs, not longitudinal intervention follow-up.
+We aggregated corrected county-year SUD counts prepared by Habib\cite{habib_temporal_2026} and Surveillance, Epidemiology, and End Results (SEER) program populations aged 18--64 into 58 community-college service-area clusters partitioning the 100 counties of North Carolina (NC). SUD deaths were identified from death certificates with the case-adjudication algorithm of Gan et al.\cite{gan_factors_2019} The corrected numerator includes heart-failure deaths previously excluded as presumed non-sudden (Habib, personal communication, September 25, 2026): 23,523 deaths over 25,594,321 person-years during 2018--2021. Annual rates were deaths/population per 100,000. Every county mapped to one cluster; annual cluster totals reproduced statewide totals. Observed rates were held fixed with no synthetic incidence generation (Figure~\ref{fig:nc-map}). The four years were separate planning inputs, not longitudinal intervention follow-up.
 \ifctjreading
 \CTJMapFigure
 \fi
@@ -194,9 +197,9 @@ Primary queen settings crossed $\rho=0,0.2,0.5$, $\gamma=0.5,0.8$, both regimes,
 
 We drew 100 assignments and simulated 100 independent outcomes for each distinct assignment, using 1,000 outcomes for designs with only one possible assignment. A prespecified rule increased replication until the MCSE of mean MSE was at most 5\% of its value and the MCSE of coverage was at most 0.01; these MCSEs accounted for repeated assignments and for both assignment and outcome variation. A separate extension at $\rho\in\{0,0.5\}$ and $\gamma=0.8$ kept the same assignments and increased outcomes to 400 per assignment. To avoid selection bias, worst-decile assignments were identified with one half of the simulated outcomes and evaluated with the other half. Every random draw used a fixed, reproducible seed.
 
-% PLACEHOLDER (author, 2026-10-14): assumes a not-human-subjects determination;
-% confirm with Habib/Simpson and fill in the IRB number and date before submission.
-\hl{The application used deidentified death-certificate data on deceased individuals, aggregated to 58 clusters. The University of North Carolina at Chapel Hill Institutional Review Board determined that this work does not constitute human subjects research [Placeholder for the UNC IRB determination: protocol number and date]; informed consent was therefore not required.}
+% Protocol number, title and PI supplied by the author (2026-10-21). PLACEHOLDER: the
+% determination type and consent wording await Dr. Simpson; never claim approval/exemption.
+The application used deidentified death-certificate data on deceased individuals, aggregated to 58 clusters, obtained under University of North Carolina at Chapel Hill Institutional Review Board protocol 14-2036, ``Sudden Unexpected Death in North Carolina'' (principal investigator Ross J. Simpson, Jr., Department of Medicine). \hl{[Placeholder for the IRB determination and consent statement, pending confirmation from Dr. Simpson.]}
 
 \section{Results}
 \subsection{Simulation study: the spillover regime decides which designs perform best}

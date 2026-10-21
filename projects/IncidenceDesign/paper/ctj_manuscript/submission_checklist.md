@@ -28,9 +28,12 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [x] Comprehensive review completed 2026-10-12 (see docs/plans/ctj_comprehensive_review_findings_2026-10-12.md).
 - [ ] Author review of the revised full drafts and chosen exhibits.
 - [ ] Ethics/data-use statement: CTJ requires an IRB statement in Methods for human data.
-  **Placeholder in Methods (2026-10-14)** assumes a not-human-subjects determination with
-  `[Placeholder for the UNC IRB determination: protocol number and date]` (wording 2026-10-19). Confirm with Habib/Simpson, fill in number/date (Sage also asks
-  for it on the title page), and confirm permission to publish 58-cluster aggregates.
+  **Protocol filled in (2026-10-21):** UNC IRB 14-2036, "Sudden Unexpected Death in North
+  Carolina" (PI Ross J. Simpson, Jr., Department of Medicine). The determination type and
+  consent wording remain a highlighted placeholder pending Simpson (Sage also asks for the
+  statement on the title page); confirm permission to publish 58-cluster aggregates.
+  Body word count not recounted after the 2026-10-21 additions (Gan citation sentence,
+  IRB protocol sentence; roughly +40 words).
 - [x] Corresponding-author telephone (919) 966-9431 on the title page and cover letter
   (from Lin's UNC Gillings profile; the journal requires it).
 - [ ] ORCIDs: Walther 0000-0002-1932-9653 is on the title page; collect the coauthors'
