@@ -28,17 +28,19 @@ Reasons and history for each rule: `DECISIONS.md`.
   future SUD incidence (no count-outcome model); partial participation and power run on
   NC only, with the fast fitter and new output folders, never editing hashed production
   code. Plan: `docs/plans/methods_extensions_plan_2026-10-20.md`.
-- **Methods-extension reporting (author, 2026-10-21):** headline power is size-adjusted,
-  with t + df-corrected power beside it and Wald in the SI; the reported interval is
+- **Methods-extension reporting (author, 2026-10-21):** headline power uses the
+  t + df-corrected test, with size-adjusted power as a check and Wald in the SI; the reported interval is
   t + df-corrected (Stage 1 main evidence, Stage 2 in the SI); targeting is the
   per-college rate share with the death share beside it. Reasons: `DECISIONS.md`.
 - **CTJ authors:** Walther, Habib, Simpson, Lin, in that order; Lin corresponding. Never
   invent an IRB protocol number or claim approval/exemption.
 - **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first
   body use and avoid internal pipeline jargon; one design-name set everywhere
-  (Checkerboard, High Incidence Focus, Plain Saturation, Isolation Buffer, 2×2 Blocking,
+  (Checkerboard, High Incidence Focus, Saturation Regions, Isolation Buffer, 2×2 Blocking,
   Balanced Quartiles, Balanced Halves, Incidence-Guided Saturation, Simple Random Sampling);
-  frame incidence guidance as matching plain saturation's accuracy while targeting
+  "Saturation Regions" replaced Plain Saturation / Saturation Quadrants on 2026-10-21 (display
+  layer only; hashed code and CSVs keep old labels); frame incidence guidance as matching
+  Saturation Regions' accuracy while targeting
   high-burden regions when burden differs between regions, with a small gain on the NC
   map (revised 2026-10-21; never "no benefit"); no repository hyperlink in manuscripts;
   no Codex/Claude mentions in code headers or documents (AI disclosure is a later TODO).

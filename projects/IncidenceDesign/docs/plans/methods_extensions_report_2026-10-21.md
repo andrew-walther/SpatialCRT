@@ -56,7 +56,7 @@ Results at ρ = 0 and ρ = 0.5 agree within one or two colleges
 | Simple Random Sampling | 35 / 35–36 / 30 | 28–32 / 33 / 19–22 |
 | High Incidence Focus | 34 / 34 / 29–31 | 27–33 / 28–34 / 18–22 |
 | Balanced Halves, Balanced Quartiles | 35 / 35 / 30–31 | 28–32 / 29–35 / 20–22 |
-| Plain Saturation | 35 / 35 / 30 | 27–28 / 28–31 / 19–20 |
+| Saturation Regions | 35 / 35 / 30 | 27–28 / 28–31 / 19–20 |
 | Incidence-Guided Saturation | 35 / 35 / 30 | 26–27 / 28 / 20 |
 | 2×2 Blocking | 36 / 36 / 31 | 44 to > 58 / 57 to > 58 / 25–27 |
 | Checkerboard | > 58 / > 58 / > 58 | > 58 |
@@ -137,7 +137,7 @@ SUD rate in treated colleges; death share is the share of deaths.
 |---|---|---|
 | High Incidence Focus | 0.622 | 0.354 |
 | Incidence-Guided Saturation | 0.511 | 0.492 |
-| Plain Saturation | 0.504 | 0.496 |
+| Saturation Regions | 0.504 | 0.496 |
 | SRS | 0.500 | 0.497 |
 
 The four frozen NC regions have similar mean incidence ranks, 24–34 of 58 in every
@@ -150,7 +150,7 @@ to about 0.42. NC's high-rate colleges are small.
 **Grid** (`results/grid_burden_share/`: queen, production allocations, mean over 10
 surfaces and 32 blocks):
 
-| Incidence | Quadrant spread, mean (range) | Incidence-Guided Saturation | Plain Saturation | High Incidence Focus | Gain vs Plain, mean (range) | corr(spread, gain) |
+| Incidence | Quadrant spread, mean (range) | Incidence-Guided Saturation | Saturation Regions | High Incidence Focus | Gain vs Plain, mean (range) | corr(spread, gain) |
 |---|---|---|---|---|---|---|
 | iid | 0.16 (0.08–0.22) | 0.528 | 0.500 | 0.758 | +0.028 (+0.015 to +0.038) | 0.88 |
 | spatial ρ_X = 0.2 | 0.17 (0.09–0.26) | 0.528 | 0.500 | 0.766 | +0.029 (+0.018 to +0.040) | 0.84 |
@@ -175,7 +175,7 @@ Two caveats:
 Unchanged from 2026-10-20 (`stored/a2_tests_*.csv`): Friedman χ² (df 8) 135.3, 153.8,
 150.7 and 179.8 (p from 1e-34 to 2e-25) in the four β × regime settings, each over 24
 blocks.
-- Under control-only spillover, Plain Saturation and Incidence-Guided Saturation have
+- Under control-only spillover, Saturation Regions and Incidence-Guided Saturation have
   the two best average ranks (1.29–1.79).
 - One correction to the 2026-10-20 findings doc: Checkerboard is not last or next to
   last everywhere. Under β = 1 both-arms it is seventh of nine, behind High Incidence
@@ -220,7 +220,7 @@ blocks.
     - Under control-only spillover, Checkerboard (2.31) and 2×2 Blocking (1.34) remain
       worst.
     - The saturation advantage does not carry over at ρ = 0.5: Incidence-Guided
-      Saturation 0.95, Saturation Quadrants 1.05 and Isolation Buffer 0.87, against
+      Saturation 0.95, Saturation Regions 1.05 and Isolation Buffer 0.87, against
       SAR ML's 0.81, 0.86 and 1.01 on the same data.
     - Spearman correlation with the SAR ML ordering: 0.87 (both-arms) and 0.77
       (control-only).
@@ -242,7 +242,7 @@ blocks.
     cell. Credible-interval coverage is 94.5–95.3%. That is closer to nominal than the
     Wald interval on the same fits (93.2–93.8%) and similar to the t + df interval.
   - **Design ordering matches ML.** Ratio to SRS at ρ = 0.5 under control-only
-    spillover: Incidence-Guided Saturation 0.81, Saturation Quadrants 0.86 (ML 0.81,
+    spillover: Incidence-Guided Saturation 0.81, Saturation Regions 0.86 (ML 0.81,
     0.86). At ρ = 0: 0.76 and 0.81 (ML 0.77, 0.82). Under both-arms spillover,
     Checkerboard is 3.01–3.18 and Isolation Buffer 3.69–3.94. Spearman correlation with
     ML is 0.96–1.00, and the best design agrees in every block.
@@ -265,29 +265,22 @@ blocks.
 
 ---
 
-## 3. Questions for the author
+## 3. Author decisions on this report (2026-10-21 afternoon)
 
-1. **Headline test.** You chose size-adjusted power as the headline, with t + df
-   power beside it. The run shows the t + df test holds its 5% size at every N and is
-   the test a trial analyst would actually use. **Proposal:** make t + df power the
-   headline, use size-adjusted power as a check that agrees with it, and keep Wald in
-   the SI. The drafts in Section 4 are written this way. If you keep size-adjusted as
-   the headline, only the numbers in the colleges-needed sentences change, by 0–5
-   colleges.
-2. **Design name.** AGENTS.md lists "Plain Saturation" as the canonical name, but
-   Chapter 3 and the SI say "Saturation Quadrants" (22 and 23 uses), and the CTJ main
-   text uses neither name. The drafts use "Saturation Quadrants" to match the
-   manuscripts. Which name should win everywhere?
-3. **Push.** Seven commits on main are unpushed (23f1d7a, 72d5041, c63d96b, 40efbf8,
-   5922cf8, 4a4e167, and the Bayesian SAR-lag commit). Push them?
+1. **Headline test:** t + df-corrected power, with size-adjusted power as a check
+   beside it and Wald in the SI. The drafts below already use this.
+2. **Design name:** "Saturation Regions" replaces both "Plain Saturation" and
+   "Saturation Quadrants" in the manuscripts, slides and new figure labels. This
+   report uses it throughout. The CSVs and hashed code still say "Plain Saturation" or
+   "Saturation Quadrants".
+3. **Push:** done (a1c3026..8971b51).
 
 ---
 
 ## 4. Proposed manuscript text
 
 Conventions: Chapter 3 first, then the CTJ (both layouts) and the SI, with the two
-verifiers run after each. Drafts use "we", no contractions, and the manuscripts' design
-names. "Replace" quotes the current sentence, which is unchanged until you approve.
+verifiers run after each. Drafts use "we", no contractions, and the new design name "Saturation Regions". "Replace" quotes the current sentence, which is unchanged until you approve.
 
 ### 4.1 Chapter 3
 
@@ -363,11 +356,11 @@ or spell out "ICC".
 > incidence differs between regions. On the NC map it differs little: the four
 > regions' mean incidence ranks lie between 24 and 34 of 58 in every year. On average,
 > Incidence-Guided Saturation treats colleges holding 51.1\% of the summed college
-> incidence rates, against 50.4\% for Saturation Quadrants and 62.2\% for High
+> incidence rates, against 50.4\% for Saturation Regions and 62.2\% for High
 > Incidence Focus. Shares of deaths run the other way (49.2\%, 49.6\% and 35.4\%),
 > because the highest-rate colleges serve small populations. On the simulation grid,
 > where quadrant incidence differed more, incidence guidance raised the treated share
-> of incidence by 2.1--3.1 percentage points over Saturation Quadrants. Across
+> of incidence by 2.1--3.1 percentage points over Saturation Regions. Across
 > surfaces, the gain rose with the spread of quadrant mean ranks (correlation
 > 0.84--0.99).
 

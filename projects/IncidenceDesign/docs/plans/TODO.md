@@ -65,10 +65,13 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   [findings](ctj_comprehensive_review_findings_2026-10-12.md).
 - [x] Application study report for the advisor meeting:
   `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`.
-- [ ] **Ethics/IRB statement** (CTJ requires one in Methods): placeholder added
-  2026-10-14 (assumes not-human-subjects; `[IRB #XX-XXXX, date]`). Confirm the
-  determination with Habib/Simpson, fill in number/date (also on the title page),
-  and confirm permission to publish 58-cluster aggregates and maps.
+- [ ] **Ethics/IRB statement** (CTJ requires one in Methods): protocol filled in
+  2026-10-21 (UNC IRB 14-2036, "Sudden Unexpected Death in North Carolina", PI Ross
+  Simpson, Department of Medicine) in CTJ Methods and the Chapter 3 application
+  section. Still pending from Simpson (expected in the coming days): the determination
+  type and consent wording (highlighted CTJ placeholder; the chapter states the
+  protocol only), any required disclosures, the title-page statement, and permission
+  to publish 58-cluster aggregates and maps.
 - [ ] **Generative-AI disclosure** (Sage policy requires one for AI-assisted code,
   code checking and visualization): draft in CTJ Acknowledgements (2026-10-14);
   author to confirm tool list and wording.
@@ -136,6 +139,9 @@ description, ORCIDs) are not repeated here.
   (does "no specific grant" hold?).
 - [ ] Replace "personal communication" for Habib's corrected counts with a citation
   Lin finds acceptable (e.g. a data-preparation description or acknowledgement).
+- [ ] **Simpson feedback on the application (awaited, 2026-10-21):** whether our
+  implementation of the SUD application matches his pilot idea; revise the
+  application framing in CTJ, SI and Chapter 3 accordingly.
 - [ ] Frame the application as a statewide expansion of Simpson's small-scale (Lenoir
   County) proposal; fix the "pilot" wording flagged before the meeting.
 
@@ -204,8 +210,10 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `methods_extensions_findings_2026-
 - [x] Bayesian CAR: rerun ρ = 0.5 with 4× longer chains.
 - [x] Overnight 2026-10-21: A3 rerun (`a3v2`), grid burden share, Bayesian CAR long
   chains, summaries, V9 (QUEUEDONE 10:41; one check-spec fix, logged).
-- [ ] Author: headline test (t + df proposed), design name (Plain Saturation vs
-  Saturation Quadrants), push. Report Section 3.
+- [x] Author: headline test = t + df; design name = "Saturation Regions"; pushed
+  (2026-10-21).
+- [ ] Rename to "Saturation Regions" at the display layer during step 7 (manuscripts,
+  figure/table labels, slides). Hashed code and stored CSVs keep old labels.
 - [ ] Review the report with proposed drafts
   (`methods_extensions_report_2026-10-21.md`), then steps 7–8 (manuscripts, slides).
 - [ ] Push the unpushed commits on main (ask the author).

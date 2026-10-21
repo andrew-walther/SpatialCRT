@@ -5,6 +5,51 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-21 — Habib affiliation, SUD case algorithm citation, IRB protocol
+
+**Decision.** Habib's affiliation is the Department of Epidemiology, UNC Chapel Hill
+(CTJ and Chapter 3 title blocks; authors now Walther¹, Habib², Simpson³, Lin¹). His
+master's paper entry (`habib_temporal_2026`) keeps "Department of Biostatistics",
+because it was written for the BIOS master's paper course. Cite Gan et al. (2019,
+`gan_factors_2019`) as the source of the SUD case-adjudication algorithm Habib used,
+in the CTJ, SI and Chapter 3 data paragraphs. State UNC IRB protocol 14-2036, "Sudden
+Unexpected Death in North Carolina" (PI Ross J. Simpson, Jr., Department of Medicine)
+in CTJ Methods and in the Chapter 3 application section (reversing "Chapter 3 has
+neither statement").
+
+**Why.** Author-supplied facts (2026-10-21). The CTJ no longer asserts a
+not-human-subjects determination: only the protocol is confirmed, so the determination
+and consent wording stay a highlighted placeholder until Simpson supplies the
+disclosures and permissions. A dissertation chapter using restricted human data
+should state its protocol.
+
+---
+
+## 2026-10-21 (afternoon) — Headline test and the plain saturation design's name
+
+**Decision.**
+- **Headline power uses the t + df-corrected test.** This supersedes the morning's
+  "size-adjusted headline". Size-adjusted power stays as a check beside it, and Wald
+  power goes to the SI.
+- **The plain saturation design is renamed "Saturation Regions".** It replaces both
+  "Plain Saturation" (AGENTS.md) and "Saturation Quadrants" (chapter, SI and older
+  code) in every manuscript, slide and new figure. "Incidence-Guided Saturation" is
+  unchanged.
+  - The hashed production code (`code/03_designs.R`, `application/code/*`) and the
+    stored CSVs keep their old labels. Rename at the display layer only: manuscript
+    text, figure and table labels.
+
+**Why.**
+- On the A3 rerun the t + df test held 4.4–5.6% size at every N from 15 to 58, and it
+  is the test a trial analyst can run. Size adjustment needs a simulated critical
+  value.
+- "Regions" describes both the grid quadrants and the NC k-means regions, and it
+  removes the two-name conflict.
+
+**Source.** Author review session, 2026-10-21.
+
+---
+
 ## 2026-10-21 — Methods-extension results: decisions after review
 
 **Decision.** Review of `docs/plans/methods_extensions_findings_2026-10-20.md`, one
