@@ -6,6 +6,33 @@
 separate approval). All outputs are under
 `application/results/methods_ext_2026-10/`; fit caches are gitignored.
 
+## Addendum 2026-10-21 (after the author's review)
+
+The author decided the open items on 2026-10-21 (`DECISIONS.md`), and three reruns
+followed ([overnight plan](overnight_plan_2026-10-21.md)). The results, corrections and
+proposed manuscript text are in
+[methods_extensions_report_2026-10-21.md](methods_extensions_report_2026-10-21.md).
+In brief:
+- **t + df-corrected test.** Size 4.4–5.6% and coverage at τ = 1 of 94.0–95.6% for
+  every design and regime at every N from 15 to 58. It fixes V2.
+- **A3 rerun (`a3v2`).** Saturation regions now have at least 2 colleges (V6 fixed;
+  two distinct subsets rebuilt). Every other count reproduces the 2026-10-20 run bit
+  for bit, after a correction to the reproduction check itself.
+- **Grid targeting check.** Incidence-Guided Saturation gains 2.1–3.1 points of
+  incidence share over Plain Saturation on the grid, against 0.7 on NC. Within each
+  configuration the gain rises with the quadrants' incidence spread.
+- **Two corrections to this doc.**
+  - In Stage 2, three cells, not two, fall below 94% for the t + df interval (93.9%,
+    93.8% and 92.8%).
+  - Checkerboard is seventh of nine, not last or next to last, under β = 1 both-arms
+    in A2.
+- **Bayesian CAR long chains.** Convergence at ρ = 0.5 rises from 46% to 83% of
+  chains. Bias and under-coverage persist in converged chains (misspecification, not
+  mixing). Under control-only spillover at ρ = 0.5, the Bayesian CAR does not
+  reproduce the saturation advantage (report, Section 2.6). This qualifies the
+  "same ordering at the ends" sentence in Section 4: it holds for the poor designs,
+  not for saturation under control-only spillover.
+
 ## Summary (for the author)
 
 - **Ran everything in steps 1–6**: 400.3 million A3/A4 fits, 0.43M A6 data sets fit two

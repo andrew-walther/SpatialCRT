@@ -1,0 +1,22 @@
+Run 2026-10-21 10:41:54
+Same data confirmed: 7200 fits, SAR estimates identical in both runs
+Long chains (burn-in 20000, 100000 iterations, thin 20): errors 0; converged 83.1% (short chains 46.2%); ESS median 1161 (short 419), min 82
+  both: converged long 87.0% vs short 50.4%; ESS < 400 long 97; |Geweke| >= 1.96 long 392
+  control_only: converged long 79.1% vs short 42.1%; ESS < 400 long 352; |Geweke| >= 1.96 long 506
+Posterior mean, long vs short chain: correlation 0.995, mean |diff| 0.033
+rho = 0.5, BCAR, both: coverage 0.906, bias +0.137, MSE 0.165
+rho = 0.5, BCAR_converged, both: coverage 0.904, bias +0.138, MSE 0.165
+rho = 0.5, SAR, both: coverage 0.935, bias +0.023, MSE 0.116
+rho = 0.5, BCAR, control_only: coverage 0.879, bias +0.243, MSE 0.581
+rho = 0.5, BCAR_converged, control_only: coverage 0.877, bias +0.219, MSE 0.563
+rho = 0.5, SAR, control_only: coverage 0.932, bias +0.028, MSE 0.365
+MSE ratio to SRS, BCAR, both: High Incidence Focus 0.88, Simple Random Sampling 1.00, Balanced Halves 1.01, Balanced Quartiles 1.05, Incidence-Guided Saturation 1.10, Plain Saturation 1.11, 2x2 Blocking 1.12, Checkerboard 3.04, Isolation Buffer 3.84
+MSE ratio to SRS, BCAR, control_only: Isolation Buffer 0.79, Incidence-Guided Saturation 0.96, High Incidence Focus 0.97, Balanced Halves 0.97, Plain Saturation 0.98, Simple Random Sampling 1.00, Balanced Quartiles 1.07, 2x2 Blocking 1.24, Checkerboard 2.05
+MSE ratio to SRS, BCAR_converged, both: High Incidence Focus 0.83, Balanced Halves 0.99, Simple Random Sampling 1.00, Balanced Quartiles 1.05, 2x2 Blocking 1.11, Plain Saturation 1.11, Incidence-Guided Saturation 1.13, Checkerboard 2.90, Isolation Buffer 3.80
+MSE ratio to SRS, BCAR_converged, control_only: Isolation Buffer 0.87, Incidence-Guided Saturation 0.95, Simple Random Sampling 1.00, Balanced Halves 1.01, High Incidence Focus 1.04, Plain Saturation 1.05, Balanced Quartiles 1.15, 2x2 Blocking 1.34, Checkerboard 2.31
+MSE ratio to SRS, SAR, both: High Incidence Focus 0.96, Balanced Halves 0.97, Simple Random Sampling 1.00, Balanced Quartiles 1.00, Incidence-Guided Saturation 1.12, Plain Saturation 1.12, 2x2 Blocking 1.14, Checkerboard 3.14, Isolation Buffer 3.89
+MSE ratio to SRS, SAR, control_only: Incidence-Guided Saturation 0.81, Plain Saturation 0.86, Simple Random Sampling 1.00, Isolation Buffer 1.01, Balanced Halves 1.05, Balanced Quartiles 1.10, High Incidence Focus 1.19, 2x2 Blocking 1.48, Checkerboard 3.16
+Spearman SAR vs BCAR, both: mean 0.85 (range 0.47-1.00); best design agrees 3/4
+Spearman SAR vs BCAR, control_only: mean 0.76 (range 0.63-0.82); best design agrees 2/4
+Spearman SAR vs BCAR_converged, both: mean 0.87 (range 0.52-1.00); best design agrees 3/4
+Spearman SAR vs BCAR_converged, control_only: mean 0.77 (range 0.63-0.83); best design agrees 2/4

@@ -13,6 +13,7 @@
 # ============================================================
 # Run from the project root (keeps the machine awake while it runs):
 #   caffeinate -i bash application/code/run_methods_ext_queue_v2.sh
+#   START_AT=a6bayeslong caffeinate -i bash ...   (resume at a step)
 # Status: application/results/methods_ext_2026-10/queue_v2.log ends with QUEUEDONE
 # or QUEUEFAILED <step>. Each step's output: <results>/<step>.log.
 # Compute: about 4 h (a3v2, 10 workers) + 4 h (a6bayeslong) on this machine.
@@ -25,8 +26,13 @@ stop_queue() { log "QUEUEFAILED $1 ($2)"; exit 1; }
 
 # run <step> <success-pattern or -> <command...>: fails on non-zero exit, or when the
 # success pattern (a line the step prints only when every task succeeded) is missing.
+# START_AT=<step> resumes at that step (earlier steps are skipped and logged).
+started=${START_AT:+no}; started=${started:-yes}
 run() {
   name=$1; pat=$2; shift 2
+  if [ "$started" = no ]; then
+    if [ "$name" = "$START_AT" ]; then started=yes; else log "skip $name (START_AT=$START_AT)"; return 0; fi
+  fi
   log "start $name"
   "$@" > "$R/${name}.log" 2>&1; rc=$?
   log "end $name (exit $rc)"

@@ -1,4 +1,4 @@
-Run 2026-10-21 03:46:42
+Run 2026-10-21 03:50:39
 Wrapper equals production partition whenever production's has regions >= 2     PASS 399 of 400 subsets qualify
 Wrapper flags 'changed' exactly when production's partition had a region < 2   PASS changed 1
 Wrapper regions always >= 2 colleges, always 4 regions                         PASS 

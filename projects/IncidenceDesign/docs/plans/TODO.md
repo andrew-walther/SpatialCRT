@@ -202,8 +202,10 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `methods_extensions_findings_2026-
 - [x] Power headline: size-adjusted, plus t + df-corrected power (A3 rerun); Wald in SI.
 - [x] V8: no rerun; report dips with subset-bootstrap intervals.
 - [x] Bayesian CAR: rerun ρ = 0.5 with 4× longer chains.
-- [ ] Overnight 2026-10-21: A3 rerun (`a3v2`), grid burden share, Bayesian CAR long
-  chains, summaries, V9. Plan: `overnight_plan_2026-10-21.md`.
+- [x] Overnight 2026-10-21: A3 rerun (`a3v2`), grid burden share, Bayesian CAR long
+  chains, summaries, V9 (QUEUEDONE 10:41; one check-spec fix, logged).
+- [ ] Author: headline test (t + df proposed), design name (Plain Saturation vs
+  Saturation Quadrants), push. Report Section 3.
 - [ ] Review the report with proposed drafts
   (`methods_extensions_report_2026-10-21.md`), then steps 7–8 (manuscripts, slides).
 - [ ] Push the unpushed commits on main (ask the author).

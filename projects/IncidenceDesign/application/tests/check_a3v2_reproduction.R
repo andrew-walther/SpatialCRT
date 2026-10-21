@@ -14,7 +14,8 @@
 # Rules
 #   - Same task list and the same cells in every task.
 #   - Designs other than 3 and 8 (Plain / Incidence-Guided Saturation): every stat of
-#     the old run (n_fit ... n_rej_adj) is identical in every cell, subset, allocation.
+#     the old run (n_fit ... n_rej_adj) and every allocation diagnostic is identical in
+#     every cell, subset and allocation, including subsets whose regions were rebuilt.
 #   - Designs 3 and 8: subsets whose regions did not change are identical in
 #     n_fit ... n_unident. n_rej_adj is compared only when no subset of the task
 #     changed (the size-adjusted critical value pools all subsets).
@@ -41,12 +42,16 @@ for (f in common) {
   chg <- if (is.null(n$subsets$Regions_Changed)) rep(FALSE, nrow(n$subsets)) else n$subsets$Regions_Changed
   n_changed <- n_changed + sum(chg); n_sub <- n_sub + length(chg)
   if (any(n$subsets$Min_Region_Size < 2)) fail("%s: a subset has a region below 2 colleges", f)
-  if (!(id %in% c(3, 8)) && any(chg)) fail("%s: regions changed for a non-saturation design", f)
-  keep <- which(!chg)
+  # Regions_Changed is a property of the subset, recorded for every design run on it;
+  # only designs 3 and 8 use the regions, so every other design must match on ALL
+  # subsets (corrected 2026-10-21 07:35: the first version wrongly failed when a
+  # non-saturation task's subset had rebuilt regions).
+  keep <- if (id %in% c(3, 8)) which(!chg) else seq_along(chg)
+  if (!(id %in% c(3, 8)) && !identical(o$allocations, n$allocations)) fail("%s: allocations differ for a non-saturation design", f)
   so <- o$stats[, keep, , base_stats, drop = FALSE]; sn <- n$stats[, keep, , base_stats, drop = FALSE]
   if (!identical(so, sn)) fail("%s: base stats differ on unchanged subsets (max |diff| %g)", f, max(abs(so - sn), na.rm = TRUE))
   n_cmp <- n_cmp + length(so)
-  if (!any(chg) && !identical(o$stats[, , , "n_rej_adj"], n$stats[, , , "n_rej_adj"]))
+  if ((!any(chg) || !(id %in% c(3, 8))) && !identical(o$stats[, , , "n_rej_adj"], n$stats[, , , "n_rej_adj"]))
     fail("%s: size-adjusted rejections differ with no changed subsets", f)
   if (any(n$stats[, , , "n_rej_tdf"] > n$stats[, , , "n_rej"], na.rm = TRUE)) fail("%s: t + df rejects more than Wald", f)
   if (any(n$stats[, , , "n_cov_tdf"] < n$stats[, , , "n_cov"], na.rm = TRUE)) fail("%s: t + df covers less than Wald", f)
