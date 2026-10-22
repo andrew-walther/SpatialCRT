@@ -1,6 +1,6 @@
 # IncidenceDesign — Future Work Roadmap
 
-> **Current status (2026-10-02):** observed application and full chapter/appendix, CTJ/SI drafts complete. Next: author/Claude review and author-only submission metadata; see current progress log and TODO. Historical statuses below are retained by date.
+> **Current status (2026-10-21):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Next: steps 7–8 of `docs/plans/methods_extensions_plan_2026-10-20.md` (manuscripts, slides), author review and author-only submission metadata; see current progress log and `docs/plans/TODO.md`. Historical statuses below are retained by date.
 >
 > A living task list of potential extensions, methodological improvements, and dissemination
 > goals for the IncidenceDesign project. Organized by theme. Add, edit, and check off items
@@ -12,7 +12,7 @@
 > *Clinical Trials* (SAGE) submission and a longer-form dissertation chapter — plus a
 > completed Supplementary Information document for the CTJ submission. The application
 > study (NC's 58 Community College service areas) has a complete synthetic-incidence run;
-> real SUDDEN-derived data is still pending. The modular Quarto manuscript framework
+> real SUDDEN-derived data is still pending *(superseded 2026-10-02: the application now uses observed 2018–2021 SUD data)*. The modular Quarto manuscript framework
 > referenced by older items below (`paper/manuscript/_application.qmd` etc.) was retired
 > 2026-07-02 in favor of the two manuscripts written fresh — see `paper/archive/pre_unification_20260702/`.
 >
@@ -134,17 +134,20 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 > and manuscript figures are finalized (see README "Manuscript Development" for the current
 > figure inventory). See `paper/archive/pre_unification_20260702/` for the retired framework.
 
-- [ ] **Consolidated review of all three manuscript documents** `[Priority: High]` `[Effort: Medium]`
+- [x] **Consolidated review of all three manuscript documents** `[Priority: High]` `[Effort: Medium]`
   CTJ main text, CTJ Supplementary Information, and the dissertation chapter all have complete
   first drafts (the SI as of 2026-07-03) but have not yet had one combined user review/revision
   pass together.
+  *Done 2026-10-12: four-track comprehensive review, approved fixes applied
+  (`docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`).*
 
-- [ ] **Deliberate figure-list review across main text + SI** `[Priority: High]` `[Effort: Small]`
+- [x] **Deliberate figure-list review across main text + SI** `[Priority: High]` `[Effort: Small]`
   The coverage and tau-sensitivity figures were merged into one 2-panel figure on 2026-07-03
   specifically to fit the new NC incidence map within the CTJ's 6-exhibit cap — a quick fit,
   not a considered final selection. Review the full figure list (both documents) and decide
   what to keep, drop, or further combine.
   *Notes: see `code/14_manuscript_supplement_figures.R` for how main-text/SI figures are generated.*
+  *Done 2026-10-02: approved six-exhibit revision (`docs/plans/ctj_exhibit_revision_findings_2026-10-02.md`).*
 
 - [x] **Real SUDDEN data + maps in the Application sections** *(2026-10-02)*
   Done: the chapter, CTJ manuscript and SI Application sections use the observed-incidence
@@ -205,7 +208,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 - [x] **Tau-sweep: vary `true_tau` across the full parameter grid** *(results SUPERSEDED 2026-09-24; the sweep is kept in the revised run)* — 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}; design ranking (D3/D8 dominance) stable at every τ level (all conditional Friedman p < 2.2×10⁻¹⁶). *(2026-04-08)*
 - [x] **Statistical power added as a primary metric** — P(reject H₀: τ=0) tracked per scenario; power curves computed as a function of τ per design. *(2026-04-08)*
 - [x] **Monte Carlo SEs for MSE/coverage estimates** *(SUPERSEDED 2026-09-24: SEs now come from the 10 surface-level means, stored by 05)* — Delta-method `SE_MSE`, `SE_Coverage`, `SE_Bias` via `add_mc_ses()`; confirmed small and uniform across designs at current rep counts. *(2026-04-08)*
-- [x] **NC application study (irregular geometry)** — Full design-comparison pipeline re-implemented for NC's actual 58 Community College service areas (`application/`), all 8 designs adapted, 640-scenario/160,000-fit synthetic-incidence run complete. Real SUDDEN-derived data still pending (tracked above). *(2026-06, ongoing)*
+- [x] **NC application study (irregular geometry)** — Full design-comparison pipeline re-implemented for NC's actual 58 Community College service areas (`application/`), all 8 designs adapted, 640-scenario/160,000-fit synthetic-incidence run complete. Observed 2018–2021 SUD-incidence run completed 2026-10-02 (`docs/plans/nc_sud_application_findings_2026-10-02.md`). *(2026-06 to 2026-10-02)*
 - [x] **Two manuscripts drafted from scratch** — Short *Clinical Trials* (SAGE) submission (`paper/ctj_manuscript/`) and longer-form dissertation chapter (`paper/thesis_chapter/`), both presenting 6 of the 8 designs (2 dropped as statistically redundant), no DIM-vs-MLE comparison, full design names throughout. *(2026-07-02)* *(Design count history: 6 designs at first, expanded to 8, cut back to 6 for the CTJ main text because some were similar, then the SRS benchmark was added. Current: CTJ main text 6 + SRS; thesis chapter 8 + SRS, with 6 in the detailed grid rankings.)*
 - [x] **CTJ Supplementary Information drafted and reviewed** — Fulfills the main text's 3 deferred "online supplementary material" items (reproducibility/code, full 8-design comparison, metric formulas/parameter grid); reviewed by a fresh agent against the plan's hard constraints. *(2026-07-03)*
 - [x] **NC application maps added to both manuscript documents** — 3 maps from `application/` added to the SI (Figures S8-S10) and main text (Figure 4); coverage + tau-sensitivity figures merged into one to preserve the CTJ's 6-exhibit cap. *(2026-07-03)*

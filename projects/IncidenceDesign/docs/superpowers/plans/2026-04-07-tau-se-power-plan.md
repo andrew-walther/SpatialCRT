@@ -1,5 +1,7 @@
 # Combined Simulation Extension Implementation Plan
 
+> **Status (checked 2026-10-22):** implemented 2026-04-07/08 (443fc14; results b9ea98c, d6634f6). All steps ticked.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add tau sensitivity sweep (5 values), Monte Carlo SEs, and statistical power to the simulation pipeline — bundled into one implementation pass producing 12,800 total scenarios.
@@ -35,7 +37,7 @@
 - Modify: `code/05_run_simulation.R:177-178` (seed string)
 - Modify: `code/05_run_simulation.R:253-282` (results data.frame — both branches)
 
-- [ ] **Step 1: Replace scalar true_tau with vector**
+- [x] **Step 1: Replace scalar true_tau with vector**
 
 At line 65, replace:
 ```r
@@ -48,7 +50,7 @@ with:
 true_tau_vals <- c(0.8, 1.0, 1.5, 2.0, 3.0)
 ```
 
-- [ ] **Step 2: Update scenarios_per_config calculation**
+- [x] **Step 2: Update scenarios_per_config calculation**
 
 At lines 106-108, replace:
 ```r
@@ -63,7 +65,7 @@ scenarios_per_config <- length(true_tau_vals) * length(neighbor_types) * length(
 total_scenarios <- length(inc_configs) * scenarios_per_config
 ```
 
-- [ ] **Step 3: Add outer tau loop inside run_incidence_config**
+- [x] **Step 3: Add outer tau loop inside run_incidence_config**
 
 After line 155 (`config_times <- numeric(0)`), insert:
 ```r
@@ -77,7 +79,7 @@ After the closing brace of `for (nb_type in neighbor_types)` (line ~299), insert
   }  # end true_tau loop
 ```
 
-- [ ] **Step 4: Add true_tau to seed string**
+- [x] **Step 4: Add true_tau to seed string**
 
 At line 178, replace:
 ```r
@@ -90,7 +92,7 @@ with:
                                  gamma_val, spill_type, d_id, true_tau, sep = "|")
 ```
 
-- [ ] **Step 5: Add 3 new columns to valid-estimates branch**
+- [x] **Step 5: Add 3 new columns to valid-estimates branch**
 
 In the valid-estimates branch of the results data.frame (lines 253-267), add these columns after `Fail_Rate = fail_rate,`:
 ```r
@@ -101,7 +103,7 @@ In the valid-estimates branch of the results data.frame (lines 253-267), add the
                 } else NA,
 ```
 
-- [ ] **Step 6: Add 3 new columns to NA/else branch**
+- [x] **Step 6: Add 3 new columns to NA/else branch**
 
 In the else/NA branch (lines 270-281), add these columns after `Coverage = NA, Fail_Rate = fail_rate,`:
 ```r
@@ -110,7 +112,7 @@ In the else/NA branch (lines 270-281), add these columns after `Coverage = NA, F
                 Power       = NA,
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add code/05_run_simulation.R
@@ -135,14 +137,14 @@ git commit -m "Add tau sweep loop, Power, N_Valid_Est to local simulation runner
 - Modify: `longleaf_setup/simulation.R:205-207` (seed string)
 - Modify: `longleaf_setup/simulation.R:282-310` (results data.frame)
 
-- [ ] **Step 1: Remove hardcoded true_tau**
+- [x] **Step 1: Remove hardcoded true_tau**
 
 Delete line 91:
 ```r
 true_tau <- 1.0
 ```
 
-- [ ] **Step 2: Add true_tau to expand.grid**
+- [x] **Step 2: Add true_tau to expand.grid**
 
 At lines 115-123, replace:
 ```r
@@ -170,7 +172,7 @@ param_grid <- expand.grid(
 )
 ```
 
-- [ ] **Step 3: Extract true_tau from params**
+- [x] **Step 3: Extract true_tau from params**
 
 After `d_id <- params$design_id` (line 143), add:
 ```r
@@ -183,7 +185,7 @@ cat(sprintf("Scenario: %s(rho_x=%.2f) | nb=%s | rho=%.2f | gamma=%.2f | spill=%s
             inc_mode, rho_x, nb_type, rho, gamma_val, spill_type, d_id, true_tau))
 ```
 
-- [ ] **Step 4: Add true_tau to seed string**
+- [x] **Step 4: Add true_tau to seed string**
 
 At line 205, replace:
 ```r
@@ -196,7 +198,7 @@ scenario_seed <- digest2int(paste(inc_mode, rho_x, nb_type, rho,
                                   gamma_val, spill_type, d_id, true_tau, sep = "|"))
 ```
 
-- [ ] **Step 5: Add 3 new columns to valid-estimates branch**
+- [x] **Step 5: Add 3 new columns to valid-estimates branch**
 
 In the valid-estimates branch of the result data.frame (around line 290), add after `Fail_Rate = fail_rate,`:
 ```r
@@ -207,7 +209,7 @@ In the valid-estimates branch of the result data.frame (around line 290), add af
     } else NA,
 ```
 
-- [ ] **Step 6: Add 3 new columns to NA/else branch**
+- [x] **Step 6: Add 3 new columns to NA/else branch**
 
 In the else/NA branch (around line 305), add after `Coverage = NA, Fail_Rate = fail_rate,`:
 ```r
@@ -216,11 +218,11 @@ In the else/NA branch (around line 305), add after `Coverage = NA, Fail_Rate = f
     Power       = NA,
 ```
 
-- [ ] **Step 7: Update comments**
+- [x] **Step 7: Update comments**
 
 Update the header comment (~line 3-6) to say "12,800 scenarios" instead of "2,560 scenarios".
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add longleaf_setup/simulation.R
@@ -240,7 +242,7 @@ git commit -m "Add tau dimension to HPC simulation worker
 - Modify: `longleaf_setup/aggregate_results.R:42`
 - Modify: `longleaf_setup/submit_array.sl:6,17`
 
-- [ ] **Step 1: Update expected_total in aggregate_results.R**
+- [x] **Step 1: Update expected_total in aggregate_results.R**
 
 At line 42, replace:
 ```r
@@ -251,7 +253,7 @@ with:
 expected_total <- 12800  # 5 configs x 2 nb x 4 rho x 4 gamma x 2 spill x 8 designs x 5 tau
 ```
 
-- [ ] **Step 2: Add tau-stratified summary to aggregate_results.R**
+- [x] **Step 2: Add tau-stratified summary to aggregate_results.R**
 
 After the existing MSE summary by Design (around line 100), add:
 ```r
@@ -267,7 +269,7 @@ if ("True_Tau" %in% names(all_results)) {
 }
 ```
 
-- [ ] **Step 3: Update SLURM array size**
+- [x] **Step 3: Update SLURM array size**
 
 In `submit_array.sl`, replace line 6:
 ```bash
@@ -287,7 +289,7 @@ with:
 #SBATCH --array=1-12800%100             # 12,800 tasks, max 100 concurrent
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add longleaf_setup/aggregate_results.R longleaf_setup/submit_array.sl
@@ -304,7 +306,7 @@ git commit -m "Update HPC aggregation and submission for 12,800-scenario grid
 **Files:**
 - Modify: `code/06_visualizations.R` (insert after line 61)
 
-- [ ] **Step 1: Add add_mc_ses() function**
+- [x] **Step 1: Add add_mc_ses() function**
 
 Insert after the `split_by_incidence_config()` function (after line 61):
 ```r
@@ -338,7 +340,7 @@ add_mc_ses <- function(results) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add code/06_visualizations.R
@@ -355,7 +357,7 @@ columns. Falls back to Fail_Rate approximation for old results."
 **Files:**
 - Modify: `code/06_visualizations.R` (insert before `run_all_visualizations` at line 713)
 
-- [ ] **Step 1: Add plot_mse_vs_tau()**
+- [x] **Step 1: Add plot_mse_vs_tau()**
 
 Insert before `run_all_visualizations()`:
 ```r
@@ -401,7 +403,7 @@ plot_mse_vs_tau <- function(results, inc_label = "") {
 }
 ```
 
-- [ ] **Step 2: Add plot_best_design_per_tau()**
+- [x] **Step 2: Add plot_best_design_per_tau()**
 
 ```r
 # ==============================================================================
@@ -439,7 +441,7 @@ plot_best_design_per_tau <- function(results, inc_label = "") {
 }
 ```
 
-- [ ] **Step 3: Add plot_rank_trajectories_by_tau()**
+- [x] **Step 3: Add plot_rank_trajectories_by_tau()**
 
 ```r
 # ==============================================================================
@@ -482,7 +484,7 @@ plot_rank_trajectories_by_tau <- function(results, inc_label = "") {
 }
 ```
 
-- [ ] **Step 4: Add plot_coverage_vs_tau()**
+- [x] **Step 4: Add plot_coverage_vs_tau()**
 
 ```r
 # ==============================================================================
@@ -528,7 +530,7 @@ plot_coverage_vs_tau <- function(results, inc_label = "") {
 }
 ```
 
-- [ ] **Step 5: Add plot_power_curves()**
+- [x] **Step 5: Add plot_power_curves()**
 
 ```r
 # ==============================================================================
@@ -567,7 +569,7 @@ plot_power_curves <- function(results, inc_label = "") {
 }
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add code/06_visualizations.R
@@ -588,7 +590,7 @@ All return invisible(NULL) if True_Tau column absent (backward-compat)."
 **Files:**
 - Modify: `code/06_visualizations.R:796-797` (inside per-config loop)
 
-- [ ] **Step 1: Add tau plot calls to per-config loop**
+- [x] **Step 1: Add tau plot calls to per-config loop**
 
 Inside `run_all_visualizations()`, after the `plot_coverage_mse_tradeoff` call (line 796) and before the `if (output_pdf)` check (line 798), insert:
 
@@ -619,7 +621,7 @@ Inside `run_all_visualizations()`, after the `plot_coverage_mse_tradeoff` call (
     }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add code/06_visualizations.R
@@ -637,7 +639,7 @@ Old single-tau results skip the block entirely."
 - Modify: `code/10_statistical_comparisons.R:1016-1018` (cond_params)
 - Modify: `code/10_statistical_comparisons.R` (add 2 new functions before generate_comparison_report)
 
-- [ ] **Step 1: Add True_Tau to conditional test parameters**
+- [x] **Step 1: Add True_Tau to conditional test parameters**
 
 At line 1016-1018, replace:
 ```r
@@ -652,7 +654,7 @@ with:
 
 The `intersect()` on line 1018 ensures backward compatibility — if True_Tau is absent, it's silently dropped.
 
-- [ ] **Step 2: Add table_relative_efficiency_by_tau() function**
+- [x] **Step 2: Add table_relative_efficiency_by_tau() function**
 
 Insert before `generate_comparison_report()` (~line 960):
 ```r
@@ -695,7 +697,7 @@ table_relative_efficiency_by_tau <- function(results, inc_label = "") {
 }
 ```
 
-- [ ] **Step 3: Add plot_bias_across_tau() function**
+- [x] **Step 3: Add plot_bias_across_tau() function**
 
 ```r
 # ==============================================================================
@@ -743,7 +745,7 @@ plot_bias_across_tau <- function(results, inc_label = "") {
 }
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add code/10_statistical_comparisons.R
@@ -761,7 +763,7 @@ git commit -m "Add True_Tau stratification and tau-dimension analyses
 **Files:**
 - Modify: `code/complete_after_mle.R:139,141,145,260-261`
 
-- [ ] **Step 1: Update estimand description**
+- [x] **Step 1: Update estimand description**
 
 At line 139, replace:
 ```
@@ -772,7 +774,7 @@ with:
 spillover. The estimand is **tau** (direct treatment effect), swept across {0.8, 1.0, 1.5, 2.0, 3.0}. We compare two
 ```
 
-- [ ] **Step 2: Update scenario count**
+- [x] **Step 2: Update scenario count**
 
 At line 140-141, replace:
 ```
@@ -783,7 +785,7 @@ with:
 estimators (DIM, MLE) across 12,800 parameter scenarios (5 tau values x 2,560 base grid) and 3 incidence generation
 ```
 
-- [ ] **Step 3: Update metrics tracked**
+- [x] **Step 3: Update metrics tracked**
 
 At line 145, replace:
 ```
@@ -794,7 +796,7 @@ with:
 **Metrics tracked per scenario:** Bias, SD, MSE, Coverage (95%% CI), Power (P(CI excludes 0)), Fail_Rate, N_Valid_Est, True_Tau.
 ```
 
-- [ ] **Step 4: Update Fixed DGP Parameters section**
+- [x] **Step 4: Update Fixed DGP Parameters section**
 
 At lines 260-261, remove `true_tau <- 1.0` from the Fixed DGP code block. Add after the closing triple-backtick (line 268):
 
@@ -808,7 +810,7 @@ At lines 260-261, remove `true_tau <- 1.0` from the Fixed DGP code block. Add af
 Combined with the existing 2,560-scenario base grid: 5 x 2,560 = **12,800 total scenarios**.
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add code/complete_after_mle.R

@@ -534,6 +534,7 @@ Added 2026-10-14 from AGENTS.md (simulation revision and later):
       output directory so the existing synthetic results are untouched. **Nothing
       has been run yet** — this is dormant plumbing waiting on the actual dataset;
       see Open To-Dos below for the two key next steps.
+      *(Superseded: run on the observed data 2026-10-02.)*
 - [x] **Real SUD data aggregated to the 58 clusters**, completed 2026-09-25.
       `application/code/run_sud_aggregation.R` joins Habib's methodology death
       counts (`sudden_county_year.csv`, 21,147 deaths) to SEER `pop_18_64`
@@ -541,6 +542,7 @@ Added 2026-10-14 from AGENTS.md (simulation revision and later):
       by year, total, and average to the gitignored `application/data/derived/`. It
       reproduces Habib (2026) exactly (see `application/README.md`), and the tests pass (`application/tests/test_application_data.R`).
       The design comparison on these surfaces has not been run yet.
+      *(Superseded: run 2026-10-02; see `docs/plans/nc_sud_application_findings_2026-10-02.md`.)*
 
 ---
 
@@ -552,7 +554,7 @@ The core simulation is complete. The following extensions would strengthen the s
 
 | Priority | Extension | Description | Notes |
 |----------|-----------|-------------|-------|
-| High | **Non-oracle MLE** | Re-run MLE without true Spill covariate (`include_spill_covariate = FALSE`) | Toggle already exists in `estimate_tau()`; reveals realistic vs. oracle performance gap |
+| Done | **Non-oracle MLE** | Re-run MLE without true Spill covariate (`include_spill_covariate = FALSE`) | Done in the 2026-09-24 revision: fit beside the oracle model in every run and reported as a sensitivity analysis |
 | Medium | **Heterogeneous population** | Poisson mode with `pop_mode = "heterogeneous"` (unequal cluster sizes) | `pop_mode` parameter exists in `05`; needs `generate_incidence_poisson()` extension |
 | Medium | **Grid sensitivity** | Rerun with `grid_dim = 8` (64 clusters) or `grid_dim = 15` (225 clusters) | Tests whether D3/D8 dominance holds at different spatial scales |
 | Low | **DIM tau-sweep** | Re-run DIM across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} to compute DIM power curves | Low priority — DIM is confirmed naive baseline; MLE results are primary |

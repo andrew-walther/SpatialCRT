@@ -122,7 +122,7 @@ SpillSpatialDepSim is the **applied predecessor** of IncidenceDesign. Key differ
 | Incidence | Single mode | 3 modes (iid, spatial, Poisson), matched surfaces |
 | Designs | Applied NC judicial-district configurations | 8 systematic designs (6 in the manuscripts) |
 | Estimators | SAR lagsarlm | Oracle ML spatial lag (`fit_sar_lag()`), non-oracle sensitivity |
-| Status | **Accepted** (BMC MRM) | Simulation revised 2026-09-24; chapter rewritten; application pending |
+| Status | **Accepted** (BMC MRM) | Simulation revised 2026-09-24; chapter rewritten; observed NC SUD application completed 2026-10-02 |
 
 Cross-reference: `here("projects", "SpillSpatialDepSim", "results")` from
 IncidenceDesign code.

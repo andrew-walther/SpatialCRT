@@ -110,7 +110,8 @@ Context, Lin's feedback, unanswered questions and fact-checks:
 [advisor_meeting_2026-10-14.md](advisor_meeting_2026-10-14.md).
 **Approved plan for the new analyses (2026-10-20):
 [methods_extensions_plan_2026-10-20.md](methods_extensions_plan_2026-10-20.md)**
-(decisions in DECISIONS.md, 2026-10-20). Analyses not started.
+(decisions in DECISIONS.md, 2026-10-20). Analyses A0–A7 ran 2026-10-20/21 (commits
+23f1d7a–40efbf8, plus the `a3v2` rerun); see `methods_extensions_findings_2026-10-20.md`.
 Items overlapping the submission list above (IRB, coauthor approval, pilot
 description, ORCIDs) are not repeated here.
 
@@ -147,22 +148,22 @@ description, ORCIDs) are not repeated here.
 
 **New analyses** (sample size/power and reduced participation must be addressed in the
 thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
-- [ ] Partial participation (plan A3): sample subsets of colleges (about half; Zoom said ~20),
+- [x] Partial participation (plan A3; run 2026-10-20, rerun as `a3v2` 2026-10-21; findings Section 3): sample subsets of colleges (about half; Zoom said ~20),
   rebuild W on the possibly non-contiguous subset, and check whether the regime
   guidance (incidence-guided saturation under control-only spillover) still holds.
-- [ ] Sample size and power (plan A0, A3, A4): answer "how many clusters are needed?". Power at τ = 1 for
+- [x] Sample size and power (plan A0, A3, A4; run 2026-10-20; findings Sections 2–3): answer "how many clusters are needed?". Power at τ = 1 for
   the current NC runs can be computed from stored fits (τ̂, SE) without new
   simulation; subset runs would need it too. Candidate for the main CTJ text, not
   only the SI.
-- [ ] Design comparisons with sample size (plan A2, A3; author, 2026-10-19): show with formal tests
+- [x] Design comparisons with sample size (plan A2, A3; author, 2026-10-19; run 2026-10-20, findings Sections 2–3): show with formal tests
   which designs are better or worse, and the number of participating colleges needed to
   make that claim (power curves by design). Note that more simulation replicates alone
   make any difference "significant". Planned-extensions reasoning is in the meeting record.
   The application report now lists these analyses (Section 8, "Planned extensions").
-- [ ] Estimation-method sensitivity (plan A6): design guidance under CAR and/or Bayesian fits
+- [x] Estimation-method sensitivity (plan A6; run 2026-10-20, long-chain Bayesian CAR 2026-10-21; findings Section 4): design guidance under CAR and/or Bayesian fits
   versus SAR (existing related evidence: grid non-oracle and omitted-spillover fits).
   Likely committee question; scope with Lin.
-- [ ] Binary and additive-count spillover sensitivities (plan A7): refit with Project 1-style on/off
+- [x] Binary and additive-count spillover sensitivities (plan A7; run 2026-10-20; findings Section 4): refit with Project 1-style on/off
   spillover (any treated neighbor). Expected without running it: Isolation Buffer and
   Checkerboard not identified, SRS/balanced worse, saturation relatively better. Could
   be a sensitivity analysis or a prepared committee answer.
@@ -189,7 +190,7 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 - [ ] Re-run the saved read-only review prompt
   (`claude_comprehensive_review_prompt_2026-10-12.md`) after these edits.
 
-- [ ] Burden share treated by design (plan A1).
+- [x] Burden share treated by design (plan A1; run 2026-10-20, grid check 2026-10-21; findings Section 2).
 
 **Prelim and beyond**
 - [ ] Prelim slides (bios-dissertation/slides/): structure Project 1 / 2 / 3, brief
