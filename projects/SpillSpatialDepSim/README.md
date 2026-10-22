@@ -67,6 +67,13 @@ From the accepted paper:
 See `paper/Manuscript Revisions/Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/Revisions_V2c.pdf`
 for the full paper.
 
+**Post-publication correction (2026-10-22).** The published 3×3 and 3×4
+tables and figures summarise the wrong BSS allocations, and their Control
+Only SRS rows contain a loop-bound error. The 2×4 results are correct.
+Corrected results are in `review/` (see `review/COMPARISON.md`). They
+support the general findings above, and they apply them more consistently
+across grids than the published tables did.
+
 ---
 
 ## File Guide

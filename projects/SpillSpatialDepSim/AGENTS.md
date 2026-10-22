@@ -69,6 +69,19 @@ They produce inline HTML plots only (no saved figure files).
 | `code/UnifiedSpatialSim/04_run_simulation.R` | Parallel orchestrator (`mclapply`), saves RDS |
 | `code/UnifiedSpatialSim/05_analysis_report.Rmd` | Unified report: all grids + parameters |
 
+### Post-publication review (`review/`, 2026-10-22)
+
+A check found two errors affecting the published 3×3 and 3×4 results (2×4
+unaffected):
+- `SimEstimateAnalysisAll.Rmd` uses BSS combos `c(28,43)` for every grid.
+- The Control Only loop is `1:8` in `SpatialSim_3x3.Rmd:455` and
+  `SpatialSim_3x4.Rmd:463`.
+
+Corrected reruns, tables, figures and a published-vs-corrected comparison
+are in `review/` (`README.md`, `COMPARISON.md`). The frozen scripts and
+`results/` are unchanged. Do not edit them, or the paper, without the
+author's approval.
+
 ---
 
 ## Results Directory
