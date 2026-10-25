@@ -82,14 +82,16 @@ pc$TauLab <- factor(sprintf("tau == %s", pc$Tau), levels = sprintf("tau == %s", 
 
 pal4 <- c("Simple Random Sampling" = "grey25", "Saturation Regions" = "#009E73",
           "Incidence-Guided Saturation" = "#0072B2", "Checkerboard" = "#D55E00")
-p_power <- ggplot(pc, aes(N, Power, colour = Design, fill = Design)) +
+p_power <- ggplot(pc, aes(N, Power, colour = Design, fill = Design, linetype = Design, shape = Design)) +
   geom_hline(yintercept = 0.8, linetype = "dashed", colour = "grey50") +
   geom_ribbon(aes(ymin = Lo, ymax = Hi), alpha = 0.15, colour = NA) +
   geom_line(linewidth = 0.8) +
-  geom_point(size = 1.3) +
+  geom_point(size = 1.6) +
   facet_grid(TauLab ~ Regime, labeller = labeller(TauLab = label_parsed)) +
   scale_colour_manual(values = pal4, name = NULL) +
   scale_fill_manual(values = pal4, name = NULL) +
+  scale_linetype_manual(values = c("solid", "longdash", "dotted", "dotdash"), name = NULL) +
+  scale_shape_manual(values = c(16, 17, 15, 4), name = NULL) +
   scale_x_continuous(breaks = c(15, 20, 29, 40, 50, 58)) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
   labs(x = "Participating colleges", y = "Power (t test, df-corrected)",
@@ -98,7 +100,8 @@ p_power <- ggplot(pc, aes(N, Power, colour = Design, fill = Design)) +
   theme_bw(base_size = 10) +
   theme(legend.position = "bottom", panel.grid.minor = element_blank(),
         plot.caption = element_text(hjust = 0, size = 8), plot.caption.position = "plot") +
-  guides(colour = guide_legend(nrow = 2), fill = guide_legend(nrow = 2))
+  guides(colour = guide_legend(nrow = 2), fill = guide_legend(nrow = 2),
+         linetype = guide_legend(nrow = 2), shape = guide_legend(nrow = 2))
 save_both(p_power, "fig_power_vs_n", 7, 5.2)
 
 # Figure 2: colleges needed for 80% power ----
@@ -122,9 +125,11 @@ n80_data <- function(n80, regime, tau) {
     Panel = sprintf('"%s,"~tau == %s', REGIME_LAB[[regime]], tau),  # plotmath label
     Value = ifelse(reached, x$N80_Tdf_Mean, 58),
     Lo = ifelse(reached, x$N80_Tdf_Min, NA), Hi = ifelse(reached, x$N80_Tdf_Max, NA),
-    Reached = ifelse(reached, "Reached in every year", "Not reached in some years (count shown)"),
+    Reached = ifelse(reached, "Reached in every year", "Not reached with 58 colleges in at least one year"),
     Label = ifelse(reached, sprintf("%.0f", x$N80_Tdf_Mean),
-                   sprintf("> 58 (%d/4 years)", x$N80_Tdf_Years_Above58)),
+                   ifelse(is.finite(x$N80_Tdf_Min),
+                          sprintf("> 58 in %d/4 yr, else %d+", x$N80_Tdf_Years_Above58, as.integer(floor(x$N80_Tdf_Min))),
+                          "> 58 in 4/4 yr")),
     Label_x = ifelse(reached, x$N80_Tdf_Max, 58) + 1.5)
 }
 
@@ -139,9 +144,9 @@ p_n80 <- ggplot(nd, aes(Value, Design, fill = Reached)) +
   geom_text(aes(x = Label_x, label = Label), hjust = 0, size = 3) +
   geom_vline(xintercept = 58, linetype = "dotted", colour = "grey40") +
   facet_wrap(~ Panel, labeller = label_parsed) +
-  scale_fill_manual(values = c("Reached in every year" = "#0072B2",
-                               "Not reached in some years (count shown)" = "grey75"), name = NULL) +
-  scale_x_continuous(limits = c(0, 90), breaks = c(0, 15, 29, 45, 58)) +
+  scale_fill_manual(values = c("Reached in every year" = "grey30",
+                               "Not reached with 58 colleges in at least one year" = "grey80"), name = NULL) +
+  scale_x_continuous(limits = c(0, 105), breaks = c(0, 20, 29, 40, 58)) +
   labs(x = "Colleges needed for 80% power (t test, df-corrected)", y = NULL,
        caption = expression("Random volunteering; " * rho * " = 0.5, " * gamma * " = 0.8" * tau *
                               "; bars: mean of 2018-2021, whiskers: range. Dotted: all 58 colleges.")) +
@@ -187,15 +192,18 @@ p_spread <- ggplot(grid, aes(Spread, Gain)) +
   geom_hline(yintercept = 0, colour = "grey60") +
   geom_smooth(method = "lm", formula = y ~ x, se = FALSE, colour = "grey50",
               linewidth = 0.5, linetype = "dashed") +
-  geom_point(aes(colour = Config), size = 2, alpha = 0.85) +
-  geom_point(data = nc, shape = 17, size = 3, colour = "black") +
+  geom_point(aes(colour = Config, shape = Config), size = 2, alpha = 0.9) +
+  geom_point(data = nc, shape = 24, size = 3, colour = "black", fill = "white") +
   geom_text(data = nc, aes(label = paste("NC", Year)), hjust = -0.2, vjust = 0.5, size = 2.8) +
-  scale_colour_viridis_d(end = 0.85, name = expression("Grid incidence, " * rho[X])) +
-  scale_y_continuous(labels = function(v) sprintf("%+.0f", 100 * v)) +
+  # Okabe-Ito colors plus shapes, so configurations stay distinct in grayscale
+  scale_colour_manual(values = c("#000000", "#E69F00", "#56B4E9", "#009E73", "#CC79A7"),
+                      name = expression("Grid incidence, " * rho[X])) +
+  scale_shape_manual(values = c(16, 17, 15, 3, 7), name = expression("Grid incidence, " * rho[X])) +
+  scale_y_continuous(labels = function(v) ifelse(abs(v) < 1e-9, "0", sprintf("%+.0f", 100 * v))) +
   labs(x = "Spread of regional mean incidence ranks (max - min) / number of clusters",
-       y = "Treated incidence share, guided minus plain\n(percentage points)",
-       caption = paste("Grid: 10 surfaces per incidence configuration, queen, production allocations.",
-                       "NC: four frozen regions, one point per planning year (triangles).")) +
+       y = "Treated incidence share, Incidence-Guided\nSaturation minus Saturation Regions (points)",
+       caption = paste("Grid: 10 surfaces per incidence configuration, queen, production allocations; line fit to grid points only.",
+                       "NC (open triangles): four fixed regions per planning year, spread divided by 58.")) +
   theme_bw(base_size = 10) +
   theme(panel.grid.minor = element_blank(),
         plot.caption = element_text(hjust = 0, size = 8), plot.caption.position = "plot")

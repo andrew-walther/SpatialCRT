@@ -377,7 +377,7 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
     # figure is scaled to the chapter's 6.27 in A4 text width (was 2.6 mm at 10 in,
     # ~4.6 pt printed).
     geom_text(data = df_pts, aes(x = rank, y = y_label * 0.75, label = label),
-              size = 3.2, fontface = "bold", hjust = 0.5, lineheight = 0.85) +
+              size = 3.7, fontface = "bold", hjust = 0.5, lineheight = 0.85) +
     {if (nrow(df_bars) > 0)
       geom_segment(data = df_bars, aes(x = xmin, xend = xmax, y = y, yend = y),
                    linewidth = 2.8, color = "grey35", lineend = "round")

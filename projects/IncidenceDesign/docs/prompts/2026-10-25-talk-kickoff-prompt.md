@@ -52,8 +52,10 @@ Constraints:
 - Follow my global workflow: present a numbered plan and wait for approval before
   building anything.
 
-Start by asking me what you need to know (venue and audience size, Q&A time, slide
-format), then propose a slide-by-slide outline in `presentation/OUTLINE.md` (title,
-figure, on-slide text, speaker notes, about 1 minute per slide) and mark which slides
-carry over to the prelim unchanged, which need a technical version, and which are
-talk-only.
+A first draft outline already exists (2026-10-25): `presentation/OUTLINE.md` (19 main
+slides, 8 backups, each with title, figure, slide text, notes, minutes and a
+prelim/technical/talk-only tag) and `presentation/outline.html`, a visual version with
+the figures inline, rebuilt from the markdown by `python3 presentation/tools/build_outline_html.py`.
+Its PNG figures are in `presentation/figures/`. Start by going through its "Open
+questions for Andrew" with me, revise the outline from my answers, and only then build
+the deck.

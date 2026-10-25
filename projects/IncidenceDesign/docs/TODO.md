@@ -213,20 +213,25 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
   chains, summaries, V9 (QUEUEDONE 10:41; one check-spec fix, logged).
 - [x] Author: headline test = t + df; design name = "Saturation Regions"; pushed
   (2026-10-21).
-- [ ] Rename to "Saturation Regions" at the display layer during step 7 (manuscripts,
-  figure/table labels, slides). Hashed code and stored CSVs keep old labels.
-- [ ] Author: review Section 4 (proposed text) of
-  `findings/2026-10-21-methods-extensions-report.md`; decide ρ_I vs "ICC".
-- [ ] Step 7a (author, 2026-10-25): build the new figures first, for author review,
-  before any text edits: SI/appendix power curves by N and the grid spread-vs-gain
-  scatter (NC point marked), plus the slide figures (colleges-needed bar chart,
-  power vs N). New plotting scripts reading the stored CSVs; no hashed code changes.
-- [ ] Step 7b: apply the approved text (Chapter 3 → CTJ both layouts + SI → verifiers →
-  Chapter 3 sync).
-- [ ] Step 8 (changed by author, 2026-10-25): outline only, no slides built. Refine the
-  Part II "Methods extensions" entries in `bios-dissertation/slides/prelim/OUTLINE.md`
-  with slide titles, proposed figures, proposed slide text and a suggested order.
-  Building the slides is a later plan.
+- [x] Rename to "Saturation Regions" at the display layer (2026-10-25): chapter, SI and
+  table labels, new figures, verifier labels. Older figures: see the item below.
+- [x] Author reviewed Section 4 of the report (2026-10-25 feedback): SRS in every design
+  test, model specs and citations, narrative results, no colons, ICC spelled out.
+- [x] Step 7a (2026-10-25): figures first. `code/23_methods_extension_figures.R` (power
+  vs N, colleges needed, spread vs gain), `code/15` vs-SRS forest plot, SRS in the grid
+  tests (`code/12`, `code/14`).
+- [x] Step 7b first pass (2026-10-25): Chapter 3, SI and CTJ (both layouts) drafted;
+  verifiers pass; `CTJ_Reading_Markup_V3.pdf` made for markup.
+- [ ] Author: review the step 7b draft (chapter Application sections and Appendix A9,
+  SI S10 subsection, CTJ +~95 words; CTJ body now 3,483 of 3,500).
+- [ ] Older manuscript figures still print "Saturation Quadrants" / "Incidence-Guided
+  Saturation Quadrants" (design samples, tau sensitivity, coverage, ranked MSE, NC
+  real_sud and compact figures). Their current script outputs also differ in content
+  (SRS reference lines), so swapping them needs a review pass; the text notes the old
+  names for now.
+- [x] Step 8 (2026-10-25): draft talk outline in `presentation/OUTLINE.md` and
+  `presentation/outline.html` (figures inline). The prelim Part II outline in
+  bios-dissertation is unchanged; adapt it from the talk deck later.
 - [ ] 20-minute project talk for clinicians and epidemiologists, Thursday 2026-10-29:
   full overview, discussion weighted toward the application; built in `presentation/`
   and later adapted into prelim Part II. Kickoff prompt:

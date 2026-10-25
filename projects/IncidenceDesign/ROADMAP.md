@@ -1,6 +1,6 @@
 # IncidenceDesign — Future Work Roadmap
 
-> **Current status (2026-10-25):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Next: author review of the report's proposed text, then step 7 of `docs/plans/2026-10-20-methods-extensions-plan.md` (new figures first, then manuscripts) and step 8 (slide outline only, no slides built; author change 2026-10-25). A 20-minute application talk is due 2026-10-29 (`docs/prompts/2026-10-25-talk-kickoff-prompt.md`). See current progress log and `docs/TODO.md`. Historical statuses below are retained by date.
+> **Current status (2026-10-25):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Steps 7–8 of `docs/plans/2026-10-20-methods-extensions-plan.md` were drafted overnight 2026-10-25 (figures, SRS in tests, chapter/SI/CTJ text, talk outline); next is the author's review of those drafts. A 20-minute application talk is due 2026-10-29 (`docs/prompts/2026-10-25-talk-kickoff-prompt.md`). See current progress log and `docs/TODO.md`. Historical statuses below are retained by date.
 >
 > A living task list of potential extensions, methodological improvements, and dissemination
 > goals for the IncidenceDesign project. Organized by theme. Add, edit, and check off items
@@ -248,6 +248,27 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
+
+### 2026-10-25 (overnight) — methods-extension steps 7–8: SRS in tests, figures, manuscripts, talk outline
+
+- SRS joins every grid hypothesis test (author decision, `DECISIONS.md`): `code/12` (six
+  designs + SRS), `code/14` (eight + SRS, CD diagrams), `code/15` (each design vs SRS
+  within regime, ratio forest plot). Queen Friedman chi2 = 560.33 on 6 df; SRS and
+  Balanced Quartiles not separated; under both-arms spillover the saturation designs
+  have 4-8% higher MSE than SRS (significant), under control-only about 37% lower.
+- New figures (`code/23`): power vs participating colleges, colleges needed for 80%
+  power, grid spread vs incidence-guidance gain with NC points. Tables from the stored
+  CSVs (`code/24`). A figure reviewer's fixes applied (ratio axis, grayscale, labels).
+- Chapter 3: application methods (partial participation, sigma_c and ICC, corrected t
+  interval, further sensitivity analyses), results (realistic participation, targeting,
+  calibration, model robustness), discussion and limitations, new Appendix A9 with
+  model specifications (CAR, Bayesian CAR, Bayesian SAR) and seven tables. SI mirrors it
+  (S10 subsection). CTJ: about 95 words (methods, results, limitations, abstract);
+  body 3,483 of 3,500, abstract 414 of 425. "Saturation Regions" in text and tables.
+- New citations verified at doi.org and added to both bibs (Besag 1974, Leroux 2000,
+  Lee 2013, Geweke 1992). Chapter 3 sync ran (bios-dissertation f0647c8).
+- Talk outline draft: `presentation/OUTLINE.md` and `outline.html` (19 + 8 slides).
+- Open: author review of the drafts; older figures still print "Saturation Quadrants".
 
 ### 2026-10-25 — docs folder reorganized by type
 
