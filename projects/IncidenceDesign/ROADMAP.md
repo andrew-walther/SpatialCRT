@@ -1,6 +1,6 @@
 # IncidenceDesign — Future Work Roadmap
 
-> **Current status (2026-10-21):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Next: steps 7–8 of `docs/plans/methods_extensions_plan_2026-10-20.md` (manuscripts, slides), author review and author-only submission metadata; see current progress log and `docs/plans/TODO.md`. Historical statuses below are retained by date.
+> **Current status (2026-10-25):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Next: author review of the report's proposed text, then step 7 of `docs/plans/methods_extensions_plan_2026-10-20.md` (new figures first, then manuscripts) and step 8 (slide outline only, no slides built; author change 2026-10-25). A 20-minute application talk is due 2026-10-29 (`docs/plans/talk_2026-10-29_kickoff_prompt.md`). See current progress log and `docs/plans/TODO.md`. Historical statuses below are retained by date.
 >
 > A living task list of potential extensions, methodological improvements, and dissemination
 > goals for the IncidenceDesign project. Organized by theme. Add, edit, and check off items

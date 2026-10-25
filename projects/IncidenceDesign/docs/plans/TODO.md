@@ -215,8 +215,22 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `methods_extensions_findings_2026-
   (2026-10-21).
 - [ ] Rename to "Saturation Regions" at the display layer during step 7 (manuscripts,
   figure/table labels, slides). Hashed code and stored CSVs keep old labels.
-- [ ] Review the report with proposed drafts
-  (`methods_extensions_report_2026-10-21.md`), then steps 7–8 (manuscripts, slides).
+- [ ] Author: review Section 4 (proposed text) of
+  `methods_extensions_report_2026-10-21.md`; decide ρ_I vs "ICC".
+- [ ] Step 7a (author, 2026-10-25): build the new figures first, for author review,
+  before any text edits: SI/appendix power curves by N and the grid spread-vs-gain
+  scatter (NC point marked), plus the slide figures (colleges-needed bar chart,
+  power vs N). New plotting scripts reading the stored CSVs; no hashed code changes.
+- [ ] Step 7b: apply the approved text (Chapter 3 → CTJ both layouts + SI → verifiers →
+  Chapter 3 sync).
+- [ ] Step 8 (changed by author, 2026-10-25): outline only, no slides built. Refine the
+  Part II "Methods extensions" entries in `bios-dissertation/slides/prelim/OUTLINE.md`
+  with slide titles, proposed figures, proposed slide text and a suggested order.
+  Building the slides is a later plan.
+- [ ] 20-minute project talk for clinicians and epidemiologists, Thursday 2026-10-29:
+  full overview, discussion weighted toward the application; built in `presentation/`
+  and later adapted into prelim Part II. Kickoff prompt:
+  `talk_2026-10-29_kickoff_prompt.md`.
 - [ ] Push the unpushed commits on main (ask the author).
 
 ## Known minor code issues (low priority; moved from AGENTS.md 2026-10-14)
