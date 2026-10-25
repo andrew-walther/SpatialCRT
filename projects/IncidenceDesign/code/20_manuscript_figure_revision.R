@@ -204,8 +204,8 @@ export_compact_exhibits <- function(project_dir) {
   region_map <- ggplot2::ggplot(g) +
     ggplot2::geom_sf(ggplot2::aes(fill = Region), color = "white", linewidth = 0.2) +
     ggplot2::scale_fill_brewer(palette = "Set2") +
-    ggplot2::labs(title = "One fixed region partition for all four years",
-                  subtitle = "Selected by geography and balance before outcome performance is evaluated") +
+    # No title: the manuscript caption describes the partition (author, 2026-10-25)
+
     ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(),
                    panel.grid = ggplot2::element_blank())

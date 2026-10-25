@@ -262,7 +262,11 @@ for (nb in c("queen", "rook")) {
     geom_hline(yintercept = srs_cov_median, linetype = "dotted", colour = "grey30", linewidth = 0.6) +
     labs(subtitle = expression("Incidence: all configs, " * tau * " = 1.0 | Red dashed = nominal 95%"),
          caption = cov_caption) +
-    note_theme
+    note_theme +
+    # Manuscript figure (author, 2026-10-25): no title, subtitle or note, since the
+    # caption carries them; true hyphens in the design labels
+    scale_x_discrete(labels = function(x) gsub("-", "\u00ad", x, fixed = TRUE)) +
+    theme(plot.title = element_blank(), plot.subtitle = element_blank(), plot.caption = element_blank())
   # Legibility only: coverage is tightly clustered, so the default black outlines
   # collapse the boxes into dark bars; thinner grey outlines let the fill show.
   p_coverage$layers[[1]] <- geom_boxplot(alpha = 0.5, outlier.alpha = 0.5, outlier.size = 1,

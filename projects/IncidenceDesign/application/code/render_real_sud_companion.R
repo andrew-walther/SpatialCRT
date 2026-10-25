@@ -9,6 +9,51 @@ real_sud_define_only <- TRUE
 .rs_report_dir <- dirname(normalizePath(sub("--file=", "", grep("--file=", commandArgs(FALSE), value = TRUE)[1])))
 source(file.path(.rs_report_dir, "run_real_sud.R"))
 
+#' Build the three NC maps: observed yearly rates, fixed regions, example allocations
+#'
+#' Shared by the offline companion (saved with titles) and the manuscript export
+#' (application/code/manuscript_maps.R, saved without titles).
+#' @param s Production setup list (setup.rds): clusters, annual rates, regions.
+#' @return list(observed, regions, examples) of ggplot objects with titles.
+#' @family real_sud_report
+#' @seealso rs_companion
+#' @examples
+#' # m <- rs_maps(readRDS("application/results/real_sud_rev_20261002/setup.rds"))
+rs_maps <- function(s) {
+  # Display simplification changes only map rendering, never the cached legal W.
+  g <- sf::st_simplify(s$clusters, dTolerance = 250)
+  ggplot2::theme_set(ggplot2::theme_minimal(base_size = 12))
+  annual_maps <- do.call(rbind, lapply(as.character(2018:2021), function(y) {
+    a <- g; a$Year <- y; a$Rate <- s$annual[[y]]$rate_per_100k; a
+  }))
+  map <- ggplot2::ggplot(annual_maps) + ggplot2::geom_sf(ggplot2::aes(fill = Rate), color = "white", linewidth = 0.15) +
+    ggplot2::scale_fill_viridis_c(name = "SUD / 100k") + ggplot2::facet_wrap(~Year, ncol = 2) +
+    ggplot2::labs(title = "Observed SUD incidence: four fixed yearly planning settings", subtitle = "58 community-college clusters; denominator is population aged 18–64") +
+    ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(), panel.grid = ggplot2::element_blank())
+  observed <- map
+  g$Region <- factor(s$regions)
+  map <- ggplot2::ggplot(g) + ggplot2::geom_sf(ggplot2::aes(fill = Region), color = "white", linewidth = 0.2) +
+    ggplot2::scale_fill_brewer(palette = "Set2") + ggplot2::labs(title = "One fixed region partition for all four years", subtitle = "Selected by geography and balance before outcome performance is evaluated") +
+    ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(), panel.grid = ggplot2::element_blank())
+  regions <- map
+  c <- rs_config("smoke"); units <- rs_units(c)
+  examples <- do.call(rbind, lapply(1:9, function(id) {
+    u <- units[which(units$Design_ID == id)[1], ]
+    a <- g; z <- rs_draws(u, s, 1)[, 1]
+    # Display names match the manuscripts (author 2026-10-12).
+    shown <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
+               "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
+               "Incidence-Guided Saturation", "Simple Random Sampling")[id]
+    a$Design <- paste0(id, ". ", shown, " (", sum(z), "/58)")
+    a$Treatment <- factor(z, levels = 0:1, labels = c("Control", "Treatment")); a
+  }))
+  map <- ggplot2::ggplot(examples) + ggplot2::geom_sf(ggplot2::aes(fill = Treatment), color = "white", linewidth = 0.12) +
+    ggplot2::scale_fill_manual(values = c(Control = "#e0e7ef", Treatment = "#167c80")) + ggplot2::facet_wrap(~Design, ncol = 3) +
+    ggplot2::labs(title = "Reproducible example allocations on the NC geography", subtitle = "2018, queen graph, draw 1. These maps illustrate rules; they do not compare performance.") +
+    ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(), panel.grid = ggplot2::element_blank(), strip.text = ggplot2::element_text(size = 9))
+  list(observed = observed, regions = regions, examples = map)
+}
+
 #' Encode a reporting data frame as a JSON array without an additional dependency
 #' @param d Data frame containing atomic character, logical or numeric columns.
 #' @return One JSON string; non-finite numbers are null.
@@ -50,38 +95,10 @@ rs_companion <- function(root = file.path(.rs_app, "results", "real_sud_rev_2026
     read.csv(tp, stringsAsFactors = FALSE) else data.frame()
   dest <- file.path(.rs_app, "report"); assets <- file.path(dest, "real_sud_assets")
   dir.create(assets, recursive = TRUE, showWarnings = FALSE)
-  # Display simplification changes only map rendering, never the cached legal W.
-  g <- sf::st_simplify(s$clusters, dTolerance = 250)
-  ggplot2::theme_set(ggplot2::theme_minimal(base_size = 12))
-  annual_maps <- do.call(rbind, lapply(as.character(2018:2021), function(y) {
-    a <- g; a$Year <- y; a$Rate <- s$annual[[y]]$rate_per_100k; a
-  }))
-  map <- ggplot2::ggplot(annual_maps) + ggplot2::geom_sf(ggplot2::aes(fill = Rate), color = "white", linewidth = 0.15) +
-    ggplot2::scale_fill_viridis_c(name = "SUD / 100k") + ggplot2::facet_wrap(~Year, ncol = 2) +
-    ggplot2::labs(title = "Observed SUD incidence: four fixed yearly planning settings", subtitle = "58 community-college clusters; denominator is population aged 18–64") +
-    ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(), panel.grid = ggplot2::element_blank())
-  ggplot2::ggsave(file.path(assets, "observed_years.png"), map, width = 11, height = 7, dpi = 150)
-  g$Region <- factor(s$regions)
-  map <- ggplot2::ggplot(g) + ggplot2::geom_sf(ggplot2::aes(fill = Region), color = "white", linewidth = 0.2) +
-    ggplot2::scale_fill_brewer(palette = "Set2") + ggplot2::labs(title = "One fixed region partition for all four years", subtitle = "Selected by geography and balance before outcome performance is evaluated") +
-    ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(), panel.grid = ggplot2::element_blank())
-  ggplot2::ggsave(file.path(assets, "regions.png"), map, width = 10, height = 4, dpi = 150)
-  c <- rs_config("smoke"); units <- rs_units(c)
-  examples <- do.call(rbind, lapply(1:9, function(id) {
-    u <- units[which(units$Design_ID == id)[1], ]
-    a <- g; z <- rs_draws(u, s, 1)[, 1]
-    # Display names match the manuscripts (author 2026-10-12).
-    shown <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
-               "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
-               "Incidence-Guided Saturation", "Simple Random Sampling")[id]
-    a$Design <- paste0(id, ". ", shown, " (", sum(z), "/58)")
-    a$Treatment <- factor(z, levels = 0:1, labels = c("Control", "Treatment")); a
-  }))
-  map <- ggplot2::ggplot(examples) + ggplot2::geom_sf(ggplot2::aes(fill = Treatment), color = "white", linewidth = 0.12) +
-    ggplot2::scale_fill_manual(values = c(Control = "#e0e7ef", Treatment = "#167c80")) + ggplot2::facet_wrap(~Design, ncol = 3) +
-    ggplot2::labs(title = "Reproducible example allocations on the NC geography", subtitle = "2018, queen graph, draw 1. These maps illustrate rules; they do not compare performance.") +
-    ggplot2::theme(axis.text = ggplot2::element_blank(), axis.title = ggplot2::element_blank(), panel.grid = ggplot2::element_blank(), strip.text = ggplot2::element_text(size = 9))
-  ggplot2::ggsave(file.path(assets, "design_examples.png"), map, width = 14, height = 8, dpi = 150)
+  maps <- rs_maps(s)
+  ggplot2::ggsave(file.path(assets, "observed_years.png"), maps$observed, width = 11, height = 7, dpi = 150)
+  ggplot2::ggsave(file.path(assets, "regions.png"), maps$regions, width = 10, height = 4, dpi = 150)
+  ggplot2::ggsave(file.path(assets, "design_examples.png"), maps$examples, width = 14, height = 8, dpi = 150)
   status <- if (!nrow(results)) "Implementation and verification in progress; no performance results loaded." else
     paste0(if (profile != "production") "PRELIMINARY " else "PRODUCTION ", toupper(profile), ": ", nrow(results),
       " reporting rows; ", length(unique(results$Source_ID)), " computational sources; ",
@@ -131,5 +148,8 @@ rs_companion <- function(root = file.path(.rs_app, "results", "real_sud_rev_2026
   cat("Saved companion: ", path, "\n", sep = "")
   invisible(path)
 }
-args <- commandArgs(TRUE)
-rs_companion(profile = if (length(args)) args[1] else "pilot")
+# Sourcing with rs_companion_define_only set defines the functions without rendering
+if (!exists("rs_companion_define_only")) {
+  args <- commandArgs(TRUE)
+  rs_companion(profile = if (length(args)) args[1] else "pilot")
+}

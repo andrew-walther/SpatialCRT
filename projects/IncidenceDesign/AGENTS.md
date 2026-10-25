@@ -151,6 +151,7 @@ the reasoning behind this distinction.
 | `application/code/sud_load_data.R` | ~105 | Load and join numerator + denominator; complete-panel checks | `load_sud_county_data()` |
 | `application/code/sud_incidence.R` | ~110 | Rate formulas; county → college aggregation | `compute_incidence()`, `aggregate_sud_to_clusters()` |
 | `application/code/sud_reconcile.R` | ~100 | QC report vs Habib (2026) and the 23,523 counts | `reconcile_sud_counts()` |
+| `application/code/manuscript_maps.R` | ~70 | Clean (title-free) manuscript copies of the NC maps, service-area map and application figures | Reuses `rs_maps()` (companion) and `generate_county_borders_map(show_title = FALSE)`; writes both paper figure folders |
 | `application/code/build_cluster_weights.R` | ~70 | Queen + rook contiguity (nb, binary A, row-standardized W) for the 58 clusters → tracked `application/data/nc_cluster_weights.rds` | Reuses `build_nc_application_clusters()`, `build_application_spatial_weights()` |
 | `application/tests/test_application_data.R` | ~130 | 23 checks: rate formulas (fixture), bad input, real data vs Habib (2026), weights | Real-data part skips if the gitignored sources are absent |
 | **paper/report/** | | | |

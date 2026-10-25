@@ -58,9 +58,11 @@ get_nc_cc_data <- function(cb = TRUE) {
 #' Generate Spatial Map Retaining County Borders
 #'
 #' @param nc_cluster_map Prepared sf dataframe
+#' @param show_title Logical. FALSE drops the title and subtitle, for manuscript use
+#'   where the caption carries them (author, 2026-10-25).
 #' @return ggplot object
 #' @export
-generate_county_borders_map <- function(nc_cluster_map) {
+generate_county_borders_map <- function(nc_cluster_map, show_title = TRUE) {
   merged_clusters <- nc_cluster_map %>%
     dplyr::group_by(Legend_Label, ID) %>%
     dplyr::summarize(geometry = sf::st_union(geometry), .groups = 'drop')
@@ -101,6 +103,7 @@ generate_county_borders_map <- function(nc_cluster_map) {
       legend.title = ggplot2::element_text(face = "bold", size = 10)
     )
   
+  if (!show_title) map_obj <- map_obj + ggplot2::labs(title = NULL, subtitle = NULL)
   return(map_obj)
 }
 

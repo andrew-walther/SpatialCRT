@@ -279,7 +279,8 @@ rep_label_6 <- inc_config_label("poisson", 0.20)
 results_rep_6 <- configs_tau1_6[[rep_label_6]]
 
 p_biasvar <- plot_bias_variance(results_rep_6, rep_label_6) +
-  scale_x_discrete(limits = best_to_worst_6, labels = wrap_labels) +
+  scale_x_discrete(limits = best_to_worst_6, labels = function(x) hy(wrap_labels(x))) +
+  scale_fill_manual(values = c("Bias-squared" = "#E69F00", "Variance" = "#56B4E9"), labels = hy) +
   labs(title = "Bias-Variance Decomposition of MSE (ranked best to worst)",
        subtitle = expression("Incidence: Poisson (" * rho[X] * " = 0.20)")) +  # = rep_label_6, Greek
   # SRS reference: its MSE (squared bias + variance) in the same configuration
@@ -288,7 +289,8 @@ p_biasvar <- plot_bias_variance(results_rep_6, rep_label_6) +
                                mean(Bias^2) + mean(SD^2)),
              linetype = "dashed", colour = "grey40", linewidth = 0.6) +
   labs(caption = "Gray dashed: Simple Random Sampling benchmark (MSE in the same configuration)") +
-  theme(plot.caption = element_text(hjust = 0))
+  theme(plot.caption = element_text(hjust = 0)) +
+  MS_CLEAN   # manuscript figure: the chapter/SI caption carries the title and SRS note
 stopifnot(rep_label_6 == "Poisson (rho_X = 0.20)")  # keep the plotmath subtitle in sync
 ggsave(file.path(fig_dir, "fig_biasvar_6design.pdf"), p_biasvar, width = 9, height = 6)
 

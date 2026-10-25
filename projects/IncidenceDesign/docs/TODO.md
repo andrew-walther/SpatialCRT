@@ -225,9 +225,10 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
   verifiers pass; `CTJ_Reading_Markup_V3.pdf` made for markup.
 - [ ] Author: review the step 7b draft (chapter Application sections and Appendix A9,
   SI Section S11, CTJ +~95 words; CTJ body now 3,483 of 3,500, so keep CTJ edits tight).
-- [ ] Older figures not regenerated still carry in-figure titles (bias-variance, coverage
-  by design, NC `real_sud` and `compact` figures); strip them if wanted. The unused
-  `fig_tau_sensitivity_6design_{queen,rook}.pdf` copies in the figure folders are stale.
+- [x] Every figure in the chapter, SI and CTJ is now a clean figure (2026-10-25): no
+  in-figure title or note; captions carry them. NC maps and application figures come from
+  `application/code/manuscript_maps.R`. The unused `fig_tau_sensitivity_6design_{queen,rook}.pdf`
+  copies in the figure folders are stale.
 - [x] Step 8 (2026-10-25): draft talk outline in `presentation/OUTLINE.md` and
   `presentation/outline.html` (figures inline). The prelim Part II outline in
   bios-dissertation is unchanged; adapt it from the talk deck later.

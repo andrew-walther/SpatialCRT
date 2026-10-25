@@ -259,6 +259,9 @@ checkpoints here, not in `AGENTS.md`.
 - Colleges needed are whole colleges, rounded up (35 to 37 under both-arms spillover; 28
   for the saturation designs against 29 to 32 at 1.5 SD under control-only).
 - The SRS comparison now reports allocation spread beside the mean difference.
+- All remaining titled manuscript figures cleaned: bias-variance and coverage-by-design
+  (codes 12/14), the NC maps, service-area map and application figures
+  (`application/code/manuscript_maps.R`, title-free `_journal` PDFs); captions extended.
 
 ### 2026-10-25 (overnight) — methods-extension steps 7–8: SRS in tests, figures, manuscripts, talk outline
 

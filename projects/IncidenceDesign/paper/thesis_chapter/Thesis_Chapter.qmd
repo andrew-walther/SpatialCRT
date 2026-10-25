@@ -1083,7 +1083,7 @@ Checkerboard (flagged) & 0.295 & 0.403 & 0.538 & 0.684 \\
 \centering
 \includegraphics[width=0.6\linewidth]{figures/fig_coverage_by_design_6design_queen.pdf}
 
-\caption{Coverage of the 95\% confidence intervals by design at $\tau = 1$, under queen contiguity. Each box summarizes the coverage of the 160 scenarios of one design (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each estimated from 250 fits. Designs are ordered by median coverage, so the order differs from the MSE order used elsewhere. The dashed red line marks the nominal 0.95 level. Figure \ref{fig:coverage-rook} shows rook contiguity.}
+\caption{Coverage of the 95\% confidence intervals by design at $\tau = 1$, under queen contiguity. Each box summarizes the coverage of the 160 scenarios of one design (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each estimated from 250 fits. Designs are ordered by median coverage, so the order differs from the MSE order used elsewhere. The dashed red line marks the nominal 0.95 level, and the gray dotted line the median coverage of simple random sampling. Figure \ref{fig:coverage-rook} shows rook contiguity.}
 \label{fig:coverage}
 
 \end{figure}
@@ -1095,7 +1095,7 @@ Checkerboard (flagged) & 0.295 & 0.403 & 0.538 & 0.684 \\
 \centering
 \includegraphics[width=0.62\linewidth]{figures/fig_biasvar_6design_queen.pdf}
 
-\caption{Decomposition of mean squared error into squared bias and variance by design at $\tau = 1$ for one incidence configuration, Poisson with $\rho_X = 0.20$, under queen contiguity. For each design, the two stacked components are the squared bias and the variance ($\text{SD}^2$) of $\hat\tau$, each averaged over the 32 scenarios of that configuration (4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes). Designs are ordered by pooled mean MSE (Table \ref{tab:performance}). Figure \ref{fig:biasvar-rook} shows rook contiguity.}
+\caption{Decomposition of mean squared error into squared bias and variance by design at $\tau = 1$ for one incidence configuration, Poisson with $\rho_X = 0.20$, under queen contiguity. For each design, the two stacked components are the squared bias and the variance ($\text{SD}^2$) of $\hat\tau$, each averaged over the 32 scenarios of that configuration (4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes). Designs are ordered by pooled mean MSE (Table \ref{tab:performance}). The gray dashed line marks the MSE of simple random sampling (SRS) in the same configuration. Figure \ref{fig:biasvar-rook} shows rook contiguity.}
 \label{fig:biasvar}
 
 \end{figure}
@@ -1291,7 +1291,7 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 \centering
 \includegraphics[width=\linewidth]{figures/real_sud/primary_setting_ratios.pdf}
 
-\caption{Primary queen setting-specific mean MSE ratios to year-matched SRS. Parameters and spillover regimes are kept separate; this plot does not pool neighbor definitions.}
+\caption{Primary queen setting-specific mean MSE ratios to year-matched SRS. Teal cells have lower MSE than SRS and red cells higher; setting-specific Monte Carlo errors are in the source table. Parameters and spillover regimes are kept separate; this plot does not pool neighbor definitions.}
 \label{fig:nc-setting-ratios}
 
 \end{figure}
