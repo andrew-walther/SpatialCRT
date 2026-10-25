@@ -14,6 +14,14 @@
 # uses the full tau-sweep set so dominance-across-tau can still be checked
 # for the reduced design set.
 #
+# 2026-10-25 (author): Simple Random Sampling (SRS) joins the hypothesis tests as a
+# seventh member, so every Friedman/Nemenyi/Wilcoxon result and CD diagram shows how
+# each design compares with SRS. The descriptive figures (MSE, coverage, tau
+# sensitivity) keep the six designs with SRS as a gray reference line. Display names
+# follow the manuscripts: "Incidence-Guided Saturation Quadrants" is shown as
+# "Incidence-Guided Saturation" and "Saturation Quadrants" as "Saturation Regions"
+# (author, 2026-10-21); the stored CSVs and hashed code keep the old labels.
+#
 # 2026-09 revision: neighbor types are analyzed separately -- queen (primary) and
 # rook (Chapter 2 continuity / sensitivity; tau is not identified for Checkerboard
 # under rook, whose oracle estimates are kept but flagged) -- plus a POOLED slice
@@ -68,6 +76,8 @@ stopifnot(identical(unname(full_name_map),
                        "Isolation Buffer", "2x2 Blocking", "Balanced Quartiles",
                        "Balanced Halves", "Incidence-Guided Saturation Quadrants",
                        "Simple Random Sampling")))
+# Display layer only (author, 2026-10-21): manuscript names for the two saturation designs
+full_name_map[c("Design 3", "Design 8")] <- c("Saturation Regions", "Incidence-Guided Saturation")
 
 # 6 retained designs: drop "Design 3" (Saturation Quadrants) and "Design 7" (Balanced Halves)
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
@@ -84,11 +94,15 @@ mle_full_6 <- mle_full[mle_full$Design %in% retained_ids, ]
 mle_full_6$Design <- full_name_map[mle_full_6$Design]
 
 # Simple Random Sampling (Design 9) is a benchmark, not a proposed design (author,
-# 2026-09-26): it never enters the six-design tests or palettes above, and appears
-# in the figures only as a gray reference line (dotted for coverage, dashed for
-# MSE). Its numbers are tabulated in 15_srs_benchmark.R.
+# 2026-09-26). It enters the hypothesis tests below as a seventh member (author,
+# 2026-10-25) but not the six-design palettes: in the descriptive figures it appears
+# only as a gray reference line (dotted for coverage, dashed for MSE). Its paired
+# surface-level tests are in 15_srs_benchmark.R.
 srs_full <- mle_full[mle_full$Design == "Design 9", ]
 stopifnot(nrow(srs_full) > 0)
+srs_test <- srs_full
+srs_test$Design <- full_name_map[srs_test$Design]
+mle_full_7 <- rbind(mle_full_6, srs_test)
 SRS_CAPTION <- "Gray dashed: Simple Random Sampling benchmark (mean MSE)."
 
 # Integrity: every block (all parameters except Design) has all 6 designs, once
@@ -99,10 +113,19 @@ stopifnot(all(per_block == 6))
 cat(sprintf("6-design rows: %d (%d blocks x 6 designs; %d tau levels)\n",
             nrow(mle_full_6), length(per_block), length(unique(mle_full_6$True_Tau))))
 
+per_block7 <- table(do.call(paste, mle_full_7[, block_cols]))
+stopifnot(all(per_block7 == 7))
+
+# Descriptive figure slices: six designs (SRS as a reference line)
 slices <- list(
   queen  = mle_full_6[mle_full_6$Neighbor_Type == "queen", ],
   rook   = mle_full_6[mle_full_6$Neighbor_Type == "rook", ],
   pooled = mle_full_6)
+# Hypothesis-test slices: six designs + SRS
+test_slices <- list(
+  queen  = mle_full_7[mle_full_7$Neighbor_Type == "queen", ],
+  rook   = mle_full_7[mle_full_7$Neighbor_Type == "rook", ],
+  pooled = mle_full_7)
 slice_title <- c(queen = "QUEEN (primary)", rook = "ROOK (sensitivity / Chapter 2 continuity)",
                  pooled = "POOLED over rook and queen (label as pooled wherever used)")
 
@@ -111,7 +134,7 @@ slice_title <- c(queen = "QUEEN (primary)", rook = "ROOK (sensitivity / Chapter 
 # ------------------------------------------------------------------------
 #' Friedman / Nemenyi / Wilcoxon (tau = 1) and the True_Tau-conditional test for one slice
 #'
-#' @param res Data frame of 6-design results for one neighbor slice (all tau)
+#' @param res Data frame of 6-design + SRS results for one neighbor slice (all tau)
 #' @return List with friedman, nemenyi, wilcoxon, conditional_tau,
 #'   conditional_tau_summary, descriptive, n_rows_tau1
 run_slice <- function(res) {
@@ -129,15 +152,16 @@ run_slice <- function(res) {
        conditional_tau_summary = summarize_conditional_tests(cond),
        descriptive = desc, n_rows_tau1 = nrow(tau1))
 }
-report <- lapply(slices, run_slice)
+report <- lapply(test_slices, run_slice)
 
 sink(file.path(out_dir, "six_design_summary.txt"), split = TRUE)
 cat("======================================================================\n")
-cat("SIX-DESIGN STATISTICAL COMPARISONS (manuscript design set)\n")
+cat("SIX-DESIGN + SRS STATISTICAL COMPARISONS (manuscript design set; SRS tested as a seventh member)\n")
 cat("Estimator: ", if (est_prefix == "MLE") "oracle (Y ~ Z + Spill + X), primary" else
       "non-oracle (Y ~ Z + X), sensitivity", "\n")
 cat("Retained: ", paste(unname(full_name_map[retained_ids]), collapse = ", "), "\n")
-cat("Dropped:  Saturation Quadrants, Balanced Halves (redundant, see plan)\n")
+cat("Tested with: Simple Random Sampling (benchmark)\n")
+cat("Dropped:  Saturation Regions, Balanced Halves (redundant, see plan)\n")
 cat("Per-tau Friedman tests share Z and eps across tau (common random numbers):\n")
 cat("they are not independent confirmations of one another.\n")
 cat("======================================================================\n")
@@ -175,6 +199,7 @@ sink()
 cat("Summary written to", file.path(out_dir, "six_design_summary.txt"), "\n")
 
 saveRDS(c(report, list(estimator = est_prefix, retained_designs = unname(full_name_map[retained_ids]),
+                       tested_designs = c(unname(full_name_map[retained_ids]), "Simple Random Sampling"),
                        rook_note = ROOK_NOTE)),
         file.path(out_dir, "six_design_comparison_report.rds"))
 
@@ -201,11 +226,12 @@ for (nb in c("queen", "rook")) {
   r <- report[[nb]]
   res <- slices[[nb]]
   tau1 <- res[res$True_Tau == 1.0, ]
+  tau1_test <- test_slices[[nb]][test_slices[[nb]]$True_Tau == 1.0, ]
   sub_note <- if (nb == "rook") paste0(" [", ROOK_NOTE, "]") else ""
   pdf(file.path(out_dir, sprintf("MLE_statistical_comparisons_6design_%s.pdf", nb)),
       width = 10, height = 6)
-  print(plot_cd_diagram(r$nemenyi, title = sprintf("Critical Difference Diagram (6 designs, %s, tau=1.0)", nb)))
-  print(plot_mse_boxplot_with_stars(tau1, r$wilcoxon))
+  print(plot_cd_diagram(r$nemenyi, title = sprintf("Critical Difference Diagram (6 designs + SRS, %s, tau=1.0)", nb)))
+  print(plot_mse_boxplot_with_stars(tau1_test, r$wilcoxon))
   print(plot_pvalue_heatmap(r$wilcoxon, "Wilcoxon (Holm)"))
   print(plot_pvalue_heatmap(r$nemenyi, "Nemenyi"))
   for (pl in plot_conditional_cd_diagrams(r$conditional_tau, "True_Tau")) print(pl)
@@ -248,10 +274,10 @@ for (nb in c("queen", "rook")) {
   # so a design has the same colour in both versions and only the legend order differs.
   # The ribbon is Mean_MSE +/- the AVERAGE of the stored scenario-level SE_MSE
   # (surface-level MC SEs) in each Design x tau cell, not the SE of the mean.
-  tau_colour_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+  tau_colour_order <- c("Incidence-Guided Saturation", "Balanced Quartiles",
                         "Isolation Buffer", "High Incidence Focus", "2x2 Blocking", "Checkerboard")
   tau_legend_order <- if (nb == "rook")
-    c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+    c("Incidence-Guided Saturation", "Balanced Quartiles",
       "2x2 Blocking", "Isolation Buffer", "High Incidence Focus", "Checkerboard") else tau_colour_order
   stopifnot(setequal(tau_legend_order, unique(res$Design)),
             setequal(tau_colour_order, tau_legend_order))

@@ -5,6 +5,26 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-25 — SRS in every design hypothesis test; figures before text; outline-only slides
+
+**Decision.** Simple Random Sampling is a member of every hypothesis-test comparison
+of designs and of its figures. The grid Friedman, Nemenyi and Holm-adjusted Wilcoxon
+tests now cover the six designs plus SRS (`code/12`; the critical-difference diagrams
+in `code/14`) and the eight designs plus SRS (`code/14`), and `code/15` adds paired
+surface-level tests of each design against SRS within each spillover regime, drawn
+as a forest plot. SRS stays a benchmark, not a proposed design, and remains a gray
+reference line in the descriptive figures. Methods-extension step 7 builds the new
+figures first, for review, before any text; step 8 drafts the slide outline (text plus
+an HTML page with figures) in `presentation/` and builds no slides. The 2026-10-29
+talk deck lives in `presentation/` and is adapted into prelim Part II later.
+
+**Why.** SRS is the standard of care, so readers need to see whether each design
+differs significantly from it, not only from the other designs (author feedback on
+the methods-extension report, 2026-10-25). This reverses the 2026-09-26 rule that SRS
+never enters the rank-based tests.
+
+---
+
 ## 2026-10-21 — Habib affiliation, SUD case algorithm citation, IRB protocol
 
 **Decision.** Habib's affiliation is the Department of Epidemiology, UNC Chapel Hill

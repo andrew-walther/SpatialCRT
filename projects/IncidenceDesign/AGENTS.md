@@ -49,6 +49,9 @@ Reasons and history for each rule: `DECISIONS.md`.
   paper, never "Chapter 2" or "Project 1".
 - **Checkerboard placement (2026-10-02):** keep it in the main design comparison, with
   identification diagnostics in the appendix; no numerical cross-project comparison.
+- **SRS in every design test (author, 2026-10-25):** every hypothesis-test comparison of
+  designs and its figures include Simple Random Sampling (reverses the 2026-09-26
+  exclusion); SRS stays a reference line in descriptive figures.
 - **No single recommended design (author, 2026-10-14):** report the best designs by
   scenario (mainly spillover regime).
 - **Revisions reach every version (author, 2026-10-19):** CTJ edits go in

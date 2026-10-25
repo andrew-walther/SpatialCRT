@@ -25,6 +25,12 @@
 # the full manuscript name (get_design_names() with the "Design N: " prefix
 # stripped), per the CTJ + dissertation manuscript no-shorthand convention.
 #
+# 2026-10-25 (author): Simple Random Sampling (SRS) is a member of every hypothesis
+# test, so the consolidation comparison in (a) covers 8 designs + SRS and the CD
+# diagrams in (c) show SRS beside the six designs (their tests come from 12). Display
+# names follow the manuscripts ("Saturation Regions", "Incidence-Guided Saturation";
+# author, 2026-10-21).
+#
 # 2026-09 revision: queen (primary) and rook (sensitivity; tau not identified for
 # Checkerboard) are analyzed separately. (a) reports queen, rook and a labeled POOLED
 # slice; (b)-(c) are produced once per neighbor type into six_design_manuscript/<nb>/.
@@ -71,6 +77,8 @@ stopifnot(identical(unname(full_name_map),
                        "Isolation Buffer", "2x2 Blocking", "Balanced Quartiles",
                        "Balanced Halves", "Incidence-Guided Saturation Quadrants",
                        "Simple Random Sampling")))
+# Display layer only (author, 2026-10-21): manuscript names for the two saturation designs
+full_name_map[c("Design 3", "Design 8")] <- c("Saturation Regions", "Incidence-Guided Saturation")
 
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
 
@@ -83,7 +91,7 @@ DESIGN_GROUPS_6 <- c(
   "Isolation Buffer"                        = "Blocking",
   "High Incidence Focus"                    = "Stratified",
   "Balanced Quartiles"                      = "Stratified",
-  "Incidence-Guided Saturation Quadrants"   = "Saturation"
+  "Incidence-Guided Saturation"             = "Saturation"
 )
 
 # ==============================================================================
@@ -93,10 +101,11 @@ DESIGN_GROUPS_6 <- c(
 mle_full <- load_latest_results(results_dir = results_dir, estimation_mode = "MLE_tau_sweep")
 stopifnot("True_Tau" %in% names(mle_full))
 
-# --- 8-design (Designs 1-8, relabeled; split by neighbor type in (a)). The Simple
-# Random Sampling benchmark (Design 9) is excluded explicitly: it is a reference,
-# not a design, and is tabulated in 15_srs_benchmark.R (author, 2026-09-26) ---
-mle_full_8 <- mle_full[mle_full$Design %in% paste("Design", 1:8), ]
+# --- 8 designs + SRS (Designs 1-9, relabeled; split by neighbor type in (a)). SRS is
+# a benchmark, not a design (author, 2026-09-26), but it is tested as a member so
+# every comparison shows each design against it (author, 2026-10-25). Its paired
+# surface-level tests are in 15_srs_benchmark.R ---
+mle_full_8 <- mle_full[mle_full$Design %in% paste("Design", 1:9), ]
 mle_full_8$Design <- full_name_map[mle_full_8$Design]
 mle_tau1_8_all <- mle_full_8[mle_full_8$True_Tau == 1.0, ]
 
@@ -129,9 +138,9 @@ wrap_labels <- function(x, width = 14) {
 sink(file.path(eight_dir, "eight_design_summary.txt"), split = TRUE)
 
 cat("======================================================================\n")
-cat("EIGHT-DESIGN STATISTICAL COMPARISONS (consolidation justification)\n")
-cat("Purpose: justify dropping Saturation Quadrants (redundant with\n")
-cat("Incidence-Guided Saturation Quadrants) and Balanced Halves (redundant\n")
+cat("EIGHT-DESIGN + SRS STATISTICAL COMPARISONS (consolidation justification)\n")
+cat("Purpose: justify dropping Saturation Regions (redundant with\n")
+cat("Incidence-Guided Saturation) and Balanced Halves (redundant\n")
 cat("with Balanced Quartiles) from the 6-design manuscript comparison.\n")
 cat("Reported for queen (primary), rook, and a labeled POOLED slice.\n")
 cat("======================================================================\n")
@@ -139,12 +148,12 @@ cat("======================================================================\n")
 slices8 <- list(queen = mle_tau1_8_all[mle_tau1_8_all$Neighbor_Type == "queen", ],
                 rook = mle_tau1_8_all[mle_tau1_8_all$Neighbor_Type == "rook", ],
                 pooled = mle_tau1_8_all)
-cons_pairs <- list(c("Saturation Quadrants", "Incidence-Guided Saturation Quadrants"),
+cons_pairs <- list(c("Saturation Regions", "Incidence-Guided Saturation"),
                    c("Balanced Halves", "Balanced Quartiles"))
 eight_report <- list()
 for (sl in names(slices8)) {
   d8 <- slices8[[sl]]
-  cat(sprintf("\n######## %s -- True_Tau = 1.0, all 8 designs ########\n",
+  cat(sprintf("\n######## %s -- True_Tau = 1.0, all 8 designs + SRS ########\n",
               c(queen = "QUEEN (primary)", rook = "ROOK", pooled = "POOLED over rook and queen")[[sl]]))
   if (sl != "queen") cat(ROOK_NOTE, "\n")
   fr8  <- run_friedman_test(d8)
@@ -165,7 +174,7 @@ for (sl in names(slices8)) {
   desc8 <- aggregate(cbind(MSE, Coverage) ~ Design, data = d8, FUN = mean)
   desc8 <- desc8[order(desc8$MSE), ]
   desc8$Rank <- seq_len(nrow(desc8))
-  cat("\nAll-8 mean MSE / Coverage / Rank (tau=1.0):\n")
+  cat("\nAll-8 + SRS mean MSE / Coverage / Rank (tau=1.0):\n")
   print(desc8, row.names = FALSE)
   for (pr in cons_pairs) {
     cat(sprintf("\n--- Consolidation pair: %s vs %s ---\n", pr[1], pr[2]))
@@ -174,9 +183,9 @@ for (sl in names(slices8)) {
                 desc8$MSE[desc8$Design == pr[1]] - desc8$MSE[desc8$Design == pr[2]],
                 nem8$p_matrix[pr[1], pr[2]], format.pval(wil8$p_matrix[pr[1], pr[2]], digits = 3)))
   }
-  cat("\nFull Nemenyi p-value matrix (8 designs):\n")
+  cat("\nFull Nemenyi p-value matrix (8 designs + SRS):\n")
   print(round(nem8$p_matrix, 4))
-  cat("\nFull Wilcoxon (Holm-adjusted) p-value matrix (8 designs):\n")
+  cat("\nFull Wilcoxon (Holm-adjusted) p-value matrix (8 designs + SRS):\n")
   print(round(wil8$p_matrix, 4))
   eight_report[[sl]] <- list(friedman = fr8, nemenyi = nem8, wilcoxon = wil8, descriptive = desc8)
 }
@@ -199,7 +208,8 @@ mle_full_6 <- mle_full_6_all[mle_full_6_all$Neighbor_Type == nb_sel, ]
 mle_tau1_6 <- mle_full_6[mle_full_6$True_Tau == 1.0, ]
 srs_full <- srs_full_all[srs_full_all$Neighbor_Type == nb_sel, ]
 srs_tau1 <- srs_full[srs_full$True_Tau == 1.0, ]
-nem6 <- six_report[[nb_sel]]$nemenyi
+nem6 <- six_report[[nb_sel]]$nemenyi   # six designs + SRS (12, 2026-10-25)
+stopifnot("Simple Random Sampling" %in% names(nem6$avg_ranks))
 
 # Best-to-worst ordering (mean MSE at tau=1.0 over all configs, this nb only)
 best_to_worst_6 <- mle_tau1_6 %>%
@@ -389,14 +399,15 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
           panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
           plot.title = element_text(hjust = 0.5, size = 12),
           plot.margin = margin(5, 10, 5, 10)) +
-    ggtitle(expression("Critical Difference Diagram by Average Rank (6-design set, " * tau * " = 1.0)"))
+    ggtitle(expression("Critical Difference Diagram by Average Rank (6 designs + SRS, " * tau * " = 1.0)"))
 
   ggsave(file.path(si_dir, "si_fig_cd_diagram_rank.pdf"), p_cd_rank, width = 7, height = 3.75)
 }
 
 # --- SI Fig 2: CD diagram by mean MSE (log scale) ---
 {
-  mse_vals <- mle_tau1_6 %>%
+  srs_tau1_named <- transform(srs_tau1, Design = "Simple Random Sampling")
+  mse_vals <- rbind(mle_tau1_6, srs_tau1_named) %>%
     group_by(Design) %>%
     summarize(Mean_MSE = mean(MSE, na.rm = TRUE), .groups = "drop") %>%
     tibble::deframe()
@@ -465,7 +476,7 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
           panel.grid.minor.y = element_blank(), panel.grid.minor.x = element_blank(),
           plot.title = element_text(hjust = 0.5, size = 11),
           plot.margin = margin(3, 8, 2, 8)) +
-    ggtitle("Design MSE with Statistical Equivalence Groups (6-design set, tau=1.0)")
+    ggtitle("Design MSE with Statistical Equivalence Groups (6 designs + SRS, tau=1.0)")
 
   ggsave(file.path(si_dir, "si_fig_cd_diagram_mse.pdf"), p_cd_mse, width = 11, height = 6.5)
 }
@@ -539,7 +550,7 @@ p_tau_mse <- plot_mse_vs_tau(mle_full_6_leveled) +
 # order), so Checkerboard is not the pale viridis yellow; the legend keeps this
 # neighbor type's best-to-worst order. Overridden here rather than in
 # plot_coverage_vs_tau() (06) so its other callers are unaffected.
-tau_colour_order <- c("Incidence-Guided Saturation Quadrants", "Balanced Quartiles",
+tau_colour_order <- c("Incidence-Guided Saturation", "Balanced Quartiles",
                       "Isolation Buffer", "High Incidence Focus", "2x2 Blocking", "Checkerboard")
 stopifnot(setequal(tau_colour_order, best_to_worst_6))
 tau_palette <- setNames(scales::viridis_pal(option = "D", end = 0.85)(length(tau_colour_order)),

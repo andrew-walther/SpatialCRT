@@ -8,17 +8,21 @@
 # Dependencies: dplyr, tidyr (via 10_statistical_comparisons.R)
 # ============================================================
 #
-# SRS is a benchmark, not a proposed design (author, 2026-09-26). It never enters
-# the rank-based six-design statistics of 12-14 (Friedman, Nemenyi, average rank,
-# win rates, CD diagrams), which therefore do not change. Its role is to show each
-# design's value added over naive complete randomization:
+# SRS is a benchmark, not a proposed design (author, 2026-09-26). Since 2026-10-25
+# (author) it is also a member of the rank-based tests of 12-14 (Friedman, Nemenyi,
+# Wilcoxon, CD diagrams). This script shows each design's value added over naive
+# complete randomization:
 #
 #   relative efficiency  RE_d = MSE_d / MSE_SRS        (< 1 means d beats SRS)
 #   block share          P_d  = share of blocks with MSE_d < MSE_SRS
 #   paired test          D_u  = m_{d,u} - m_{SRS,u} over the 50 independent
 #                        (configuration x surface) units, t49 CI + Wilcoxon,
-#                        Holm-adjusted across the 8 designs within each slice
+#                        Holm-adjusted across the 8 designs within each slice,
+#                        pooled over the spillover regimes and within each regime
 #
+# The within-regime tests (author, 2026-10-25) are drawn as a forest plot,
+# fig_vs_srs_by_regime_<nb>.png/.pdf: each design's paired MSE difference from SRS as
+# a percentage of SRS's MSE in that regime, with its t49 interval, Holm-marked.
 # Queen is primary, rook the sensitivity (tau not identified for Checkerboard under
 # rook). Pooled numbers are labeled as pooled.
 #
@@ -30,6 +34,7 @@
 # OUTPUTS (results/srs_benchmark/):
 #   srs_benchmark_summary.txt   console summary (oracle primary, non-oracle appended)
 #   srs_benchmark.rds           list of the tables below, per estimator and nb
+#   fig_vs_srs_by_regime_{queen,rook}.{pdf,png}   oracle, six designs, by regime
 
 script_dir <- tryCatch(
   normalizePath(dirname(sys.frame(1)$ofile)),
@@ -179,6 +184,18 @@ for (est in c("oracle", "nonoracle")) {
     cat("\n-- 3. Paired surface-level tests vs SRS (tau = 1; diff = design - SRS, negative = better) --\n")
     print(r$tests, row.names = FALSE, digits = 3)
 
+    # 3b. The same tests within each spillover regime (author, 2026-10-25): each
+    # unit's MSE averages that regime's blocks only, so the 50 units stay independent
+    r$tests_by_regime <- do.call(rbind, lapply(c("both", "control_only"), function(g) {
+      t <- vs_srs_tests(su1[su1$Spillover_Type == g, ])
+      t$Spillover_Type <- g
+      t$MSE_SRS <- mean(sc1$MSE[sc1$Design == SRS & sc1$Spillover_Type == g])
+      t
+    }))
+    stopifnot(all(r$tests_by_regime$n_units == 50))
+    cat("\n-- 3b. Paired surface-level tests vs SRS within each spillover regime (tau = 1) --\n")
+    print(r$tests_by_regime, row.names = FALSE, digits = 3)
+
     r$by_config <- re_by(sc1, "Config")
     r$by_rho    <- re_by(sc1, "Rho")
     r$by_gamma  <- re_by(sc1, "Gamma")
@@ -217,4 +234,51 @@ cat("\n\n", if (length(stop_rule)) paste("STOP-RULE TRIGGERED:", paste(stop_rule
     "\n", sep = "")
 sink()
 saveRDS(c(res, list(stop_rule = stop_rule)), file.path(out_dir, "srs_benchmark.rds"))
+
+# Figure: each design vs SRS by spillover regime (oracle) ----
+#' Forest plot of paired MSE differences from SRS, by spillover regime
+#'
+#' x = 100 * (m_d - m_SRS) / MSE_SRS, the mean paired difference over the 50
+#' (configuration x surface) units as a percentage of SRS's mean MSE in that regime,
+#' with the t49 95% interval scaled the same way. Negative = lower MSE than SRS.
+#' Filled points: Holm-adjusted Wilcoxon p < 0.05 (Holm over the 8 designs, within
+#' regime). A signed pseudo-log axis keeps Checkerboard on the same panel.
+#'
+#' @param tests tests_by_regime data frame for one neighbor type
+#' @param nb "queen" or "rook" (for the subtitle)
+#' @return ggplot object
+plot_vs_srs <- function(tests, nb) {
+  display <- c("Incidence-Guided Saturation Quadrants" = "Incidence-Guided Saturation",
+               "Saturation Quadrants" = "Saturation Regions")
+  d <- tests[tests$Design %in% retained, ]
+  d$Design <- ifelse(d$Design %in% names(display), display[d$Design], d$Design)
+  d$pct <- 100 * d$mean_diff / d$MSE_SRS
+  d$lo  <- 100 * d$ci_lo / d$MSE_SRS
+  d$hi  <- 100 * d$ci_hi / d$MSE_SRS
+  d$sig <- ifelse(d$p_holm < 0.05, "Holm p < 0.05", "Not significant")
+  d$Regime <- factor(ifelse(d$Spillover_Type == "both", "Both-arms spillover",
+                            "Control-only spillover"),
+                     levels = c("Control-only spillover", "Both-arms spillover"))
+  ord <- d[d$Spillover_Type == "control_only", ]
+  d$Design <- factor(d$Design, levels = rev(ord$Design[order(ord$pct)]))
+  ggplot(d, aes(x = pct, y = Design)) +
+    geom_vline(xintercept = 0, colour = "grey40", linetype = "dashed") +
+    geom_errorbarh(aes(xmin = lo, xmax = hi), height = 0.25) +
+    geom_point(aes(shape = sig), size = 2.6, fill = "black") +
+    scale_shape_manual(values = c("Holm p < 0.05" = 21, "Not significant" = 1), name = NULL) +
+    scale_x_continuous(trans = scales::pseudo_log_trans(sigma = 10),
+                       breaks = c(-50, -25, 0, 25, 100, 250, 1000)) +
+    facet_wrap(~ Regime) +
+    labs(x = "MSE difference from Simple Random Sampling (% of SRS MSE; negative = better)",
+         y = NULL,
+         subtitle = bquote("Grid, " * .(nb) * " contiguity, " * tau * " = 1; paired over 50 configuration-by-surface units, 95% t interval")) +
+    theme_bw(base_size = 10) +
+    theme(legend.position = "bottom", panel.grid.minor = element_blank(),
+          panel.spacing = unit(1.2, "lines"))
+}
+for (nb in c("queen", "rook")) {
+  p_vs <- plot_vs_srs(res$oracle[[nb]]$tests_by_regime, nb)
+  ggsave(file.path(out_dir, sprintf("fig_vs_srs_by_regime_%s.pdf", nb)), p_vs, width = 7.5, height = 3.6)
+  ggsave(file.path(out_dir, sprintf("fig_vs_srs_by_regime_%s.png", nb)), p_vs, width = 7.5, height = 3.6, dpi = 200)
+}
 cat("Written to", out_dir, "\n")
