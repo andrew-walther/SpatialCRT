@@ -11,3 +11,4 @@ Paste-in prompts, review briefs and handoffs for starting a new session.
 | 2026-10-02 | [claude-comprehensive-review-prompt](2026-10-02-claude-comprehensive-review-prompt.md) | Full independent review of the completed study and drafts | superseded by the 2026-10-12 brief |
 | 2026-10-12 | [claude-comprehensive-review-prompt](2026-10-12-claude-comprehensive-review-prompt.md) | Brief for the four review tracks run before the advisor meeting | complete |
 | 2026-10-25 | [talk-kickoff-prompt](2026-10-25-talk-kickoff-prompt.md) | Plan and build the 20-minute talk on 2026-10-29 | active |
+| 2026-10-25 | [multiomicsgep-docs-reorg-prompt](2026-10-25-multiomicsgep-docs-reorg-prompt.md) | Apply this folder layout to multiomicsGEP's `docs/` | active |
