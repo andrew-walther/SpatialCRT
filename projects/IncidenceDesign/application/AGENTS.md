@@ -6,8 +6,8 @@ and focused tail refinement are complete. Production: 1,248 reporting rows,
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](../docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../docs/plans/manuscript_completion_findings_2026-10-02.md).
+uncertain. See [completed findings](../docs/findings/2026-10-02-nc-sud-application-findings.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../docs/findings/2026-10-02-manuscript-completion-findings.md).
 
 > Loaded only when working under `application/` (via the `@AGENTS.md` stub in `CLAUDE.md`).
 > Moved from the project-level [../AGENTS.md](../AGENTS.md) "Current State (2026-09-25)" section.
@@ -30,7 +30,7 @@ Full chapter/appendix and derived CTJ/SI drafts are complete and verified; autho
   HTML companion. Run commands are in README; behavioral tests are in
   `tests/test_real_sud.R`. Smoke/pilot are preliminary engineering stages.
 - Findings and full function/script teach-back:
-  `../docs/plans/nc_sud_implementation_findings_2026-10-02.md`.
+  `../docs/findings/2026-10-02-nc-sud-implementation-findings.md`.
 
 ## Real NC SUD data (as of 2026-09-25)
 

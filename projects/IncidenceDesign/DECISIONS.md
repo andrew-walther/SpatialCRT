@@ -52,7 +52,7 @@ should state its protocol.
 
 ## 2026-10-21 — Methods-extension results: decisions after review
 
-**Decision.** Review of `docs/plans/methods_extensions_findings_2026-10-20.md`, one
+**Decision.** Review of `docs/findings/2026-10-20-methods-extensions-findings.md`, one
 decision at a time.
 - **Targeting wording (D2 revised).** Incidence-Guided Saturation matches Plain
   Saturation's accuracy and sends more treatment to high-burden regions when burden
@@ -95,7 +95,7 @@ Wald distortion, but a trial analyst needs a test they can compute.
 
 ## 2026-10-20 — Methods extensions after the 2026-10-14 advisor meeting
 
-**Decision.** Plan: `docs/plans/methods_extensions_plan_2026-10-20.md` (D1–D9).
+**Decision.** Plan: `docs/plans/2026-10-20-methods-extensions-plan.md` (D1–D9).
 - **Outcome (reaffirms the 2026-10-02 rule, with reasoning).** The trial's outcome Y is
   the measured education endpoint (an assessment of the trained first responders and
   healthcare professionals, averaged per college). It is an intermediate endpoint,
@@ -196,7 +196,7 @@ second under both. A trial team may not know the regime in advance, so an
 answer given for each scenario is more robust than a single recommendation.
 
 **Replaces.** The "one recommended design" in
-`docs/plans/simulation-revision-plan.md` (left as a dated record) and in the
+`docs/plans/2026-09-24-simulation-revision-plan.md` (left as a dated record) and in the
 Phase D ROADMAP item.
 
 **Source.** `paper/thesis_chapter/Thesis_Chapter.qmd` (Discussion, guidance by
@@ -215,7 +215,7 @@ merged table. The concise copy was adopted 2026-10-13.
 **Why.** To make Chapter 3 shorter and easier to follow without losing results
 the author needs; cut text is kept in a side file.
 
-**Source.** `docs/plans/chapter3_length_review_plan_2026-10-12.md` (status and
+**Source.** `docs/plans/2026-10-12-chapter3-length-review-plan.md` (status and
 "Goal"); ROADMAP.md "Concise Chapter 3 adopted (2026-10-13)".
 
 ---
@@ -234,7 +234,7 @@ no repository hyperlink, no Codex/Claude mentions) date from the same review.
 restricted and, for the Habib citation, that Habib produced the corrected counts
 after amending the adjudication method.
 
-**Source.** `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`
+**Source.** `docs/reviews/2026-10-12-ctj-comprehensive-review-findings.md`
 ("Author decisions and resolution"); `paper/ctj_manuscript/submission_checklist.md`;
 `paper/thesis_chapter/manuscript-declarations.md` ("Generative assistance");
 AGENTS.md "Standing Author Rules" (manuscript conventions).
@@ -267,9 +267,9 @@ The full chapter/appendix, CTJ/SI and comprehensive review (2026-10-12) are done
 Old deadline dates no longer govern work.
 
 Application design authority: start with
-`docs/plans/nc_sud_application_plan_2026-10-02.md`; its status records settled
+`docs/plans/2026-10-02-nc-sud-application-plan.md`; its status records settled
 versus proposed choices. The integrated prompt is
-`docs/plans/continuation_prompt_2026-10-02.md`. Do not treat proposals as approved
+`docs/prompts/2026-10-02-continuation-prompt.md`. Do not treat proposals as approved
 model/design changes.
 
 **Source.** Moved from AGENTS.md "Standing Author Rules" 2026-10-14.
@@ -316,9 +316,9 @@ a proposal-only application section is not the final deliverable.
 under known parameters to assess estimation error. The Balanced Halves change
 keeps exactly half of the 58 clusters treated. Other reasons are not recorded.
 
-**Source.** `docs/plans/nc_sud_application_plan_2026-10-02.md` (author
+**Source.** `docs/plans/2026-10-02-nc-sud-application-plan.md` (author
 clarification, author-confirmed endpoint, "Author decisions to settle",
-"Recommended primary analysis"); `docs/plans/continuation_prompt_2026-10-02.md`
+"Recommended primary analysis"); `docs/prompts/2026-10-02-continuation-prompt.md`
 (author-confirmed completion goal).
 
 ---
@@ -352,7 +352,7 @@ Incidence-Guided-to-SRS MSE ratio was about 0.63 under control-only spillover
 and 1.08 under both-arms spillover, which supports a control-only benefit, not
 universal superiority.
 
-**Source.** `docs/plans/ch2_check_findings_2026-09-27.md` ("Author
+**Source.** `docs/findings/2026-09-27-ch2-check-findings.md` ("Author
 clarification: SRS benchmark and recommendation (2026-09-27)").
 
 ---
@@ -368,7 +368,7 @@ other designs' draws are unchanged.
 not a generic benchmark (2026-09-25 TODO).
 
 **Source.** ROADMAP.md (the 2026-09-25 "TO DO before the CTJ" item);
-`docs/plans/simulation-revision-spec.md` §3 (design table and note);
+`docs/plans/2026-09-24-simulation-revision-spec.md` §3 (design table and note);
 `code/03_designs.R` (Design 9 comment).
 
 ---
@@ -389,7 +389,7 @@ exception because its chapter came from an accepted paper.
 **Replaces.** An early draft of the 2026-09-18 plan that made the CTJ the
 primary source (corrected in the same session).
 
-**Source.** `docs/plans/manuscript-unification-plan.md` (header and
+**Source.** `docs/plans/2026-09-18-manuscript-unification-plan.md` (header and
 "Decision:", ~line 154); AGENTS.md "Dissertation Chapter 3 Sync"; ROADMAP.md
 ~line 733 (step 7 / sync).
 
@@ -406,7 +406,7 @@ real-data results. The chapter-first order stands.
 
 **Note.** On 2026-10-02 the author said old deadline dates no longer govern work.
 
-**Source.** `docs/plans/manuscript-unification-plan.md` ("Timing revised
+**Source.** `docs/plans/2026-09-18-manuscript-unification-plan.md` ("Timing revised
 (author, 2026-09-25)", ~line 484).
 
 ---
@@ -462,9 +462,9 @@ checkpoints loaded silently.
 **Replaces.** The April 2026 runs (archived in
 `results/archive/pre_revision_20260924/`).
 
-**Source.** `docs/plans/step0-review-findings-2026-09-23.md` ("Decisions
-(author, 2026-09-23/24)"); `docs/plans/simulation-revision-plan.md` ("Context",
-"Decisions recorded"); `docs/plans/simulation-revision-spec.md`.
+**Source.** `docs/reviews/2026-09-23-step0-review-findings.md` ("Decisions
+(author, 2026-09-23/24)"); `docs/plans/2026-09-24-simulation-revision-plan.md` ("Context",
+"Decisions recorded"); `docs/plans/2026-09-24-simulation-revision-spec.md`.
 
 ---
 
@@ -477,8 +477,8 @@ and the fit returns τ − γ) and flag them in exhibits (`N_Aliased`,
 **Why.** So all six designs appear in every ranking; the anomaly connects to
 Chapter 2's checkerboard paradox.
 
-**Source.** `docs/plans/simulation-revision-plan.md` (decisions table, M6;
-B2 M6/M7, ~line 138); `docs/plans/simulation-revision-spec.md` (Flags, ~line 150).
+**Source.** `docs/plans/2026-09-24-simulation-revision-plan.md` (decisions table, M6;
+B2 M6/M7, ~line 138); `docs/plans/2026-09-24-simulation-revision-spec.md` (Flags, ~line 150).
 
 ---
 
@@ -492,8 +492,8 @@ floor(25/2) = 12 per quartile, plus one more in 2 randomly chosen quartiles.
 tied Poisson incidence, and Balanced Quartiles treated 48 (`round(25/2)` = 12
 per stratum).
 
-**Source.** `docs/plans/simulation-revision-spec.md` §3 (~line 74);
-`docs/plans/simulation-revision-plan.md` ("Context" item 2; B2 M3);
+**Source.** `docs/plans/2026-09-24-simulation-revision-spec.md` §3 (~line 74);
+`docs/plans/2026-09-24-simulation-revision-plan.md` ("Context" item 2; B2 M3);
 `code/03_designs.R` (Design 6 comment).
 
 ---
@@ -539,7 +539,7 @@ the most application-realistic mode.
 coverage figure averaged queen (~0.92) and rook (~0.13). Why queen rather than
 rook is primary is not recorded.
 
-**Source.** `docs/plans/step0-review-findings-2026-09-23.md` (findings 26–27;
+**Source.** `docs/reviews/2026-09-23-step0-review-findings.md` (findings 26–27;
 "Decisions"); AGENTS.md Critical Invariants #2; README.md "Key Design
 Decisions" #4.
 
@@ -553,7 +553,7 @@ the chapter states once that the two names are used interchangeably.
 
 **Why.** It combines Chapter 2's name with this study's name.
 
-**Source.** `docs/plans/TODO.md` ("Known minor code issues").
+**Source.** `docs/TODO.md` ("Known minor code issues").
 
 ---
 
@@ -568,8 +568,8 @@ the master entry by entry before porting.
 
 **Replaces.** The plan's pointer to bios-dissertation's `prelim/references.bib`.
 
-**Source.** `docs/plans/manuscript-unification-plan.md` ("Step 0 progress
-(2026-09-24)", ~line 254); `docs/plans/simulation-revision-plan.md` (decisions
+**Source.** `docs/plans/2026-09-18-manuscript-unification-plan.md` ("Step 0 progress
+(2026-09-24)", ~line 254); `docs/plans/2026-09-24-simulation-revision-plan.md` (decisions
 table, Bib).
 
 ---

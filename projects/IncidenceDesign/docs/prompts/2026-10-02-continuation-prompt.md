@@ -6,8 +6,8 @@ and focused tail refinement are complete. Production: 1,248 reporting rows,
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](manuscript_completion_findings_2026-10-02.md).
+uncertain. See [completed findings](../findings/2026-10-02-nc-sud-application-findings.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../findings/2026-10-02-manuscript-completion-findings.md).
 
 Earlier execution/pending statements below are historical and superseded by this checkpoint.
 
@@ -17,7 +17,7 @@ repeat the interview or ask for that approval again. Build/update
 `application/report/real_sud_companion.html` alongside the study, then prepare a
 ready-to-paste comprehensive Claude review prompt after the analyses and full
 thesis/CTJ drafts. Implementation checkpoint and teach-back:
-`nc_sud_implementation_findings_2026-10-02.md`. Read current Git state and running
+`../findings/2026-10-02-nc-sud-implementation-findings.md`. Read current Git state and running
 processes before resuming; code and smoke verification are underway, not completed
 scientific results. All old deadline dates are superseded by ASAP completion.
 
@@ -32,8 +32,8 @@ sensitivity uses rank-scaled X with β = 1 and adjusts for X; the primary model
 fits treatment and spillover without X. The primary queen grid and focused
 sensitivities/starting precision targets are accepted, subject to the requested
 independent alignment review (now complete) and concrete implementation-plan
-approval. Read `nc_sud_independent_review_2026-10-02.md` and
-`nc_sud_implementation_plan_2026-10-02.md`; no scientific scope expansion is
+approval. Read `../reviews/2026-10-02-nc-sud-independent-review.md` and
+`../plans/2026-10-02-nc-sud-implementation-plan.md`; no scientific scope expansion is
 required. Singleton production starts at R = 1,000, and all precision gates must
 account for cached duplicates and be assessed per setting.
 τ remains constant within a scenario in both versions. Read the updated
@@ -59,10 +59,10 @@ as a required final deliverable.
 > Continue Project 2 in
 > `/Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign`.
 > Work directly in the checkout. Read the root and project AGENTS.md, ROADMAP.md,
-> docs/plans/TODO.md, docs/plans/ch2_check_findings_2026-09-27.md,
-> docs/plans/allocation_risk_findings_2026-09-27.md, and
-> docs/plans/nc_sud_application_plan_2026-10-02.md. Also read
-> docs/plans/manuscript-unification-plan.md for writing priorities and deliverables.
+> docs/TODO.md, docs/findings/2026-09-27-ch2-check-findings.md,
+> docs/findings/2026-09-27-allocation-risk-findings.md, and
+> docs/plans/2026-10-02-nc-sud-application-plan.md. Also read
+> docs/plans/2026-09-18-manuscript-unification-plan.md for writing priorities and deliverables.
 > Read application/AGENTS.md
 > and README before working there. Verify current Git and project state;
 > historical progress paragraphs may be superseded by later notes.

@@ -6,8 +6,8 @@ and focused tail refinement are complete. Production: 1,248 reporting rows,
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](manuscript_completion_findings_2026-10-02.md).
+uncertain. See [completed findings](../findings/2026-10-02-nc-sud-application-findings.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../findings/2026-10-02-manuscript-completion-findings.md).
 
 Earlier execution/pending statements below are historical and superseded by this checkpoint.
 
@@ -18,8 +18,8 @@ independent alignment review, implementation and full verification complete.
 The HTML visual companion is an additional approved deliverable. Production
 findings and full thesis/CTJ drafts are complete; author submission review remains.
 
-Read the [independent review](nc_sud_independent_review_2026-10-02.md) and
-[concrete implementation plan](nc_sud_implementation_plan_2026-10-02.md).
+Read the [independent review](../reviews/2026-10-02-nc-sud-independent-review.md) and
+[concrete implementation plan](2026-10-02-nc-sud-implementation-plan.md).
 
 ## Purpose and place in the project
 
@@ -76,8 +76,8 @@ its results into full drafts of the thesis chapter/appendix and CTJ manuscript/S
 Build and settle the thesis chapter first, then trim/reorganize it for CTJ. A plan,
 pilot or proposal-only application section is not the final deliverable.
 
-Read with `continuation_prompt_2026-10-02.md`, `TODO.md`,
-`allocation_risk_findings_2026-09-27.md`, and `application/AGENTS.md` / README.
+Read with `../prompts/2026-10-02-continuation-prompt.md`, `TODO.md`,
+`../findings/2026-09-27-allocation-risk-findings.md`, and `application/AGENTS.md` / README.
 
 ## What is already settled or available
 

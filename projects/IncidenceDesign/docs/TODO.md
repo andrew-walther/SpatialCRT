@@ -40,7 +40,7 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 
 - [x] Assemble full-length prelim in bios-dissertation, retaining the full
   Chapter 3 appendix; fix CTJ reading bibliography flow/last-page columns.
-  See [assembly/reference review](prelim_assembly_ctj_reference_review_2026-10-02.md).
+  See [assembly/reference review](findings/2026-10-02-prelim-assembly-ctj-reference-review.md).
 - [x] Add author-requested List of Tables and List of Figures to the full prelim;
   verify all 63 current exhibit page references and preserve main-matter numbering.
 - [x] Remove Chapter 4's fixed-date timeline in canonical multiomicsGEP source,
@@ -51,18 +51,18 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 
 - [x] Implement approved title restoration and six-exhibit revision in both CTJ
   layouts; carry applicable clarity changes into the chapter and derived supplement.
-  See [exhibit review](ctj_exhibit_revision_findings_2026-10-02.md).
+  See [exhibit review](findings/2026-10-02-ctj-exhibit-revision-findings.md).
 - [x] Chapter 3 length review (2026-10-12/13): concise version independently reviewed
   and adopted (prelim body 45.5 to 41 pp; Appendix B 27 pp; standalone chapter 68 pp;
   SI 45 pp with merged annual table); synced, full prelim rebuilt (192 pp), pushed.
-  See [plan/status](chapter3_length_review_plan_2026-10-12.md); cut text in
+  See [plan/status](plans/2026-10-12-chapter3-length-review-plan.md); cut text in
   `paper/thesis_chapter/notes/trimmed-material.md`.
 - [x] Reference-list length check: strict APA 7 with DOIs and full author lists kept
   (a six-author et-al. variant saved no pages; reverted).
 - [ ] Author full review of the revised (concise) chapter, both CTJ layouts and supplement.
 - [x] Comprehensive review (four tracks: numbers, journal compliance/clarity,
   chapter consistency, code) completed 2026-10-12; approved fixes applied. See
-  [findings](ctj_comprehensive_review_findings_2026-10-12.md).
+  [findings](reviews/2026-10-12-ctj-comprehensive-review-findings.md).
 - [x] Application study report for the advisor meeting:
   `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`.
 - [ ] **Ethics/IRB statement** (CTJ requires one in Methods): protocol filled in
@@ -91,7 +91,7 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   single-allocation designs). Ask Lin whether a stated limitation (optionally with
   one sentence on the t-value check) suffices.
 - [ ] Submit CTJ with the author-completed
-  [checklist](../../paper/ctj_manuscript/submission_checklist.md)/cover letter.
+  [checklist](../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
   SpatialCRT `f67ab4b`, bios-dissertation `7d10596`). Future pushes still require explicit author authorization.
 
@@ -100,18 +100,18 @@ Actual pilot endpoint/enrollment/budget/network specification and interval
 calibration belong to planning the implemented trial; this simulation evaluation
 is complete and does not claim observed intervention effectiveness.
 
-Findings: [application](nc_sud_application_findings_2026-10-02.md),
-[manuscripts and teach-back](manuscript_completion_findings_2026-10-02.md).
+Findings: [application](findings/2026-10-02-nc-sud-application-findings.md),
+[manuscripts and teach-back](findings/2026-10-02-manuscript-completion-findings.md).
 Commands and safeguards: project/application README and AGENTS.
 
 ## Advisor meeting 2026-10-14 follow-ups
 
 Context, Lin's feedback, unanswered questions and fact-checks:
-[advisor_meeting_2026-10-14.md](advisor_meeting_2026-10-14.md).
+[meetings/2026-10-14-advisor-meeting.md](meetings/2026-10-14-advisor-meeting.md).
 **Approved plan for the new analyses (2026-10-20):
-[methods_extensions_plan_2026-10-20.md](methods_extensions_plan_2026-10-20.md)**
+[plans/2026-10-20-methods-extensions-plan.md](plans/2026-10-20-methods-extensions-plan.md)**
 (decisions in DECISIONS.md, 2026-10-20). Analyses A0–A7 ran 2026-10-20/21 (commits
-23f1d7a–40efbf8, plus the `a3v2` rerun); see `methods_extensions_findings_2026-10-20.md`.
+23f1d7a–40efbf8, plus the `a3v2` rerun); see `findings/2026-10-20-methods-extensions-findings.md`.
 Items overlapping the submission list above (IRB, coauthor approval, pilot
 description, ORCIDs) are not repeated here.
 
@@ -188,7 +188,7 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
   (the SI has Nemenyi/Holm-Wilcoxon for variant consolidation; script 12 has six-design
   Friedman/Nemenyi; none for the application).
 - [ ] Re-run the saved read-only review prompt
-  (`claude_comprehensive_review_prompt_2026-10-12.md`) after these edits.
+  (`prompts/2026-10-12-claude-comprehensive-review-prompt.md`) after these edits.
 
 - [x] Burden share treated by design (plan A1; run 2026-10-20, grid check 2026-10-21; findings Section 2).
 
@@ -201,7 +201,7 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 
 ### Methods-extension decisions for the author (2026-10-20 run)
 
-Decided 2026-10-21 (`DECISIONS.md`). Details: `methods_extensions_findings_2026-10-20.md`.
+Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-extensions-findings.md`.
 - [x] A5 coverage: report the t + df-corrected interval (Stage 1 main, Stage 2 in SI).
 - [x] A1/D2 targeting: reworded (small gain on NC; larger where burden is regional);
   rate share primary, death share beside it.
@@ -216,7 +216,7 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `methods_extensions_findings_2026-
 - [ ] Rename to "Saturation Regions" at the display layer during step 7 (manuscripts,
   figure/table labels, slides). Hashed code and stored CSVs keep old labels.
 - [ ] Author: review Section 4 (proposed text) of
-  `methods_extensions_report_2026-10-21.md`; decide ρ_I vs "ICC".
+  `findings/2026-10-21-methods-extensions-report.md`; decide ρ_I vs "ICC".
 - [ ] Step 7a (author, 2026-10-25): build the new figures first, for author review,
   before any text edits: SI/appendix power curves by N and the grid spread-vs-gain
   scatter (NC point marked), plus the slide figures (colleges-needed bar chart,
@@ -230,7 +230,7 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `methods_extensions_findings_2026-
 - [ ] 20-minute project talk for clinicians and epidemiologists, Thursday 2026-10-29:
   full overview, discussion weighted toward the application; built in `presentation/`
   and later adapted into prelim Part II. Kickoff prompt:
-  `talk_2026-10-29_kickoff_prompt.md`.
+  `prompts/2026-10-25-talk-kickoff-prompt.md`.
 - [ ] Push the unpushed commits on main (ask the author).
 
 ## Known minor code issues (low priority; moved from AGENTS.md 2026-10-14)

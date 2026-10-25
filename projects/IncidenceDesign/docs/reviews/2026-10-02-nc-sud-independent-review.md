@@ -114,7 +114,7 @@ Isolation Buffer implies Z ⊙ WZ = 0, so both spillover formulas agree for the 
 allocation and noise. Do not alter the completed grid modules/results or reuse
 old application caches.
 
-Implementation response: `nc_sud_implementation_plan_2026-10-02.md`.
+Implementation response: `../plans/2026-10-02-nc-sud-implementation-plan.md`.
 
 
 ## Completed-study/manuscript review follow-up
@@ -128,4 +128,4 @@ source review found no scientifically mandatory issue. Both main tables and
 all 22 supplement tables agree with the chapter; the ethics placeholder
 asserts no approval/exemption. No claim of an external Claude review is made.
 Fresh PDF layout review and source-to-CSV checks are recorded separately in
-`manuscript_completion_findings_2026-10-02.md`. No new analysis was required.
+`../findings/2026-10-02-manuscript-completion-findings.md`. No new analysis was required.

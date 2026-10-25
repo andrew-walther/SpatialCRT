@@ -30,7 +30,7 @@ backup slides that the prelim version can promote.
 Read first:
 - `AGENTS.md` (standing rules: design names, "Saturation Regions", no single
   recommended design, β = 0 primary with the education endpoint) and `DECISIONS.md`.
-- `docs/plans/methods_extensions_report_2026-10-21.md` (Sections 2 and 5) and the
+- `docs/findings/2026-10-21-methods-extensions-report.md` (Sections 2 and 5) and the
   application report, `application/report/IncidenceDesign_Application_Study_Report.qmd`.
 - `bios-dissertation/slides/prelim/OUTLINE.md`, Part II, including the "Methods
   extensions" entries P2-X1 to P2-X13. This talk should reuse and feed that outline.
@@ -48,7 +48,7 @@ Constraints:
   "slides live in bios-dissertation" rule.
 - New figures from methods-extension step 7a (power vs number of colleges,
   colleges-needed bar chart, spread-vs-gain scatter) may or may not exist yet; check
-  `docs/plans/TODO.md` and tell me if the talk is waiting on them.
+  `docs/TODO.md` and tell me if the talk is waiting on them.
 - Follow my global workflow: present a numbered plan and wait for approval before
   building anything.
 

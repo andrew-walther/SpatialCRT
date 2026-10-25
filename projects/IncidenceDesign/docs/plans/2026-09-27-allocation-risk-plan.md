@@ -1,7 +1,7 @@
 # Allocation-risk study — authorized plan, 2026-09-27
 
 The author authorized the necessary pilot/analysis and subagent work after discussion
-in `ch2_check_findings_2026-09-27.md`. The aim is to assess the distribution of
+in `../findings/2026-09-27-ch2-check-findings.md`. The aim is to assess the distribution of
 allocation-specific MSE for every candidate design and SRS, not to guarantee a
 preferred design's ranking. Manuscript framing will follow the results.
 

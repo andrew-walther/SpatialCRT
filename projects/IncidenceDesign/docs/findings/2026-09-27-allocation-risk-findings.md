@@ -2,8 +2,8 @@
 
 Author: Andrew Walther
 
-This note continues the [authorized plan](allocation_risk_plan_2026-09-27.md)
-and [Chapter 2 discussion](ch2_check_findings_2026-09-27.md). It concerns new
+This note continues the [authorized plan](../plans/2026-09-27-allocation-risk-plan.md)
+and [Chapter 2 discussion](2026-09-27-ch2-check-findings.md). It concerns new
 IncidenceDesign analyses only. Project 1 and bios-dissertation remain read-only;
 no manuscript wording or exhibit placement has been changed.
 
@@ -382,8 +382,8 @@ Project 1 based on these notes.
 
 Ready-to-paste continuation prompt:
 
-> Continue IncidenceDesign. Read AGENTS.md, docs/plans/TODO.md and
-> docs/plans/allocation_risk_findings_2026-09-27.md, with the linked Chapter 2
+> Continue IncidenceDesign. Read AGENTS.md, docs/TODO.md and
+> docs/findings/2026-09-27-allocation-risk-findings.md, with the linked Chapter 2
 > findings for context. The authorized nested pilot and R400 precision check are
 > complete: saturation designs improve mean and estimated allocation-tail MSE
 > versus SRS under control-only spillover, while SRS remains competitive/better

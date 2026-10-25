@@ -1,7 +1,7 @@
 # CTJ comprehensive review — consolidated findings (2026-10-12)
 
 Four read-only tracks run against the state after commit `2b142f9` (brief:
-`claude_comprehensive_review_prompt_2026-10-12.md`). No edits were made by reviewers.
+`../prompts/2026-10-12-claude-comprehensive-review-prompt.md`). No edits were made by reviewers.
 
 ## Headline
 

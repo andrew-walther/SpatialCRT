@@ -2,7 +2,7 @@
 
 **DRAFT for the coordinator and author. Nothing here has been applied to the chapter.**
 
-Written 2026-09-25. Method authority: `docs/plans/simulation-revision-spec.md`. Data: the full run
+Written 2026-09-25. Method authority: `docs/plans/2026-09-24-simulation-revision-spec.md`. Data: the full run
 `results/sim_data/*_20260924_025509.rds`. Nothing under `results/` was written.
 
 ## How the evidence was produced

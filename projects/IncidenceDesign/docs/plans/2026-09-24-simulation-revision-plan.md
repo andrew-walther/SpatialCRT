@@ -3,12 +3,12 @@
 ## Handoff (done 2026-09-24, in the planning session; kept for the record)
 
 1. Copy this plan verbatim to
-   `projects/IncidenceDesign/docs/plans/simulation-revision-plan.md`.
-2. In `docs/plans/manuscript-unification-plan.md`, insert a short "Step 0.5 (added
+   `projects/IncidenceDesign/docs/plans/2026-09-24-simulation-revision-plan.md`.
+2. In `docs/plans/2026-09-18-manuscript-unification-plan.md`, insert a short "Step 0.5 (added
    2026-09-24)" pointer to that file, noting that step 0 is partly done (0a snapshot,
    review brief, findings) and that the bib location changed to
    `paper/SpatialCRT_IncidenceDesign.bib`.
-3. In `docs/plans/step0-review-findings-2026-09-23.md`, fill in the "Decisions needed"
+3. In `docs/reviews/2026-09-23-step0-review-findings.md`, fill in the "Decisions needed"
    section with the decisions table below.
 4. Add a 2026-09-24 status note at the top of `projects/IncidenceDesign/ROADMAP.md`
    (revision planned, why, and a pointer to the plan).
@@ -20,7 +20,7 @@ Everything below is for the new session.
 
 ## Context
 
-The step 0 chapter review (`docs/plans/step0-review-findings-2026-09-23.md`) found results
+The step 0 chapter review (`docs/reviews/2026-09-23-step0-review-findings.md`) found results
 that rest on implementation oversights in the simulation, not on wording:
 
 1. **Design/outcome incidence mismatch.** Designs use `X_matrix[,1]`; outcome replicate k
@@ -98,7 +98,7 @@ continue the chapter-first manuscript plan.
 
 ## Phase B — New step 0.5: simulation revision + re-run (commits "Step 0.5a…")
 
-**B1. Spec.** Write `docs/plans/simulation-revision-spec.md`: before/after data-generating
+**B1. Spec.** Write `docs/plans/2026-09-24-simulation-revision-spec.md`: before/after data-generating
 process equations, seed keys, result schema, the estimand (performance averaged over
 incidence surfaces), and the dependence structure below. It is the source for the 00 spec
 and the chapter Methods.
@@ -255,7 +255,7 @@ confirmations.
     sensitivity; one recommended design).
   - Brief Chapter 2 continuity passage.
   - All remaining findings; replace the `knitr::kable` chunk with a static table.
-  - Update `step0-chapter-review-prompt.md` (new ground truth; the spec as method authority)
+  - Update `../prompts/2026-09-23-step0-chapter-review-prompt.md` (new ground truth; the spec as method authority)
     and loop a fresh reviewer until clean.
 - **Steps 1, 2, 3, 4, 7** as written.
   - Step 2 adds the one-college-per-county rule (Northampton → Halifax CC, Bertie → Martin
@@ -266,7 +266,7 @@ confirmations.
 
 ## Documentation / checkpointing
 
-- **`docs/plans/manuscript-unification-plan.md`:** insert step 0.5 and the decisions table;
+- **`docs/plans/2026-09-18-manuscript-unification-plan.md`:** insert step 0.5 and the decisions table;
   record the bib override; mark progress.
 - **`projects/IncidenceDesign/ROADMAP.md`:**
   - New 2026-09-24 status block.

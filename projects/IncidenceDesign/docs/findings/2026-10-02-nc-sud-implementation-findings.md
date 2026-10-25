@@ -2,9 +2,9 @@
 
 Status: approved implementation, full production and same-allocation tail extension
 are complete and independently verified. Full chapter/appendix and derived CTJ/SI
-drafts are complete. Scientific findings: `nc_sud_application_findings_2026-10-02.md`;
+drafts are complete. Scientific findings: `2026-10-02-nc-sud-application-findings.md`;
 document provenance, review and export/checker teach-back:
-`manuscript_completion_findings_2026-10-02.md`. Historical pilot/execution entries
+`2026-10-02-manuscript-completion-findings.md`. Historical pilot/execution entries
 below remain engineering history, not current study status.
 
 ## What is implemented and why
@@ -244,5 +244,5 @@ browser visual review. The in-app browser blocks local file URLs, so no actual
 browser rendering is claimed. Local scientific/map PNGs were visually reviewed.
 
 Full scientific findings and completed verification counts are in
-`nc_sud_application_findings_2026-10-02.md`. Production and tail outputs are
+`2026-10-02-nc-sud-application-findings.md`. Production and tail outputs are
 complete; chapter/appendix and CTJ/SI drafting are now the active work.

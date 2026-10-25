@@ -1,11 +1,11 @@
 # Step 0 review brief — `Dissertation_Chapter.qmd` citation / numeric / voice pass
 
-Companion to `manuscript-unification-plan.md`, step 0 ("Citations and
+Companion to `../plans/2026-09-18-manuscript-unification-plan.md`, step 0 ("Citations and
 voice"). Written 2026-09-23; updated 2026-09-24 (Phase D block 2) to check against
 the revised simulation (full re-run 2026-09-24). Changes: numbers ground truth is now
 the revised-run summaries plus read-only R on the 20260924_025509 .rds files
 (`application_table_6design.txt` dropped: it is labeled STALE); method authority is
-`docs/plans/simulation-revision-spec.md`, with the code as secondary; citations are
+`docs/plans/2026-09-24-simulation-revision-spec.md`, with the code as secondary; citations are
 checked against the chapter bib, with the bios-dissertation master still authoritative
 for shared keys; "Project 1" is now "Chapter 2"; the abstract line is removed (the
 abstract is gone); a "Decisions already made" section lists settled author choices.
@@ -55,7 +55,7 @@ spatial cluster randomized trials.)
   number in the prose and every table cell, including derived claims ("less
   than 0.02", "13 of 15", counts like 9,600 / 1,920 / 320 / 160, "every
   design", "every configuration").
-- Method facts: /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/docs/plans/simulation-revision-spec.md
+- Method facts: /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/docs/plans/2026-09-24-simulation-revision-spec.md
   is the method authority. The code
   (/Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/code/
   01_spatial_setup.R ... 05_run_simulation.R) and the project CLAUDE.md at

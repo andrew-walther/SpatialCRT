@@ -1,7 +1,7 @@
 # Plan: Write Project 2 long-form first; derive CTJ + supplementary
 # material from it
 
-**Completion update, 2026-10-02:** all required full drafts and the verified observed-incidence study are complete; see `manuscript_completion_findings_2026-10-02.md`. The source-to-CTJ direction below was followed. Old deadline dates are superseded.
+**Completion update, 2026-10-02:** all required full drafts and the verified observed-incidence study are complete; see `../findings/2026-10-02-manuscript-completion-findings.md`. The source-to-CTJ direction below was followed. Old deadline dates are superseded.
 
 **Author reaffirmation, 2026-10-02:** complete the real NC SUD application and use
 its findings to finish the thesis chapter and appendix first, then trim/reorganize
@@ -248,8 +248,8 @@ no missing keys; the in-body abstract is gone and its content is saved,
 not discarded.
 
 **Step 0 progress (2026-09-24).** Done: the snapshot (`archive/IncidenceDesign_Manuscripts_PreUnification_2026-09-23/`),
-the review brief (`step0-chapter-review-prompt.md`), and the first review pass
-(`step0-review-findings-2026-09-23.md`: 17 errors, 31 warnings, 17 style). Not
+the review brief (`../prompts/2026-09-23-step0-chapter-review-prompt.md`), and the first review pass
+(`../reviews/2026-09-23-step0-review-findings.md`: 17 errors, 31 warnings, 17 style). Not
 done: the bibliography, abstract, and prose fixes. **Two changes to this step,
 by author decision:** (1) the bibliography is one self-contained file in this
 repo, `paper/SpatialCRT_IncidenceDesign.bib` (renamed from
@@ -261,7 +261,7 @@ wording, so Methods and Results are rewritten only after step 0.5.
 
 **0.5. [Added 2026-09-24] Revise the simulation and re-run it before
 rewriting Methods/Results.** Full plan, decisions, and verification:
-`simulation-revision-plan.md`. In short: designs and outcomes use the
+`2026-09-24-simulation-revision-plan.md`. In short: designs and outcomes use the
 same incidence surface; Poisson clusters get 100,000 people; ties are
 broken randomly; seeding is explicit; Monte Carlo SEs are honest;
 aliasing is flagged; a non-oracle sensitivity estimator is added; a

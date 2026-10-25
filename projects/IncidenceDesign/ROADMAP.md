@@ -1,6 +1,6 @@
 # IncidenceDesign — Future Work Roadmap
 
-> **Current status (2026-10-25):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Next: author review of the report's proposed text, then step 7 of `docs/plans/methods_extensions_plan_2026-10-20.md` (new figures first, then manuscripts) and step 8 (slide outline only, no slides built; author change 2026-10-25). A 20-minute application talk is due 2026-10-29 (`docs/plans/talk_2026-10-29_kickoff_prompt.md`). See current progress log and `docs/plans/TODO.md`. Historical statuses below are retained by date.
+> **Current status (2026-10-25):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Next: author review of the report's proposed text, then step 7 of `docs/plans/2026-10-20-methods-extensions-plan.md` (new figures first, then manuscripts) and step 8 (slide outline only, no slides built; author change 2026-10-25). A 20-minute application talk is due 2026-10-29 (`docs/prompts/2026-10-25-talk-kickoff-prompt.md`). See current progress log and `docs/TODO.md`. Historical statuses below are retained by date.
 >
 > A living task list of potential extensions, methodological improvements, and dissemination
 > goals for the IncidenceDesign project. Organized by theme. Add, edit, and check off items
@@ -41,8 +41,8 @@
 > A pilot suggests the top and bottom designs are stable, while High Incidence Focus changes
 > substantially. Fix, test, re-run, and regenerate every downstream result before the
 > manuscripts' Methods/Results are rewritten:
-> [`docs/plans/simulation-revision-plan.md`](docs/plans/simulation-revision-plan.md),
-> which is step 0.5 of `docs/plans/manuscript-unification-plan.md`.
+> [`docs/plans/2026-09-24-simulation-revision-plan.md`](docs/plans/2026-09-24-simulation-revision-plan.md),
+> which is step 0.5 of `docs/plans/2026-09-18-manuscript-unification-plan.md`.
 > The 2026-04-08 numbers below and in the Completed section are superseded once the re-run lands.
 
 ---
@@ -86,7 +86,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   Done: the application now uses observed NC county SUD incidence (2018–2021, SEER
   denominators; restricted source files gitignored) and the observed-incidence production run
   is complete and verified. The synthetic Poisson SAR run is kept as historical. See
-  `application/README.md` and `docs/plans/nc_sud_application_findings_2026-10-02.md`.
+  `application/README.md` and `docs/findings/2026-10-02-nc-sud-application-findings.md`.
 
 - [ ] **Add cluster-level baseline covariates to the DGP** `[Priority: Medium]` `[Effort: Medium]`
   Current DGP generates outcomes from spatial structure alone. Adding covariates
@@ -139,7 +139,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   first drafts (the SI as of 2026-07-03) but have not yet had one combined user review/revision
   pass together.
   *Done 2026-10-12: four-track comprehensive review, approved fixes applied
-  (`docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`).*
+  (`docs/reviews/2026-10-12-ctj-comprehensive-review-findings.md`).*
 
 - [x] **Deliberate figure-list review across main text + SI** `[Priority: High]` `[Effort: Small]`
   The coverage and tau-sensitivity figures were merged into one 2-panel figure on 2026-07-03
@@ -147,11 +147,11 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   not a considered final selection. Review the full figure list (both documents) and decide
   what to keep, drop, or further combine.
   *Notes: see `code/14_manuscript_supplement_figures.R` for how main-text/SI figures are generated.*
-  *Done 2026-10-02: approved six-exhibit revision (`docs/plans/ctj_exhibit_revision_findings_2026-10-02.md`).*
+  *Done 2026-10-02: approved six-exhibit revision (`docs/findings/2026-10-02-ctj-exhibit-revision-findings.md`).*
 
 - [x] **Real SUDDEN data + maps in the Application sections** *(2026-10-02)*
   Done: the chapter, CTJ manuscript and SI Application sections use the observed-incidence
-  results (`docs/plans/manuscript_completion_findings_2026-10-02.md`). Duplicate of the
+  results (`docs/findings/2026-10-02-manuscript-completion-findings.md`). Duplicate of the
   Applicability & Generalizability item above.
 
 - [ ] **UNC Graduate School dissertation template** `[Priority: Medium]` `[Effort: Small]`
@@ -175,14 +175,14 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 - [x] **Revision M1–M8** — matched surfaces, 100,000 per Poisson cluster, random ties with exact
   N/2, key-based seeds, one noise column per fit, aliasing flags, non-oracle sensitivity estimator,
   surface-level MC SEs, manifest-checked checkpoints, lean validated ML engine. Spec:
-  `docs/plans/simulation-revision-spec.md`. *(2026-09-24)*
+  `docs/plans/2026-09-24-simulation-revision-spec.md`. *(2026-09-24)*
 - [x] **Full re-run + verification + 1% lagsarlm cross-check** *(2026-09-24)*
 - [x] **Downstream regeneration (Phase C)** — 12/13/14 and the 06/08/10 PDFs, reports
   00/07/11 (`516e127`), 09 and the project Report/ProjectSummary (`6e3aaa0`), and the docs
   (`fe4d65f`) regenerated. *(2026-09-24)*
 - [x] **Chapter Methods/Results rewrite (Phase D)** — robust vs. fragile; queen primary; rook
   sensitivity including the Checkerboard-rook anomaly; non-oracle sensitivity. Chapter complete
-  2026-10-02 (`docs/plans/manuscript_completion_findings_2026-10-02.md`). Instead of one
+  2026-10-02 (`docs/findings/2026-10-02-manuscript-completion-findings.md`). Instead of one
   recommended design, the Discussion gives guidance by spillover scenario (added 2026-10-11).
   *(2026-10-02)*
 
@@ -208,7 +208,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
 - [x] **Tau-sweep: vary `true_tau` across the full parameter grid** *(results SUPERSEDED 2026-09-24; the sweep is kept in the revised run)* — 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}; design ranking (D3/D8 dominance) stable at every τ level (all conditional Friedman p < 2.2×10⁻¹⁶). *(2026-04-08)*
 - [x] **Statistical power added as a primary metric** — P(reject H₀: τ=0) tracked per scenario; power curves computed as a function of τ per design. *(2026-04-08)*
 - [x] **Monte Carlo SEs for MSE/coverage estimates** *(SUPERSEDED 2026-09-24: SEs now come from the 10 surface-level means, stored by 05)* — Delta-method `SE_MSE`, `SE_Coverage`, `SE_Bias` via `add_mc_ses()`; confirmed small and uniform across designs at current rep counts. *(2026-04-08)*
-- [x] **NC application study (irregular geometry)** — Full design-comparison pipeline re-implemented for NC's actual 58 Community College service areas (`application/`), all 8 designs adapted, 640-scenario/160,000-fit synthetic-incidence run complete. Observed 2018–2021 SUD-incidence run completed 2026-10-02 (`docs/plans/nc_sud_application_findings_2026-10-02.md`). *(2026-06 to 2026-10-02)*
+- [x] **NC application study (irregular geometry)** — Full design-comparison pipeline re-implemented for NC's actual 58 Community College service areas (`application/`), all 8 designs adapted, 640-scenario/160,000-fit synthetic-incidence run complete. Observed 2018–2021 SUD-incidence run completed 2026-10-02 (`docs/findings/2026-10-02-nc-sud-application-findings.md`). *(2026-06 to 2026-10-02)*
 - [x] **Two manuscripts drafted from scratch** — Short *Clinical Trials* (SAGE) submission (`paper/ctj_manuscript/`) and longer-form dissertation chapter (`paper/thesis_chapter/`), both presenting 6 of the 8 designs (2 dropped as statistically redundant), no DIM-vs-MLE comparison, full design names throughout. *(2026-07-02)* *(Design count history: 6 designs at first, expanded to 8, cut back to 6 for the CTJ main text because some were similar, then the SRS benchmark was added. Current: CTJ main text 6 + SRS; thesis chapter 8 + SRS, with 6 in the detailed grid rankings.)*
 - [x] **CTJ Supplementary Information drafted and reviewed** — Fulfills the main text's 3 deferred "online supplementary material" items (reproducibility/code, full 8-design comparison, metric formulas/parameter grid); reviewed by a fresh agent against the plan's hard constraints. *(2026-07-03)*
 - [x] **NC application maps added to both manuscript documents** — 3 maps from `application/` added to the SI (Figures S8-S10) and main text (Figure 4); coverage + tau-sensitivity figures merged into one to preserve the CTJ's 6-exhibit cap. *(2026-07-03)*
@@ -237,7 +237,7 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 | Priority | Task | File |
 |----------|------|------|
-| **NEXT UP** | Consolidated author/Claude review of completed study and full drafts; finish author-only ethics/data-use and submission metadata | `docs/plans/claude_comprehensive_review_prompt_2026-10-02.md`; `paper/ctj_manuscript/submission_checklist.md` |
+| **NEXT UP** | Consolidated author/Claude review of completed study and full drafts; finish author-only ethics/data-use and submission metadata | `docs/prompts/2026-10-02-claude-comprehensive-review-prompt.md`; `paper/ctj_manuscript/submission_checklist.md` |
 | **High** | Coauthor approval, mandatory reviewer corrections if any, then approved CTJ submission | Full chapter, CTJ and supplement |
 | Medium | Final UNC dissertation-template integration when chapters are combined | Canonical Chapter 3 source and approved sync |
 | Low | Project 2 prelim/conference slides | `bios-dissertation/slides/` |
@@ -249,6 +249,16 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-25 — docs folder reorganized by type
+
+- `docs/plans/` held every project document. They now sit in `docs/plans/`, `findings/`,
+  `reviews/`, `prompts/` and `meetings/`, named `YYYY-MM-DD-topic-type.md`. Each folder
+  has a README giving every document's purpose and status. `TODO.md` is now `docs/TODO.md`.
+- References were updated everywhere except hashed code (`code/04`, `05`,
+  `application/code/`), `CTJ_Manuscript.tex` and frozen archives. `docs/README.md` maps
+  their old paths to the new ones. Links resolve, and `verify_manuscripts.py` and
+  `test_manuscript_exhibits.R` pass.
+
 ### 2026-10-21 — affiliation, Gan citation and IRB protocol in all versions
 
 - Habib → Department of Epidemiology (CTJ, Chapter 3); Gan et al. (2019) cited for the
@@ -256,17 +266,17 @@ checkpoints here, not in `AGENTS.md`.
   (determination still a placeholder) and Chapter 3. Rebuilt CTJ_Manuscript, CTJ_Reading,
   SI and Thesis_Chapter PDFs; `verify_manuscripts.py` and `test_manuscript_exhibits.R` pass.
 - Awaiting Simpson: IRB disclosures/permissions and feedback on the application's fit
-  to his pilot idea (`docs/plans/TODO.md`).
+  to his pilot idea (`docs/TODO.md`).
 
 ### 2026-10-20 — methods extensions (post-advisor-meeting analyses), steps 1–6
 
-- Implemented the approved plan (`docs/plans/methods_extensions_plan_2026-10-20.md`)
+- Implemented the approved plan (`docs/plans/2026-10-20-methods-extensions-plan.md`)
   in new files `application/code/methods_ext_*.R` and tests; production files unchanged (V9).
 - Ran A0–A2 and A5 Stage 1 on stored fits; A3 (301.8M fits) and A4 (98.5M) overnight
   locally, all 576 tasks OK, no failed fits; then A7, A5 Stage 2, A6 CAR/reverse and
   Bayesian CAR. Findings, failed checks (V2 at N <= 35, V6 small regions, V8 along N,
   V5 guard deviation) and open author decisions:
-  `docs/plans/methods_extensions_findings_2026-10-20.md`.
+  `docs/findings/2026-10-20-methods-extensions-findings.md`.
 - No manuscript, chapter, CTJ, SI or slide edits (steps 7–8 await approval). No push.
 
 ### Status text moved from AGENTS.md (2026-10-14)
@@ -279,8 +289,8 @@ and focused tail refinement are complete. Production: 1,248 reporting rows,
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+uncertain. See [completed findings](docs/findings/2026-10-02-nc-sud-application-findings.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. 2026-10-11: chapter, SI (Table S12) and CTJ add a per-design mean/worst-decile comparison with SRS and scenario guidance (see ROADMAP progress log). See [manuscript completion findings](docs/findings/2026-10-02-manuscript-completion-findings.md).
 
 **CTJ layout authority:** `CTJ_Manuscript.tex` remains the master for both layouts;
 `CTJ_Reading.tex` only selects the two-column author preview. Edit captions/cells
@@ -290,8 +300,8 @@ approved original-title restoration and the six-exhibit revision. Main figures
 are `figures/compact/` exports from `code/20_manuscript_figure_revision.R`; old
 parameter/tail/budget graphics remain supporting material. Author order is
 Walther, Habib, Simpson, Lin, with Lin corresponding. See
-[exhibit revision](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md) and
-[layout review](docs/plans/ctj_layout_review_2026-10-02.md) for builds and checks.
+[exhibit revision](docs/findings/2026-10-02-ctj-exhibit-revision-findings.md) and
+[layout review](docs/findings/2026-10-02-ctj-layout-review.md) for builds and checks.
 
 **Full prelim/reference-flow checkpoint:** bios-dissertation's
 `prelim/full-draft/prelim.pdf` is the 192-page working assembly (2026-10-13); Chapter 3 has 41 body
@@ -304,7 +314,7 @@ timeline or advisor-meeting references. CTJ reading
 uses the `balance` package (`\balance` before the bibliography) and no forced page breaks;
 references begin on page 7 and occupy both columns on page 8. The review layout
 alone loads `lastpage`. See
-[checkpoint/teach-back](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).
+[checkpoint/teach-back](docs/findings/2026-10-02-prelim-assembly-ctj-reference-review.md).
 
 **Current State (summary), as it stood in AGENTS.md:**
 
@@ -327,13 +337,13 @@ alone loads `lastpage`. See
   (72 pp, 31 citekeys); editorial revision `3fc8385` resynced to `fa49f47`
   (72 pp, one compact figure copied); no push.
 - Comprehensive four-track review completed and approved fixes applied (2026-10-12):
-  `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`. CTJ body 3,280 words
+  `docs/reviews/2026-10-12-ctj-comprehensive-review-findings.md`. CTJ body 3,280 words
   (3,425 with declarations; limit 3,500), abstract 317.
 - Advisor-meeting report: `application/report/IncidenceDesign_Application_Study_Report.{qmd,pdf}`
   (reads tracked aggregates only; inline numbers computed from CSVs).
-- Next: author review; IRB statement, AI disclosure, coauthor approval (docs/plans/TODO.md).
+- Next: author review; IRB statement, AI disclosure, coauthor approval (docs/TODO.md).
 - Full figure selection, code teach-back, source mapping and live journal check:
-  `docs/plans/manuscript_completion_findings_2026-10-02.md`.
+  `docs/findings/2026-10-02-manuscript-completion-findings.md`.
 
 - **Length review (adopted 2026-10-13):** the chapter is the reviewed concise version
   (prelim body 41 pp, was 45.5; Appendix B 27 pp). Detail moved to Appendix B; nothing
@@ -347,8 +357,8 @@ alone loads `lastpage`. See
   be correlated with the incidence that guides allocation; test partial
   college participation, sample size/power and estimation-method sensitivity; group
   the designs in Table 1. Prelim: Project 1/2/3 structure, brief literature review.
-- Record: `docs/plans/advisor_meeting_2026-10-14.md`; action items in
-  `docs/plans/TODO.md` ("Advisor meeting 2026-10-14 follow-ups"). Only quick checks
+- Record: `docs/meetings/2026-10-14-advisor-meeting.md`; action items in
+  `docs/TODO.md` ("Advisor meeting 2026-10-14 follow-ups"). Only quick checks
   so far: equal-weight vs pooled rates make no meaningful difference, and the CTJ
   words were recounted. The outcome–incidence decision (possibly reporting β = 0 and
   β = 1 both) comes first.
@@ -419,7 +429,7 @@ alone loads `lastpage`. See
 
 ### Concise Chapter 3 copy for length review (2026-10-12)
 
-- Author-approved length review (`docs/plans/chapter3_length_review_plan_2026-10-12.md`)
+- Author-approved length review (`docs/plans/2026-10-12-chapter3-length-review-plan.md`)
   carried out on a **separate copy**, `paper/dissertation_chapter/Dissertation_Chapter_concise.qmd`
   (branch `ch3-concise`), awaiting author approval as the replacement; the canonical
   chapter, the hook sync, bios-dissertation and the SI are unchanged.
@@ -440,7 +450,7 @@ alone loads `lastpage`. See
 
 - Four read-only review tracks (numbers, live journal compliance/clarity, chapter vs
   CTJ/SI, code + tests) found no numeric or code errors; findings and author decisions:
-  `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`.
+  `docs/reviews/2026-10-12-ctj-comprehensive-review-findings.md`.
 - Approved fixes applied to CTJ, SI, chapter, exhibits, bib and cover letter:
   abbreviations defined at first body use; pipeline jargon rewritten; one design-name
   set across text, tables and figures (code/20 and code/21 labels regenerated); positive,
@@ -521,7 +531,7 @@ alone loads `lastpage`. See
   configuration/regime separation and year-matched denominators; all manuscript
   tables/figures/citations checked. Counts: 3,215 body/283 abstract; reading 8 pp,
   review 21 pp, chapter 66 pp, SI 44 pp. Fresh rendered-page review and hook sync
-  recorded in `docs/plans/ctj_exhibit_revision_findings_2026-10-02.md`.
+  recorded in `docs/findings/2026-10-02-ctj-exhibit-revision-findings.md`.
 - On author feedback about the 3,500-word cap, expanded CTJ from the chapter to
   3,215 body prose/heading words (3,381 with end declarations); abstract 283.
   Added mechanisms, effect-size crossover, omitted-spillover sensitivity, allocation
@@ -545,7 +555,7 @@ alone loads `lastpage`. See
 - Title restoration and less repetitive exhibit selection are proposed, pending
   author review. Preview charts deliberately retain current verified figures.
   Source/provenance/build details and teach-back:
-  `docs/plans/ctj_layout_review_2026-10-02.md`. No push or submission.
+  `docs/findings/2026-10-02-ctj-layout-review.md`. No push or submission.
 
 ### Complete chapter/appendix and derived CTJ/SI drafts (2026-10-02)
 
@@ -569,7 +579,7 @@ alone loads `lastpage`. See
   bios-dissertation `fc63326` (72 pp, seven new assets, 31 citekeys). Final
   manuscript checkpoint `a47b0ae` resynced the coordinate wording to `6b07b95`
   (72 pp, 31 citekeys); no push.
-  Detailed evidence: `docs/plans/manuscript_completion_findings_2026-10-02.md`.
+  Detailed evidence: `docs/findings/2026-10-02-manuscript-completion-findings.md`.
 
 ### Completed observed-incidence application (2026-10-02)
 
@@ -582,7 +592,7 @@ alone loads `lastpage`. See
 - Primary control-only results favor saturation; both-arms SRS remains competitive.
   Undercoverage, budget differences and finite-tail uncertainty remain explicit.
 - Traced publication exhibits and the production/refined HTML companion are built.
-  Findings: `docs/plans/nc_sud_application_findings_2026-10-02.md`.
+  Findings: `docs/findings/2026-10-02-nc-sud-application-findings.md`.
 - Next required deliverables: full Chapter 3/appendix integration, fresh rendering
   and approved sync, then full standalone CTJ/SI and comprehensive Claude prompt.
   Author declarations confirmed except the authorized IRB/data-use placeholder.
@@ -608,7 +618,7 @@ alone loads `lastpage`. See
 - Offline companion saved with model flow, observed-year maps, example assignments
   and interactive performance filters. Maps reviewed as local images; in-app
   browser blocks file URLs, so interactive browser rendering is not yet verified.
-- Details: `docs/plans/nc_sud_implementation_findings_2026-10-02.md`.
+- Details: `docs/findings/2026-10-02-nc-sud-implementation-findings.md`.
 
 ### SRS interpretation interview follow-up (2026-10-02)
 
@@ -617,9 +627,9 @@ alone loads `lastpage`. See
   and starting Monte Carlo targets, while requesting an independent reviewer
   to check alignment with earlier simulations before implementation. Review
   completed read-only; no production code or runs yet. Verdict and safeguards are
-  in `docs/plans/nc_sud_independent_review_2026-10-02.md`: ready for implementation
+  in `docs/reviews/2026-10-02-nc-sud-independent-review.md`: ready for implementation
   planning, no extra scientific sweep. Concrete plan saved as
-  `nc_sud_implementation_plan_2026-10-02.md`, awaiting author approval.
+  `docs/plans/2026-10-02-nc-sud-implementation-plan.md`, awaiting author approval.
 - Reviewer verified singleton High Incidence Focus in all four observed years;
   start singleton production at R = 1,000 and refine using empirical MC targets.
   Stochastic designs need duplicate-aware joint MSE/coverage uncertainty and
@@ -669,7 +679,7 @@ alone loads `lastpage`. See
   evidence and using the real-SUD NC application as the next confirmation, without
   first expanding the grid comparison to all ten incidence surfaces.
 - Approved the Chapter 2 linking sentence, recorded verbatim in
-  `docs/plans/nc_sud_application_plan_2026-10-02.md`. The author does not need a
+  `docs/plans/2026-10-02-nc-sud-application-plan.md`. The author does not need a
   direct cross-project numerical comparison in the body. A brief extension
   reference and inclusion of SRS/BSS can appear in the introduction/discussion;
   an appendix comparison is optional if necessary. In the follow-up the author
@@ -683,8 +693,8 @@ alone loads `lastpage`. See
 
 ### Application design and integrated continuation (2026-10-02)
 
-- Created `docs/plans/nc_sud_application_plan_2026-10-02.md` and an integrated
-  `continuation_prompt_2026-10-02.md`, as requested by the author. They combine
+- Created `docs/plans/2026-10-02-nc-sud-application-plan.md` and an integrated
+  `docs/prompts/2026-10-02-continuation-prompt.md`, as requested by the author. They combine
   Project 1 continuity, open manuscript decisions, and application execution.
 - Author chose the existing continuous SAR approach, with observed NC SUD
   incidence informing allocation. Clarified after the author's follow-up:
@@ -703,7 +713,7 @@ alone loads `lastpage`. See
 
 ### Continuation note (2026-09-27): SRS and Chapter 2 decisions
 
-Read `docs/plans/ch2_check_findings_2026-09-27.md` with `docs/plans/TODO.md` before
+Read `docs/findings/2026-09-27-ch2-check-findings.md` with `docs/TODO.md` before
 continuing manuscript work. It records the restricted Chapter 2 reproduction and
 subsequent review of the accepted PDF, including the allocation-level figures/tables.
 Current code and stored CSV agree at 3×4 checkerboard MSE 0.22555, whereas the accepted
@@ -724,7 +734,7 @@ and upper tails for every candidate design and SRS before final recommendations.
 Existing runs use one noise draw per allocation draw and cannot isolate this risk
 from outcome noise. **The author subsequently authorized the necessary pilot/analysis
 and subagents.** The nested pilot is complete; see
-`docs/plans/allocation_risk_findings_2026-09-27.md` for results, precision checks and
+`docs/findings/2026-09-27-allocation-risk-findings.md` for results, precision checks and
 reproduction commands. The older
 "pending approval" statements in the chronological findings note predate this authorization.
 
@@ -768,7 +778,7 @@ comparison on them is the next plan. Plan of record:
   - Static Table 2; queen/rook figure pairs (Figures 1–4, including bias–variance).
   - Renders at 40 pp.
 - Six fresh-reviewer passes. Passes 4–6 had no ERROR outside the Application.
-  `docs/plans/step0-chapter-review-prompt.md` is the current review brief; it holds the
+  `docs/prompts/2026-09-23-step0-chapter-review-prompt.md` is the current review brief; it holds the
   settled decisions.
 - **Finding to remember:** under queen, the control-only lead of Incidence-Guided Saturation
   Quadrants holds only up to τ = 1.5. Isolation Buffer matches it at τ = 2 and passes it at
@@ -840,8 +850,8 @@ comparison on them is the next plan. Plan of record:
 ### Prior State (as of 2026-09-24)
 
 **Simulation revision (step 0.5): re-run COMPLETE; downstream regeneration (Phase C) in progress.**
-Plan: `docs/plans/simulation-revision-plan.md`; method authority:
-`docs/plans/simulation-revision-spec.md`. All April 2026 numbers are superseded (archived in
+Plan: `docs/plans/2026-09-24-simulation-revision-plan.md`; method authority:
+`docs/plans/2026-09-24-simulation-revision-spec.md`. All April 2026 numbers are superseded (archived in
 `results/archive/pre_revision_20260924/`, with a README).
 
 - **What changed:** M1–M8. Matched surfaces; 100,000 people per Poisson cluster; random
@@ -904,7 +914,7 @@ Plan: `docs/plans/simulation-revision-plan.md`; method authority:
 - CTJ reading references flow from page 7 across both final-page columns; eight
   pages retained. Submission remains 21 pages with identical extracted text.
   Numerical/exhibit checks and visual review pass; no scientific result changes.
-- Findings/teach-back: `docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md`.
+- Findings/teach-back: `docs/findings/2026-10-02-prelim-assembly-ctj-reference-review.md`.
   No pushes; full-draft review remains.
 
 ### 2026-10-02 — full prelim exhibit lists

@@ -7,7 +7,7 @@ editor_options:
 
 # Methods extensions: report and proposed manuscript text (2026-10-21)
 
-**Status: draft for the author's review.** No chapter, CTJ, SI or slide file has been edited. This report combines the 2026-10-20 results ([findings](methods_extensions_findings_2026-10-20.md)), the author's 2026-10-21 decisions (`DECISIONS.md`) and the 2026-10-21 reruns ([overnight plan](overnight_plan_2026-10-21.md)). Every number below was read from the CSV or log named in Section 6. Section 3 lists three new questions for the author. Section 4 holds the proposed text, and Section 5 the proposed Part II slides.
+**Status: draft for the author's review.** No chapter, CTJ, SI or slide file has been edited. This report combines the 2026-10-20 results ([findings](2026-10-20-methods-extensions-findings.md)), the author's 2026-10-21 decisions (`DECISIONS.md`) and the 2026-10-21 reruns ([overnight plan](../plans/2026-10-21-overnight-plan.md)). Every number below was read from the CSV or log named in Section 6. Section 3 lists three new questions for the author. Section 4 holds the proposed text, and Section 5 the proposed Part II slides.
 
 ------------------------------------------------------------------------
 

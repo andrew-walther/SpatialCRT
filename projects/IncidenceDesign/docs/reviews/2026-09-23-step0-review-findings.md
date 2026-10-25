@@ -1,6 +1,6 @@
 # Step 0 review findings — `Dissertation_Chapter.qmd`, first pass (2026-09-23)
 
-Produced by a fresh reviewer run of `step0-chapter-review-prompt.md` against
+Produced by a fresh reviewer run of `../prompts/2026-09-23-step0-chapter-review-prompt.md` against
 the chapter as snapshotted in
 `archive/IncidenceDesign_Manuscripts_PreUnification_2026-09-23/` (line numbers
 refer to that version). **Status: findings reported, none applied yet** —
@@ -127,7 +127,7 @@ No findings: DIM mentions; numbered design shorthand; unresolved @keys; Tables 2
 
 Because many findings trace to the simulation itself, the author chose to
 revise and re-run it before any prose fixes to Methods/Results. Full
-detail: `simulation-revision-plan.md`.
+detail: `../plans/2026-09-24-simulation-revision-plan.md`.
 
 - **Narrative:** robust vs. fragile, with rankings as support, failure
   diagnostics as context, and one recommended design for investigators.

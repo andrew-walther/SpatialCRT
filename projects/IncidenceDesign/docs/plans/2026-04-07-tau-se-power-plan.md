@@ -10,7 +10,7 @@
 
 **Tech Stack:** R, ggplot2, dplyr, tidyr, viridis, spatialreg, digest, SLURM
 
-**Spec:** `docs/superpowers/specs/2026-04-07-tau-sensitivity-design.md`
+**Spec:** `docs/plans/2026-04-07-tau-sensitivity-design-spec.md`
 
 ---
 

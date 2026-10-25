@@ -6,26 +6,26 @@ and focused tail refinement are complete. Production: 1,248 reporting rows,
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/plans/manuscript_completion_findings_2026-10-02.md).
+uncertain. See [completed findings](docs/findings/2026-10-02-nc-sud-application-findings.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/findings/2026-10-02-manuscript-completion-findings.md).
 
 **CTJ layout review (October 2):** an [eight-page two-column reading preview](paper/ctj_manuscript/manuscript_ctj/CTJ_Reading.pdf)
 now accompanies the [21-page submission draft](paper/ctj_manuscript/manuscript_ctj/CTJ_Manuscript.pdf).
-Comprehensive review completed 2026-10-12 (see `docs/plans/ctj_comprehensive_review_findings_2026-10-12.md`);
+Comprehensive review completed 2026-10-12 (see `docs/reviews/2026-10-12-ctj-comprehensive-review-findings.md`);
 the advisor-meeting application report is `application/report/IncidenceDesign_Application_Study_Report.pdf`.
 Both use one master manuscript and shared exhibit definitions. The approved original title is restored. Six revised exhibits show six-design-plus-SRS
 rules/benchmark, compact simulation accuracy/decomposition, observed NC geography
 and annual NC accuracy. Detailed tail/budget/parameter displays remain in supporting
 material. Author order is Walther, Habib, Simpson, Lin. See the
-[exhibit revision and teach-back](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md).
-See [layout findings and build commands](docs/plans/ctj_layout_review_2026-10-02.md).
+[exhibit revision and teach-back](docs/findings/2026-10-02-ctj-exhibit-revision-findings.md).
+See [layout findings and build commands](docs/findings/2026-10-02-ctj-layout-review.md).
 
 **Full prelim assembly (October 2):** `bios-dissertation/prelim/prelim.pdf` now
 combines the current literature review, Chapters 2–4, appendices and one
 bibliography (192 pages as of 2026-10-13), including the requested List of Tables and List of
 Figures. Chapter 3 is 41 body + 27 appendix pages after the length review. CTJ
 reading references now flow from page 7 into both columns of page 8. See
-[assembly/reference review and rebuild commands](docs/plans/prelim_assembly_ctj_reference_review_2026-10-02.md).
+[assembly/reference review and rebuild commands](docs/findings/2026-10-02-prelim-assembly-ctj-reference-review.md).
 The individual Chapter 3 sync hook remains unchanged; rerun the full assembly
 builder after chapter syncs. Chapter 4's dated timeline is removed; continuing
 work describes additional methodology and expected results in prose. This
@@ -34,16 +34,16 @@ full-length draft awaits author review.
 > For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
 **Application planning (2026-10-02):** the
-[NC SUD application design](docs/plans/nc_sud_application_plan_2026-10-02.md)
-and [integrated continuation prompt](docs/plans/continuation_prompt_2026-10-02.md)
+[NC SUD application design](docs/plans/2026-10-02-nc-sud-application-plan.md)
+and [integrated continuation prompt](docs/prompts/2026-10-02-continuation-prompt.md)
 combine the earlier manuscript decisions with the real-data application request.
 The author chose continuous SAR education outcomes, using observed SUD incidence
 for allocation without an assumed incidence–education baseline relationship.
 An incidence-related baseline is a hypothetical sensitivity; the grid study
 continues to include its incidence baseline term. The implementation plan is
 approved and execution is complete. The independent alignment review is
-complete; see the [review](docs/plans/nc_sud_independent_review_2026-10-02.md) and
-[implementation plan](docs/plans/nc_sud_implementation_plan_2026-10-02.md). The
+complete; see the [review](docs/reviews/2026-10-02-nc-sud-independent-review.md) and
+[implementation plan](docs/plans/2026-10-02-nc-sud-implementation-plan.md). The
 author requests ASAP completion rather than the earlier date-based schedule.
 The plan covers verification, results and
 subsequent chapter/appendix and CTJ/supplement updates.
@@ -52,22 +52,22 @@ The [visual application companion](application/report/real_sud_companion.html)
 shows observed-rate maps, model meaning, adaptations and filterable performance.
 The current companion displays verified production and separate refined-risk results. Smoke/pilot outputs remain preliminary engineering checks. Run instructions and
 verification are in [application/README.md](application/README.md); the
-[implementation findings](docs/plans/nc_sud_implementation_findings_2026-10-02.md)
+[implementation findings](docs/findings/2026-10-02-nc-sud-implementation-findings.md)
 record the code walkthrough and evidence. Full application and manuscript drafts are complete; author review is next.
 
 **Manuscript continuation (2026-09-27):** The [Chapter 2 check and accepted-manuscript
-review](docs/plans/ch2_check_findings_2026-09-27.md) records the evidence, limits and
+review](docs/findings/2026-09-27-ch2-check-findings.md) records the evidence, limits and
 open decisions for the SRS benchmark and Checkerboard discussion. Project 1 remains
 finalized and read-only. October 2 decisions retain Checkerboard in the main
 Project 2 comparison, with detailed diagnostics in the appendix, and approve a
 brief Chapter 2 extension reference. CTJ will stand alone and cite Project 1.
 The allocation-risk pilot remains supporting evidence; the completed NC application provides the
 focused confirmation, without expanding the grid pilot first. See
-[TODO](docs/plans/TODO.md) for remaining work.
+[TODO](docs/TODO.md) for remaining work.
 
 **Allocation-risk analysis (2026-09-27):** the author authorized a nested pilot
 comparing all eight designs with SRS, including variability and upper tails of
-allocation-specific MSE. See the [methods and findings note](docs/plans/allocation_risk_findings_2026-09-27.md)
+allocation-specific MSE. See the [methods and findings note](docs/findings/2026-09-27-allocation-risk-findings.md)
 for scope, precision limitations, code walkthrough, and interpretation. This uses
 queen weights, oracle ML, tau=1, ten fixed incidence surfaces and parameter corners;
 it does not replace the main study or run the revised NC application.
@@ -166,7 +166,7 @@ VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 Rscript 05_run
   a manifest. Any change to parameters, code (01–05), packages or BLAS makes the runner
   refuse to resume, so delete that directory to start fresh.
 - DIM is not run by the revised script (the DIM baseline in `sim_data/` predates the revision).
-- Method specification: `docs/plans/simulation-revision-spec.md`.
+- Method specification: `docs/plans/2026-09-24-simulation-revision-spec.md`.
 
 ### Tests
 
@@ -400,7 +400,7 @@ The export reads completed results, writes traceable plot-data CSVs to
 manuscript figure directories (all four to CTJ; annual heatmap to the chapter). Its exact bias/variance decomposition corrects
 sample variance by 249/250; annual heatmap cells divide means by matched SRS means.
 It does not estimate pooled MC intervals or change computational outputs/weights.
-Selection/provenance: [exhibit findings](docs/plans/ctj_exhibit_revision_findings_2026-10-02.md).
+Selection/provenance: [exhibit findings](docs/findings/2026-10-02-ctj-exhibit-revision-findings.md).
 Submission components: [checklist](paper/ctj_manuscript/submission_checklist.md),
 [cover letter](paper/ctj_manuscript/cover_letter/Cover_Letter_Draft.md) and separate
 [figure legends](paper/ctj_manuscript/figures/Figure_Legends.md).
@@ -542,7 +542,7 @@ Added 2026-10-14 from AGENTS.md (simulation revision and later):
       by year, total, and average to the gitignored `application/data/derived/`. It
       reproduces Habib (2026) exactly (see `application/README.md`), and the tests pass (`application/tests/test_application_data.R`).
       The design comparison on these surfaces has not been run yet.
-      *(Superseded: run 2026-10-02; see `docs/plans/nc_sud_application_findings_2026-10-02.md`.)*
+      *(Superseded: run 2026-10-02; see `docs/findings/2026-10-02-nc-sud-application-findings.md`.)*
 
 ---
 

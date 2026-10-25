@@ -98,7 +98,7 @@ that open the same way.
 
 ## Session brief
 
-> Run Part A of `SpatialCRT/projects/IncidenceDesign/docs/plans/ctj_structure_and_prose_review_plan.md`.
+> Run Part A of `SpatialCRT/projects/IncidenceDesign/docs/plans/2026-10-22-ctj-structure-and-prose-review-plan.md`.
 > First confirm both preconditions at the top of the plan are met; if not, stop and say so.
 > Write only to `paper/ctj_manuscript/review/`. Do not edit the manuscript, do not commit,
 > do not push. Finish with a 5-line summary: word count now, answers to the three

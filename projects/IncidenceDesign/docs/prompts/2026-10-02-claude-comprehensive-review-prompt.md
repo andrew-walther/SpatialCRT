@@ -19,18 +19,18 @@ choices until you present the review and the author authorizes corrections.
 Do not push, submit, send messages, or edit Project 1/bios-dissertation.
 
 Read in order:
-1. Root `../../AGENTS.md`, project `AGENTS.md`, `ROADMAP.md`, `docs/plans/TODO.md`.
-2. `docs/plans/ch2_check_findings_2026-09-27.md` and
-   `allocation_risk_findings_2026-09-27.md`.
-3. `docs/plans/nc_sud_application_plan_2026-10-02.md`,
-   `nc_sud_implementation_plan_2026-10-02.md`,
-   `nc_sud_independent_review_2026-10-02.md`,
-   `nc_sud_implementation_findings_2026-10-02.md`,
-   `nc_sud_application_findings_2026-10-02.md`.
-4. `docs/plans/manuscript-unification-plan.md` and
-   `manuscript_completion_findings_2026-10-02.md`,
-   `ctj_layout_review_2026-10-02.md` and
-   `ctj_exhibit_revision_findings_2026-10-02.md`.
+1. Root `../../AGENTS.md`, project `AGENTS.md`, `ROADMAP.md`, `docs/TODO.md`.
+2. `docs/findings/2026-09-27-ch2-check-findings.md` and
+   `../findings/2026-09-27-allocation-risk-findings.md`.
+3. `docs/plans/2026-10-02-nc-sud-application-plan.md`,
+   `../plans/2026-10-02-nc-sud-implementation-plan.md`,
+   `../reviews/2026-10-02-nc-sud-independent-review.md`,
+   `../findings/2026-10-02-nc-sud-implementation-findings.md`,
+   `../findings/2026-10-02-nc-sud-application-findings.md`.
+4. `docs/plans/2026-09-18-manuscript-unification-plan.md` and
+   `../findings/2026-10-02-manuscript-completion-findings.md`,
+   `../findings/2026-10-02-ctj-layout-review.md` and
+   `../findings/2026-10-02-ctj-exhibit-revision-findings.md`.
 5. `application/AGENTS.md`, `application/README.md` and project `README.md`.
 6. The canonical `paper/dissertation_chapter/Dissertation_Chapter.qmd` and its PDF,
    `paper/ctj_manuscript/CTJ_Manuscript.tex`/PDF, shared `CTJ_Exhibits.tex`,

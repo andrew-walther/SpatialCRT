@@ -1,11 +1,11 @@
 # Handoff (2026-09-27): SRS framing, Chapter 2 check, chapter write-up, CTJ
 
-Context for the next agent (Codex or Claude). Read first: `AGENTS.md`, `docs/plans/TODO.md`
+Context for the next agent (Codex or Claude). Read first: `AGENTS.md`, `docs/TODO.md`
 (item 1 status), this file, `results/srs_benchmark/srs_benchmark_summary.txt`, and
 `paper/dissertation_chapter/notes/a5_technical_notes.md` Q3.
 
 **Continuation update (2026-09-27):** Task 1's restricted code check and the subsequent
-accepted-PDF review are recorded in [ch2_check_findings_2026-09-27.md](ch2_check_findings_2026-09-27.md).
+accepted-PDF review are recorded in [../findings/2026-09-27-ch2-check-findings.md](../findings/2026-09-27-ch2-check-findings.md).
 Read that note before acting on the original task list below. Verdict (c) is limited
 to the numerical reproduction: current code/CSV agree, but disagree with the accepted
 exhibit whose historical inputs remain untraced. Project 1 stays finalized/read-only;
@@ -105,7 +105,7 @@ Plan: `~/.claude/plans/pasted-content-id-a3af-you-are-synchronous-seal.md` (step
 - Render with RStudio Quarto: `/Applications/RStudio.app/Contents/Resources/app/quarto/bin/quarto`,
   with TinyTeX on PATH.
 - Review in fresh passes until there is no ERROR/WARN. The brief is
-  `docs/plans/step0-chapter-review-prompt.md`.
+  `docs/prompts/2026-09-23-step0-chapter-review-prompt.md`.
 - Style rules:
   - no DIM, and no numbered design shorthand;
   - "we" / "this chapter" / "Chapter 2";

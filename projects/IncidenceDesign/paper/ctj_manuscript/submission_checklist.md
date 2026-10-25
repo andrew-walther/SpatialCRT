@@ -25,7 +25,7 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [x] Separate shared-source two-column reading preview; submission layout retained.
 - [x] Restore approved original title and revise six exhibits for two-column readability.
 - [x] Author-approved order: Walther, Habib, Simpson, Lin; Lin corresponding.
-- [x] Comprehensive review completed 2026-10-12 (see docs/plans/ctj_comprehensive_review_findings_2026-10-12.md).
+- [x] Comprehensive review completed 2026-10-12 (see docs/reviews/2026-10-12-ctj-comprehensive-review-findings.md).
 - [ ] Author review of the revised full drafts and chosen exhibits.
 - [ ] Ethics/data-use statement: CTJ requires an IRB statement in Methods for human data.
   **Protocol filled in (2026-10-21):** UNC IRB 14-2036, "Sudden Unexpected Death in North

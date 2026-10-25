@@ -9,7 +9,7 @@ editor_options:
 
 **Status: approved by the author 2026-10-20.** Planning only: no analysis code has been written and nothing has been run. Decisions D1–D9 were agreed with the author in the 2026-10-19/20 planning interview. "Claude's call" marks choices Claude made that the author has seen. "Builder's call" is left to whoever implements the plan.
 
-Sources: [advisor meeting record](advisor_meeting_2026-10-14.md) (Lin's feedback, follow-up reasoning, synthesis, planned extensions), [TODO.md](TODO.md) ("Advisor meeting 2026-10-14 follow-ups"), Section 8 of `application/report/IncidenceDesign_Application_Study_Report.qmd`, `DECISIONS.md`, `application/AGENTS.md`, and the application code (`application/code/real_sud_*.R`, `code/04_estimation.R`).
+Sources: [advisor meeting record](../meetings/2026-10-14-advisor-meeting.md) (Lin's feedback, follow-up reasoning, synthesis, planned extensions), [TODO.md](../TODO.md) ("Advisor meeting 2026-10-14 follow-ups"), Section 8 of `application/report/IncidenceDesign_Application_Study_Report.qmd`, `DECISIONS.md`, `application/AGENTS.md`, and the application code (`application/code/real_sud_*.R`, `code/04_estimation.R`).
 
 ------------------------------------------------------------------------
 

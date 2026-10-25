@@ -2,7 +2,7 @@
 
 **Status: approved by the author 2026-10-21 (about 03:45).** It follows the decisions
 recorded in `DECISIONS.md` (2026-10-21 entry), made while reviewing
-[methods_extensions_findings_2026-10-20.md](methods_extensions_findings_2026-10-20.md).
+[../findings/2026-10-20-methods-extensions-findings.md](../findings/2026-10-20-methods-extensions-findings.md).
 No manuscript, chapter, CTJ, SI or slide file is edited by this plan.
 
 ## What runs
@@ -44,7 +44,7 @@ If it ends with `QUEUEDONE`, the session that launched it:
 
 1. checks the logs and the key numbers;
 2. adds the 2026-10-21 results to the findings doc;
-3. writes `methods_extensions_report_2026-10-21.md`, covering the findings, proposed
+3. writes `../findings/2026-10-21-methods-extensions-report.md`, covering the findings, proposed
    text for the thesis appendix, the CTJ SI and the few main-text sentences (every
    number traced to its CSV), and proposed Part II slides;
 4. adds those slides to `bios-dissertation/slides/prelim/OUTLINE.md`.

@@ -1,6 +1,6 @@
 # Comprehensive review brief — current state 2026-10-12
 
-Supersedes `claude_comprehensive_review_prompt_2026-10-02.md`, which predates the
+Supersedes `2026-10-02-claude-comprehensive-review-prompt.md`, which predates the
 2026-10-12 CTJ revision (commits `22b7765`..`2b142f9`). Used to drive four parallel
 read-only review tracks before the advisor meeting of 2026-10-14.
 
@@ -38,9 +38,9 @@ read-only review tracks before the advisor meeting of 2026-10-14.
 
 ## Reference findings
 
-`docs/plans/nc_sud_application_findings_2026-10-02.md`,
-`docs/plans/manuscript_completion_findings_2026-10-02.md`,
-`docs/plans/ctj_exhibit_revision_findings_2026-10-02.md`,
+`docs/findings/2026-10-02-nc-sud-application-findings.md`,
+`docs/findings/2026-10-02-manuscript-completion-findings.md`,
+`docs/findings/2026-10-02-ctj-exhibit-revision-findings.md`,
 `paper/ctj_manuscript/submission_checklist.md`, project `AGENTS.md`.
 
 ## Output format

@@ -406,7 +406,7 @@ run_pairwise_wilcoxon <- function(results, metric = "MSE", p_adjust = "holm") {
 
 #' Surface-level paired comparison of two designs over independent units
 #'
-#' Added for the 2026-09 revision (simulation-revision-spec.md section 5). Blocks
+#' Added for the 2026-09 revision (docs/plans/2026-09-24-simulation-revision-spec.md section 5). Blocks
 #' within an incidence config share the same K incidence surfaces, so a Friedman
 #' test over blocks treats correlated blocks as independent. Here the independent
 #' unit is (config, surface k): 5 configs x 10 surfaces = 50 units, whose Z and eps

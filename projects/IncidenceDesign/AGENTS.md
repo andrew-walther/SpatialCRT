@@ -18,7 +18,7 @@ Reasons and history for each rule: `DECISIONS.md`.
 
 - **Application (approved 2026-10-02):** continue the approved plan without
   re-interviewing settled choices. Design authority:
-  `docs/plans/nc_sud_application_plan_2026-10-02.md` (its status separates settled from
+  `docs/plans/2026-10-02-nc-sud-application-plan.md` (its status separates settled from
   proposed choices; never treat proposals as approved). Smoke/pilot outputs are
   verification stages, not conclusions.
 - **Application outcome (2026-10-02):** the primary continuous education outcome has no
@@ -27,7 +27,7 @@ Reasons and history for each rule: `DECISIONS.md`.
 - **Methods extensions (author, 2026-10-20):** Y is the measured education endpoint, not
   future SUD incidence (no count-outcome model); partial participation and power run on
   NC only, with the fast fitter and new output folders, never editing hashed production
-  code. Plan: `docs/plans/methods_extensions_plan_2026-10-20.md`.
+  code. Plan: `docs/plans/2026-10-20-methods-extensions-plan.md`.
 - **Methods-extension reporting (author, 2026-10-21):** headline power uses the
   t + df-corrected test, with size-adjusted power as a check and Wald in the SI; the reported interval is
   t + df-corrected (Stage 1 main evidence, Stage 2 in the SI); targeting is the
@@ -62,8 +62,10 @@ Reasons and history for each rule: `DECISIONS.md`.
   asks otherwise.
 - **Allocation-risk numbers** (selected-surface/corner pilot, `results/allocation_risk/`)
   are never substituted for full-study numbers.
-- **Where to write things down:** key findings go in `docs/plans/` (open items:
-  `docs/plans/TODO.md`); dated progress checkpoints go in the progress log of
+- **Where to write things down:** project docs go in `docs/` by type (`plans/`,
+  `findings/`, `reviews/`, `prompts/`, `meetings/`), named `YYYY-MM-DD-topic-type.md`
+  with hyphens, and get a row in that folder's `README.md` (map: `docs/README.md`;
+  open items: `docs/TODO.md`); dated progress checkpoints go in the progress log of
   `ROADMAP.md`; author decisions and their reasons go in `DECISIONS.md`, with only a
   one-line rule here. Restricted SUD data details: `application/AGENTS.md`.
 
@@ -292,7 +294,7 @@ DIM baseline used 25 design × 100 outcome resamples, and wasn't re-run.
 ## Current State
 
 Status and dated checkpoints: `ROADMAP.md` (Progress Log). Open items:
-`docs/plans/TODO.md`. Numerical/exhibit checks after any manuscript edit:
+`docs/TODO.md`. Numerical/exhibit checks after any manuscript edit:
 `Rscript code/tests/test_manuscript_exhibits.R` and
 `python3 paper/tools/verify_manuscripts.py`.
 
@@ -340,7 +342,7 @@ Status and dated checkpoints: `ROADMAP.md` (Progress Log). Open items:
 
 ## Critical Invariants (DO NOT Violate)
 
-Revised 2026-09-24 for the simulation revision (spec: `docs/plans/simulation-revision-spec.md`).
+Revised 2026-09-24 for the simulation revision (spec: `docs/plans/2026-09-24-simulation-revision-spec.md`).
 
 1. **Incidence surfaces are generated per `(mode, rho_X, k)`, k = 1..10, and shared by every
    block of that config** — NOT regenerated per `(nb_type, rho, gamma, regime)` block. Only the
@@ -401,7 +403,7 @@ Full table: `README.md` ("Known Issues & Bugs Fixed").
 
 ## Known Minor Issues
 
-Low-priority cleanup items: `docs/plans/TODO.md` ("Known minor code issues").
+Low-priority cleanup items: `docs/TODO.md` ("Known minor code issues").
 
 ---
 

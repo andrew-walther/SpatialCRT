@@ -2,7 +2,7 @@
 
 Reviewed: the CTJ manuscript draft and the NC application study report, as of
 2026-10-12. Sources: Andrew's prep and meeting notes, plus the Zoom AI summary. The
-action items are in [TODO.md](TODO.md), under "Advisor meeting 2026-10-14 follow-ups".
+action items are in [TODO.md](../TODO.md), under "Advisor meeting 2026-10-14 follow-ups".
 Nothing below has been acted on yet.
 
 ## What Dr. Lin said

@@ -1,7 +1,7 @@
 # Methods extensions — findings (2026-10-20)
 
 **Status: complete (steps 1–6), 2026-10-20 12:40.** Implements steps 1–6 of
-[methods_extensions_plan_2026-10-20.md](methods_extensions_plan_2026-10-20.md)
+[../plans/2026-10-20-methods-extensions-plan.md](../plans/2026-10-20-methods-extensions-plan.md)
 (D1–D9). Manuscripts, chapter, CTJ, SI and slides are untouched (steps 7–8 need
 separate approval). All outputs are under
 `application/results/methods_ext_2026-10/`; fit caches are gitignored.
@@ -9,9 +9,9 @@ separate approval). All outputs are under
 ## Addendum 2026-10-21 (after the author's review)
 
 The author decided the open items on 2026-10-21 (`DECISIONS.md`), and three reruns
-followed ([overnight plan](overnight_plan_2026-10-21.md)). The results, corrections and
+followed ([overnight plan](../plans/2026-10-21-overnight-plan.md)). The results, corrections and
 proposed manuscript text are in
-[methods_extensions_report_2026-10-21.md](methods_extensions_report_2026-10-21.md).
+[2026-10-21-methods-extensions-report.md](2026-10-21-methods-extensions-report.md).
 In brief:
 - **t + df-corrected test.** Size 4.4–5.6% and coverage at τ = 1 of 94.0–95.6% for
   every design and regime at every N from 15 to 58. It fixes V2.

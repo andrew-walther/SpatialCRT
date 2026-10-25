@@ -3,7 +3,7 @@
 **Later author-approved revision:** original title and six revised exhibits are
 now implemented; reading 8 pp, submission 21 pp, chapter 66 pp, SI 44 pp.
 Author order is Walther, Habib, Simpson, Lin. The following describes the earlier
-layout-only checkpoint. Current details: [exhibit findings](ctj_exhibit_revision_findings_2026-10-02.md).
+layout-only checkpoint. Current details: [exhibit findings](2026-10-02-ctj-exhibit-revision-findings.md).
 
 The author requested both versions to judge the eventual article appearance.
 Completed: `CTJ_Manuscript.pdf` (18-page submission draft) and `CTJ_Reading.pdf`

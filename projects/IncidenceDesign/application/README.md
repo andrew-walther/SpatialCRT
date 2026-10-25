@@ -6,11 +6,11 @@ and focused tail refinement are complete. Production: 1,248 reporting rows,
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](../docs/plans/nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../docs/plans/manuscript_completion_findings_2026-10-02.md).
+uncertain. See [completed findings](../docs/findings/2026-10-02-nc-sud-application-findings.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../docs/findings/2026-10-02-manuscript-completion-findings.md).
 
 **Revised study planning (2026-10-02):** see the
-[application design document](../docs/plans/nc_sud_application_plan_2026-10-02.md).
+[application design document](../docs/plans/2026-10-02-nc-sud-application-plan.md).
 The author chose a continuous SAR application using observed SUD incidence to
 inform allocation. The concrete implementation plan is approved and execution
 is complete. The older synthetic results below are historical, not results of
@@ -55,7 +55,7 @@ maps, model diagrams and interactive result filters. Only authorized 58-cluster
 aggregates are displayed. The current display uses completed production and separately identified refined-tail results.
 The new behavioral suite verifies model meaning, exact budgets, fixed-prefix
 extensions, duplicate covariance, annual reuse diagnostics and estimator agreement.
-See [implementation findings](../docs/plans/nc_sud_implementation_findings_2026-10-02.md)
+See [implementation findings](../docs/findings/2026-10-02-nc-sud-implementation-findings.md)
 for the walkthrough and current verification evidence.
 
 `refine_real_sud_tail.R` separately extends outcomes to at least R400 for all
@@ -69,8 +69,8 @@ This directory adapts the IncidenceDesign simulation framework from a regular 10
 
 ## Methods extensions (2026-10-20)
 
-Plan: [methods_extensions_plan_2026-10-20.md](../docs/plans/methods_extensions_plan_2026-10-20.md);
-findings and teach-back: [methods_extensions_findings_2026-10-20.md](../docs/plans/methods_extensions_findings_2026-10-20.md).
+Plan: [docs/plans/2026-10-20-methods-extensions-plan.md](../docs/plans/2026-10-20-methods-extensions-plan.md);
+findings and teach-back: [docs/findings/2026-10-20-methods-extensions-findings.md](../docs/findings/2026-10-20-methods-extensions-findings.md).
 New files only; the hashed production files are sourced, not edited (V9). From the
 project directory, BLAS pinned to one thread (`VECLIB_MAXIMUM_THREADS=1
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1`):
@@ -125,7 +125,7 @@ The synthetic-incidence application pipeline is implemented and has been run end
 ## Design rules changed 2026-09-24 (not yet re-run)
 
 `code/application_designs.R` now follows the simulation revision's design rules
-(`../docs/plans/simulation-revision-spec.md` §3):
+(`../docs/plans/2026-09-24-simulation-revision-spec.md` §3):
 - Incidence ties are broken at random for every draw.
 - High Incidence Focus treats exactly round(N/2) = 29.
 - Balanced Quartiles treats exactly floor(N/2) = 29.

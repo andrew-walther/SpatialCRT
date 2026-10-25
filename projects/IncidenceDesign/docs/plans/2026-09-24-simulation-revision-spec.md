@@ -1,7 +1,7 @@
 # Simulation revision spec (2026-09) — step 0.5, B1
 
 Source of truth for the revised simulation. Written 2026-09-24 from
-`simulation-revision-plan.md` (decisions settled there) and the code as it stood
+`2026-09-24-simulation-revision-plan.md` (decisions settled there) and the code as it stood
 at commit `38a14dc`. `00_mathematical_specification.Rmd` and the chapter Methods are
 rewritten from this file in Phases C and D. Fix IDs (M1–M8) follow the plan.
 

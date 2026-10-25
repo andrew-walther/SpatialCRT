@@ -9,7 +9,7 @@ You write and revise `paper/dissertation_chapter/Dissertation_Chapter.qmd` for P
 (Chapter 3). The coordinating session gives you one block of work at a time.
 
 Authority and ground truth:
-- Method authority: `docs/plans/simulation-revision-spec.md`. The chapter's Methods must
+- Method authority: `docs/plans/2026-09-24-simulation-revision-spec.md`. The chapter's Methods must
   match it exactly.
 - Numbers come only from `results/six_design_manuscript/{six_design_summary,dissertation_results_extract}.txt`,
   `results/eight_design_supplementary/eight_design_summary.txt`,

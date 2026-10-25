@@ -718,7 +718,7 @@ run_standard_tables <- function(results, inc_label = "") {
 #'
 #' Results from the 2026-09 runner (05) already carry surface-level SEs
 #' (SE_Bias, SE_MSE, SE_Coverage, SE_Power = sd of the 10 surface means / sqrt(10);
-#' see docs/plans/simulation-revision-spec.md section 7). When those columns are
+#' see docs/plans/2026-09-24-simulation-revision-spec.md section 7). When those columns are
 #' present they are returned unchanged: the fallback formulas below treat all fits
 #' as independent, which understates the SE when fits share incidence surfaces.
 #'

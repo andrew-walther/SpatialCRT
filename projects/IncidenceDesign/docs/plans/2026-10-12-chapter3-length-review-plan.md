@@ -108,7 +108,7 @@ are a starting point.
 ## Kickoff prompt (paste into a fresh session started in `~/GithubProjects/SpatialCRT`)
 
 > Read `projects/IncidenceDesign/AGENTS.md` and
-> `projects/IncidenceDesign/docs/plans/chapter3_length_review_plan_2026-10-12.md`.
+> `projects/IncidenceDesign/docs/plans/2026-10-12-chapter3-length-review-plan.md`.
 > Carry out step 1 of the plan: a read-only, section-by-section inventory of
 > Chapter 3 (`paper/dissertation_chapter/Dissertation_Chapter.qmd`) and its
 > appendix, with page counts from a fresh prelim-format build, citations between

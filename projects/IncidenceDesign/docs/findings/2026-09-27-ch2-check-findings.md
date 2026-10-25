@@ -3,7 +3,7 @@
 ## Status and author direction
 
 This is the durable continuation note for the minimal Chapter 2 check in
-`handoff_2026-09-27_srs_ch2_audit.md`. Read it before deciding the Chapter 3 SRS
+`../prompts/2026-09-27-handoff-srs-ch2-audit.md`. Read it before deciding the Chapter 3 SRS
 framing, Checkerboard placement, or Chapter 2 link. It supplements the earlier
 draft-only discussion in `paper/dissertation_chapter/notes/a5_technical_notes.md` Q3.
 
@@ -343,8 +343,8 @@ been made. Do not start either action based only on this note.
 
 ## Ready-to-paste continuation prompt
 
-Continue IncidenceDesign. Read AGENTS.md, docs/plans/TODO.md, the SRS/Chapter 2 handoff,
-and docs/plans/ch2_check_findings_2026-09-27.md. The minimal audit found that current
+Continue IncidenceDesign. Read AGENTS.md, docs/TODO.md, the SRS/Chapter 2 handoff,
+and docs/findings/2026-09-27-ch2-check-findings.md. The minimal audit found that current
 code and CSV agree at BSS MSE 0.22555, but the accepted 3×4 exhibit reports 0.0004;
 the exact source of the accepted exhibit remains untraced. Its figures and tables
 also support a broader allocation-consistency argument that must be represented
@@ -357,9 +357,9 @@ before changing the chapter. Do not infer that the audit has settled those decis
 
 The author subsequently approved the necessary analysis/pilot and economical
 subagent execution. This supersedes the historical "await approval" statements
-above. See [allocation-risk findings](allocation_risk_findings_2026-09-27.md) for
+above. See [allocation-risk findings](2026-09-27-allocation-risk-findings.md) for
 methods, all-design results and precision limitations, and
-[the authorized plan](allocation_risk_plan_2026-09-27.md) for initial scope.
+[the authorized plan](../plans/2026-09-27-allocation-risk-plan.md) for initial scope.
 The conditional pilot supports saturation designs under control-only spillover,
 including lower estimated upper-tail MSE than SRS, while SRS remains competitive
 or better under both-arms spillover. It does not settle the earlier Project 1

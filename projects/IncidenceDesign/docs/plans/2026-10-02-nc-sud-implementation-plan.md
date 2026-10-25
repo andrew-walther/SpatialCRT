@@ -6,16 +6,16 @@ and focused tail refinement are complete. Production: 1,248 reporting rows,
 adds 2,280,000 outcomes on the same allocations. All settings pass completeness
 and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
 boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](nc_sud_application_findings_2026-10-02.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](manuscript_completion_findings_2026-10-02.md).
+uncertain. See [completed findings](../findings/2026-10-02-nc-sud-application-findings.md).
+Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../findings/2026-10-02-manuscript-completion-findings.md).
 
 Earlier execution/pending statements below are historical and superseded by this checkpoint.
 
 Status: author approved implementation and uninterrupted FAST execution, with
 an HTML visual companion added as a deliverable. Implementation and verification
 are underway; production results and manuscripts are not complete. Authority:
-`nc_sud_application_plan_2026-10-02.md`; review:
-`nc_sud_independent_review_2026-10-02.md`.
+`2026-10-02-nc-sud-application-plan.md`; review:
+`../reviews/2026-10-02-nc-sud-independent-review.md`.
 
 ## Study being implemented
 

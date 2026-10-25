@@ -2,7 +2,7 @@
 
 The observed-incidence application and its focused allocation-risk extension are
 complete and independently verified. Full thesis/appendix and derived CTJ/SI drafts are now complete; see
-`manuscript_completion_findings_2026-10-02.md`. No restricted county data were released or staged.
+`2026-10-02-manuscript-completion-findings.md`. No restricted county data were released or staged.
 
 ## Verified study and provenance
 
