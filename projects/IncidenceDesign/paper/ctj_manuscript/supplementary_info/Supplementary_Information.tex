@@ -134,29 +134,29 @@ are defined in the same way.
 designs}\label{treatment-assignment-designs}
 
 We implemented eight treatment assignment designs and present six of
-them as the primary comparison set in the detailed analysis. The other two, Saturation Quadrants and Balanced Halves, each share the mechanism
-of a retained design, and in the eight-design comparison at \(\tau = 1\)
+them as the primary comparison set in the detailed analysis. The other two, Saturation Regions and Balanced Halves, each share the mechanism
+of a retained design, and in the comparison of the eight designs and simple random sampling (SRS) at \(\tau = 1\)
 neither could be distinguished from its counterpart under either
 neighbor type, by the Nemenyi and Holm-adjusted Wilcoxon signed-rank
 tests described under Simulation design, resampling, and metrics below,
-applied here to all eight designs. Saturation Quadrants assigns the saturations 20\%, 40\%, 60\%, and 80\% to the four quadrants in random order, without reference to incidence; its retained counterpart, Incidence-Guided Saturation Quadrants, assigns the higher saturations to the quadrants with higher mean incidence (Table \ref{tab:designs}). We shorten the second name to Incidence-Guided Saturation in the rest of this supplement, as in the figures. Saturation Quadrants's mean squared error was 0.0900, against 0.0907 for Incidence-Guided Saturation, under
-queen contiguity (Nemenyi \(p = 0.98\); Holm-adjusted Wilcoxon
-signed-rank \(p = 0.41\)), and 0.0708 against 0.0717 under rook
-contiguity (Nemenyi \(p = 1.00\); Wilcoxon \(p = 0.82\)). We retain one
-representative of the saturation mechanism, Incidence-Guided Saturation. Saturation Quadrants had the marginally lower mean under both
-neighbor types and the better average rank in the eight-design
-comparison (2.100 against 2.350 under queen contiguity and 2.281 against
-2.306 under rook contiguity), so this choice does not rest on performance. The two saturation designs performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants with little or no loss of estimation accuracy; the accuracy advantage of both designs over simple random sampling (SRS), which arises under control-only spillover (see SRS benchmark and allocation-specific risk), comes from the saturation structure they share.
+applied here to all eight designs and SRS. Saturation Regions assigns the saturations 20\%, 40\%, 60\%, and 80\% to four regions in random order, without reference to incidence; on the grid the regions are the four $5\times5$ quadrants. Its retained counterpart, Incidence-Guided Saturation, assigns the higher saturations to the regions with higher mean incidence (Table \ref{tab:designs}). Some figures carry the earlier names, Saturation Quadrants and Incidence-Guided Saturation Quadrants, for these two designs. Saturation Regions' mean squared error was 0.0900, against 0.0907 for Incidence-Guided Saturation, under
+queen contiguity (Nemenyi \(p = 0.99\); Holm-adjusted Wilcoxon
+signed-rank \(p = 0.62\)), and 0.0708 against 0.0717 under rook
+contiguity (Nemenyi \(p = 1.00\); Wilcoxon \(p = 1.00\)). We retain one
+representative of the saturation mechanism, Incidence-Guided Saturation. Saturation Regions had the marginally lower mean under both
+neighbor types and the better average rank in this
+comparison (2.394 against 2.700 under queen contiguity and 2.587 against
+2.650 under rook contiguity), so this choice does not rest on performance. The two saturation designs performed similarly, so incidence guidance matches the accuracy of Saturation Regions while directing the highest treatment saturations to the regions with the highest incidence; how much treatment it redirects depends on how much incidence differs between regions (Section \ref{app:nc-ext}). The accuracy advantage of both designs over SRS, which arises under control-only spillover (see SRS benchmark and allocation-specific risk), comes from the saturation structure they share.
 Balanced Halves divides clusters into two halves by incidence rank and
 treats 25 at random in each. Its mean squared error was 0.1299, against
 0.1308 for Balanced Quartiles, under queen contiguity (Nemenyi
-\(p = 1.00\); Wilcoxon \(p = 0.88\)), and 0.0842 against 0.0837 under
-rook contiguity (Nemenyi \(p = 1.00\); Wilcoxon \(p = 0.82\)). The two
+\(p = 1.00\); Wilcoxon \(p = 1.00\)), and 0.0842 against 0.0837 under
+rook contiguity (Nemenyi \(p = 1.00\); Wilcoxon \(p = 1.00\)). The two
 designs differ only in how finely they stratify on incidence, and we
 retain the finer, four-stratum version. Balanced Halves had the
 marginally lower mean and the better average rank under queen contiguity
-(3.312 against 3.356), and Balanced Quartiles had both under rook
-contiguity (2.919 against 3.038), so this choice does not rest on
+(3.831 against 3.906), and Balanced Quartiles had both under rook
+contiguity (3.369 against 3.569), so this choice does not rest on
 performance either. Both related variants, and the full eight-design
 comparison, are reported in Section \ref{app:eight-design}.
 
@@ -326,20 +326,19 @@ exact formulas for these metrics and standard errors.
 
 We compared designs within each neighbor type with a Friedman rank-sum
 test on scenario MSE \citep{friedman_use_1937}, treating the 160 blocks
-as repeated measures across the six designs. At \(\tau = 1\) we followed
-it with Nemenyi post-hoc comparisons
+as repeated measures across the six designs and SRS. SRS is the usual default for a cluster randomized trial, so it enters every test as a seventh member and each design is compared with it as well as with the other designs. At \(\tau = 1\) we followed
+the Friedman test with Nemenyi post-hoc comparisons
 \citep{nemenyi_distributionfree_1963, demsar_statistical_2006} and
 paired Wilcoxon signed-rank tests \citep{wilcoxon_individual_1945} with
 Holm's adjustment for multiple comparisons \citep{holm_simple_1979} for
-all 15 pairs of designs, and we repeated the Friedman test at each other
+all 21 pairs, and we repeated the Friedman test at each other
 value of \(\tau\). Blocks within an incidence configuration share their
 surfaces, so these tests treat dependent blocks as independent, which
-overstates the information about variation from surface to surface. For
-each pair of designs adjacent in the mean-MSE order, we therefore also
-ran a paired Wilcoxon signed-rank test over 50 independent units, the 5
+overstates the information about variation from surface to surface. We
+therefore also ran paired Wilcoxon signed-rank tests over 50 independent units, the 5
 configurations times 10 surfaces, with each unit's MSE averaged over
-that surface's blocks, and a \(t_{49}\) interval for the mean
-difference. Because the values of \(\tau\) share assignments and noise,
+that surface's blocks, and \(t_{49}\) intervals for the mean
+difference. These tests compared each pair of designs adjacent in the mean-MSE order, and each design with SRS within each spillover regime, with Holm's adjustment over the eight designs compared with SRS. Because the values of \(\tau\) share assignments and noise,
 Friedman tests at different values of \(\tau\) are not independent
 confirmations of one another.
 
@@ -373,7 +372,7 @@ High Incidence Focus, and 0.547 for Checkerboard.
 \small
 \centering
 
-\caption{Performance of the six designs at the primary scenario, $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Monte Carlo standard errors of MSE, in parentheses, are computed from the 50 configuration-by-surface means (Methods); those of bias, coverage, and power are all below 0.007. Average rank is the mean of each design's within-block MSE rank among the six designs over the 160 blocks (1 = lowest MSE). Clusters treated is the mean number of clusters treated per assignment. Under rook contiguity, $\tau$ is not identified for Checkerboard ($WZ = 1 - Z$); its estimates are kept and flagged, and its coefficient on $Z$ estimates $\tau - \gamma$.}
+\caption{Performance of the six designs at the primary scenario, $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Monte Carlo standard errors of MSE, in parentheses, are computed from the 50 configuration-by-surface means (Methods); those of bias, coverage, and power are all below 0.007. Average rank is the mean of each design's within-block MSE rank among the six designs and SRS over the 160 blocks (1 = lowest MSE); SRS's average rank is 2.600 under queen contiguity and 2.450 under rook contiguity. Clusters treated is the mean number of clusters treated per assignment. Under rook contiguity, $\tau$ is not identified for Checkerboard ($WZ = 1 - Z$); its estimates are kept and flagged, and its coefficient on $Z$ estimates $\tau - \gamma$.}
 \label{tab:performance}
 
 \begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}cccccc}
@@ -383,21 +382,21 @@ Design & MSE (SE) & Bias & Coverage & Power & \shortstack{Average\\rank} & \shor
 
 \midrule
 \multicolumn{7}{l}{\textit{Queen contiguity (primary)}} \\
-Incidence-Guided Saturation & 0.091 (0.0008) & 0.032 & 0.937 & 0.930 & 1.425 & 50 \\
-Balanced Quartiles & 0.131 (0.0011) & 0.017 & 0.936 & 0.827 & 2.138 & 50 \\
-Isolation Buffer & 0.160 (0.0011) & 0.003 & 0.939 & 0.731 & 3.694 & 21.4 \\
-High Incidence Focus & 0.245 (0.0047) & 0.031 & 0.938 & 0.610 & 4.763 & 50 \\
-2$\times$2 Blocking & 0.319 (0.0032) & 0.010 & 0.939 & 0.642 & 4.244 & 50 \\
-Checkerboard & 1.087 (0.0101) & 0.001 & 0.941 & 0.547 & 4.737 & 50 \\
+Incidence-Guided Saturation & 0.091 (0.0008) & 0.032 & 0.937 & 0.930 & 1.775 & 50 \\
+Balanced Quartiles & 0.131 (0.0011) & 0.017 & 0.936 & 0.827 & 2.688 & 50 \\
+Isolation Buffer & 0.160 (0.0011) & 0.003 & 0.939 & 0.731 & 4.194 & 21.4 \\
+High Incidence Focus & 0.245 (0.0047) & 0.031 & 0.938 & 0.610 & 5.763 & 50 \\
+2$\times$2 Blocking & 0.319 (0.0032) & 0.010 & 0.939 & 0.642 & 5.244 & 50 \\
+Checkerboard & 1.087 (0.0101) & 0.001 & 0.941 & 0.547 & 5.737 & 50 \\
 
 \midrule
 \multicolumn{7}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Incidence-Guided Saturation & 0.072 (0.0006) & 0.018 & 0.942 & 0.963 & 1.488 & 50 \\
-Balanced Quartiles & 0.084 (0.0006) & 0.008 & 0.940 & 0.917 & 1.775 & 50 \\
-Isolation Buffer & 0.133 (0.0009) & 0.003 & 0.939 & 0.806 & 3.381 & 38.2 \\
-High Incidence Focus & 0.206 (0.0030) & 0.018 & 0.939 & 0.645 & 4.969 & 50 \\
-2$\times$2 Blocking & 0.128 (0.0012) & 0.004 & 0.938 & 0.818 & 3.400 & 50 \\
-Checkerboard (flagged) & 0.480 (0.0015) & $-0.652$ & 0.150 & 0.414 & 5.987 & 50 \\
+Incidence-Guided Saturation & 0.072 (0.0006) & 0.018 & 0.942 & 0.963 & 1.831 & 50 \\
+Balanced Quartiles & 0.084 (0.0006) & 0.008 & 0.940 & 0.917 & 2.225 & 50 \\
+Isolation Buffer & 0.133 (0.0009) & 0.003 & 0.939 & 0.806 & 4.206 & 38.2 \\
+High Incidence Focus & 0.206 (0.0030) & 0.018 & 0.939 & 0.645 & 5.969 & 50 \\
+2$\times$2 Blocking & 0.128 (0.0012) & 0.004 & 0.938 & 0.818 & 4.331 & 50 \\
+Checkerboard (flagged) & 0.480 (0.0015) & $-0.652$ & 0.150 & 0.414 & 6.987 & 50 \\
 
 \bottomrule
 
@@ -424,23 +423,22 @@ block.
 \subsection{Formal statistical
 comparison}\label{formal-statistical-comparison}
 
-The Friedman test rejected equal MSE ranks across the six designs under
-queen contiguity at \(\tau = 1\) (\(\chi^2 = 451.57\),
-\(\text{df} = 5\), 160 blocks, \(p < 2.2\times10^{-16}\)). The average
-within-block ranks were 1.43 for Incidence-Guided Saturation,
-2.14 for Balanced Quartiles, 3.69 for Isolation Buffer, 4.24 for
-\(2\times2\) Blocking, 4.74 for Checkerboard, and 4.76 for High
-Incidence Focus. Nemenyi comparisons (critical difference 0.596)
-separated 11 of the 15 pairs (Section \ref{app:supp-comparisons} shows
+The Friedman test rejected equal MSE ranks across the six designs and SRS under
+queen contiguity at \(\tau = 1\) (\(\chi^2 = 560.33\),
+\(\text{df} = 6\), 160 blocks, \(p < 2.2\times10^{-16}\)). The average
+within-block ranks were 1.78 for Incidence-Guided Saturation, 2.60 for SRS,
+2.69 for Balanced Quartiles, 4.19 for Isolation Buffer, 5.24 for
+\(2\times2\) Blocking, 5.74 for Checkerboard, and 5.76 for High
+Incidence Focus. Nemenyi comparisons (critical difference 0.712)
+separated 17 of the 21 pairs (Section \ref{app:supp-comparisons} shows
 the critical-difference diagrams). Incidence-Guided Saturation
-ranked significantly better than every other design, including Balanced
-Quartiles (\(p = 0.0086\)), and Balanced Quartiles ranked significantly
-better than the remaining four. The four pairs that Nemenyi comparisons
-did not separate all lay among the bottom four designs: \(2\times2\)
-Blocking against Isolation Buffer (\(p = 0.090\)), High Incidence Focus
-(\(p = 0.130\)), and Checkerboard (\(p = 0.170\)), and Checkerboard
+ranked significantly better than every other design and than SRS (\(p = 0.011\)). SRS and Balanced
+Quartiles could not be distinguished from each other (\(p = 1.00\)), and both ranked significantly
+better than the remaining four designs. The other three pairs that Nemenyi comparisons
+did not separate all lay among the bottom three designs: \(2\times2\)
+Blocking against High Incidence Focus (\(p = 0.32\)) and Checkerboard (\(p = 0.39\)), and Checkerboard
 against High Incidence Focus (\(p = 1.00\)). Holm-adjusted Wilcoxon
-signed-rank tests separated all 15 pairs.
+signed-rank tests separated 20 of the 21 pairs, all except Balanced Quartiles against SRS (\(p = 0.15\)).
 
 \begin{figure}[!htb]
 
@@ -455,8 +453,8 @@ signed-rank tests separated all 15 pairs.
 The bottom three designs were ordered differently by average rank and by
 mean MSE. By mean MSE the order was High Incidence Focus (0.245),
 \(2\times2\) Blocking (0.319), and Checkerboard (1.087); by average rank
-it was \(2\times2\) Blocking (4.24), Checkerboard (4.74), and High
-Incidence Focus (4.76). Both reversals have the same source: the MSEs of
+it was \(2\times2\) Blocking (5.24), Checkerboard (5.74), and High
+Incidence Focus (5.76). Both reversals have the same source: the MSEs of
 \(2\times2\) Blocking and Checkerboard depended strongly on the
 spillover regime. Each had a lower MSE than High Incidence Focus in all
 80 both-arms blocks (mean MSE 0.062 for each, against 0.162) and a
@@ -640,7 +638,7 @@ separate draws. Every other design had a higher MSE under the
 control-only regime, and the increase was largest for Checkerboard and
 \(2\times2\) Blocking, which went from close to the best designs under
 the both-arms regime to the two worst under the control-only regime.
-Among the six detailed designs, Incidence-Guided Saturation was first or second under both regimes, at this and every other value of $\tau$, and in the full benchmark that includes SRS (Table \ref{tab:grid-srs}) it remained competitive with SRS under both-arms spillover; this matters because a trial team may not know in advance which regime applies.
+Among the six detailed designs, Incidence-Guided Saturation was first or second under both regimes, at this and every other value of $\tau$. In the full benchmark that includes SRS (Table \ref{tab:grid-srs}), its both-arms MSE was 8\% above that of SRS, a small but statistically detectable difference (Figure \ref{fig:vs-srs}). This matters because a trial team may not know in advance which regime applies.
 
 \begin{table}[!htb]
 
@@ -714,21 +712,21 @@ lowest MSE in 97 of the 160 rook blocks (61\%) and Balanced Quartiles in
 Checkerboard, whose coverage was 0.150 (Figure \ref{fig:coverage-rook}
 in Section \ref{app:rook-figures}); within single incidence
 configurations, the corresponding ranges were 0.935 to 0.946, and 0.14
-to 0.15 for Checkerboard. The Friedman test rejected equal ranks
-(\(\chi^2 = 703.76\), \(\text{df} = 5\), 160 blocks,
-\(p < 2.2\times10^{-16}\)). Nemenyi comparisons separated 13 of 15
-pairs; the two they did not separate were Incidence-Guided Saturation against Balanced Quartiles (\(p = 0.74\)) and \(2\times2\)
+to 0.15 for Checkerboard. With SRS as a seventh member, the Friedman test rejected equal ranks
+(\(\chi^2 = 795.77\), \(\text{df} = 6\), 160 blocks,
+\(p < 2.2\times10^{-16}\)). Nemenyi comparisons separated 17 of 21
+pairs; the four they did not separate were Incidence-Guided Saturation against Balanced Quartiles (\(p = 0.66\)) and SRS (\(p = 0.14\)), Balanced Quartiles against SRS (\(p = 0.97\)), and \(2\times2\)
 Blocking against Isolation Buffer (\(p = 1.00\)). Holm-adjusted Wilcoxon
 tests separated every pair except \(2\times2\) Blocking against
-Isolation Buffer. In the surface-level comparison, Incidence-Guided
+Isolation Buffer and Balanced Quartiles against SRS (both \(p = 0.21\)). In the surface-level comparison, Incidence-Guided
 Saturation had a lower MSE than Balanced Quartiles in 48 of
 the 50 units (mean difference \(-0.0121\); \(-0.0139\), \(-0.0102\);
 Wilcoxon \(p = 9.9\times10^{-10}\)). \(2\times2\) Blocking and Isolation
 Buffer were close: \(2\times2\) Blocking had the lower MSE in 36 of the
 50 units (72\%; mean difference \(-0.0048\); \(-0.0078\), \(-0.0017\);
 Wilcoxon \(p = 0.0027\)), but Isolation Buffer had the slightly better
-average rank (3.38 against 3.40), and the two designs traded places at
-some values of \(\tau\) (see the results for \(\tau\) below). Every
+average rank (4.21 against 4.33), and the two designs traded places in mean MSE at
+\(\tau = 3\) (see the results for \(\tau\) below). Every
 other adjacent pair differed in all 50 units.
 
 Checkerboard under rook contiguity is a different case: \(\tau\) is not
@@ -819,13 +817,12 @@ every tested value of \(\tau\) (0.8, 1.0, 1.5, 2.0 and 3.0): the order by averag
 within-block rank did not change across these values, and neither did
 the order by mean MSE, although the two orders differ from each other in
 the bottom three designs (see Formal statistical comparison; Figure
-\ref{fig:tau-mse}a shows mean MSE). The Friedman statistic was 455.49,
-451.57, 429.01, 411.19, and 376.79 at these five values
+\ref{fig:tau-mse}a shows mean MSE). With SRS included, the order by average rank placed SRS second at every value of \(\tau\), and the Friedman statistic was 564.09,
+560.33, 540.92, 526.55, and 497.55 at these five values
 (\(p < 2.2\times10^{-16}\) at each). Under rook contiguity the order was
-also stable (Figure \ref{fig:tau-mse}b) except for the close pair of
-\(2\times2\) Blocking and Isolation Buffer: by average rank,
-\(2\times2\) Blocking was ahead only at \(\tau = 0.8\), and by mean MSE,
-Isolation Buffer was ahead only at \(\tau = 3\). The five values of
+also stable (Figure \ref{fig:tau-mse}b). By average rank among the six designs and SRS, it was the same at every value of \(\tau\), with SRS third behind Incidence-Guided Saturation and Balanced Quartiles. By mean MSE, the close pair of
+\(2\times2\) Blocking and Isolation Buffer traded places, with
+Isolation Buffer ahead only at \(\tau = 3\). The five values of
 \(\tau\) share their assignments and noise, so these five comparisons
 are not independent confirmations of one another; they show that, under
 queen contiguity, the order did not change across the five values of
@@ -944,7 +941,7 @@ Saturation combines low pooled MSE with comparatively favorable
 control-only performance. The SRS benchmark below changes the practical
 interpretation: recommend the saturation approach when control-only
 spillover is plausible, while retaining SRS as a competitive option
-under both-arms spillover. Saturation Quadrants performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence quadrants with little or no loss of estimation accuracy. Scenario-level worst cases summarize variation across
+under both-arms spillover. Saturation Regions performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy. Scenario-level worst cases summarize variation across
 parameter settings; they are distinct from conditional risk across
 assignments within one setting.
 
@@ -953,16 +950,22 @@ risk}\label{srs-benchmark-and-allocation-specific-risk}
 
 At \(\tau=1\) under queen contiguity, pooled over the five incidence
 configurations and all spatial/spillover settings, Incidence-Guided Saturation has
-mean MSE 0.0907 against SRS 0.1285; Saturation Quadrants has 0.0900. Table
+mean MSE 0.0907 against SRS 0.1285; Saturation Regions has 0.0900. Table
 \ref{tab:grid-srs} separates the regimes and includes all eight
 strategies. Incidence-Guided Saturation's control-only ratio to SRS is 0.631,
 whereas its both-arms ratio is 1.083. SRS, Balanced Quartiles and
 Balanced Halves have similar both-arms accuracy. Small mean differences
 should not be interpreted as equivalence, nor should pooling the regimes
-obscure the difference in design guidance. Paired comparisons over 50
-independent configuration-by-surface units support the lower pooled MSE
-of both saturation designs relative to SRS; the six-design Friedman
-rankings elsewhere describe that subset only.
+obscure the difference in design guidance.
+
+Figure \ref{fig:vs-srs} tests each design against SRS within each regime, over the 50 independent configuration-by-surface units. Under control-only spillover, Incidence-Guided Saturation had 36.9\% lower MSE than SRS (95\% interval 34.5\% to 39.2\% lower), Saturation Regions 36.7\% lower and Isolation Buffer 25.7\% lower, each in all 50 units (Holm-adjusted $p = 6.2\times10^{-9}$). Under both-arms spillover, Incidence-Guided Saturation had 8.3\% higher MSE than SRS (5.6\% to 11.0\% higher; $p = 6.1\times10^{-6}$) and Saturation Regions 4.3\% higher ($p = 0.017$). Balanced Quartiles and Balanced Halves did not differ significantly from SRS under either regime, and the remaining designs had significantly higher MSE than SRS under both-arms spillover, as did High Incidence Focus, $2\times2$ Blocking and Checkerboard under control-only spillover. Under rook contiguity the saturation designs had 23\% lower control-only MSE than SRS and 3 to 5\% higher both-arms MSE, and Isolation Buffer had 5.8\% higher control-only MSE than SRS. The advantage of the saturation designs over SRS is therefore specific to control-only spillover, and under both-arms spillover their small disadvantage is statistically detectable.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\linewidth]{../figures/fig_vs_srs_by_regime_queen.pdf}
+\caption{Each design's mean squared error (MSE) compared with simple random sampling (SRS) at $\tau = 1$ under queen contiguity, within each spillover regime. Each point is the mean paired difference in MSE over the 50 independent configuration-by-surface units, as a percentage of SRS's mean MSE in that regime, with its $t_{49}$ 95\% interval; negative values are lower error than SRS. Filled points are significant after Holm's adjustment over the eight designs compared with SRS within the regime (Wilcoxon signed-rank test). The horizontal axis uses a signed logarithmic scale so that Checkerboard fits on the same panel.}
+\label{fig:vs-srs}
+\end{figure}
 
 \begin{table}[!htb]
 
@@ -982,7 +985,7 @@ Design & MSE & Coverage & MSE & Coverage \\
 \midrule
 Checkerboard & 0.0624 & 0.940 & 2.1114 & 0.942 \\
 High Incidence Focus & 0.1617 & 0.941 & 0.3292 & 0.935 \\
-Saturation Quadrants & 0.0442 & 0.942 & 0.1359 & 0.929 \\
+Saturation Regions & 0.0442 & 0.942 & 0.1359 & 0.929 \\
 Isolation Buffer & 0.1608 & 0.939 & 0.1595 & 0.939 \\
 $2\times2$ Blocking & 0.0623 & 0.937 & 0.5761 & 0.941 \\
 Balanced Quartiles & 0.0421 & 0.940 & 0.2195 & 0.932 \\
@@ -1003,7 +1006,7 @@ scenarios. The pilot used 100 assignment draws for each randomized design and 10
 
 Averaged over the 40 units per regime in the pilot (fixed surfaces crossed with the extreme combinations of $\rho$ and $\gamma$), Incidence-Guided Saturation's control-only mean MSE is 0.1409 against SRS 0.2172, the estimated 90th percentile of allocation-specific MSE is 0.1747 against 0.2980, and the estimated worst-decile mean is 0.1936 against 0.3486. Under both arms, the
 corresponding mean MSE is 0.0458 against 0.0428 and worst-decile mean
-0.0582 against 0.0544. Saturation Quadrants also performs favorably under
+0.0582 against 0.0544. Saturation Regions also performs favorably under
 control-only spillover; Table \ref{tab:downside} in the application section compares every design with SRS on both criteria. These selected-unit results support a qualified
 downside argument for saturation; they are not the full-study grid
 estimates. The focused refinement preserves the control-only direction
@@ -1097,7 +1100,7 @@ The two saturation designs use one fixed four-region partition for all
 years. A geographic $k$-means procedure generates 250 candidates, selecting the partition by compactness and balance in
 reference population, cluster count and county count, without consulting
 outcomes. Reference population is pooled person-years divided by four.
-Saturation Quadrants randomly assigns 20/40/60/80\% to these regions each
+Saturation Regions randomly assigns 20/40/60/80\% to these regions each
 draw. Incidence-Guided Saturation first ranks clusters by annual per-capita rates,
 averages their ranks equally within each region, ranks those four means,
 and assigns 80/60/40/20\% from highest to lowest. Regional ties are
@@ -1128,7 +1131,7 @@ Design & 2018 & 2019 & 2020 & 2021 \\
 \midrule
 Checkerboard & 27.00 / 50.4 & 27.00 / 50.4 & 27.00 / 50.4 & 27.00 / 50.7 \\
 High Incidence Focus & 29.00 / 22.2 & 29.00 / 23.5 & 29.00 / 23.3 & 29.00 / 22.4 \\
-Saturation Quadrants & 29.03 / 49.2 & 29.03 / 49.2 & 29.03 / 49.1 & 29.03 / 49.1 \\
+Saturation Regions & 29.03 / 49.2 & 29.03 / 49.2 & 29.03 / 49.1 & 29.03 / 49.1 \\
 Isolation Buffer & 15.89 / 26.7 & 15.89 / 26.7 & 15.89 / 26.7 & 15.89 / 26.7 \\
 $2\times2$ Blocking & 28.00 / 50.0 & 31.00 / 55.1 & 27.00 / 48.0 & 29.00 / 50.3 \\
 Balanced Quartiles & 29.00 / 48.5 & 29.00 / 49.7 & 29.00 / 50.6 & 29.00 / 49.8 \\
@@ -1152,7 +1155,7 @@ Y=(I-\rho W)^{-1}[\tau Z+S(Z)+\epsilon],\qquad \epsilon\sim N(0,I).
 baseline education nor the constant structural intervention effect. We estimate $\tau$ with the same validated maximum likelihood implementation as in the grid study, with an intercept, \(Z\)
 and the true regime-specific \(S(Z)\), without \(X\). As in the grid
 model, \(\tau\) is the coefficient before spatial propagation, not an
-average total impact after applying \((I-\rho W)^{-1}\).
+average total impact after applying \((I-\rho W)^{-1}\). The main application reports Wald intervals. For the analyses of partial participation and sample size below, we report $\hat\tau \pm t_{0.975,\,n-p}\,\widehat{\mathrm{SE}}\sqrt{n/(n-p)}$, where $n$ is the number of participating colleges and $p$ the number of fitted coefficients plus $\rho$, and we test $\tau = 0$ against the same $t$ distribution. The maximum likelihood variance divides by $n$, and the normal reference distribution ignores the estimated parameters; with 58 or fewer clusters, both make the Wald interval too narrow.
 
 Primary queen settings cross \(\rho=0,0.2,0.5\), \(\gamma=0.5,0.8\),
 both regimes, four years and nine designs (432 reported settings). A
@@ -1162,11 +1165,23 @@ to both the outcome baseline and the fitted covariates (432 settings). It
 changes baseline and adjustment together and is not an empirical
 incidence--education association. A rook-contiguity sensitivity analysis of the primary model uses the extreme values $\rho=0,0.5$ (288 settings), and the two alternative regional summaries add 96 Incidence-Guided Saturation settings. The full application reports 1,248 settings, computed from 936 distinct simulation settings, because reported settings with the same allocations and outcome model share one simulation.
 
-We initially sampled $J=100$ assignments and simulated $R=100$ independent outcomes per distinct assignment. A design whose set of possible assignments contains only one assignment instead received $R=1,000$ outcomes for that assignment, rather than 100 repeated copies of it counted as separate allocations. An adaptive, prespecified replication schedule extended allocations or outcomes until the Monte Carlo standard error of mean MSE was at most 5\% of mean MSE and that of coverage at most 0.01. Two single-assignment settings in the matched sensitivity analysis required $R=2,000$; all randomized designs met these targets at $J=100$ and $R=100$. Each random draw used a fixed, reproducible seed. Settings with the same set of possible assignments shared their simulations, with annual treatment counts and population shares recalculated. In the primary model, Checkerboard, Saturation Quadrants, Isolation Buffer and SRS reuse the same simulations across years, because annual incidence enters neither their allocation nor the outcome model. These repeated values are not independent
+We initially sampled $J=100$ assignments and simulated $R=100$ independent outcomes per distinct assignment. A design whose set of possible assignments contains only one assignment instead received $R=1,000$ outcomes for that assignment, rather than 100 repeated copies of it counted as separate allocations. An adaptive, prespecified replication schedule extended allocations or outcomes until the Monte Carlo standard error of mean MSE was at most 5\% of mean MSE and that of coverage at most 0.01. Two single-assignment settings in the matched sensitivity analysis required $R=2,000$; all randomized designs met these targets at $J=100$ and $R=100$. Each random draw used a fixed, reproducible seed. Settings with the same set of possible assignments shared their simulations, with annual treatment counts and population shares recalculated. In the primary model, Checkerboard, Saturation Regions, Isolation Buffer and SRS reuse the same simulations across years, because annual incidence enters neither their allocation nor the outcome model. These repeated values are not independent
 annual confirmation.
 
 For each allocation $a$, the repeated outcomes estimate the conditional MSE \(m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,\text{observed inputs}]\). We report its distribution across sampled allocations, its estimated 90th percentile and the estimated mean among the worst 10\% of sampled allocations, alongside unconditional mean MSE, bias and coverage. An allocation drawn more than once keeps its sampled frequency but uses one conditional estimate, and the Monte Carlo uncertainty accounts for the resulting covariance. A separate tail refinement at queen $\rho=0,0.5$, $\gamma=0.8$, both regimes and all years and designs kept the same allocations and extended the randomized designs to $R=400$ outcomes per allocation, keeping $R=1,000$ for single-assignment designs. Worst-decile assignments were identified with one half of the simulated outcomes and evaluated with the other half, to avoid selection bias. The refinement is not a new allocation sample. The rank of the fitted design matrix, residual treatment information, aliased columns, warnings, invalid estimates or intervals, and estimates of $\rho$ at the boundary of its parameter space were recorded. Section
 \ref{app:nc} gives the reproducibility and precision details.
+
+\subsection{Partial participation and sample size}
+
+All 58 colleges will be invited to take part after the pilot, but not every college will join. We therefore repeated the application for subsets of $N$ participating colleges, $N \in \{15, 20, 25, 29, 30, 35, 40, 45, 50, 58\}$, under the education outcome model with $\beta = 0$. Under random volunteering, 50 subsets were drawn for each $N$ and shared by every design and year, so designs are compared on the same participants. In a sensitivity analysis at $N = 20$ and $N = 29$, a college's chance of joining rose linearly with its incidence rank, so that the highest-burden college was three times as likely to join as the lowest. Each design was rebuilt on the participants with its own rule, and the four saturation regions were required to contain at least two colleges each. Spatial dependence links participating colleges only, so a participant with no participating neighbor has a zero row in the participants' weights matrix $W_P$. Spillover exposure counts treated participating neighbors over all geographic neighbors, $e_j(Z) = \sum_{k \in \mathcal{N}(j)} Z_k / |\mathcal{N}(j)|$, so a non-participating neighbor counts as untreated. Spillover scales with the effect, $\gamma = \kappa\tau$ with $\kappa \in \{0.5, 0.8\}$, and the effect $\tau$ took nine values from 0 to 2 in units of the college-level outcome standard deviation. Settings crossed these with $\rho \in \{0, 0.5\}$, both spillover regimes, the nine strategies and the four planning years. With fewer than 58 participants, each setting used 20 allocations and 10 outcomes on each of the 50 subsets (10,000 fits), and a design with a single possible allocation on a subset used 200 outcomes instead; with all 58, it used 100 allocations and 100 outcomes, as in the main application, and reproduced the main application's MSE and coverage within Monte Carlo error. All effect sizes share the same subsets, allocations and noise, so power curves are smooth in $\tau$. For each setting we estimated power with the corrected $t$ test above, the number of colleges needed for 80\% power, and the smallest effect detectable with 80\% power at each $N$.
+
+The trial outcome is a score measured on each trained professional and averaged within each college. We write a professional's score as a college effect plus individual variation, with total variance 1, so that effects are in individual standard-deviation units. The intraclass correlation coefficient (ICC) is the share of that variance that lies between colleges, so the between-college variance is the ICC and the within-college variance is $1 - \text{ICC}$. Averaging the scores of $m$ professionals leaves the college part unchanged and divides the individual part by $m$, so the college mean has standard deviation $\sigma_c = \sqrt{\text{ICC} + (1 - \text{ICC})/m}$ \citep{donner_design_2000, hayes_cluster_2017}. A college-level effect of $\tau$ standard deviations is therefore an individual-level standardized effect $d = \tau\sigma_c$. With $\beta = 0$, multiplying the effect and the noise by the same constant leaves $\hat\tau/\widehat{\mathrm{SE}}$ unchanged, so power for any $m$, ICC and $d$ follows from the simulated college-level results; rerunning one setting with the effect and the noise both halved reproduced its estimates to within $6\times10^{-8}$. In a sensitivity analysis, the number of trained professionals grew with college population ($m$ averaging 25 over participants, ICC $= 0.05$), so the noise variance differed between colleges while the fitted model stayed unweighted, as an analyst unaware of the difference would fit it.
+
+\subsection{Further sensitivity analyses}
+
+We compared the nine strategies with the Friedman, Nemenyi and Holm-adjusted Wilcoxon tests used on the grid, treating the 24 combinations of year, $\rho$ and $\gamma$ as blocks, separately for each spillover regime and each value of $\beta$. The four years share one map and the strategies whose allocations ignore annual incidence share their simulations across years, so these $p$-values summarize consistency rather than independent evidence.
+
+To check that the design comparison does not depend on the spatial model, we generated data at $N = 58$ with $\beta = 0$ from the spatial lag model and fitted them by a conditional autoregressive (CAR) model \citep{besag_spatial_1974, cressie_statistics_1993} as well as by the spatial lag model. In the reverse direction, we generated data from a CAR model with the same mean and fitted them by both models. We also fitted two Bayesian models to the spatial lag data, a CAR model with the prior of Leroux and colleagues \citep{leroux_estimation_2000, lee_carbayes_2013} and a Bayesian spatial lag model \citep{lesage_introduction_2009}. Section \ref{app:nc-ext} gives the four models, their priors, the Markov chain Monte Carlo settings and the convergence checks. Finally, we replaced the proportional spillover exposure by a binary indicator of any treated neighbor and by a count of treated neighbors scaled by the mean number of neighbors, with the same form in the outcome model and the fit.
 
 \subsection{Completed results: accuracy, inference and
 reach}\label{completed-results-accuracy-inference-and-reach}
@@ -1176,13 +1191,13 @@ uncertainty in simulated performance; it does not certify interval
 calibration.
 
 Figure \ref{fig:nc-mse} compares the eight designs with SRS by year and regime.
-Under control-only spillover, Saturation Quadrants has descriptive mean MSE
+Under control-only spillover, Saturation Regions has descriptive mean MSE
 0.22329 against SRS 0.30761, a 27.4\% reduction. Incidence-Guided Saturation
 reduces mean MSE by 21.1--29.9\% across the four observed years (Table
 \ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best: the two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share. High Incidence Focus is year-sensitive
 under control-only spillover and cannot be recommended uniformly.
 
-Under both-arms spillover, SRS mean MSE is 0.07638, Saturation Quadrants
+Under both-arms spillover, SRS mean MSE is 0.07638, Saturation Regions
 0.07518, and Incidence-Guided Saturation ranges from 0.07428 to 0.07682 across
 years. SRS remains competitive with balancing, blocking and saturation.
 Small point differences do not establish equivalence or universal
@@ -1193,7 +1208,7 @@ causal validity.
 
 Mean annual coverage across primary settings is approximately
 92.6--93.6\%, below nominal 95\%. The full year/design/regime bias and
-coverage table is in Section \ref{app:nc}. Meeting the Monte Carlo precision targets does not repair this finite-sample undercoverage. Checkerboard's
+coverage table is in Section \ref{app:nc}. Meeting the Monte Carlo precision targets does not repair this finite-sample undercoverage. Applied to the stored fits of the main application, the corrected $t$ interval described under Outcome model and Monte Carlo evaluation had coverage between 94.1\% and 94.9\% for every design and regime (Section \ref{app:nc-ext}). Checkerboard's treatment effect is identified on this irregular graph, but weak treatment--spillover separation makes its estimates imprecise; this differs from exact rook non-identification on the rectangular grid. Checkerboard's
 treatment effect is identified on this irregular graph, but weak
 treatment--spillover separation makes its estimates imprecise; this
 differs from exact rook non-identification on the rectangular grid.
@@ -1206,6 +1221,8 @@ precision. $2\times2$ Blocking treatment counts are 28/31/27/29 by year;
 complete budgets and shares are reported in Table \ref{tab:nc-budgets}
 and the appendix.
 
+Incidence-Guided Saturation sends more treatment to high-incidence regions when incidence differs between regions. On the NC map it differs little, because the four regions' mean incidence ranks lie between 24 and 34 of 58 in every year. On average, Incidence-Guided Saturation treats colleges holding 51.1\% of the summed college incidence rates, against 50.4\% for Saturation Regions and 62.2\% for High Incidence Focus. Shares of deaths run the other way (49.2\%, 49.6\% and 35.4\%), because the highest-rate colleges serve small populations. On the simulation grid, where regional incidence differed more, incidence guidance raised the treated share of incidence by 2.1 to 3.1 percentage points over Saturation Regions, and across surfaces the gain rose with the spread of the regions' mean incidence ranks (correlation 0.84 to 0.99; Figure \ref{fig:spread-gain} in Section \ref{app:nc-ext}).
+
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\linewidth]{../figures/compact/nc_annual_accuracy.pdf}
@@ -1217,14 +1234,14 @@ and the appendix.
 \small
 \centering
 
-\caption{Primary application yearly mean MSE, queen contiguity; equal weights over the six $\rho/\gamma$ pairs. Saturation Quadrants and SRS reuse the same simulations across years.}
+\caption{Primary application yearly mean MSE, queen contiguity; equal weights over the six $\rho/\gamma$ pairs. Saturation Regions and SRS reuse the same simulations across years.}
 \label{tab:nc-year}
 % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
 
 \begin{tabular}{lrrrrr}
 \toprule
 & \multicolumn{2}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
-Year & SRS & \shortstack{Incidence-Guided\\Saturation} & SRS & \shortstack{Saturation\\Quadrants} & \shortstack{Incidence-Guided\\Saturation} \\
+Year & SRS & \shortstack{Incidence-Guided\\Saturation} & SRS & \shortstack{Saturation\\Regions} & \shortstack{Incidence-Guided\\Saturation} \\
 \midrule
 2018 & 0.07638 & 0.07428 & 0.30761 & 0.22329 & 0.24285 \\
 2019 & 0.07638 & 0.07628 & 0.30761 & 0.22329 & 0.21565 \\
@@ -1238,7 +1255,7 @@ Year & SRS & \shortstack{Incidence-Guided\\Saturation} & SRS & \shortstack{Satur
 \subsection{Allocation downside and
 sensitivity}\label{allocation-downside-and-sensitivity}
 
-At the two refined queen settings, $\rho=0$ and $\rho=0.5$ with $\gamma=0.8$, under control-only spillover, Saturation Quadrants's estimated 90th percentile of allocation-specific MSE is 31.8--32.9\%
+At the two refined queen settings, $\rho=0$ and $\rho=0.5$ with $\gamma=0.8$, under control-only spillover, Saturation Regions' estimated 90th percentile of allocation-specific MSE is 31.8--32.9\%
 below SRS and its estimated worst-decile mean 34.6--37.8\% below. Incidence-Guided
 Saturation's corresponding reductions are 20.8--38.6\% and 20.7--43.4\%.
 The pattern persists when worst-decile assignments are identified with one half of the simulated outcomes and evaluated with the other half, which avoids selection bias. Figure \ref{fig:nc-risk} shows the $\rho=0.5$ setting. This supports a descriptive downside benefit
@@ -1267,7 +1284,7 @@ Design & Mean & Worst 10\% & Mean & Worst 10\% & Mean & Worst 10\% & Mean & Wors
 \midrule
 Checkerboard & 1.41 & 1.10 & 9.80 & 6.11 & 2.68 & 2.20 & 3.02 & 1.88 \\
 High Incidence Focus & 3.91 & 3.11 & 1.38 & 0.87 & 0.93 & 0.76 & 1.03 & 0.64 \\
-Saturation Quadrants & 1.06 & 1.05 & 0.62 & 0.53 & 0.99 & 0.94 & 0.73 & 0.64 \\
+Saturation Regions & 1.06 & 1.05 & 0.62 & 0.53 & 0.99 & 0.94 & 0.73 & 0.64 \\
 Isolation Buffer & 3.79 & 3.93 & 0.75 & 0.62 & 3.69 & 4.75 & 0.93 & 0.91 \\
 $2\times2$ Blocking & 1.44 & 1.57 & 2.68 & 2.63 & 1.00 & 1.02 & 1.15 & 1.18 \\
 Balanced Quartiles & 0.99 & 1.00 & 1.00 & 1.00 & 0.98 & 0.96 & 0.95 & 1.01 \\
@@ -1293,7 +1310,7 @@ Figure \ref{fig:alloc-dist} shows the full allocation-to-allocation distribution
 
 Tail uncertainty remains material. With \(J=100\), the worst decile
 contains only ten sampled draws; extra outcomes reduce noise in
-\(\hat m(a)\) but do not enlarge the allocation sample. All 112 reported settings in the tail refinement for designs with more than one possible assignment flag uncertain worst-decile membership. Under both arms, the overlap between the worst deciles identified by the two outcome halves (the Jaccard index: allocations in both divided by allocations in either) was 0--0.25 for Incidence-Guided Saturation, and approximately 61--86\% of the raw variance of estimated risk across allocations was attributable to outcome Monte Carlo noise. Saturation Quadrants's worst-decile membership was similarly unstable. Small both-arms tail differences therefore do not establish superior downside protection. Checkerboard and High Incidence Focus each have only one possible assignment for these inputs; their 90th percentile and worst-decile mean equal their conditional mean MSE, which does not imply low error or absence of outcome uncertainty.
+\(\hat m(a)\) but do not enlarge the allocation sample. All 112 reported settings in the tail refinement for designs with more than one possible assignment flag uncertain worst-decile membership. Under both arms, the overlap between the worst deciles identified by the two outcome halves (the Jaccard index: allocations in both divided by allocations in either) was 0--0.25 for Incidence-Guided Saturation, and approximately 61--86\% of the raw variance of estimated risk across allocations was attributable to outcome Monte Carlo noise. Saturation Regions' worst-decile membership was similarly unstable. Small both-arms tail differences therefore do not establish superior downside protection. Checkerboard and High Incidence Focus each have only one possible assignment for these inputs; their 90th percentile and worst-decile mean equal their conditional mean MSE, which does not imply low error or absence of outcome uncertainty.
 
 
 
@@ -1307,6 +1324,32 @@ education ability. Rook and queen comparisons matched at the same extreme combin
 prespecified mean-rank rule rather than select a summary
 retrospectively. Section \ref{app:nc} reports the matched sensitivity
 table and regional ordering.
+
+\subsection{Planning for realistic participation}
+
+Under both-arms spillover, the design hardly affected the number of colleges a trial needs. Every design except Checkerboard and Isolation Buffer needed 35 or 36 colleges for 80\% power to detect a college-level effect of one standard deviation, and about 19 colleges for 1.5 standard deviations (Figure \ref{fig:colleges-needed}, Table \ref{tab:nc-power}). Checkerboard and Isolation Buffer did not reach 80\% power at $\tau = 1$ even with all 58 colleges. Under control-only spillover, no design reached 80\% power at $\tau = 1$ with all 58 colleges. At $\tau = 1.5$ the two saturation designs needed 27 or 28 colleges, against 29 to 31 for SRS and the rank-based designs, while $2\times2$ Blocking and Isolation Buffer failed to reach 80\% power with 58 colleges in one of the four planning years. Power under control-only spillover rose slowly beyond about 40 colleges (Figure \ref{fig:power-n}). When nearly every college participates, nearly every control has a treated neighbor, so spillover exposure varies little and is hard to separate from treatment; non-participating neighbors restore some of that variation, and so do the saturation designs. With all 58 colleges, the smallest effect detectable with 80\% power was 0.76 to 0.78 college-level standard deviations under both-arms spillover for every design except Checkerboard (1.32) and Isolation Buffer (1.50), and 1.24 to 1.25 for the two saturation designs under control-only spillover, against 1.45 to 1.57 for SRS and the rank-based designs.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\linewidth]{../figures/fig_colleges_needed.pdf}
+\caption{Number of participating colleges needed for 80\% power with the corrected $t$ test, by design, for a college-level effect of $\tau = 1$ standard deviation under both-arms spillover and $\tau = 1.5$ under control-only spillover. Random volunteering, $\rho = 0.5$ and spillover $\gamma = 0.8\tau$. Bars show the mean over the 2018--2021 planning years and whiskers the range; gray bars mark designs that did not reach 80\% power with all 58 colleges in the stated number of years.}
+\label{fig:colleges-needed}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\linewidth]{../figures/fig_power_vs_n.pdf}
+\caption{Power of the corrected $t$ test against the number of participating colleges for simple random sampling (SRS), the two saturation designs and Checkerboard, by spillover regime (columns) and college-level effect (rows). Random volunteering, $\rho = 0.5$ and spillover $\gamma = 0.8\tau$. Lines show the mean over the 2018--2021 planning years and bands the range; the dashed line marks 80\% power.}
+\label{fig:power-n}
+\end{figure}
+
+For a trial with $m = 25$ trained professionals per college and an ICC of 0.05, so that $\sigma_c = 0.30$, an individual-level effect of $d = 0.3$ gives power 0.71 to 0.72 with 29 colleges and 0.96 with 58 under both-arms spillover, for SRS and for both saturation designs. Under control-only spillover the same effect gives power 0.49 and 0.53 with SRS, and 0.51 and 0.64 with Incidence-Guided Saturation (Table \ref{tab:nc-translation} in Section \ref{app:nc-ext}). Letting the number of professionals grow with college population, at the same average of 25, reduced power by about 0.1 for every design and changed no design's relative standing.
+
+The Wald test rejected a true null hypothesis in 11\% to 13\% of simulated trials with 15 colleges and in 6\% to 7\% with 58. With the corrected $t$ test the rejection rate was 4.4\% to 5.6\%, and the coverage of the corrected interval at $\tau = 1$ was between 94.0\% and 95.6\% for every design and regime at every number of colleges (Table \ref{tab:nc-calibration} in Section \ref{app:nc-ext}). The colleges-needed numbers above therefore come from a test with the nominal size.
+
+The regime-specific guidance held with fewer participants, but the size of the saturation advantage depended on participation (Table \ref{tab:nc-guidance} in Section \ref{app:nc-ext}). Checkerboard and Isolation Buffer remained worse than SRS under both-arms spillover at every number of colleges, and the rank-based designs remained within a few percent of SRS. Under control-only spillover, the saturation designs' mean MSE was 22\% below that of SRS with 58 colleges, 9\% to 10\% below with 40, 4\% to 5\% below with 29 and about 1\% below with 20. With few participants, non-participating neighbors already create the exposure variation that saturation otherwise supplies. When the colleges with higher incidence were more likely to volunteer, the saturation designs' advantage over SRS was 2\% or less at 20 and 29 colleges. Isolation Buffer went from matching SRS under control-only spillover with 58 colleges to two to four times SRS's MSE with 29 or fewer.
+
+The design comparison did not depend on the spatial model used to generate or fit the data, with one exception (Section \ref{app:nc-ext}). Fitting a CAR model, generating the data from a CAR model, or both, left the saturation designs with 0.76 to 0.82 times SRS's MSE under control-only spillover, and Checkerboard and Isolation Buffer the worst designs under both-arms spillover. A Bayesian spatial lag model reproduced the maximum likelihood results, with posterior means correlated 0.999 with the maximum likelihood estimates, credible-interval coverage of 94.5\% to 95.3\% and the same design ordering. The exception is the Bayesian CAR model with strong spatial dependence ($\rho = 0.5$). Its estimates were biased by 0.14 to 0.22 even when its chains converged, its coverage was 88\% to 90\%, and it did not reproduce the saturation designs' control-only advantage. That model assumes a different dependence structure from the one that generated the data, and the correctly specified Bayesian model does not share the problem. Under a binary spillover exposure Isolation Buffer was never identified, and under a count exposure the saturation designs remained the best under control-only spillover. Formal tests over the 24 combinations of year, $\rho$ and $\gamma$ rejected equal ranks for every regime and value of $\beta$ (Friedman $\chi^2$ from 135 to 180 on 8 degrees of freedom), and under control-only spillover the two saturation designs had the two best average ranks.
 
 The application supports considering either saturation strategy when
 control-only spillover is plausible, and SRS alongside other randomized
@@ -1331,7 +1374,7 @@ the primary scenario, \(\tau = 1\).
 \small
 \centering
 
-\caption{The two related variants outside the detailed six-design grid ranking, in the format of Table \ref{tab:designs}. Saturation Quadrants shares its mechanism with Incidence-Guided Saturation, and Balanced Halves with Balanced Quartiles (see Treatment assignment designs). A cluster's incidence rank is its rank by the baseline incidence surface $X_k$, with ties broken at random in every draw. Clusters treated is the number of clusters treated per assignment.}
+\caption{The two related variants outside the detailed six-design grid ranking, in the format of Table \ref{tab:designs}. Saturation Regions shares its mechanism with Incidence-Guided Saturation, and Balanced Halves with Balanced Quartiles (see Treatment assignment designs). A cluster's incidence rank is its rank by the baseline incidence surface $X_k$, with ties broken at random in every draw. Clusters treated is the number of clusters treated per assignment.}
 \label{tab:excluded-designs}
 
 \begin{tabular}{p{3.4cm}p{6.4cm}p{2.0cm}p{2.3cm}}
@@ -1340,7 +1383,7 @@ the primary scenario, \(\tau = 1\).
 Design & Assignment rule & Clusters treated & Deterministic \\
 
 \midrule
-Saturation Quadrants & The grid is divided into its four $5\times5$ coordinate quadrants, which are given saturations of 20\%, 40\%, 60\%, and 80\% in an order drawn at random for each assignment, without reference to incidence; within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
+Saturation Regions & The grid is divided into its four $5\times5$ coordinate quadrants, which are given saturations of 20\%, 40\%, 60\%, and 80\% in an order drawn at random for each assignment, without reference to incidence; within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
 Balanced Halves & Clusters are divided by incidence rank into two strata of 50; 25 clusters are treated at random in each stratum & 50 & No \\
 
 \bottomrule
@@ -1349,7 +1392,7 @@ Balanced Halves & Clusters are divided by incidence rank into two strata of 50; 
 
 \end{table}
 
-The argument for leaving Saturation Quadrants and Balanced Halves out of
+The argument for leaving Saturation Regions and Balanced Halves out of
 the detailed grid analysis, with the Nemenyi and Wilcoxon results for
 each pair, is given under Treatment assignment designs in Methods; Table
 \ref{tab:eight-design} supplies the rest of the eight-design comparison.
@@ -1363,7 +1406,7 @@ four and three decimal places.
 \small
 \centering
 
-\caption{Performance of all eight designs at the primary scenario, $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Retained marks the six designs compared in the detailed grid analysis. Average rank is the mean of each design's within-block MSE rank among the eight designs over the 160 blocks (1 = lowest MSE), so it differs from the six-design average rank in Table \ref{tab:performance}. Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}
+\caption{Performance of all eight designs and SRS at the primary scenario, $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Retained marks the six designs compared in the detailed grid analysis; SRS is the benchmark. Average rank is the mean of each design's within-block MSE rank among the eight designs and SRS over the 160 blocks (1 = lowest MSE), so it differs from the average rank in Table \ref{tab:performance}. Under rook contiguity, $\tau$ is not identified for Checkerboard; its estimates are kept and flagged.}
 \label{tab:eight-design}
 
 \begin{tabular}{lcccc}
@@ -1373,25 +1416,27 @@ Design & Retained & MSE & Coverage & Average rank \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Queen contiguity (primary)}} \\
-Saturation Quadrants & No & 0.0900 & 0.936 & 2.100 \\
-Incidence-Guided Saturation & Yes & 0.0907 & 0.937 & 2.350 \\
-Balanced Halves & No & 0.1299 & 0.936 & 3.312 \\
-Balanced Quartiles & Yes & 0.1308 & 0.936 & 3.356 \\
-Isolation Buffer & Yes & 0.1602 & 0.939 & 5.138 \\
-High Incidence Focus & Yes & 0.2455 & 0.938 & 6.763 \\
-2$\times$2 Blocking & Yes & 0.3192 & 0.939 & 6.244 \\
-Checkerboard & Yes & 1.0869 & 0.941 & 6.737 \\
+Saturation Regions & No & 0.0900 & 0.936 & 2.394 \\
+Incidence-Guided Saturation & Yes & 0.0907 & 0.937 & 2.700 \\
+Simple Random Sampling & Benchmark & 0.1285 & 0.938 & 3.788 \\
+Balanced Halves & No & 0.1299 & 0.936 & 3.831 \\
+Balanced Quartiles & Yes & 0.1308 & 0.936 & 3.906 \\
+Isolation Buffer & Yes & 0.1602 & 0.939 & 5.638 \\
+High Incidence Focus & Yes & 0.2455 & 0.938 & 7.763 \\
+2$\times$2 Blocking & Yes & 0.3192 & 0.939 & 7.244 \\
+Checkerboard & Yes & 1.0869 & 0.941 & 7.737 \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Saturation Quadrants & No & 0.0708 & 0.940 & 2.281 \\
-Incidence-Guided Saturation & Yes & 0.0717 & 0.942 & 2.306 \\
-Balanced Halves & No & 0.0842 & 0.940 & 3.038 \\
-Balanced Quartiles & Yes & 0.0837 & 0.940 & 2.919 \\
-Isolation Buffer & Yes & 0.1329 & 0.939 & 5.225 \\
-High Incidence Focus & Yes & 0.2062 & 0.939 & 6.969 \\
-2$\times$2 Blocking & Yes & 0.1281 & 0.938 & 5.275 \\
-Checkerboard (flagged) & Yes & 0.4799 & 0.150 & 7.987 \\
+Saturation Regions & No & 0.0708 & 0.940 & 2.587 \\
+Incidence-Guided Saturation & Yes & 0.0717 & 0.942 & 2.650 \\
+Simple Random Sampling & Benchmark & 0.0850 & 0.938 & 3.612 \\
+Balanced Halves & No & 0.0842 & 0.940 & 3.569 \\
+Balanced Quartiles & Yes & 0.0837 & 0.940 & 3.369 \\
+Isolation Buffer & Yes & 0.1329 & 0.939 & 6.050 \\
+High Incidence Focus & Yes & 0.2062 & 0.939 & 7.969 \\
+2$\times$2 Blocking & Yes & 0.1281 & 0.938 & 6.206 \\
+Checkerboard (flagged) & Yes & 0.4799 & 0.150 & 8.988 \\
 
 \bottomrule
 
@@ -1576,27 +1621,22 @@ results stated in the detailed grid analysis.
 \label{fig:cd-rook}
 \end{subfigure}
 
-\caption{Nemenyi critical-difference diagrams for the six designs at $\tau = 1$, pooled over the five incidence configurations. Designs are placed at their average within-block MSE rank, given in parentheses (1 = lowest MSE); gray bars join designs that the Nemenyi comparisons did not separate.}
+\caption{Nemenyi critical-difference diagrams for the six designs and simple random sampling (SRS) at $\tau = 1$, pooled over the five incidence configurations. Designs are placed at their average within-block MSE rank, given in parentheses (1 = lowest MSE); gray bars join designs that the Nemenyi comparisons did not separate.}
 \label{fig:cd}
 
 \end{figure}
 
 Figure \ref{fig:cd} gives the Nemenyi critical-difference diagrams for
-the comparison of the six designs at \(\tau = 1\), whose results are
+the comparison of the six designs and SRS at \(\tau = 1\), whose results are
 reported under Formal statistical comparison (queen contiguity) and Rook
 contiguity in the Results. Each design is placed at its average
-within-block MSE rank among the six designs over the 160 blocks of its
-neighbor type. The red arrow shows the critical difference, 0.596 at
+within-block MSE rank among the six designs and SRS over the 160 blocks of its
+neighbor type. The red arrow shows the critical difference, 0.712 at
 \(\alpha = 0.05\), and a gray bar joins designs whose pairwise Nemenyi
-comparisons were all not significant: under queen contiguity, Isolation
-Buffer with \(2\times2\) Blocking, and \(2\times2\) Blocking with
-Checkerboard and High Incidence Focus; under rook contiguity,
-Incidence-Guided Saturation with Balanced Quartiles, and
-Isolation Buffer with \(2\times2\) Blocking. Where two designs have
-nearly equal average ranks (Checkerboard and High Incidence Focus under
-queen contiguity, Isolation Buffer and \(2\times2\) Blocking under rook
-contiguity), the dotted leader line to the outer label crosses the
-neighboring design's label; the positions and labels are correct. Under
+comparisons were all not significant. Under queen contiguity, the bars join Balanced Quartiles with SRS, and \(2\times2\) Blocking with
+Checkerboard and High Incidence Focus. Under rook contiguity, they join
+Incidence-Guided Saturation, Balanced Quartiles and SRS, and
+Isolation Buffer with \(2\times2\) Blocking. Under
 rook contiguity, \(\tau\) is not identified for Checkerboard; its
 estimates are kept and flagged.
 
@@ -2015,7 +2055,7 @@ precision components, residual treatment information and warning and failure rec
 \footnotesize
 \centering
 
-\caption{Primary queen application performance by design and planning year. Each entry averages the six $\rho/\gamma$ pairs of one spillover regime with equal weight; MSE, bias and coverage are Monte Carlo estimates. Checkerboard, Saturation Quadrants, Isolation Buffer and SRS use the same simulations in every year, because annual incidence enters neither their allocation nor the outcome model, so their rows repeat; repeated values are not independent annual confirmation. Treatment counts and population shares are in Table \ref{tab:nc-budgets}.}
+\caption{Primary queen application performance by design and planning year. Each entry averages the six $\rho/\gamma$ pairs of one spillover regime with equal weight; MSE, bias and coverage are Monte Carlo estimates. Checkerboard, Saturation Regions, Isolation Buffer and SRS use the same simulations in every year, because annual incidence enters neither their allocation nor the outcome model, so their rows repeat; repeated values are not independent annual confirmation. Treatment counts and population shares are in Table \ref{tab:nc-budgets}.}
 \label{tab:nc-annual}
 % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
 
@@ -2035,7 +2075,7 @@ High Incidence Focus & 2018 & 0.07172 & 0.0160 & 0.934 & 0.21426 & 0.0237 & 0.93
  & 2020 & 0.07292 & 0.0094 & 0.931 & 0.25918 & 0.0327 & 0.930 \\
  & 2021 & 0.07031 & 0.0104 & 0.934 & 0.35318 & 0.0296 & 0.929 \\
 \addlinespace
-Saturation Quadrants & 2018 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
+Saturation Regions & 2018 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
  & 2019 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
  & 2020 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
  & 2021 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
@@ -2102,6 +2142,216 @@ Pooled regional rate & Control & 0.962 & 1.133 & 1.061 & 1.030 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\subsection{Participation, power and sensitivity analyses}
+\applabel{S10}{app:nc-ext}This section gives the detail behind Planning for realistic participation and the sensitivity analyses of the application. All numbers come from aggregate summaries of runs that wrote to their own output folders, each with a manifest of parameters, code hashes and package versions; the production application files were unchanged. Unless stated otherwise, results use random volunteering, $\beta = 0$, $\kappa = 0.8$ and the corrected $t$ test, and they average the four planning years.
+
+\textbf{Colleges needed and smallest detectable effect.} Table \ref{tab:nc-power} gives, for each strategy, the number of colleges needed for 80\% power and the smallest college-level effect detectable with 80\% power at 29 and 58 colleges. The number of colleges needed is interpolated monotonically between the simulated values of $N$ within each year and then averaged over years. Results at $\rho = 0$ differed from those at $\rho = 0.5$ by about two colleges or fewer. Power curves are not perfectly monotone in $N$ within Monte Carlo error, because the participant subsets differ between values of $N$; we report the dips rather than smooth them.
+
+\begin{table}[!htb]
+\small
+\centering
+\caption{Colleges needed for 80\% power and smallest effect detectable with 80\% power (MDE, college-level standard deviations), corrected $t$ test, random volunteering, $\rho = 0.5$, spillover $\gamma = 0.8\tau$, mean over the 2018--2021 planning years. $>58$: 80\% power not reached with all 58 colleges in at least one year. $>2$: 80\% power not reached at the largest simulated effect, $\tau = 2$.}
+\label{tab:nc-power}
+% SOURCE: application/results/methods_ext_2026-10/summaries_v2/a3_n80_summary.csv, a3_mde_summary.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{2}{c}{Colleges needed} & \multicolumn{2}{c}{MDE, 29 colleges} & \multicolumn{2}{c}{MDE, 58 colleges} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+Design & \shortstack{Both arms\\$\tau = 1$} & \shortstack{Control only\\$\tau = 1.5$} & Both & Control & Both & Control \\
+\midrule
+Checkerboard & $>58$ & $>58$ & 1.70 & 1.86 & 1.32 & $>2$ \\
+High Incidence Focus & 35 & 30 & 1.13 & 1.51 & 0.76 & 1.57 \\
+Saturation Regions & 35 & 28 & 1.14 & 1.47 & 0.76 & 1.24 \\
+Isolation Buffer & $>58$ & $>58$ & $>2$ & $>2$ & 1.50 & 1.50 \\
+$2\times2$ Blocking & 36 & $>58$ & 1.15 & 1.63 & 0.78 & 1.60 \\
+Balanced Quartiles & 35 & 30 & 1.14 & 1.50 & 0.77 & 1.46 \\
+Balanced Halves & 35 & 29 & 1.13 & 1.49 & 0.77 & 1.46 \\
+Incidence-Guided Saturation & 35 & 27 & 1.13 & 1.46 & 0.76 & 1.25 \\
+Simple Random Sampling & 35 & 31 & 1.14 & 1.50 & 0.77 & 1.45 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\small
+\centering
+\caption{Power of the corrected $t$ test for an individual-level standardized effect $d$ with simple random sampling, by the number of trained professionals per college ($m$) and the intraclass correlation coefficient (ICC); $\sigma_c = \sqrt{\text{ICC} + (1-\text{ICC})/m}$ and $\tau = d/\sigma_c$. Random volunteering, $\rho = 0.5$, spillover $\gamma = 0.8\tau$, mean over the four planning years.}
+\label{tab:nc-translation}
+% SOURCE: application/results/methods_ext_2026-10/summaries_v2/a3_translation_m_icc.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{rrrcccccccc}
+\toprule
+& & & \multicolumn{4}{c}{Both arms} & \multicolumn{4}{c}{Control only} \\
+\cmidrule(lr){4-7}\cmidrule(lr){8-11}
+& & & \multicolumn{2}{c}{29 colleges} & \multicolumn{2}{c}{58 colleges} & \multicolumn{2}{c}{29 colleges} & \multicolumn{2}{c}{58 colleges} \\
+$m$ & ICC & $\sigma_c$ & $d=0.2$ & $d=0.3$ & $d=0.2$ & $d=0.3$ & $d=0.2$ & $d=0.3$ & $d=0.2$ & $d=0.3$ \\
+\midrule
+10 & 0.01 & 0.330 & 0.33 & 0.62 & 0.61 & 0.90 & 0.22 & 0.41 & 0.24 & 0.45 \\
+10 & 0.05 & 0.381 & 0.27 & 0.51 & 0.50 & 0.82 & 0.18 & 0.33 & 0.20 & 0.36 \\
+10 & 0.10 & 0.436 & 0.22 & 0.41 & 0.40 & 0.71 & 0.15 & 0.27 & 0.17 & 0.30 \\
+25 & 0.01 & 0.223 & 0.61 & 0.91 & 0.90 & 1.00 & 0.41 & 0.71 & 0.44 & 0.74 \\
+25 & 0.05 & 0.297 & 0.40 & 0.71 & 0.69 & 0.96 & 0.26 & 0.49 & 0.29 & 0.53 \\
+25 & 0.10 & 0.369 & 0.28 & 0.53 & 0.52 & 0.85 & 0.19 & 0.35 & 0.21 & 0.38 \\
+50 & 0.01 & 0.173 & 0.81 & 0.98 & 0.98 & 1.00 & 0.59 & 0.87 & 0.63 & 0.89 \\
+50 & 0.05 & 0.263 & 0.48 & 0.80 & 0.79 & 0.98 & 0.31 & 0.58 & 0.34 & 0.62 \\
+50 & 0.10 & 0.344 & 0.31 & 0.59 & 0.58 & 0.88 & 0.21 & 0.39 & 0.23 & 0.42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interval calibration.} We tried several corrections before adopting one, with the rule that a method is adopted only if its coverage lies between 94.0\% and 96.0\% for every design and regime. On the stored fits of the main application ($\beta = 0$), the Wald interval covered 92.6\% to 93.6\% by design and regime. A $t$ reference distribution alone gave 93.2\% to 94.1\%, a degrees-of-freedom-corrected standard error alone 93.5\% to 94.4\%, and the two together 94.1\% to 94.9\%. In a separate run of 500 fits per setting at 58 colleges, parametric percentile bootstrap intervals with 499 replicates covered 90.1\% to 93.6\%, parametric bootstrap-$t$ intervals 93.2\% to 95.8\% and profile-likelihood intervals 91.8\% to 94.7\%. Only the $t$ interval with the corrected standard error met the rule. Table \ref{tab:nc-calibration} shows its size and coverage at each number of participating colleges.
+
+\begin{table}[!htb]
+\small
+\centering
+\caption{Size and coverage of the Wald and corrected $t$ tests by the number of participating colleges, random volunteering, $\beta = 0$, all designs, regimes, values of $\rho$ and $\kappa$, and years. Size is the rejection rate of a true null hypothesis $\tau = 0$ (range over designs); coverage is at $\tau = 1$, with the range over design-by-regime means in parentheses. All entries are percentages.}
+\label{tab:nc-calibration}
+% SOURCE: application/results/methods_ext_2026-10/summaries_v2/v2_size.csv, a3_settings.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{rcccc}
+\toprule
+Colleges & Wald size & Corrected $t$ size & Wald coverage & Corrected $t$ coverage \\
+\midrule
+15 & 11.1--12.8 & 4.4--5.4 & 87.7 & 94.9 (94.5--95.6) \\
+20 & 9.5--10.4 & 4.7--5.4 & 89.8 & 94.8 (94.4--95.3) \\
+25 & 8.4--9.5 & 4.7--5.5 & 90.9 & 94.8 (94.4--95.2) \\
+29 & 8.3--8.8 & 5.0--5.5 & 91.6 & 94.8 (94.4--95.1) \\
+30 & 7.9--8.6 & 5.0--5.5 & 91.7 & 94.7 (94.4--95.0) \\
+35 & 7.6--8.1 & 5.1--5.5 & 92.2 & 94.7 (94.2--95.1) \\
+40 & 7.4--7.7 & 5.2--5.5 & 92.5 & 94.7 (94.2--94.9) \\
+45 & 6.9--7.5 & 5.0--5.6 & 92.7 & 94.7 (94.3--95.2) \\
+50 & 7.0--7.3 & 5.2--5.6 & 92.9 & 94.6 (94.2--95.1) \\
+58 & 6.3--7.0 & 5.0--5.5 & 93.2 & 94.6 (94.0--95.1) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Guidance under partial participation.} Table \ref{tab:nc-guidance} gives each strategy's mean MSE relative to SRS at $\tau = 1$ for 20, 29, 40 and 58 participating colleges. When colleges with higher incidence were more likely to volunteer, the ratios at 20 and 29 colleges were within 0.02 of 1 for both saturation designs, Balanced Quartiles and Balanced Halves under either regime, and Checkerboard and Isolation Buffer remained the worst designs. Rebuilding the four saturation regions on the participants left at least two colleges in every region by construction. Before that requirement was imposed, a region with fewer than three colleges occurred in 38\% of subsets at 15 colleges and 7\% at 20; imposing it changed the regions of only two distinct participant subsets and changed no ratio in Table \ref{tab:nc-guidance} by more than 0.01.
+
+\begin{table}[!htb]
+\small
+\centering
+\caption{Mean MSE relative to simple random sampling (SRS) at $\tau = 1$ by the number of participating colleges, random volunteering, mean over 16 blocks (year $\times$ $\rho$ $\times$ $\kappa$). Below 1 is lower error than SRS.}
+\label{tab:nc-guidance}
+% SOURCE: application/results/methods_ext_2026-10/summaries_v2/a3_guidance_ratio_to_srs.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{Both arms} & \multicolumn{4}{c}{Control only} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+Design & 20 & 29 & 40 & 58 & 20 & 29 & 40 & 58 \\
+\midrule
+Checkerboard & 1.88 & 2.18 & 2.23 & 2.82 & 1.18 & 1.38 & 1.80 & 3.10 \\
+High Incidence Focus & 0.98 & 0.97 & 0.96 & 0.92 & 0.99 & 1.00 & 0.99 & 1.06 \\
+Saturation Regions & 1.00 & 0.98 & 1.00 & 1.00 & 0.99 & 0.96 & 0.90 & 0.78 \\
+Isolation Buffer & 5.92 & 4.21 & 3.74 & 3.87 & 3.61 & 2.25 & 1.51 & 0.99 \\
+$2\times2$ Blocking & 1.03 & 1.01 & 1.02 & 1.03 & 1.08 & 1.11 & 1.11 & 1.18 \\
+Balanced Quartiles & 1.00 & 0.99 & 0.99 & 1.01 & 1.00 & 0.99 & 0.99 & 1.02 \\
+Balanced Halves & 0.99 & 0.98 & 0.98 & 1.00 & 0.99 & 0.97 & 1.01 & 1.01 \\
+Incidence-Guided Saturation & 0.99 & 0.97 & 1.00 & 1.00 & 0.99 & 0.95 & 0.91 & 0.78 \\
+Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Targeting.} With all 58 colleges, Incidence-Guided Saturation's mean share of the summed college incidence rates in treated colleges was 51.1\%, against 50.4\% for Saturation Regions, 50.0\% for SRS and 62.2\% for High Incidence Focus; its mean share of deaths was 49.2\%, against 49.6\%, 49.7\% and 35.4\%. On the grid, the gain of Incidence-Guided Saturation over Saturation Regions in treated incidence share averaged 2.1 to 3.1 percentage points across the five incidence configurations, while High Incidence Focus reached 0.75 to 0.77 by giving up randomization over the whole map. Grid clusters have equal populations, so rate share and death share coincide there. Figure \ref{fig:spread-gain} shows that the gain rose almost linearly with the spread of the regions' mean incidence ranks, and that the NC regions lie at the low end of that spread.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.9\linewidth]{../figures/fig_spread_vs_gain.pdf}
+\caption{Gain in treated incidence share from incidence guidance, Incidence-Guided Saturation minus Saturation Regions, against the spread of the regions' mean incidence ranks, (largest minus smallest regional mean rank) divided by the number of clusters. Circles: the 50 grid surfaces (queen, production allocations), colored by incidence configuration, with a least-squares line. Triangles: the four fixed NC regions in each planning year.}
+\label{fig:spread-gain}
+\end{figure}
+
+\textbf{Formal tests on the NC results.} Friedman tests over the 24 combinations of year, $\rho$ and $\gamma$ rejected equal ranks of the nine strategies in all four combinations of regime and $\beta$ ($\chi^2 = 135.3$, 153.8, 150.7 and 179.8 on 8 degrees of freedom, $p \le 2.3\times10^{-25}$; Nemenyi critical difference 2.45). Under control-only spillover, Saturation Regions and Incidence-Guided Saturation had the two best average ranks (1.67 and 1.79 with $\beta = 0$; 1.29 and 1.71 with $\beta = 1$), and SRS ranked seventh with $\beta = 0$ and sixth with $\beta = 1$. Under both-arms spillover with $\beta = 0$, High Incidence Focus ranked first (1.88) and SRS sixth (5.17), with the balancing and saturation designs between them. These tests treat the 24 blocks as independent, although the years share one map and some strategies share their simulations across years, so they describe the consistency of the ordering rather than independent evidence.
+
+\textbf{Unequal numbers of trained professionals.} With $m$ proportional to college population and averaging 25, and ICC $= 0.05$, power fell by 0.097 on average across designs, settings and effect sizes. For $d = 0.3$ under both-arms spillover, the mean power over the nine strategies fell from 0.59 to 0.46 with 20 colleges and from 0.88 to 0.77 with 58. MSE rose by a factor of 1.24 to 1.84 across designs and settings, and no design gained relative to the others.
+
+\textbf{Estimation models.} Every model in the sensitivity analysis has the mean $\mu = \alpha \mathbf{1} + \tau Z + \text{Spill}$ with the proportional spillover covariate of the main analysis, and uses the 58-college queen geography. The spatial lag model of the main analysis is $Y = \rho W Y + \mu + \epsilon$, $\epsilon \sim N(0, \sigma^2 I)$. The CAR model is $Y = \mu + u$, $u \sim N\{0, \sigma^2 (I - \lambda S)^{-1}\}$, where $S$ is the symmetric matrix similar to the row-standardized $W$ \citep{ord_estimation_1975}, fitted by maximum likelihood with the \texttt{spautolm} function of the R package \texttt{spatialreg} \citep{bivand_r_2022}. For the reverse comparison, data were generated as $Y = \mu + L\epsilon$ with $LL^\top = (I - \rho S)^{-1}$ and the same values of $\rho$ as the spatial lag data. These runs used four years, $\rho \in \{0, 0.2, 0.5\}$, $\gamma \in \{0.5, 0.8\}$, both regimes and the nine strategies, with 500 fits per setting.
+
+The Bayesian CAR model \citep{leroux_estimation_2000} is $Y_j = \mu_j + \phi_j + e_j$, $e_j \sim N(0, \nu^2)$, with
+\begin{equation*}
+\phi_j \mid \phi_{-j} \sim N\left(\frac{\lambda \sum_k a_{jk}\phi_k}{\lambda \sum_k a_{jk} + 1 - \lambda},\; \frac{\sigma_\phi^2}{\lambda \sum_k a_{jk} + 1 - \lambda}\right),
+\end{equation*}
+where $a_{jk}$ is the binary queen adjacency. We used the defaults of the \texttt{S.CARleroux} function of the R package \texttt{CARBayes} \citep{lee_carbayes_2013}, version 6.1.1: independent $N(0, 10^5)$ priors for the regression coefficients, inverse-gamma(1, 0.01) priors for $\nu^2$ and $\sigma_\phi^2$, and a uniform(0, 1) prior for $\lambda$. Each chain ran 25,000 iterations, of which the first 5,000 were discarded, thinned by 5. At $\rho = 0.5$, where fewer than half the chains converged, we reran the same data with 100,000 iterations, 20,000 discarded and thinning by 20. The Bayesian spatial lag model \citep{lesage_introduction_2009} has the same form as the maximum likelihood model, with the defaults of the \texttt{spBreg\_lag} function of \texttt{spatialreg}, version 1.4.3: a $N(0, 10^{12} I)$ prior for the regression coefficients, the prior $p(\sigma^2) \propto 1/\sigma^2$, a Beta(1.01, 1.01) prior for $\rho$ rescaled to its feasible interval, and 10,000 draws of which the first 2,000 were discarded. Both Bayesian models used four years, $\rho \in \{0, 0.5\}$, $\gamma = 0.8$, both regimes and the nine strategies, with 100 fits per setting (14,400 fits per model), and both were fitted to the same data as the maximum likelihood model. We report the posterior mean of $\tau$ and the 95\% equal-tailed credible interval. A chain was counted as converged when the effective sample size of $\tau$ was at least 400 and the absolute Geweke $z$ statistic \citep{geweke_evaluating_1992} was below 1.96.
+
+With the longer chains, 83.1\% of the Bayesian CAR chains at $\rho = 0.5$ converged, against 46.2\% for the shorter chains; 12.5\% still had an absolute Geweke $z$ of at least 1.96, against about 5\% expected by chance. Among converged chains, the Bayesian CAR estimate was biased by $+0.14$ under both-arms spillover and $+0.22$ under control-only spillover, with credible-interval coverage of 90.4\% and 87.7\%, against biases of $+0.02$ and $+0.03$ and Wald coverage of 93.5\% and 93.2\% for maximum likelihood on the same data. Of the Bayesian spatial lag chains, 94.9\% converged; the median effective sample size of $\tau$ was 8,000 (minimum 5,897) and 5.1\% had an absolute Geweke $z$ of at least 1.96. Its posterior means correlated 0.999 with the maximum likelihood estimates (mean absolute difference 0.017), its bias was at most 0.04 in absolute value in every combination of $\rho$ and regime, and its credible intervals covered 94.5\% to 95.3\%. The Spearman correlation of its design ordering with that of maximum likelihood was 0.96 to 1.00, and the best design agreed in every block. Tables \ref{tab:nc-car} and \ref{tab:nc-bayes} give each strategy's MSE relative to SRS under each model.
+
+\begin{table}[!htb]
+\small
+\centering
+\caption{Mean MSE relative to simple random sampling (SRS) under four combinations of data-generating model and fitted model: spatial lag (SAR) or conditional autoregressive (CAR). 58 colleges, $\beta = 0$, mean over 24 blocks (year $\times$ $\rho$ $\times$ $\gamma$). Below 1 is lower error than SRS.}
+\label{tab:nc-car}
+% SOURCE: application/results/methods_ext_2026-10/sensitivity_summaries/a6_car_ratio_to_srs.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{Both arms} & \multicolumn{4}{c}{Control only} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+Data & SAR & SAR & CAR & CAR & SAR & SAR & CAR & CAR \\
+Fit & SAR & CAR & SAR & CAR & SAR & CAR & SAR & CAR \\
+\midrule
+Checkerboard & 2.88 & 2.83 & 2.93 & 3.09 & 2.99 & 2.64 & 3.01 & 3.00 \\
+High Incidence Focus & 1.06 & 1.02 & 1.07 & 1.07 & 1.08 & 1.03 & 1.10 & 1.09 \\
+Saturation Regions & 1.04 & 1.02 & 1.04 & 1.03 & 0.79 & 0.81 & 0.81 & 0.78 \\
+Isolation Buffer & 4.11 & 4.13 & 4.16 & 4.45 & 1.03 & 0.95 & 1.03 & 1.05 \\
+$2\times2$ Blocking & 0.98 & 0.99 & 1.00 & 1.02 & 1.21 & 1.17 & 1.22 & 1.22 \\
+Balanced Quartiles & 1.04 & 1.05 & 1.04 & 1.06 & 1.03 & 1.00 & 1.03 & 1.02 \\
+Balanced Halves & 1.04 & 1.03 & 1.05 & 1.04 & 1.02 & 0.98 & 1.03 & 0.99 \\
+Incidence-Guided Saturation & 1.03 & 1.04 & 1.04 & 1.03 & 0.81 & 0.82 & 0.81 & 0.76 \\
+Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\small
+\centering
+\caption{Mean MSE relative to simple random sampling (SRS) at $\rho = 0.5$ for maximum likelihood (ML), the Bayesian spatial lag model (Bayes SAR) and the Bayesian CAR model with converged chains only (Bayes CAR), all fitted to the same spatial lag data. 58 colleges, $\beta = 0$, $\gamma = 0.8$, mean over the four planning years.}
+\label{tab:nc-bayes}
+% SOURCE: application/results/methods_ext_2026-10/sensitivity_summaries_v2/a6_bayes_lag_ratio_to_srs.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Design & ML & Bayes SAR & Bayes CAR & ML & Bayes SAR & Bayes CAR \\
+\midrule
+Checkerboard & 3.14 & 3.18 & 2.90 & 3.16 & 3.16 & 2.31 \\
+High Incidence Focus & 0.96 & 0.96 & 0.83 & 1.19 & 1.19 & 1.04 \\
+Saturation Regions & 1.12 & 1.10 & 1.11 & 0.86 & 0.86 & 1.05 \\
+Isolation Buffer & 3.89 & 3.94 & 3.80 & 1.01 & 1.02 & 0.87 \\
+$2\times2$ Blocking & 1.14 & 1.14 & 1.11 & 1.48 & 1.48 & 1.34 \\
+Balanced Quartiles & 1.00 & 1.00 & 1.05 & 1.10 & 1.10 & 1.15 \\
+Balanced Halves & 0.97 & 0.97 & 0.99 & 1.05 & 1.06 & 1.01 \\
+Incidence-Guided Saturation & 1.12 & 1.10 & 1.13 & 0.81 & 0.81 & 0.95 \\
+Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Spillover form.} Under the binary form, $S(Z) = \gamma\,\mathbf{1}\{\text{any treated queen neighbor}\}$, times $1 - Z$ under control-only spillover. Under the count form, $S(Z) = (\gamma/\bar d) \times$ (number of treated queen neighbors), where $\bar d = 4.93$ is the mean number of queen neighbors, so a college of average degree with every neighbor treated receives $\gamma$, as under the proportional form. Table \ref{tab:nc-forms} compares the three forms. Under the binary form, Isolation Buffer is never identified, because every control has a treated neighbor, and under control-only spillover no strategy was identified in every fit. The saturation designs were identified most often there (in 89.7\% and 91.7\% of fits) and, among identified fits, had MSE 0.70 to 0.71 times that of SRS.
+
+\begin{table}[!htb]
+\small
+\centering
+\caption{Mean MSE relative to simple random sampling (SRS) under three spillover forms, 58 colleges, $\beta = 0$, mean over 16 blocks (year $\times$ $\rho$ $\times$ $\gamma$). n.i.: not identified in every fit (the spillover covariate is aliased with the intercept and treatment in some or all allocations).}
+\label{tab:nc-forms}
+% SOURCE: application/results/methods_ext_2026-10/sensitivity_summaries/a7_ratio_to_srs.csv, a7_identification.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Design & Proportional & Count & Binary & Proportional & Count & Binary \\
+\midrule
+Checkerboard & 2.97 & 1.78 & 1.07 & 3.09 & 1.41 & n.i. \\
+High Incidence Focus & 0.91 & 0.92 & 0.96 & 1.03 & 1.04 & n.i. \\
+Saturation Regions & 1.01 & 1.02 & 1.03 & 0.76 & 0.81 & n.i. \\
+Isolation Buffer & 3.82 & 3.84 & n.i. & 0.95 & 1.16 & n.i. \\
+$2\times2$ Blocking & 1.04 & 1.03 & 1.00 & 1.17 & 1.07 & n.i. \\
+Balanced Quartiles & 1.01 & 1.01 & 1.00 & 0.99 & 0.99 & n.i. \\
+Balanced Halves & 1.02 & 1.02 & 1.02 & 0.98 & 0.99 & n.i. \\
+Incidence-Guided Saturation & 1.01 & 1.03 & 1.04 & 0.75 & 0.79 & n.i. \\
+Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & n.i. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \FloatBarrier
 \bibliographystyle{unsrtnat}
 \bibliography{SpatialCRT_IncidenceDesign}

@@ -23,7 +23,7 @@ READING = MAIN.with_name('CTJ_Reading.tex')
 SUPPLEMENT = ROOT / 'paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
 PENDING_SI = set()  # chapter tables allowed to be absent from the SI (--pending-si)
-LABELS = ['Checkerboard', 'High Incidence Focus', 'Saturation Quadrants',
+LABELS = ['Checkerboard', 'High Incidence Focus', 'Saturation Regions',
           'Isolation Buffer', '$2\\times2$ Blocking', 'Balanced Quartiles',
           'Balanced Halves', 'Incidence-Guided Saturation', 'Simple Random Sampling']
 
