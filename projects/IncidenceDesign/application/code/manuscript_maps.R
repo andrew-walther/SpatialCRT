@@ -39,7 +39,8 @@ stopifnot(all(dir.exists(file.path(FOLDERS, "real_sud"))))
 #' @return Invisibly, the written paths
 save_all <- function(p, rel, w, h, dpi = 150) {
   paths <- file.path(FOLDERS, rel)
-  for (path in paths) ggplot2::ggsave(path, p, width = w, height = h, dpi = dpi)
+  # White background: theme_void() leaves the plot background transparent
+  for (path in paths) ggplot2::ggsave(path, p, width = w, height = h, dpi = dpi, bg = "white")
   stopifnot(all(file.exists(paths)))
   invisible(paths)
 }
