@@ -249,6 +249,17 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-25 (afternoon) — author feedback on the overnight drafts
+
+- "Saturation Quadrants" restored as the one name in text, tables and figures (reversing
+  "Saturation Regions"); the grid figures and the design-sample figure were regenerated so
+  every manuscript figure matches.
+- Manuscript figures lose in-figure titles and notes (captions hold them) and print true
+  hyphens (soft-hyphen labels; PNGs rendered from the PDFs). The power figure was relabeled.
+- Colleges needed are whole colleges, rounded up (35 to 37 under both-arms spillover; 28
+  for the saturation designs against 29 to 32 at 1.5 SD under control-only).
+- The SRS comparison now reports allocation spread beside the mean difference.
+
 ### 2026-10-25 (overnight) — methods-extension steps 7–8: SRS in tests, figures, manuscripts, talk outline
 
 - SRS joins every grid hypothesis test (author decision, `DECISIONS.md`): `code/12` (six

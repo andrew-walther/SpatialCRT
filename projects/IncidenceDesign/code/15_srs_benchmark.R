@@ -243,25 +243,26 @@ saveRDS(c(res, list(stop_rule = stop_rule)), file.path(out_dir, "srs_benchmark.r
 #' regime, with the t49 95% interval scaled the same way, on a log10 axis (the
 #' log-ratio scale of the NC accuracy figure). Below 1 = lower MSE than SRS.
 #' Filled points: Holm-adjusted Wilcoxon p < 0.05 (Holm over the 8 designs, within
-#' regime). All eight designs are drawn; ratios above 2 are printed.
+#' regime). All eight designs are drawn; ratios above 2 are printed. No title or
+#' in-figure note: the LaTeX caption gives the setting (author, 2026-10-25).
 #'
 #' @param tests tests_by_regime data frame for one neighbor type
 #' @param nb "queen" or "rook" (for the subtitle)
 #' @return ggplot object
 plot_vs_srs <- function(tests, nb) {
-  display <- c("Incidence-Guided Saturation Quadrants" = "Incidence-Guided Saturation",
-               "Saturation Quadrants" = "Saturation Regions")
+  display <- c("Incidence-Guided Saturation Quadrants" = "Incidence-Guided Saturation")
   d <- tests[tests$Design %in% c(retained, consolidated), ]
   stopifnot(nrow(d) == 16)
   d$Design <- ifelse(d$Design %in% names(display), display[d$Design], d$Design)
+  hy <- function(x) gsub("-", "\u00ad", x, fixed = TRUE)  # true hyphens in pdf()
   d$ratio <- 1 + d$mean_diff / d$MSE_SRS
   d$lo    <- 1 + d$ci_lo / d$MSE_SRS
   d$hi    <- 1 + d$ci_hi / d$MSE_SRS
   d$lab   <- ifelse(d$ratio > 2, sprintf("%.1f", d$ratio), "")
-  d$sig <- ifelse(d$p_holm < 0.05, "Holm-adjusted Wilcoxon p < 0.05", "Not significant")
-  d$Regime <- factor(ifelse(d$Spillover_Type == "both", "Both-arms spillover",
-                            "Control-only spillover"),
-                     levels = c("Control-only spillover", "Both-arms spillover"))
+  d$sig <- ifelse(d$p_holm < 0.05, hy("Holm-adjusted Wilcoxon p < 0.05"), "Not significant")
+  d$Regime <- factor(ifelse(d$Spillover_Type == "both", hy("Both-arms spillover"),
+                            hy("Control-only spillover")),
+                     levels = hy(c("Control-only spillover", "Both-arms spillover")))
   ord <- d[d$Spillover_Type == "control_only", ]
   d$Design <- factor(d$Design, levels = rev(ord$Design[order(ord$ratio)]))
   ggplot(d, aes(x = ratio, y = Design)) +
@@ -269,21 +270,25 @@ plot_vs_srs <- function(tests, nb) {
     geom_errorbar(aes(xmin = lo, xmax = hi), width = 0.25, orientation = "y") +
     geom_point(aes(shape = sig), size = 2.6, fill = "black") +
     geom_text(aes(label = lab), hjust = 1.4, size = 2.8) +
-    scale_shape_manual(values = c("Holm-adjusted Wilcoxon p < 0.05" = 21, "Not significant" = 1),
+    scale_shape_manual(values = setNames(c(21, 1), c(hy("Holm-adjusted Wilcoxon p < 0.05"), "Not significant")),
                        name = NULL) +
+    scale_y_discrete(labels = hy) +
     scale_x_log10(breaks = c(0.5, 0.75, 1, 1.5, 2, 4, 10), labels = c("0.5", "0.75", "1", "1.5", "2", "4", "10"),
                   limits = c(0.5, 12)) +
     facet_wrap(~ Regime) +
     labs(x = "MSE relative to Simple Random Sampling (log scale; below 1 = lower error)",
-         y = NULL,
-         subtitle = bquote("Grid, " * .(nb) * " contiguity, " * tau * " = 1. Mean paired ratio over 50 independent units with 95% t interval.")) +
+         y = NULL) +
     theme_bw(base_size = 10) +
     theme(legend.position = "bottom", panel.grid.minor = element_blank(),
-          panel.spacing = unit(1.2, "lines"), plot.subtitle = element_text(size = 8))
+          panel.spacing = unit(1.2, "lines"))
 }
 for (nb in c("queen", "rook")) {
   p_vs <- plot_vs_srs(res$oracle[[nb]]$tests_by_regime, nb)
   ggsave(file.path(out_dir, sprintf("fig_vs_srs_by_regime_%s.pdf", nb)), p_vs, width = 7.5, height = 4)
-  ggsave(file.path(out_dir, sprintf("fig_vs_srs_by_regime_%s.png", nb)), p_vs, width = 7.5, height = 4, dpi = 200)
+  # PNG rendered from the PDF: raster devices drop the soft hyphens hy() relies on
+  pdf_path <- file.path(out_dir, sprintf("fig_vs_srs_by_regime_%s.pdf", nb))
+  status <- system2("pdftoppm", c("-png", "-r", "200", "-singlefile", shQuote(pdf_path),
+                                  shQuote(sub("\\.pdf$", "", pdf_path))))
+  if (status != 0) stop("pdftoppm failed for ", pdf_path)
 }
 cat("Written to", out_dir, "\n")

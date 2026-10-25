@@ -16,16 +16,16 @@ Stage 2 Percentile: 90.1-93.6
 Stage 2 Profile: 91.8-94.7
 Stage 2 Stage1_t_df: 92.8-95.8
 Stage 2 Wald: 91.2-94.3
-incidence-weighted both N=20: 2x2 Blocking 1.04; Balanced Halves 1.01; Balanced Quartiles 1.01; Checkerboard 1.84; High Incidence Focus 0.98; Incidence-Guided Saturation 1.00; Isolation Buffer 5.14; Saturation Regions 1.00; Simple Random Sampling 1.00
-incidence-weighted both N=29: 2x2 Blocking 1.04; Balanced Halves 1.00; Balanced Quartiles 1.00; Checkerboard 2.24; High Incidence Focus 0.97; Incidence-Guided Saturation 1.00; Isolation Buffer 3.80; Saturation Regions 1.00; Simple Random Sampling 1.00
-incidence-weighted control_only N=20: 2x2 Blocking 1.10; Balanced Halves 1.03; Balanced Quartiles 1.01; Checkerboard 1.21; High Incidence Focus 1.00; Incidence-Guided Saturation 1.00; Isolation Buffer 3.24; Saturation Regions 1.01; Simple Random Sampling 1.00
-incidence-weighted control_only N=29: 2x2 Blocking 1.14; Balanced Halves 0.99; Balanced Quartiles 0.99; Checkerboard 1.45; High Incidence Focus 1.02; Incidence-Guided Saturation 0.99; Isolation Buffer 2.01; Saturation Regions 0.98; Simple Random Sampling 1.00
+incidence-weighted both N=20: 2x2 Blocking 1.04; Balanced Halves 1.01; Balanced Quartiles 1.01; Checkerboard 1.84; High Incidence Focus 0.98; Incidence-Guided Saturation 1.00; Isolation Buffer 5.14; Saturation Quadrants 1.00; Simple Random Sampling 1.00
+incidence-weighted both N=29: 2x2 Blocking 1.04; Balanced Halves 1.00; Balanced Quartiles 1.00; Checkerboard 2.24; High Incidence Focus 0.97; Incidence-Guided Saturation 1.00; Isolation Buffer 3.80; Saturation Quadrants 1.00; Simple Random Sampling 1.00
+incidence-weighted control_only N=20: 2x2 Blocking 1.10; Balanced Halves 1.03; Balanced Quartiles 1.01; Checkerboard 1.21; High Incidence Focus 1.00; Incidence-Guided Saturation 1.00; Isolation Buffer 3.24; Saturation Quadrants 1.01; Simple Random Sampling 1.00
+incidence-weighted control_only N=29: 2x2 Blocking 1.14; Balanced Halves 0.99; Balanced Quartiles 0.99; Checkerboard 1.45; High Incidence Focus 1.02; Incidence-Guided Saturation 0.99; Isolation Buffer 2.01; Saturation Quadrants 0.98; Simple Random Sampling 1.00
 A4 d=0.3 N=20 both: mean power equal 0.59 -> unequal 0.46
 A4 d=0.3 N=20 control_only: mean power equal 0.48 -> unequal 0.37
 A4 d=0.3 N=58 both: mean power equal 0.88 -> unequal 0.77
 A4 d=0.3 N=58 control_only: mean power equal 0.53 -> unequal 0.39
 A4 overall: mean power difference -0.097; MSE ratio range 1.24-1.84
-A2 beta0_both: chi2 = 135.3, df = 8, p = 2.3e-25, blocks = 24, CD = 2.45; ranks High Incidence Focus 1.88, Balanced Halves 3.17, Saturation Regions 3.83, Incidence-Guided Saturation 4.00, Balanced Quartiles 4.04, Simple Random Sampling 5.17, 2x2 Blocking 5.92, Checkerboard 8.00, Isolation Buffer 9.00
-A2 beta0_control_only: chi2 = 153.8, df = 8, p = 3.2e-29, blocks = 24, CD = 2.45; ranks Saturation Regions 1.67, Incidence-Guided Saturation 1.79, Isolation Buffer 3.79, High Incidence Focus 4.75, Balanced Quartiles 4.88, Balanced Halves 5.04, Simple Random Sampling 6.42, 2x2 Blocking 7.67, Checkerboard 9.00
-A2 beta1_both: chi2 = 150.7, df = 8, p = 1.4e-28, blocks = 24, CD = 2.45; ranks Balanced Quartiles 2.17, Balanced Halves 2.46, Saturation Regions 3.58, Incidence-Guided Saturation 3.92, Simple Random Sampling 4.00, 2x2 Blocking 4.88, Checkerboard 7.04, High Incidence Focus 8.38, Isolation Buffer 8.58
-A2 beta1_control_only: chi2 = 179.8, df = 8, p = 1.1e-34, blocks = 24, CD = 2.45; ranks Saturation Regions 1.29, Incidence-Guided Saturation 1.71, Isolation Buffer 3.50, Balanced Quartiles 4.33, Balanced Halves 4.54, Simple Random Sampling 5.96, 2x2 Blocking 6.67, High Incidence Focus 8.00, Checkerboard 9.00
+A2 beta0_both: chi2 = 135.3, df = 8, p = 2.3e-25, blocks = 24, CD = 2.45; ranks High Incidence Focus 1.88, Balanced Halves 3.17, Saturation Quadrants 3.83, Incidence-Guided Saturation 4.00, Balanced Quartiles 4.04, Simple Random Sampling 5.17, 2x2 Blocking 5.92, Checkerboard 8.00, Isolation Buffer 9.00
+A2 beta0_control_only: chi2 = 153.8, df = 8, p = 3.2e-29, blocks = 24, CD = 2.45; ranks Saturation Quadrants 1.67, Incidence-Guided Saturation 1.79, Isolation Buffer 3.79, High Incidence Focus 4.75, Balanced Quartiles 4.88, Balanced Halves 5.04, Simple Random Sampling 6.42, 2x2 Blocking 7.67, Checkerboard 9.00
+A2 beta1_both: chi2 = 150.7, df = 8, p = 1.4e-28, blocks = 24, CD = 2.45; ranks Balanced Quartiles 2.17, Balanced Halves 2.46, Saturation Quadrants 3.58, Incidence-Guided Saturation 3.92, Simple Random Sampling 4.00, 2x2 Blocking 4.88, Checkerboard 7.04, High Incidence Focus 8.38, Isolation Buffer 8.58
+A2 beta1_control_only: chi2 = 179.8, df = 8, p = 1.1e-34, blocks = 24, CD = 2.45; ranks Saturation Quadrants 1.29, Incidence-Guided Saturation 1.71, Isolation Buffer 3.50, Balanced Quartiles 4.33, Balanced Halves 4.54, Simple Random Sampling 5.96, 2x2 Blocking 6.67, High Incidence Focus 8.00, Checkerboard 9.00

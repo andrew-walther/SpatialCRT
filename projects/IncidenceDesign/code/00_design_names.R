@@ -19,7 +19,7 @@ DESIGN_FULL_NAMES <- c(
   "Design 5" = "2x2 Blocking",
   "Design 6" = "Balanced Quartiles",
   "Design 7" = "Balanced Halves",
-  "Design 8" = "Incidence-Guided Saturation Quadrants",
+  "Design 8" = "Incidence-Guided Saturation",              # manuscript name (author, 2026-10-25)
   "Design 9" = "Simple Random Sampling"                     # benchmark, not a proposed design
 )
 

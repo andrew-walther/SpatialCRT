@@ -3,7 +3,7 @@ SIX-DESIGN + SRS STATISTICAL COMPARISONS (manuscript design set; SRS tested as a
 Estimator:  oracle (Y ~ Z + Spill + X), primary 
 Retained:  Checkerboard, High Incidence Focus, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Incidence-Guided Saturation 
 Tested with: Simple Random Sampling (benchmark)
-Dropped:  Saturation Regions, Balanced Halves (redundant, see plan)
+Dropped:  Saturation Quadrants, Balanced Halves (redundant, see plan)
 Per-tau Friedman tests share Z and eps across tau (common random numbers):
 they are not independent confirmations of one another.
 ======================================================================

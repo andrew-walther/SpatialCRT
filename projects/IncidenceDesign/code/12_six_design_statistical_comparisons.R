@@ -19,8 +19,8 @@
 # each design compares with SRS. The descriptive figures (MSE, coverage, tau
 # sensitivity) keep the six designs with SRS as a gray reference line. Display names
 # follow the manuscripts: "Incidence-Guided Saturation Quadrants" is shown as
-# "Incidence-Guided Saturation" and "Saturation Quadrants" as "Saturation Regions"
-# (author, 2026-10-21); the stored CSVs and hashed code keep the old labels.
+# "Incidence-Guided Saturation", and "Saturation Quadrants" keeps its name (author,
+# 2026-10-25); the stored CSVs and hashed code are unchanged.
 #
 # 2026-09 revision: neighbor types are analyzed separately -- queen (primary) and
 # rook (Chapter 2 continuity / sensitivity; tau is not identified for Checkerboard
@@ -77,7 +77,7 @@ stopifnot(identical(unname(full_name_map),
                        "Balanced Halves", "Incidence-Guided Saturation Quadrants",
                        "Simple Random Sampling")))
 # Display layer only (author, 2026-10-21): manuscript names for the two saturation designs
-full_name_map[c("Design 3", "Design 8")] <- c("Saturation Regions", "Incidence-Guided Saturation")
+full_name_map[["Design 8"]] <- "Incidence-Guided Saturation"
 
 # 6 retained designs: drop "Design 3" (Saturation Quadrants) and "Design 7" (Balanced Halves)
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
@@ -161,7 +161,7 @@ cat("Estimator: ", if (est_prefix == "MLE") "oracle (Y ~ Z + Spill + X), primary
       "non-oracle (Y ~ Z + X), sensitivity", "\n")
 cat("Retained: ", paste(unname(full_name_map[retained_ids]), collapse = ", "), "\n")
 cat("Tested with: Simple Random Sampling (benchmark)\n")
-cat("Dropped:  Saturation Regions, Balanced Halves (redundant, see plan)\n")
+cat("Dropped:  Saturation Quadrants, Balanced Halves (redundant, see plan)\n")
 cat("Per-tau Friedman tests share Z and eps across tau (common random numbers):\n")
 cat("they are not independent confirmations of one another.\n")
 cat("======================================================================\n")
@@ -310,20 +310,19 @@ tau_panel <- function(nb, panel_title, y_lab) {
   res_tau <- slices[[nb]]
   res_tau$Design <- factor(res_tau$Design, levels = tau_colour_order)
   plot_mse_vs_tau(res_tau) + srs_tau_layers(nb) +
-    scale_color_manual(values = tau_palette, breaks = tau_colour_order) +
-    scale_fill_manual(values = tau_palette, breaks = tau_colour_order) +
+    scale_color_manual(values = tau_palette, breaks = tau_colour_order, labels = hy) +
+    scale_fill_manual(values = tau_palette, breaks = tau_colour_order, labels = hy) +
     labs(title = panel_title, x = expression("True " * tau), y = y_lab,
          color = NULL, fill = NULL) +
     theme_bw(base_size = 10) +
     theme(plot.title = element_text(size = 10))
 }
+# No in-figure note (author, 2026-10-25): the chapter caption explains the gray SRS
+# line and the rook Checkerboard flag; legend labels print true hyphens via hy().
+hy <- function(x) gsub("-", "\u00ad", x, fixed = TRUE)
 p_tau_combined <- (tau_panel("queen", "(a) Queen", "Mean MSE\n(band: ± average scenario-level\nMonte Carlo SE)") |
                      tau_panel("rook", "(b) Rook", NULL)) +
-  plot_layout(guides = "collect") +
-  plot_annotation(
-    caption = expression(atop("Gray dashed: Simple Random Sampling benchmark (mean MSE).",
-                              "Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")),
-    theme = theme(plot.caption = element_text(hjust = 0, size = 8))) &
+  plot_layout(guides = "collect") &
   theme(legend.position = "bottom", legend.text = element_text(size = 8),
         legend.key.size = unit(0.9, "lines"), legend.margin = margin(0, 0, 0, 0),
         legend.box.spacing = unit(2, "pt")) &

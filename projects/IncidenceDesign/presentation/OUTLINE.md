@@ -84,7 +84,7 @@ The visual version is `outline.html` (built from this file by
 
 ### 7. Nine ways to choose which clusters to treat
 - Figure: design_samples_6panel.png
-- Slide text: Simple random sampling (SRS) is the default. Others balance incidence (Balanced Quartiles), target it (High Incidence Focus), separate treated clusters (Checkerboard, Isolation Buffer, 2×2 Blocking) or vary the treated share by region (Saturation Regions, Incidence-Guided Saturation).
+- Slide text: Simple random sampling (SRS) is the default. Others balance incidence (Balanced Quartiles), target it (High Incidence Focus), separate treated clusters (Checkerboard, Isolation Buffer, 2×2 Blocking) or vary the treated share by region (Saturation Quadrants, Incidence-Guided Saturation).
 - Notes: Walk through two or three panels only. Saturation designs treat 80, 60, 40 and 20 percent of four regions; the incidence-guided version gives the highest share to the highest-incidence region.
 - Time: 1.25
 - Carry-over: prelim
@@ -99,8 +99,8 @@ The visual version is `outline.html` (built from this file by
 
 ### 9. On the grid, the spillover regime decides which design wins
 - Figure: fig_vs_srs_by_regime_queen.png
-- Slide text: Spillover to controls only means the saturation designs had about 37% lower error than SRS. Spillover to everyone means SRS was as good as any design, and the saturation designs were 4–8% worse.
-- Notes: Each point compares a design with SRS over 50 independent units; filled points are significant after multiple-comparison adjustment. Checkerboard and 2×2 Blocking look fine under one regime and fail badly under the other. Alternative figure if a simpler view is wanted is grid_accuracy_srs.png.
+- Slide text: Spillover to controls only means the saturation designs had about 37% lower error than SRS. Spillover to everyone means SRS was as good as any design; the saturation designs were 4–8% worse on average, with similar worst-case allocations.
+- Notes: Each point is a design's error relative to SRS (below 1 is better), averaged over 50 independent units; filled points are significant after multiple-comparison adjustment. Mention that SRS's worst allocations are much worse than its average under control-only spillover (slide 13). Checkerboard and 2×2 Blocking look fine under one regime and fail badly under the other. Alternative figure if a simpler view is wanted is grid_accuracy_srs.png.
 - Time: 1.5
 - Carry-over: prelim
 
@@ -134,9 +134,9 @@ The visual version is `outline.html` (built from this file by
 - Time: 1
 - Carry-over: prelim
 
-### 14. About 35 colleges detect a one-standard-deviation effect under spillover to everyone
+### 14. About 36 colleges detect a one-standard-deviation effect under spillover to everyone
 - Figure: fig_colleges_needed.png
-- Slide text: Spillover to everyone means 35–36 colleges for 80% power with any design except Checkerboard and Isolation Buffer. Spillover to controls only means even 58 colleges are not enough at that effect; at 1.5 standard deviations the saturation designs need 27–28 colleges, against 31 for SRS.
+- Slide text: Spillover to everyone means 35–37 colleges for 80% power with any design except Checkerboard and Isolation Buffer. Spillover to controls only means even 58 colleges are not enough at that effect; at 1.5 standard deviations the saturation designs need 28 colleges, against 32 for SRS.
 - Notes: Effects are in college-level standard deviations. For 25 trained professionals per college and an intraclass correlation of 0.05, a one-SD college effect is about 0.3 SD for an individual; d = 0.3 gives power 0.71 with 29 colleges and 0.96 with 58 under spillover to everyone. These numbers use a small-sample t test that keeps the false-positive rate at 5%.
 - Time: 1.25
 - Carry-over: prelim
@@ -159,7 +159,7 @@ The visual version is `outline.html` (built from this file by
 
 ### 17. The best design depends mainly on how spillover travels
 - Figure: none (take-home layout: claim, highlight box, three bullets)
-- Slide text: Highlight box: choose the design for the spillover you expect. Bullets: saturation when spillover reaches mainly controls; SRS or balanced designs when it reaches everyone; about 35 colleges detect a one-SD effect under spillover to everyone.
+- Slide text: Highlight box: choose the design for the spillover you expect. Bullets: saturation when spillover reaches mainly controls; SRS or balanced designs when it reaches everyone; 35–37 colleges detect a one-SD effect under spillover to everyone.
 - Notes: No single recommended design. Incidence-Guided Saturation matches plain saturation's accuracy while sending more treatment to high-burden regions, when regions differ.
 - Time: 1
 - Carry-over: prelim

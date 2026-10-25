@@ -5,6 +5,21 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-25 (afternoon) — "Saturation Quadrants" restored; figure conventions; whole colleges
+
+**Decision.** The plain saturation design is called "Saturation Quadrants" everywhere, in
+text, tables and figures, reversing the 2026-10-21 "Saturation Regions". On the NC map the
+chapter says that both saturation designs use four fixed geographic regions in place of the
+quadrants. Manuscript figures carry no in-figure title, subtitle or note; the caption holds
+them. Colleges needed for 80% power are reported as whole colleges, rounded up.
+
+**Why.** Consistency between text and figures matters more than the name, and the NC
+figures already said "Saturation Quadrants", so restoring it needed the fewest figure
+regenerations. Whole colleges read more intuitively than interpolated means (author
+feedback, 2026-10-25).
+
+---
+
 ## 2026-10-25 — SRS in every design hypothesis test; figures before text; outline-only slides
 
 **Decision.** Simple Random Sampling is a member of every hypothesis-test comparison

@@ -28,8 +28,9 @@
 # 2026-10-25 (author): Simple Random Sampling (SRS) is a member of every hypothesis
 # test, so the consolidation comparison in (a) covers 8 designs + SRS and the CD
 # diagrams in (c) show SRS beside the six designs (their tests come from 12). Display
-# names follow the manuscripts ("Saturation Regions", "Incidence-Guided Saturation";
-# author, 2026-10-21).
+# names follow the manuscripts ("Saturation Quadrants", "Incidence-Guided Saturation";
+# author, 2026-10-25). Manuscript-bound figures carry no title, subtitle or note (the
+# LaTeX caption holds them) and print hyphens via hy() (see below).
 #
 # 2026-09 revision: queen (primary) and rook (sensitivity; tau not identified for
 # Checkerboard) are analyzed separately. (a) reports queen, rook and a labeled POOLED
@@ -57,6 +58,19 @@ proj_dir    <- dirname(script_dir)
 
 source("10_statistical_comparisons.R")  # sources 06_visualizations.R -> 01-03
 
+#' Replace ASCII hyphens with soft hyphens for pdf() labels
+#'
+#' R's default pdf() device draws "-" as a minus sign; "\u00ad" prints as a true
+#' hyphen (the convention of 20_manuscript_figure_revision.R).
+#' @param x Character vector of labels
+#' @return The same labels with "-" replaced by "\u00ad"
+hy <- function(x) gsub("-", "\u00ad", x, fixed = TRUE)
+
+# Manuscript-bound figures carry no title, subtitle or in-figure note: the LaTeX
+# caption holds them (author, 2026-10-25)
+MS_CLEAN <- theme(plot.title = element_blank(), plot.subtitle = element_blank(),
+                  plot.caption = element_blank())
+
 six_dir  <- file.path(results_dir, "six_design_manuscript")
 eight_dir <- file.path(results_dir, "eight_design_supplementary")
 dir.create(eight_dir, showWarnings = FALSE, recursive = TRUE)
@@ -78,7 +92,7 @@ stopifnot(identical(unname(full_name_map),
                        "Balanced Halves", "Incidence-Guided Saturation Quadrants",
                        "Simple Random Sampling")))
 # Display layer only (author, 2026-10-21): manuscript names for the two saturation designs
-full_name_map[c("Design 3", "Design 8")] <- c("Saturation Regions", "Incidence-Guided Saturation")
+full_name_map[["Design 8"]] <- "Incidence-Guided Saturation"
 
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
 
@@ -139,7 +153,7 @@ sink(file.path(eight_dir, "eight_design_summary.txt"), split = TRUE)
 
 cat("======================================================================\n")
 cat("EIGHT-DESIGN + SRS STATISTICAL COMPARISONS (consolidation justification)\n")
-cat("Purpose: justify dropping Saturation Regions (redundant with\n")
+cat("Purpose: justify dropping Saturation Quadrants (redundant with\n")
 cat("Incidence-Guided Saturation) and Balanced Halves (redundant\n")
 cat("with Balanced Quartiles) from the 6-design manuscript comparison.\n")
 cat("Reported for queen (primary), rook, and a labeled POOLED slice.\n")
@@ -148,7 +162,7 @@ cat("======================================================================\n")
 slices8 <- list(queen = mle_tau1_8_all[mle_tau1_8_all$Neighbor_Type == "queen", ],
                 rook = mle_tau1_8_all[mle_tau1_8_all$Neighbor_Type == "rook", ],
                 pooled = mle_tau1_8_all)
-cons_pairs <- list(c("Saturation Regions", "Incidence-Guided Saturation"),
+cons_pairs <- list(c("Saturation Quadrants", "Incidence-Guided Saturation"),
                    c("Balanced Halves", "Balanced Quartiles"))
 eight_report <- list()
 for (sl in names(slices8)) {
@@ -235,7 +249,7 @@ mse_subtitle <- if (nb_sel == "rook") {
   expression("Queen Contiguity | Incidence: all configs, " * tau * " = 1.0")
 }
 p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = nb_sel) +
-  scale_x_discrete(limits = best_to_worst_6) +
+  scale_x_discrete(limits = best_to_worst_6, labels = hy) +
   facet_grid(Spillover_Type ~ Rho, scales = "free_y",
              labeller = labeller(Spillover_Type = c("both" = "Spillover: Both",
                                                     "control_only" = "Spillover: Control"),
@@ -254,7 +268,8 @@ p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = nb_sel) +
   labs(subtitle = mse_subtitle,
        caption = "Gray dashed: Simple Random Sampling benchmark (largest configuration MSE, averaged over the four spillover magnitudes)") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-        plot.caption = element_text(hjust = 0))
+        plot.caption = element_text(hjust = 0)) +
+  MS_CLEAN
 ggsave(file.path(fig_dir, "fig_mse_by_design_6design.pdf"), p_mse_reordered,
        width = 12, height = 7)
 
@@ -332,7 +347,7 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
   # Two-line label (wrapped name + rank value) -- full manuscript names are much
   # wider than the "D1"-style labels the original ProjectSummary.qmd code was
   # tuned for, so a single-line label collides with neighbors at this figure width.
-  df_pts$label <- sprintf("%s\n(%.2f)", wrap_labels(df_pts$design, 16), df_pts$rank)
+  df_pts$label <- hy(sprintf("%s\n(%.2f)", wrap_labels(df_pts$design, 16), df_pts$rank))
 
   # Outer levels at +/-2.3 (was +/-1.9): two- and three-line labels of designs
   # with near-equal ranks overlapped at +/-1.9 (queen 4.74/4.76, rook 3.38/3.40).
@@ -399,7 +414,7 @@ ggsave(file.path(fig_dir, "fig_coverage_tau_6design.pdf"), p_coverage_tau, width
           panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
           plot.title = element_text(hjust = 0.5, size = 12),
           plot.margin = margin(5, 10, 5, 10)) +
-    ggtitle(expression("Critical Difference Diagram by Average Rank (6 designs + SRS, " * tau * " = 1.0)"))
+    MS_CLEAN
 
   ggsave(file.path(si_dir, "si_fig_cd_diagram_rank.pdf"), p_cd_rank, width = 7, height = 3.75)
 }
@@ -560,10 +575,10 @@ p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
   geom_line(data = srs_cov_tau, aes(x = True_Tau, y = Coverage), inherit.aes = FALSE,
             linetype = "dashed", colour = "grey40", linewidth = 0.6) +
   labs(caption = "Gray dashed: Simple Random Sampling benchmark (mean coverage)") +
-  scale_color_manual(values = tau_palette, breaks = best_to_worst_6) +
-  scale_fill_manual(values = tau_palette, breaks = best_to_worst_6) +
-  labs(title = expression("Coverage vs. True " * tau * " by Design (6-design set)"),
-       x = expression("True " * tau))
+  scale_color_manual(values = tau_palette, breaks = best_to_worst_6, labels = hy) +
+  scale_fill_manual(values = tau_palette, breaks = best_to_worst_6, labels = hy) +
+  labs(x = expression("True " * tau)) +
+  MS_CLEAN
 
 ggsave(file.path(si_dir, "si_fig_tau_mse.pdf"), p_tau_mse, width = 8, height = 5)
 ggsave(file.path(si_dir, "si_fig_tau_coverage.pdf"), p_tau_cov, width = 8, height = 5)

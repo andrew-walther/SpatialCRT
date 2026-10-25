@@ -24,7 +24,7 @@
 # Conventions (author decisions 2026-10-21): t + df-corrected power is the headline;
 # random volunteering, beta = 0, kappa = 0.8 (spillover gamma = kappa * tau); the four
 # planning years are summarized by their mean (line or bar) and range (band or bar);
-# "Plain Saturation" in the stored files is displayed as "Saturation Regions".
+# "Plain Saturation" in the stored files is displayed as "Saturation Quadrants" (author, 2026-10-25).
 
 library(ggplot2)
 
@@ -32,11 +32,18 @@ R_EXT   <- "application/results/methods_ext_2026-10"
 OUT_DIR <- "results/methods_ext_figures"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
-DISPLAY <- c("Plain Saturation" = "Saturation Regions")
+DISPLAY <- c("Plain Saturation" = "Saturation Quadrants")
 display_name <- function(x) ifelse(x %in% names(DISPLAY), DISPLAY[x], x)
-REGIME_LAB <- c(both = "Both-arms spillover", control_only = "Control-only spillover")
+#' Replace ASCII hyphens with soft hyphens: R's pdf() draws "-" as a minus sign,
+#' while "\u00ad" prints as a true hyphen (as in 20_manuscript_figure_revision.R)
+#' @param x Character vector of labels
+#' @return The labels with "-" replaced by "\u00ad"
+hy <- function(x) gsub("-", "\u00ad", x, fixed = TRUE)
+REGIME_LAB <- c(both = hy("Both-arms spillover"), control_only = hy("Control-only spillover"))
+# Manuscript figures carry no title or in-figure note; the LaTeX caption holds them
+# (author, 2026-10-25).
 
-#' Save one ggplot as PDF (manuscripts) and PNG (HTML outline, slides)
+#' Save one ggplot as PDF (manuscripts) and a PNG rendered from it (HTML outline, slides)
 #'
 #' @param p ggplot object
 #' @param name File stem in OUT_DIR
@@ -45,7 +52,11 @@ REGIME_LAB <- c(both = "Both-arms spillover", control_only = "Control-only spill
 save_both <- function(p, name, w, h) {
   paths <- file.path(OUT_DIR, paste0(name, c(".pdf", ".png")))
   ggsave(paths[1], p, width = w, height = h)
-  ggsave(paths[2], p, width = w, height = h, dpi = 200)
+  # The PNG is rendered from the PDF (poppler's pdftoppm): raster devices drop the
+  # soft hyphens that hy() uses to print true hyphens in the PDF
+  status <- system2("pdftoppm", c("-png", "-r", "200", "-singlefile", shQuote(paths[1]),
+                                  shQuote(sub("\\.png$", "", paths[2]))))
+  if (status != 0 || !file.exists(paths[2])) stop("pdftoppm failed for ", paths[1])
   invisible(paths)
 }
 
@@ -75,31 +86,30 @@ power_curve_data <- function(settings, designs, taus) {
 
 settings <- read.csv(file.path(R_EXT, "summaries_v2/a3_settings.csv"))
 pc <- power_curve_data(settings, designs = c(9, 3, 8, 1), taus = c(1, 1.5))
-pc$Design <- factor(pc$Design, levels = c("Simple Random Sampling", "Saturation Regions",
+pc$Design <- factor(pc$Design, levels = c("Simple Random Sampling", "Saturation Quadrants",
                                           "Incidence-Guided Saturation", "Checkerboard"))
 pc$Regime <- factor(REGIME_LAB[pc$Regime], levels = REGIME_LAB)
-pc$TauLab <- factor(sprintf("tau == %s", pc$Tau), levels = sprintf("tau == %s", c(1, 1.5)))
+pc$TauLab <- factor(sprintf("Effect of %s college-level SD", pc$Tau),
+                    levels = sprintf("Effect of %s college-level SD", c(1, 1.5)))
 
-pal4 <- c("Simple Random Sampling" = "grey25", "Saturation Regions" = "#009E73",
+pal4 <- c("Simple Random Sampling" = "grey25", "Saturation Quadrants" = "#009E73",
           "Incidence-Guided Saturation" = "#0072B2", "Checkerboard" = "#D55E00")
 p_power <- ggplot(pc, aes(N, Power, colour = Design, fill = Design, linetype = Design, shape = Design)) +
   geom_hline(yintercept = 0.8, linetype = "dashed", colour = "grey50") +
+  annotate("text", x = 15, y = 0.86, label = "80% power", hjust = 0, size = 2.8, colour = "grey35") +
   geom_ribbon(aes(ymin = Lo, ymax = Hi), alpha = 0.15, colour = NA) +
   geom_line(linewidth = 0.8) +
   geom_point(size = 1.6) +
-  facet_grid(TauLab ~ Regime, labeller = labeller(TauLab = label_parsed)) +
-  scale_colour_manual(values = pal4, name = NULL) +
-  scale_fill_manual(values = pal4, name = NULL) +
-  scale_linetype_manual(values = c("solid", "longdash", "dotted", "dotdash"), name = NULL) +
-  scale_shape_manual(values = c(16, 17, 15, 4), name = NULL) +
+  facet_grid(TauLab ~ Regime) +
+  scale_colour_manual(values = pal4, name = NULL, labels = hy) +
+  scale_fill_manual(values = pal4, name = NULL, labels = hy) +
+  scale_linetype_manual(values = c("solid", "longdash", "dotted", "dotdash"), name = NULL, labels = hy) +
+  scale_shape_manual(values = c(16, 17, 15, 4), name = NULL, labels = hy) +
   scale_x_continuous(breaks = c(15, 20, 29, 40, 50, 58)) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
-  labs(x = "Participating colleges", y = "Power (t test, df-corrected)",
-       caption = expression("Random volunteering; " * rho * " = 0.5, " * gamma * " = 0.8" * tau *
-                              "; lines: mean of 2018-2021 planning years, bands: range. Dashed: 80%.")) +
+  labs(x = "Number of participating colleges", y = "Power (chance the trial detects the effect)") +
   theme_bw(base_size = 10) +
-  theme(legend.position = "bottom", panel.grid.minor = element_blank(),
-        plot.caption = element_text(hjust = 0, size = 8), plot.caption.position = "plot") +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank()) +
   guides(colour = guide_legend(nrow = 2), fill = guide_legend(nrow = 2),
          linetype = guide_legend(nrow = 2), shape = guide_legend(nrow = 2))
 save_both(p_power, "fig_power_vs_n", 7, 5.2)
@@ -108,7 +118,8 @@ save_both(p_power, "fig_power_vs_n", 7, 5.2)
 #' Colleges-needed data for one regime and effect
 #'
 #' N80 is the interpolated number of participating colleges at which t + df power
-#' reaches 0.8 (a3_n80_summary.csv, monotone interpolation over N). A design that
+#' reaches 0.8 (a3_n80_summary.csv, monotone interpolation over N), averaged over the
+#' four years and rounded up to a whole college (author, 2026-10-25). A design that
 #' does not reach 0.8 with all 58 colleges in some years has no mean; it is drawn to
 #' 58 and labeled with its range instead, never dropped.
 #'
@@ -122,15 +133,15 @@ n80_data <- function(n80, regime, tau) {
   reached <- is.finite(x$N80_Tdf_Mean)
   data.frame(
     Design = display_name(x$Design),
-    Panel = sprintf('"%s,"~tau == %s', REGIME_LAB[[regime]], tau),  # plotmath label
-    Value = ifelse(reached, x$N80_Tdf_Mean, 58),
-    Lo = ifelse(reached, x$N80_Tdf_Min, NA), Hi = ifelse(reached, x$N80_Tdf_Max, NA),
+    Panel = sprintf("%s, effect of %s SD", REGIME_LAB[[regime]], tau),
+    Value = ifelse(reached, ceiling(x$N80_Tdf_Mean), 58),
+    Lo = ifelse(reached, ceiling(x$N80_Tdf_Min), NA), Hi = ifelse(reached, ceiling(x$N80_Tdf_Max), NA),
     Reached = ifelse(reached, "Reached in every year", "Not reached with 58 colleges in at least one year"),
-    Label = ifelse(reached, sprintf("%.0f", x$N80_Tdf_Mean),
+    Label = ifelse(reached, sprintf("%d", as.integer(ceiling(x$N80_Tdf_Mean))),
                    ifelse(is.finite(x$N80_Tdf_Min),
-                          sprintf("> 58 in %d/4 yr, else %d+", x$N80_Tdf_Years_Above58, as.integer(floor(x$N80_Tdf_Min))),
+                          sprintf("> 58 in %d/4 yr, else %d+", x$N80_Tdf_Years_Above58, as.integer(ceiling(x$N80_Tdf_Min))),
                           "> 58 in 4/4 yr")),
-    Label_x = ifelse(reached, x$N80_Tdf_Max, 58) + 1.5)
+    Label_x = ifelse(reached, ceiling(x$N80_Tdf_Max), 58) + 1.5)
 }
 
 n80 <- read.csv(file.path(R_EXT, "summaries_v2/a3_n80_summary.csv"))
@@ -143,16 +154,14 @@ p_n80 <- ggplot(nd, aes(Value, Design, fill = Reached)) +
   geom_errorbar(aes(xmin = Lo, xmax = Hi), width = 0.25, orientation = "y", na.rm = TRUE) +
   geom_text(aes(x = Label_x, label = Label), hjust = 0, size = 3) +
   geom_vline(xintercept = 58, linetype = "dotted", colour = "grey40") +
-  facet_wrap(~ Panel, labeller = label_parsed) +
+  facet_wrap(~ Panel) +
+  scale_y_discrete(labels = hy) +
   scale_fill_manual(values = c("Reached in every year" = "grey30",
                                "Not reached with 58 colleges in at least one year" = "grey80"), name = NULL) +
   scale_x_continuous(limits = c(0, 105), breaks = c(0, 20, 29, 40, 58)) +
-  labs(x = "Colleges needed for 80% power (t test, df-corrected)", y = NULL,
-       caption = expression("Random volunteering; " * rho * " = 0.5, " * gamma * " = 0.8" * tau *
-                              "; bars: mean of 2018-2021, whiskers: range. Dotted: all 58 colleges.")) +
+  labs(x = "Colleges needed for 80% power", y = NULL) +
   theme_bw(base_size = 10) +
-  theme(legend.position = "bottom", panel.grid.minor = element_blank(),
-        plot.caption = element_text(hjust = 0, size = 8), plot.caption.position = "plot")
+  theme(legend.position = "bottom", panel.grid.minor = element_blank())
 save_both(p_n80, "fig_colleges_needed", 7.5, 4)
 
 # Figure 3: quadrant spread vs incidence-guidance gain ----
@@ -160,7 +169,7 @@ save_both(p_n80, "fig_colleges_needed", 7.5, 4)
 #'
 #' spread_y = (max_r - min_r of region mean incidence rank in year y) / 58 over the
 #' four frozen production regions; gain_y = rate share treated by Incidence-Guided
-#' Saturation minus Saturation Regions (A1, production allocations).
+#' Saturation minus Saturation Quadrants (A1, production allocations).
 #'
 #' @param setup Production setup.rds list (regions, annual)
 #' @param a1 stored/a1_burden_share.csv as a data frame
@@ -201,12 +210,9 @@ p_spread <- ggplot(grid, aes(Spread, Gain)) +
   scale_shape_manual(values = c(16, 17, 15, 3, 7), name = expression("Grid incidence, " * rho[X])) +
   scale_y_continuous(labels = function(v) ifelse(abs(v) < 1e-9, "0", sprintf("%+.0f", 100 * v))) +
   labs(x = "Spread of regional mean incidence ranks (max - min) / number of clusters",
-       y = "Treated incidence share, Incidence-Guided\nSaturation minus Saturation Regions (points)",
-       caption = paste("Grid: 10 surfaces per incidence configuration, queen, production allocations; line fit to grid points only.",
-                       "NC (open triangles): four fixed regions per planning year, spread divided by 58.")) +
+       y = hy("Treated incidence share, Incidence-Guided\nSaturation minus Saturation Quadrants (points)")) +
   theme_bw(base_size = 10) +
-  theme(panel.grid.minor = element_blank(),
-        plot.caption = element_text(hjust = 0, size = 8), plot.caption.position = "plot")
+  theme(panel.grid.minor = element_blank())
 save_both(p_spread, "fig_spread_vs_gain", 7, 4.2)
 
 cat("NC reference points (spread, gain):\n"); print(nc, row.names = FALSE)

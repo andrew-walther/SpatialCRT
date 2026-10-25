@@ -16,17 +16,17 @@
 #
 # Conventions (author, 2026-10-21): t + df-corrected tests, random volunteering,
 # beta = 0, kappa = 0.8; four planning years averaged; "Plain Saturation" in the
-# stored files is displayed as "Saturation Regions".
+# stored files is displayed as "Saturation Quadrants" (author, 2026-10-25).
 
 R_EXT   <- "application/results/methods_ext_2026-10"
 OUT_DIR <- "results/methods_ext_figures/tables"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
 # Display order and names (manuscript order of the nine strategies)
-ORDER <- c("Checkerboard", "High Incidence Focus", "Saturation Regions", "Isolation Buffer",
+ORDER <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
            "2x2 Blocking", "Balanced Quartiles", "Balanced Halves",
            "Incidence-Guided Saturation", "Simple Random Sampling")
-display <- function(x) ifelse(x == "Plain Saturation", "Saturation Regions", x)
+display <- function(x) ifelse(x == "Plain Saturation", "Saturation Quadrants", x)
 tex_name <- function(x) sub("2x2", "$2\\\\times2$", x)
 
 rd <- function(f) read.csv(file.path(R_EXT, f), stringsAsFactors = FALSE)
@@ -67,7 +67,7 @@ log <- character(0)
 # 1. Colleges needed and smallest detectable effect ----
 n80 <- rd("summaries_v2/a3_n80_summary.csv")
 mde <- rd("summaries_v2/a3_mde_summary.csv")
-n80_fmt <- function(v) ifelse(is.finite(v), sprintf("%.0f", v), "$>58$")
+n80_fmt <- function(v) ifelse(is.finite(v), sprintf("%d", as.integer(ceiling(v))), "$>58$")  # rounded up to a whole college
 mde_fmt <- function(v) ifelse(is.finite(v), sprintf("%.2f", v), "$>2$")  # 2 = top of the effect grid
 write_body("tab_nc_power", list(
   pick(n80, "N80_Tdf_Mean", n80_fmt, Kappa = 0.8, Rho = 0.5, Regime = "both", Tau = 1),

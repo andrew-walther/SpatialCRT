@@ -213,8 +213,9 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
   chains, summaries, V9 (QUEUEDONE 10:41; one check-spec fix, logged).
 - [x] Author: headline test = t + df; design name = "Saturation Regions"; pushed
   (2026-10-21).
-- [x] Rename to "Saturation Regions" at the display layer (2026-10-25): chapter, SI and
-  table labels, new figures, verifier labels. Older figures: see the item below.
+- [x] Design name made consistent (2026-10-25, afternoon): "Saturation Quadrants" in text,
+  tables and every manuscript figure (the 2026-10-21 "Saturation Regions" is retired; see
+  `DECISIONS.md`). Grid figures regenerated without in-figure titles and with true hyphens.
 - [x] Author reviewed Section 4 of the report (2026-10-25 feedback): SRS in every design
   test, model specs and citations, narrative results, no colons, ICC spelled out.
 - [x] Step 7a (2026-10-25): figures first. `code/23_methods_extension_figures.R` (power
@@ -223,12 +224,10 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 - [x] Step 7b first pass (2026-10-25): Chapter 3, SI and CTJ (both layouts) drafted;
   verifiers pass; `CTJ_Reading_Markup_V3.pdf` made for markup.
 - [ ] Author: review the step 7b draft (chapter Application sections and Appendix A9,
-  SI S10 subsection, CTJ +~95 words; CTJ body now 3,483 of 3,500).
-- [ ] Older manuscript figures still print "Saturation Quadrants" / "Incidence-Guided
-  Saturation Quadrants" (design samples, tau sensitivity, coverage, ranked MSE, NC
-  real_sud and compact figures). Their current script outputs also differ in content
-  (SRS reference lines), so swapping them needs a review pass; the text notes the old
-  names for now.
+  SI Section S11, CTJ +~95 words; CTJ body now 3,483 of 3,500, so keep CTJ edits tight).
+- [ ] Older figures not regenerated still carry in-figure titles (bias-variance, coverage
+  by design, NC `real_sud` and `compact` figures); strip them if wanted. The unused
+  `fig_tau_sensitivity_6design_{queen,rook}.pdf` copies in the figure folders are stale.
 - [x] Step 8 (2026-10-25): draft talk outline in `presentation/OUTLINE.md` and
   `presentation/outline.html` (figures inline). The prelim Part II outline in
   bios-dissertation is unchanged; adapt it from the talk deck later.

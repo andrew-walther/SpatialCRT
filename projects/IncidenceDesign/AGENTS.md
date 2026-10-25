@@ -36,11 +36,12 @@ Reasons and history for each rule: `DECISIONS.md`.
   invent an IRB protocol number or claim approval/exemption.
 - **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first
   body use and avoid internal pipeline jargon; one design-name set everywhere
-  (Checkerboard, High Incidence Focus, Saturation Regions, Isolation Buffer, 2×2 Blocking,
-  Balanced Quartiles, Balanced Halves, Incidence-Guided Saturation, Simple Random Sampling);
-  "Saturation Regions" replaced Plain Saturation / Saturation Quadrants on 2026-10-21 (display
-  layer only; hashed code and CSVs keep old labels); frame incidence guidance as matching
-  Saturation Regions' accuracy while targeting
+  (Checkerboard, High Incidence Focus, Saturation Quadrants, Isolation Buffer, 2×2 Blocking,
+  Balanced Quartiles, Balanced Halves, Incidence-Guided Saturation, Simple Random Sampling),
+  in text, tables and figures alike; "Saturation Quadrants" was restored on 2026-10-25
+  (reversing the 2026-10-21 "Saturation Regions"; CSVs say "Plain Saturation"); manuscript
+  figures have no in-figure title or note (the caption holds them) and print true hyphens;
+  frame incidence guidance as matching Saturation Quadrants' accuracy while targeting
   high-burden regions when burden differs between regions, with a small gain on the NC
   map (revised 2026-10-21; never "no benefit"); no repository hyperlink in manuscripts;
   no Codex/Claude mentions in code headers or documents (AI disclosure is a later TODO).
