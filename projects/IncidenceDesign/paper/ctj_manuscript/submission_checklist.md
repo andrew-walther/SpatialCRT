@@ -3,11 +3,12 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,362 prose/heading words (after the 2026-10-14 Monte Carlo definition); limit 3,500 applies to the body (author, 2026-10-14;
-  end declarations, abstract, references and exhibits excluded). 3,628 with declarations
-  (266 declaration words; recounted 2026-10-14, texcount text + headers, math excluded).
+- [x] Body 3,477 prose/heading words (recounted 2026-10-26, Introduction through
+  Discussion, texcount text + headers, math excluded); limit 3,500 applies to the body
+  (author, 2026-10-14; end declarations, abstract, references and exhibits excluded).
+  Declarations not recounted since 2026-10-14 (266 words then).
   Placeholder text (ethics statement, coauthor-approval sentence) is highlighted yellow.
-  Structured abstract 394 words (limit 425); six keywords. Recounted 2026-10-14
+  Structured abstract 414 words (title page; limit 425); six keywords. Earlier count 394 on 2026-10-14
   after the heading/abstract revision (informative subheadings, Discussion
   subsections, plainer abstract), using texcount on the body, declaration and
   abstract fragments.

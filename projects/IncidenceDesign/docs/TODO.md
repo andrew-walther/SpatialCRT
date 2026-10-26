@@ -79,17 +79,13 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   title page). Lin's telephone (919) 966-9431 added from his UNC profile.
 - [ ] Confirm contribution wording; obtain all coauthors' final approval and
   submission attestations; confirm the pilot description with Simpson.
-- [ ] **Coverage below nominal (~93%; added 2026-10-14; plan A5):** Wald intervals
-  τ̂ ± 1.96·SE are slightly too narrow in every design (likely ML SE ignoring
-  uncertainty in ρ̂; untested). Quick fix tried 2026-10-14 (application only): a
-  t critical value (df = 58 − 4 = 54, t ≈ 2.005; 53 for β = 1) recomputed from the
-  stored production fits (stored Wald coverage reproduced exactly, 936/936 sources)
-  raised primary coverage only from ~93.1% to ~93.7% (per design/regime
-  92.6–93.6% → 93.2–94.1%; β = 1: 92.9% → 93.5%); rankings unchanged, ~1.3 points
-  of the gap remain. Grid not checked. Closing the gap would need a heavier option:
-  parametric bootstrap; randomization inference (not possible for the
-  single-allocation designs). Ask Lin whether a stated limitation (optionally with
-  one sentence on the t-value check) suffices.
+- [x] **Coverage below nominal (plan A5):** settled 2026-10-21. The application reports
+  the t + df-corrected interval (94–96%) beside Wald (92.6–93.6%); see `DECISIONS.md`.
+- [ ] **Grid coverage with the t + df interval (author asked 2026-10-26):** the grid
+  still reports Wald coverage (~93–94%). The grid run stored only scenario summaries,
+  not per-fit estimates and SEs, so aligning it needs a separate re-fit (τ = 1, oracle,
+  both neighbor types, all designs and SRS, key-seeded so the fits match production)
+  and updates to every grid coverage cell and its verifier source. Awaiting the go-ahead.
 - [ ] Submit CTJ with the author-completed
   [checklist](../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
@@ -138,8 +134,8 @@ description, ORCIDs) are not repeated here.
 - [ ] From Habib/Simpson: IRB protocol holder and determination, permission to publish
   58-cluster aggregates/maps, required disclosures for derived data, and funding
   (does "no specific grant" hold?).
-- [ ] Replace "personal communication" for Habib's corrected counts with a citation
-  Lin finds acceptable (e.g. a data-preparation description or acknowledgement).
+- [x] "Personal communication" for Habib's counts removed (2026-10-26, author): the
+  text calls them corrected counts (CTJ, SI, chapter).
 - [ ] **Simpson feedback on the application (awaited, 2026-10-21):** whether our
   implementation of the SUD application matches his pilot idea; revise the
   application framing in CTJ, SI and Chapter 3 accordingly.
@@ -172,9 +168,9 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
   top-29 changes. No meaningful impact; pooled rates do not drive yearly allocation.
 
 **Manuscript and exhibits (edit the chapter first, then re-derive CTJ/SI; run verifiers)**
-- [ ] Group the designs into categories in Table 1 (e.g. deterministic, random,
-  incidence-driven, saturation-driven; some designs span two). Consider one unified
-  table + illustration exhibit.
+- [x] Unified table + illustration exhibit: CTJ hybrid Table 1 (2026-10-25).
+- [ ] Group the designs into categories in Table 1 (a column; recommendations given
+  2026-10-26, author to choose).
 - [ ] State explicitly that the endpoint is assumed correlated with the guiding
   incidence (wording depends on the outcome decision).
 - [x] Update keywords (done 2026-10-19: dropped "simulation" and "mean squared error";
@@ -182,13 +178,13 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 - [ ] Optional: one sentence contrasting this project's proportional spillover
   (γ × share of treated neighbors) with Chapter 2's on/off indicator (keep brief).
 - [ ] Keep CTJ word counts current after every edit (texcount, text + headers, math
-  excluded; title page and checklist). 2026-10-14: body 3,362; 3,628 with
-  declarations; abstract 393 (394 counting "10×10").
+  excluded; title page and checklist). 2026-10-26: body 3,477 (Introduction through
+  Discussion; reproduces the earlier 3,483 before the last cut); abstract 414.
 - [ ] Decide whether statistical tests of design differences belong in the CTJ/SI
   (the SI has Nemenyi/Holm-Wilcoxon for variant consolidation; script 12 has six-design
   Friedman/Nemenyi; none for the application).
-- [ ] Re-run the saved read-only review prompt
-  (`prompts/2026-10-12-claude-comprehensive-review-prompt.md`) after these edits.
+- [ ] Run the read-only review with the updated brief
+  (`prompts/2026-10-26-claude-comprehensive-review-prompt.md`).
 
 - [x] Burden share treated by design (plan A1; run 2026-10-20, grid check 2026-10-21; findings Section 2).
 
@@ -224,7 +220,7 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 - [x] Step 7b first pass (2026-10-25): Chapter 3, SI and CTJ (both layouts) drafted;
   verifiers pass; `CTJ_Reading_Markup_V3.pdf` made for markup.
 - [ ] Author: review the step 7b draft (chapter Application sections and Appendix A9,
-  SI Section S11, CTJ +~95 words; CTJ body now 3,483 of 3,500, so keep CTJ edits tight).
+  SI Section S11, CTJ +~95 words; CTJ body now 3,477 of 3,500 (2026-10-26), so keep CTJ edits tight).
 - [x] Every figure in the chapter, SI and CTJ is now a clean figure (2026-10-25): no
   in-figure title or note; captions carry them. NC maps and application figures come from
   `application/code/manuscript_maps.R`. The unused `fig_tau_sensitivity_6design_{queen,rook}.pdf`
@@ -236,7 +232,6 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
   full overview, discussion weighted toward the application; built in `presentation/`
   and later adapted into prelim Part II. Kickoff prompt:
   `prompts/2026-10-25-talk-kickoff-prompt.md`.
-- [ ] Push the unpushed commits on main (ask the author).
 
 ## Known minor code issues (low priority; moved from AGENTS.md 2026-10-14)
 

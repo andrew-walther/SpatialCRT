@@ -40,6 +40,17 @@ never enters the rank-based tests.
 
 ---
 
+## 2026-10-26 — Habib's counts: "corrected", no personal communication
+
+**Decision.** The CTJ, SI and chapter describe Habib's numerator as corrected counts
+that include heart-failure deaths formerly excluded as presumed non-sudden, without a
+"personal communication" citation. CTJ body now 3,477 words.
+
+**Why.** Author instruction (2026-10-26); the correction is a property of the data
+Habib prepared, already credited through his report and the author contributions.
+
+---
+
 ## 2026-10-25 — Hybrid Table 1 with example maps; new design-sample figure
 
 **Decision.** CTJ Table 1 gains an "Example (grid)" column with one example

@@ -249,6 +249,14 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-26 — pre-review cleanup
+
+- Removed "personal communication" for Habib's counts (CTJ, SI, chapter); CTJ body
+  recounted at 3,477 (title page, checklist, cover letter updated).
+- New review brief `docs/prompts/2026-10-26-claude-comprehensive-review-prompt.md`;
+  stale TODO entries closed. Grid coverage with the t + df interval needs a re-fit
+  (no per-fit grid output stored) and awaits the author's go-ahead.
+
 ### 2026-10-25 — hybrid Table 1, new design figure, flushend reading layout
 
 - Reading layout uses `flushend` instead of `balance`, so References follows the
