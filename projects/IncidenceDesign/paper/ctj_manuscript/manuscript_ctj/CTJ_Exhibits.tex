@@ -4,26 +4,28 @@
 % Table 1 example maps: code/25_design_assignment_figures.R (illustrative surface).
 % Starred floats span both reading columns; every macro is called once per build.
 
-% One example map per Table 1 row, vertically centered with padding between rows.
+% One example map per Table 1 row, vertically centered with padding between rows;
+% \CTJCat sets each design's category on an italic line under its name.
+\newcommand{\CTJCat}[1]{\newline{\footnotesize\textit{#1}}}
 \newcommand{\CTJThumb}[1]{\raisebox{-0.5\height}{\includegraphics[width=1.9cm]{../figures/compact/design_thumbs/thumb_#1.pdf}}\rule[-1.05cm]{0pt}{2.2cm}}
 \newcommand{\CTJDesignTable}{%
 \begin{table*}[!htb]
 \small
 \centering
-\caption{Treatment assignment designs on the 100-cluster grid and their North Carolina (NC) adaptations, each with one example assignment on the grid (blue, treated; white, control). Every example uses the illustrative incidence surface in the first row, which is not one of the simulated surfaces. Numbers in the Balanced Quartiles example give each cluster's incidence quartile; percentages in the Incidence-Guided Saturation example give each quadrant's treated share. Incidence is the simulated grid covariate or the observed annual cluster rate. Two related variants, saturation with randomly ordered quadrants and balancing within incidence halves, performed similarly to their retained counterparts and are reported in the supplementary material.}
+\caption{Treatment assignment designs on the 100-cluster grid and their North Carolina (NC) adaptations, each with its category (italic) and one example assignment on the grid (blue, treated; white, control). Every example uses the illustrative incidence surface in the first row, which is not one of the simulated surfaces. Numbers in the Balanced Quartiles example give each cluster's incidence quartile; percentages in the Incidence-Guided Saturation example give each quadrant's treated share. Incidence is the simulated grid covariate or the observed annual cluster rate. Two related variants, saturation with randomly ordered quadrants and balancing within incidence halves, performed similarly to their retained counterparts and are reported in the supplementary material.}
 \label{tab:allocation-rules}
 \begin{tabular}{>{\raggedright\arraybackslash}m{0.16\linewidth}c>{\raggedright\arraybackslash}m{0.37\linewidth}>{\raggedright\arraybackslash}m{0.28\linewidth}}
 \toprule
 Design & Example (grid) & Grid (100 clusters) & NC (58 clusters) \\
 \midrule
 \textit{Incidence surface} & \CTJThumb{incidence} & Illustrative surface used in every example below; darker is higher, and dashed lines mark the quadrants. & Observed annual SUD rate of each cluster. \\
-Checkerboard & \CTJThumb{1} & Treat alternating clusters in a checkerboard pattern, so no two clusters that share an edge are in the same arm (50 treated). & Deterministic graph version: visit clusters from most to fewest neighbors and give each the arm less common among its assigned neighbors (27 treated). \\
-High Incidence Focus & \CTJThumb{2} & Treat the 50 clusters with the highest incidence; ties are broken at random. & Treat the 29 clusters with the highest observed rate. \\
-Isolation Buffer & \CTJThumb{4} & Treat clusters one at a time, each chosen at random from the untreated clusters with no treated neighbor, until none remain; no two treated clusters are neighbors (about 21 treated under queen weights). & Same rule on the NC adjacency graph (about 16 treated). \\
-$2\times2$ Blocking & \CTJThumb{5} & Divide the grid into 25 blocks of $2\times2$ clusters and treat two randomly chosen clusters in each block (50 treated). & Treat a random half (rounded) of each of 14 fixed groups formed by $k$-means clustering on location, incidence rank and population (27--31 treated by year). \\
-Balanced Quartiles & \CTJThumb{6} & Divide clusters into quartiles of incidence rank and treat a random half of each quartile (50 treated). & Same rule with observed rates (29 treated). \\
-Incidence-Guided Saturation & \CTJThumb{8} & Treat a random 80\%, 60\%, 40\% and 20\% of the clusters in the four $5\times5$ quadrants, ordered from highest to lowest mean incidence (50 treated). & Same rule with four fixed geographic regions, ordered by the mean rank of their clusters' observed rates (29 treated). \\
-Simple Random Sampling & \CTJThumb{9} & Treat a completely random half of the clusters (50 treated). & Same rule (29 treated). \\
+Checkerboard\CTJCat{Fixed spatial interspersion} & \CTJThumb{1} & Treat alternating clusters in a checkerboard pattern, so no two clusters that share an edge are in the same arm (50 treated). & Deterministic graph version: visit clusters from most to fewest neighbors and give each the arm less common among its assigned neighbors (27 treated). \\
+High Incidence Focus\CTJCat{Incidence targeting} & \CTJThumb{2} & Treat the 50 clusters with the highest incidence; ties are broken at random. & Treat the 29 clusters with the highest observed rate. \\
+Isolation Buffer\CTJCat{Spatial separation} & \CTJThumb{4} & Treat clusters one at a time, each chosen at random from the untreated clusters with no treated neighbor, until none remain; no two treated clusters are neighbors (about 21 treated under queen weights). & Same rule on the NC adjacency graph (about 16 treated). \\
+$2\times2$ Blocking\CTJCat{Local spatial balance} & \CTJThumb{5} & Divide the grid into 25 blocks of $2\times2$ clusters and treat two randomly chosen clusters in each block (50 treated). & Treat a random half (rounded) of each of 14 fixed groups formed by $k$-means clustering on location, incidence rank and population (27--31 treated by year). \\
+Balanced Quartiles\CTJCat{Incidence balance} & \CTJThumb{6} & Divide clusters into quartiles of incidence rank and treat a random half of each quartile (50 treated). & Same rule with observed rates (29 treated). \\
+Incidence-Guided Saturation\CTJCat{Incidence-ordered regional saturation} & \CTJThumb{8} & Treat a random 80\%, 60\%, 40\% and 20\% of the clusters in the four $5\times5$ quadrants, ordered from highest to lowest mean incidence (50 treated). & Same rule with four fixed geographic regions, ordered by the mean rank of their clusters' observed rates (29 treated). \\
+Simple Random Sampling\CTJCat{Unrestricted reference} & \CTJThumb{9} & Treat a completely random half of the clusters (50 treated). & Same rule (29 treated). \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -35,7 +37,7 @@ Simple Random Sampling & \CTJThumb{9} & Treat a completely random half of the cl
 \small
 \centering
 
-\caption{Grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE is the mean squared error of the estimate of $\tau$; coverage is the proportion of nominal 95\% confidence intervals that contain $\tau$. Both use the oracle fit, the spatial lag model that includes the true spillover term. Simple random sampling is complete randomization of 50 clusters.}
+\caption{Grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE is the mean squared error of the estimate of $\tau$; coverage is the proportion of 95\% $t$-based confidence intervals, with a degrees-of-freedom-corrected standard error, that contain $\tau$. Both use the oracle fit, the spatial lag model that includes the true spillover term. Simple random sampling is complete randomization of 50 clusters.}
 \label{tab:grid-srs}
 % SOURCE: results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds
 
@@ -46,13 +48,13 @@ Simple Random Sampling & \CTJThumb{9} & Treat a completely random half of the cl
 Design & MSE & Coverage & MSE & Coverage \\
 
 \midrule
-Checkerboard & 0.0624 & 0.940 & 2.1114 & 0.942 \\
-High Incidence Focus & 0.1617 & 0.941 & 0.3292 & 0.935 \\
-Isolation Buffer & 0.1608 & 0.939 & 0.1595 & 0.939 \\
-$2\times2$ Blocking & 0.0623 & 0.937 & 0.5761 & 0.941 \\
-Balanced Quartiles & 0.0421 & 0.940 & 0.2195 & 0.932 \\
-Incidence-Guided Saturation & 0.0459 & 0.939 & 0.1355 & 0.934 \\
-Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
+Checkerboard & 0.0624 & 0.948 & 2.1114 & 0.951 \\
+High Incidence Focus & 0.1617 & 0.950 & 0.3292 & 0.945 \\
+Isolation Buffer & 0.1608 & 0.948 & 0.1595 & 0.950 \\
+$2\times2$ Blocking & 0.0623 & 0.947 & 0.5761 & 0.950 \\
+Balanced Quartiles & 0.0421 & 0.949 & 0.2195 & 0.942 \\
+Incidence-Guided Saturation & 0.0459 & 0.949 & 0.1355 & 0.945 \\
+Simple Random Sampling & 0.0424 & 0.950 & 0.2146 & 0.946 \\
 
 \bottomrule
 

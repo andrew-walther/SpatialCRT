@@ -26,15 +26,15 @@ Nemenyi critical difference (alpha=0.05) = 0.950
 
 All-8 + SRS mean MSE / Coverage / Rank (tau=1.0):
                       Design        MSE Coverage Rank
-        Saturation Quadrants 0.09004083 0.935900    1
- Incidence-Guided Saturation 0.09067072 0.936550    2
-      Simple Random Sampling 0.12848083 0.938350    3
-             Balanced Halves 0.12994350 0.935750    4
-          Balanced Quartiles 0.13081366 0.935950    5
-            Isolation Buffer 0.16016279 0.939000    6
-        High Incidence Focus 0.24545517 0.937850    7
-                2x2 Blocking 0.31923193 0.939075    8
-                Checkerboard 1.08689503 0.940725    9
+        Saturation Quadrants 0.09004083 0.945775    1
+ Incidence-Guided Saturation 0.09067072 0.946850    2
+      Simple Random Sampling 0.12848083 0.948075    3
+             Balanced Halves 0.12994350 0.945650    4
+          Balanced Quartiles 0.13081366 0.945550    5
+            Isolation Buffer 0.16016279 0.948875    6
+        High Incidence Focus 0.24545517 0.947725    7
+                2x2 Blocking 0.31923193 0.948450    8
+                Checkerboard 1.08689503 0.949650    9
 
 --- Consolidation pair: Saturation Quadrants vs Incidence-Guided Saturation ---
 MSE: 0.0900 vs 0.0907 (delta = -0.0006) | Nemenyi p = 0.9860 | Wilcoxon (Holm) p = 0.619
@@ -147,15 +147,15 @@ Nemenyi critical difference (alpha=0.05) = 0.950
 
 All-8 + SRS mean MSE / Coverage / Rank (tau=1.0):
                       Design        MSE Coverage Rank
-        Saturation Quadrants 0.07075356 0.940100    1
- Incidence-Guided Saturation 0.07165113 0.942300    2
-          Balanced Quartiles 0.08371778 0.940150    3
-             Balanced Halves 0.08417786 0.939825    4
-      Simple Random Sampling 0.08504689 0.938275    5
-                2x2 Blocking 0.12812905 0.937825    6
-            Isolation Buffer 0.13290418 0.939400    7
-        High Incidence Focus 0.20623986 0.939125    8
-                Checkerboard 0.47992058 0.149775    9
+        Saturation Quadrants 0.07075356 0.949375    1
+ Incidence-Guided Saturation 0.07165113 0.951725    2
+          Balanced Quartiles 0.08371778 0.948125    3
+             Balanced Halves 0.08417786 0.948625    4
+      Simple Random Sampling 0.08504689 0.947450    5
+                2x2 Blocking 0.12812905 0.948050    6
+            Isolation Buffer 0.13290418 0.949750    7
+        High Incidence Focus 0.20623986 0.948375    8
+                Checkerboard 0.47992058 0.161500    9
 
 --- Consolidation pair: Saturation Quadrants vs Incidence-Guided Saturation ---
 MSE: 0.0708 vs 0.0717 (delta = -0.0009) | Nemenyi p = 1.0000 | Wilcoxon (Holm) p = 1
@@ -268,15 +268,15 @@ Nemenyi critical difference (alpha=0.05) = 0.672
 
 All-8 + SRS mean MSE / Coverage / Rank (tau=1.0):
                       Design        MSE  Coverage Rank
-        Saturation Quadrants 0.08039719 0.9380000    1
- Incidence-Guided Saturation 0.08116092 0.9394250    2
-      Simple Random Sampling 0.10676386 0.9383125    3
-             Balanced Halves 0.10706068 0.9377875    4
-          Balanced Quartiles 0.10726572 0.9380500    5
-            Isolation Buffer 0.14653348 0.9392000    6
-                2x2 Blocking 0.22368049 0.9384500    7
-        High Incidence Focus 0.22584751 0.9384875    8
-                Checkerboard 0.78340780 0.5452500    9
+        Saturation Quadrants 0.08039719 0.9475750    1
+ Incidence-Guided Saturation 0.08116092 0.9492875    2
+      Simple Random Sampling 0.10676386 0.9477625    3
+             Balanced Halves 0.10706068 0.9471375    4
+          Balanced Quartiles 0.10726572 0.9468375    5
+            Isolation Buffer 0.14653348 0.9493125    6
+                2x2 Blocking 0.22368049 0.9482500    7
+        High Incidence Focus 0.22584751 0.9480500    8
+                Checkerboard 0.78340780 0.5555750    9
 
 --- Consolidation pair: Saturation Quadrants vs Incidence-Guided Saturation ---
 MSE: 0.0804 vs 0.0812 (delta = -0.0008) | Nemenyi p = 0.9952 | Wilcoxon (Holm) p = 0.595

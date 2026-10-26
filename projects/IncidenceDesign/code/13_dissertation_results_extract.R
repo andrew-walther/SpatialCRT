@@ -35,8 +35,9 @@ relabel6 <- function(df) {
   df$Design <- full_name_map[df$Design]
   df
 }
-mle_full_6 <- relabel6(load_latest_results(results_dir = results_dir, estimation_mode = "MLE_tau_sweep"))
-non_full_6 <- relabel6(load_latest_results(results_dir = results_dir, estimation_mode = "MLEnonoracle_tau_sweep"))
+# Reported grid interval: t + df-corrected (author, 2026-10-26; re-fit in 26_grid_tdf_intervals.R)
+mle_full_6 <- relabel6(apply_tdf_intervals(load_latest_results(results_dir = results_dir, estimation_mode = "MLE_tau_sweep"), results_dir))
+non_full_6 <- relabel6(apply_tdf_intervals(load_latest_results(results_dir = results_dir, estimation_mode = "MLEnonoracle_tau_sweep"), results_dir))
 surf_files <- list.files(file.path(results_dir, "sim_data"),
                          pattern = "^surface_results_MLE_tau_sweep_.*\\.rds$", full.names = TRUE)
 stopifnot(length(surf_files) > 0)

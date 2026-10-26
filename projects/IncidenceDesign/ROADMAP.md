@@ -249,6 +249,15 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-26 — grid t + df intervals; Table 1 categories
+
+- `code/26_grid_tdf_intervals.R` re-fit the full grid (16 min, 10 workers) and
+  reproduced every stored Wald metric exactly; t + df coverage/power now feed scripts
+  12/13/14/19 through `apply_tdf_intervals()` (06). Updated every grid coverage and
+  power number in the CTJ (Methods, Results, Limitations, Table 2), SI and Chapter 3
+  (five tables, four figures, prose, metric formulas). CTJ body 3,486 words.
+- Table 1 shows each design's category in italics under its name.
+
 ### 2026-10-26 — pre-review cleanup
 
 - Removed "personal communication" for Habib's counts (CTJ, SI, chapter); CTJ body

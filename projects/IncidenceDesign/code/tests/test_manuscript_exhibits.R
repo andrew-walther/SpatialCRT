@@ -53,13 +53,17 @@ for (tau in c(2, 3)) {
   stopifnot(all(vapply(sprintf("%.4f", values), grepl, logical(1),
                        x = manuscript, fixed = TRUE)))
 }
-nonoracle <- readRDS("results/sim_data/sim_results_MLEnonoracle_tau_sweep_combined_20260927_000502.rds")
+# Reported coverage uses the t + df-corrected interval (author, 2026-10-26); its
+# metrics come from the exact re-fit in code/26_grid_tdf_intervals.R
+nonoracle <- readRDS("results/grid_tdf_2026-10/grid_tdf_scenarios.rds")
+nonoracle <- nonoracle[nonoracle$Estimator == "nonoracle", ]
+nonoracle$Coverage <- nonoracle$Coverage_Tdf
 nonoracle <- nonoracle[nonoracle$True_Tau == 1 &
   nonoracle$Design %in% paste("Design", c(1, 2, 4, 5, 6, 8)) &
   !(nonoracle$Neighbor_Type == "rook" & nonoracle$Design == "Design 1"), ]
 pooled <- aggregate(cbind(Bias, Coverage) ~ Design + Neighbor_Type, nonoracle, mean)
 stopifnot(identical(sprintf("%.2f", range(pooled$Bias)), c("-0.40", "-0.12")),
-          identical(sprintf("%.2f", range(pooled$Coverage)), c("0.51", "0.90")))
+          identical(sprintf("%.2f", range(pooled$Coverage)), c("0.54", "0.91")))
 decomposition <- read.csv("results/manuscript_exhibit_revision_20261002/grid_bias_variance.csv")
 stopifnot(min(decomposition$Variance_Percent) > 97)
 cat("PASS: exact error decomposition, configuration/regime separation, named annual SRS denominators, and wrong-value fixtures.\n")

@@ -40,6 +40,21 @@ never enters the rank-based tests.
 
 ---
 
+## 2026-10-26 — Grid intervals use the t + df correction
+
+**Decision.** Grid coverage and power are reported with the same interval as the
+application, τ̂ ± t(0.975, N − p) × SE × √(N/(N − p)), N = 100, p = coefficients + ρ
+(oracle 5; non-oracle and rook Checkerboard, whose aliased spillover column is dropped,
+4). Wald stays as a stated comparison (about one point lower). Scripts 12, 13, 14 and 19
+call `apply_tdf_intervals()`; MSE, bias and every ranking are unchanged.
+
+**Why.** Author: use the interval whose coverage is closest to nominal (2026-10-26).
+The grid run had stored only summaries, so `code/26_grid_tdf_intervals.R` re-fit all
+28,800 scenario-estimator rows from the same seed keys; every stored Wald metric was
+reproduced exactly. Identified-design coverage moved from 0.936–0.942 to 0.946–0.952.
+
+---
+
 ## 2026-10-26 — Habib's counts: "corrected", no personal communication
 
 **Decision.** The CTJ, SI and chapter describe Habib's numerator as corrected counts

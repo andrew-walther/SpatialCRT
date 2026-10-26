@@ -32,6 +32,9 @@ Reasons and history for each rule: `DECISIONS.md`.
   t + df-corrected test, with size-adjusted power as a check and Wald in the SI; the reported interval is
   t + df-corrected (Stage 1 main evidence, Stage 2 in the SI); targeting is the
   per-college rate share with the death share beside it. Reasons: `DECISIONS.md`.
+- **Grid intervals (author, 2026-10-26):** grid coverage and power use the same t + df
+  interval (exact re-fit `code/26_grid_tdf_intervals.R`; manuscript scripts call
+  `apply_tdf_intervals()` from 06; Wald kept as `*_Wald` for comparison).
 - **CTJ authors:** Walther, Habib, Simpson, Lin, in that order; Lin corresponding. Never
   invent an IRB protocol number or claim approval/exemption.
 - **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first
@@ -145,6 +148,7 @@ the reasoning behind this distinction.
 | `23_methods_extension_figures.R` | ~210 | NC methods-extension figures: power vs participating colleges, colleges needed for 80% power, grid spread vs incidence-guidance gain (PDF + PNG) | Reads stored 2026-10-21 summaries; writes `results/methods_ext_figures/` |
 | `24_methods_extension_tables.R` | ~200 | LaTeX table bodies for chapter Appendix A9 / SI S10 (power, translation, calibration, guidance, CAR, Bayes, spillover forms) plus in-text numbers | Writes `results/methods_ext_figures/tables/` |
 | `25_design_assignment_figures.R` | ~200 | Example assignment per design on one illustrative surface (ρ_X = 0.5): CTJ Table 1 thumbnails, SI/Chapter 3 panel figure, wide slide version | Writes `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf` (SI and chapter figure folders), `presentation/figures/design_assignments_panels_wide.{pdf,png}` |
+| `26_grid_tdf_intervals.R` | ~180 | Exact re-fit of the full grid recording t + df coverage/power beside Wald; reproduction check against the 2026-09-27 run | Writes `results/grid_tdf_2026-10/` (never `sim_data/`) |
 | `paper/tools/verify_manuscripts.py` | ~290 | CSV-to-table and chapter-to-supplement reconciliation (incl. merged `tab:nc-annual`); assets/references/citations/exhibit count; `--chapter`, `--pending-si` for candidate copies | Stdlib; deliberately wrong-number fixture must fail |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **application/** | | | |

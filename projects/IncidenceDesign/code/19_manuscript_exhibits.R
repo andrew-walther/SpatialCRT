@@ -17,6 +17,8 @@ source_file <- file.path(project_dir, "results", "sim_data",
 r <- readRDS(source_file)
 stopifnot(nrow(r) == 14400, all(r$Estimator == "oracle"),
           all(r$N_Valid_Est == 250), length(unique(r$Design)) == 9)
+# Reported grid interval: t + df-corrected (author, 2026-10-26; re-fit in 26_grid_tdf_intervals.R)
+r <- apply_tdf_intervals(r, file.path(project_dir, "results"))
 a <- r[r$True_Tau == 1 & r$Neighbor_Type == "queen", ]
 benchmark <- aggregate(cbind(MSE, Bias, Coverage) ~ Design + Spillover_Type,
                        a, mean)

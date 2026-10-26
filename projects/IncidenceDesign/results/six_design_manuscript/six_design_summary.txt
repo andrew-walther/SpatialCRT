@@ -52,13 +52,13 @@ Simple Random Sampling                 0e+00                     NA
 
 Mean MSE / Coverage by design (tau=1.0):
                       Design        MSE Coverage
- Incidence-Guided Saturation 0.09067072 0.936550
-      Simple Random Sampling 0.12848083 0.938350
-          Balanced Quartiles 0.13081366 0.935950
-            Isolation Buffer 0.16016279 0.939000
-        High Incidence Focus 0.24545517 0.937850
-                2x2 Blocking 0.31923193 0.939075
-                Checkerboard 1.08689503 0.940725
+ Incidence-Guided Saturation 0.09067072 0.946850
+      Simple Random Sampling 0.12848083 0.948075
+          Balanced Quartiles 0.13081366 0.945550
+            Isolation Buffer 0.16016279 0.948875
+        High Incidence Focus 0.24545517 0.947725
+                2x2 Blocking 0.31923193 0.948450
+                Checkerboard 1.08689503 0.949650
 
 --- Conditional test: stratify by True_Tau (full sweep) ---
   True_Tau = 0.8: Friedman chi-sq = 564.09, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
@@ -112,13 +112,13 @@ Simple Random Sampling                0.0000                     NA
 
 Mean MSE / Coverage by design (tau=1.0):
                       Design        MSE Coverage
- Incidence-Guided Saturation 0.07165113 0.942300
-          Balanced Quartiles 0.08371778 0.940150
-      Simple Random Sampling 0.08504689 0.938275
-                2x2 Blocking 0.12812905 0.937825
-            Isolation Buffer 0.13290418 0.939400
-        High Incidence Focus 0.20623986 0.939125
-                Checkerboard 0.47992058 0.149775
+ Incidence-Guided Saturation 0.07165113 0.951725
+          Balanced Quartiles 0.08371778 0.948125
+      Simple Random Sampling 0.08504689 0.947450
+                2x2 Blocking 0.12812905 0.948050
+            Isolation Buffer 0.13290418 0.949750
+        High Incidence Focus 0.20623986 0.948375
+                Checkerboard 0.47992058 0.161500
 
 --- Conditional test: stratify by True_Tau (full sweep) ---
   True_Tau = 0.8: Friedman chi-sq = 803.59, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
@@ -172,13 +172,13 @@ Simple Random Sampling                0.0000                     NA
 
 Mean MSE / Coverage by design (tau=1.0):
                       Design        MSE  Coverage
- Incidence-Guided Saturation 0.08116092 0.9394250
-      Simple Random Sampling 0.10676386 0.9383125
-          Balanced Quartiles 0.10726572 0.9380500
-            Isolation Buffer 0.14653348 0.9392000
-                2x2 Blocking 0.22368049 0.9384500
-        High Incidence Focus 0.22584751 0.9384875
-                Checkerboard 0.78340780 0.5452500
+ Incidence-Guided Saturation 0.08116092 0.9492875
+      Simple Random Sampling 0.10676386 0.9477625
+          Balanced Quartiles 0.10726572 0.9468375
+            Isolation Buffer 0.14653348 0.9493125
+                2x2 Blocking 0.22368049 0.9482500
+        High Incidence Focus 0.22584751 0.9480500
+                Checkerboard 0.78340780 0.5555750
 
 --- Conditional test: stratify by True_Tau (full sweep) ---
   True_Tau = 0.8: Friedman chi-sq = 1321.64, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard

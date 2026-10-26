@@ -81,11 +81,11 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   submission attestations; confirm the pilot description with Simpson.
 - [x] **Coverage below nominal (plan A5):** settled 2026-10-21. The application reports
   the t + df-corrected interval (94–96%) beside Wald (92.6–93.6%); see `DECISIONS.md`.
-- [ ] **Grid coverage with the t + df interval (author asked 2026-10-26):** the grid
-  still reports Wald coverage (~93–94%). The grid run stored only scenario summaries,
-  not per-fit estimates and SEs, so aligning it needs a separate re-fit (τ = 1, oracle,
-  both neighbor types, all designs and SRS, key-seeded so the fits match production)
-  and updates to every grid coverage cell and its verifier source. Awaiting the go-ahead.
+- [x] **Grid coverage with the t + df interval** (done 2026-10-26): exact re-fit
+  (`code/26_grid_tdf_intervals.R`), carried through the CTJ, SI and Chapter 3.
+- [ ] **Application main tables still report Wald coverage** (92.6–93.6%, t + df
+  beside it in the text and Appendix A9/S11). Author to decide whether the primary
+  application tables should switch to t + df as the grid now does.
 - [ ] Submit CTJ with the author-completed
   [checklist](../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
@@ -169,8 +169,7 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 
 **Manuscript and exhibits (edit the chapter first, then re-derive CTJ/SI; run verifiers)**
 - [x] Unified table + illustration exhibit: CTJ hybrid Table 1 (2026-10-25).
-- [ ] Group the designs into categories in Table 1 (a column; recommendations given
-  2026-10-26, author to choose).
+- [x] Design categories in Table 1 (italic line under each name, 2026-10-26).
 - [ ] State explicitly that the endpoint is assumed correlated with the guiding
   incidence (wording depends on the outcome decision).
 - [x] Update keywords (done 2026-10-19: dropped "simulation" and "mean squared error";
@@ -178,7 +177,7 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 - [ ] Optional: one sentence contrasting this project's proportional spillover
   (γ × share of treated neighbors) with Chapter 2's on/off indicator (keep brief).
 - [ ] Keep CTJ word counts current after every edit (texcount, text + headers, math
-  excluded; title page and checklist). 2026-10-26: body 3,477 (Introduction through
+  excluded; title page and checklist). 2026-10-26: body 3,486 (Introduction through
   Discussion; reproduces the earlier 3,483 before the last cut); abstract 414.
 - [ ] Decide whether statistical tests of design differences belong in the CTJ/SI
   (the SI has Nemenyi/Holm-Wilcoxon for variant consolidation; script 12 has six-design
@@ -220,7 +219,7 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 - [x] Step 7b first pass (2026-10-25): Chapter 3, SI and CTJ (both layouts) drafted;
   verifiers pass; `CTJ_Reading_Markup_V3.pdf` made for markup.
 - [ ] Author: review the step 7b draft (chapter Application sections and Appendix A9,
-  SI Section S11, CTJ +~95 words; CTJ body now 3,477 of 3,500 (2026-10-26), so keep CTJ edits tight).
+  SI Section S11, CTJ +~95 words; CTJ body now 3,486 of 3,500 (2026-10-26), so keep CTJ edits tight).
 - [x] Every figure in the chapter, SI and CTJ is now a clean figure (2026-10-25): no
   in-figure title or note; captions carry them. NC maps and application figures come from
   `application/code/manuscript_maps.R`. The unused `fig_tau_sensitivity_6design_{queen,rook}.pdf`

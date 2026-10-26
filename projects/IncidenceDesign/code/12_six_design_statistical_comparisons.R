@@ -88,6 +88,8 @@ ROOK_NOTE <- "Rook: tau not identified for Checkerboard (WZ = 1 - Z); its estima
 # Load tau-sweep results for this estimator, relabel Design, keep 6 designs
 # ------------------------------------------------------------------------
 mle_full <- load_latest_results(results_dir = results_dir, estimation_mode = est_tag)
+# Reported grid interval: t + df-corrected (author, 2026-10-26; re-fit in 26_grid_tdf_intervals.R)
+mle_full <- apply_tdf_intervals(mle_full, results_dir)
 stopifnot("True_Tau" %in% names(mle_full))
 
 mle_full_6 <- mle_full[mle_full$Design %in% retained_ids, ]

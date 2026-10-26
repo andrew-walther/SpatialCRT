@@ -113,6 +113,8 @@ DESIGN_GROUPS_6 <- c(
 # ==============================================================================
 
 mle_full <- load_latest_results(results_dir = results_dir, estimation_mode = "MLE_tau_sweep")
+# Reported grid interval: t + df-corrected (author, 2026-10-26; re-fit in 26_grid_tdf_intervals.R)
+mle_full <- apply_tdf_intervals(mle_full, results_dir)
 stopifnot("True_Tau" %in% names(mle_full))
 
 # --- 8 designs + SRS (Designs 1-9, relabeled; split by neighbor type in (a)). SRS is

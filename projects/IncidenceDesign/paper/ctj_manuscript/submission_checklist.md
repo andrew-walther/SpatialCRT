@@ -3,7 +3,7 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,477 prose/heading words (recounted 2026-10-26, Introduction through
+- [x] Body 3,486 prose/heading words (recounted 2026-10-26, Introduction through
   Discussion, texcount text + headers, math excluded); limit 3,500 applies to the body
   (author, 2026-10-14; end declarations, abstract, references and exhibits excluded).
   Declarations not recounted since 2026-10-14 (266 words then).

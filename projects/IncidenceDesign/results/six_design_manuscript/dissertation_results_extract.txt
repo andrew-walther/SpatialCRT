@@ -3,12 +3,12 @@
 
 === 1. Overall performance (tau=1.0), all incidence configs averaged ===
                                 Design        MSE Coverage    Power
- Incidence-Guided Saturation Quadrants 0.09067072 0.936550 0.930275
-                    Balanced Quartiles 0.13081366 0.935950 0.827275
-                      Isolation Buffer 0.16016279 0.939000 0.730600
-                  High Incidence Focus 0.24545517 0.937850 0.609900
-                          2x2 Blocking 0.31923193 0.939075 0.642050
-                          Checkerboard 1.08689503 0.940725 0.547100
+ Incidence-Guided Saturation Quadrants 0.09067072 0.946850 0.920950
+                    Balanced Quartiles 0.13081366 0.945550 0.813625
+                      Isolation Buffer 0.16016279 0.948875 0.705875
+                  High Incidence Focus 0.24545517 0.947725 0.582125
+                          2x2 Blocking 0.31923193 0.948450 0.629000
+                          Checkerboard 1.08689503 0.949650 0.538125
  Mean_Treated
      50.00000
      50.00000
@@ -148,10 +148,10 @@ Incidence-Guided Saturation Quadrants                    Balanced Quartiles
 
 === 8. Checkerboard coverage across Rho (tau=1.0) ===
   Rho Coverage
- 0.00   0.9408
- 0.01   0.9430
- 0.20   0.9400
- 0.50   0.9391
+ 0.00   0.9495
+ 0.01   0.9517
+ 0.20   0.9485
+ 0.50   0.9489
 
 === 9. Average-rank order per tau (within-block MSE ranks; tau levels share draws) ===
   tau = 0.8: Incidence-Guided Saturation Quadrants (1.41) < Balanced Quartiles (2.14) < Isolation Buffer (3.71) < 2x2 Blocking (4.24) < Checkerboard (4.74) < High Incidence Focus (4.76)
@@ -162,19 +162,19 @@ Incidence-Guided Saturation Quadrants                    Balanced Quartiles
 
 === 10. Non-oracle (Y ~ Z + X) vs oracle, tau=1.0 ===
                                 Design MSE.oracle Bias.oracle Coverage.oracle
- Incidence-Guided Saturation Quadrants     0.0907     0.03212           0.937
-                    Balanced Quartiles     0.1308     0.01727           0.936
-                      Isolation Buffer     0.1602     0.00262           0.939
-                  High Incidence Focus     0.2455     0.03127           0.938
-                          2x2 Blocking     0.3192     0.00959           0.939
-                          Checkerboard     1.0869     0.00113           0.941
+ Incidence-Guided Saturation Quadrants     0.0907     0.03212           0.947
+                    Balanced Quartiles     0.1308     0.01727           0.946
+                      Isolation Buffer     0.1602     0.00262           0.949
+                  High Incidence Focus     0.2455     0.03127           0.948
+                          2x2 Blocking     0.3192     0.00959           0.948
+                          Checkerboard     1.0869     0.00113           0.950
  MSE.nonoracle Bias.nonoracle Coverage.nonoracle
-        0.0870         -0.123              0.810
-        0.0978         -0.176              0.770
-        0.0911         -0.175              0.879
-        0.2189         -0.180              0.896
-        0.1210         -0.244              0.709
-        0.1076         -0.206              0.741
+        0.0870         -0.123              0.825
+        0.0978         -0.176              0.786
+        0.0911         -0.175              0.892
+        0.2189         -0.180              0.907
+        0.1210         -0.244              0.727
+        0.1076         -0.206              0.758
 
 === 11. Surface-level robustness (paired over 5 configs x 10 surfaces, tau=1.0) ===
   Incidence-Guided Saturation Quadrants  vs Balanced Quartiles                     n=50 diff -0.0401 [-0.0431, -0.0372] Wilcoxon p=7.8e-10; first better in 100%
@@ -188,12 +188,12 @@ Rook: tau not identified for Checkerboard (WZ = 1 - Z); estimates kept but flagg
 
 === 1. Overall performance (tau=1.0), all incidence configs averaged ===
                                 Design        MSE Coverage    Power
- Incidence-Guided Saturation Quadrants 0.07165113 0.942300 0.962675
-                    Balanced Quartiles 0.08371778 0.940150 0.917300
-                          2x2 Blocking 0.12812905 0.937825 0.817725
-                      Isolation Buffer 0.13290418 0.939400 0.806025
-                  High Incidence Focus 0.20623986 0.939125 0.644750
-                          Checkerboard 0.47992058 0.149775 0.413650
+ Incidence-Guided Saturation Quadrants 0.07165113 0.951725 0.956375
+                    Balanced Quartiles 0.08371778 0.948125 0.907150
+                          2x2 Blocking 0.12812905 0.948050 0.803050
+                      Isolation Buffer 0.13290418 0.949750 0.783900
+                  High Incidence Focus 0.20623986 0.948375 0.617225
+                          Checkerboard 0.47992058 0.161500 0.390150
  Mean_Treated
      50.00000
      50.00000
@@ -333,10 +333,10 @@ Incidence-Guided Saturation Quadrants                    Balanced Quartiles
 
 === 8. Checkerboard coverage across Rho (tau=1.0) ===
   Rho Coverage
- 0.00   0.1607
- 0.01   0.1564
- 0.20   0.1482
- 0.50   0.1338
+ 0.00   0.1711
+ 0.01   0.1675
+ 0.20   0.1610
+ 0.50   0.1464
 
 === 9. Average-rank order per tau (within-block MSE ranks; tau levels share draws) ===
   tau = 0.8: Incidence-Guided Saturation Quadrants (1.47) < Balanced Quartiles (1.76) < 2x2 Blocking (3.40) < Isolation Buffer (3.41) < High Incidence Focus (4.97) < Checkerboard (5.99)
@@ -347,19 +347,19 @@ Incidence-Guided Saturation Quadrants                    Balanced Quartiles
 
 === 10. Non-oracle (Y ~ Z + X) vs oracle, tau=1.0 ===
                                 Design MSE.oracle Bias.oracle Coverage.oracle
- Incidence-Guided Saturation Quadrants     0.0717     0.01849           0.942
-                    Balanced Quartiles     0.0837     0.00848           0.940
-                          2x2 Blocking     0.1281     0.00397           0.938
-                      Isolation Buffer     0.1329     0.00251           0.939
-                  High Incidence Focus     0.2062     0.01772           0.939
-                          Checkerboard     0.4799    -0.65185           0.150
+ Incidence-Guided Saturation Quadrants     0.0717     0.01849           0.952
+                    Balanced Quartiles     0.0837     0.00848           0.948
+                          2x2 Blocking     0.1281     0.00397           0.948
+                      Isolation Buffer     0.1329     0.00251           0.950
+                  High Incidence Focus     0.2062     0.01772           0.948
+                          Checkerboard     0.4799    -0.65185           0.162
  MSE.nonoracle Bias.nonoracle Coverage.nonoracle
-        0.0864         -0.121              0.810
-        0.0969         -0.176              0.772
-        0.1277         -0.257              0.691
-        0.2115         -0.400              0.513
-        0.2231         -0.192              0.892
-        0.4799         -0.652              0.150
+        0.0864         -0.121              0.825
+        0.0969         -0.176              0.789
+        0.1277         -0.257              0.710
+        0.2115         -0.400              0.536
+        0.2231         -0.192              0.903
+        0.4799         -0.652              0.162
 
 === 11. Surface-level robustness (paired over 5 configs x 10 surfaces, tau=1.0) ===
   Incidence-Guided Saturation Quadrants  vs Balanced Quartiles                     n=50 diff -0.0121 [-0.0139, -0.0102] Wilcoxon p=9.9e-10; first better in 96%

@@ -246,7 +246,7 @@ analytic information matrix. On 5,120 validation fits it agreed with
 \texttt{lagsarlm} to within \(9.7\times10^{-8}\) in \(\hat\tau\) and to
 a relative difference of \(1.1\times10^{-8}\) in its standard error, at
 roughly 1\% of the computing time; we also refit a 1\% sample of the
-full simulation with \texttt{lagsarlm} itself as a check. Confidence intervals are 95\% Wald intervals, $\hat\tau \pm 1.96\,\widehat{\text{SE}}$, where $\widehat{\text{SE}}$ is the estimated standard error.
+full simulation with \texttt{lagsarlm} itself as a check. Confidence intervals are 95\% intervals with a $t$ reference distribution and a degrees-of-freedom-corrected standard error, $\hat\tau \pm t_{0.975,\,N-p}\,\widehat{\text{SE}}\sqrt{N/(N-p)}$, where $\widehat{\text{SE}}$ is the estimated standard error, $N = 100$ is the number of clusters and $p$ is the number of regression coefficients plus $\rho$ (5 for the oracle model; 4 for the non-oracle model and for rook Checkerboard, whose aliased spillover column is dropped). The application uses the same interval. The 95\% Wald interval, $\hat\tau \pm 1.96\,\widehat{\text{SE}}$, covered about one percentage point less for every design.
 
 Checkerboard illustrates why interspersion alone cannot guarantee
 precision. Under rook contiguity on the rectangular grid, \(WZ=1-Z\), so
@@ -303,8 +303,7 @@ For each scenario and estimator, we computed five metrics over the valid
 fits, those with a finite estimate and standard error: bias, the mean of
 \(\hat\tau - \tau\); the standard deviation (SD) of \(\hat\tau\); mean
 squared error, \(\text{MSE} = \text{mean}\{(\hat\tau - \tau)^2\}\);
-coverage, the fraction of fits with \(L \le \tau \le U\), where
-\(L, U = \hat\tau \mp 1.96\,\widehat{\text{SE}}\); and power, the
+coverage, the fraction of fits with \(L \le \tau \le U\), where \(L\) and \(U\) are the limits of the 95\% interval defined above; and power, the
 fraction of fits with \(L > 0\), a one-sided test of \(\tau = 0\) at
 level 0.025. For both estimators, every one of the 250 fits in every
 scenario was valid, and the fitting routine raised no warning other than
@@ -361,11 +360,8 @@ over the five incidence configurations, Incidence-Guided Saturation had the lowe
 Balanced Quartiles (0.131), Isolation Buffer (0.160), High Incidence
 Focus (0.245), \(2\times2\) Blocking (0.319), and Checkerboard (1.087)
 (Table \ref{tab:performance}, Figure \ref{fig:mse}). Coverage of the
-95\% intervals was between 0.936 and 0.941 for all six designs (Figure
-\ref{fig:coverage}). Power to reject \(\tau = 0\) was 0.930 for
-Incidence-Guided Saturation, 0.827 for Balanced Quartiles,
-0.731 for Isolation Buffer, 0.642 for \(2\times2\) Blocking, 0.610 for
-High Incidence Focus, and 0.547 for Checkerboard.
+95\% intervals was between 0.946 and 0.950 for all six designs (Figure
+\ref{fig:coverage}). Power to reject \(\tau = 0\) was 0.921 for Incidence-Guided Saturation, 0.814 for Balanced Quartiles, 0.706 for Isolation Buffer, 0.629 for \(2\times2\) Blocking, 0.582 for High Incidence Focus, and 0.538 for Checkerboard.
 
 \begin{table}[!htb]
 
@@ -382,21 +378,21 @@ Design & MSE (SE) & Bias & Coverage & Power & \shortstack{Average\\rank} & \shor
 
 \midrule
 \multicolumn{7}{l}{\textit{Queen contiguity (primary)}} \\
-Incidence-Guided Saturation & 0.091 (0.0008) & 0.032 & 0.937 & 0.930 & 1.775 & 50 \\
-Balanced Quartiles & 0.131 (0.0011) & 0.017 & 0.936 & 0.827 & 2.688 & 50 \\
-Isolation Buffer & 0.160 (0.0011) & 0.003 & 0.939 & 0.731 & 4.194 & 21.4 \\
-High Incidence Focus & 0.245 (0.0047) & 0.031 & 0.938 & 0.610 & 5.763 & 50 \\
-2$\times$2 Blocking & 0.319 (0.0032) & 0.010 & 0.939 & 0.642 & 5.244 & 50 \\
-Checkerboard & 1.087 (0.0101) & 0.001 & 0.941 & 0.547 & 5.737 & 50 \\
+Incidence-Guided Saturation & 0.091 (0.0008) & 0.032 & 0.947 & 0.921 & 1.775 & 50 \\
+Balanced Quartiles & 0.131 (0.0011) & 0.017 & 0.946 & 0.814 & 2.688 & 50 \\
+Isolation Buffer & 0.160 (0.0011) & 0.003 & 0.949 & 0.706 & 4.194 & 21.4 \\
+High Incidence Focus & 0.245 (0.0047) & 0.031 & 0.948 & 0.582 & 5.763 & 50 \\
+2$\times$2 Blocking & 0.319 (0.0032) & 0.010 & 0.948 & 0.629 & 5.244 & 50 \\
+Checkerboard & 1.087 (0.0101) & 0.001 & 0.950 & 0.538 & 5.737 & 50 \\
 
 \midrule
 \multicolumn{7}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Incidence-Guided Saturation & 0.072 (0.0006) & 0.018 & 0.942 & 0.963 & 1.831 & 50 \\
-Balanced Quartiles & 0.084 (0.0006) & 0.008 & 0.940 & 0.917 & 2.225 & 50 \\
-Isolation Buffer & 0.133 (0.0009) & 0.003 & 0.939 & 0.806 & 4.206 & 38.2 \\
-High Incidence Focus & 0.206 (0.0030) & 0.018 & 0.939 & 0.645 & 5.969 & 50 \\
-2$\times$2 Blocking & 0.128 (0.0012) & 0.004 & 0.938 & 0.818 & 4.331 & 50 \\
-Checkerboard (flagged) & 0.480 (0.0015) & $-0.652$ & 0.150 & 0.414 & 6.987 & 50 \\
+Incidence-Guided Saturation & 0.072 (0.0006) & 0.018 & 0.952 & 0.956 & 1.831 & 50 \\
+Balanced Quartiles & 0.084 (0.0006) & 0.008 & 0.948 & 0.907 & 2.225 & 50 \\
+Isolation Buffer & 0.133 (0.0009) & 0.003 & 0.950 & 0.784 & 4.206 & 38.2 \\
+High Incidence Focus & 0.206 (0.0030) & 0.018 & 0.948 & 0.617 & 5.969 & 50 \\
+2$\times$2 Blocking & 0.128 (0.0012) & 0.004 & 0.948 & 0.803 & 4.331 & 50 \\
+Checkerboard (flagged) & 0.480 (0.0015) & $-0.652$ & 0.162 & 0.390 & 6.987 & 50 \\
 
 \bottomrule
 
@@ -497,7 +493,7 @@ order, each design's highest MSE across the five configurations was
 lower than the next design's lowest. Incidence-Guided Saturation had the lowest MSE in 18 to 21 of the 32 blocks in each
 configuration. Coverage did not depend on the configuration either:
 within each configuration, every design's coverage, averaged over its 32
-scenarios, was between 0.931 and 0.943. The mechanism that generated the
+scenarios, was between 0.941 and 0.952. The mechanism that generated the
 incidence surface therefore did not change the ranking. This includes
 High Incidence Focus, the design that uses the incidence ranks most
 directly: its MSE was no higher under the two Poisson configurations
@@ -680,7 +676,7 @@ the intercept and \(Z\) at every interior cluster, so only the boundary
 clusters separate the spillover effect from the treatment effect
 (Methods). Checkerboard's MSE rose from 0.062 under the both-arms regime
 to 2.111 under the control-only regime, while its bias stayed near zero
-(0.004) and its coverage stayed at 0.942: its intervals widened with its
+(0.004) and its coverage stayed at 0.951: its intervals widened with its
 variance. Its pooled MSE of 1.087 was almost entirely variance: squared
 bias, averaged over scenarios, was 0.0045, less than 0.5\% of MSE
 (Figure \ref{fig:biasvar} shows the decomposition for the Poisson
@@ -708,11 +704,9 @@ Checkerboard (0.480) (Table \ref{tab:performance}; Figure
 order held within each of the five incidence configurations (Table
 \ref{tab:by-config}). Incidence-Guided Saturation had the
 lowest MSE in 97 of the 160 rook blocks (61\%) and Balanced Quartiles in
-60 (38\%). Coverage was between 0.938 and 0.942 for every design except
-Checkerboard, whose coverage was 0.150 (Figure \ref{fig:coverage-rook}
+60 (38\%). Coverage was between 0.948 and 0.952 for every design except Checkerboard, whose coverage was 0.162 (Figure \ref{fig:coverage-rook}
 in Section \ref{app:rook-figures}); within single incidence
-configurations, the corresponding ranges were 0.935 to 0.946, and 0.14
-to 0.15 for Checkerboard. With SRS as a seventh member, the Friedman test rejected equal ranks
+configurations, the corresponding ranges were 0.944 to 0.954, and 0.15 to 0.16 for Checkerboard. With SRS as a seventh member, the Friedman test rejected equal ranks
 (\(\chi^2 = 795.77\), \(\text{df} = 6\), 160 blocks,
 \(p < 2.2\times10^{-16}\)). Nemenyi comparisons separated 17 of 21
 pairs; the four they did not separate were Incidence-Guided Saturation against Balanced Quartiles (\(p = 0.66\)) and SRS (\(p = 0.14\)), Balanced Quartiles against SRS (\(p = 0.97\)), and \(2\times2\)
@@ -738,7 +732,7 @@ standard deviation stayed between 0.20 and 0.21; squared bias, averaged
 over scenarios, accounted for 0.438 of its MSE of 0.480 (Figure
 \ref{fig:biasvar-rook} in Section \ref{app:rook-figures} shows the
 decomposition for the Poisson configuration with \(\rho_X = 0.20\)). Its
-coverage fell from 0.316 at \(\gamma = 0.5\) to 0.027 at
+coverage fell from 0.337 at \(\gamma = 0.5\) to 0.031 at
 \(\gamma = 0.8\). Because \(WZ = 1 - Z\), the two spillover covariates
 in Equation \ref{eq:spillover} coincide,
 \(\gamma\, WZ \circ (1 - Z) = \gamma(1 - Z) = \gamma\, WZ\), so the two
@@ -746,8 +740,7 @@ regimes define the same outcome model and the same expected MSE; the
 observed values, 0.477 under the both-arms regime and 0.483 under the
 control-only regime, differ only by Monte Carlo error, because the two
 regimes use separate noise draws. Under queen contiguity, by contrast,
-Checkerboard's coverage stayed between 0.939 and 0.943 at every level of
-\(\rho\); under rook contiguity it was between 0.134 and 0.161 (Table
+Checkerboard's coverage stayed between 0.949 and 0.952 at every level of \(\rho\); under rook contiguity it was between 0.146 and 0.171 (Table
 \ref{tab:checkerboard-coverage}). Rook Checkerboard estimates were
 precise but centered on the wrong quantity, the opposite of its
 imprecise but valid queen estimates. We keep these estimates in every
@@ -767,8 +760,8 @@ ranking and flag them.
 Neighbor type & $\rho=0$ & $\rho=0.01$ & $\rho=0.20$ & $\rho=0.50$ \\
 
 \midrule
-Queen & 0.941 & 0.943 & 0.940 & 0.939 \\
-Rook & 0.161 & 0.156 & 0.148 & 0.134 \\
+Queen & 0.950 & 0.952 & 0.949 & 0.949 \\
+Rook & 0.171 & 0.168 & 0.161 & 0.146 \\
 
 \bottomrule
 
@@ -784,15 +777,13 @@ every design (Table \ref{tab:oracle-nonoracle} in Section
 \ref{app:oracle-nonoracle} gives both models' MSE, bias, and coverage
 for each design). At \(\tau = 1\), and setting aside Checkerboard under
 rook contiguity, its bias ranged from \(-0.12\) to \(-0.40\) and its
-coverage from 0.51 to 0.90 across designs and neighbor types. Under
+coverage from 0.54 to 0.91 across designs and neighbor types. Under
 queen contiguity its bias ranged from \(-0.123\) (Incidence-Guided
 Saturation) to \(-0.244\) (\(2\times2\) Blocking) and its
-coverage from 0.709 (\(2\times2\) Blocking) to 0.896 (High Incidence
-Focus); under rook contiguity the most biased design other than
-Checkerboard was Isolation Buffer (bias \(-0.400\), coverage 0.513). For
+coverage from 0.727 (\(2\times2\) Blocking) to 0.907 (High Incidence Focus); under rook contiguity the most biased design other than
+Checkerboard was Isolation Buffer (bias \(-0.400\), coverage 0.536). For
 Checkerboard under rook contiguity, the non-oracle estimates were
-identical to the oracle estimates (MSE 0.480, bias \(-0.652\), coverage
-0.150), because once the aliased spillover column is dropped the two
+identical to the oracle estimates (MSE 0.480, bias \(-0.652\), coverage 0.162), because once the aliased spillover column is dropped the two
 models are the same.
 
 Omitting the spillover term also removes a column that can be nearly
@@ -880,14 +871,10 @@ rook blocks was the lowest of the six designs at every value of \(\tau\)
 except \(\tau = 3\), where that of Isolation Buffer was lower (0.173
 against 0.174).
 
-Except for Checkerboard under rook contiguity, coverage stayed close to
-0.94 at every value of \(\tau\). Pooled over the five incidence
-configurations, every design's coverage was between 0.936 and 0.941 at
-every value of \(\tau\) under queen contiguity, and every design except
-Checkerboard was between 0.937 and 0.942 at every value of \(\tau\)
+Except for Checkerboard under rook contiguity, coverage stayed close to 0.95 at every value of \(\tau\). Pooled over the five incidence
+configurations, every design's coverage was between 0.946 and 0.950 at every value of \(\tau\) under queen contiguity, and every design except Checkerboard was between 0.947 and 0.952 at every value of \(\tau\)
 under rook contiguity. The coverage of rook Checkerboard, for which
-\(\tau\) is not identified, rose from 0.138 at \(\tau = 0.8\) to 0.150,
-0.198, 0.269, and 0.442 at \(\tau = 1\), 1.5, 2, and 3 (Section
+\(\tau\) is not identified, rose from 0.150 at \(\tau = 0.8\) to 0.162, 0.212, 0.286, and 0.464 at \(\tau = 1\), 1.5, 2, and 3 (Section
 \ref{app:technical-notes}). Section \ref{app:supp-comparisons} shows
 coverage across \(\tau\) for each design.
 
@@ -972,7 +959,7 @@ Figure \ref{fig:vs-srs} tests each design against SRS within each regime, over t
 \small
 \centering
 
-\caption{Full grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE is the mean squared error of the estimate of $\tau$; coverage is the proportion of nominal 95\% confidence intervals that contain $\tau$. Both use the oracle fit, the spatial lag model that includes the true spillover term. Simple random sampling is complete randomization of 50 clusters. No value pools queen and rook.}
+\caption{Full grid benchmark at $\tau=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\gamma$ values). MSE is the mean squared error of the estimate of $\tau$; coverage is the proportion of 95\% $t$-based confidence intervals, with a degrees-of-freedom-corrected standard error, that contain $\tau$. Both use the oracle fit, the spatial lag model that includes the true spillover term. Simple random sampling is complete randomization of 50 clusters. No value pools queen and rook.}
 \label{tab:grid-srs}
 % SOURCE: results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds
 
@@ -983,15 +970,15 @@ Figure \ref{fig:vs-srs} tests each design against SRS within each regime, over t
 Design & MSE & Coverage & MSE & Coverage \\
 
 \midrule
-Checkerboard & 0.0624 & 0.940 & 2.1114 & 0.942 \\
-High Incidence Focus & 0.1617 & 0.941 & 0.3292 & 0.935 \\
-Saturation Quadrants & 0.0442 & 0.942 & 0.1359 & 0.929 \\
-Isolation Buffer & 0.1608 & 0.939 & 0.1595 & 0.939 \\
-$2\times2$ Blocking & 0.0623 & 0.937 & 0.5761 & 0.941 \\
-Balanced Quartiles & 0.0421 & 0.940 & 0.2195 & 0.932 \\
-Balanced Halves & 0.0420 & 0.939 & 0.2179 & 0.933 \\
-Incidence-Guided Saturation & 0.0459 & 0.939 & 0.1355 & 0.934 \\
-Simple Random Sampling & 0.0424 & 0.941 & 0.2146 & 0.936 \\
+Checkerboard & 0.0624 & 0.948 & 2.1114 & 0.951 \\
+High Incidence Focus & 0.1617 & 0.950 & 0.3292 & 0.945 \\
+Saturation Quadrants & 0.0442 & 0.952 & 0.1359 & 0.940 \\
+Isolation Buffer & 0.1608 & 0.948 & 0.1595 & 0.950 \\
+$2\times2$ Blocking & 0.0623 & 0.947 & 0.5761 & 0.950 \\
+Balanced Quartiles & 0.0421 & 0.949 & 0.2195 & 0.942 \\
+Balanced Halves & 0.0420 & 0.949 & 0.2179 & 0.943 \\
+Incidence-Guided Saturation & 0.0459 & 0.949 & 0.1355 & 0.945 \\
+Simple Random Sampling & 0.0424 & 0.950 & 0.2146 & 0.946 \\
 
 \bottomrule
 
@@ -1416,27 +1403,27 @@ Design & Retained & MSE & Coverage & Average rank \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Queen contiguity (primary)}} \\
-Saturation Quadrants & No & 0.0900 & 0.936 & 2.394 \\
-Incidence-Guided Saturation & Yes & 0.0907 & 0.937 & 2.700 \\
-Simple Random Sampling & Benchmark & 0.1285 & 0.938 & 3.788 \\
-Balanced Halves & No & 0.1299 & 0.936 & 3.831 \\
-Balanced Quartiles & Yes & 0.1308 & 0.936 & 3.906 \\
-Isolation Buffer & Yes & 0.1602 & 0.939 & 5.638 \\
-High Incidence Focus & Yes & 0.2455 & 0.938 & 7.763 \\
-2$\times$2 Blocking & Yes & 0.3192 & 0.939 & 7.244 \\
-Checkerboard & Yes & 1.0869 & 0.941 & 7.737 \\
+Saturation Quadrants & No & 0.0900 & 0.946 & 2.394 \\
+Incidence-Guided Saturation & Yes & 0.0907 & 0.947 & 2.700 \\
+Simple Random Sampling & Benchmark & 0.1285 & 0.948 & 3.788 \\
+Balanced Halves & No & 0.1299 & 0.946 & 3.831 \\
+Balanced Quartiles & Yes & 0.1308 & 0.946 & 3.906 \\
+Isolation Buffer & Yes & 0.1602 & 0.949 & 5.638 \\
+High Incidence Focus & Yes & 0.2455 & 0.948 & 7.763 \\
+2$\times$2 Blocking & Yes & 0.3192 & 0.948 & 7.244 \\
+Checkerboard & Yes & 1.0869 & 0.950 & 7.737 \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Saturation Quadrants & No & 0.0708 & 0.940 & 2.587 \\
-Incidence-Guided Saturation & Yes & 0.0717 & 0.942 & 2.650 \\
-Simple Random Sampling & Benchmark & 0.0850 & 0.938 & 3.612 \\
-Balanced Halves & No & 0.0842 & 0.940 & 3.569 \\
-Balanced Quartiles & Yes & 0.0837 & 0.940 & 3.369 \\
-Isolation Buffer & Yes & 0.1329 & 0.939 & 6.050 \\
-High Incidence Focus & Yes & 0.2062 & 0.939 & 7.969 \\
-2$\times$2 Blocking & Yes & 0.1281 & 0.938 & 6.206 \\
-Checkerboard (flagged) & Yes & 0.4799 & 0.150 & 8.988 \\
+Saturation Quadrants & No & 0.0708 & 0.949 & 2.587 \\
+Incidence-Guided Saturation & Yes & 0.0717 & 0.952 & 2.650 \\
+Simple Random Sampling & Benchmark & 0.0850 & 0.947 & 3.612 \\
+Balanced Halves & No & 0.0842 & 0.949 & 3.569 \\
+Balanced Quartiles & Yes & 0.0837 & 0.948 & 3.369 \\
+Isolation Buffer & Yes & 0.1329 & 0.950 & 6.050 \\
+High Incidence Focus & Yes & 0.2062 & 0.948 & 7.969 \\
+2$\times$2 Blocking & Yes & 0.1281 & 0.948 & 6.206 \\
+Checkerboard (flagged) & Yes & 0.4799 & 0.162 & 8.988 \\
 
 \bottomrule
 
@@ -1549,8 +1536,7 @@ settings are never combined.
 \textbf{Scenario metrics.} For one scenario and estimator, let
 \(f = 1, \dots, n\) index the valid fits, those with a finite estimate
 and standard error (here every fit was valid, so \(n = 250\)). Let
-\(L_f, U_f = \hat\tau_f \mp z_{0.975}\,\widehat{\text{SE}}_f\), where
-\(z_{0.975} = \Phi^{-1}(0.975) \approx 1.96\), and let
+\(L_f, U_f = \hat\tau_f \mp t_{0.975,\,N-p}\,\widehat{\text{SE}}_f\sqrt{N/(N-p)}\), with \(N = 100\) clusters and \(p\) as defined in the detailed methods (the Wald limits replace the multiplier by \(z_{0.975} = \Phi^{-1}(0.975) \approx 1.96\)), and let
 \(\bar{\hat\tau} = n^{-1}\sum_f \hat\tau_f\). Then \[
 \text{Bias} = \frac{1}{n}\sum_{f=1}^{n}(\hat\tau_f - \tau), \qquad
 \text{SD} = \left\{\frac{1}{n-1}\sum_{f=1}^{n}\left(\hat\tau_f - \bar{\hat\tau}\right)^2\right\}^{1/2}, \qquad
@@ -1675,9 +1661,7 @@ the precision of a single scenario's coverage, not of the plotted
 average. The legend lists the designs in order of pooled mean MSE at
 \(\tau = 1\) for the neighbor type of the panel (Table
 \ref{tab:performance}). The vertical axis runs from 0 to 1, so lines
-close to 0.94 overlap: all six under queen contiguity, between 0.936 and
-0.941, and all but Checkerboard under rook contiguity, between 0.937 and
-0.942. The lowest line under rook contiguity, which the legend does not
+close to 0.95 overlap: all six under queen contiguity, between 0.946 and 0.950, and all but Checkerboard under rook contiguity, between 0.947 and 0.952. The lowest line under rook contiguity, which the legend does not
 mark, is Checkerboard, for which \(\tau\) is not identified; its
 estimates are kept and flagged. The five values of \(\tau\) share their
 assignments and noise.
@@ -1704,7 +1688,7 @@ flagged. Figure \ref{fig:mse-rook} corresponds to Figure \ref{fig:mse}.
 
 Figure \ref{fig:coverage-rook} corresponds to Figure \ref{fig:coverage}.
 Every design except Checkerboard has coverage close to the nominal
-level; Checkerboard's coverage, 0.150 pooled over the five incidence
+level; Checkerboard's coverage, 0.162 pooled over the five incidence
 configurations (Table \ref{tab:performance}), is far below it.
 
 \begin{figure}[!htb]
@@ -1758,21 +1742,21 @@ Design & MSE & Bias & Coverage & MSE & Bias & Coverage \\
 
 \midrule
 \multicolumn{7}{l}{\textit{Queen contiguity (primary)}} \\
-Incidence-Guided Saturation & 0.091 & 0.032 & 0.937 & 0.087 & $-0.123$ & 0.810 \\
-Balanced Quartiles & 0.131 & 0.017 & 0.936 & 0.098 & $-0.176$ & 0.770 \\
-Isolation Buffer & 0.160 & 0.003 & 0.939 & 0.091 & $-0.175$ & 0.879 \\
-High Incidence Focus & 0.245 & 0.031 & 0.938 & 0.219 & $-0.180$ & 0.896 \\
-2$\times$2 Blocking & 0.319 & 0.010 & 0.939 & 0.121 & $-0.244$ & 0.709 \\
-Checkerboard & 1.087 & 0.001 & 0.941 & 0.108 & $-0.206$ & 0.741 \\
+Incidence-Guided Saturation & 0.091 & 0.032 & 0.947 & 0.087 & $-0.123$ & 0.825 \\
+Balanced Quartiles & 0.131 & 0.017 & 0.946 & 0.098 & $-0.176$ & 0.786 \\
+Isolation Buffer & 0.160 & 0.003 & 0.949 & 0.091 & $-0.175$ & 0.892 \\
+High Incidence Focus & 0.245 & 0.031 & 0.948 & 0.219 & $-0.180$ & 0.907 \\
+2$\times$2 Blocking & 0.319 & 0.010 & 0.948 & 0.121 & $-0.244$ & 0.727 \\
+Checkerboard & 1.087 & 0.001 & 0.950 & 0.108 & $-0.206$ & 0.758 \\
 
 \midrule
 \multicolumn{7}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Incidence-Guided Saturation & 0.072 & 0.018 & 0.942 & 0.086 & $-0.121$ & 0.810 \\
-Balanced Quartiles & 0.084 & 0.008 & 0.940 & 0.097 & $-0.176$ & 0.772 \\
-Isolation Buffer & 0.133 & 0.003 & 0.939 & 0.211 & $-0.400$ & 0.513 \\
-High Incidence Focus & 0.206 & 0.018 & 0.939 & 0.223 & $-0.192$ & 0.892 \\
-2$\times$2 Blocking & 0.128 & 0.004 & 0.938 & 0.128 & $-0.257$ & 0.691 \\
-Checkerboard (flagged) & 0.480 & $-0.652$ & 0.150 & 0.480 & $-0.652$ & 0.150 \\
+Incidence-Guided Saturation & 0.072 & 0.018 & 0.952 & 0.086 & $-0.121$ & 0.825 \\
+Balanced Quartiles & 0.084 & 0.008 & 0.948 & 0.097 & $-0.176$ & 0.789 \\
+Isolation Buffer & 0.133 & 0.003 & 0.950 & 0.211 & $-0.400$ & 0.536 \\
+High Incidence Focus & 0.206 & 0.018 & 0.948 & 0.223 & $-0.192$ & 0.903 \\
+2$\times$2 Blocking & 0.128 & 0.004 & 0.948 & 0.128 & $-0.257$ & 0.710 \\
+Checkerboard (flagged) & 0.480 & $-0.652$ & 0.162 & 0.480 & $-0.652$ & 0.162 \\
 
 \bottomrule
 
@@ -1921,7 +1905,7 @@ grows, so the downward bias of \(\hat\rho\) shrank.
 
 Second, the decomposition explains why the coverage of Checkerboard
 under rook contiguity rose with \(\tau\). Under rook contiguity,
-Checkerboard's coverage rose from 0.138 at \(\tau = 0.8\) to 0.442 at
+Checkerboard's coverage rose from 0.150 at \(\tau = 0.8\) to 0.464 at
 \(\tau = 3\) (Stability across treatment effect sizes), although its
 coefficient on \(Z\) estimates \(\tau - \gamma\) at every value of
 \(\tau\). For this design \(WZ = 1 - Z\), and because \(W\) is
@@ -1943,8 +1927,7 @@ with \(\tau\). The mean standard deviation of \(\hat\tau\) rose from
 0.202 at \(\tau = 0.8\) to 0.327 at \(\tau = 3\), and the standard error
 tracked it, rising on average from 0.199 to 0.322. With the bias held
 near \(-\gamma\), wider intervals covered \(\tau\) more often. The rise
-was largest at \(\rho = 0\) (coverage 0.145 to 0.541) and smallest at
-\(\rho = 0.5\) (0.130 to 0.265), consistent with the factor
+was largest at \(\rho = 0\) (coverage 0.157 to 0.562) and smallest at \(\rho = 0.5\) (0.142 to 0.284), consistent with the factor
 \(1/(1 + \rho)\). The same term raised the MSE from 0.477 to 0.567.
 About three quarters of that increase was variance,
 \((n-1)\text{SD}^2/n\) averaged over scenarios (Section

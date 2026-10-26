@@ -1,0 +1,10 @@
+Rows: production 28800, re-fit 28800, matched 28800
+max |production - re-fit|  Mean_Estimate  0
+max |production - re-fit|  Bias           0
+max |production - re-fit|  SD             0
+max |production - re-fit|  MSE            0
+max |production - re-fit|  Coverage       0
+max |production - re-fit|  Power          0
+max |production - re-fit|  N_Valid_Est    0
+max |production - re-fit|  SE_Coverage    0
+max |production - re-fit|  N_Aliased      0

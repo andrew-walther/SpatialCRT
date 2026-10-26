@@ -94,6 +94,38 @@ load_latest_results <- function(results_dir = file.path(dirname(script_dir), "re
   readRDS(latest)
 }
 
+#' Replace Wald coverage and power with the t + df-corrected interval's
+#'
+#' The reported grid interval is tau-hat +/- t(0.975, n - p) x SE x sqrt(n / (n - p))
+#' (author, 2026-10-26; as in the application). Its metrics come from the exact re-fit
+#' in 26_grid_tdf_intervals.R. Coverage, Power, SE_Coverage and SE_Power are replaced;
+#' the Wald values are kept as Coverage_Wald, Power_Wald, SE_Coverage_Wald and
+#' SE_Power_Wald. Stops if any row is unmatched or the re-fit MSE differs.
+#'
+#' @param results Scenario data frame from load_latest_results() (either estimator)
+#' @param results_dir Project results directory
+#' @return `results` with the t + df metrics in the standard columns
+#' @examples
+#' r <- apply_tdf_intervals(load_latest_results(estimation_mode = "MLE_tau_sweep"))
+apply_tdf_intervals <- function(results,
+                                results_dir = file.path(dirname(script_dir), "results")) {
+  tdf <- readRDS(file.path(results_dir, "grid_tdf_2026-10", "grid_tdf_scenarios.rds"))
+  keys <- c("Incidence_Mode", "Rho_Incidence", "Neighbor_Type", "Design", "Rho",
+            "Gamma", "Spillover_Type", "True_Tau", "Estimator")
+  mets <- c("Coverage", "Power", "SE_Coverage", "SE_Power")
+  idx <- match(do.call(paste, results[keys]), do.call(paste, tdf[keys]))
+  if (anyNA(idx)) stop(sum(is.na(idx)), " scenario rows have no t + df re-fit")
+  if (max(abs(results$MSE - tdf$MSE[idx]), na.rm = TRUE) > 1e-12) {
+    stop("t + df re-fit MSE differs from the loaded results")
+  }
+  for (m in mets) {
+    results[[paste0(m, "_Wald")]] <- results[[m]]
+    results[[m]] <- tdf[[paste0(m, "_Tdf")]][idx]
+  }
+  cat("Coverage and power: t + df-corrected interval (", nrow(results), " rows)\n", sep = "")
+  results
+}
+
 # ==============================================================================
 # PLOT 1: MSE Boxplot by Design, faceted by Neighbor Type
 # ==============================================================================
