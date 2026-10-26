@@ -82,10 +82,10 @@ The visual version is `outline.html` (built from this file by
 
 ## 3. Simulation study and designs
 
-### 7. Nine ways to choose which clusters to treat
+### 7. Seven ways to choose which clusters to treat
 - Figure: design_assignments_panels_wide.png
-- Slide text: Simple random sampling (SRS) is the default. Others balance incidence (Balanced Quartiles), target it (High Incidence Focus), separate treated clusters (Checkerboard, Isolation Buffer, 2×2 Blocking) or vary the treated share by region (Saturation Quadrants, Incidence-Guided Saturation).
-- Notes: Walk through two or three panels only. Saturation designs treat 80, 60, 40 and 20 percent of four regions; the incidence-guided version gives the highest share to the highest-incidence region.
+- Slide text: Simple random sampling (SRS) is the default. The six designs balance incidence (Balanced Quartiles), target it (High Incidence Focus), separate treated clusters (Checkerboard, Isolation Buffer, 2×2 Blocking) or vary the treated share by region (Incidence-Guided Saturation).
+- Notes: Walk through two or three panels only. Incidence-Guided Saturation treats 80, 60, 40 and 20 percent of the four quadrants, giving the highest share to the highest-incidence quadrant (the percentages on its panel). Two related variants, Saturation Quadrants and Balanced Halves, behaved like their counterparts and are in the supplement; mention them only if asked.
 - Time: 1.25
 - Carry-over: prelim
 
