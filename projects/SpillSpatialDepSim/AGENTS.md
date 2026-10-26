@@ -69,6 +69,16 @@ They produce inline HTML plots only (no saved figure files).
 | `code/UnifiedSpatialSim/04_run_simulation.R` | Parallel orchestrator (`mclapply`), saves RDS |
 | `code/UnifiedSpatialSim/05_analysis_report.Rmd` | Unified report: all grids + parameters |
 
+### Talk outline (`presentation/`, 2026-10-25)
+
+`presentation/OUTLINE.md` is the slide-by-slide outline for prelim Part I and
+Dr. Lin's conference talk; `outline.html` is built from it by
+`presentation/tools/build_outline_html.py`, and the new talk figures by
+`presentation/tools/make_figures.R` (reads the corrected results in `review/`).
+The deck is drafted here and copied into `bios-dissertation/slides/prelim/part-1/` (a README-only placeholder until then) once a working draft has been reviewed. The talk is about 20 minutes. Framing the author
+wants: BSS is a good, not best or worst, design, against rolling the dice with
+SRS; per-scenario "optimal allocation" counts are not the point.
+
 ### Post-publication review (`review/`, 2026-10-22)
 
 A check found two errors affecting the published 3×3 and 3×4 results (2×4
@@ -78,7 +88,15 @@ unaffected):
   `SpatialSim_3x4.Rmd:463`.
 
 Corrected reruns, tables, figures and a published-vs-corrected comparison
-are in `review/` (`README.md`, `COMPARISON.md`). The frozen scripts and
+are in `review/` (`README.md`, `COMPARISON.md`). As of 2026-10-25 it also
+holds a corrected manuscript, a correction memo to BMC (not sent), and a
+corrected Chapter 2 (not yet copied into bios-dissertation); the plan and
+decisions are in `review/notes/2026-10-25-correction-plan.md`. The term
+"checkerboard paradox" is retired. `SimEstimateAnalysisMeans.Rmd` has the
+correct BSS indices but reads the buggy 3×3/3×4 Control Only CSVs, and
+`OptimalTreatmentAssignmentCombos.Rmd` does too (its "7" is 7/4/6 once
+corrected). The α, ψ and ρ CSVs for 3×3/3×4 Control Only carry the loop
+bug and were not rerun (never reported). The frozen scripts and
 `results/` are unchanged. Do not edit them, or the paper, without the
 author's approval.
 

@@ -57,8 +57,9 @@ From the accepted paper:
 - Simple random sampling (SRS) can reach lower average MSE for the intervention effect,
   but its MSE varies widely across treatment combinations, so a single allocation can
   perform poorly.
-- Block stratified sampling (BSS) gives nearly constant MSE across combinations, which
-  bounds worst-case allocation risk, though it does not reach the minimum error.
+- Block stratified sampling (BSS) gives much less variation in MSE across combinations
+  (lower than SRS in 38 of 48 scenario rows after the correction below), which bounds
+  worst-case allocation risk, though it does not reach the minimum error.
 - Both designs show substantial bias when the treatment and spillover indicators are
   collinear.
 - The preferred design depends on the spillover mechanism; BSS is most advantageous when
@@ -72,7 +73,9 @@ tables and figures summarise the wrong BSS allocations, and their Control
 Only SRS rows contain a loop-bound error. The 2×4 results are correct.
 Corrected results are in `review/` (see `review/COMPARISON.md`). They
 support the general findings above, and they apply them more consistently
-across grids than the published tables did.
+across grids than the published tables did. A corrected manuscript, a
+correction memo and a corrected Chapter 2 are in `review/manuscript/` and
+`review/thesis-chapter/` (2026-10-25).
 
 ---
 
@@ -100,6 +103,15 @@ across grids than the published tables did.
 | `03_analysis_functions.R` | Reusable plot and summary functions |
 | `04_run_simulation.R` | Parallel orchestrator (`mclapply`), all 48 scenarios |
 | `05_analysis_report.Rmd` | Combined report across all grids and parameters |
+
+### Talk outline (`presentation/`)
+
+| File | Description |
+|------|-------------|
+| `OUTLINE.md` | Slide-by-slide outline for prelim Part I and Dr. Lin's conference talk (draft 1, 2026-10-25) |
+| `outline.html` | Visual version: `python3 presentation/tools/build_outline_html.py` |
+| `tools/make_figures.R` | New talk figures from the corrected results: `Rscript presentation/tools/make_figures.R` |
+| `figures/` | Chapter figures (corrected 3×3/3×4) and the new talk figures |
 
 ### Data
 

@@ -20,18 +20,26 @@ but not the 2×4 results:
    to control neighbours. BSS allocations are unaffected; SRS Control Only
    averages are.
 
-Full evidence: `bios-dissertation/prelim/full-draft/notes/human-writer-review/ch2/bss-spillover-check.md`.
+Full evidence: `notes/bss-spillover-check.md` (copy of the bios-dissertation
+note). The plan for carrying the correction through, with Andrew's decisions
+D1–D7, is `notes/2026-10-25-correction-plan.md`.
 
 ## Contents
 
 | Path | What |
 |---|---|
-| `code/rerun_trtnospill.R` | Reruns one Control Only scenario of the 3×3 or 3×4 script, same seed and RNG order; `bug` mode keeps `1:8`, `fixed` mode uses the full bound |
-| `code/build_tables_figures.R` | Rebuilds the three tables and figures, `published` and `corrected` versions |
-| `results/validation/` | `bug`-mode reruns; match the published CSVs (max abs MSE difference 3e-9 for 3×3, 1.2e-8 for 3×4) |
+| `code/rerun_trtnospill.R` | Reruns one Control Only scenario of the 3×3 or 3×4 script, same seed and RNG order; `bug` mode keeps `1:8`, `fixed` mode uses the full bound; `trtspill` mode reruns an Intervention & Control scenario |
+| `code/build_tables_figures.R` | Rebuilds the three tables and figures, `published` and `corrected` versions, the optimal-allocation counts, and paper-size (700×432) figures |
+| `code/make_latex_tables.py` | Writes the 3×3 and 3×4 table cells into the manuscript or Chapter 2 from `tables/` |
+| `code/text_corrections.py` | The text edits (T1–T13, N1), applied to the manuscript `.tex` and the Chapter 2 `.qmd` |
+| `results/beta_mse_TrtSpill_rerun/` | Rerun of the one published TrtSpill CSV that came from a different random stream (3×3, ψ = 0.8, ρ = 0.01) |
+| `manuscript/` | Corrected manuscript, latexdiff markup, correction memo (see its README) |
+| `thesis-chapter/` | Corrected Chapter 2, ready to copy into bios-dissertation (see its README) |
+| `notes/` | Evidence note and the correction plan |
+| `results/validation/` | `bug`-mode reruns and one `trtspill`-mode rerun; match the published CSVs (max abs MSE difference 3e-9 for 3×3, 1.2e-8 for 3×4) |
 | `results/beta_mse_TrtNoSpill_fixed/` | 16 corrected Control Only CSVs (3×3, 3×4 × 4 ψ × 2 ρ) |
-| `tables/` | `beta_mse_table_<grid>_<published|corrected>.csv` (unscaled; SD = SD of per-allocation MSE) |
-| `figures/` | `MSE_Estimates_<grid>_<published|corrected>.png` |
+| `tables/` | `beta_mse_table_<grid>_<published|corrected>.csv` (unscaled; SD = SD of per-allocation MSE); `optimal_combos_<grid>_<version>.csv` |
+| `figures/` | `MSE_Estimates_<grid>_<published|corrected>.png`; `paper_size/` at the published 700×432 |
 | `COMPARISON.md` | Published vs corrected, grid by grid |
 
 ## How to run
@@ -40,5 +48,6 @@ From `review/`:
 
 ```bash
 xargs -P 8 -L 1 sh -c 'Rscript code/rerun_trtnospill.R $0 $1 $2 fixed' < logs/jobs.txt
+Rscript code/rerun_trtnospill.R 3x3 0.8 0.01 trtspill
 Rscript code/build_tables_figures.R
 ```

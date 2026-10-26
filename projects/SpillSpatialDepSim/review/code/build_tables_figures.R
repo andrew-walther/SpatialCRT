@@ -11,7 +11,13 @@
 #                grid, as in code/SimEstimateAnalysisAll.Rmd. Must reproduce the paper.
 #   "corrected": BSS = each grid's own block-stratified combos, and for 3x3/3x4 the
 #                TrtNoSpill CSVs rerun with the case-1 loop bound fixed
-#                (review/results/beta_mse_TrtNoSpill_fixed). 2x4 inputs are unchanged.
+#                (review/results/beta_mse_TrtNoSpill_fixed). The one published TrtSpill CSV
+#                that came from a different random stream (3x3, psi = 0.8, rho = 0.01) is
+#                replaced by its rerun (review/results/beta_mse_TrtSpill_rerun). 2x4 inputs
+#                are unchanged.
+# Also writes, per version, the allocation with minimum MSE in each scenario
+# (the "optimal combos" of code/OptimalTreatmentAssignmentCombos.Rmd) and copies of
+# the figures at the published pixel size (700 x 432) for the manuscript.
 # Reads ../results (read-only); writes only to review/tables and review/figures.
 # Run from review/:  Rscript code/build_tables_figures.R
 
@@ -20,6 +26,7 @@ suppressMessages({library(dplyr); library(ggplot2)})
 # Inputs ----
 orig_dir  <- "../results/beta_mse"
 fixed_dir <- "results/beta_mse_TrtNoSpill_fixed"
+spill_dir <- "results/beta_mse_TrtSpill_rerun"
 grids     <- c("2x4", "3x3", "3x4")
 bss_idx   <- list(published = list(`2x4` = c(28, 43), `3x3` = c(28, 43), `3x4` = c(28, 43)),
                   corrected = list(`2x4` = c(28, 43), `3x3` = c(28, 30, 35, 51, 77, 106),
@@ -32,12 +39,31 @@ psis <- c(0.5, 0.6, 0.7, 0.8); rhos <- c(0.01, 0)
 #' @param spill "TrtNoSpill" or "TrtSpill".
 #' @param grid "2x4", "3x3" or "3x4".
 #' @param psi,rho Scenario values.
-#' @return File path. Corrected 3x3/3x4 TrtNoSpill files come from the rerun.
+#' @return File path. Corrected 3x3/3x4 TrtNoSpill files come from the rerun, and a
+#'   corrected TrtSpill file comes from spill_dir when a rerun of it exists there.
 csv_path <- function(version, spill, grid, psi, rho) {
   f <- sprintf("beta_mse_results_%s_%s_A02_B1_P%02d_R%s.csv", spill, grid,
                round(psi * 10), ifelse(rho == 0, "00", "001"))
   if (version == "corrected" && spill == "TrtNoSpill" && grid != "2x4") file.path(fixed_dir, f)
+  else if (version == "corrected" && file.exists(file.path(spill_dir, f))) file.path(spill_dir, f)
   else file.path(orig_dir, f)
+}
+
+#' Allocation with the minimum MSE in each scenario of one grid.
+#'
+#' @param version "published" or "corrected".
+#' @param grid Grid label.
+#' @return One row per spillover type x psi x rho: best combo, its MSE, and whether it is BSS.
+optimal_combos <- function(version, grid) {
+  out <- list()
+  for (spill in c("TrtNoSpill", "TrtSpill")) for (psi in psis) for (rho in rhos) {
+    d <- read.csv(csv_path(version, spill, grid, psi, rho))
+    best <- which.min(d$MSE)
+    out[[length(out) + 1]] <- data.frame(grid = grid, spill = spill, Psi = psi, Rho = rho,
+      best_combo = best, best_MSE = d$MSE[best],
+      is_BSS = best %in% bss_idx$corrected[[grid]])   # the true BSS sets, in both versions
+  }
+  bind_rows(out)
 }
 
 #' Long data frame of per-allocation results, labelled SRS ("Random", all combos)
@@ -96,5 +122,13 @@ for (version in c("published", "corrected")) for (grid in grids) {
   write.csv(tab, sprintf("tables/beta_mse_table_%s_%s.csv", grid, version), row.names = FALSE)
   ggsave(sprintf("figures/MSE_Estimates_%s_%s.png", grid, version), plot_grid(df),
          width = 7, height = 4.5, dpi = 150, bg = "white")
+  # same figure at the published pixel size (700 x 432), for the corrected manuscript
+  dir.create("figures/paper_size", showWarnings = FALSE)
+  ggsave(sprintf("figures/paper_size/MSE_Estimates_%s_%s.png", grid, version), plot_grid(df),
+         width = 7, height = 4.32, dpi = 100, bg = "white")
+  opt <- optimal_combos(version, grid)
+  write.csv(opt, sprintf("tables/optimal_combos_%s_%s.csv", grid, version), row.names = FALSE)
+  cat(sprintf("%s %s: %d distinct optimal allocations across 16 scenarios; BSS optimal in %d\n",
+              version, grid, length(unique(opt$best_combo)), sum(opt$is_BSS)))
 }
 cat("Wrote", length(list.files("tables")), "tables and", length(list.files("figures")), "figures\n")

@@ -75,14 +75,23 @@ Two items to upload to BMC:
 | 2×4 | TrtNoSpill | 0.01 | 0.165 | 0.304 | BSS |
 | 2×4 | TrtNoSpill | 0 | 0.262 | 0.173 | SRS |
 | 2×4 | TrtSpill | 0 | 0.262 | 0.008 | SRS |
-| 3×3 | TrtNoSpill | 0 | 0.001 | 0.092 | BSS |
-| 3×3 | TrtSpill | 0.01 | 0.039 | 0.103 | BSS |
-| 3×4 | TrtNoSpill | 0 | ~0.0004 | 0.034 | BSS |
-| 3×4 | TrtSpill | 0.01 | ~0.223 | 0.112 | SRS ← checkerboard paradox |
+| 3×3 | TrtNoSpill | 0 | 0.042 | 0.114 | BSS |
+| 3×3 | TrtSpill | 0.01 | 0.147 | 0.103 | SRS |
+| 3×4 | TrtNoSpill | 0 | 0.226 | 0.133 | SRS |
+| 3×4 | TrtSpill | 0.01 | 0.133 | 0.112 | SRS |
 
-**Checkerboard paradox**: In 3×4 TrtSpill with ρ=0.01, BSS's rigid structure amplifies spillover-induced bias (BSS MSE ~0.223 >> SRS MSE 0.112) because every intervention cluster is surrounded entirely by control neighbors, creating systematic bias unique to TrtSpill + background autocorrelation.
+ψ = 0.5 throughout. The 3×3 and 3×4 rows are the **corrected** values
+(2026-10-25). The published ones (e.g. 3×4 TrtSpill BSS ~0.223) came from two
+coding errors; see `../review/README.md` and `../review/COMPARISON.md`.
 
-**Risk-management framing (key R1.5 revision)**: BSS provides near-zero variance across allocations (only 2–6 valid allocations) → bounds worst-case allocation risk. SRS sometimes achieves lower *average* MSE but with high variance across the 70–924 possible allocations → chance of good *or* bad draws.
+**"Checkerboard paradox": retired (2026-10-22).** The published Discussion
+said BSS amplifies bias under TrtSpill with ρ > 0. That pattern came from the
+wrong BSS allocations. The real effect is collinearity: in a strict
+checkerboard every control borders a treated cluster, so z = 1 − x, β and ψ
+are not separately identifiable, and β̂ ≈ β − ψ, under both spillover types
+and both ρ. The corrected manuscript is in `../review/manuscript/`.
+
+**Risk-management framing (key R1.5 revision)**: BSS provides much lower variance across its 2–6 valid allocations (near zero on 2×4, not on the corrected 3×3) → bounds worst-case allocation risk. SRS sometimes achieves lower *average* MSE but with high variance across the 70–924 possible allocations → chance of good *or* bad draws.
 
 ---
 
@@ -135,7 +144,7 @@ Two items to upload to BMC:
 | R2.M1 | "prevention" → "limitation" in Section 4 |
 | R2.M2 | Added total effect note (ψ interpretation) |
 | R2.M3 | Updated Figure 2 caption |
-| R2.M4 | Added checkerboard paradox note to Section 5.1 Discussion |
+| R2.M4 | Added checkerboard paradox note to Section 5.1 Discussion (retired 2026-10-22; replaced by a collinearity note in the corrected manuscript, `../review/manuscript/`) |
 | R2.M5 | Fixed Y_ik notation |
 | R2.M6 | Fixed Z_i description |
 

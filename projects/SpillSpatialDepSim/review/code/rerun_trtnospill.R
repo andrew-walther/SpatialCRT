@@ -3,8 +3,12 @@
 # Purpose: Re-run one Control Only (TrtNoSpill) scenario of SpatialSim_3x3.Rmd /
 #          SpatialSim_3x4.Rmd with the case-1 loop bound either as published (1:8)
 #          or corrected (1:n_districts). Same seed and RNG order as the originals.
-# Usage:   Rscript rerun.R <3x3|3x4> <psi> <rho> <bug|fixed>
-# Output:  review/results/beta_mse_TrtNoSpill_fixed/ (mode fixed) or review/results/validation/ (mode bug)
+#          Mode trtspill re-runs the Intervention & Control (case 2) scenario instead,
+#          used to regenerate the one published TrtSpill CSV that came from a
+#          different random stream (3x3, psi = 0.8, rho = 0.01; see notes/2026-10-25-correction-plan.md).
+# Usage:   Rscript rerun.R <3x3|3x4> <psi> <rho> <bug|fixed|trtspill>
+# Output:  review/results/beta_mse_TrtNoSpill_fixed/ (mode fixed), review/results/validation/ (mode bug),
+#          review/results/beta_mse_TrtSpill_rerun/ (mode trtspill)
 # Author:  Andrew Walther (review written with Claude Code)
 # Created: 2026-10-22
 # Dependencies: spdep, spatialreg
@@ -25,7 +29,9 @@ est <- matrix(NA, N, length(combos))
 for (ci in seq_along(combos)) {
   trt <- combos[[ci]]
   # z_d = 1 if control district d has a treated Rook neighbour among districts 1..loop_max
-  zd <- sapply(1:n, function(d) as.integer(!(d %in% trt) && any(nb[[d]][nb[[d]] <= loop_max] %in% trt)))
+  # (mode trtspill: z_d = 1 for any district, treated or control, with a treated Rook neighbour)
+  zd <- if (mode == "trtspill") sapply(1:n, function(d) as.integer(any(nb[[d]] %in% trt))) else
+    sapply(1:n, function(d) as.integer(!(d %in% trt) && any(nb[[d]][nb[[d]] <= loop_max] %in% trt)))
   for (r in 1:N) {
     x <- sample(1:gw - 1, ppi, replace = TRUE); y <- sample(1:300 - 1, ppi, replace = TRUE)
     eps <- rnorm(ppi, 0, sdv)                      # same RNG order as the original scripts
@@ -39,5 +45,7 @@ for (ci in seq_along(combos)) {
 }
 out <- t(apply(est, 2, function(e) c(bias = mean(e) - beta, bias.abs = abs(mean(e) - beta), variance = var(e), MSE = mean((e - beta)^2))))
 rownames(out) <- seq_along(combos)
-outdir <- if (mode == "bug") "results/validation" else "results/beta_mse_TrtNoSpill_fixed"
-write.csv(out, sprintf("%s/beta_mse_results_TrtNoSpill_%s_A02_B1_P%02d_R%s.csv", outdir, g, round(psi * 10), ifelse(rho == 0, "00", "001")))
+outdir <- switch(mode, bug = "results/validation", fixed = "results/beta_mse_TrtNoSpill_fixed",
+                 trtspill = "results/beta_mse_TrtSpill_rerun")
+dir.create(outdir, showWarnings = FALSE)
+write.csv(out, sprintf("%s/beta_mse_results_%s_%s_A02_B1_P%02d_R%s.csv", outdir, ifelse(mode == "trtspill", "TrtSpill", "TrtNoSpill"), g, round(psi * 10), ifelse(rho == 0, "00", "001")))

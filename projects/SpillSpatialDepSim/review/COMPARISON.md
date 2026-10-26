@@ -8,6 +8,23 @@ in `tables/corrected_tables_paper_units.md`. Figures are in `figures/`.
 
 ## Checks that passed
 
+- **One stray published file regenerated (2026-10-25).** For BSS
+  allocations the two spillover types give identical data, and the
+  published CSVs agree exactly on the BSS rows in 31 of 32 3×3/3×4
+  scenarios. The exception, `TrtSpill_3x3_A02_B1_P08_R001.csv`, differed
+  from Control Only in every row, so it came from a different random
+  stream. `code/rerun_trtnospill.R` in `trtspill` mode reproduces another
+  published TrtSpill file (3×3, ψ = 0.5, ρ = 0.01) to 3e-9, and its rerun of
+  the stray scenario matches Control Only exactly on all six BSS rows. The
+  corrected tables use the rerun (`results/beta_mse_TrtSpill_rerun/`). It
+  moves that 3×3 SRS row slightly (MSE 0.168 → 0.167, SD×10 2.149 → 2.133,
+  bias 0.101 → 0.102) and the number of distinct optimal 3×3 allocations
+  from 5 to 4. No comparison between designs changes.
+- **The optimal-allocation count reproduces the paper.** On the published
+  inputs, `code/build_tables_figures.R` finds 7 distinct minimum-MSE
+  allocations per grid, as the paper states. Corrected: 7, 4 and 6
+  (`tables/optimal_combos_<grid>_<version>.csv`). BSS is never the single
+  best allocation in any grid.
 - **The rerun code reproduces the published CSVs.** In bug mode (`1:8`
   loop) it matches the published Control Only CSVs to 3e-9 (3×3, 126
   allocations) and 1.2e-8 (3×4, 924 allocations).
@@ -72,7 +89,7 @@ That apparent result came from the wrong allocations.
 | MSE rises with ψ | ✓ | ✓ | ✓ | **Holds** |
 | SRS has lower bias, BSS lower variance (Discussion) | ✓ | ✗ (BSS lower \|bias\| in 12/16) | ✓ SRS lower \|bias\| 16/16 | **Holds for 2×4 and 3×4, not 3×3** |
 | BSS "consistently exhibits minimal MSE" (Discussion, M2.5.1) | ✗ (4/16) | ✗ (8/16) | ✗ (4/16) | **Does not hold** in any grid, published or corrected |
-| 7 allocations are each optimal for some scenario; BSS never the single best | 7, BSS never | 5 (was 7), BSS never | 6 (was 7), BSS never | **"BSS never best" holds; "7" holds only for 2×4** |
+| 7 allocations are each optimal for some scenario; BSS never the single best | 7, BSS never | 4 (was 7), BSS never | 6 (was 7), BSS never | **"BSS never best" holds; "7" holds only for 2×4** |
 | 3×3: BSS better in MSE, SD and bias under both spillover types | n/a | ✗ under Int. & Control | n/a | **Does not hold** |
 | 3×4: BSS "dramatically outperforms" SRS under Control Only at all ρ | n/a | n/a | ✗ at ρ = 0 (0.226 vs 0.133) | **Does not hold at ρ = 0** |
 | "Checkerboard paradox" (BSS backfires only under Int. & Control with ρ > 0, through diagonal spillover) | n/a | n/a | ✗ | **Does not hold.** The real effect is the −ψ collinearity bias, under both spillover types and at both ρ |
