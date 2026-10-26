@@ -112,6 +112,10 @@ def verify():
         require_equal(positions, sorted(positions), path.name + ': author order')
     annual = csv_rows(EXHIBITS / 'yearly_primary_design_means.csv')
     yearly = {(r['Year'], r['Regime'], int(r['Design_ID'])): r for r in annual}
+    # Reported application coverage: t + df-corrected interval (author, 2026-10-26),
+    # from the same stored fits (code/27_interval_comparison.R checks its Wald column)
+    tdf_cov = {(r['Year'], r['Regime'], int(r['Design_ID'])): r['Coverage_Tdf'] for r in csv_rows(
+        ROOT / 'application/results/methods_ext_2026-10/stored/yearly_primary_coverage_tdf.csv')}
     grid = csv_rows(ROOT / 'results/srs_benchmark/manuscript_regime_means.csv')
     grid = {(r['Design'], r['Spillover_Type']): r for r in grid}
     expected_grid = []
@@ -149,6 +153,14 @@ def verify():
         expected = float(yearly[key]['Mean_MSE']) / float(yearly[(key[0], key[1], 9)]['Mean_MSE'])
         if abs(float(row['Ratio']) - expected) > 1e-10:
             raise AssertionError(f'Compact annual figure: wrong ratio {key}')
+    # Wald vs t + df comparison table (chapter and SI) against its CSV
+    comparison = csv_rows(ROOT / 'results/grid_tdf_2026-10/interval_comparison.csv')
+    cmp_cols = ['Grid_Queen_Wald', 'Grid_Queen_Tdf', 'Grid_Rook_Wald', 'Grid_Rook_Tdf',
+                'App_Both_Wald', 'App_Both_Tdf', 'App_Control_Wald', 'App_Control_Tdf']
+    expected_cmp = [[f"{float(r[c]):.3f}" for c in cmp_cols] for r in comparison]
+    for path, source in ((CHAPTER, chapter), (SUPPLEMENT, supplement)):
+        require_equal([n for _, n in numerical_rows(table(source, 'tab:interval-comparison'))],
+                      expected_cmp, f'{path.name}: interval comparison')
     require_equal(len(re.findall(r' & ', table(main, 'tab:allocation-rules'))), 27,
                   'Allocation-rule table: four-column header, incidence row and seven designs')
     if '\\label{tab:nc-annual}' in chapter:
@@ -161,7 +173,7 @@ def verify():
                 for regime in ('both', 'control_only'):
                     row = yearly[(year, regime, name_index)]
                     cells.extend([f"{float(row['Mean_MSE']):.5f}", f"{float(row['Bias']):.4f}",
-                                  f"{float(row['Coverage']):.3f}"])
+                                  f"{float(tdf_cov[(year, regime, name_index)]):.3f}"])
                 expected.append((label, cells))
         for line in table(chapter, 'tab:nc-annual').splitlines():
             cells = [c.strip() for c in line.split('&')]

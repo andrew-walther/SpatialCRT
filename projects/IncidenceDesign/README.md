@@ -139,6 +139,7 @@ The predecessor Rmd is preserved untouched.
 | `23_methods_extension_figures.R` | ~210 | NC methods-extension figures (power vs N, colleges needed, spread vs gain) | `results/methods_ext_figures/*.{pdf,png}` |
 | `24_methods_extension_tables.R` | ~200 | Table bodies for chapter Appendix A9 and SI S10 | `results/methods_ext_figures/tables/` |
 | `26_grid_tdf_intervals.R` | ~180 | Exact re-fit of the grid recording t + df coverage and power; 12/13/14/19 apply them via `apply_tdf_intervals()` | `results/grid_tdf_2026-10/` |
+| `27_interval_comparison.R` | ~100 | Wald vs t + df coverage (grid and application) and the application's yearly t + df coverage | `results/grid_tdf_2026-10/interval_comparison.csv`, `application/results/methods_ext_2026-10/stored/` |
 | `25_design_assignment_figures.R` | ~200 | Example assignments on one illustrative surface: CTJ Table 1 maps, SI/Chapter 3 panel figure, slide version | `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf`, `presentation/figures/` |
 | `paper/tools/verify_manuscripts.py` | ~290 | Reconcile current manuscript cells, derived supplement and assets; `--chapter` checks another chapter file, `--pending-si` reports a table not yet in the SI | Aggregate CSV inputs; fails on drift |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |

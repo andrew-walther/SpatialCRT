@@ -249,6 +249,15 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-26 — application t + df coverage; both-interval table
+
+- `code/27_interval_comparison.R`: application yearly t + df coverage (Wald column
+  reproduces the production means exactly) and a Wald vs t + df comparison CSV.
+- Application coverage switched to t + df in the yearly table (chapter, SI), Results
+  text and the CTJ abstract/Results; new `tab:interval-comparison` (chapter A9, SI S11),
+  checked by the verifier. CTJ body 3,489 words, abstract 411. Removed a duplicated
+  Checkerboard sentence in the SI application paragraph.
+
 ### 2026-10-26 — grid t + df intervals; Table 1 categories
 
 - `code/26_grid_tdf_intervals.R` re-fit the full grid (16 min, 10 workers) and

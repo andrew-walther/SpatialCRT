@@ -83,9 +83,8 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   the t + df-corrected interval (94–96%) beside Wald (92.6–93.6%); see `DECISIONS.md`.
 - [x] **Grid coverage with the t + df interval** (done 2026-10-26): exact re-fit
   (`code/26_grid_tdf_intervals.R`), carried through the CTJ, SI and Chapter 3.
-- [ ] **Application main tables still report Wald coverage** (92.6–93.6%, t + df
-  beside it in the text and Appendix A9/S11). Author to decide whether the primary
-  application tables should switch to t + df as the grid now does.
+- [x] **Application coverage uses t + df too** (2026-10-26), with Wald beside it in
+  `tab:interval-comparison` (chapter A9, SI S11).
 - [ ] Submit CTJ with the author-completed
   [checklist](../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
@@ -177,8 +176,8 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 - [ ] Optional: one sentence contrasting this project's proportional spillover
   (γ × share of treated neighbors) with Chapter 2's on/off indicator (keep brief).
 - [ ] Keep CTJ word counts current after every edit (texcount, text + headers, math
-  excluded; title page and checklist). 2026-10-26: body 3,486 (Introduction through
-  Discussion; reproduces the earlier 3,483 before the last cut); abstract 414.
+  excluded; title page and checklist). 2026-10-26: body 3,489 (Introduction through
+  Discussion; reproduces the earlier 3,483 before the last cut); abstract 411.
 - [ ] Decide whether statistical tests of design differences belong in the CTJ/SI
   (the SI has Nemenyi/Holm-Wilcoxon for variant consolidation; script 12 has six-design
   Friedman/Nemenyi; none for the application).
@@ -219,7 +218,7 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 - [x] Step 7b first pass (2026-10-25): Chapter 3, SI and CTJ (both layouts) drafted;
   verifiers pass; `CTJ_Reading_Markup_V3.pdf` made for markup.
 - [ ] Author: review the step 7b draft (chapter Application sections and Appendix A9,
-  SI Section S11, CTJ +~95 words; CTJ body now 3,486 of 3,500 (2026-10-26), so keep CTJ edits tight).
+  SI Section S11, CTJ +~95 words; CTJ body now 3,489 of 3,500 (2026-10-26), so keep CTJ edits tight).
 - [x] Every figure in the chapter, SI and CTJ is now a clean figure (2026-10-25): no
   in-figure title or note; captions carry them. NC maps and application figures come from
   `application/code/manuscript_maps.R`. The unused `fig_tau_sensitivity_6design_{queen,rook}.pdf`

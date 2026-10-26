@@ -3,12 +3,12 @@
 Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj).
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,486 prose/heading words (recounted 2026-10-26, Introduction through
+- [x] Body 3,489 prose/heading words (recounted 2026-10-26, Introduction through
   Discussion, texcount text + headers, math excluded); limit 3,500 applies to the body
   (author, 2026-10-14; end declarations, abstract, references and exhibits excluded).
   Declarations not recounted since 2026-10-14 (266 words then).
   Placeholder text (ethics statement, coauthor-approval sentence) is highlighted yellow.
-  Structured abstract 414 words (title page; limit 425); six keywords. Earlier count 394 on 2026-10-14
+  Structured abstract 411 words (title page; limit 425); six keywords. Earlier count 394 on 2026-10-14
   after the heading/abstract revision (informative subheadings, Discussion
   subsections, plainer abstract), using texcount on the body, declaration and
   abstract fragments.

@@ -1,0 +1,73 @@
+"Year","Regime","Design_ID","Design","Coverage_Wald","Coverage_Tdf"
+2018,"both",1,"Checkerboard (graph adaptation)",0.936166666666667,0.948666666666667
+2018,"both",2,"High Incidence Focus",0.9345,0.948333333333333
+2018,"both",3,"Saturation Regions",0.9349,0.948616666666667
+2018,"both",4,"Isolation Buffer",0.931649999999999,0.946566666666666
+2018,"both",5,"2x2 Blocking",0.933366666666667,0.947933333333333
+2018,"both",6,"Balanced Quartiles",0.932516666666666,0.946883333333333
+2018,"both",7,"Balanced Halves",0.933733333333333,0.948033333333333
+2018,"both",8,"Incidence-Guided Saturation Regions",0.935166666666666,0.94925
+2018,"both",9,"Simple Random Sampling",0.932416666666666,0.947166666666667
+2018,"control_only",1,"Checkerboard (graph adaptation)",0.9335,0.948
+2018,"control_only",2,"High Incidence Focus",0.931833333333333,0.9475
+2018,"control_only",3,"Saturation Regions",0.92625,0.94115
+2018,"control_only",4,"Isolation Buffer",0.931283333333333,0.946866666666666
+2018,"control_only",5,"2x2 Blocking",0.929066666666666,0.9441
+2018,"control_only",6,"Balanced Quartiles",0.9286,0.943666666666667
+2018,"control_only",7,"Balanced Halves",0.929733333333333,0.94485
+2018,"control_only",8,"Incidence-Guided Saturation Regions",0.927833333333333,0.942733333333333
+2018,"control_only",9,"Simple Random Sampling",0.92915,0.944683333333334
+2019,"both",1,"Checkerboard (graph adaptation)",0.936166666666667,0.948666666666667
+2019,"both",2,"High Incidence Focus",0.9365,0.950833333333333
+2019,"both",3,"Saturation Regions",0.9349,0.948616666666667
+2019,"both",4,"Isolation Buffer",0.931649999999999,0.946566666666666
+2019,"both",5,"2x2 Blocking",0.9304,0.944983333333333
+2019,"both",6,"Balanced Quartiles",0.93315,0.947983333333333
+2019,"both",7,"Balanced Halves",0.9343,0.948733333333333
+2019,"both",8,"Incidence-Guided Saturation Regions",0.9347,0.9488
+2019,"both",9,"Simple Random Sampling",0.932416666666666,0.947166666666667
+2019,"control_only",1,"Checkerboard (graph adaptation)",0.9335,0.948
+2019,"control_only",2,"High Incidence Focus",0.931166666666667,0.945
+2019,"control_only",3,"Saturation Regions",0.92625,0.94115
+2019,"control_only",4,"Isolation Buffer",0.931283333333333,0.946866666666666
+2019,"control_only",5,"2x2 Blocking",0.927599999999999,0.942216666666667
+2019,"control_only",6,"Balanced Quartiles",0.929116666666667,0.943683333333333
+2019,"control_only",7,"Balanced Halves",0.9301,0.944633333333333
+2019,"control_only",8,"Incidence-Guided Saturation Regions",0.925783333333333,0.94115
+2019,"control_only",9,"Simple Random Sampling",0.92915,0.944683333333334
+2020,"both",1,"Checkerboard (graph adaptation)",0.936166666666667,0.948666666666667
+2020,"both",2,"High Incidence Focus",0.931166666666667,0.946333333333333
+2020,"both",3,"Saturation Regions",0.9349,0.948616666666667
+2020,"both",4,"Isolation Buffer",0.931649999999999,0.946566666666666
+2020,"both",5,"2x2 Blocking",0.933133333333333,0.948616666666667
+2020,"both",6,"Balanced Quartiles",0.93325,0.94745
+2020,"both",7,"Balanced Halves",0.933633333333333,0.947733333333333
+2020,"both",8,"Incidence-Guided Saturation Regions",0.932833333333333,0.946566666666667
+2020,"both",9,"Simple Random Sampling",0.932416666666666,0.947166666666667
+2020,"control_only",1,"Checkerboard (graph adaptation)",0.9335,0.948
+2020,"control_only",2,"High Incidence Focus",0.930333333333333,0.945666666666667
+2020,"control_only",3,"Saturation Regions",0.92625,0.94115
+2020,"control_only",4,"Isolation Buffer",0.931283333333333,0.946866666666666
+2020,"control_only",5,"2x2 Blocking",0.9304,0.945183333333333
+2020,"control_only",6,"Balanced Quartiles",0.927466666666667,0.942983333333333
+2020,"control_only",7,"Balanced Halves",0.929766666666666,0.944383333333333
+2020,"control_only",8,"Incidence-Guided Saturation Regions",0.925933333333333,0.941883333333333
+2020,"control_only",9,"Simple Random Sampling",0.92915,0.944683333333334
+2021,"both",1,"Checkerboard (graph adaptation)",0.936166666666667,0.948666666666667
+2021,"both",2,"High Incidence Focus",0.933666666666667,0.950666666666667
+2021,"both",3,"Saturation Regions",0.9349,0.948616666666667
+2021,"both",4,"Isolation Buffer",0.931649999999999,0.946566666666666
+2021,"both",5,"2x2 Blocking",0.931216666666666,0.946916666666667
+2021,"both",6,"Balanced Quartiles",0.934133333333333,0.947933333333333
+2021,"both",7,"Balanced Halves",0.931916666666667,0.946316666666667
+2021,"both",8,"Incidence-Guided Saturation Regions",0.9364,0.950066666666667
+2021,"both",9,"Simple Random Sampling",0.932416666666666,0.947166666666667
+2021,"control_only",1,"Checkerboard (graph adaptation)",0.9335,0.948
+2021,"control_only",2,"High Incidence Focus",0.929166666666667,0.945
+2021,"control_only",3,"Saturation Regions",0.92625,0.94115
+2021,"control_only",4,"Isolation Buffer",0.931283333333333,0.946866666666666
+2021,"control_only",5,"2x2 Blocking",0.92835,0.942683333333333
+2021,"control_only",6,"Balanced Quartiles",0.929083333333333,0.943983333333333
+2021,"control_only",7,"Balanced Halves",0.929216666666666,0.944016666666667
+2021,"control_only",8,"Incidence-Guided Saturation Regions",0.926483333333333,0.94245
+2021,"control_only",9,"Simple Random Sampling",0.92915,0.944683333333334

@@ -501,7 +501,7 @@ For the primary education outcome, we set $\beta=0$ in Equation \ref{eq:outcome}
 Y=(I-\rho W)^{-1}[\tau Z+S(Z)+\epsilon],\qquad \epsilon\sim N(0,I).
 \label{eq:nc-education}
 \end{equation}
-Observed incidence affects assignments but neither baseline education nor the constant structural intervention effect. We estimate $\tau$ with the same validated maximum likelihood implementation as in the grid study, with an intercept, $Z$ and the true regime-specific $S(Z)$, without $X$. As in the grid model, $\tau$ is the coefficient before spatial propagation, not an average total impact after applying $(I-\rho W)^{-1}$. The main application reports Wald intervals. For the analyses of partial participation and sample size below, we report $\hat\tau \pm t_{0.975,\,n-p}\,\widehat{\mathrm{SE}}\sqrt{n/(n-p)}$, where $n$ is the number of participating colleges and $p$ the number of fitted coefficients plus $\rho$, and we test $\tau = 0$ against the same $t$ distribution. The maximum likelihood variance divides by $n$, and the normal reference distribution ignores the estimated parameters. With 58 or fewer clusters, both make the Wald interval too narrow.
+Observed incidence affects assignments but neither baseline education nor the constant structural intervention effect. We estimate $\tau$ with the same validated maximum likelihood implementation as in the grid study, with an intercept, $Z$ and the true regime-specific $S(Z)$, without $X$. As in the grid model, $\tau$ is the coefficient before spatial propagation, not an average total impact after applying $(I-\rho W)^{-1}$. For the main application and for the analyses of partial participation and sample size below, we report $\hat\tau \pm t_{0.975,\,n-p}\,\widehat{\mathrm{SE}}\sqrt{n/(n-p)}$, where $n$ is the number of participating colleges and $p$ the number of fitted coefficients plus $\rho$, and we test $\tau = 0$ against the same $t$ distribution. The maximum likelihood variance divides by $n$, and the normal reference distribution ignores the estimated parameters. With 58 or fewer clusters, both make the Wald interval too narrow.
 
 Primary queen settings cross $\rho=0,0.2,0.5$, $\gamma=0.5,0.8$, both regimes, four years and nine designs (432 reported settings). A matched hypothetical baseline sensitivity adds $X=(\operatorname{rank}_{\rm average}(rate)-0.5)/58$ with $\beta=1$ to both the outcome baseline and the fitted covariates (432 settings). It changes baseline and adjustment together and is not an empirical incidence--education association. A rook-contiguity sensitivity analysis of the primary model uses the extreme values $\rho=0,0.5$ (288 settings), and the two alternative regional summaries add 96 Incidence-Guided Saturation settings. The full application reports 1,248 settings, computed from 936 distinct simulation settings, because reported settings with the same allocations and outcome model share one simulation.
 
@@ -529,7 +529,7 @@ Figure \ref{fig:nc-mse} compares the eight designs with SRS by year and regime. 
 
 Under both-arms spillover, SRS mean MSE is 0.07638, Saturation Quadrants 0.07518, and Incidence-Guided Saturation ranges from 0.07428 to 0.07682 across years. SRS remains competitive with balancing, blocking and saturation. Small point differences do not establish equivalence or universal optimality. High Incidence Focus has low both-arms MSE in the primary model, but its allocation is deterministic for these fixed rates; this is conditional model-based accuracy, not evidence of randomization-based causal validity.
 
-Mean annual coverage across primary settings is approximately 92.6--93.6\%, below nominal 95\%. The full year/design/regime bias and coverage table is in Appendix \ref{app:nc}. Meeting the Monte Carlo precision targets does not repair this finite-sample undercoverage. Applied to the stored fits of the main application, the corrected $t$ interval described under Outcome model and Monte Carlo evaluation had coverage between 94.1\% and 94.9\% for every design and regime (Appendix \ref{app:nc-ext}). Checkerboard's treatment effect is identified on this irregular graph, but weak treatment--spillover separation makes its estimates imprecise; this differs from exact rook non-identification on the rectangular grid.
+Mean coverage of the 95\% intervals across the four years was between 94.1\% and 94.9\% for every design and regime, and between 94.1\% and 95.1\% in single years. The Wald interval covered only 92.6\% to 93.6\% (Table \ref{tab:interval-comparison}). Meeting the Monte Carlo precision targets did not repair that finite-sample undercoverage, but the corrected $t$ interval described under Outcome model and Monte Carlo evaluation did (Appendix \ref{app:nc-ext}). The full year/design/regime bias and coverage table is in Appendix \ref{app:nc}. Checkerboard's treatment effect is identified on this irregular graph, but weak treatment--spillover separation makes its estimates imprecise; this differs from exact rook non-identification on the rectangular grid.
 
 Population shares contextualize performance (Table \ref{tab:nc-budgets}). High Incidence Focus treats 29 clusters but only about 22--24\% of working-age population, while Isolation Buffer treats a mean of 15.89 clusters and about 27\%. These population denominators measure geographic reach, not the number of healthcare professionals educated, intervention cost or participant-level precision.
 
@@ -1318,7 +1318,7 @@ Table \ref{tab:nc-annual} retains MSE, bias and coverage for every design in eve
 \footnotesize
 \centering
 
-\caption{Primary queen application performance by design and planning year. Each entry averages the six $\rho/\gamma$ pairs of one spillover regime with equal weight; MSE, bias and coverage are Monte Carlo estimates. Checkerboard, Saturation Quadrants, Isolation Buffer and SRS use the same simulations in every year, because annual incidence enters neither their allocation nor the outcome model, so their rows repeat; repeated values are not independent annual confirmation. Treatment counts and population shares are in Table \ref{tab:nc-budgets}.}
+\caption{Primary queen application performance by design and planning year. Each entry averages the six $\rho/\gamma$ pairs of one spillover regime with equal weight; MSE, bias and coverage of the corrected $t$ interval are Monte Carlo estimates. Checkerboard, Saturation Quadrants, Isolation Buffer and SRS use the same simulations in every year, because annual incidence enters neither their allocation nor the outcome model, so their rows repeat; repeated values are not independent annual confirmation. Treatment counts and population shares are in Table \ref{tab:nc-budgets}.}
 \label{tab:nc-annual}
 % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_primary_design_means.csv
 
@@ -1328,50 +1328,50 @@ Table \ref{tab:nc-annual} retains MSE, bias and coverage for every design in eve
 \cmidrule(lr){3-5}\cmidrule(lr){6-8}
 Design & Year & MSE & Bias & Coverage & MSE & Bias & Coverage \\
 \midrule
-Checkerboard & 2018 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
- & 2019 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
- & 2020 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
- & 2021 & 0.21591 & -0.0074 & 0.936 & 0.92036 & 0.0100 & 0.933 \\
+Checkerboard & 2018 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
+ & 2019 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
+ & 2020 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
+ & 2021 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
 \addlinespace
-High Incidence Focus & 2018 & 0.07172 & 0.0160 & 0.934 & 0.21426 & 0.0237 & 0.932 \\
- & 2019 & 0.07180 & 0.0063 & 0.936 & 0.43019 & 0.0227 & 0.931 \\
- & 2020 & 0.07292 & 0.0094 & 0.931 & 0.25918 & 0.0327 & 0.930 \\
- & 2021 & 0.07031 & 0.0104 & 0.934 & 0.35318 & 0.0296 & 0.929 \\
+High Incidence Focus & 2018 & 0.07172 & 0.0160 & 0.948 & 0.21426 & 0.0237 & 0.948 \\
+ & 2019 & 0.07180 & 0.0063 & 0.951 & 0.43019 & 0.0227 & 0.945 \\
+ & 2020 & 0.07292 & 0.0094 & 0.946 & 0.25918 & 0.0327 & 0.946 \\
+ & 2021 & 0.07031 & 0.0104 & 0.951 & 0.35318 & 0.0296 & 0.945 \\
 \addlinespace
-Saturation Quadrants & 2018 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
- & 2019 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
- & 2020 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
- & 2021 & 0.07518 & 0.0208 & 0.935 & 0.22329 & 0.0464 & 0.926 \\
+Saturation Quadrants & 2018 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
+ & 2019 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
+ & 2020 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
+ & 2021 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
 \addlinespace
-Isolation Buffer & 2018 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
- & 2019 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
- & 2020 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
- & 2021 & 0.28591 & 0.0088 & 0.932 & 0.28575 & 0.0106 & 0.931 \\
+Isolation Buffer & 2018 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
+ & 2019 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
+ & 2020 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
+ & 2021 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
 \addlinespace
-$2\times2$ Blocking & 2018 & 0.07609 & 0.0099 & 0.933 & 0.30622 & 0.0281 & 0.929 \\
- & 2019 & 0.07808 & 0.0143 & 0.930 & 0.43630 & 0.0314 & 0.928 \\
- & 2020 & 0.07764 & 0.0122 & 0.933 & 0.31848 & 0.0281 & 0.930 \\
- & 2021 & 0.07736 & 0.0107 & 0.931 & 0.36168 & 0.0289 & 0.928 \\
+$2\times2$ Blocking & 2018 & 0.07609 & 0.0099 & 0.948 & 0.30622 & 0.0281 & 0.944 \\
+ & 2019 & 0.07808 & 0.0143 & 0.945 & 0.43630 & 0.0314 & 0.942 \\
+ & 2020 & 0.07764 & 0.0122 & 0.949 & 0.31848 & 0.0281 & 0.945 \\
+ & 2021 & 0.07736 & 0.0107 & 0.947 & 0.36168 & 0.0289 & 0.943 \\
 \addlinespace
-Balanced Quartiles & 2018 & 0.07610 & 0.0170 & 0.933 & 0.29352 & 0.0315 & 0.929 \\
- & 2019 & 0.07624 & 0.0175 & 0.933 & 0.30616 & 0.0367 & 0.929 \\
- & 2020 & 0.07530 & 0.0158 & 0.933 & 0.28932 & 0.0356 & 0.927 \\
- & 2021 & 0.07453 & 0.0175 & 0.934 & 0.28439 & 0.0354 & 0.929 \\
+Balanced Quartiles & 2018 & 0.07610 & 0.0170 & 0.947 & 0.29352 & 0.0315 & 0.944 \\
+ & 2019 & 0.07624 & 0.0175 & 0.948 & 0.30616 & 0.0367 & 0.944 \\
+ & 2020 & 0.07530 & 0.0158 & 0.947 & 0.28932 & 0.0356 & 0.943 \\
+ & 2021 & 0.07453 & 0.0175 & 0.948 & 0.28439 & 0.0354 & 0.944 \\
 \addlinespace
-Balanced Halves & 2018 & 0.07458 & 0.0158 & 0.934 & 0.29101 & 0.0395 & 0.930 \\
- & 2019 & 0.07517 & 0.0167 & 0.934 & 0.29955 & 0.0360 & 0.930 \\
- & 2020 & 0.07466 & 0.0150 & 0.934 & 0.30610 & 0.0372 & 0.930 \\
- & 2021 & 0.07584 & 0.0160 & 0.932 & 0.29089 & 0.0340 & 0.929 \\
+Balanced Halves & 2018 & 0.07458 & 0.0158 & 0.948 & 0.29101 & 0.0395 & 0.945 \\
+ & 2019 & 0.07517 & 0.0167 & 0.949 & 0.29955 & 0.0360 & 0.945 \\
+ & 2020 & 0.07466 & 0.0150 & 0.948 & 0.30610 & 0.0372 & 0.944 \\
+ & 2021 & 0.07584 & 0.0160 & 0.946 & 0.29089 & 0.0340 & 0.944 \\
 \addlinespace
-Incidence-Guided Saturation & 2018 & 0.07428 & 0.0174 & 0.935 & 0.24285 & 0.0464 & 0.928 \\
- & 2019 & 0.07628 & 0.0233 & 0.935 & 0.21565 & 0.0522 & 0.926 \\
- & 2020 & 0.07682 & 0.0209 & 0.933 & 0.22029 & 0.0474 & 0.926 \\
- & 2021 & 0.07450 & 0.0197 & 0.936 & 0.23732 & 0.0451 & 0.926 \\
+Incidence-Guided Saturation & 2018 & 0.07428 & 0.0174 & 0.949 & 0.24285 & 0.0464 & 0.943 \\
+ & 2019 & 0.07628 & 0.0233 & 0.949 & 0.21565 & 0.0522 & 0.941 \\
+ & 2020 & 0.07682 & 0.0209 & 0.947 & 0.22029 & 0.0474 & 0.942 \\
+ & 2021 & 0.07450 & 0.0197 & 0.950 & 0.23732 & 0.0451 & 0.942 \\
 \addlinespace
-Simple Random Sampling & 2018 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
- & 2019 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
- & 2020 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
- & 2021 & 0.07638 & 0.0135 & 0.932 & 0.30761 & 0.0378 & 0.929 \\
+Simple Random Sampling & 2018 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
+ & 2019 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
+ & 2020 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
+ & 2021 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1465,7 +1465,7 @@ $m$ & ICC & $\sigma_c$ & $d=0.2$ & $d=0.3$ & $d=0.2$ & $d=0.3$ & $d=0.2$ & $d=0.
 \end{table}
 ```
 
-**Interval calibration.** We tried several corrections before adopting one, with the rule that a method is adopted only if its coverage lies between 94.0\% and 96.0\% for every design and regime. On the stored fits of the main application ($\beta = 0$), the Wald interval covered 92.6\% to 93.6\% by design and regime. A $t$ reference distribution alone gave 93.2\% to 94.1\%, a degrees-of-freedom-corrected standard error alone 93.5\% to 94.4\%, and the two together 94.1\% to 94.9\%. In a separate run of 500 fits per setting at 58 colleges, parametric percentile bootstrap intervals with 499 replicates covered 90.1\% to 93.6\%, parametric bootstrap-$t$ intervals 93.2\% to 95.8\% and profile-likelihood intervals 91.8\% to 94.7\%. Only the $t$ interval with the corrected standard error met the rule on the stored fits. In the separate 500-fit run it covered 92.8\% to 95.8\%, narrowly missing the rule there, as every other method did. Table \ref{tab:nc-calibration} shows its size and coverage at each number of participating colleges.
+**Interval calibration.** We tried several corrections before adopting one, with the rule that a method is adopted only if its coverage lies between 94.0\% and 96.0\% for every design and regime. On the stored fits of the main application ($\beta = 0$), the Wald interval covered 92.6\% to 93.6\% by design and regime. A $t$ reference distribution alone gave 93.2\% to 94.1\%, a degrees-of-freedom-corrected standard error alone 93.5\% to 94.4\%, and the two together 94.1\% to 94.9\%. In a separate run of 500 fits per setting at 58 colleges, parametric percentile bootstrap intervals with 499 replicates covered 90.1\% to 93.6\%, parametric bootstrap-$t$ intervals 93.2\% to 95.8\% and profile-likelihood intervals 91.8\% to 94.7\%. Only the $t$ interval with the corrected standard error met the rule on the stored fits. In the separate 500-fit run it covered 92.8\% to 95.8\%, narrowly missing the rule there, as every other method did. Table \ref{tab:nc-calibration} shows its size and coverage at each number of participating colleges. Table \ref{tab:interval-comparison} compares the Wald and corrected intervals for each design in the grid study and the main application.
 
 ```{=latex}
 \begin{table}[!htb]
@@ -1488,6 +1488,31 @@ Colleges & Wald size & Corrected $t$ size & Wald coverage & Corrected $t$ covera
 45 & 6.9--7.5 & 5.0--5.6 & 92.7 & 94.7 (94.3--95.2) \\
 50 & 7.0--7.3 & 5.2--5.6 & 92.9 & 94.6 (94.2--95.1) \\
 58 & 6.3--7.0 & 5.0--5.5 & 93.2 & 94.6 (94.0--95.1) \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+```{=latex}
+\begin{table}[!htb]
+\small
+\centering
+\caption{Coverage of the 95\% Wald interval and the corrected $t$ interval ($t$ reference distribution with a degrees-of-freedom-corrected standard error), the interval reported throughout, for the six designs and SRS. Grid: oracle model at $\tau = 1$, pooled over the five incidence configurations and both spillover regimes (160 scenarios per entry). Application: queen weights, $\beta = 0$, averaged over the four planning years and the six $\rho/\gamma$ pairs of each regime. Both intervals were computed from the same fits. \textsuperscript{a}Under rook contiguity on the grid, $\tau$ is not identified for Checkerboard.}
+\label{tab:interval-comparison}
+% SOURCE: results/grid_tdf_2026-10/interval_comparison.csv (code/27_interval_comparison.R)
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.4cm}cccccccc}
+\toprule
+& \multicolumn{2}{c}{Grid, queen} & \multicolumn{2}{c}{Grid, rook} & \multicolumn{2}{c}{NC, both arms} & \multicolumn{2}{c}{NC, control only} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+Design & Wald & $t$ & Wald & $t$ & Wald & $t$ & Wald & $t$ \\
+\midrule
+Incidence-Guided Saturation & 0.937 & 0.947 & 0.942 & 0.952 & 0.935 & 0.949 & 0.927 & 0.942 \\
+Balanced Quartiles & 0.936 & 0.946 & 0.940 & 0.948 & 0.933 & 0.948 & 0.929 & 0.944 \\
+Isolation Buffer & 0.939 & 0.949 & 0.939 & 0.950 & 0.932 & 0.947 & 0.931 & 0.947 \\
+High Incidence Focus & 0.938 & 0.948 & 0.939 & 0.948 & 0.934 & 0.949 & 0.931 & 0.946 \\
+2$\times$2 Blocking & 0.939 & 0.948 & 0.938 & 0.948 & 0.932 & 0.947 & 0.929 & 0.944 \\
+Checkerboard\textsuperscript{a} & 0.941 & 0.950 & 0.150 & 0.162 & 0.936 & 0.949 & 0.933 & 0.948 \\
+Simple Random Sampling & 0.938 & 0.948 & 0.938 & 0.947 & 0.932 & 0.947 & 0.929 & 0.945 \\
 \bottomrule
 \end{tabular}
 \end{table}

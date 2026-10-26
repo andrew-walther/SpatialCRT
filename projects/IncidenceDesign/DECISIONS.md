@@ -40,6 +40,22 @@ never enters the rank-based tests.
 
 ---
 
+## 2026-10-26 — Application tables also use the t + df interval; both intervals reported
+
+**Decision.** The application's coverage (the yearly table, Results text, CTJ abstract
+and Results) now reports the t + df interval (94.1–94.9% by design and regime),
+reversing the 2026-10-21 choice of Wald in the main tables. A new appendix/SI table,
+`tab:interval-comparison`, gives Wald and t + df coverage side by side for the grid
+(queen and rook) and the application (both regimes). Wald values stay stored
+(production summaries; `*_Wald` columns; the comparison CSV).
+
+**Why.** Author rule (2026-10-26): report the interval whose coverage is closest to
+nominal, and keep both so either can be reported later. The application values come
+from the same stored fits; `code/27_interval_comparison.R` reproduces the production
+Wald yearly means exactly before writing the t + df values.
+
+---
+
 ## 2026-10-26 — Grid intervals use the t + df correction
 
 **Decision.** Grid coverage and power are reported with the same interval as the

@@ -11,7 +11,7 @@ read-only tracks and output format as before.
 - CTJ (`paper/ctj_manuscript/manuscript_ctj/`): `CTJ_Manuscript.tex` is the master for
   both layouts; `CTJ_Reading.tex` only selects the two-column branch; captions, cells
   and example maps live in `CTJ_Exhibits.tex`. Six main exhibits (2 tables +
-  4 figures). Body 3,486 of 3,500 words (texcount text + headers, Introduction through
+  4 figures). Body 3,489 of 3,500 words (texcount text + headers, Introduction through
   Discussion), so any proposed addition must name an equal cut.
 - Supplement `paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex`;
   chapter `paper/thesis_chapter/Thesis_Chapter.qmd` (canonical; synced to
@@ -46,9 +46,10 @@ read-only tracks and output format as before.
   framed as matching Saturation Quadrants' accuracy while targeting high-burden regions.
 - Intervals: the grid reports the t + df-corrected interval throughout (coverage
   0.946–0.952 for identified designs; exact re-fit in `code/26_grid_tdf_intervals.R`,
-  applied by `apply_tdf_intervals()` in 06). The application reports Wald (92.6–93.6%)
-  in its main tables with t + df (94–96%) beside it; whether to switch those tables is
-  an open author decision, so flag inconsistent wording, not that choice itself.
+  applied by `apply_tdf_intervals()` in 06). The application reports t + df too
+  (94.1–94.9% by design and regime; `code/27_interval_comparison.R`), and
+  `tab:interval-comparison` (chapter A9, SI S11) gives Wald beside t + df for both
+  studies. Flag any remaining text that reports Wald as the main interval.
 - Known placeholders (do not report as errors): IRB determination/consent wording and
   coauthor approval (highlighted), pending Dr. Simpson and the coauthors.
 - Application primary outcome: β = 0, τ = 1, σ = 1, queen primary, fit with
