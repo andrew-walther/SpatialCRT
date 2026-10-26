@@ -249,6 +249,17 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-25 — hybrid Table 1, new design figure, flushend reading layout
+
+- Reading layout uses `flushend` instead of `balance`, so References follows the
+  declarations on page 8 again.
+- New `code/25_design_assignment_figures.R`: CTJ Table 1 example maps, SI/Chapter 3
+  panel figure (`design_assignments_panels.pdf`) and a wide slide copy in
+  `presentation/figures/`. Table 1 is now a hybrid table (reading layout still 9 pages);
+  the verifier counts its eight rows and checks every map file exists.
+- The old `design_samples_6panel.pdf` (CTJ and chapter figure folders) is no longer
+  referenced by any manuscript; `presentation/OUTLINE.md` still points to its PNG.
+
 ### 2026-10-25 (afternoon) — author feedback on the overnight drafts
 
 - "Saturation Quadrants" restored as the one name in text, tables and figures (reversing

@@ -40,6 +40,26 @@ never enters the rank-based tests.
 
 ---
 
+## 2026-10-25 — Hybrid Table 1 with example maps; new design-sample figure
+
+**Decision.** CTJ Table 1 gains an "Example (grid)" column with one example
+assignment per design and an incidence-surface row; its rule text is unchanged and it
+stays "Table 1" (the maps are part of the table), so the six-exhibit count holds. The
+SI and Chapter 3 replace the old six-panel figure with a 2×4 panel figure (incidence
+surface, six designs, SRS). Treated clusters are solid blue and controls white;
+overlays show the 2×2 blocks, incidence quartiles and saturation quadrants with their
+treated shares. All maps use one illustrative spatially autocorrelated surface
+(ρ_X = 0.5, fixed seed), labeled as not one of the simulated surfaces. One script,
+`code/25_design_assignment_figures.R`, draws every version, including a wide slide copy.
+
+**Why.** The old figure overlaid incidence fill and ring/X markers, hid each design's
+structure and used the retired "Block Stratified Sampling (Checkerboard)" label. The
+independent-uniform surface showed little regional burden, so High Incidence Focus and
+Incidence-Guided Saturation looked arbitrary. Visual examples beside the prose rules
+explain the designs faster (author, 2026-10-25).
+
+---
+
 ## 2026-10-21 — Habib affiliation, SUD case algorithm citation, IRB protocol
 
 **Decision.** Habib's affiliation is the Department of Epidemiology, UNC Chapel Hill

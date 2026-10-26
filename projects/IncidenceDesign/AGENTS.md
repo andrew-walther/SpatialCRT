@@ -144,6 +144,7 @@ the reasoning behind this distinction.
 | `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile conditional MSE as ratios to SRS (Table `tab:downside`) and the allocation-distribution figure (CTJ Figure 3, chapter/SI `fig:alloc-dist`) | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/downside_by_design.csv` |
 | `23_methods_extension_figures.R` | ~210 | NC methods-extension figures: power vs participating colleges, colleges needed for 80% power, grid spread vs incidence-guidance gain (PDF + PNG) | Reads stored 2026-10-21 summaries; writes `results/methods_ext_figures/` |
 | `24_methods_extension_tables.R` | ~200 | LaTeX table bodies for chapter Appendix A9 / SI S10 (power, translation, calibration, guidance, CAR, Bayes, spillover forms) plus in-text numbers | Writes `results/methods_ext_figures/tables/` |
+| `25_design_assignment_figures.R` | ~200 | Example assignment per design on one illustrative surface (ρ_X = 0.5): CTJ Table 1 thumbnails, SI/Chapter 3 panel figure, wide slide version | Writes `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf` (SI and chapter figure folders), `presentation/figures/design_assignments_panels_wide.{pdf,png}` |
 | `paper/tools/verify_manuscripts.py` | ~290 | CSV-to-table and chapter-to-supplement reconciliation (incl. merged `tab:nc-annual`); assets/references/citations/exhibit count; `--chapter`, `--pending-si` for candidate copies | Stdlib; deliberately wrong-number fixture must fail |
 | `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
 | **application/** | | | |
@@ -334,7 +335,8 @@ Status and dated checkpoints: `ROADMAP.md` (Progress Log). Open items:
   `CTJ_Reading.tex` only selects the two-column reading layout. Edit captions and cells in
   `CTJ_Exhibits.tex`; never duplicate manuscript content in the wrapper. Main figures are
   `figures/compact/` exports from `code/20_manuscript_figure_revision.R`. The reading layout
-  uses the `balance` package (`\balance` before the bibliography) and no forced page breaks.
+  uses the `flushend` package (balances only the last page; `balance` pushed References to a
+  new page, 2026-10-25) and no forced page breaks.
 - **CTJ manuscript/SI:** need TinyTeX on `PATH`; run `latexmk <file>.tex` inside
   `paper/ctj_manuscript/manuscript_ctj/` or `.../supplementary_info/`. Symlinks there (`sagej.cls`,
   `SageV.bst`, `SpatialCRT_IncidenceDesign.bib`) replace the old `TEXINPUTS`/`BSTINPUTS` setup,

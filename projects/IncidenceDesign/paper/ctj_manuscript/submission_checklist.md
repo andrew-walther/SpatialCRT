@@ -14,7 +14,8 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
   The body count excludes the abstract, declarations, references and exhibits.
 - [x] Six main exhibits: two tables and four figures; extra detail in supplement. Main text
   shows the six detailed designs and SRS; the two related variants are in the supplement
-  (author 2026-10-12).
+  (author 2026-10-12). Table 1 is a hybrid table with one example map per design
+  (author, 2026-10-25); it stays Table 1 and the count stays six.
 - [x] Standalone introduction and citation to verified preceding BMC publication.
 - [x] Author/title page, affiliations, corresponding email and short running head.
 - [x] Double-spaced single-column review text; end-positioned exhibits and separate legends.

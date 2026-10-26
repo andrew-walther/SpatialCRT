@@ -149,8 +149,8 @@ def verify():
         expected = float(yearly[key]['Mean_MSE']) / float(yearly[(key[0], key[1], 9)]['Mean_MSE'])
         if abs(float(row['Ratio']) - expected) > 1e-10:
             raise AssertionError(f'Compact annual figure: wrong ratio {key}')
-    require_equal(len(re.findall(r' & ', table(main, 'tab:allocation-rules'))), 16,
-                  'Allocation-rule table: three-column header plus seven designs')
+    require_equal(len(re.findall(r' & ', table(main, 'tab:allocation-rules'))), 27,
+                  'Allocation-rule table: four-column header, incidence row and seven designs')
     if '\\label{tab:nc-annual}' in chapter:
         # Merged annual table (concise chapter): one row per design and year,
         # both-arms then control-only MSE/bias/coverage; budgets live in tab:nc-budgets.
@@ -240,6 +240,9 @@ def verify():
     keys = set(re.findall(r'@\w+\s*\{([^,]+),', bib))
     for path, source in sources.items():
         assets = re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}', source)
+        # Table 1 example maps: \CTJThumb{<id>} fills the macro's #1 path
+        thumbs = re.findall(r'\\CTJThumb\{([^}]+)\}', source)
+        assets = [a.replace('#1', t) for a in assets for t in (thumbs if '#1' in a else [a])]
         for asset in assets:
             if not (path.parent / asset).is_file():
                 raise AssertionError(f'{path.name}: missing figure {asset}')
@@ -271,7 +274,7 @@ def verify():
     else:
         raise AssertionError('Wrong-value fixture was silently accepted')
     print('PASS: 36 grid cells in chapter/SI and 28 in the CTJ (six designs + SRS); 20 annual MSE cells in chapter/SI;')
-    print('72 matched annual figure ratios and the seven-row CTJ allocation-rule table;')
+    print('72 matched annual figure ratios and the eight-row CTJ allocation-rule table with example maps;')
     annual_cells = '216 merged annual performance cells' if '\\label{tab:nc-annual}' in chapter else '360 annual performance cells'
     print(annual_cells + ', 72 budget cells, 32 sensitivity cells, all ' + str(len(table_labels)) +
           ' supplement table bodies; figures, references, citations and six-exhibit cap.')

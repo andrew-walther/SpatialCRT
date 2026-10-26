@@ -161,7 +161,7 @@ performance either. Both related variants, and the full eight-design
 comparison, are reported in Section \ref{app:eight-design}.
 
 Table \ref{tab:designs} describes the six retained designs, and Figure
-\ref{fig:design-samples} shows one assignment from each on a single
+\ref{fig:design-samples} shows one assignment from each, and from SRS, on a single
 illustrative incidence surface. Checkerboard is the strict
 block-stratified allocation of the earlier small-grid study, in which no
 two rook neighbors share an arm. The earlier small-grid study's Block
@@ -213,9 +213,9 @@ Checkerboard (strict Block Stratified Sampling allocation in the earlier small-g
 \begin{figure}[!htb]
 
 \centering
-\includegraphics[width=0.85\linewidth]{../figures/design_samples_6panel.pdf}
+\includegraphics[width=0.85\linewidth]{../figures/design_assignments_panels.pdf}
 
-\caption{One sample assignment from each of the six designs on the $10\times10$ grid, with panels in the order of Table \ref{tab:designs}. All six assignments use a single illustrative incidence surface of 100 independent Uniform$(0,1)$ values generated with a fixed seed; it is not one of the simulation's incidence surfaces. Tile fill shows baseline incidence (darker is higher), a ring marks a treated cluster, and an X marks a control. Isolation Buffer is shown under queen contiguity. The Checkerboard panel is labeled Block Stratified Sampling (Checkerboard), the earlier small-grid study's name for this allocation (see Treatment assignment designs).}
+\caption{One example assignment from each of the six designs and SRS on the $10\times10$ grid, with the designs in the order of Table \ref{tab:designs} followed by SRS. Every example uses the illustrative incidence surface in the first panel (darker is higher; dashed lines mark the quadrants), a spatially autocorrelated surface with $\rho_X = 0.5$ generated with a fixed seed; it is not one of the simulation's incidence surfaces. Blue clusters are treated and white clusters are controls. Lines mark the $2\times2$ blocks and the quadrants, numbers in the Balanced Quartiles panel give each cluster's incidence quartile, and percentages in the Incidence-Guided Saturation panel give each quadrant's treated share. Isolation Buffer is shown under queen contiguity.}
 \label{fig:design-samples}
 
 \end{figure}

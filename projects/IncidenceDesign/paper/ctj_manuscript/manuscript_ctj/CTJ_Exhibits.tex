@@ -1,25 +1,29 @@
 % Shared approved exhibit definitions for both CTJ layouts.
-% Author: Andrew Walther. Updated: 2026-10-12.
+% Author: Andrew Walther. Updated: 2026-10-25.
 % Figure sources: code/20_manuscript_figure_revision.R; no simulation rerun.
+% Table 1 example maps: code/25_design_assignment_figures.R (illustrative surface).
 % Starred floats span both reading columns; every macro is called once per build.
 
+% One example map per Table 1 row, vertically centered with padding between rows.
+\newcommand{\CTJThumb}[1]{\raisebox{-0.5\height}{\includegraphics[width=1.9cm]{../figures/compact/design_thumbs/thumb_#1.pdf}}\rule[-1.05cm]{0pt}{2.2cm}}
 \newcommand{\CTJDesignTable}{%
 \begin{table*}[!htb]
 \small
 \centering
-\caption{Treatment assignment designs on the 100-cluster grid and their North Carolina (NC) adaptations. Incidence is the simulated grid covariate or the observed annual cluster rate. Two related variants, saturation with randomly ordered quadrants and balancing within incidence halves, performed similarly to their retained counterparts and are reported in the supplementary material.}
+\caption{Treatment assignment designs on the 100-cluster grid and their North Carolina (NC) adaptations, each with one example assignment on the grid (blue, treated; white, control). Every example uses the illustrative incidence surface in the first row, which is not one of the simulated surfaces. Numbers in the Balanced Quartiles example give each cluster's incidence quartile; percentages in the Incidence-Guided Saturation example give each quadrant's treated share. Incidence is the simulated grid covariate or the observed annual cluster rate. Two related variants, saturation with randomly ordered quadrants and balancing within incidence halves, performed similarly to their retained counterparts and are reported in the supplementary material.}
 \label{tab:allocation-rules}
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}p{0.33\linewidth}}
+\begin{tabular}{>{\raggedright\arraybackslash}m{0.16\linewidth}c>{\raggedright\arraybackslash}m{0.37\linewidth}>{\raggedright\arraybackslash}m{0.28\linewidth}}
 \toprule
-Design & Grid (100 clusters) & NC (58 clusters) \\
+Design & Example (grid) & Grid (100 clusters) & NC (58 clusters) \\
 \midrule
-Checkerboard & Treat alternating clusters in a checkerboard pattern, so no two clusters that share an edge are in the same arm (50 treated). & Deterministic graph version: visit clusters from most to fewest neighbors and give each the arm less common among its assigned neighbors (27 treated). \\
-High Incidence Focus & Treat the 50 clusters with the highest incidence; ties are broken at random. & Treat the 29 clusters with the highest observed rate. \\
-Isolation Buffer & Treat clusters one at a time, each chosen at random from the untreated clusters with no treated neighbor, until none remain; no two treated clusters are neighbors (about 21 treated under queen weights). & Same rule on the NC adjacency graph (about 16 treated). \\
-$2\times2$ Blocking & Divide the grid into 25 blocks of $2\times2$ clusters and treat two randomly chosen clusters in each block (50 treated). & Treat a random half (rounded) of each of 14 fixed groups formed by $k$-means clustering on location, incidence rank and population (27--31 treated by year). \\
-Balanced Quartiles & Divide clusters into quartiles of incidence rank and treat a random half of each quartile (50 treated). & Same rule with observed rates (29 treated). \\
-Incidence-Guided Saturation & Treat a random 80\%, 60\%, 40\% and 20\% of the clusters in the four $5\times5$ quadrants, ordered from highest to lowest mean incidence (50 treated). & Same rule with four fixed geographic regions, ordered by the mean rank of their clusters' observed rates (29 treated). \\
-Simple Random Sampling & Treat a completely random half of the clusters (50 treated). & Same rule (29 treated). \\
+\textit{Incidence surface} & \CTJThumb{incidence} & Illustrative surface used in every example below; darker is higher, and dashed lines mark the quadrants. & Observed annual SUD rate of each cluster. \\
+Checkerboard & \CTJThumb{1} & Treat alternating clusters in a checkerboard pattern, so no two clusters that share an edge are in the same arm (50 treated). & Deterministic graph version: visit clusters from most to fewest neighbors and give each the arm less common among its assigned neighbors (27 treated). \\
+High Incidence Focus & \CTJThumb{2} & Treat the 50 clusters with the highest incidence; ties are broken at random. & Treat the 29 clusters with the highest observed rate. \\
+Isolation Buffer & \CTJThumb{4} & Treat clusters one at a time, each chosen at random from the untreated clusters with no treated neighbor, until none remain; no two treated clusters are neighbors (about 21 treated under queen weights). & Same rule on the NC adjacency graph (about 16 treated). \\
+$2\times2$ Blocking & \CTJThumb{5} & Divide the grid into 25 blocks of $2\times2$ clusters and treat two randomly chosen clusters in each block (50 treated). & Treat a random half (rounded) of each of 14 fixed groups formed by $k$-means clustering on location, incidence rank and population (27--31 treated by year). \\
+Balanced Quartiles & \CTJThumb{6} & Divide clusters into quartiles of incidence rank and treat a random half of each quartile (50 treated). & Same rule with observed rates (29 treated). \\
+Incidence-Guided Saturation & \CTJThumb{8} & Treat a random 80\%, 60\%, 40\% and 20\% of the clusters in the four $5\times5$ quadrants, ordered from highest to lowest mean incidence (50 treated). & Same rule with four fixed geographic regions, ordered by the mean rank of their clusters' observed rates (29 treated). \\
+Simple Random Sampling & \CTJThumb{9} & Treat a completely random half of the clusters (50 treated). & Same rule (29 treated). \\
 \bottomrule
 \end{tabular}
 \end{table*}

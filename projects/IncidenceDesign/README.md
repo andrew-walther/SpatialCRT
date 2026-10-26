@@ -138,6 +138,7 @@ The predecessor Rmd is preserved untouched.
 | `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile MSE ratios to SRS, and the allocation-to-allocation MSE distribution figure (CTJ Figure 3) | `results/allocation_risk/summary/downside_by_design.csv`, `allocation_distribution_by_design.{csv,pdf}` |
 | `23_methods_extension_figures.R` | ~210 | NC methods-extension figures (power vs N, colleges needed, spread vs gain) | `results/methods_ext_figures/*.{pdf,png}` |
 | `24_methods_extension_tables.R` | ~200 | Table bodies for chapter Appendix A9 and SI S10 | `results/methods_ext_figures/tables/` |
+| `25_design_assignment_figures.R` | ~200 | Example assignments on one illustrative surface: CTJ Table 1 maps, SI/Chapter 3 panel figure, slide version | `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf`, `presentation/figures/` |
 | `paper/tools/verify_manuscripts.py` | ~290 | Reconcile current manuscript cells, derived supplement and assets; `--chapter` checks another chapter file, `--pending-si` reports a table not yet in the SI | Aggregate CSV inputs; fails on drift |
 | `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
 
@@ -194,6 +195,12 @@ run_all_visualizations(results_dir = normalizePath("../results"), estimation_mod
 r <- load_latest_results(estimation_mode = "MLE_tau_sweep")
 cfgs <- split_by_incidence_config(r)
 run_standard_tables(cfgs[["iid Uniform"]], "iid Uniform")
+```
+
+Design example maps (CTJ Table 1, SI/Chapter 3 figure, slides), from the project root:
+
+```bash
+Rscript code/25_design_assignment_figures.R
 ```
 
 ### Generating Design Recommendations
