@@ -249,6 +249,27 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-27 — CTJ V5 revision (author review); grid allocation risk on ten surfaces
+
+- Author's V5 markup and notes applied to the CTJ (both layouts): Methods reordered (model,
+  estimation and allocation risk; designs; simulation; application), human-writer pass for
+  flow, definitions (β rationale, MCSE with Morris et al., m(a), queen/rook, SEER and
+  Mirzaei citations), results trimmed to key findings, run totals moved to the SI,
+  "supplementary information (SI)", Sage funding sentence, IRB statement in Methods plus an
+  "Ethical considerations" declaration. Body 3,498, abstract 404.
+- Exhibits: Table 2 gains MSE ratio to SRS with 95% paired intervals
+  (`results/srs_benchmark/manuscript_paired_ratios.csv`, `code/19`); Figure 2 gains t₉ Monte
+  Carlo intervals and new shapes (`code/20`); Figure 1 gains yearly maps (panel C); Figure 4
+  axis "Year (observed SUD incidence)"; captions revised; verifier checks the new cells.
+- Grid allocation risk rerun on all ten surfaces (`code/16` profile `surfaces10`, 28.1M fits,
+  pilot reproduced exactly on surfaces 1–2, no conclusion changed; findings
+  `docs/findings/2026-10-27-allocation-risk-surfaces10-findings.md`). CTJ, SI and Chapter 3
+  no longer describe a "pilot"; `tab:downside` grid columns updated.
+- Independent statistician and clinician reviews, four rounds
+  (`docs/reviews/2026-10-27-ctj-v5-*`); edit log `docs/reviews/2026-10-27-ctj-v5-revision-edit-log.md`.
+- Chapter 3: β rationale, closing outline paragraph in the Introduction, refreshed grid
+  figure caption, SRS wording, ten-surface allocation-risk numbers.
+
 ### 2026-10-26 — application t + df coverage; both-interval table
 
 - `code/27_interval_comparison.R`: application yearly t + df coverage (Wald column

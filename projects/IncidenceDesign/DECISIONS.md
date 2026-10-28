@@ -5,6 +5,40 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-27 — CTJ V5 revision: full-surface allocation risk, paired SRS column, Methods order
+
+**Decision.** From the author's V5 review of the CTJ reading draft:
+- The grid allocation-risk study is rerun on all ten surfaces per incidence
+  configuration (same queen ρ ∈ {0, 0.5} × γ ∈ {0.5, 0.8} settings, nine designs, J = 100,
+  R = 100 plus the R = 400 precision step) into `results/allocation_risk/surfaces10/`.
+  Its numbers replace the two-surface pilot in the CTJ, SI and Chapter 3, and the word
+  "pilot" leaves the manuscripts (except "education pilot"). This reverses the
+  2026-10-02 choice not to extend the grid allocation-risk study.
+- Table 2 keeps its MSE and coverage cells and adds each design's MSE ratio to SRS with
+  a 95% paired interval per regime (t₄₉ over the 50 surface units, from `code/15`).
+  Figure 2 gains per-point 95% Monte Carlo intervals (t₉ over the ten surfaces) and new
+  shapes. Figure 1 may gain yearly maps (panel C) if legible.
+- Methods order: outcome model, estimation and allocation risk; designs; simulation
+  study; application. The grid's β = 1 makes incidence prognostic, the harder case for
+  designs that use it; the application's education outcome uses β = 0 because it is not
+  expected to depend on SUD incidence.
+- The education outcome stays generic ("a continuous cluster-level education outcome").
+  The supplement is "supplementary information (SI)". Funding uses Sage's standard
+  no-funding sentence pending coauthor confirmation. The AI disclosure names Claude Code
+  and Codex only.
+- Main-text Results keep key results; run totals and replication counts move to the SI.
+  Yearly budgets and population reach stay in the main text.
+
+**Why.** "Pilot" made a finished study read as preliminary, and the full-surface run costs
+about 1.5 hours. Readers need to see which designs differ significantly from SRS, and
+designs share surfaces and noise, so only paired intervals answer that. Stating the
+model before the simulation lets readers follow the setup (author review, 2026-10-27).
+
+**Source.** `revision_markup/CTJ_Reading_Markup_V5.pdf`; plan
+`~/.claude/plans/context-i-completed-a-wild-crab.md` (session 2026-10-27).
+
+---
+
 ## 2026-10-25 (afternoon) — "Saturation Quadrants" restored; figure conventions; whole colleges
 
 **Decision.** The plain saturation design is called "Saturation Quadrants" everywhere, in

@@ -72,9 +72,9 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   type and consent wording (highlighted CTJ placeholder; the chapter states the
   protocol only), any required disclosures, the title-page statement, and permission
   to publish 58-cluster aggregates and maps.
-- [ ] **Generative-AI disclosure** (Sage policy requires one for AI-assisted code,
+- [x] **Generative-AI disclosure** (Sage policy requires one for AI-assisted code,
   code checking and visualization): draft in CTJ Acknowledgements (2026-10-14);
-  author to confirm tool list and wording.
+  tool list confirmed by the author 2026-10-27 (Claude Code and Codex only).
 - [ ] Coauthor ORCIDs if the submission system requests them (Walther's is on the
   title page). Lin's telephone (919) 966-9431 added from his UNC profile.
 - [ ] Confirm contribution wording; obtain all coauthors' final approval and
@@ -169,15 +169,22 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 **Manuscript and exhibits (edit the chapter first, then re-derive CTJ/SI; run verifiers)**
 - [x] Unified table + illustration exhibit: CTJ hybrid Table 1 (2026-10-25).
 - [x] Design categories in Table 1 (italic line under each name, 2026-10-26).
-- [ ] State explicitly that the endpoint is assumed correlated with the guiding
-  incidence (wording depends on the outcome decision).
+- [x] State the endpoint/incidence assumption (2026-10-27): the grid's β = 1 makes incidence
+  prognostic (the harder case); the application's education outcome is not expected to
+  depend on SUD incidence (β = 0, β = 1 a sensitivity), in CTJ and Chapter 3 Methods.
 - [x] Update keywords (done 2026-10-19: dropped "simulation" and "mean squared error";
   added interference, design-stage treatment allocation, incidence-guided design).
+- [ ] **After the V5 revision (2026-10-27):** full SI prose review (human-writer pass plus
+  statistician and clinician reviewers), after the 2026-10-29 SUDDEN talk deck is ready
+  (author); `application/report/IncidenceDesign_Application_Study_Report.qmd` still reads the
+  pilot `downside_by_design.csv`. Service-area clusters need no explanation in the paper
+  (the education would be delivered through the colleges; author, 2026-10-27).
+  `morris_using_2019` and `seer_population_data` were added to the bios-dissertation master
+  bib and cited in Chapter 3 (2026-10-27).
 - [ ] Optional: one sentence contrasting this project's proportional spillover
   (γ × share of treated neighbors) with Chapter 2's on/off indicator (keep brief).
 - [ ] Keep CTJ word counts current after every edit (texcount, text + headers, math
-  excluded; title page and checklist). 2026-10-26: body 3,489 (Introduction through
-  Discussion; reproduces the earlier 3,483 before the last cut); abstract 411.
+  excluded; title page and checklist). 2026-10-27 (V5 revision): body 3,498; abstract 404.
 - [ ] Decide whether statistical tests of design differences belong in the CTJ/SI
   (the SI has Nemenyi/Holm-Wilcoxon for variant consolidation; script 12 has six-design
   Friedman/Nemenyi; none for the application).
