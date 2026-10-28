@@ -104,3 +104,26 @@
 /* Outline slide: the title rule already separates the heading, so drop the
    template's thick top rule on the first agenda row. */
 .reveal .agenda-rows .agenda-row:first-child { border-top: none; }
+
+/* Model slide: the two spillover forms on their own rows, label beside formula. */
+.reveal .spill-forms {
+  display: grid; grid-template-columns: auto auto; justify-content: center;
+  column-gap: 1.2em; row-gap: 0.1em; align-items: center; font-size: 0.85em; margin: 0 0 0.3em;
+}
+.reveal .spill-forms > p { display: contents; }
+.reveal .spill-forms .lab { font-weight: 700; color: var(--unc-navy); text-align: right; }
+
+/* Model slide glossary: symbols in left-aligned tinted chips, each entry ruled off,
+   so notation and description read as separate columns. */
+.reveal .glossary { grid-template-columns: 7.2em 1fr 7.2em 1fr; column-gap: 0.7em; row-gap: 0; align-items: stretch; }
+.reveal .glossary > p > span, .reveal .glossary > span { padding: 0.28em 0; border-bottom: 1px solid var(--unc-light-grey); }
+.reveal .glossary .sym {
+  text-align: left; background: var(--unc-navy-tint); color: var(--unc-navy);
+  border-left: 5px solid var(--unc-carolina-blue); padding-left: 0.45em !important;
+  display: flex; align-items: center;
+}
+.reveal .glossary > p > span, .reveal .glossary > span { padding: 0.14em 0; display: block; }
+.reveal .glossary .sym { display: flex !important; }
+.reveal .glossary { font-size: 0.68em !important; }
+.reveal .eq-box { font-size: 0.85em; padding: 0 0.6em; margin-bottom: 0.3em; }
+.reveal .eq-box mjx-container[display="true"] { margin: 0.35em 0 !important; }

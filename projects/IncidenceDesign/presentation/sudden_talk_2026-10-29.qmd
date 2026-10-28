@@ -323,7 +323,10 @@ Y = (I - \rho W)^{-1}\left[\,\tau Z + S(Z) + \beta X + \epsilon\,\right], \qquad
 $$
 </div>
 
-<p style="text-align:center; margin: 0;"><strong>Spillover to both arms</strong> &nbsp;$S(Z) = \gamma\, WZ$ &emsp;&emsp;&emsp; <strong>Spillover to controls only</strong> &nbsp;$S(Z) = \gamma\,(1 - Z) \circ WZ$</p>
+<div class="spill-forms">
+<span class="lab">Spillover to both arms</span><span>$S(Z) = \gamma\, WZ$</span>
+<span class="lab">Spillover to controls only</span><span>$S(Z) = \gamma\,(1 - Z) \circ WZ$</span>
+</div>
 
 <div class="glossary" style="margin-top: 0.5em;">
 <span class="sym">$Y$</span><span>Outcome of each cluster (in the application, a college's mean education score)</span>
