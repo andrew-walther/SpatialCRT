@@ -78,6 +78,8 @@ def verify():
     for index, block in enumerate(figure_blocks, 1):
         caption = re.search(r'\\caption\{(.*?)\}\\label\{fig:', block, re.S).group(1)
         caption = caption.replace('Table~\\ref{tab:grid-srs}', 'Table 2')
+        caption = caption.replace('Figure~\\ref{fig:nc-mse}', 'Figure 4')
+        caption = caption.replace('Figure~\\ref{fig:grid}', 'Figure 2')
         if f'Figure {index}. {caption}' not in legends:
             raise AssertionError(f'Figure {index}: separate legend differs from master')
     require_equal(re.search(r'\\newcommand\{\\CTJTitle\}\{([^}]+)\}', master).group(1),
@@ -134,8 +136,23 @@ def verify():
         expected_year.append(cells)
     # The CTJ main table shows the six detailed designs and SRS (IDs 3 and 7, the
     # two related variants, are omitted; author 2026-10-12); chapter/SI keep all nine.
-    ctj_grid = [row for design_id, row in zip(range(1, 10), expected_grid)
-                if design_id not in (3, 7)]
+    # The CTJ table adds each design's MSE ratio to SRS with its 95% paired
+    # interval in each regime (author, 2026-10-27); SRS prints "N/A".
+    paired_ids = {'Checkerboard': 1, 'High Incidence Focus': 2, 'Saturation Quadrants': 3,
+                  'Isolation Buffer': 4, '2x2 Blocking': 5, 'Balanced Quartiles': 6,
+                  'Balanced Halves': 7, 'Incidence-Guided Saturation Quadrants': 8}
+    paired = {(paired_ids[r['Design_Name']], r['Spillover_Type']): r for r in csv_rows(
+        ROOT / 'results/srs_benchmark/manuscript_paired_ratios.csv')}
+    ctj_grid = []
+    for design_id in (1, 2, 4, 5, 6, 8, 9):
+        cells = []
+        for regime in ('both', 'control_only'):
+            row = grid[(f'Design {design_id}', regime)]
+            cells.extend([f"{float(row['MSE']):.4f}", f"{float(row['Coverage']):.3f}"])
+            if design_id != 9:
+                q = paired[(design_id, regime)]
+                cells.extend(f"{float(q[c]):.2f}" for c in ('Ratio', 'Ratio_Lo', 'Ratio_Hi'))
+        ctj_grid.append(cells)
     for path, source in sources.items():
         require_equal([n for _, n in numerical_rows(table(source, 'tab:grid-srs'))],
                       ctj_grid if path == MAIN else expected_grid,
@@ -219,13 +236,14 @@ def verify():
     require_equal([n for _, n in numerical_rows(table(chapter, 'tab:nc-summary-sens'))],
                   expected_sensitivity, '32 parameter-matched sensitivity ratio cells')
     # Per-design downside table: mean and worst-decile ratios to SRS
-    # (code/21_downside_by_design.R), grid pilot then NC, both arms then control-only.
-    downside = csv_rows(ROOT / 'results/allocation_risk/summary/downside_by_design.csv')
+    # (code/21_downside_by_design.R), grid (all ten surfaces, 2026-10-27) then NC,
+    # both arms then control-only.
+    downside = csv_rows(ROOT / 'results/allocation_risk/summary/surfaces10/downside_by_design.csv')
     downside = {(r['Source'], r['Regime'], int(r['Design_ID'])): r for r in downside}
     expected_downside = []
     for design in range(1, 10):
         cells = []
-        for source_name in ('grid_pilot', 'nc_refined'):
+        for source_name in ('grid_surfaces10', 'nc_refined'):
             for regime in ('both', 'control_only'):
                 row = downside[(source_name, regime, design)]
                 cells.extend([f"{float(row['Mean_Ratio_SRS']):.2f}",

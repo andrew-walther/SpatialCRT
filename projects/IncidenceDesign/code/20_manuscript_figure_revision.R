@@ -27,6 +27,33 @@ compact_grid_means <- function(results) {
               Incidence_Mode + Rho_Incidence + Spillover_Type, x, mean)
 }
 
+#' 95% Monte Carlo intervals for the Figure 2 configuration means
+#'
+#' Surface k is shared by all 16 rho/gamma settings of a configuration, so the
+#' settings are not independent replications. Each surface's MSE is first averaged
+#' over the 16 settings; the interval is then mean +/- t_{0.975, K-1} * sd / sqrt(K)
+#' over the K = 10 surface means (author, 2026-10-27).
+#' @param surfaces Surface-level oracle results (one row per scenario x surface).
+#' @return Data frame of queen, tau=1 configuration/design/regime means with MC_Lo, MC_Hi.
+#' @examples
+#' # grid_surface_intervals(readRDS("results/sim_data/surface_results_....rds"))
+grid_surface_intervals <- function(surfaces) {
+  x <- surfaces[surfaces$Neighbor_Type == "queen" & surfaces$True_Tau == 1, ]
+  stopifnot(all(x$Estimator == "oracle"), all(x$N_Valid == 25))
+  by_surface <- aggregate(MSE ~ Design + Incidence_Mode + Rho_Incidence +
+                            Spillover_Type + Surface, x, mean)
+  stopifnot(all(table(x$Design, x$Spillover_Type) == 16 * 10 * 5))
+  summarise <- function(v) {
+    k <- length(v)
+    stopifnot(k == 10)
+    half <- stats::qt(0.975, k - 1) * stats::sd(v) / sqrt(k)
+    c(MSE = mean(v), MC_Lo = mean(v) - half, MC_Hi = mean(v) + half)
+  }
+  out <- aggregate(MSE ~ Design + Incidence_Mode + Rho_Incidence + Spillover_Type,
+                   by_surface, summarise)
+  cbind(out[, 1:4], as.data.frame(out$MSE))
+}
+
 #' Compute annual MSE ratios using the year- and regime-matched SRS denominator
 #' @param annual Authorized yearly primary design-means data frame.
 #' @return Same rows with a recomputed Ratio column; input is not modified.
@@ -81,16 +108,28 @@ export_compact_exhibits <- function(project_dir) {
                       labels = c("Spillover reaches both arms", "Spillover reaches controls only"))
   d2$Configuration <- factor(paste(d2$Incidence_Mode, d2$Rho_Incidence, sep = "/"),
                              levels = c("iid/0", "spatial/0.2", "spatial/0.5", "poisson/0.2", "poisson/0.5"),
-                             labels = c("Independent uniform", "Spatial (0.2)",
+                             labels = c("Independent Uniform", "Spatial (0.2)",
                                         "Spatial (0.5)", "Poisson (0.2)", "Poisson (0.5)"))
   stopifnot(nrow(d2) == 70, !anyNA(d2$Configuration))
+  # Per-point 95% Monte Carlo intervals over the ten shared surfaces
+  ci <- grid_surface_intervals(readRDS(file.path(project_dir, "results/sim_data",
+                                       "surface_results_MLE_tau_sweep_20260927_000502.rds")))
+  ci_keys <- paste(ci$Design, ci$Incidence_Mode, ci$Rho_Incidence, ci$Spillover_Type)
+  d2_keys <- paste(d2$Design, d2$Incidence_Mode, d2$Rho_Incidence, d2$Spillover_Type)
+  idx <- match(d2_keys, ci_keys)
+  stopifnot(!anyNA(idx), max(abs(ci$MSE[idx] - d2$MSE)) < 1e-10)
+  d2$MC_Lo <- ci$MC_Lo[idx]
+  d2$MC_Hi <- ci$MC_Hi[idx]
+  write.csv(d2[, c("Design", "Incidence_Mode", "Rho_Incidence", "Spillover_Type",
+                   "MSE", "MC_Lo", "MC_Hi")],
+            file.path(out, "grid_configuration_intervals.csv"), row.names = FALSE)
   d$Label <- factor(d$Design, levels = paste("Design", rev(ids)), labels = rev(short))
   d$Regime <- factor(d$Spillover_Type, levels = c("both", "control_only"),
                      labels = c("Both arms", "Control only"))
   configs <- c("iid/0", "spatial/0.2", "spatial/0.5", "poisson/0.2", "poisson/0.5")
   d$Configuration <- factor(paste(d$Incidence_Mode, d$Rho_Incidence, sep = "/"),
                             levels = configs,
-                            labels = c("Independent uniform", "Spatial (0.2)",
+                            labels = c("Independent Uniform", "Spatial (0.2)",
                                        "Spatial (0.5)", "Poisson (0.2)", "Poisson (0.5)"))
   stopifnot(!anyNA(d$Configuration))
   theme <- ggplot2::theme_minimal(base_size = 9) + ggplot2::theme(
@@ -107,13 +146,22 @@ export_compact_exhibits <- function(project_dir) {
     ggplot2::guides(color = ggplot2::guide_legend(nrow = 2),
                     shape = ggplot2::guide_legend(nrow = 2))
   ggplot2::ggsave(file.path(out, "grid_accuracy.pdf"), p, width = 174, height = 93, units = "mm")
-  p2 <- ggplot2::ggplot(d2, ggplot2::aes(MSE, Label, color = Configuration, shape = Configuration)) +
-    ggplot2::geom_point(position = ggplot2::position_dodge(width = 0.6), size = 1.8) +
+  # Figure 2: five filled shapes in distinct colors, each with its 95% Monte Carlo
+  # interval (author, 2026-10-27). Dodging separates the five configurations.
+  dodge <- ggplot2::position_dodge(width = 0.7)
+  p2 <- ggplot2::ggplot(d2, ggplot2::aes(MSE, Label, color = Configuration,
+                                         fill = Configuration, shape = Configuration)) +
+    ggplot2::geom_linerange(ggplot2::aes(xmin = MC_Lo, xmax = MC_Hi), position = dodge,
+                            linewidth = 0.45) +
+    ggplot2::geom_point(position = dodge, size = 1.7, stroke = 0.3) +
     ggplot2::facet_wrap(~Regime, nrow = 1) +
-    ggplot2::scale_x_log10(breaks = c(0.03, 0.1, 0.3, 1, 3)) +
+    ggplot2::scale_x_log10(breaks = c(0.05, 0.1, 0.2, 0.5, 1, 2)) +
     ggplot2::scale_color_manual(values = colors) +
+    ggplot2::scale_fill_manual(values = colors) +
+    ggplot2::scale_shape_manual(values = c(21, 22, 24, 23, 25)) +
     ggplot2::labs(x = "Mean MSE (log scale)", y = NULL) + theme +
     ggplot2::guides(color = ggplot2::guide_legend(nrow = 2),
+                    fill = ggplot2::guide_legend(nrow = 2),
                     shape = ggplot2::guide_legend(nrow = 2))
   ggplot2::ggsave(file.path(out, "grid_accuracy_srs.pdf"), p2, width = 174, height = 100, units = "mm")
 
@@ -145,7 +193,7 @@ export_compact_exhibits <- function(project_dir) {
              "Incidence\u00adGuided Saturation", "Simple Random Sampling")
   annual$Label <- factor(annual$Design_ID, levels = 9:1, labels = rev(names))
   annual$Regime_Label <- factor(annual$Regime, levels = c("both", "control_only"),
-                                labels = c("Both arms", "Control only"))
+                                labels = c("Spillover reaches both arms", "Spillover reaches controls only"))
   annual$Log_Ratio <- log2(annual$Ratio)
   span <- max(abs(annual$Log_Ratio))
   # The SRS row (ID 9) is the reference and would print 1.00 in every cell, so
@@ -159,7 +207,7 @@ export_compact_exhibits <- function(project_dir) {
       midpoint = 0, limits = c(-span, span), breaks = log2(c(0.25, 0.5, 1, 2, 4)),
       labels = c("0.25", "0.5", "1", "2", "4"),
       name = "MSE relative to\nsimple random sampling") +
-    ggplot2::labs(x = "Observed planning year", y = NULL) + theme +
+    ggplot2::labs(x = "Year (observed SUD incidence)", y = NULL) + theme +
     ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.title = ggplot2::element_text(size = 9))
   ggplot2::ggsave(file.path(out, "nc_annual_accuracy.pdf"), p, width = 174, height = 87, units = "mm")
   # CTJ variant: the six detailed designs only (drops the two related
@@ -173,9 +221,9 @@ export_compact_exhibits <- function(project_dir) {
   # Named joins prevent an unnoticed permutation of observed rates or regions.
   # Simplification is display only and never feeds the cached queen/rook weights.
   setup <- readRDS(file.path(app_root, "setup.rds"))
-  observed <- read.csv(file.path(app_root, "exhibits/observed_cluster_inputs.csv"))
+  observed_all <- read.csv(file.path(app_root, "exhibits/observed_cluster_inputs.csv"))
   # Pooled 2018-2021 rate: total deaths / total person-years (author 2026-10-12).
-  observed <- observed[observed$period == "2018-2021", ]
+  observed <- observed_all[observed_all$period == "2018-2021", ]
   partition <- read.csv(file.path(app_root, "frozen_partitions.csv"))
   g <- sf::st_simplify(setup$clusters, dTolerance = 250)
   stopifnot(nrow(g) == 58, !anyDuplicated(g$Primary_College),
@@ -188,16 +236,38 @@ export_compact_exhibits <- function(project_dir) {
     legend.position = "bottom", legend.key.height = grid::unit(2, "mm"),
     plot.title = ggplot2::element_text(size = 9, face = "bold"),
     plot.margin = ggplot2::margin(2, 2, 2, 2))
+  # One color scale spans the pooled and yearly rates so panels A and C compare
+  # directly (panel C added by the author, 2026-10-27).
+  yearly <- observed_all[observed_all$period %in% as.character(2018:2021), ]
+  stopifnot(nrow(yearly) == 4 * 58, all(is.finite(yearly$rate_per_100k)))
+  rate_limits <- range(c(g$Rate, yearly$rate_per_100k))
+  rate_scale <- ggplot2::scale_fill_viridis_c(name = "SUD per 100,000", option = "C",
+                                              limits = rate_limits)
   rates <- ggplot2::ggplot(g) + ggplot2::geom_sf(ggplot2::aes(fill = Rate), color = "white", linewidth = 0.12) +
-    ggplot2::scale_fill_viridis_c(name = "SUD per 100,000", option = "C") +
-    ggplot2::labs(title = "A. Observed 2018-2021 rates") + map_theme
+    rate_scale +
+    ggplot2::labs(title = "A. Observed 2018\u00ad2021 SUD rates (pooled)") + map_theme
   regions <- ggplot2::ggplot(g) + ggplot2::geom_sf(ggplot2::aes(fill = Region), color = "white", linewidth = 0.12) +
     ggplot2::scale_fill_manual(values = c("#0072B2", "#E69F00", "#009E73", "#CC79A7"), name = "Region") +
     ggplot2::labs(title = "B. Fixed saturation regions") + map_theme
-  grDevices::pdf(file.path(out, "nc_planning_map.pdf"), width = 174/25.4, height = 64/25.4)
+  # Panel C: one small map per year, named joins as above
+  gy <- do.call(rbind, lapply(as.character(2018:2021), function(y) {
+    o <- yearly[yearly$period == y, ]
+    stopifnot(setequal(o$Primary_College, g$Primary_College))
+    gg <- g[, "Primary_College"]
+    gg$Rate <- o$rate_per_100k[match(gg$Primary_College, o$Primary_College)]
+    gg$Year <- y
+    gg
+  }))
+  annual_maps <- ggplot2::ggplot(gy) +
+    ggplot2::geom_sf(ggplot2::aes(fill = Rate), color = "white", linewidth = 0.08) +
+    ggplot2::facet_wrap(~Year, nrow = 1) + rate_scale +
+    ggplot2::labs(title = "C. Observed SUD rates by year") + map_theme +
+    ggplot2::theme(legend.position = "none", strip.text = ggplot2::element_text(size = 8))
+  grDevices::pdf(file.path(out, "nc_planning_map.pdf"), width = 174/25.4, height = 92/25.4)
   grid::grid.newpage()
-  print(rates, vp = grid::viewport(x = 0.25, width = 0.5))
-  print(regions, vp = grid::viewport(x = 0.75, width = 0.5))
+  print(rates, vp = grid::viewport(x = 0.25, y = 0.685, width = 0.5, height = 0.63))
+  print(regions, vp = grid::viewport(x = 0.75, y = 0.685, width = 0.5, height = 0.63))
+  print(annual_maps, vp = grid::viewport(x = 0.5, y = 0.185, width = 1, height = 0.37))
   grDevices::dev.off()
   # Chapter/SI region map (figures/real_sud/regions.png). Same layout as the
   # application companion's version, with "fixed" wording (author 2026-10-12).

@@ -27,6 +27,26 @@ stopifnot(nrow(benchmark) == 18,
 write.csv(benchmark, file.path(project_dir, "results", "srs_benchmark",
                                "manuscript_regime_means.csv"), row.names = FALSE)
 
+# Table 2 ratio column: design MSE / SRS MSE with a 95% paired interval ----
+# Source: code/15's paired surface-level tests within each regime (queen, oracle,
+# tau = 1). Each interval is t_49 over the 50 configuration-by-surface differences
+# (design - SRS); dividing by SRS's regime mean MSE (treated as fixed) gives
+# ratio = 1 + diff / MSE_SRS (author, 2026-10-27).
+tests <- readRDS(file.path(project_dir, "results", "srs_benchmark",
+                           "srs_benchmark.rds"))$oracle$queen$tests_by_regime
+stopifnot(all(tests$n_units == 50), nrow(tests) == 16)
+paired <- data.frame(Design_Name = tests$Design, Spillover_Type = tests$Spillover_Type,
+                     Ratio = 1 + tests$mean_diff / tests$MSE_SRS,
+                     Ratio_Lo = 1 + tests$ci_lo / tests$MSE_SRS,
+                     Ratio_Hi = 1 + tests$ci_hi / tests$MSE_SRS,
+                     P_Holm = tests$p_holm)
+# The point ratio must equal the ratio of the Table 2 regime means
+srs <- benchmark$MSE[benchmark$Design == "Design 9"]
+names(srs) <- benchmark$Spillover_Type[benchmark$Design == "Design 9"]
+stopifnot(max(abs(tests$MSE_SRS - srs[tests$Spillover_Type])) < 1e-10)
+write.csv(paired, file.path(project_dir, "results", "srs_benchmark",
+                            "manuscript_paired_ratios.csv"), row.names = FALSE)
+
 # Journal figure: retain the chapter's detailed six-design scope ----
 ids <- c(8, 6, 4, 2, 5, 1)
 labels <- c("Guided saturation", "Balanced quartiles", "Isolation buffer",
