@@ -2,7 +2,7 @@
 
 Talk deck for the IncidenceDesign project (dissertation Project 2): the 20-minute talk
 at the SUDDEN project meeting on 2026-10-29, which also seeds prelim Part II
-(prelim 2026-12-07). The deck stays here until Andrew approves copying it to
+(prelim 2026-12-07). This deck also serves as an initial draft for building the slides in
 `bios-dissertation/slides/prelim/part-2/`.
 
 ## Files
