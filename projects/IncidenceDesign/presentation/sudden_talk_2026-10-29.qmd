@@ -324,8 +324,8 @@ $$
 </div>
 
 <div class="spill-forms">
-<span class="lab">Spillover to both arms</span><span>$S(Z) = \gamma\, WZ$</span>
-<span class="lab">Spillover to controls only</span><span>$S(Z) = \gamma\,(1 - Z) \circ WZ$</span>
+<span class="grp"><span class="lab">Spillover to both arms</span> $S(Z) = \gamma\, WZ$</span>
+<span class="grp"><span class="lab">Spillover to controls only</span> $S(Z) = \gamma\,(1 - Z) \circ WZ$</span>
 </div>
 
 <div class="glossary" style="margin-top: 0.5em;">

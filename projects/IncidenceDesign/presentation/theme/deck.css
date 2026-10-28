@@ -135,3 +135,7 @@
   background: var(--unc-blue-tint); border: 1px solid var(--unc-carolina-blue); border-radius: 6px;
   padding: 0.35em 1em; margin: 0.1em 0 0.5em;
 }
+/* Each label stays next to its own formula; the two groups spread across the box. */
+.reveal .spill-forms { display: flex; justify-content: space-around; }
+.reveal .spill-forms .grp { white-space: nowrap; }
+.reveal .spill-forms .grp .lab { margin-right: 0.45em; }
