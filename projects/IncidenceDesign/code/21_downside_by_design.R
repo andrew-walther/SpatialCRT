@@ -2,30 +2,41 @@
 # Script: 21_downside_by_design.R
 # Purpose: Compare every design with SRS on mean allocation MSE and on
 #          allocation downside (worst-10% mean), by spillover regime, for the
-#          grid pilot and the refined NC application corners.
+#          grid allocation-risk study and the refined NC application corners.
 # Author: Andrew Walther
 # Created: 2026-10-11
 # Dependencies: base R; ggplot2 for the distribution figure
 # ============================================================
-# Run from the project root: Rscript code/21_downside_by_design.R
-# Reads completed aggregate outputs only; it neither simulates nor changes
-# checkpoints. Outputs: results/allocation_risk/summary/downside_by_design.csv,
-# allocation_distribution_by_design.csv and allocation_distribution_by_design.pdf
-# (CTJ Figure 3; also copied to the chapter/SI figure folders).
+# Run from the project root: Rscript code/21_downside_by_design.R [profile]
+# profile is the grid run of code/16: surfaces10 (default; all ten surfaces, the
+# reported study) or pilot (first two surfaces). Reads completed aggregate outputs
+# only; it neither simulates nor changes checkpoints. Outputs go to
+# results/allocation_risk/summary/surfaces10/ (pilot: results/allocation_risk/summary/):
+# downside_by_design.csv, allocation_distribution_by_design.csv and
+# allocation_distribution_by_design.pdf (CTJ Figure 3). Only the surfaces10 figure
+# is copied to the CTJ and chapter figure folders.
 #
 # For allocation a, m(a) = E_eps[(tau_hat - tau)^2 | a, X] is its conditional
 # MSE. Each source row already summarizes the sampled allocations of one
 # design: their mean m(a) and the mean of the worst 10% of m(a).
-#   Grid pilot: queen, tau = 1, oracle fit, averaged over 40 fixed
-#     surface/corner units (as reported in the chapter).
+#   Grid: queen, tau = 1, oracle fit, averaged over 20 x (surfaces per config)
+#     fixed surface/corner units (200 for surfaces10, 40 for the pilot).
 #   NC: refined queen corners rho in {0, 0.5}, gamma = 0.8, education model,
 #     mean-rank regions; averaged with equal weight over 2018-2021 and both
 #     corners (8 rows per design and regime).
 # Ratios are (design average) / (SRS average) within the same source and regime,
 # so a value below 1 means lower error than SRS.
 
+# Grid profile and output folder ----
+args <- commandArgs(TRUE); profile <- if (length(args)) args[1] else "surfaces10"
+n_surfaces <- c(pilot = 2L, surfaces10 = 10L)[[profile]]
+out_dir <- if (profile == "pilot") "results/allocation_risk/summary" else
+  file.path("results/allocation_risk/summary", profile)
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+grid_source <- paste0("grid_", profile)
+
 # Read sources ----
-grid <- read.csv("results/allocation_risk/summary/pilot/pooled_fixed_units.csv",
+grid <- read.csv(file.path("results/allocation_risk/summary", profile, "pooled_fixed_units.csv"),
                  stringsAsFactors = FALSE)
 nc <- read.csv(paste0("application/results/real_sud_rev_20261002/exhibits/",
                       "refined_tail_comparison.csv"), stringsAsFactors = FALSE)
@@ -38,7 +49,7 @@ nc <- nc[nc$Neighbor == "queen" & nc$Model == "education" &
 
 # Fail loud if the sources are not the expected shape ----
 stopifnot(nrow(grid) == 18, setequal(grid$Design_ID, 1:9),
-          all(grid$N_Fixed_Units == 40))
+          all(grid$N_Fixed_Units == 20 * n_surfaces))
 nc_counts <- table(nc$Design_ID, nc$Regime)
 stopifnot(nrow(nc_counts) == 9, all(nc_counts == 8))
 
@@ -61,7 +72,7 @@ summarize_source <- function(ids, regimes, mean_mse, worst10, source) {
 result <- rbind(
   summarize_source(grid$Design_ID, grid$Spillover_Type,
                    grid$Mean_Allocation_MSE, grid$Average_Conditional_Worst10,
-                   "grid_pilot"),
+                   grid_source),
   summarize_source(nc$Design_ID, nc$Regime, nc$Mean_MSE,
                    nc$Worst10_Mean_Estimated, "nc_refined")
 )
@@ -70,7 +81,7 @@ result <- result[order(result$Source, result$Regime, result$Design_ID),
                    "Mean_Ratio_SRS", "Worst10_Ratio_SRS")]
 
 # Write ----
-out_file <- "results/allocation_risk/summary/downside_by_design.csv"
+out_file <- file.path(out_dir, "downside_by_design.csv")
 write.csv(result, out_file, row.names = FALSE)
 cat("Wrote", nrow(result), "rows to", out_file, "\n")
 
@@ -104,12 +115,13 @@ relative_to_srs <- function(d, unit_cols) {
   d
 }
 
-ga <- read.csv("results/allocation_risk/pilot/allocation_metrics.csv", stringsAsFactors = FALSE)
+ga <- read.csv(file.path("results/allocation_risk", profile, "allocation_metrics.csv"),
+               stringsAsFactors = FALSE)
 ga <- ga[ga$Neighbor_Type == "queen" & ga$True_Tau == 1 & ga$Estimator == "oracle", ]
 ga$Design_ID <- as.integer(sub("Design ", "", ga$Design))
 ga$Regime <- ga$Spillover_Type
 ga <- relative_to_srs(ga, c("Incidence_Mode", "Rho_Incidence", "Surface", "Rho", "Gamma", "Regime"))
-ga$Source <- "grid_pilot"
+ga$Source <- grid_source
 na <- read.csv(paste0("application/results/real_sud_rev_20261002/tail_confirmation/",
                       "allocation_metrics.csv"), stringsAsFactors = FALSE)
 na <- na[na$Model == "education" & na$Neighbor == "queen" & na$Summary == "mean_rank" &
@@ -118,7 +130,7 @@ na <- relative_to_srs(na, c("Year", "Rho", "Regime"))
 na$Source <- "nc_refined"
 keep <- c("Source", "Regime", "Design_ID", "Unit", "Ratio", "Frequency")
 alloc <- rbind(ga[keep], na[keep])
-stopifnot(all(is.finite(alloc$Ratio)), length(unique(ga$Unit)) == 80,
+stopifnot(all(is.finite(alloc$Ratio)), length(unique(ga$Unit)) == 40 * n_surfaces,
           length(unique(na$Unit)) == 16)
 per_unit <- do.call(rbind, lapply(split(alloc, list(alloc$Source, alloc$Regime, alloc$Design_ID,
                                                     alloc$Unit), drop = TRUE), function(x) {
@@ -129,7 +141,7 @@ per_unit <- do.call(rbind, lapply(split(alloc, list(alloc$Source, alloc$Regime, 
 }))
 dist <- aggregate(cbind(Q05, Q25, Q50, Q75, Q95, Mean) ~ Source + Regime + Design_ID, per_unit, mean)
 dist <- dist[order(dist$Source, dist$Regime, dist$Design_ID), ]
-write.csv(dist, "results/allocation_risk/summary/allocation_distribution_by_design.csv", row.names = FALSE)
+write.csv(dist, file.path(out_dir, "allocation_distribution_by_design.csv"), row.names = FALSE)
 
 # Figure: six detailed designs and SRS; vector PDF in the default Helvetica, like Figure 4.
 ids <- c(8, 6, 4, 2, 5, 1, 9)
@@ -139,7 +151,7 @@ labels <- c("Incidence\u00adGuided Saturation", "Balanced Quartiles", "Isolation
             "High Incidence Focus", "2\u00d72 Blocking", "Checkerboard", "Simple Random Sampling")
 f <- dist[dist$Design_ID %in% ids, ]
 f$Label <- factor(f$Design_ID, levels = rev(ids), labels = rev(labels))
-f$Study <- factor(f$Source, c("grid_pilot", "nc_refined"), c("Simulation study", "Application study"))
+f$Study <- factor(f$Source, c(grid_source, "nc_refined"), c("Simulation study", "Application study"))
 f$Regime <- factor(f$Regime, c("both", "control_only"),
                    c("Spillover reaches both arms", "Spillover reaches controls only"))
 f$Benchmark <- f$Design_ID == 9
@@ -157,10 +169,12 @@ fig <- ggplot2::ggplot(f, ggplot2::aes(y = Label)) +
   ggplot2::theme(panel.grid.minor = ggplot2::element_blank(),
                  strip.text = ggplot2::element_text(face = "bold"),
                  strip.text.y = ggplot2::element_text(angle = -90))
-fig_file <- "results/allocation_risk/summary/allocation_distribution_by_design.pdf"
+fig_file <- file.path(out_dir, "allocation_distribution_by_design.pdf")
 ggplot2::ggsave(fig_file, fig, width = 174, height = 105, units = "mm")
-for (folder in c("paper/ctj_manuscript/figures/compact", "paper/thesis_chapter/figures/compact")) {
-  stopifnot(file.copy(fig_file, folder, overwrite = TRUE))
+if (profile == "surfaces10") {
+  for (folder in c("paper/ctj_manuscript/figures/compact", "paper/thesis_chapter/figures/compact")) {
+    stopifnot(file.copy(fig_file, folder, overwrite = TRUE))
+  }
 }
 cat("Wrote allocation distribution summary and figure\n")
 

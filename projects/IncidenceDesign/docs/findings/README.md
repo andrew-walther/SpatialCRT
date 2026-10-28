@@ -18,3 +18,4 @@ The plan behind each one is in [`../plans/`](../plans/README.md).
 | 2026-10-02 | [manuscript-exhibit-verification.txt](2026-10-02-manuscript-exhibit-verification.txt) | Pass log from the exhibit checks | complete |
 | 2026-10-20 | [methods-extensions-findings](2026-10-20-methods-extensions-findings.md) | Results of methods-extension steps 1–6, with the 2026-10-21 addendum | complete |
 | 2026-10-21 | [methods-extensions-report](2026-10-21-methods-extensions-report.md) | Report on the extensions with proposed manuscript text | active: waiting on the author's review of Section 4 |
+| 2026-10-27 | [allocation-risk-surfaces10-findings](2026-10-27-allocation-risk-surfaces10-findings.md) | Grid allocation risk rerun on all ten surfaces: pilot reproduction, precision, old-vs-new cited numbers | complete |

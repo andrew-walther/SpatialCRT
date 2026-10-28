@@ -7,7 +7,8 @@
 # ============================================================
 # Run from code/: VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 # OMP_NUM_THREADS=1 Rscript 16_allocation_risk.R pilot 8
-# Profiles: smoke, benchmark, pilot. All outputs/checkpoints are isolated under
+# Profiles: smoke, benchmark, pilot, surfaces10 (pilot settings on all ten surfaces;
+# key-based seeds make its surfaces 1-2 reproduce the pilot). All outputs/checkpoints are isolated under
 # results/allocation_risk/<profile>/. No existing simulation result is overwritten.
 # Local fork workers use one BLAS thread; each worker holds only one fixed-X block
 # (100 clusters, at most 100 allocation x 100 outcome fits). Not a SLURM runner.
@@ -42,13 +43,13 @@ allocation_seed <- function(...) {
   invisible(s)
 }
 
-#' Specify the authorized pilot or a small verification slice
-#' @param profile One of smoke, benchmark, pilot.
+#' Specify the authorized pilot, the full-surface study or a small verification slice
+#' @param profile One of smoke, benchmark, pilot, surfaces10.
 #' @return List of fixed DGP parameters and Monte Carlo replication counts.
 #' @examples
 #' p <- allocation_parameters("pilot")
 allocation_parameters <- function(profile = "pilot") {
-  stopifnot(profile %in% c("smoke", "benchmark", "pilot"))
+  stopifnot(profile %in% c("smoke", "benchmark", "pilot", "surfaces10"))
   p <- list(profile = profile, grid_dim = 10, nb_type = "queen", tau = 1,
             beta = 1, sigma = 1, base_rate = 35 / 100000,
             pop_per_cluster = 100000, pop_mode = "equal",
@@ -59,7 +60,8 @@ allocation_parameters <- function(profile = "pilot") {
             regimes = c("control_only", "both"), designs = 1:9,
             n_allocations = 100L, n_outcomes = 100L, noise_batch_size = 25L,
             seed_namespace = "allocation-risk-v1")
-  if (profile != "pilot") {
+  if (profile == "surfaces10") p$surfaces <- 1:10
+  if (!profile %in% c("pilot", "surfaces10")) {
     p$configs <- p$configs[1]; p$surfaces <- 1L; p$rho <- 0.5
     p$gamma <- 0.5; p$regimes <- "both"
     p$n_allocations <- if (profile == "smoke") 4L else 10L

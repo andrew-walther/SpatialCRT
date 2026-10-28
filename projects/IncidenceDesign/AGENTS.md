@@ -69,8 +69,9 @@ Reasons and history for each rule: `DECISIONS.md`.
 - **Project 1 is final.** Treat `projects/SpillSpatialDepSim/` as read-only. Changes
   reach `bios-dissertation` only through the Chapter 3 sync (below) unless the author
   asks otherwise.
-- **Allocation-risk numbers** (selected-surface/corner pilot, `results/allocation_risk/`)
-  are never substituted for full-study numbers.
+- **Allocation-risk numbers** (corner settings on all ten surfaces,
+  `results/allocation_risk/surfaces10/`, author 2026-10-27; the two-surface `pilot/` is
+  superseded) are never substituted for the full grid benchmark (Table 2).
 - **Where to write things down:** project docs go in `docs/` by type (`plans/`,
   `findings/`, `reviews/`, `prompts/`, `meetings/`), named `YYYY-MM-DD-topic-type.md`
   with hyphens, and get a row in that folder's `README.md` (map: `docs/README.md`;

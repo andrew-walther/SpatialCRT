@@ -171,7 +171,16 @@ allocation_risk_report <- function(input, output) {
   pilot_file <- file.path(dirname(dirname(input)), "pilot", "results.rds")
   if (basename(dirname(input)) != "pilot" && file.exists(pilot_file)) {
     pilot <- readRDS(pilot_file)
-    tables$matched_pilot_replication_comparison <- allocation_risk_extension(s, pilot$summary)
+    keys <- c(allocation_unit_keys, "Design")
+    in_pilot <- allocation_summary_key(s, keys) %in% allocation_summary_key(pilot$summary, keys)
+    # A strict subset (targeted extension) compares every unit; a larger run
+    # (e.g. surfaces10) compares only its pilot-surface units, as a reproduction check.
+    if (all(in_pilot)) {
+      tables$matched_pilot_replication_comparison <- allocation_risk_extension(s, pilot$summary)
+    } else if (any(in_pilot)) {
+      cat(sum(in_pilot), "of", nrow(s), "blocks match pilot units; writing pilot_unit_reproduction\n")
+      tables$pilot_unit_reproduction <- allocation_risk_extension(s[in_pilot, ], pilot$summary)
+    }
   }
   baseline <- file.path(dirname(input), "main_run_surface_baseline.csv")
   if (file.exists(baseline)) {

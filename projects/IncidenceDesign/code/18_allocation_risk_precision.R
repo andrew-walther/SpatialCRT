@@ -1,13 +1,15 @@
 # ============================================================
 # Script: 18_allocation_risk_precision.R
-# Purpose: Extend 50 matched pilot blocks from R = 100 to R = 400 on the same assignments.
+# Purpose: Extend 50 matched blocks of a run from R = 100 to R = 400 on the same assignments.
 # Author: Andrew Walther
 # Created: 2026-09-27
 # Dependencies: unchanged IncidenceDesign16 allocation-risk runner
 # ============================================================
 # Keeps pilot source/checkpoints/results unchanged.
 # Run from code/: VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1
-# OMP_NUM_THREADS=1 Rscript 18_allocation_risk_precision.R
+# OMP_NUM_THREADS=1 Rscript 18_allocation_risk_precision.R [profile]
+# profile defaults to pilot (output precision_R400/); any other profile writes
+# <profile>_precision_R400/ beside its parent run, e.g. surfaces10_precision_R400/.
 # Eight local fork workers each use single-thread BLAS. Memory per worker is one
 # 100-cluster block's 100-allocation × 400-outcome records; not a SLURM runner.
 allocation_define_only <- TRUE
@@ -17,8 +19,9 @@ allocation_script_dir <- local({
 })
 source(file.path(allocation_script_dir, "16_allocation_risk.R"))
 stopifnot(all(Sys.getenv(c("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS")) == "1"))
-p <- allocation_parameters("pilot")
-pilot <- file.path(dirname(allocation_script_dir), "results", "allocation_risk", "pilot")
+args <- commandArgs(TRUE); profile <- if (length(args)) args[1] else "pilot"
+p <- allocation_parameters(profile)
+pilot <- file.path(dirname(allocation_script_dir), "results", "allocation_risk", profile)
 mf <- readRDS(file.path(pilot, "manifest.rds"))
 model_p <- p; model_p$n_allocations <- model_p$n_outcomes <- NULL
 stopifnot(identical(mf$params, model_p), identical(mf$R, R.version.string),
@@ -36,7 +39,8 @@ selected <- which(units$surface == 1 & units$rho == 0.5 & units$gamma == 0.8 &
                     units$design %in% c(3, 4, 6, 8, 9))
 stopifnot(length(selected) == 50)
 p$n_outcomes <- 400L
-root <- file.path(dirname(pilot), "precision_R400")
+root <- file.path(dirname(pilot), if (profile == "pilot") "precision_R400" else
+  paste0(profile, "_precision_R400"))
 cp_dir <- file.path(root, "checkpoints")
 dir.create(cp_dir, recursive = TRUE, showWarnings = FALSE)
 manifest <- list(parent_manifest = mf, parameters = p, selected = units[selected, ],
