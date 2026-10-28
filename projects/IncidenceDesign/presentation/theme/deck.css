@@ -100,3 +100,7 @@
    attribute. Let a column with an explicit width keep it (shrinking for the gap). */
 .reveal .columns > .column[style*="width"] { flex: 0 1 auto; }
 .reveal .smallcol .flow-h .step { font-size: 0.78em; padding: 0.35em 0.55em; }
+
+/* Outline slide: the title rule already separates the heading, so drop the
+   template's thick top rule on the first agenda row. */
+.reveal .agenda-rows .agenda-row:first-child { border-top: none; }
