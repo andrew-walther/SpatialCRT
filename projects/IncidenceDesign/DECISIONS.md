@@ -5,6 +5,37 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-10-28 — SUDDEN meeting talk: framing, structure and outcome population
+
+**Decision.** From the author's answers on the talk deck (`presentation/`):
+- About 20 minutes of content for a one-hour meeting with about 40 minutes of discussion;
+  ±a few minutes is fine, since questions may come during the talk.
+- The application is presented as the statewide extension of Dr. Simpson's Lenoir County
+  pilot (SUD-prevention teaching through Lenoir Community College's workforce-development
+  and disaster-response training for EMS and other healthcare professionals in its
+  service area). The talk covers SUD's relevance, the pilot-to-statewide progression,
+  how counties became the 58 service-area clusters, and flowcharts of case
+  identification and of the application study.
+- Take-home framing: Incidence-Guided Saturation is a reasonable middle ground with
+  limited downside across both spillover regimes (best or near-best under controls only,
+  close to SRS under both arms). This refines, not reverses, the 2026-10-14 rule of no
+  single recommended design: the choice still depends on the expected spillover and
+  participation.
+- Saturation Quadrants stays in the backup slides only. Questions for the group move to
+  backup and are raised as needed (some directed to Dr. Simpson).
+- The thank-you slide may name UNC IRB protocol 14-2036 (number supplied by Ashkan Habib)
+  and "manuscript in preparation for Clinical Trials".
+- Open, for Dr. Simpson: who is assessed in control colleges (eligible EMS and healthcare
+  professionals in every service area, trained or not).
+- Later the same day: an outline slide after the title; case identification shown with Gan
+  et al.'s documented steps and the statewide data's extra exclusions mentioned only
+  generically; the pilot's trainees and outcomes flagged for clarification with Dr. Simpson.
+
+**Why.** The audience is the SUDDEN team; the purpose is to share the project's state
+and collect feedback the authors have not thought of, not to ask set questions.
+
+---
+
 ## 2026-10-27 — CTJ V5 revision: full-surface allocation risk, paired SRS column, Methods order
 
 **Decision.** From the author's V5 review of the CTJ reading draft:

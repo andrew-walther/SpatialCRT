@@ -1,0 +1,102 @@
+/*-- scss:rules --*/
+
+/* ==========================================================================
+   deck.css: additions for the SUDDEN talk deck, layered after the prelim theme
+   (unc-gillings.css + prelim-overrides.css, copied unchanged from
+   bios-dissertation/slides/prelim/test/). Everything specific to this deck lives
+   here, so the theme files stay identical to the prelim template.
+   ========================================================================== */
+
+/* Content slides fill from the top; keep body text a touch smaller than the
+   theme default so claim titles and figures fit at 1920x1080. */
+.reveal .slides section { font-size: 1.08em; }
+.reveal h2 { font-size: 1.4em; margin-bottom: 0.45em; }
+
+/* Figures ------------------------------------------------------------------- */
+.reveal .fig-full { display: block; margin: 0 auto; max-width: 100%; max-height: 700px; }
+.reveal .fig-tall { display: block; margin: 0 auto; max-width: 100%; max-height: 760px; }
+.reveal .fig-mid  { display: block; margin: 0 auto; max-width: 100%; max-height: 560px; }
+.reveal .fig-note { color: var(--unc-grey); font-size: 0.72em; margin-top: 0.3em; line-height: 1.35; }
+.reveal .src { color: var(--unc-grey); font-size: 0.62em; margin-top: 0.5em; }
+
+/* Key-number and definition cards ------------------------------------------ */
+.reveal .cards { display: grid; gap: 0.6em; }
+.reveal .cards.two { grid-template-columns: 1fr 1fr; }
+.reveal .cards.three { grid-template-columns: 1fr 1fr 1fr; }
+.reveal .card {
+  border-left: 8px solid var(--unc-carolina-blue);
+  background: var(--unc-blue-tint);
+  padding: 0.5em 0.8em; border-radius: 4px; line-height: 1.4;
+}
+.reveal .card.navy { border-left-color: var(--unc-navy); background: var(--unc-navy-tint); }
+.reveal .card.amber { border-left-color: var(--unc-yellow); background: var(--unc-yellow-tint); }
+.reveal .card h3 { margin: 0 0 0.25em; font-size: 1.0em; }
+.reveal .card p { margin: 0.2em 0; }
+.reveal .big-num { font-size: 1.7em; font-weight: 700; color: var(--unc-navy); line-height: 1.1; }
+
+/* Glossary for the model slide --------------------------------------------- */
+.reveal .glossary {
+  display: grid; grid-template-columns: 5.2em 1fr 5.2em 1fr;
+  gap: 0.25em 0.6em; font-size: 0.68em; line-height: 1.32; align-items: baseline;
+}
+.reveal .glossary .sym { font-weight: 700; color: var(--unc-navy); text-align: right; }
+.reveal .eq-box {
+  border: 2px solid var(--unc-carolina-blue); border-radius: 6px;
+  padding: 0.15em 0.6em; margin: 0.1em 0 0.5em; background: #fff;
+}
+
+/* Data tables used on slides ------------------------------------------------- */
+.reveal table.deck { font-size: 0.72em; border-collapse: collapse; margin: 0.2em auto; }
+.reveal table.deck th, .reveal table.deck td { padding: 0.28em 0.6em; }
+.reveal table.deck td.better { background: #d6e8f5; font-weight: 600; }
+.reveal table.deck td.worse  { background: #f8dcc7; }
+.reveal table.deck td.same   { background: #f2f2f2; }
+.reveal .backup-slide table.deck { font-size: 0.66em; }
+
+/* Spillover schematic --------------------------------------------------------- */
+.reveal .schematic { display: flex; justify-content: center; gap: 4em; margin-top: 0.3em; }
+.reveal .schematic figure { margin: 0; text-align: center; }
+.reveal .schematic figcaption { font-size: 0.85em; color: var(--unc-navy); font-weight: 600; margin-bottom: 0.3em; }
+.reveal .legend-row { display: flex; justify-content: center; gap: 2em; font-size: 0.72em; margin-top: 0.4em; }
+.reveal .swatch { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; margin-right: 0.3em; border: 1px solid #999; }
+
+/* Take-home box ----------------------------------------------------------------- */
+.reveal .take-home {
+  background: var(--unc-navy); color: #fff; font-size: 1.15em; font-weight: 600;
+  padding: 0.5em 0.9em; border-radius: 6px; margin: 0.3em 0 0.7em; text-align: center;
+}
+
+/* Audience questions slide */
+.reveal ol.asks li { margin-bottom: 0.55em; }
+/* Pandoc wraps the glossary's inline spans in one <p>; let them join the grid. */
+.reveal .glossary > p { display: contents; }
+.reveal .smallcol { font-size: 0.88em; }
+
+/* Flowcharts and process diagrams ---------------------------------------------- */
+.reveal .flow-h { display: flex; align-items: stretch; gap: 0; margin: 0.4em 0; }
+.reveal .flow-h .step {
+  flex: 1; background: var(--unc-blue-tint); border: 2px solid var(--unc-carolina-blue);
+  border-radius: 8px; padding: 0.45em 0.55em; font-size: 0.76em; line-height: 1.3;
+}
+.reveal .flow-h .step.navy { background: var(--unc-navy); color: #fff; border-color: var(--unc-navy); }
+.reveal .flow-h .step.amber { background: var(--unc-yellow-tint); border-color: var(--unc-yellow); }
+.reveal .flow-h .step b.k { display: block; color: var(--unc-navy); font-size: 1.12em; margin-bottom: 0.2em; }
+.reveal .flow-h .step.navy b.k { color: #fff; }
+.reveal .flow-h .arrow { align-self: center; color: var(--unc-carolina-blue); font-size: 1.4em; padding: 0 0.15em; }
+.reveal .flow-v { display: grid; grid-template-columns: 1fr 2.4em 1.25fr; row-gap: 0.12em; align-items: center; font-size: 0.86em; }
+.reveal .flow-v .main {
+  background: var(--unc-blue-tint); border: 2px solid var(--unc-carolina-blue); border-radius: 8px;
+  padding: 0.35em 0.6em; text-align: center; line-height: 1.25;
+}
+.reveal .flow-v .main.final { background: var(--unc-navy); color: #fff; border-color: var(--unc-navy); }
+.reveal .flow-v .down { text-align: center; color: var(--unc-carolina-blue); font-size: 1.3em; line-height: 1; }
+.reveal .flow-v .side { color: var(--unc-grey); text-align: center; font-size: 1.3em; }
+.reveal .flow-v .excl {
+  background: #f6f6f6; border: 1.5px dashed #9aa3ad; border-radius: 6px; padding: 0.3em 0.6em; line-height: 1.25;
+}
+.reveal .big-stat { font-size: 1.9em; font-weight: 700; color: var(--unc-navy); line-height: 1.05; }
+
+/* unc-gillings.css gives every column flex: 1, which ignores Quarto's width="..%"
+   attribute. Let a column with an explicit width keep it (shrinking for the gap). */
+.reveal .columns > .column[style*="width"] { flex: 0 1 auto; }
+.reveal .smallcol .flow-h .step { font-size: 0.78em; padding: 0.35em 0.55em; }

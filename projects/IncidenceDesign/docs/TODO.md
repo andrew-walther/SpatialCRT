@@ -245,3 +245,9 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 - `load_latest_results()` comment (line ~87 of `06_visualizations.R`): clarify `_combined_` preference applies per estimation-mode, not globally
 - `07_results_summary.Rmd` compare-table caption: should note that DIM only ran 6 designs (D7/D8 NAs are expected)
 - `IncidenceSpatialCRT_Report.qmd` caption/text alignment: MC SEs table uses tau=1.0 slice (2,560 rows), not full 12,800 — prose now correctly clarifies this distinction
+
+**From the SUDDEN talk prep (2026-10-28)**
+- [ ] Ask Dr. Simpson who is assessed in control colleges (eligible EMS and healthcare professionals in every service area, trained or not) and how the education outcome is measured; update the application framing in the CTJ, SI and Chapter 3.
+- [x] `code/23` now prints "2×2 Blocking" in `fig_colleges_needed`; chapter and SI PDFs rebuilt (2026-10-28).
+- [ ] Older chapter/SI figures still print "2x2 Blocking" (chapter Figures 2, 3b, 4, 12, 16 and their SI copies, from earlier scripts such as `code/12`/`code/14`); regenerate with "2×2".
+- [ ] Confirm with Dr. Simpson who the pilot trains (students and staff in workforce-development and disaster-response programs, EMS or other healthcare trainees) and the outcome measured.

@@ -24,7 +24,8 @@
 # Conventions (author decisions 2026-10-21): t + df-corrected power is the headline;
 # random volunteering, beta = 0, kappa = 0.8 (spillover gamma = kappa * tau); the four
 # planning years are summarized by their mean (line or bar) and range (band or bar);
-# "Plain Saturation" in the stored files is displayed as "Saturation Quadrants" (author, 2026-10-25).
+# "Plain Saturation" in the stored files is displayed as "Saturation Quadrants" (author, 2026-10-25),
+# and "2x2 Blocking" as "2×2 Blocking" with a true multiplication sign (author, 2026-10-28).
 
 library(ggplot2)
 
@@ -32,7 +33,7 @@ R_EXT   <- "application/results/methods_ext_2026-10"
 OUT_DIR <- "results/methods_ext_figures"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
-DISPLAY <- c("Plain Saturation" = "Saturation Quadrants")
+DISPLAY <- c("Plain Saturation" = "Saturation Quadrants", "2x2 Blocking" = "2\u00d72 Blocking")
 display_name <- function(x) ifelse(x %in% names(DISPLAY), DISPLAY[x], x)
 #' Replace ASCII hyphens with soft hyphens: R's pdf() draws "-" as a minus sign,
 #' while "\u00ad" prints as a true hyphen (as in 20_manuscript_figure_revision.R)

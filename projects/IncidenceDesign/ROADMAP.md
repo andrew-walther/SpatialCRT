@@ -249,6 +249,28 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-10-28 — SUDDEN meeting deck (draft 2) with speaker script
+
+- Deck `presentation/sudden_talk_2026-10-29.qmd` → `.html` (Quarto revealjs in the prelim
+  template style; theme copied from `bios-dissertation/slides/prelim/test/`), built from the
+  V5 CTJ, SI, Chapter 3 and methods-extension figures. 23 main slides in five footer-labeled
+  sections (no dividers) plus 15 backups; model-notation slide with full glossary; verbatim
+  speaker script, about 18.5–20 minutes. Title slide lists Andrew only; coauthors credited on
+  the thank-you slide (author, 2026-10-28).
+- `presentation/OUTLINE.md` revised (draft 2, how Draft 1 shaped it) and `outline.html`
+  rebuilt; `presentation/README.md` lists files; new `tools/refresh_figures.sh` and
+  `tools/nc_design_examples.R` (title-free NC example map, names only).
+- Four rounds of independent statistician and clinician reviews
+  (`docs/reviews/2026-10-28-sudden-talk-*`); rounds 2–4 reported no blocking issues.
+- Draft 3 after the author's answers (`DECISIONS.md` 2026-10-28): SUD burden, Lenoir pilot
+  to statewide, county-to-service-area clustering, case-identification and application
+  flowcharts; "middle ground with limited downside" take-home; Saturation Quadrants,
+  targeting and audience questions to backup; read-aloud script (~21 min); slide-sized
+  allocation figure (`tools/deck_allocation_figure.R`); `code/23` now prints "2×2 Blocking"
+  (chapter and SI PDFs rebuilt). Later: outline slide in author wording, Gan-based case
+  identification, column widths per slide, narrative limitations title; script ~20.5 min.
+  Nothing committed; deck stays in `presentation/` until Andrew approves the prelim copy.
+
 ### 2026-10-27 — CTJ V5 revision (author review); grid allocation risk on ten surfaces
 
 - Author's V5 markup and notes applied to the CTJ (both layouts): Methods reordered (model,
