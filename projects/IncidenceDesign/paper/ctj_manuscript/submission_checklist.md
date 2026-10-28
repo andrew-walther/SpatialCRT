@@ -1,6 +1,6 @@
 # Clinical Trials submission checklist — current full draft
 
-Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/author-instructions/ctj). The 2026-10-27 proofread could not load the page (HTTP 403); re-check it before submission.
+Checked against the live [journal instructions](https://journals.sagepub.com/author-instructions/ctj) on 2026-10-28 (the page loads in a browser; scripted fetches get HTTP 403). Findings: `docs/reviews/2026-10-27-ctj-v5-final-proofread.md`, "Live guideline check".
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
 - [x] Body 3,498 prose/heading words (recounted 2026-10-27 after the V5 revision, Introduction through
@@ -32,14 +32,14 @@ Checked 2026-10-02 against [journal instructions](https://journals.sagepub.com/a
 - [ ] Ethics/data-use statement: CTJ requires an IRB statement in Methods for human data.
   **Protocol filled in (2026-10-21):** UNC IRB 14-2036, "Sudden Unexpected Death in North
   Carolina" (PI Ross J. Simpson, Jr., Department of Medicine). The determination type and
-  consent wording remain a highlighted placeholder pending Simpson (Sage also asks for the
-  statement on the title page); confirm permission to publish 58-cluster aggregates.
+  consent wording remain a highlighted placeholder pending Simpson (the 2026-10-28 live check
+  found no title-page requirement); confirm permission to publish 58-cluster aggregates.
   2026-10-27: a short IRB sentence stays in the application Methods; the full statement and
   placeholder moved to an "Ethical considerations" declaration.
 - [x] Corresponding-author telephone (919) 966-9431 on the title page and cover letter
   (from Lin's UNC Gillings profile; the journal requires it).
-- [ ] ORCIDs: Walther 0000-0002-1932-9653 is on the title page; collect the coauthors'
-  ORCIDs in the submission system if required.
+- [x] ORCIDs: Walther 0000-0002-1932-9653 and Lin (corresponding) 0000-0002-2638-1775 are on
+  the title page (author, 2026-10-28); the system collects Lin's. Coauthors' are optional.
 - [x] Author contributions statement added (author-supplied roles, 2026-10-12).
 - [x] Generative-AI disclosure: Sage policy requires one (methods or acknowledgements)
   for AI-assisted code, code checking and visualization. Draft added as Acknowledgements
@@ -72,9 +72,13 @@ proof. It selects a layout branch in `CTJ_Manuscript.tex`; both layouts load
 - [ ] Remove draft labels from the submission file: the title-page line "Clinical Trials
   submission draft. Final submission approval remains pending." and the running header
   (`\volumenumber`/`\issuenumber`).
-- [ ] Ethics statement on the title page once Simpson supplies the determination wording.
-- [ ] Confirm with the editorial office whether Table 1 with embedded example maps counts as a
-  table (six exhibits) or a figure (seven).
+- [ ] Ethics in Methods (guidelines 2.6): the IRB name, institution and protocol number are
+  there; add whether approval was given or waived and the consent statement (consent from
+  decedents is not applicable; the waiver wording comes from Simpson). Not a title-page item.
+- [x] Acronyms (guidelines 4.1 discourage them): keep SUD, SRS, MSE, MCSE, NC, SEER, SI and CI,
+  each defined at first use, to save words (author, 2026-10-28).
+- [x] Table 1 with embedded example maps is one exhibit either way, so the count stays six
+  (author, 2026-10-28).
 - [ ] Reference style: convert title-case article titles (refs 3, 11, 12, 13, 17) to sentence
   case in both the shared and the bios-dissertation master bib (title is a sync-checked
   field); edition out of the Hayes title; check the BMC paper's exact title punctuation; drop
@@ -82,5 +86,7 @@ proof. It selects a layout branch in `CTJ_Manuscript.tex`; both layouts load
 - [ ] Figure 1 panel A prints "2018-2021" with a hyphen (R's pdf device cannot print an en
   dash); acceptable, or switch that export to a Unicode-capable device.
 - [ ] Body is at 3,498 of 3,500 words: any addition needs an equal cut.
-- [ ] Coauthor ORCIDs; funding confirmation with Habib and Simpson (the Funding comment).
+- [ ] Funding confirmation with Habib and Simpson (the Funding comment); the guideline
+  sentence stays unless they report funding (author, 2026-10-28). Funding and
+  conflict wording now follow the guidelines' own sentences (2.4, 2.5; 2026-10-28).
 

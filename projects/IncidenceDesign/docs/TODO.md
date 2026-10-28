@@ -4,6 +4,11 @@ Updated 2026-10-13. The author superseded earlier deadline dates and requested A
 completion with CTJ remaining a required deliverable. Historical interview and
 execution to-dos are preserved in Git history; settled choices are not reopened.
 
+## Next up
+
+- [ ] Full SI prose review, right after the 2026-10-29 SUDDEN deck (author, 2026-10-28);
+  details under "After the V5 revision" below.
+
 ## Completed
 
 - [x] SRS benchmark added and verified without altering original eight-design results.

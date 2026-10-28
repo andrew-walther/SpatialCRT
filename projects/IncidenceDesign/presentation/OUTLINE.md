@@ -92,7 +92,7 @@ figure was redrawn at slide size (`deck_allocation_distribution.png`).
 
 ### 2. Outline
 - Figure: none
-- Slide text: • Background Sudden unexpected death, Lenoir County pilot, spillover, and community college service area clusters • Methods Spillover variants, spatial autoregressive outcome model, sampling design evaluation, candidate designs vs. simple random sampling • Simulation Results Design intervention estimation efficacy on a simulated 100-cluster region • Application North Carolina SUD data, application of designs to …
+- Slide text: • Background Sudden unexpected death, Lenoir County pilot, spillover, and community college service area clusters • Methods Spillover variants, spatial autoregressive outcome model, sampling design evaluation, candidate designs vs. simple random sampling • Simulation Results Design intervention estimation accuracy on a simulated 100-cluster region • Application North Carolina SUD data, application of designs to …
 - Notes: Here is the plan. I'll start with why sudden death matters and where the pilot idea came from, then the methods, a short simulation section, and most of the time on the North Carolina application, before the take-home and next steps.
 - Time: 0.25
 - Carry-over: prelim

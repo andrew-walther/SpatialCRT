@@ -63,7 +63,7 @@ Department of Biostatistics, University of North Carolina at Chapel Hill<br/>
 <div class="agenda-rows" style="margin-top: 0.8em;">
 <div class="agenda-row"><span class="agenda-num">•</span><span class="agenda-name">Background</span><span>Sudden unexpected death, Lenoir County pilot, spillover, and community college service area clusters</span></div>
 <div class="agenda-row"><span class="agenda-num">•</span><span class="agenda-name">Methods</span><span>Spillover variants, spatial autoregressive outcome model, sampling design evaluation, candidate designs vs. simple random sampling</span></div>
-<div class="agenda-row"><span class="agenda-num">•</span><span class="agenda-name">Simulation Results</span><span>Design intervention estimation efficacy on a simulated 100-cluster region</span></div>
+<div class="agenda-row"><span class="agenda-num">•</span><span class="agenda-name">Simulation Results</span><span>Design intervention estimation accuracy on a simulated 100-cluster region</span></div>
 <div class="agenda-row"><span class="agenda-num">•</span><span class="agenda-name">Application</span><span>North Carolina SUD data, application of designs to NC map, accuracy, downside risk, and participation required</span></div>
 <div class="agenda-row"><span class="agenda-num">•</span><span class="agenda-name">Discussion</span><span>Take-home, limitations, and next steps</span></div>
 </div>

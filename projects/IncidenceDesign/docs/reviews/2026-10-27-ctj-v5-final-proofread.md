@@ -88,3 +88,15 @@ J10. **Checklist internal inconsistencies (`submission_checklist.md`)**:
 J11. **References follow Sage Vancouver (SageV numeric superscripts after punctuation), as the recorded check expects.** There are 17 references. The recorded notes give no reference limit, so this is unverified. Fix the reference-formatting errors in items 16–21.
 
 J12. **Keywords: six are present, as the checklist records.** Remove the trailing period (item 4).
+
+## Live guideline check (2026-10-28)
+
+The page loaded in the app's browser on 2026-10-28, so the items above that relied on recorded notes were re-checked against the live text.
+
+- **Confirmed:** 3,500 body words excluding abstract, references, tables and figures; six tables or figures; abstract ≤ 425 words under Background/Aims, Methods, Results and Conclusions; 3–10 keywords; Sage Vancouver references; double spacing, left-ranged unjustified text without hyphenation; tables at the end on separate sheets; legends on a separate sheet and not on the figures; running head ≤ 40 characters (ours has 32); title page with word count, first names, affiliations with city/state/country, and the corresponding author's address, email and telephone.
+- **Corrected (J6 was wrong):** section 2.5 gives the conflict sentence "The Author(s) declare(s) that there is no conflict of interest", which the original text matched. Restored as "The authors declare that there is no conflict of interest."
+- **Corrected:** section 2.4 gives the no-funding sentence "This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors." This replaces the generic Sage sentence.
+- **J4 withdrawn:** no title-page ethics statement is required. Section 2.6 asks Methods to state that the IRB approved or waived approval, give its full name, institution and approval number, and say whether consent was obtained (written or verbal). Name, institution and number are in Methods; the determination and consent wording wait on Simpson.
+- **J8 softened:** the system collects the corresponding author's ORCID only.
+- **New:** section 4.1 strongly discourages acronyms except universally recognized ones. Author decision.
+- **Unchanged:** J3 (Table 1 with images) is not addressed by the guidelines; still a question for the editorial office.
