@@ -127,3 +127,11 @@
 .reveal .glossary { font-size: 0.68em !important; }
 .reveal .eq-box { font-size: 0.85em; padding: 0 0.6em; margin-bottom: 0.3em; }
 .reveal .eq-box mjx-container[display="true"] { margin: 0.35em 0 !important; }
+
+/* Spillover forms side by side in a pale blue box (like the take-home box in the
+   template's defense deck), separating them from the equation and the glossary. */
+.reveal .spill-forms {
+  grid-template-columns: auto auto auto auto; column-gap: 0.8em; justify-content: space-evenly;
+  background: var(--unc-blue-tint); border: 1px solid var(--unc-carolina-blue); border-radius: 6px;
+  padding: 0.35em 1em; margin: 0.1em 0 0.5em;
+}
