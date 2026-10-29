@@ -7,7 +7,7 @@ approves.
 |---|---|---|
 | `draft/project1-spillover-draft.qmd` / `.tex` / `.pdf` | Corrected chapter | yes |
 | `draft/figures/` | Chapter figures; `BetaMSEresults/MSE_Estimates_3x3.png` and `_3x4.png` replaced | the two replaced PNGs |
-| `manuscript-declarations.md` | Verbatim copy of the paper's abstract and Declarations, with the abstract edits (T13) | yes |
+| `manuscript-declarations.md` | Verbatim copy of the paper's abstract and Declarations, with the abstract edits (T13) and the funder name fixed (T14) | yes |
 | `references.bib` | Copy of bios-dissertation `prelim/references.bib` (2026-10-25), used only to render here | no |
 | `draft/bios-prelim.cls` | Symlink to bios-dissertation's class file, used only to render here | no |
 

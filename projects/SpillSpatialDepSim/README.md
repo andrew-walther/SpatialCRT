@@ -104,14 +104,17 @@ correction memo and a corrected Chapter 2 are in `review/manuscript/` and
 | `04_run_simulation.R` | Parallel orchestrator (`mclapply`), all 48 scenarios |
 | `05_analysis_report.Rmd` | Combined report across all grids and parameters |
 
-### Talk outline (`presentation/`)
+### Talk deck (`presentation/`)
+
+The ~20-minute deck for prelim Part I and Dr. Lin's conference talk; see
+`presentation/README.md` for every file and the build commands.
 
 | File | Description |
 |------|-------------|
-| `OUTLINE.md` | Slide-by-slide outline for prelim Part I and Dr. Lin's conference talk (draft 1, 2026-10-25) |
-| `outline.html` | Visual version: `python3 presentation/tools/build_outline_html.py` |
-| `tools/make_figures.R` | New talk figures from the corrected results: `Rscript presentation/tools/make_figures.R` |
-| `figures/` | Chapter figures (corrected 3×3/3×4) and the new talk figures |
+| `spillover_talk.qmd` / `.html` | Deck source and self-contained render (speaker view: **S**) |
+| `OUTLINE.md` / `outline.html` | Decisions, timing, conference trims, and per-slide entries generated from the deck |
+| `tools/load_results.R` | Loads the saved results that every slide number and figure is computed from |
+| `tools/make_figures.R` | Slide-sized figures: `Rscript presentation/tools/make_figures.R` |
 
 ### Data
 

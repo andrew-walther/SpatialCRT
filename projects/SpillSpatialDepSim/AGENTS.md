@@ -69,15 +69,21 @@ They produce inline HTML plots only (no saved figure files).
 | `code/UnifiedSpatialSim/04_run_simulation.R` | Parallel orchestrator (`mclapply`), saves RDS |
 | `code/UnifiedSpatialSim/05_analysis_report.Rmd` | Unified report: all grids + parameters |
 
-### Talk outline (`presentation/`, 2026-10-25)
+### Talk deck (`presentation/`, 2026-10-28)
 
-`presentation/OUTLINE.md` is the slide-by-slide outline for prelim Part I and
-Dr. Lin's conference talk; `outline.html` is built from it by
-`presentation/tools/build_outline_html.py`, and the new talk figures by
-`presentation/tools/make_figures.R` (reads the corrected results in `review/`).
-The deck is drafted here and copied into `bios-dissertation/slides/prelim/part-1/` (a README-only placeholder until then) once a working draft has been reviewed. The talk is about 20 minutes. Framing the author
-wants: BSS is a good, not best or worst, design, against rolling the dice with
-SRS; per-scenario "optimal allocation" counts are not the point.
+`presentation/spillover_talk.qmd` is the ~20-minute deck for prelim Part I
+(2026-12-07) and the seed of Dr. Lin's conference talk: Quarto revealjs, renders
+to one self-contained HTML, full speaker script with timing, 13 backup slides.
+Every number is computed at render time from `results/` and `review/` through
+`presentation/tools/load_results.R` (author rule, 2026-10-28: build documents from
+saved results, never hand-typed numbers). `OUTLINE.md` slide entries are
+generated from the deck (`tools/outline_from_deck.py`); `presentation/README.md`
+lists the files, build commands and the steps to adapt the deck into
+`bios-dissertation/slides/prelim/part-1/`, which happens only after Andrew
+approves the deck. Reviews: `review/deck-reviews/`. Framing the author wants:
+BSS is a good, not best or worst, design, against rolling the dice with SRS;
+per-scenario "optimal allocation" counts are not the point; the slides never
+mention the correction.
 
 ### Post-publication review (`review/`, 2026-10-22)
 
@@ -90,7 +96,10 @@ unaffected):
 Corrected reruns, tables, figures and a published-vs-corrected comparison
 are in `review/` (`README.md`, `COMPARISON.md`). As of 2026-10-25 it also
 holds a corrected manuscript, a correction memo to BMC (not sent), and a
-corrected Chapter 2 (not yet copied into bios-dissertation); the plan and
+corrected Chapter 2 (copied into bios-dissertation on 2026-10-28, with the
+uncorrected chapter kept in `project1-spillover/draft-uncorrected/`; the
+corrected manuscript is also in `bios-dissertation/manuscripts/project1-spillover/`
+as `project_1_paper_revised.*`); the plan and
 decisions are in `review/notes/2026-10-25-correction-plan.md`. The term
 "checkerboard paradox" is retired. `SimEstimateAnalysisMeans.Rmd` has the
 correct BSS indices but reads the buggy 3×3/3×4 Control Only CSVs, and
@@ -99,6 +108,14 @@ corrected). The α, ψ and ρ CSVs for 3×3/3×4 Control Only carry the loop
 bug and were not rerun (never reported). The frozen scripts and
 `results/` are unchanged. Do not edit them, or the paper, without the
 author's approval.
+
+**Scale of ρ (2026-10-28, documentation only).** The frozen scripts generate
+outcomes with a binary subject-level weights matrix (about 40–60 neighbors per
+subject) but fit `lagsarlm` with the row-standardized version, so ρ = 0.01 in the
+generator is about 0.5 on the fitted scale (median ρ̂ ≈ 0.50). A quick re-run
+suggests the BSS advantage under Control Only with ρ = 0.01 depends on that
+difference. The author decided to keep the published results as they are; see
+`review/notes/2026-10-28-rho-scale-note.md`.
 
 ---
 

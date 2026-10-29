@@ -1,0 +1,96 @@
+/*-- scss:rules --*/
+
+/* ==========================================================================
+   deck.css: additions for the Project 1 (Part I) talk, layered after the prelim
+   theme (unc-gillings.css + prelim-overrides.css, copied unchanged from
+   bios-dissertation/slides/prelim/test/). Every class here is prefixed "p1-" so
+   it cannot clash with Part II's deck.css when the prelim deck is assembled.
+   The one unprefixed rule (column widths) is identical to Part II's.
+   ========================================================================== */
+
+.reveal .slides section { font-size: 1.08em; }
+.reveal h2 { font-size: 1.4em; margin-bottom: 0.45em; }
+
+/* unc-gillings.css gives every column flex: 1, which ignores Quarto's width="..%"
+   attribute. Let a column with an explicit width keep it (same rule as Part II). */
+.reveal .columns > .column[style*="width"] { flex: 0 1 auto; }
+
+/* Figures ------------------------------------------------------------------- */
+.reveal .p1-fig { display: block; margin: 0 auto; max-width: 100%; max-height: 700px; }
+.reveal .p1-fig.tall { max-height: 800px; }
+.reveal .p1-fig.mid { max-height: 560px; }
+.reveal .p1-fig.short { max-height: 430px; }
+.reveal .p1-note { color: var(--unc-grey); font-size: 0.7em; margin-top: 0.3em; line-height: 1.35; }
+.reveal .p1-src { color: var(--unc-grey); font-size: 0.6em; margin-top: 0.5em; }
+.reveal .p1-small { font-size: 0.86em; }
+
+/* Cards ---------------------------------------------------------------------- */
+.reveal .p1-cards { display: grid; gap: 0.6em; }
+.reveal .p1-cards.two { grid-template-columns: 1fr 1fr; }
+.reveal .p1-cards.three { grid-template-columns: 1fr 1fr 1fr; }
+.reveal .p1-card {
+  border-left: 8px solid var(--unc-carolina-blue); background: var(--unc-blue-tint);
+  padding: 0.45em 0.8em; border-radius: 4px; line-height: 1.38; font-size: 0.9em;
+}
+.reveal .p1-card.navy { border-left-color: var(--unc-navy); background: var(--unc-navy-tint); }
+.reveal .p1-card.amber { border-left-color: var(--unc-yellow); background: var(--unc-yellow-tint); }
+.reveal .p1-card h3 { margin: 0 0 0.25em; font-size: 1.0em; }
+.reveal .p1-card p { margin: 0.2em 0; }
+.reveal .p1-big { font-size: 1.6em; font-weight: 700; color: var(--unc-navy); line-height: 1.1; }
+
+/* Take-home box -------------------------------------------------------------- */
+.reveal .p1-take {
+  background: var(--unc-navy); color: #fff; font-size: 1.08em; font-weight: 600;
+  padding: 0.45em 0.9em; border-radius: 6px; margin: 0.3em 0 0.6em; text-align: center;
+}
+
+/* Model slide ---------------------------------------------------------------- */
+.reveal .p1-eq {
+  border: 2px solid var(--unc-carolina-blue); border-radius: 6px; background: #fff;
+  font-size: 0.9em; padding: 0 0.6em; margin: 0.1em 0 0.35em;
+}
+.reveal .p1-eq mjx-container[display="true"] { margin: 0.3em 0 !important; }
+.reveal .p1-zdefs {
+  display: flex; justify-content: space-around; gap: 1em; font-size: 0.74em;
+  background: var(--unc-blue-tint); border: 1px solid var(--unc-carolina-blue); border-radius: 6px;
+  padding: 0.3em 1em; margin: 0 0 0.4em;
+}
+.reveal .p1-zdefs > p { display: contents; }
+.reveal .p1-zdefs .lab { font-weight: 700; color: var(--unc-navy); margin-right: 0.4em; }
+.reveal .p1-glossary {
+  display: grid; grid-template-columns: 5.4em 1fr 5.4em 1fr; column-gap: 0.7em;
+  font-size: 0.7em; line-height: 1.3;
+}
+.reveal .p1-glossary > p { display: contents; }
+.reveal .p1-glossary > p > span, .reveal .p1-glossary > span {
+  display: block; padding: 0.14em 0; border-bottom: 1px solid var(--unc-light-grey);
+}
+.reveal .p1-glossary .sym {
+  display: flex !important; align-items: center; background: var(--unc-navy-tint); color: var(--unc-navy);
+  border-left: 5px solid var(--unc-carolina-blue); padding-left: 0.45em !important; font-weight: 700;
+}
+.reveal .p1-level { font-size: 0.66em; color: var(--unc-grey); margin-top: 0.35em; line-height: 1.35; }
+
+/* Spillover schematic -------------------------------------------------------- */
+.reveal .p1-schematic { display: flex; justify-content: center; gap: 3.5em; margin-top: 0.2em; }
+.reveal .p1-schematic figure { margin: 0; text-align: center; }
+.reveal .p1-schematic figcaption { font-size: 0.8em; color: var(--unc-navy); font-weight: 700; margin-bottom: 0.25em; }
+.reveal .p1-legend { display: flex; justify-content: center; gap: 2em; font-size: 0.68em; margin-top: 0.3em; }
+.reveal .p1-swatch { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; margin-right: 0.3em; border: 1px solid #999; }
+
+/* Tables --------------------------------------------------------------------- */
+.reveal table.p1-table { font-size: 0.62em; border-collapse: collapse; margin: 0.2em auto; }
+.reveal table.p1-table th, .reveal table.p1-table td { padding: 0.22em 0.55em; text-align: center; }
+.reveal table.p1-table th { background: var(--unc-navy-tint); color: var(--unc-navy); }
+.reveal table.p1-table td.lower { background: #d6e8f5; font-weight: 600; }
+.reveal table.p1-decide { font-size: 0.8em; border-collapse: collapse; margin: 0.4em auto; width: 100%; }
+.reveal table.p1-decide th, .reveal table.p1-decide td { border: 2px solid #fff; padding: 0.5em 0.7em; vertical-align: top; line-height: 1.35; }
+.reveal table.p1-decide th { background: var(--unc-navy); color: #fff; }
+.reveal table.p1-decide td.rowh { background: var(--unc-navy-tint); color: var(--unc-navy); font-weight: 700; width: 22%; }
+.reveal table.p1-decide td.bss { background: #d6e8f5; }
+.reveal table.p1-decide td.srs { background: #f2f2f2; }
+.reveal table.p1-decide td.mix { background: var(--unc-yellow-tint); }
+
+/* Contrast columns (analysis vs design) ------------------------------------- */
+.reveal .p1-contrast h3 { font-size: 0.95em; margin-bottom: 0.2em; }
+.reveal .p1-contrast li { font-size: 0.82em; margin-bottom: 0.25em; }

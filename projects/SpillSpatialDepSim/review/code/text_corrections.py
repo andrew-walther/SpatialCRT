@@ -11,7 +11,7 @@ Usage (from review/):
   python3 code/text_corrections.py qmd <in.qmd> <out.qmd>
   python3 code/text_corrections.py md  <manuscript-declarations.md> <out.md>   (abstract only)
 Each edit's "old" text must match exactly once (whitespace-insensitive), or the
-script stops. Edit IDs (T1-T13) follow notes/2026-10-25-correction-plan.md.
+script stops. Edit IDs (T1-T14) follow notes/2026-10-25-correction-plan.md.
 Every number in the new text comes from tables/beta_mse_table_<grid>_corrected.csv,
 tables/optimal_combos_<grid>_corrected.csv or COMPARISON.md.
 """
@@ -41,6 +41,12 @@ EDITS = [
     ("T13c", "abstract",
      r"BSS bounds worst-case allocation risk through near-zero variation in estimation error",
      r"BSS bounds worst-case allocation risk through lower variation in estimation error"),
+
+    # T14: funder name in the Declarations (manuscript and manuscript-declarations.md);
+    # the published text says "National Institutes of Mental Health" (fixed 2026-10-28)
+    ("T14", "abstract",
+     r"supported by the National Institutes of Mental Health",
+     r"supported by the National Institute of Mental Health"),
 
     # C1, C2: source comments that named the retired "checkerboard paradox" (manuscript only;
     # comments do not print, but the source should not point readers to it)

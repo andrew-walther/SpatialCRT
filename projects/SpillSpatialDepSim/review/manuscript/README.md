@@ -7,7 +7,7 @@ Nothing has been sent to the journal.
 | File | What |
 |---|---|
 | `Revisions_V2c_original.tex` | Unchanged copy of the accepted `Revisions_V2c.tex` (input to the diff) |
-| `Revisions_V2c_corrected.tex` / `.pdf` | Corrected manuscript: 3×3 and 3×4 tables and figures replaced, text edits T1–T13 |
+| `Revisions_V2c_corrected.tex` / `.pdf` | Corrected manuscript: 3×3 and 3×4 tables and figures replaced, text edits T1–T13, and T14 (funder name "National Institute of Mental Health", 2026-10-28) |
 | `Revisions_V2c_corrections_markup.tex` / `.pdf` | latexdiff of original vs corrected; tables shown with the new values only |
 | `figures/` | Copy of the accepted figures, with `BetaMSEresults/MSE_Estimates_3x3.png` and `_3x4.png` replaced by the corrected ones |
 | `correction_memo.md` / `.pdf` | Letter to the journal plus proposed Correction-note text |
