@@ -43,13 +43,13 @@ prelim drops it). Prelim and conference notes say how a slide changes.
 | Section | Main slides | Minutes |
 |---|---|---|
 | Standalone frame (title, outline) | 2 | 0.5 |
-| Background | 5 | 4 |
-| Methods | 5 | 5.25 |
-| Simulation results | 5 | 5.75 |
-| Application | 3 | 2.5 |
+| Background | 5 | 4.5 |
+| Methods | 5 | 4.5 |
+| Simulation results | 5 | 5.5 |
+| Application | 3 | 3 |
 | Discussion | 3 | 2.5 |
 | Thank you (standalone only) | 1 | 0.25 |
-| Backup | 13 | as needed |
+| Backup | 15 | as needed |
 
 20 minutes on the slides the prelim keeps, 20.75 with the standalone frame and thank-you slide. The script's
 `[time | running]` markers give the per-slide timing.
@@ -132,8 +132,8 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 
 ### 5. Neighboring outcomes are also correlated for reasons that have nothing to do with treatment
 - Figure: none
-- Slide text: Spatial dependence Nearby areas share demographics, labor markets, service providers and local practice, so their outcomes move together whether or not anyone is treated. It violates the independence that a standard analysis assumes and can understate standard errors Measured by Moran's *I* or Geary's *C*, and modeled through a spatial weights matrix that records who neighbors whom Spillover Caused by the …
-- Notes: The second mechanism is spatial dependence. Neighboring areas share demographics, labor markets, service providers and local practice, so their outcomes move together whether or not anyone is treated.
+- Slide text: Spatial dependence ($\rho$) Neighbors have similar outcomes because they share conditions, with or without treatment Spillover ($\psi$) The treated area (dark) raises outcomes in its neighbors (amber); without treatment there is none Both run through the same neighbors, so they are easy to confuse, and the model keeps them as separate parameters Spatial dependence breaks the independence a standard analysis …
+- Notes: The second mechanism is spatial dependence. On the left, neighboring areas have similar outcomes because they share demographics, labor markets, providers and local practice, whether or not anyone is treated.
 - Time: 0.75
 - Carry-over: both
 - Prelim note: Shared motivation; Part II refers back to it.
@@ -141,18 +141,18 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 
 ### 6. Spatial methods mostly adjust after the data are in, and guidance on which clusters to treat is thin
 - Figure: none
-- Slide text: After the trial (analysis) Add a measure of exposure, such as distance to the nearest treated area or the density of treated neighbors Or model space directly in the mean or covariance, as in spatial regression and multiple-membership models Reanalyses show these choices can change the estimated effect and its uncertainty A review of spatial CRT analyses set aside trials that handled space only by design Before …
-- Notes: Most spatial methods for cluster trials adjust after the data are in, either with an exposure measure such as distance to the nearest treated area or by modeling space directly. On the design side there are restricted randomization, buffer zones and saturation designs, but few studies compare simple allocation rules when spillover and spatial dependence occur together.
+- Slide text: Before the trial (design) Choose which clusters to treat Restricted randomization balances covariates, and recent versions spread the selected clusters apart Buffer zones drop areas near the boundary between arms Saturation designs vary the treated share across groups → During the trial Treatment reaches neighbors, and neighboring outcomes move together Spillover ($\psi$) Spatial dependence ($\rho$) → After the …
+- Notes: A spatial cluster trial has three stages, and most spatial methods work in the last one, adjusting for exposure or modeling space after the data are in. At the design stage there are restricted randomization, buffer zones and saturation designs, but few studies compare simple allocation rules when spillover and spatial dependence occur together.
 - Time: 0.75
 - Carry-over: both
 - Prelim note: Part I's own prior work and gap. Part II adds heterogeneous incidence to it.
 - Conference note: In a 15–20 minute slot, keep; in a 10–15 minute slot, reduce to the bottom card.
 
 ### 7. Does the allocation chosen before the trial change how well we estimate the effect?
-- Figure: none
-- Slide text: Simple random sampling (SRS) Any balanced allocation of clusters to intervention and control (4 and 5 on the 3×3 grid), chosen at random. The usual default. Block stratified sampling (BSS) A spatially constrained allocation in which no two intervention clusters share an edge, so treated clusters are kept apart in a checkerboard-like pattern. An allocation is the list of which clusters get the intervention We …
-- Notes: So the question is whether the allocation chosen before the trial, meaning the list of which clusters get the intervention, changes how well we can estimate the effect. Simple random sampling draws any balanced allocation at random, and block stratified sampling keeps treated clusters from touching, in a checkerboard-like pattern.
-- Time: 0.75
+- Figure: fig_designs.png
+- Slide text: Dark cells are intervention clusters. The three grids studied here. Simple random sampling (SRS) Any allocation with half the clusters treated (4 of 9 on the 3×3 grid), drawn at random. It can put all treated clusters together, as in the bottom row. Block stratified sampling (BSS) No two intervention clusters share an edge, and no two controls where the grid allows. That leaves the two checkerboards on the 2×4 …
+- Notes: So the question is whether the allocation chosen before the trial, meaning the list of which clusters get the intervention, changes how well we can estimate the effect. Here are the two designs on the three grids we study, with block stratified allocations on top and one random allocation below.
+- Time: 1.25
 - Carry-over: both
 
 
@@ -160,27 +160,20 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 
 ### 8. This study defines neighbors as clusters that share an edge
 - Figure: RookQueen2ndContiguityColored.png
-- Slide text: Rook neighbors share an edge, queen neighbors share an edge or a corner, and higher-order neighbors are neighbors of neighbors Distance-based neighbors lie within a fixed radius We use rook neighbors throughout, and they decide both who can receive spillover and who is spatially correlated
+- Slide text: Rook neighbors share an edge, queen neighbors share an edge or a corner, and higher-order neighbors are neighbors of neighbors Distance-based neighbors lie within a fixed radius We use rook neighbors throughout, the same edge rule that defines BSS, and they decide both who can receive spillover and who is spatially correlated
 - Notes: Everything depends on how we define a neighbor. Rook neighbors share an edge, queen neighbors share an edge or a corner, and you can also define neighbors by distance or as neighbors of neighbors.
 - Time: 0.5
 - Carry-over: both
 - Conference note: In a 10–15 minute slot, cut and say "rook neighbors" on the designs slide.
 
-### 9. Block stratified sampling keeps intervention clusters from sharing an edge
-- Figure: fig_designs.png
-- Slide text: SRS may draw any balanced allocation, including ones that put all treated clusters together BSS requires that no two intervention clusters share an edge, and no two controls where the grid allows On the 2×4 and 3×4 grids that leaves only the two checkerboards On the 3×3 grid the arms cannot be balanced, so only intervention clusters must be separated, and 6 allocations qualify; the strict one is shown
-- Notes: Here are the two designs on the three grids we study, with a block stratified allocation on top and one random allocation below. Simple random sampling can draw any balanced allocation, including ones that put every treated cluster together, like the bottom row.
-- Time: 1
-- Carry-over: both
-
-### 10. Spillover may reach only control clusters, or control and intervention clusters
+### 9. Spillover may reach only control clusters, or control and intervention clusters
 - Figure: none
 - Slide text: Control Clusters Only Control & Intervention Clusters Intervention cluster ($x_i = 1$) Control cluster ($x_i = 0$) Exposed to spillover ($z_i = 1$), unmarked $z_i = 0$ Exposure is binary. A cluster is exposed if at least one rook neighbor is an intervention cluster (and, for Control Clusters Only, it is itself a control), however many treated neighbors it has Control Clusters Only is classic contamination; under …
 - Notes: Spillover can travel in two ways, and this turns out to drive every result. Dark squares are intervention clusters, and here the left half of a two-by-four grid is treated.
 - Time: 1
 - Carry-over: both
 
-### 11. A spatial lag model separates the intervention effect, spillover and spatial dependence
+### 10. A spatial lag model separates the intervention effect, spillover and spatial dependence
 - Figure: none
 - Slide text: $$ y_i \;=\; \alpha \;+\; \beta\, x_i \;+\; \psi\, z_i \;+\; \rho \sum_{j \in \mathcal{N}(i)} w_{ij}\, y_j \;+\; \varepsilon_i, \qquad \varepsilon_i \overset{iid}{\sim} N(0, \sigma^2) $$ Control Clusters Only $z_i = 1$ if $x_i = 0$ and $x_j = 1$ for some $j \in \mathcal{N}(i)$ Control & Intervention Clusters $z_i = 1$ if $x_j = 1$ for some $j \in \mathcal{N}(i)$ $y_i$ Cluster-level outcome of cluster $i$ $\alpha$ …
 - Notes: This is the spatial lag model behind every result, and every symbol is defined below. A cluster's outcome is a baseline alpha, plus the intervention effect beta if the cluster is treated, plus the spillover effect psi if it is exposed.
@@ -189,8 +182,15 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Prelim note: Part I defines its own model and notation in full; Part II defines its own (no harmonizing).
 - Conference note: For a statistics audience, can add the reduced form from backup.
 
+### 11. Outcomes are generated with y on both sides, so effects ripple through the neighbors
+- Figure: none
+- Slide text: $$ \mathbf{y} = \rho\mathbf{W}\mathbf{y} + \boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon \quad\Longrightarrow\quad \mathbf{y} = (\mathbf{I} - \rho\mathbf{W})^{-1}\left(\boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon\right) $$ $$ (\mathbf{I} - \rho\mathbf{W})^{-1} = \mathbf{I} + \rho\mathbf{W} + \rho^2\mathbf{W}^2 + \cdots $$ The matrix form stacks the …
+- Notes: The outcome appears on both sides of the model, so we can't draw it directly, and solving for it gives the reduced form on the right. Expanding the inverse shows what it does, passing each cluster's outcome to its neighbors, then to their neighbors, and so on, with rho controlling how fast it fades.
+- Time: 0.5
+- Carry-over: both
+
 ### 12. We enumerate every possible allocation on three small grids and compare their error
-- Figure: SampledPoints.png
+- Figure: SampledPoints_trim.png
 - Slide text: One replication on the 2×4 grid, 160 subjects placed at random. Only cluster membership enters the fit. | Grid | Clusters | Allocations (SRS) | BSS allocations | Replications | | 2×4 | 8 | 70 | 2 | 50 | | 3×3 | 9 | 126 | 6 | 50 | | 3×4 | 12 | 924 | 2 | 10 | 16 scenarios per grid: $\psi \in \{0.5, 0.6, 0.7, 0.8\}$ × $\rho \in \{0, 0.01\}$ × two spillover types Outcomes generated from the model's reduced form, …
 - Notes: Small grids let us enumerate every possible allocation, from 70 on the two-by-four grid to 924 on the three-by-four grid. Each grid has sixteen scenarios, four spillover sizes, two levels of spatial dependence and the two spillover types.
 - Time: 1.25
@@ -240,15 +240,15 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 ## 4. Application
 
 ### 18. North Carolina probation trials assign counties or judicial districts, natural spatial clusters
-- Figure: NC_DCS_Map_NoCounties.png
-- Slide text: NC Division of Community Supervision has 30 judicial districts in 4 judicial divisions Officers supervise by county; chief probation/parole officers and judicial district managers oversee districts and often span several units and counties Case 1, trauma-informed supervision. Training for officers and chiefs on specialty caseloads (domestic violence, sex offense, gang), randomized by county or district …
+- Figure: NC_DCS_Map_trim.png
+- Slide text: 30 judicial districts in 4 divisions (NC Division of Community Supervision) Chief probation/parole officers and district managers oversee districts, often spanning several counties Case 1, trauma-informed supervision. Training for officers and chiefs on specialty caseloads, randomized by county or district Neighbors share courts, labor markets and providers, and leaders and providers can carry the program across arms
 - Notes: These questions came from two probation studies with the North Carolina Department of Adult Correction. Supervision is organized into thirty judicial districts in four divisions, and chiefs and district managers often span several units and counties.
 - Time: 1
 - Carry-over: both
 
 ### 19. A second study crosses the four behavioral health management areas
-- Figure: NC_MCO_Map.png
-- Slide text: Case 2, specialty mental health probation. Cross-training and joint treatment-team meetings between officers and behavioral health providers Each county is served by one of 4 LME/MCOs (Local Management Entity/Managed Care Organizations) Large providers work across counties and MCO areas, so practices can travel into control counties MCO-level policies are a confounder, so the design stratifies by MCO area
+- Figure: NC_MCO_Map_trim.png
+- Slide text: Each county shaded by the LME/MCO that manages its behavioral health services. Case 2, specialty mental health probation. Cross-training and joint treatment-team meetings between officers and behavioral health providers Each county is served by one of 4 LME/MCOs (Local Management Entity/Managed Care Organizations) Large providers work across counties and MCO areas, so practices can travel into control counties …
 - Notes: The second study tests a strategy for specialty mental health probation, built on cross-training and joint team meetings between officers and behavioral health providers. Behavioral health care is managed by four regional managed care organizations, and each county is served by one of them.
 - Time: 0.75
 - Carry-over: both
@@ -298,85 +298,91 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 
 ## Backup
 
-### B1. 3×3 and 3×4 results, every allocation
-- Figure: MSE_Estimates_3x3_corrected.png, MSE_Estimates_3x4_corrected.png
-- Slide text: 3×3 grid 3×4 grid
-- Notes: Use when asked for the per-allocation distributions on the larger grids. These are the chapter's figures. Rows are spillover types, columns are ρ, boxes are random allocations and the Block column is the BSS allocations.
+### B1. 3×3 grid, every allocation
+- Figure: MSE_Estimates_3x3_corrected.png
+- Slide text: Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the six BSS allocations and "Random" every allocation, colored by $\psi$ The BSS spread comes from its six different allocations. One, the full checkerboard, is collinear; the other five leave a control unexposed and estimate $\beta$ almost exactly With spillover into controls and $\rho = 0.01$, random allocations reach MSE 1.20 at …
+- Notes: Use when asked for the per-allocation distributions on the 3×3 grid. This is the chapter's figure.
 - Carry-over: both
 
-### B2. Where block stratified sampling falls among random allocations, every grid and setting
+### B2. 3×4 grid, every allocation
+- Figure: MSE_Estimates_3x4_corrected.png
+- Slide text: Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the two checkerboards and "Random" all 924 allocations, colored by $\psi$ With spillover into controls and $\rho = 0.01$, random allocations reach MSE 2.57 at $\psi = 0.5$, while both checkerboards stay at or below 0.18 With spillover into both arms, most random allocations sit near zero and the checkerboards do not
+- Notes: Use when asked for the per-allocation distributions on the 3×4 grid. This is the chapter's figure.
+- Carry-over: both
+
+### B3. Where block stratified sampling falls among random allocations, every grid and setting
 - Figure: fig_bss_rank_all_grids.png
 - Slide text: One point per ψ; points that share a value overlap. With ρ = 0 and spillover into controls, most draws expose every control and estimate β − ψ like BSS, so the share there splits near-ties by simulation noise.
 - Notes: Use when asked whether the 57% on the 2×4 grid is special. With spillover into controls and ρ = 0.01, BSS beats 40 to 60 percent on every grid; with spillover into both arms, at most 29%. The share counts random allocations with MSE above the BSS mean; the random set includes the BSS allocations, as in the paper.
 - Carry-over: both
 
-### B3. A good random draw can beat the checkerboard, but it cannot be picked before the trial
+### B4. A good random draw can beat the checkerboard, but it cannot be picked before the trial
 - Figure: none
 - Slide text: Spillover into controls, $\rho = 0.01$, $\psi = 0.5$. The allocation is chosen before any outcome is seen, so the relevant comparison is with the whole spread of random draws 2×4: BSS MSE 0.165; the worst tenth of random draws average 1.20, about 7 times as large (3×3: 0.147 vs 0.84; 3×4: 0.133 vs 0.77) Random draws that leave some control unexposed keep $\beta$ and $\psi$ separate, and many of them beat BSS (on …
 - Notes: Use when asked "against the random allocations that keep β identified, how does BSS do?" Answer plainly that many of them do better than a strict checkerboard, but nobody can tell in advance which ones, and the worst random draw passes the same check. BSS is chosen for its bounded downside, not because it is the best allocation.
 - Carry-over: both
 
-### B4. Full results, 2×4 grid
+### B5. Full results, 2×4 grid
 - Figure: none
 - Slide text: [table] MSE, SD of MSE across allocations, and mean bias of $\hat\beta$. Shading marks the design with lower MSE. SD here is the spread of MSE across allocations, unscaled (the chapter reports it ×10). The two 2×4 checkerboards are mirror images, so their difference (0.144 vs 0.186 at ρ = 0.01, ψ = 0.5) is a guide to the Monte Carlo error.
 - Notes: Use when asked for exact values. Generated from review/tables at render time.
 - Carry-over: both
 
-### B5. Full results, 3×3 grid
+### B6. Full results, 3×3 grid
 - Figure: none
 - Slide text: [table] As for the 2×4 table. The 3×3 grid has six BSS allocations, not all checkerboards, so BSS MSE also varies across allocations.
 - Notes: Use when asked for exact values on the 3×3 grid.
 - Carry-over: both
 
-### B6. Full results, 3×4 grid
+### B7. Full results, 3×4 grid
 - Figure: none
 - Slide text: [table] As for the 2×4 table. 10 replications per allocation on this grid.
 - Notes: Use when asked for exact values on the 3×4 grid.
 - Carry-over: both
 
-### B7. Outcomes come from the reduced form, and the model is fitted by maximum likelihood
+### B8. Outcomes come from the reduced form, and the model is fitted by maximum likelihood
 - Figure: none
 - Slide text: $$ \mathbf{y} = \rho \mathbf{W}\mathbf{y} + \boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon \;\Longrightarrow\; \mathbf{y} = (\mathbf{I} - \rho\mathbf{W})^{-1}\left(\boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon\right), \;\; \boldsymbol\varepsilon \sim N(\mathbf{0}, \sigma^2\mathbf{I}) $$ $$ \ell(\alpha, \beta, \psi, \rho, \sigma^2) = …
 - Notes: Use when asked how outcomes were generated and how the model was estimated. The Jacobian term log|I − ρW| is what distinguishes this from least squares on the lagged outcome.
 - Carry-over: both
 
-### B8. Row-normalized rook weights make the lag term a neighbor average
+### B9. Row-normalized rook weights make the lag term a neighbor average
 - Figure: none
 - Slide text: Cells numbered row by row for this example; cluster 2 and its rook neighbors (amber). $$ w_{ij} = \frac{c_{ij}}{\sum_k c_{ik}}, \qquad c_{ij} = \begin{cases} 1 & \text{edge shared} \\ 0 & \text{otherwise} \end{cases} $$ Cluster 2 has rook neighbors 1, 3 and 6, so $w_{21} = w_{23} = w_{26} = 1/3$ Each row sums to 1, so $\sum_j w_{ij} y_j$ is the average neighbor outcome and $\rho$ is comparable across clusters …
 - Notes: Use when asked how W is defined and why it is row-standardized. Corner clusters have two neighbors and edge clusters three on the 2×4 grid. For how the simulation's generating weights relate to this, see the next slide.
 - Carry-over: both
 
-### B9. How large is ρ = 0.01?
+### B10. How large is ρ = 0.01?
 - Figure: none
 - Slide text: In the simulation code, outcomes were generated for the subjects with subject-level binary weights, linking each subject to every subject in a rook-neighboring cluster, about 40 to 60 links The model is fitted with the row-normalized version of the same neighbor structure On that fitted scale, $\rho = 0.01$ in the generating process corresponds to roughly $0.01 \times (40\text{ to }60) \approx 0.4$ to $0.6$, and …
 - Notes: Use when asked "isn't ρ = 0.01 essentially zero?", why adding it changes the error so much, or how the subject-level and cluster-level weights relate. On the scale of the fitted model it is about one half. If asked about the weights, say plainly that outcomes were simulated for subjects within clusters, with a subject-level weights matrix linking each subject to every subject in the neighboring clusters, and the model was fitted to the subjects. Every subject in a cluster shares x, z and neighbors, so the cluster's signal is the subjects' common mean, which is why the paper writes the model at the cluster level with row-normalized weights. The two scales of ρ differ, which this slide shows. Results are reported as published; review/notes/2026-10-28-rho-scale-note.md records a quick check of how the generating weights affect the comparison, which would be the first thing to examine in follow-up work.
 - Carry-over: both
 
-### B10. Spillover and spatial dependence are different parameters
+### B11. Spillover and spatial dependence are different parameters
 - Figure: none
 - Slide text: Spillover $\psi$ Caused by treatment crossing a boundary. A coefficient on the exposure indicator $z_i$, of direct scientific interest, and zero if no one is treated. Spatial dependence $\rho$ Background correlation from shared conditions, present with or without treatment. A nuisance parameter that must be modeled for valid inference. Both use the same rook neighbors, so they are hard to separate when both are …
 - Notes: Use when asked "aren't spillover and spatial autocorrelation the same thing?"
 - Carry-over: both
 
-### B11. BSS admits too few allocations for randomization inference, so inference is model-based
+### B12. BSS admits too few allocations for randomization inference, so inference is model-based
 - Figure: none
 - Slide text: BSS admits 2–6 allocations on these grids, so it gives no usable permutation distribution With spillover into controls and correlated outcomes, BSS rules out the clustered allocations that give the worst errors; with spillover into both arms and no spatial dependence, the checkerboards are themselves the worst allocations Maximum likelihood conditions on the realized allocation and gives $\hat\beta$ a sampling …
 - Notes: Use when asked "is BSS still randomized?" or "how would you do inference?" Be direct that the checkerboard's estimate is of β − ψ, which is the collinearity on the main slide.
 - Carry-over: both
 
-### B12. Buffer-zone designs could restore identifiability
+### B13. Buffer-zone designs could restore identifiability
 - Figure: none
 - Slide text: Intervention Excluded buffer Unexposed control Exclude, or analyze separately, controls that border intervention clusters Then the remaining controls have $z_i = 0$ and $x_i = 0$, and the contrast with treated clusters estimates $\beta$ without collinearity Needs grids large enough that interior controls remain, which these small grids are not Trades the number of usable clusters against separation (McCann et …
 - Notes: Use when asked what to do about the collinearity problem.
 - Carry-over: both
 
-### B13. β and ψ are structural coefficients, not potential-outcome contrasts
+### B14. β and ψ are structural coefficients, not potential-outcome contrasts
 - Figure: none
 - Slide text: In the reduced form, a change in one cluster's treatment reaches every cluster through $(\mathbf{I} - \rho\mathbf{W})^{-1}$ Write $Y_i(a, \mathbf{a}_{-i})$ for cluster $i$'s potential outcome when it has assignment $a$ and the other clusters have $\mathbf{a}_{-i}$. An indirect effect such as $E[Y_i(0, \mathbf{1})] - E[Y_i(0, \mathbf{0})]$, the focal cluster held at control while all others are treated versus …
 - Notes: Use when asked which causal estimand β corresponds to.
 - Carry-over: both
 
-### B14. Simulation algorithm, step by step
+### B15. Simulation algorithm, step by step
 - Figure: none
 - Slide text: Fix the scenario (grid, $\psi$, $\rho$, spillover type), with $\alpha = 0.2$, $\beta = 1$, $\sigma = 0.1$ Enumerate every allocation with $\lfloor K/2 \rfloor$ of the $K$ clusters treated (70, 126, 924) and flag the BSS ones (2, 6, 2) For each allocation and each of $N$ replications (50; 10 on 3×4): place 160, 180 or 240 subjects at random over the grid (about 20 per cluster), assign $x$ and $z$ from the cluster, …
 - Notes: Use when asked how many replications were run or how the BSS allocations were identified.

@@ -161,18 +161,36 @@ design_tiles <- function(nr, nc, trt, grid_lab, design) {
   transform(g, x = as.integer(id %in% trt), grid = grid_lab, design = design)
 }
 d6 <- bind_rows(
-  design_tiles(2, 4, c(1, 3, 6, 8), "2×4 grid", "Block stratified sampling"),
-  design_tiles(3, 3, c(2, 4, 6, 8), "3×3 grid", "Block stratified sampling"),
-  design_tiles(3, 4, c(1, 3, 6, 8, 9, 11), "3×4 grid", "Block stratified sampling"),
-  design_tiles(2, 4, c(1, 2, 5, 6), "2×4 grid", "One random allocation"),
-  design_tiles(3, 3, c(1, 2, 4, 5), "3×3 grid", "One random allocation"),
-  design_tiles(3, 4, c(1, 2, 5, 6, 9, 10), "3×4 grid", "One random allocation")) %>%
+  design_tiles(2, 4, c(1, 3, 6, 8), "2×4 grid", "Block\nstratified"),
+  design_tiles(3, 3, c(2, 4, 6, 8), "3×3 grid", "Block\nstratified"),
+  design_tiles(3, 4, c(1, 3, 6, 8, 9, 11), "3×4 grid", "Block\nstratified"),
+  design_tiles(2, 4, c(1, 2, 5, 6), "2×4 grid", "One random\ndraw"),
+  design_tiles(3, 3, c(1, 2, 4, 5), "3×3 grid", "One random\ndraw"),
+  design_tiles(3, 4, c(1, 2, 5, 6, 9, 10), "3×4 grid", "One random\ndraw")) %>%
   mutate(arm = ifelse(x == 1, "Intervention", "Control"))
 p6 <- ggplot(d6, aes(c, -r, fill = arm)) + geom_tile(colour = "white", linewidth = 2) +
   scale_fill_manual(NULL, values = c(Intervention = navy, Control = light)) +
-  facet_grid(design ~ grid, switch = "y") + coord_equal() + theme_void(base_size = 24) +
+  facet_grid(design ~ grid, switch = "y") + coord_equal() + theme_void(base_size = 30) +
   theme(legend.position = "bottom", strip.text.x = element_text(face = "bold", margin = margin(b = 6)),
-        strip.text.y.left = element_text(face = "bold", angle = 90, margin = margin(r = 8)))
-save_png(p6, "fig_designs.png", 13, 7.4)
+        strip.text.y.left = element_text(face = "bold", angle = 0, hjust = 1, margin = margin(r = 10)))
+save_png(p6, "fig_designs.png", 12, 7.4)
 
-cat("Wrote 7 figures and bss_rank_among_srs.csv to", out_dir, "\n")
+# Trimmed copies of the manuscript's maps and sampled-points figure ----
+# The originals carry wide white margins, which shrink them on a slide. Crop to the
+# non-white content plus a small pad; the image content itself is unchanged.
+#' Crop white margins from a PNG.
+#' @param src,dst File names in out_dir. @param pad Pixels kept around the content.
+trim_png <- function(src, dst, pad = 8) {
+  img <- png::readPNG(file.path(out_dir, src))
+  rgb <- img[, , 1:3, drop = FALSE]
+  ink <- apply(rgb, c(1, 2), function(v) any(v < 0.97))
+  if (dim(img)[3] == 4) ink <- ink & img[, , 4] > 0.05
+  r <- range(which(rowSums(ink) > 0)); c <- range(which(colSums(ink) > 0))
+  r <- c(max(1, r[1] - pad), min(nrow(ink), r[2] + pad)); c <- c(max(1, c[1] - pad), min(ncol(ink), c[2] + pad))
+  png::writePNG(img[r[1]:r[2], c[1]:c[2], , drop = FALSE], file.path(out_dir, dst))
+}
+trim_png("NC_DCS_Map_NoCounties.png", "NC_DCS_Map_trim.png")
+trim_png("NC_MCO_Map.png", "NC_MCO_Map_trim.png")
+trim_png("SampledPoints.png", "SampledPoints_trim.png")
+
+cat("Wrote 7 figures, 3 trimmed copies and bss_rank_among_srs.csv to", out_dir, "\n")

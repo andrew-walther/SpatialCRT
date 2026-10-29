@@ -29,11 +29,12 @@
 .reveal .p1-cards.two { grid-template-columns: 1fr 1fr; }
 .reveal .p1-cards.three { grid-template-columns: 1fr 1fr 1fr; }
 .reveal .p1-card {
-  border-left: 8px solid var(--unc-carolina-blue); background: var(--unc-blue-tint);
-  padding: 0.45em 0.8em; border-radius: 4px; line-height: 1.38; font-size: 0.9em;
+  background: var(--unc-blue-tint); border: 1px solid #c9dff0;
+  padding: 0.5em 0.85em; border-radius: 8px; line-height: 1.38; font-size: 0.9em;
 }
-.reveal .p1-card.navy { border-left-color: var(--unc-navy); background: var(--unc-navy-tint); }
-.reveal .p1-card.amber { border-left-color: var(--unc-yellow); background: var(--unc-yellow-tint); }
+.reveal .p1-card.navy { background: var(--unc-navy-tint); border-color: #cdd3dd; }
+.reveal .p1-card.amber { background: var(--unc-yellow-tint); border-color: #f3dcae; }
+.reveal .p1-card h3 { color: var(--unc-navy); }
 .reveal .p1-card h3 { margin: 0 0 0.25em; font-size: 1.0em; }
 .reveal .p1-card p { margin: 0.2em 0; }
 .reveal .p1-big { font-size: 1.6em; font-weight: 700; color: var(--unc-navy); line-height: 1.1; }
@@ -94,3 +95,25 @@
 /* Contrast columns (analysis vs design) ------------------------------------- */
 .reveal .p1-contrast h3 { font-size: 0.95em; margin-bottom: 0.2em; }
 .reveal .p1-contrast li { font-size: 0.82em; margin-bottom: 0.25em; }
+
+/* Vertically centered two-column layout (figure beside text) ------------------ */
+.reveal .p1-vcenter { align-items: center !important; min-height: 820px; }
+.reveal .p1-caption { color: var(--unc-grey); font-size: 0.68em; text-align: center; margin-top: 0.3em; line-height: 1.35; }
+
+/* Before / during / after flow ------------------------------------------------- */
+.reveal .p1-flow { display: flex; align-items: stretch; gap: 0; margin: 0.5em 0 0.4em; }
+.reveal .p1-flow .step {
+  flex: 1; background: var(--unc-blue-tint); border: 1px solid #c9dff0; border-radius: 10px;
+  padding: 0.5em 0.7em; font-size: 0.74em; line-height: 1.35;
+}
+.reveal .p1-flow .step.focus { background: var(--unc-navy); color: #fff; border-color: var(--unc-navy); }
+.reveal .p1-flow .step b.k { display: block; color: var(--unc-navy); font-size: 1.15em; margin-bottom: 0.25em; }
+.reveal .p1-flow .step.focus b.k { color: #fff; }
+.reveal .p1-flow .step ul { margin: 0.2em 0 0 1em; padding: 0; }
+.reveal .p1-flow .step li { margin-bottom: 0.15em; }
+.reveal .p1-flow .arrow { align-self: center; color: var(--unc-carolina-blue); font-size: 1.6em; padding: 0 0.25em; }
+.reveal .p1-flow .step.focus, .reveal .p1-flow .step.focus li, .reveal .p1-flow .step.focus li::marker { color: #fff; }
+
+/* Fill the column width. The template forces width:auto on any image whose inline
+   style mentions a height, so low-resolution figures would stay at their natural size. */
+.reveal .slides section img.p1-wide { width: 100% !important; height: auto; object-fit: contain; }

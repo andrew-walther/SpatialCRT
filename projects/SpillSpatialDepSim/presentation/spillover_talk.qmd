@@ -253,62 +253,58 @@ Untreated children attending schools near treated schools had fewer worm infecti
 
 ## Neighboring outcomes are also correlated for reasons that have nothing to do with treatment {data-menu-title="Spatial dependence" data-footer-part="Background"}
 
-::: {.columns}
-::: {.column width="50%"}
-<div class="p1-card navy" style="font-size: 0.95em;">
-<h3>Spatial dependence</h3>
-
-Nearby areas share demographics, labor markets, service providers and local practice, so their outcomes move together whether or not anyone is treated.
+<div class="p1-schematic" style="gap: 6em; margin-top: 0.4em;">
+<figure>
+<figcaption>Spatial dependence ($\rho$)</figcaption>
+<svg width="350" height="350" viewBox="0 0 345 345" role="img" aria-label="Three by three grid shaded from dark to light, so neighboring areas have similar outcomes, with no treatment">
+<g stroke="#fff" stroke-width="5"><rect x="10" y="10" width="105" height="105" fill="#1f4e79"/><rect x="120" y="10" width="105" height="105" fill="#2f6aa0"/><rect x="230" y="10" width="105" height="105" fill="#5b8fc0"/><rect x="10" y="120" width="105" height="105" fill="#2f6aa0"/><rect x="120" y="120" width="105" height="105" fill="#5b8fc0"/><rect x="230" y="120" width="105" height="105" fill="#8fb5da"/><rect x="10" y="230" width="105" height="105" fill="#5b8fc0"/><rect x="120" y="230" width="105" height="105" fill="#8fb5da"/><rect x="230" y="230" width="105" height="105" fill="#c3d8ec"/></g>
+</svg>
+<p class="p1-caption" style="max-width: 420px;">Neighbors have similar outcomes because they share conditions, with or without treatment</p>
+</figure>
+<figure>
+<figcaption>Spillover ($\psi$)</figcaption>
+<svg width="350" height="350" viewBox="0 0 345 345" role="img" aria-label="Three by three grid with a treated center cell and its four edge neighbors raised by spillover">
+<g stroke="#fff" stroke-width="5"><rect x="10" y="10" width="105" height="105" fill="#E1E5EA"/><rect x="120" y="10" width="105" height="105" fill="#FBAF3D"/><rect x="230" y="10" width="105" height="105" fill="#E1E5EA"/><rect x="10" y="120" width="105" height="105" fill="#FBAF3D"/><rect x="120" y="120" width="105" height="105" fill="#13294B"/><rect x="230" y="120" width="105" height="105" fill="#FBAF3D"/><rect x="10" y="230" width="105" height="105" fill="#E1E5EA"/><rect x="120" y="230" width="105" height="105" fill="#FBAF3D"/><rect x="230" y="230" width="105" height="105" fill="#E1E5EA"/></g>
+<g stroke="#13294B" stroke-width="6" fill="#13294B">
+<line x1="172" y1="135" x2="172" y2="95"/><polygon points="172,82 161,100 183,100"/>
+<line x1="172" y1="210" x2="172" y2="250"/><polygon points="172,263 161,245 183,245"/>
+<line x1="135" y1="172" x2="95" y2="172"/><polygon points="82,172 100,161 100,183"/>
+<line x1="210" y1="172" x2="250" y2="172"/><polygon points="263,172 245,161 245,183"/>
+</g>
+</svg>
+<p class="p1-caption" style="max-width: 420px;">The treated area (dark) raises outcomes in its neighbors (amber); without treatment there is none</p>
+</figure>
 </div>
 
-- It violates the independence that a standard analysis assumes and can understate standard errors
-- Measured by Moran's *I* or Geary's *C*, and modeled through a spatial weights matrix that records who neighbors whom
-:::
-::: {.column width="50%"}
-<div class="p1-card amber" style="font-size: 0.95em;">
-<h3>Spillover</h3>
-
-Caused by the treatment itself, crossing from treated areas into their neighbors. Without treatment there is no spillover.
-</div>
-
-- Both run through the same neighbor structure, so they are easy to confuse
-- The model keeps them as separate parameters, spillover $\psi$ and spatial dependence $\rho$
-:::
-:::
+- Both run through the same neighbors, so they are easy to confuse, and the model keeps them as separate parameters
+- Spatial dependence breaks the independence a standard analysis assumes and can understate standard errors
 
 ::: {.notes}
 [0.75 min | running 3]
 
 - The second mechanism is spatial dependence.
-- Neighboring areas share demographics, labor markets, service providers and local practice, so their outcomes move together whether or not anyone is treated.
-- That breaks the independence a standard analysis assumes, and it is usually measured with Moran's I and modeled through a weights matrix that records who neighbors whom.
-- Spillover is different, because the treatment causes it, and with no treatment there is no spillover.
+- On the left, neighboring areas have similar outcomes because they share demographics, labor markets, providers and local practice, whether or not anyone is treated.
+- That breaks the independence a standard analysis assumes, and it can understate standard errors.
+- On the right is spillover, where a treated area raises outcomes in the areas next to it, and with no treatment there is no spillover.
 - Both work through the same neighbors, so they are easy to confuse, and the model I'll show keeps them as separate parameters, psi for spillover and rho for spatial dependence.
 :::
 
 ## Spatial methods mostly adjust after the data are in, and guidance on which clusters to treat is thin {data-menu-title="The design gap" data-footer-part="Background"}
 
-::: {.columns .p1-contrast}
-::: {.column width="48%"}
-### After the trial (analysis)
-- Add a measure of exposure, such as distance to the nearest treated area or the density of treated neighbors
-- Or model space directly in the mean or covariance, as in spatial regression and multiple-membership models
-- Reanalyses show these choices can change the estimated effect and its uncertainty
-- A review of spatial CRT analyses set aside trials that handled space only by design
-:::
-::: {.column width="4%"}
-:::
-::: {.column width="48%"}
-### Before the trial (design)
-- **Restricted randomization** balances covariates, and recent versions add spatial dispersion of the selected clusters
-- **Buffer zones** drop areas near the boundary between arms
-- **Saturation designs** vary the treated share across groups to estimate spillover
-- Few studies compare simple allocation rules when spillover and spatial dependence occur together
-:::
-:::
+<div class="p1-flow">
+<div class="step focus"><b class="k">1. Before the trial (design)</b>Choose which clusters to treat
+<ul><li>Restricted randomization balances covariates, and recent versions spread the selected clusters apart</li><li>Buffer zones drop areas near the boundary between arms</li><li>Saturation designs vary the treated share across groups</li></ul></div>
+<div class="arrow">→</div>
+<div class="step"><b class="k">2. During the trial</b>Treatment reaches neighbors, and neighboring outcomes move together
+<ul><li>Spillover ($\psi$)</li><li>Spatial dependence ($\rho$)</li></ul></div>
+<div class="arrow">→</div>
+<div class="step"><b class="k">3. After the trial (analysis)</b>Adjust for space
+<ul><li>Exposure measures, such as distance to the nearest treated area</li><li>Spatial models of the mean or covariance</li><li>These choices can change the estimate and its uncertainty</li></ul></div>
+</div>
 
-<div class="p1-card navy" style="margin-top: 0.4em; font-size: 0.82em;">
-Even a model with both own treatment and neighboring treatment cannot separate their effects if the allocation gives little independent variation in exposure. If every control district borders a trained district, training cannot be told apart from proximity to training, and that is fixed before any outcome is observed.
+<div class="p1-cards two" style="margin-top: 0.5em; font-size: 0.86em;">
+<div class="p1-card amber"><h3>The gap</h3>Few studies compare simple allocation rules in step 1 when spillover and spatial dependence occur together.</div>
+<div class="p1-card navy"><h3>Why step 1 matters</h3>If every control district borders a trained district, no analysis in step 3 can tell the training apart from being next to it.</div>
 </div>
 
 <p class="p1-src">Jarvis et al., Emerg Themes Epidemiol 2017; Silcocks and Kendrick, Trials 2010; Chao et al., Epidemiol Infect 2015; Moulton, Clin Trials 2004; Crisp et al., Clin Trials 2023; McCann et al., Int J Epidemiol 2018; Baird et al., Rev Econ Stat 2018.</p>
@@ -316,38 +312,36 @@ Even a model with both own treatment and neighboring treatment cannot separate t
 ::: {.notes}
 [0.75 min | running 3.75]
 
-- Most spatial methods for cluster trials adjust after the data are in, either with an exposure measure such as distance to the nearest treated area or by modeling space directly.
-- On the design side there are restricted randomization, buffer zones and saturation designs, but few studies compare simple allocation rules when spillover and spatial dependence occur together.
-- And the allocation limits even the best analysis.
+- A spatial cluster trial has three stages, and most spatial methods work in the last one, adjusting for exposure or modeling space after the data are in.
+- At the design stage there are restricted randomization, buffer zones and saturation designs, but few studies compare simple allocation rules when spillover and spatial dependence occur together.
+- And the first stage limits the last.
 - If every control district borders a trained district, no model can tell the training apart from being next to the training.
 :::
 
 ## Does the allocation chosen before the trial change how well we estimate the effect? {data-menu-title="The question" data-footer-part="Background"}
 
-::: {.p1-cards .two style="margin-top: 0.6em;"}
-::: {.p1-card}
-<h3>Simple random sampling (SRS)</h3>
-
-Any balanced allocation of clusters to intervention and control (4 and 5 on the 3×3 grid), chosen at random. The usual default.
+::: {.columns .p1-vcenter}
+::: {.column width="56%"}
+<img src="figures/fig_designs.png" class="p1-fig" style="max-height: 700px;" alt="Block stratified allocations (top row) and one random allocation (bottom row) on the 2 by 4, 3 by 3 and 3 by 4 grids">
+<p class="p1-caption">Dark cells are intervention clusters. The three grids studied here.</p>
 :::
-::: {.p1-card .navy}
-<h3>Block stratified sampling (BSS)</h3>
-
-A spatially constrained allocation in which no two intervention clusters share an edge, so treated clusters are kept apart in a checkerboard-like pattern.
-:::
-:::
+::: {.column .p1-small width="44%"}
+<div class="p1-card" style="margin-bottom: 0.45em;"><h3>Simple random sampling (SRS)</h3>Any allocation with half the clusters treated (4 of 9 on the 3×3 grid), drawn at random. It can put all treated clusters together, as in the bottom row.</div>
+<div class="p1-card navy" style="margin-bottom: 0.45em;"><h3>Block stratified sampling (BSS)</h3>No two intervention clusters share an edge, and no two controls where the grid allows. That leaves the two checkerboards on the 2×4 and 3×4 grids, and `r gi("3x3", "n_bss")` allocations on the 3×3 grid, where only intervention clusters must be separated.</div>
 
 - An **allocation** is the list of which clusters get the intervention
-- We compare the designs by the **mean squared error (MSE)** of the intervention effect estimate, how far off the estimate tends to be, combining systematic error (bias) and chance error (variance). Smaller is better.
-- Across spillover size, the direction spillover travels, and the presence of spatial dependence
+- We compare designs by the **mean squared error (MSE)** of the intervention effect estimate, how far off the estimate tends to be from bias and chance together. Smaller is better
+:::
+:::
 
 ::: {.notes}
-[0.75 min | running 4.5]
+[1.25 min | running 5]
 
 - So the question is whether the allocation chosen before the trial, meaning the list of which clusters get the intervention, changes how well we can estimate the effect.
-- Simple random sampling draws any balanced allocation at random, and block stratified sampling keeps treated clusters from touching, in a checkerboard-like pattern.
+- Here are the two designs on the three grids we study, with block stratified allocations on top and one random allocation below.
+- Simple random sampling draws any allocation with half the clusters treated, including ones that put every treated cluster together, like the bottom row.
+- Block stratified sampling keeps intervention clusters from sharing an edge, which leaves only the two checkerboards on the two-by-four and three-by-four grids, and `r gi("3x3", "n_bss")` allocations on the three-by-three grid.
 - We judge them by mean squared error, which measures how far off the estimate tends to be, combining being systematically off and being off by chance, so smaller is better.
-- For the probation trials, that is the difference between estimating what the training does and estimating something mixed with its spread to nearby offices.
 :::
 
 ## This study defines neighbors as clusters that share an edge {data-menu-title="Neighbors" data-footer-part="Methods"}
@@ -356,38 +350,14 @@ A spatially constrained allocation in which no two intervention clusters share a
 
 - **Rook** neighbors share an edge, **queen** neighbors share an edge or a corner, and higher-order neighbors are neighbors of neighbors
 - Distance-based neighbors lie within a fixed radius
-- We use **rook** neighbors throughout, and they decide both who can receive spillover and who is spatially correlated
+- We use **rook** neighbors throughout, the same edge rule that defines BSS, and they decide both who can receive spillover and who is spatially correlated
 
 ::: {.notes}
-[0.5 min | running 5]
+[0.5 min | running 5.5]
 
 - Everything depends on how we define a neighbor.
 - Rook neighbors share an edge, queen neighbors share an edge or a corner, and you can also define neighbors by distance or as neighbors of neighbors.
 - This study uses rook neighbors throughout, and that one definition decides both who can receive spillover and who is spatially correlated.
-:::
-
-## Block stratified sampling keeps intervention clusters from sharing an edge {data-menu-title="The two designs" data-footer-part="Methods"}
-
-::: {.columns}
-::: {.column width="58%"}
-<img src="figures/fig_designs.png" class="p1-fig" style="max-height: 640px;" alt="Block stratified allocations (top row) and one random allocation (bottom row) on the 2 by 4, 3 by 3 and 3 by 4 grids">
-:::
-::: {.column .p1-small width="42%"}
-- **SRS** may draw any balanced allocation, including ones that put all treated clusters together
-- **BSS** requires that no two intervention clusters share an edge, and no two controls where the grid allows
-- On the 2×4 and 3×4 grids that leaves only the **two checkerboards**
-- On the 3×3 grid the arms cannot be balanced, so only intervention clusters must be separated, and **`r gi("3x3", "n_bss")` allocations** qualify; the strict one is shown
-:::
-:::
-
-::: {.notes}
-[1 min | running 6]
-
-- Here are the two designs on the three grids we study, with a block stratified allocation on top and one random allocation below.
-- Simple random sampling can draw any balanced allocation, including ones that put every treated cluster together, like the bottom row.
-- Block stratified sampling requires that no two intervention clusters share an edge, and no two controls where the grid allows it.
-- On the two-by-four and three-by-four grids, that leaves only the two checkerboards.
-- The three-by-three grid has nine clusters, so the arms can't be balanced, and only the intervention clusters have to be separated, which gives `r gi("3x3", "n_bss")` allowed allocations, including the strict one shown here.
 :::
 
 ## Spillover may reach only control clusters, or control and intervention clusters {data-menu-title="Two spillover types" data-footer-part="Methods"}
@@ -423,7 +393,7 @@ A spatially constrained allocation in which no two intervention clusters share a
 - **Control Clusters Only** is classic contamination; under **Control & Intervention Clusters** treated clusters next to other treated clusters gain extra
 
 ::: {.notes}
-[1 min | running 7]
+[1 min | running 6.5]
 
 - Spillover can travel in two ways, and this turns out to drive every result.
 - Dark squares are intervention clusters, and here the left half of a two-by-four grid is treated.
@@ -462,7 +432,7 @@ $$
 <p class="p1-level">Subjects are placed at random over the grid (160 per replication on the 2×4 grid, about 20 per cluster). Every subject in a cluster shares its $x_i$, $z_i$ and neighbors, and outcomes vary within a cluster only through independent error, so the model is written for the cluster-level outcome $y_i$. Fitted by maximum likelihood (<code>lagsarlm</code>) with the true spillover term included wherever the allocation lets it be estimated; $\beta$, $\psi$ and $\rho$ are structural coefficients.</p>
 
 ::: {.notes}
-[1.25 min | running 8.25]
+[1.25 min | running 7.75]
 
 - This is the spatial lag model behind every result, and every symbol is defined below.
 - A cluster's outcome is a baseline alpha, plus the intervention effect beta if the cluster is treated, plus the spillover effect psi if it is exposed.
@@ -472,14 +442,43 @@ $$
 - We fit it by maximum likelihood with the true spillover term included wherever the allocation allows it to be estimated, and in a few slides I'll show when it doesn't.
 :::
 
+## Outcomes are generated with y on both sides, so effects ripple through the neighbors {data-menu-title="Generating outcomes" data-footer-part="Methods"}
+
+<div class="p1-eq">
+$$
+\mathbf{y} = \rho\mathbf{W}\mathbf{y} + \boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon
+\quad\Longrightarrow\quad
+\mathbf{y} = (\mathbf{I} - \rho\mathbf{W})^{-1}\left(\boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon\right)
+$$
+</div>
+
+<div class="p1-eq" style="font-size: 0.8em;">
+$$
+(\mathbf{I} - \rho\mathbf{W})^{-1} = \mathbf{I} + \rho\mathbf{W} + \rho^2\mathbf{W}^2 + \cdots
+$$
+</div>
+
+- The matrix form stacks the clusters: $\mathbf{X}$ and $\mathbf{Z}$ hold each cluster's $x_i$ and $z_i$, and $\mathbf{W}$ holds the weights $w_{ij}$
+- Since $\mathbf{y}$ appears on both sides, outcomes are simulated from the solved (reduced) form on the right
+- The expansion shows the ripple: each cluster's outcome passes to its neighbors ($\rho\mathbf{W}$), their neighbors ($\rho^2\mathbf{W}^2$) and so on
+- The model is fitted by maximum likelihood; the likelihood is in backup
+
+::: {.notes}
+[0.5 min | running 8.25]
+
+- The outcome appears on both sides of the model, so we can't draw it directly, and solving for it gives the reduced form on the right.
+- Expanding the inverse shows what it does, passing each cluster's outcome to its neighbors, then to their neighbors, and so on, with rho controlling how fast it fades.
+- Outcomes are simulated from this form and the model is fitted by maximum likelihood, with the likelihood in backup.
+:::
+
 ## We enumerate every possible allocation on three small grids and compare their error {data-menu-title="Simulation design" data-footer-part="Methods"}
 
-::: {.columns}
-::: {.column width="44%"}
-<img src="figures/SampledPoints.png" class="p1-fig" style="max-height: 520px;" alt="Simulated subjects on the 2 by 4 grid, colored by cluster">
-<p class="p1-note">One replication on the 2×4 grid, 160 subjects placed at random. Only cluster membership enters the fit.</p>
+::: {.columns .p1-vcenter}
+::: {.column width="50%"}
+<img src="figures/SampledPoints_trim.png" class="p1-fig p1-wide" alt="Simulated subjects on the 2 by 4 grid, colored by cluster">
+<p class="p1-caption">One replication on the 2×4 grid, 160 subjects placed at random. Only cluster membership enters the fit.</p>
 :::
-::: {.column .p1-small width="56%"}
+::: {.column .p1-small width="50%"}
 | Grid | Clusters | Allocations (SRS) | BSS allocations | Replications |
 |:--|:--:|:--:|:--:|:--:|
 | 2×4 | `r gi("2x4","clusters")` | `r gi("2x4","n_alloc")` | `r gi("2x4","n_bss")` | `r gi("2x4","reps")` |
@@ -630,16 +629,15 @@ $$
 
 ## North Carolina probation trials assign counties or judicial districts, natural spatial clusters {data-menu-title="NC probation districts" data-footer-part="Application"}
 
-::: {.columns}
-::: {.column width="60%"}
-<img src="figures/NC_DCS_Map_NoCounties.png" class="p1-fig" style="max-height: 640px;" alt="North Carolina Division of Community Supervision map with 30 judicial districts grouped into 4 judicial divisions">
+::: {.columns .p1-vcenter}
+::: {.column width="68%"}
+<img src="figures/NC_DCS_Map_trim.png" class="p1-fig p1-wide" alt="North Carolina Division of Community Supervision map with 30 judicial districts grouped into 4 judicial divisions">
 :::
-::: {.column .p1-small width="40%"}
-- NC Division of Community Supervision has **30 judicial districts** in **4 judicial divisions**
-- Officers supervise by county; chief probation/parole officers and judicial district managers oversee districts and often span several units and counties
-- **Case 1, trauma-informed supervision.** Training for officers and chiefs on specialty caseloads (domestic violence, sex offense, gang), randomized by county or district
-- Neighboring areas share courts, labor markets and providers
-- With districts randomized, division leaders and shared providers can carry it across arms; borders are the proxy a design can act on
+::: {.column .p1-small width="32%" style="font-size: 0.82em;"}
+- **30 judicial districts** in **4 divisions** (NC Division of Community Supervision)
+- Chief probation/parole officers and district managers oversee districts, often spanning several counties
+- **Case 1, trauma-informed supervision.** Training for officers and chiefs on specialty caseloads, randomized by county or district
+- Neighbors share courts, labor markets and providers, and leaders and providers can carry the program across arms
 :::
 :::
 
@@ -656,11 +654,12 @@ $$
 
 ## A second study crosses the four behavioral health management areas {data-menu-title="NC MCO areas" data-footer-part="Application"}
 
-::: {.columns}
-::: {.column width="62%"}
-<img src="figures/NC_MCO_Map.png" class="p1-fig" style="max-height: 640px;" alt="Map of the four LME/MCO coverage areas across North Carolina counties">
+::: {.columns .p1-vcenter}
+::: {.column width="68%"}
+<img src="figures/NC_MCO_Map_trim.png" class="p1-fig p1-wide" alt="Map of the four LME/MCO coverage areas across North Carolina counties">
+<p class="p1-caption">Each county shaded by the LME/MCO that manages its behavioral health services.</p>
 :::
-::: {.column .p1-small width="38%"}
+::: {.column .p1-small width="32%" style="font-size: 0.8em;"}
 - **Case 2, specialty mental health probation.** Cross-training and joint treatment-team meetings between officers and behavioral health providers
 - Each county is served by one of **4 LME/MCOs** (Local Management Entity/Managed Care Organizations)
 - Large providers work across counties and MCO areas, so practices can travel into control counties
@@ -822,21 +821,38 @@ Walther et al., *BMC Medical Research Methodology* (2026)
 [Backup slides follow. Press M for the menu or type a slide number and press Enter to jump.]
 :::
 
-## Backup &middot; 3×3 and 3×4 results, every allocation {.backup-slide data-menu-title="B: 3×3 and 3×4 figures" data-footer-part="Backup"}
+## Backup &middot; 3×3 grid, every allocation {.backup-slide data-menu-title="B: 3×3 figure" data-footer-part="Backup"}
 
-::: {.columns}
-::: {.column width="50%"}
-<img src="figures/MSE_Estimates_3x3_corrected.png" class="p1-fig" style="max-height: 640px;" alt="3 by 3 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
-<p class="p1-note" style="text-align:center;">3×3 grid</p>
+::: {.columns .p1-vcenter}
+::: {.column width="66%"}
+<img src="figures/MSE_Estimates_3x3_corrected.png" class="p1-fig p1-wide" alt="3 by 3 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
 :::
-::: {.column width="50%"}
-<img src="figures/MSE_Estimates_3x4_corrected.png" class="p1-fig" style="max-height: 640px;" alt="3 by 4 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
-<p class="p1-note" style="text-align:center;">3×4 grid</p>
+::: {.column .p1-small width="34%"}
+- Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the six BSS allocations and "Random" every allocation, colored by $\psi$
+- The BSS spread comes from its six different allocations. One, the full checkerboard, is collinear; the other five leave a control unexposed and estimate $\beta$ almost exactly
+- With spillover into controls and $\rho = 0.01$, random allocations reach MSE `r f2(R("3x3", CO, 0.01)$SRS_max)` at $\psi = 0.5$, against at most `r f2(R("3x3", CO, 0.01)$BSS_max)` for BSS
 :::
 :::
 
 ::: {.notes}
-Use when asked for the per-allocation distributions on the larger grids. These are the chapter's figures. Rows are spillover types, columns are ρ, boxes are random allocations and the Block column is the BSS allocations.
+Use when asked for the per-allocation distributions on the 3×3 grid. This is the chapter's figure.
+:::
+
+## Backup &middot; 3×4 grid, every allocation {.backup-slide data-menu-title="B: 3×4 figure" data-footer-part="Backup"}
+
+::: {.columns .p1-vcenter}
+::: {.column width="66%"}
+<img src="figures/MSE_Estimates_3x4_corrected.png" class="p1-fig p1-wide" alt="3 by 4 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
+:::
+::: {.column .p1-small width="34%"}
+- Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the two checkerboards and "Random" all `r gi("3x4","n_alloc")` allocations, colored by $\psi$
+- With spillover into controls and $\rho = 0.01$, random allocations reach MSE `r f2(R("3x4", CO, 0.01)$SRS_max)` at $\psi = 0.5$, while both checkerboards stay at or below `r f2(R("3x4", CO, 0.01)$BSS_max)`
+- With spillover into both arms, most random allocations sit near zero and the checkerboards do not
+:::
+:::
+
+::: {.notes}
+Use when asked for the per-allocation distributions on the 3×4 grid. This is the chapter's figure.
 :::
 
 ## Backup &middot; Where block stratified sampling falls among random allocations, every grid and setting {.backup-slide data-menu-title="B: BSS rank, all grids" data-footer-part="Backup"}
@@ -920,9 +936,9 @@ Use when asked how outcomes were generated and how the model was estimated. The 
 
 ## Backup &middot; Row-normalized rook weights make the lag term a neighbor average {.backup-slide data-menu-title="B: Weights matrix" data-footer-part="Backup"}
 
-::: {.columns}
-::: {.column width="45%"}
-<svg width="560" height="300" viewBox="0 0 560 300" role="img" aria-label="Two by four grid with cells numbered 1 to 8 row by row and cell 2 highlighted with its three rook neighbors">
+::: {.columns .p1-vcenter style="min-height: 600px;"}
+::: {.column width="50%"}
+<svg width="100%" viewBox="0 0 560 300" role="img" aria-label="Two by four grid with cells numbered 1 to 8 row by row and cell 2 highlighted with its three rook neighbors">
 <g stroke="#fff" stroke-width="5">
 <rect x="10" y="10" width="130" height="130" fill="#FBAF3D"/><rect x="145" y="10" width="130" height="130" fill="#13294B"/><rect x="280" y="10" width="130" height="130" fill="#FBAF3D"/><rect x="415" y="10" width="130" height="130" fill="#E1E5EA"/>
 <rect x="10" y="145" width="130" height="130" fill="#E1E5EA"/><rect x="145" y="145" width="130" height="130" fill="#FBAF3D"/><rect x="280" y="145" width="130" height="130" fill="#E1E5EA"/><rect x="415" y="145" width="130" height="130" fill="#E1E5EA"/>
@@ -931,7 +947,7 @@ Use when asked how outcomes were generated and how the model was estimated. The 
 </svg>
 <p class="p1-note">Cells numbered row by row for this example; cluster 2 and its rook neighbors (amber).</p>
 :::
-::: {.column width="55%"}
+::: {.column width="50%"}
 <div style="font-size: 0.8em;">
 
 $$

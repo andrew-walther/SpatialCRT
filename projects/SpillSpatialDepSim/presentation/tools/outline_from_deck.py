@@ -32,7 +32,7 @@ MARK = '<!-- SLIDES (generated) -->'
 CARRY = {
     'Title': 'conference', 'Outline': 'conference', 'Trials of places': 'both', 'Spillover': 'both',
     'Spatial dependence': 'both', 'The design gap': 'both', 'The question': 'both', 'Neighbors': 'both',
-    'The two designs': 'both', 'Two spillover types': 'both', 'Model': 'both', 'Simulation design': 'both',
+    'Generating outcomes': 'both', 'Two spillover types': 'both', 'Model': 'both', 'Simulation design': 'both',
     'Where BSS falls': 'both', 'Control clusters only': 'both', 'Control & intervention clusters': 'both',
     'Why: collinearity': 'both', 'Larger grids': 'both', 'NC probation districts': 'both',
     'NC MCO areas': 'both', 'Recommendation': 'both', 'Choosing a design': 'both', 'Take-home': 'both',

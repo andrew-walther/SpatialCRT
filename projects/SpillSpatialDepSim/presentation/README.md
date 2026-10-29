@@ -91,7 +91,11 @@ changes (author, 2026-10-28):
    - **both:** keep as is;
    - **prelim:** keep (none at present);
    - **conference:** drop (title, Outline, Thank you).
-5. **Background sets up the whole prelim.** Part I comes first, so its Background is
+5. **Background sets up the whole prelim, and Part II drops its duplicates.** Part II's
+   deck currently repeats two of Part I's slides: the spillover examples (Ghana bed
+   nets, Kenya deworming) and the analysis-versus-design gap. In the assembled prelim
+   keep them in Part I only, and give Part II one sentence pointing back to them.
+   Part I comes first, so its Background is
    the prelim's shared motivation: trials that randomize places, spillover (Ghana bed
    nets, Kenya deworming), spatial dependence, and the gap between analysis-stage and
    design-stage methods. Then "The question" states Part I's own aim. Part II builds on
