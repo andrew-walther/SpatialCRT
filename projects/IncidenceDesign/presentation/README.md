@@ -51,3 +51,48 @@ offline.
 - Slide titles are claims stated as sentences; figures carry no in-figure titles.
 - Design names exactly as in `AGENTS.md`; no DIM; numbers trace to the V5 manuscript,
   Chapter 3 or `results/`.
+
+## Adapting this deck for the prelim (Part II)
+
+This deck is a standalone talk. The prelim deck (`bios-dissertation/slides/prelim/`, skeleton
+in `test/slide-deck-test/prelim-test.qmd`) has one title, one agenda, Parts I–III, then one
+closing slide and three backup sections. Copy this deck into
+`bios-dissertation/slides/prelim/part-2/` only after Andrew approves it, then make these
+changes (author, 2026-10-28):
+
+1. **Cut the standalone frame.**
+   - Drop the title slide and the Outline slide. The prelim has its own title and agenda.
+   - Drop the closing thank-you slide. Its acknowledgements move to the single prelim
+     "Thank you" slide after Part III, grouped with Parts I and III: Dr. Lin, Ashkan
+     Habib, Dr. Simpson and the SUDDEN team, plus the IRB protocol 14-2036 note.
+   - "Manuscript in preparation for *Clinical Trials*" goes on the last Part II
+     Discussion slide.
+2. **Open with the Part II divider.** Use the skeleton's
+   `.section-divider .divider-carolina` slide with
+   `data-footer-part="Part II · SpatialCRT: Incidence"` and `data-menu-title="Part II: …"`.
+3. **Footer labels.** Prefix every section label with the part, so the footer tracks both:
+   - `data-footer-part="Methods"` becomes `"Part II · Methods"`, and the same for every
+     section;
+   - give the menu titles a `II:` prefix, as the skeleton does.
+4. **Keep, rewrite or drop each slide** by its carry-over tag in `OUTLINE.md`:
+   - **prelim:** keep as is;
+   - **technical:** rewrite for biostatisticians, with more model and estimation detail;
+   - **talk-only:** drop. This covers the SUDDEN-specific framing and the questions for
+     the group.
+5. **Build on Part I, don't repeat it.** Part I comes first and introduces cluster trials,
+   spillover, spatial dependence and the spatial lag model. Keep the Background content
+   most relevant to Project 2 (heterogeneous incidence, SUD, the pilot) and frame it as
+   the next step from Part I. Keep Part II's own model slide in full. Its notation (τ, γ on
+   the share of treated queen neighbors, β for incidence, at the cluster level)
+   deliberately differs from Part I's, and each part defines its own.
+6. **Backup.** Move the backup slides into the second of the three backup sections, after
+   Part III, under the skeleton's `Backup · Part II` divider. Prefix their titles with
+   "Backup ·" and give them the `.backup-slide` class.
+7. **Theme and figures.**
+   - Keep the theme consistent across all three parts.
+   - Merge `theme/deck.css` into the prelim theme, checking its class names against
+     Part I's `deck.css` for clashes and namespacing them if needed.
+   - Copy `figures/` into `part-2/figures/` and update the paths.
+8. **Timing.** Aim for about 20 minutes per part, about 60 in total. Parts I and II may
+   run a little longer while Part III is still brief. Re-time the speaker notes after the
+   cuts and rewrites above.

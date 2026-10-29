@@ -70,7 +70,7 @@ The authors declare that they have no competing interests.
 
 ### Funding
 
-Dr. Van Deinse is supported by the National Institutes of Mental Health
+Dr. Van Deinse is supported by the National Institute of Mental Health
 (K01MH129619). The trauma-informed supervision approach referenced in this
 manuscript was funded by the Bureau of Justice Assistance
 15PBJA-24-GG-01896-PRJH and awarded to the North Carolina Department of
