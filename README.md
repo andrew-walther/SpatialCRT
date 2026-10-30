@@ -8,8 +8,6 @@ Two projects from Andrew Walther's PhD dissertation (Biostatistics,
 UNC-Chapel Hill). The dissertation text itself lives in the separate
 `bios-dissertation` repo.
 
-> For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
-
 ---
 
 ## Projects at a Glance
