@@ -148,9 +148,7 @@ interrelated spatial phenomena can profoundly influence trial outcomes and
 compromise the validity of the results: spillover effects and spatial
 dependence [@hayes_cluster_2017; @smith_field_2015].
 
-Spillover occurs when an intervention's effects in one cluster extend or
-“spill over", into neighboring clusters, creating significant analytical
-challenges [@anayaizquierdo_spatial_2021; @jarvis_spatial_2017]. This is
+Spillover occurs when an intervention's effects in one cluster extend, or “spill over,” into neighboring clusters, which complicates the analysis [@anayaizquierdo_spatial_2021; @jarvis_spatial_2017]. This is
 especially common in trials of infectious disease interventions. A study on
 the use of permethrin-impregnated bed nets by Binka et al. (1998) provided
 early, compelling evidence of this phenomenon, demonstrating that child
@@ -190,21 +188,12 @@ recently, Chao et al. (2015) developed a “potential exposure" metric to
 quantify the spatially heterogeneous risk surrounding an individual. In
 contrast, the spatial modeling approach is more statistically sophisticated,
 directly incorporating the geographic structure of the data into the random
-effects component of a statistical method. The method employed by
-Alexander et al. (2003) considers a distance-decay function in the
-covariance matrix and an alternative by Silcocks and Kendrick (2010) using
-spatial weights matrices treats spatial correlation as an underlying
-unobserved process. Watson & Smith (2025) propose a distinct framework in
+effects component of a statistical method. Alexander et al. (2003) include a distance-decay function in the covariance matrix. Silcocks and Kendrick (2010) instead use spatial weights matrices and treat spatial correlation as an underlying unobserved process. Watson & Smith (2025) propose a distinct framework in
 which treatment is measured as a continuous dose based on distance to the
 nearest intervention site, estimating a dose-response function (DRF)
 rather than a discrete cluster-level intervention or spillover effect.
 
-Despite the growing sophistication of these analytical tools, they are
-fundamentally post-hoc corrective solutions to a problem that could (and
-should) be addressed proactively at the design stage. The existing
-literature reveals a noticeable lack of research into how the initial
-sampling and allocation of treatments across a geographic landscape can be
-optimized to manage these known spatial complexities. The review by Jarvis
+However sophisticated, these analytical tools are post-hoc corrections for a problem that could, and should, be addressed at the design stage. Little research has examined how the sampling and allocation of treatments across a geographic area can be optimized to manage these known spatial complexities. The review by Jarvis
 et al. (2017) highlights this gap, noting that in practice, the impact of
 location on trial results is definitely an afterthought and oftentimes
 entirely ignored. In fact, trial designs explicitly intended to mitigate
@@ -234,10 +223,7 @@ of study planning.
 
 ### Aims & Contributions
 
-This study aims to address this critical gap by moving beyond post-hoc
-analysis to investigate the important role of treatment sampling design in
-spatial CRTs. Through a comprehensive simulation study, we systematically
-compare the performance of two contrasting approaches for assigning study
+This study addresses that gap by moving beyond post-hoc analysis to examine the role of treatment sampling design in spatial CRTs. In a simulation study, we compare the performance of two contrasting approaches for assigning study
 clusters to intervention and control arms: simple random sampling (SRS),
 representing the standard practice for treatment assignment, and a block
 stratified sampling (BSS) method. The BSS strategy is intentionally
@@ -249,14 +235,7 @@ Our simulations explore how the estimation error of the intervention
 effect, quantified by Mean Squared Error which is composed of bias and
 variance, varies across a range of realistic conditions including
 different magnitudes of spillover effects, the presence or absence of
-underlying spatial dependence, and variation of restrictions on the
-geographic distance over which spillover can occur. By identifying the
-systematic patterns that emerge, this novel research provides practical,
-evidence-based guidance for investigators designing future spatial CRTs.
-The findings will equip researchers with the knowledge to select sampling
-strategies that align with their specific study goals, ultimately leading
-to more robust, efficient, and valid estimates of intervention effects in
-complex spatial settings.
+underlying spatial dependence, and restrictions on which clusters can receive spillover. From the patterns that emerge, we give practical guidance to investigators designing spatial CRTs on choosing a sampling strategy that fits their study goals.
 
 The remainder of this article is organized as follows: [@sec-design] outlines
 the theoretical framework of the study, including the data generation
@@ -286,8 +265,7 @@ clinics, or geographic areas are randomized to intervention arms
 is the limitation of treatment contamination, where control group members
 are inadvertently exposed to the intervention, which would otherwise bias
 the estimated treatment effect toward the null [@hayes_cluster_2017].
-Statistical considerations in a CRT are the measured response from an
-intervention and the inherent correlation among outcomes of individuals
+Statistical analysis of a CRT concerns both the measured response to an intervention and the inherent correlation among outcomes of individuals
 within the same cluster, a dependency quantified by the intraclass
 correlation coefficient (ICC) [@donner_design_2000; @hemming_how_2017]. The
 ICC measures how similar the outcomes of individuals within a cluster are
@@ -318,10 +296,7 @@ another type of contiguity-based neighbors that fulfill a contiguity
 condition where a pair of clusters share a common boundary of either an
 edge and/or a vertex [@fotheringham_sage_2009]. Clusters may also have
 Bishop neighbors where a common boundary at the vertex (corner) of the
-spatial region is shared. Clusters may also have higher-order neighbors
-where they do not directly share an edge or vertex, but rather have a
-common boundary with a cluster that is a neighbor of another cluster. In
-other words, these are “neighbors of neighbors" of the reference cluster.
+spatial region is shared. Clusters may also have higher-order neighbors, which share no edge or vertex with the reference cluster but border one of its neighbors. These are the “neighbors of neighbors" of the reference cluster.
 
 ![(a) Rook neighbors (blue) share an edge with a reference spatial region (red), (b) Queen neighbors (blue) share either an edge or vertex (or both) with a reference spatial region (red), and (c) Distance-based neighbors (blue) have centroids within a fixed radius of the reference cluster (red). Clusters with centroids beyond this distance are not considered as neighbors (white) [@moraga_spatial_2024]](figures/Neighbors/RookQueen2ndContiguityColored.png){#fig-neighbor-types width=100%}
 
@@ -409,17 +384,8 @@ as control cells. In this case, the effect of the intervention is not
 permitted to spillover into other intervention cells. This suggests a case
 where the intervention effect applied is the maximum observable effect and
 any potential spillover cannot increase the observed effect of a
-particular intervention. Another method of spillover application is
-considered where spillover effects are permitted to be applied to both
-control AND intervention cells that are neighbors of a cell that receives
-an intervention. This application suggests that an effect greater than
-that of the original intervention applied can potentially be observed in a
-cell that received an intervention and also had spillover from another
-intervention cell. It is also to be expected that any change in the
-estimated effects would not be observed in spatial settings where the
-treatment allocation does not satisfy block stratification conditions
-(where no intervention cells are rook neighbors with other intervention
-cells). @fig-trt-spill-comparison provides a comparative representation of
+particular intervention. In the second, spillover reaches both control *and* intervention cells that neighbor an intervention cell. This represents a case where an effect greater than that of the intervention alone can be observed in a cell that received an intervention and also had spillover from another
+intervention cell. Under an allocation that satisfies the block stratification condition (no intervention cell is a rook neighbor of another intervention cell), no intervention cell receives spillover, so the two spillover types produce identical data and identical estimates. @fig-trt-spill-comparison provides a comparative representation of
 how these two methods permit the application of spillover effects on
 clusters based on their treatment assignment. In all scenarios of this
 simulation study, the application of any spillover effect is simply a
@@ -432,11 +398,7 @@ additive spillover effects.
 
 ### Simple Random vs. Block Stratified Sampling
 
-In this study, two different treatments are considered: intervention &
-control. Assignment of these treatments is considered under two sampling
-methods: Simple Random Sampling (SRS) & Block Stratified Sampling (BSS).
-Random sampling treatment assignment considers all possible combinations
-of intervention & control arrangements on a specified spatial grid and
+We consider two treatments, intervention and control, assigned under one of two sampling methods: Simple Random Sampling (SRS) or Block Stratified Sampling (BSS). SRS considers all possible combinations of intervention and control arrangements on a specified spatial grid and
 provides equal probability of assignment for any given combination of
 intervention and control. For example, a 2 row by 3 column spatial grid
 has 6 total cells. Consideration of a 1:1 ratio between intervention and
@@ -471,7 +433,7 @@ class as mentioned previously.
 
 #### 2×4 Grid
 
-One representative spatial setting considered is grid of 8 individual
+One spatial setting is a grid of 8 individual
 cells laid out in an arrangement of 2 rows and 4 columns. For this grid
 setup, a balanced set of intervention and control cells can be assigned
 where 4 cells are intervention regions and 4 cells are control regions.
@@ -740,8 +702,7 @@ favorable bias–variance properties when the true data-generating model
 
 ### Simulation Procedure {#sec-sim-procedure}
 
-The algorithm implemented to perform the simulations for this study is
-illustrated in the following section. The simulation is performed over
+The simulation is performed over
 all potential cluster treatment combinations (intervention/control) for
 each of the $2\times4$, $3\times3$, and $3\times4$ cluster spatial grid
 geometries. The simulation procedure is as follows:
@@ -751,8 +712,7 @@ of possible treatment combinations was enumerated exhaustively (70 for the
 2×4 grid, 126 for the 3×3 grid, and 924 for the 3×4
 grid). For each combination, $N = 50$ simulation replications were
 performed for the 2×4 and 3×3 grids and $N = 10$ for the
-3×4 grid, with 20 subjects uniformly sampled per cluster in each
-replication. Outcomes were generated from the SAR closed-form
+3×4 grid, with subjects sampled uniformly over the whole grid in each replication, 20 per cluster on average. Outcomes were generated from the SAR closed-form
 data-generating process (@eq-reduced-form), and parameters $(\alpha, \beta,
 \psi, \rho)$ were estimated via `lagsarlm()` for each replication.
 BSS-valid combinations were identified and tracked separately (2 for the
@@ -775,7 +735,7 @@ bias pattern visible in the control-clusters-only results
 (`Tables~\ref{tbl-est-2x4}--\ref{tbl-est-3x4}`{=latex}).
 
 @fig-sampled-points presents an example of the 8 cluster $2\times4$
-spatial grid object. 160 subjects (20 subjects for each cluster) with
+spatial grid object. 160 subjects (20 per cluster on average) with
 uniformly distributed coordinates are sampled over the area of the spatial
 object and colored according to their cluster membership. Subject counts
 are not necessarily identical between any pair of clusters as the sample
@@ -816,26 +776,16 @@ tightly grouped together and large variance means that the estimates are
 spread out.
 
 `\noindent`{=latex} $\textbf{Mean Squared Error (MSE).}$ Measures the average squared difference
-between each estimate and the true value of a parameter. Mean Squared
-Error combines variance to understand the consistency of a set of
-estimates as well as bias to understand any trend in deviation from the
-true value into a measure of estimation accuracy.
+between each estimate and the true value of a parameter. It combines variance, which reflects the consistency of a set of estimates, and bias, which reflects systematic deviation from the true value, into one measure of estimation accuracy.
 
 Since $\text{MSE} = \text{Bias}^2 + \text{Variance}$, differences in MSE
 between SRS and BSS can be attributed to either systematic bias or
-sampling variability across allocations. This decomposition is visually
-reflected in the grouped bar figures throughout the Results section
-(`Figures~\ref{fig-beta-mse-2x4}--\ref{fig-beta-mse-3x4}`{=latex}), where
-the relative contribution of bias-driven versus variance-driven error is
-apparent from differences in bar height across sampling methods and
-conditions.
+sampling variability across allocations. The box plots in the Results section (`Figures~\ref{fig-beta-mse-2x4}--\ref{fig-beta-mse-3x4}`{=latex}) show how this MSE is distributed across allocations for each sampling method and condition, and the tables report the bias.
 
 Mean Squared Error is the primary metric of consideration to understand the
 efficient estimation of the intervention effect under all simulation
 settings. The following subsections detail the findings from the simulation
-study, focusing on the Mean Squared Error (MSE), standard deviation (SD),
-and bias of the intervention effect ($\beta$) estimates under various
-conditions (simulation scenarios). The analysis compares Simple Random
+study, focusing on the Mean Squared Error (MSE) and bias of the intervention effect ($\beta$) estimates, each averaged over allocations, and on the standard deviation (SD) of MSE across allocations, under various conditions (simulation scenarios). The analysis compares Simple Random
 Sampling (SRS) and Block Stratified Sampling (BSS) across different spatial
 grid configurations, spillover effect magnitudes, spatial dependence levels,
 and spillover application types. The 3×3 and 3×4 results reported here were
@@ -854,8 +804,7 @@ dependence is present ($\rho = 0.01$), BSS substantially outperforms SRS
 (e.g., BSS MSE $= 0.165$ vs. SRS MSE $= 0.304$ at $\psi = 0.5$). However,
 when spatial dependence is absent ($\rho = 0$), SRS achieves lower average
 MSE (e.g., SRS MSE $= 0.173$ vs. BSS MSE $= 0.262$ at $\psi = 0.5$).
-Crucially, the standard deviation (SD) of BSS estimates is consistently
-far smaller than that of SRS across all conditions under TrtNoSpill. This
+Crucially, the SD of MSE across BSS allocations is consistently far smaller than across SRS allocations in all TrtNoSpill conditions. This
 reflects the fact that the two BSS allocations for this grid are
 structurally similar, yielding reliably consistent estimation error, while
 the 70 SRS allocations span a wide range of spatial configurations, some
@@ -863,8 +812,7 @@ well-balanced and some poorly concentrated, producing highly variable MSE.
 
 Under the Intervention & Control Clusters (TrtSpill) spillover condition,
 SRS achieves lower average MSE in every scenario (e.g., SRS MSE $= 0.008$
-vs. BSS MSE $= 0.262$ at $\psi = 0.5$, $\rho = 0$). However, the SD of SRS
-estimates is substantially larger, meaning that while the average SRS
+vs. BSS MSE $= 0.262$ at $\psi = 0.5$, $\rho = 0$). However, the SD of MSE across SRS allocations is substantially larger, meaning that while the average SRS
 allocation performs better, some randomly drawn allocations carry
 considerable estimation risk. BSS delivers stable, though higher, average
 MSE with near-zero SD, ensuring that practitioners never encounter a
@@ -1087,11 +1035,7 @@ intervention. Furthermore, adjacent counties within the same region often
 share demographic characteristics, labor market conditions, and similar
 judicial cultures, as well as the same managed care organizations and
 treatment providers, leading to spatial dependence in probation outcomes.
-The choice of treatment assignment sampling strategy in this context is
-non-trivial when considering potential options of either simple random
-sampling (SRS) or block-stratified sampling (BSS). Selection of the
-appropriate treatment sampling strategy may yield beneficial downstream
-outcomes when considering the error of intervention & spillover estimates.
+In this setting, the choice between simple random sampling (SRS) and block-stratified sampling (BSS) is non-trivial, because it can affect the error of the intervention and spillover estimates.
 
 ### Case 1: Trauma-Informed and Engaged Supervision
 
@@ -1128,8 +1072,7 @@ managed by four large Managed Care Organizations (MCOs), each responsible
 for a different coverage area. Some service provider agencies are large,
 operating in multiple counties and potentially across different MCO
 regions. This creates multiple, overlapping layers of potential spillover.
-@fig-ncmco-map presents a map of which counties in the state that each MCO
-operates. An intervention implemented in one county could be adopted by a
+@fig-ncmco-map shows the counties in which each MCO operates. An intervention implemented in one county could be adopted by a
 provider and informally carried into a neighboring control county, or an
 MCO could promote a similar initiative, confounding the study's results.
 This complex spatial linkage underscores the importance of a robust
@@ -1167,7 +1110,7 @@ confound the intervention effect with regional characteristics. A more
 robust design would be to stratify by the four state divisions and
 randomize districts to intervention and control conditions within each
 division with a block stratification strategy. This ensures geographic
-balance and leverages the finding that BSS minimizes estimation variance,
+balance and leverages the finding that BSS reduces the variation in estimation error across allocations,
 providing a more stable and defensible estimate of the intervention
 effect.
 
@@ -1176,20 +1119,15 @@ due to the complex potential for spillover. A simple random assignment of
 counties would ignore the significant structural influence of the MCOs.
 The most effective design would be to stratify by MCO coverage area,
 randomizing counties to the implementation strategy (intervention) or
-control condition within each MCO. This approach directly controls for
-the significant confounding variable of MCO-level policies and provider
-networks. However, some challenges with this MCO stratification do
+control condition within each MCO. This approach directly controls for confounding by MCO-level policies and provider networks. However, some challenges with this MCO stratification do
 persist. For example, it is possible that a county is selected for the
 intervention and is supervised by a CPPO or even a judicial district
 manager that oversees a control group county. Furthermore, multiple
 service providers may serve a given county in the coverage area of an MCO
 and it is possible that multiple service providers begin team meetings.
 Another consideration is that some service providers are very large and
-have offices around the state and contract with more than one MCO. Based
-on this, we must consider potential spillover if after participating in a
-treatment team meeting, a service provider intends to initiate those
-practices in another part of the state. Given the high risk of
-contamination, the robustness of BSS in minimizing error variance makes it
+have offices around the state and contract with more than one MCO. Spillover is therefore possible if a service provider, after taking part in a treatment team meeting, starts those practices in another part of the state. Given the high risk of
+contamination, the robustness of BSS in reducing the variation in estimation error makes it
 the most prudent choice for achieving a reliable effect estimate. While
 SRS might achieve a lower MSE (intervention error estimate) in theory, the
 risk of a single, poorly distributed randomization in a complex,
@@ -1338,8 +1276,7 @@ when designing studies where spillover effects are expected.
 
 ### Limitations {#sec-limitations}
 
-While this simulation study provides valuable insights, it is important
-to acknowledge a few key limitations that may affect the generalizability
+This study has several limitations that may affect the generalizability
 and scope of its findings. As described in [@sec-sim-procedure], in
 scenarios where spillover propagates only to adjacent control clusters,
 the spillover indicator $z_i$ can become highly correlated with, or
@@ -1382,8 +1319,7 @@ a specific range of spillover effect sizes, spatial dependence parameters,
 and grid dimensions. However, a more extensive exploration of additional
 parameters (e.g., different baseline effects, varying intervention effect
 sizes, or a wider range of spatial dependence values) or more complex
-spatial structures would require significantly greater computational
-resources. This limitation restricted the number of scenarios that could be
+spatial structures would require much greater computational resources. This limitation restricted the number of scenarios that could be
 thoroughly investigated within the current framework.
 
 An additional notable limitation is the rudimentary spillover mechanism
@@ -1599,8 +1535,7 @@ $$
 W_{ij} = \frac{\tilde{w}_{ij}}{\displaystyle\sum_{j \neq i}\tilde{w}_{ij}}.
 $$
 
-In this study, indicator-based (Rook contiguity) weights are used
-throughout all simulation experiments.
+In this study, indicator-based (Rook contiguity) weights are used in all simulation experiments.
 
 ## SAR Model: Full Likelihood {#sec-apx-sar}
 
@@ -1678,11 +1613,8 @@ spatial grid geometries and scenarios is as follows.
 
 ## Distance-Based Neighbor Construction {#sec-apx-distance}
 
-Distance-based neighbors [@fotheringham_sage_2009] are constructed under
-the assumption that clusters within a specified distance of a reference
-cluster are considered neighbors. As illustrated in @fig-neighbor-types
-(c), the reference cell (dark) claims as neighbors all cells whose
-centroids lie within a specified radius $d_{\max}$.
+Distance-based neighbors [@fotheringham_sage_2009] of a reference cluster are the clusters within a specified distance of it. As illustrated in @fig-neighbor-types
+(c), the reference cell (red) has as neighbors all cells whose centroids lie within a specified radius $d_{\max}$.
 
 Formally, cluster $j$ is a distance-based neighbor of cluster $i$ if
 
