@@ -1,5 +1,16 @@
 # CTJ manuscript: structure and prose review plan
 
+**Update 2026-10-30: Chapter 3's structure is settled.** Round 2 of the
+human-writer review (`bios-dissertation/prelim/full-draft/notes/human-writer-review/round2/`)
+applied SR1-SR4, SR6-SR13 (SR12 without step 5) and SO8 from
+`round2/ch3/ch3-structure.md`: model and estimand first in Methods,
+performance criteria defined in Estimation, nine Results subsections, the
+Application retitled to match this manuscript, and the Discussion split into
+"Summary of findings" and "Design guidance by spillover regime". SR5 and the
+other optional operations were not applied. The structural review found no
+change required in the CTJ manuscript. Andrew keeps it as it is until
+outside feedback arrives.
+
 Created 2026-10-22. **Not started.** It waits on two things:
 1. Andrew's own manual review of the CTJ manuscript is finished and committed.
 2. Andrew has decided on the Chapter 3 structural recommendations
