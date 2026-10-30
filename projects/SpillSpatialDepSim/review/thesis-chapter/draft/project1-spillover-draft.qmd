@@ -1595,7 +1595,7 @@ spatial grid geometries and scenarios is as follows.
 
     \item\label{step-sim} \textbf{Simulate for each combination.} For each treatment combination:
     \begin{enumerate}
-        \item Sample 20 subjects per cluster with uniformly distributed coordinates over the spatial extent (160, 180, or 240 subjects total).
+        \item Sample subjects with uniformly distributed coordinates over the spatial extent (160, 180, or 240 subjects in total, about 20 per cluster on average).
         \item Assign each subject to its cluster and intervention/control status.
         \item Determine spillover eligibility: for each subject, set $z_i = 1$ if the subject's cluster has at least one Rook neighbor assigned to the intervention and the spillover application type permits it; otherwise $z_i = 0$.
         \item Generate outcomes from the reduced (equilibrium) form (Equation~\ref{eq-reduced-form}): $\mathbf{y} = (\mathbf{I}-\rho \mathbf{W})^{-1}(\boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon)$, where $\boldsymbol\varepsilon \sim \mathcal{N}(\mathbf{0}, \sigma^2\mathbf{I})$ with $\sigma^2 = 0.01$.
