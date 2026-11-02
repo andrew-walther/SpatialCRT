@@ -4,7 +4,7 @@
 #          per-allocation beta-hat MSE results (no hand-typed numbers).
 # Author: Andrew Walther
 # Created: 2026-10-25 (slide-sized versions 2026-10-28)
-# Dependencies: ggplot2, dplyr, ragg
+# Dependencies: ggplot2, dplyr, ragg, sf, tigris (NC county shapes; downloaded once, then cached)
 # ============================================================
 # Run from the project root (SpillSpatialDepSim/):
 #   Rscript presentation/tools/make_figures.R
@@ -175,22 +175,189 @@ p6 <- ggplot(d6, aes(c, -r, fill = arm)) + geom_tile(colour = "white", linewidth
         strip.text.y.left = element_text(face = "bold", angle = 0, hjust = 1, margin = margin(r = 10)))
 save_png(p6, "fig_designs.png", 12, 7.4)
 
-# Trimmed copies of the manuscript's maps and sampled-points figure ----
-# The originals carry wide white margins, which shrink them on a slide. Crop to the
-# non-white content plus a small pad; the image content itself is unchanged.
-#' Crop white margins from a PNG.
-#' @param src,dst File names in out_dir. @param pad Pixels kept around the content.
-trim_png <- function(src, dst, pad = 8) {
-  img <- png::readPNG(file.path(out_dir, src))
-  rgb <- img[, , 1:3, drop = FALSE]
-  ink <- apply(rgb, c(1, 2), function(v) any(v < 0.97))
-  if (dim(img)[3] == 4) ink <- ink & img[, , 4] > 0.05
-  r <- range(which(rowSums(ink) > 0)); c <- range(which(colSums(ink) > 0))
-  r <- c(max(1, r[1] - pad), min(nrow(ink), r[2] + pad)); c <- c(max(1, c[1] - pad), min(ncol(ink), c[2] + pad))
-  png::writePNG(img[r[1]:r[2], c[1]:c[2], , drop = FALSE], file.path(out_dir, dst))
+# Figures 7a/7b: every 3x3 and 3x4 allocation (backup slides) ----
+# Slide-sized redraw of the chapter's box-plot figure (review/code/build_tables_figures.R,
+# plot_grid()) from the same corrected data: "Random" = all balanced allocations,
+# "Block" = the BSS allocations; rows = spillover type, columns = rho.
+mse_all_alloc <- function(gr) {
+  d <- bind_rows(mutate(filter(all_alloc, grid == gr), Sampling = "Random"),
+                 mutate(filter(all_alloc, grid == gr, is_BSS), Sampling = "Block")) %>%
+    mutate(Sampling = factor(Sampling, levels = c("Block", "Random")),
+           spill = factor(spill, levels = spill_labels),
+           rho = factor(sprintf("ρ = %s", ifelse(Rho == 0, "0", "0.01")), levels = c("ρ = 0", "ρ = 0.01")))
+  ggplot(d, aes(x = Sampling, y = MSE, fill = factor(Psi))) +
+    geom_boxplot(outlier.alpha = 0.3, position = position_dodge(width = 0.75)) +
+    scale_fill_manual("Spillover ψ", values = c("#C6DBEF", "#6BAED6", "#2171B5", "#08306B")) +
+    facet_grid(spill ~ rho, scales = "free_y") +
+    labs(x = "Sampling group", y = "MSE of the intervention effect") +
+    theme_slide(20) + theme(strip.text.y = element_text(angle = 0, hjust = 0))
 }
-trim_png("NC_DCS_Map_NoCounties.png", "NC_DCS_Map_trim.png")
-trim_png("NC_MCO_Map.png", "NC_MCO_Map_trim.png")
-trim_png("SampledPoints.png", "SampledPoints_trim.png")
+save_png(mse_all_alloc("3x3"), "fig_mse_3x3_all.png", 15, 8)
+save_png(mse_all_alloc("3x4"), "fig_mse_3x4_all.png", 15, 8)
 
-cat("Wrote 7 figures, 3 trimmed copies and bss_rank_among_srs.csv to", out_dir, "\n")
+# Figure 8: simulated subjects on the 2x4 grid ----
+# Same scheme as SpatialSim_NC_DOC.Rmd: 160 subjects per dataset at integer
+# coordinates drawn uniformly over the 400 x 200 grid of 100 x 100 districts;
+# colour = the district each subject falls in.
+set.seed(8)
+pts <- data.frame(x = sample(0:399, 160, replace = TRUE), y = sample(0:199, 160, replace = TRUE)) %>%
+  mutate(district = factor((y %/% 100) * 4 + x %/% 100 + 1))
+cells8 <- expand.grid(cx = seq(50, 350, 100), cy = c(50, 150))
+okabe_ito <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#000000")
+p8 <- ggplot() +
+  geom_tile(data = cells8, aes(cx, cy), width = 100, height = 100, fill = "white", colour = "#1d1f21", linewidth = 1) +
+  geom_point(data = pts, aes(x, y, colour = district), size = 3.6) +
+  scale_colour_manual(values = okabe_ito, guide = "none") + coord_equal() + theme_void()
+save_png(p8, "fig_sampled_points.png", 12, 6)
+
+# Schematic figures (formerly inline SVG in the deck) ----
+# Generic rook grids; no data. Palette as above, amber = spillover.
+amber <- "#FBAF3D"
+#' Tile data for an nr x nc grid, cells numbered row by row from the top left.
+#' @param nr,nc Rows and columns. @return data.frame with r, c, id, and plot coords px, py.
+grid_cells <- function(nr, nc) {
+  g <- expand.grid(c = 1:nc, r = 1:nr)
+  transform(g, id = (r - 1) * nc + c, px = c, py = -r)
+}
+#' Binary rook exposure, as in the simulation: a cluster is exposed if a rook
+#' neighbour is treated; under "Control Clusters Only" only controls can be exposed.
+#' @param g Output of grid_cells() with a 0/1 column x. @param controls_only Logical.
+#' @return Integer vector z.
+exposure <- function(g, controls_only) {
+  vapply(seq_len(nrow(g)), function(i) {
+    nb <- abs(g$r - g$r[i]) + abs(g$c - g$c[i]) == 1
+    as.integer(any(g$x[nb] == 1) && (!controls_only || g$x[i] == 0))
+  }, integer(1))
+}
+theme_grid <- function(base = 24) {
+  theme_void(base_size = base) +
+    theme(legend.position = "bottom", legend.key.size = unit(1.6, "lines"),
+          strip.text = element_text(face = "bold", margin = margin(b = 8)))
+}
+arm_fill <- c("Intervention" = navy, "Control" = light)
+
+# 9: a region of nine areas, four treated, arrows from treated into neighbouring controls
+g9 <- grid_cells(3, 3) %>% mutate(arm = ifelse(id %in% c(1, 3, 5, 7), "Intervention area", "Control area"))
+arrows9 <- data.frame(x = c(1, 2, 2, 1), y = c(-1, -2, -2, -3), dx = c(1, 0, 1, 0), dy = c(0, 1, 0, 1)) %>%
+  mutate(x0 = x + 0.25 * dx, y0 = y + 0.25 * dy, x1 = x + 0.8 * dx, y1 = y + 0.8 * dy)
+p9 <- ggplot() + geom_tile(data = g9, aes(px, py, fill = arm), colour = "white", linewidth = 3) +
+  geom_segment(data = arrows9, aes(x = x0, y = y0, xend = x1, yend = y1, colour = "Possible spillover"),
+               linewidth = 2.6, arrow = arrow(type = "closed", length = unit(0.22, "in"))) +
+  scale_fill_manual(NULL, values = c("Intervention area" = navy, "Control area" = light),
+                    breaks = c("Intervention area", "Control area")) +
+  scale_colour_manual(NULL, values = c("Possible spillover" = amber)) +
+  coord_equal() + theme_grid(36) + theme(legend.box = "vertical", legend.spacing.y = unit(0.2, "lines")) +
+  guides(fill = guide_legend(override.aes = list(colour = NA)))
+save_png(p9, "fig_places.png", 8, 9)
+
+# 10a: spatial dependence, outcomes graded smoothly across neighbours, no treatment
+dep_shades <- c("#1f4e79", "#2f6aa0", "#5b8fc0", "#8fb5da", "#c3d8ec")
+g10a <- grid_cells(3, 3) %>% mutate(shade = dep_shades[r + c - 1])
+p10a <- ggplot(g10a, aes(px, py, fill = shade)) + geom_tile(colour = "white", linewidth = 3) +
+  scale_fill_identity() + coord_equal() + theme_void()
+save_png(p10a, "fig_dependence.png", 6, 6)
+
+# 10b: spillover, a treated centre raises its four rook neighbours
+g10b <- grid_cells(3, 3) %>% mutate(shade = case_when(id == 5 ~ navy, id %in% c(2, 4, 6, 8) ~ amber, TRUE ~ light))
+arrows10 <- data.frame(dx = c(0, 0, -1, 1), dy = c(1, -1, 0, 0)) %>%
+  mutate(x0 = 2 + 0.3 * dx, y0 = -2 + 0.3 * dy, x1 = 2 + 0.78 * dx, y1 = -2 + 0.78 * dy)
+p10b <- ggplot() + geom_tile(data = g10b, aes(px, py, fill = shade), colour = "white", linewidth = 3) +
+  geom_segment(data = arrows10, aes(x = x0, y = y0, xend = x1, yend = y1), colour = navy,
+               linewidth = 2.2, arrow = arrow(type = "closed", length = unit(0.2, "in"))) +
+  scale_fill_identity() + coord_equal() + theme_void()
+save_png(p10b, "fig_spillover_center.png", 6, 6)
+
+# 11: the two spillover types on a 2x4 grid with the left half treated
+g11 <- grid_cells(2, 4) %>% mutate(x = as.integer(c <= 2))
+d11 <- bind_rows(mutate(g11, z = exposure(g11, TRUE), type = spill_labels[["TrtNoSpill"]]),
+                 mutate(g11, z = exposure(g11, FALSE), type = spill_labels[["TrtSpill"]])) %>%
+  mutate(type = factor(type, levels = spill_labels),
+         arm = ifelse(x == 1, "Intervention cluster (x = 1)", "Control cluster (x = 0)"))
+p11 <- ggplot(d11, aes(px, py)) +
+  geom_tile(aes(fill = arm), colour = "white", linewidth = 3) +
+  geom_point(data = filter(d11, z == 1), aes(colour = "Exposed to spillover (z = 1)"),
+             shape = 21, fill = amber, stroke = 1.2, size = 22) +
+  geom_text(data = filter(d11, z == 1), label = "z = 1", size = 5.2, fontface = "bold", colour = navy) +
+  scale_fill_manual(NULL, values = c("Intervention cluster (x = 1)" = navy, "Control cluster (x = 0)" = light),
+                    breaks = c("Intervention cluster (x = 1)", "Control cluster (x = 0)")) +
+  scale_colour_manual(NULL, values = c("Exposed to spillover (z = 1)" = navy),
+                      guide = guide_legend(override.aes = list(size = 7))) +
+  facet_wrap(~ type, nrow = 1) + coord_equal() + theme_grid(32) + theme(panel.spacing.x = unit(3, "lines")) +
+  guides(fill = guide_legend(override.aes = list(colour = NA)))
+save_png(p11, "fig_spill_types.png", 14, 5.4)
+
+# 12: row-normalised rook weights, cluster 2 and its neighbours on a 2x4 grid
+g12 <- grid_cells(2, 4) %>%
+  mutate(role = case_when(id == 2 ~ "Cluster 2", id %in% c(1, 3, 6) ~ "Rook neighbour of cluster 2",
+                          TRUE ~ "Other cluster"),
+         role = factor(role, levels = c("Cluster 2", "Rook neighbour of cluster 2", "Other cluster")))
+p12 <- ggplot(g12, aes(px, py)) + geom_tile(aes(fill = role), colour = "white", linewidth = 3) +
+  geom_text(aes(label = id, colour = role == "Cluster 2"), size = 12, fontface = "bold", show.legend = FALSE) +
+  scale_fill_manual(NULL, values = c("Cluster 2" = navy, "Rook neighbour of cluster 2" = amber, "Other cluster" = light)) +
+  scale_colour_manual(values = c(`TRUE` = "white", `FALSE` = navy)) +
+  coord_equal() + theme_grid(28) + guides(fill = guide_legend(nrow = 2, override.aes = list(colour = NA)))
+save_png(p12, "fig_weights_2x4.png", 9, 6)
+
+# 13: buffer-zone design, one treated cluster, a ring of excluded clusters, unexposed controls
+g13 <- grid_cells(4, 5) %>%
+  mutate(role = case_when(r == 3 & c == 3 ~ "Intervention",
+                          r >= 2 & c >= 2 & c <= 4 ~ "Excluded buffer",
+                          TRUE ~ "Unexposed control"),
+         role = factor(role, levels = c("Intervention", "Excluded buffer", "Unexposed control")))
+p13 <- ggplot(g13, aes(px, py, fill = role, colour = role, linetype = role)) +
+  geom_tile(width = 0.92, height = 0.92, linewidth = 1.1) +
+  scale_fill_manual(NULL, values = c("Intervention" = navy, "Excluded buffer" = "white", "Unexposed control" = light)) +
+  scale_colour_manual(NULL, values = c("Intervention" = navy, "Excluded buffer" = "#9aa3ad", "Unexposed control" = light)) +
+  scale_linetype_manual(NULL, values = c("Intervention" = "solid", "Excluded buffer" = "dashed", "Unexposed control" = "solid")) +
+  coord_equal() + theme_grid(34)
+save_png(p13, "fig_buffer_zone.png", 9, 8)
+
+# North Carolina maps ----
+# County shapes: US Census cartographic boundaries (tigris, cached), 2023 vintage.
+# County -> Division of Community Supervision district: data/NC_DCS_District_Counties.csv,
+# transcribed from the DAC district map (updated 2025-01-07). County -> LME/MCO:
+# data/NC_LME_MCO_Counties_2025.csv, from the NCDHHS LME/MCO directory as archived
+# 2025-05-31 (four LME/MCOs, before the Vaya-Partners merger). See data/README.md.
+suppressMessages({library(sf); library(tigris)})
+options(tigris_use_cache = TRUE)
+nc <- counties(state = "NC", cb = TRUE, year = 2023, progress_bar = FALSE) %>%
+  select(county = NAME, geometry) %>%
+  left_join(read.csv("data/NC_DCS_District_Counties.csv", colClasses = c(district = "character")), by = "county") %>%
+  left_join(read.csv("data/NC_LME_MCO_Counties_2025.csv"), by = "county")
+stopifnot(nrow(nc) == 100, !anyNA(nc$district), !anyNA(nc$lme_mco))
+districts <- nc %>% group_by(division, district) %>% summarise(geometry = st_union(geometry), .groups = "drop")
+divisions <- nc %>% group_by(division) %>% summarise(geometry = st_union(geometry), .groups = "drop")
+lab_pt <- function(x) cbind(st_drop_geometry(x), st_coordinates(suppressWarnings(st_point_on_surface(x))))
+
+# 14: districts coloured by judicial division (redraw of the manuscript's DCS map)
+p14 <- ggplot() + geom_sf(data = divisions, aes(fill = factor(division)), colour = NA) +
+  geom_sf(data = districts, fill = NA, colour = "black", linewidth = 0.6) +
+  geom_text(data = lab_pt(districts), aes(X, Y, label = district), size = 6, fontface = "bold") +
+  scale_fill_manual("Judicial division", values = c("1" = "#ffeb3b", "2" = "#e53935", "3" = "#43a047", "4" = "#1e88e5")) +
+  theme_void(base_size = 22) + theme(legend.position = "bottom")
+save_png(p14, "fig_nc_dcs_districts.png", 14, 6.2)
+
+# 15: counties coloured by LME/MCO (redraw of the manuscript's MCO map)
+p15 <- ggplot(nc) + geom_sf(aes(fill = lme_mco), colour = "#6b7178", linewidth = 0.25) +
+  geom_text(data = lab_pt(nc), aes(X, Y, label = county), size = 2.6, colour = "#1d1f21") +
+  scale_fill_manual("LME/MCO", values = c("Alliance Health" = "#D9A8D2", "Partners Health Management" = "#7FA6CE",
+                                          "Trillium Health Resources" = "#BFE0B1", "Vaya Health" = "#C9E3F3")) +
+  theme_void(base_size = 22) + theme(legend.position = "bottom") + guides(fill = guide_legend(nrow = 2))
+save_png(p15, "fig_nc_mco.png", 14, 6.6)
+
+# 16: the example best-effort BSS allocation of the 31 districts (manuscript figure).
+# Treated districts as hard-coded in code/NCTrtMaps.Rmd (treatment_districts_list).
+treated16 <- c("1", "3", "4", "7", "10", "12", "13", "15", "19A", "19B", "21", "23", "24", "27", "30")
+d16 <- districts %>% mutate(arm = ifelse(district %in% treated16, "Intervention", "Control"))
+div_lab <- lab_pt(divisions) %>% mutate(label = paste("Division", division))
+p16 <- ggplot() + geom_sf(data = d16, aes(fill = arm), colour = "gray60", linewidth = 0.3) +
+  geom_sf(data = divisions, fill = NA, colour = "gray20", linewidth = 1.4) +
+  geom_text(data = lab_pt(d16), aes(X, Y, label = district), colour = "white", size = 5.5, fontface = "bold") +
+  geom_label(data = div_lab, aes(X, Y, label = label), nudge_y = 0.32, size = 6, fontface = "bold.italic",
+             fill = "white", colour = "gray20", linewidth = 0) +
+  scale_fill_manual("Treatment assignment", values = c("Intervention" = "red3", "Control" = "dodgerblue3"),
+                    breaks = c("Intervention", "Control")) +
+  theme_void(base_size = 22) + theme(legend.position = "bottom")
+save_png(p16, "fig_nc_bss_assignment.png", 14, 6.4)
+
+cat("Wrote 19 figures and bss_rank_among_srs.csv to", out_dir, "\n")

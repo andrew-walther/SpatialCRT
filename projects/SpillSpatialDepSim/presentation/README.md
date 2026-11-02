@@ -17,9 +17,9 @@ only after Andrew approves it.
 | `outline.html` | Visual version of `OUTLINE.md` with figures inline. |
 | `theme/unc-gillings.css`, `theme/prelim-overrides.css`, `theme/footer-part.html` | Copies of the prelim template theme from `bios-dissertation/slides/prelim/test/`, unchanged (identical to Part II's copies). `footer-part.html` writes each slide's `data-footer-part` (the section name) into the footer. |
 | `theme/deck.css` | Everything specific to this deck. Every class is prefixed `p1-`, so it cannot clash with Part II's `deck.css`. |
-| `figures/` | PNGs used by the deck and outline. `fig_*.png` and `bss_rank_among_srs.csv` are made by `tools/make_figures.R`; the rest are the manuscript's own figures (3×3 and 3×4 in their corrected versions). |
+| `figures/` | PNGs used by the deck and outline. Every figure on a slide is a `fig_*.png` made by `tools/make_figures.R` (plus `bss_rank_among_srs.csv`), except `RookQueen2ndContiguityColored.png`, a copy of the manuscript's figure. `GridsCombined.png`, `TrtSpillComparisonV2.png` and `MSE_Estimates_2x4.png` are manuscript copies the deck no longer uses. |
 | `tools/load_results.R` | Loads the per-allocation β̂ MSE results (`results/beta_mse/`, corrected reruns in `review/results/`) and the corrected summary tables (`review/tables/`), and stops if the two disagree. Used by the figures and the deck. |
-| `tools/make_figures.R` | Slide-sized figures: every 2×4 allocation's MSE (BSS marked), 2×4 MSE by ψ for each spillover type, 3×3 and 3×4 means side by side, where BSS falls among random allocations on every grid, and the checkerboard collinearity diagram. No in-figure titles. |
+| `tools/make_figures.R` | Builds every slide figure. Results: every 2×4 allocation's MSE (BSS marked), 2×4 MSE by ψ for each spillover type, 3×3 and 3×4 side by side, where BSS falls among random allocations, and every 3×3 and 3×4 allocation (backup). Schematics: the designs, collinearity, trials of places, spatial dependence vs spillover, the two spillover types, the weights matrix and buffer zones. Simulated subjects on the 2×4 grid. North Carolina maps (districts by division, LME/MCO areas, the example BSS allocation) from `data/` county files and Census county shapes (`tigris`, needs internet on first run). No in-figure titles; legends are in the figures. |
 | `tools/outline_from_deck.py` | Regenerates the slide entries of `OUTLINE.md` from the knitted deck; holds the carry-over tags and the prelim and conference notes. |
 | `tools/build_outline_html.py` | Builds `outline.html` from `OUTLINE.md`. |
 
@@ -50,6 +50,9 @@ also writes `spillover_talk_files/`, which the self-contained HTML does not use
 - Section names (Background, Methods, Simulation Results, Application, Discussion,
   Backup) appear in the footer; there are no section-divider slides.
 - Slide titles are claims stated as sentences; figures carry no in-figure titles.
+- Every figure is a PNG in `figures/` built by `tools/make_figures.R`, never HTML or SVG
+  drawn in the deck (author rule, 2026-11-02), so the same file can go into a manuscript.
+  Captions and panel captions stay as slide text.
 - Spillover types use the manuscript's names, Control Clusters Only and Control &
   Intervention Clusters.
 - The corrected 3×3 and 3×4 results are presented as the results; the slides do not

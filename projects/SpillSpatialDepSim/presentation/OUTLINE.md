@@ -114,7 +114,7 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Prelim note: Dropped; the prelim has one agenda for all three parts.
 
 ### 3. When a program is delivered to whole communities, trials randomize places, and places have neighbors
-- Figure: none
+- Figure: fig_places.png
 - Slide text: A cluster randomized trial (CRT) assigns whole groups, here geographic areas, to intervention or control It is the natural design when a program, policy or supervision practice is delivered to an area rather than to one person Geographic clusters share borders, so what happens in one area can depend on its neighbors Two separate mechanisms create that dependence, spillover and spatial dependence, and both affect …
 - Notes: When a program is delivered to a whole community, such as a supervision practice in a probation office, we can't randomize individual people, so a cluster randomized trial assigns whole areas to intervention or control. When those clusters are geographic, they have neighbors.
 - Time: 1
@@ -131,7 +131,7 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Prelim note: Shared motivation; Part II refers back to it rather than repeating the examples.
 
 ### 5. Neighboring outcomes are also correlated for reasons that have nothing to do with treatment
-- Figure: none
+- Figure: fig_dependence.png, fig_spillover_center.png
 - Slide text: Spatial dependence ($\rho$) Neighbors have similar outcomes because they share conditions, with or without treatment Spillover ($\psi$) The treated area (dark) raises outcomes in its neighbors (amber); without treatment there is none Both run through the same neighbors, so they are easy to confuse, and the model keeps them as separate parameters Spatial dependence breaks the independence a standard analysis …
 - Notes: The second mechanism is spatial dependence. On the left, neighboring areas have similar outcomes because they share demographics, labor markets, providers and local practice, whether or not anyone is treated.
 - Time: 0.75
@@ -167,8 +167,8 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Conference note: In a 10–15 minute slot, cut and say "rook neighbors" on the designs slide.
 
 ### 9. Spillover may reach only control clusters, or control and intervention clusters
-- Figure: none
-- Slide text: Control Clusters Only Control & Intervention Clusters Intervention cluster ($x_i = 1$) Control cluster ($x_i = 0$) Exposed to spillover ($z_i = 1$), unmarked $z_i = 0$ Exposure is binary. A cluster is exposed if at least one rook neighbor is an intervention cluster (and, for Control Clusters Only, it is itself a control), however many treated neighbors it has Control Clusters Only is classic contamination; under …
+- Figure: fig_spill_types.png
+- Slide text: Exposure is binary. A cluster is exposed if at least one rook neighbor is an intervention cluster (and, for Control Clusters Only, it is itself a control), however many treated neighbors it has Control Clusters Only is classic contamination; under Control & Intervention Clusters treated clusters next to other treated clusters gain extra
 - Notes: Spillover can travel in two ways, and this turns out to drive every result. Dark squares are intervention clusters, and here the left half of a two-by-four grid is treated.
 - Time: 1
 - Carry-over: both
@@ -190,7 +190,7 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Carry-over: both
 
 ### 12. We enumerate every possible allocation on three small grids and compare their error
-- Figure: SampledPoints_trim.png
+- Figure: fig_sampled_points.png
 - Slide text: One replication on the 2×4 grid, 160 subjects placed at random. Only cluster membership enters the fit. | Grid | Clusters | Allocations (SRS) | BSS allocations | Replications | | 2×4 | 8 | 70 | 2 | 50 | | 3×3 | 9 | 126 | 6 | 50 | | 3×4 | 12 | 924 | 2 | 10 | 16 scenarios per grid: $\psi \in \{0.5, 0.6, 0.7, 0.8\}$ × $\rho \in \{0, 0.01\}$ × two spillover types Outcomes generated from the model's reduced form, …
 - Notes: Small grids let us enumerate every possible allocation, from 70 on the two-by-four grid to 924 on the three-by-four grid. Each grid has sixteen scenarios, four spillover sizes, two levels of spatial dependence and the two spillover types.
 - Time: 1.25
@@ -240,14 +240,14 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 ## 4. Application
 
 ### 18. North Carolina probation trials assign counties or judicial districts, natural spatial clusters
-- Figure: NC_DCS_Map_trim.png
+- Figure: fig_nc_dcs_districts.png
 - Slide text: 30 judicial districts in 4 divisions (NC Division of Community Supervision) Chief probation/parole officers and district managers oversee districts, often spanning several counties Case 1, trauma-informed supervision. Training for officers and chiefs on specialty caseloads, randomized by county or district Neighbors share courts, labor markets and providers, and leaders and providers can carry the program across arms
 - Notes: These questions came from two probation studies with the North Carolina Department of Adult Correction. Supervision is organized into thirty judicial districts in four divisions, and chiefs and district managers often span several units and counties.
 - Time: 1
 - Carry-over: both
 
 ### 19. A second study crosses the four behavioral health management areas
-- Figure: NC_MCO_Map_trim.png
+- Figure: fig_nc_mco.png
 - Slide text: Each county shaded by the LME/MCO that manages its behavioral health services. Case 2, specialty mental health probation. Cross-training and joint treatment-team meetings between officers and behavioral health providers Each county is served by one of 4 LME/MCOs (Local Management Entity/Managed Care Organizations) Large providers work across counties and MCO areas, so practices can travel into control counties …
 - Notes: The second study tests a strategy for specialty mental health probation, built on cross-training and joint team meetings between officers and behavioral health providers. Behavioral health care is managed by four regional managed care organizations, and each county is served by one of them.
 - Time: 0.75
@@ -255,7 +255,7 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Conference note: In a 15–20 minute slot, can merge into "NC probation districts"; cut in a 10–15 minute slot.
 
 ### 20. For both studies we recommend a best-effort block stratified allocation
-- Figure: BSS_Assignments_NC_Map_Applications_Text_Labels.png
+- Figure: fig_nc_bss_assignment.png
 - Slide text: An example allocation of judicial districts (Case 1). Red, intervention; blue, control. Case 2 would do the same with counties within each MCO area. Stratify by judicial division (Case 1) or MCO area (Case 2), then keep same-arm districts apart where the map allows Why controls only? With a consistent treatment effect, treated districts gain nothing more from other treated districts, but nearby controls can pick …
 - Notes: For both studies we recommend block stratified sampling, adapted to the map, with intervention in red and control in blue. The recommendation rests on the proposed studies' assumption that, with a consistent treatment effect, treated districts gain nothing more from other treated districts, while nearby control districts can pick the program up.
 - Time: 1.25
@@ -299,13 +299,13 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 ## Backup
 
 ### B1. 3×3 grid, every allocation
-- Figure: MSE_Estimates_3x3_corrected.png
+- Figure: fig_mse_3x3_all.png
 - Slide text: Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the six BSS allocations and "Random" every allocation, colored by $\psi$ The BSS spread comes from its six different allocations. One, the full checkerboard, is collinear; the other five leave a control unexposed and estimate $\beta$ almost exactly With spillover into controls and $\rho = 0.01$, random allocations reach MSE 1.20 at …
 - Notes: Use when asked for the per-allocation distributions on the 3×3 grid. This is the chapter's figure.
 - Carry-over: both
 
 ### B2. 3×4 grid, every allocation
-- Figure: MSE_Estimates_3x4_corrected.png
+- Figure: fig_mse_3x4_all.png
 - Slide text: Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the two checkerboards and "Random" all 924 allocations, colored by $\psi$ With spillover into controls and $\rho = 0.01$, random allocations reach MSE 2.57 at $\psi = 0.5$, while both checkerboards stay at or below 0.18 With spillover into both arms, most random allocations sit near zero and the checkerboards do not
 - Notes: Use when asked for the per-allocation distributions on the 3×4 grid. This is the chapter's figure.
 - Carry-over: both
@@ -347,7 +347,7 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Carry-over: both
 
 ### B9. Row-normalized rook weights make the lag term a neighbor average
-- Figure: none
+- Figure: fig_weights_2x4.png
 - Slide text: Cells numbered row by row for this example; cluster 2 and its rook neighbors (amber). $$ w_{ij} = \frac{c_{ij}}{\sum_k c_{ik}}, \qquad c_{ij} = \begin{cases} 1 & \text{edge shared} \\ 0 & \text{otherwise} \end{cases} $$ Cluster 2 has rook neighbors 1, 3 and 6, so $w_{21} = w_{23} = w_{26} = 1/3$ Each row sums to 1, so $\sum_j w_{ij} y_j$ is the average neighbor outcome and $\rho$ is comparable across clusters …
 - Notes: Use when asked how W is defined and why it is row-standardized. Corner clusters have two neighbors and edge clusters three on the 2×4 grid. For how the simulation's generating weights relate to this, see the next slide.
 - Carry-over: both
@@ -371,8 +371,8 @@ The conference slot is not known yet; the deck assumes about 20 minutes.
 - Carry-over: both
 
 ### B13. Buffer-zone designs could restore identifiability
-- Figure: none
-- Slide text: Intervention Excluded buffer Unexposed control Exclude, or analyze separately, controls that border intervention clusters Then the remaining controls have $z_i = 0$ and $x_i = 0$, and the contrast with treated clusters estimates $\beta$ without collinearity Needs grids large enough that interior controls remain, which these small grids are not Trades the number of usable clusters against separation (McCann et …
+- Figure: fig_buffer_zone.png
+- Slide text: Exclude, or analyze separately, controls that border intervention clusters Then the remaining controls have $z_i = 0$ and $x_i = 0$, and the contrast with treated clusters estimates $\beta$ without collinearity Needs grids large enough that interior controls remain, which these small grids are not Trades the number of usable clusters against separation (McCann et al., Int J Epidemiol 2018)
 - Notes: Use when asked what to do about the collinearity problem.
 - Carry-over: both
 

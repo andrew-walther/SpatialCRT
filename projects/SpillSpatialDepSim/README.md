@@ -127,7 +127,11 @@ The ~20-minute deck for prelim Part I and Dr. Lin's conference talk; see
 
 | File | Description |
 |------|-------------|
-| `data/NC_Judicial_District_Assignments.csv` | County → judicial district mapping for NC |
+| `data/NC_Judicial_District_Assignments.csv` | The 31 DCS districts, their judicial division, and a random assignment draw |
+| `data/NC_DCS_District_Counties.csv` | County → DCS district → division (from the DAC district map, 2025) |
+| `data/NC_LME_MCO_Counties_2025.csv` | County → LME/MCO, four areas (NCDHHS directory, archived 2025-05-31) |
+
+Sources and known differences from the paper's maps: `data/README.md`.
 
 ### Results
 

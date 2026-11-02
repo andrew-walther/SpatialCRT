@@ -191,20 +191,7 @@ Department of Biostatistics, University of North Carolina at Chapel Hill<br/>
 - This project began with two planned **probation trials** in North Carolina that randomize counties or districts
 :::
 ::: {.column width="45%"}
-<svg width="620" height="430" viewBox="0 0 620 430" role="img" aria-label="A region divided into nine areas, four shaded as intervention areas, with arrows from intervention areas into neighboring control areas">
-<g stroke="#ffffff" stroke-width="6">
-<rect x="10" y="10" width="190" height="130" fill="#13294B"/><rect x="210" y="10" width="190" height="130" fill="#E1E5EA"/><rect x="410" y="10" width="190" height="130" fill="#13294B"/>
-<rect x="10" y="150" width="190" height="130" fill="#E1E5EA"/><rect x="210" y="150" width="190" height="130" fill="#13294B"/><rect x="410" y="150" width="190" height="130" fill="#E1E5EA"/>
-<rect x="10" y="290" width="190" height="130" fill="#13294B"/><rect x="210" y="290" width="190" height="130" fill="#E1E5EA"/><rect x="410" y="290" width="190" height="130" fill="#E1E5EA"/>
-</g>
-<g stroke="#FBAF3D" stroke-width="8" fill="#FBAF3D">
-<line x1="160" y1="75" x2="250" y2="75"/><polygon points="262,75 244,64 244,86"/>
-<line x1="305" y1="190" x2="305" y2="110"/><polygon points="305,98 294,116 316,116"/>
-<line x1="360" y1="215" x2="450" y2="215"/><polygon points="462,215 444,204 444,226"/>
-<line x1="105" y1="325" x2="105" y2="250"/><polygon points="105,238 94,256 116,256"/>
-</g>
-</svg>
-<div class="p1-legend"><span><span class="p1-swatch" style="background:#13294B"></span>Intervention area</span><span><span class="p1-swatch" style="background:#E1E5EA"></span>Control area</span><span><span class="p1-swatch" style="background:#FBAF3D"></span>Possible spillover</span></div>
+<img src="figures/fig_places.png" class="p1-fig" style="width: 600px;" alt="A region divided into nine areas, four shaded as intervention areas, with arrows from intervention areas into neighboring control areas">
 :::
 :::
 
@@ -256,22 +243,12 @@ Untreated children attending schools near treated schools had fewer worm infecti
 <div class="p1-schematic" style="gap: 6em; margin-top: 0.4em;">
 <figure>
 <figcaption>Spatial dependence ($\rho$)</figcaption>
-<svg width="350" height="350" viewBox="0 0 345 345" role="img" aria-label="Three by three grid shaded from dark to light, so neighboring areas have similar outcomes, with no treatment">
-<g stroke="#fff" stroke-width="5"><rect x="10" y="10" width="105" height="105" fill="#1f4e79"/><rect x="120" y="10" width="105" height="105" fill="#2f6aa0"/><rect x="230" y="10" width="105" height="105" fill="#5b8fc0"/><rect x="10" y="120" width="105" height="105" fill="#2f6aa0"/><rect x="120" y="120" width="105" height="105" fill="#5b8fc0"/><rect x="230" y="120" width="105" height="105" fill="#8fb5da"/><rect x="10" y="230" width="105" height="105" fill="#5b8fc0"/><rect x="120" y="230" width="105" height="105" fill="#8fb5da"/><rect x="230" y="230" width="105" height="105" fill="#c3d8ec"/></g>
-</svg>
+<img src="figures/fig_dependence.png" style="width: 350px;" alt="Three by three grid shaded from dark to light, so neighboring areas have similar outcomes, with no treatment">
 <p class="p1-caption" style="max-width: 420px;">Neighbors have similar outcomes because they share conditions, with or without treatment</p>
 </figure>
 <figure>
 <figcaption>Spillover ($\psi$)</figcaption>
-<svg width="350" height="350" viewBox="0 0 345 345" role="img" aria-label="Three by three grid with a treated center cell and its four edge neighbors raised by spillover">
-<g stroke="#fff" stroke-width="5"><rect x="10" y="10" width="105" height="105" fill="#E1E5EA"/><rect x="120" y="10" width="105" height="105" fill="#FBAF3D"/><rect x="230" y="10" width="105" height="105" fill="#E1E5EA"/><rect x="10" y="120" width="105" height="105" fill="#FBAF3D"/><rect x="120" y="120" width="105" height="105" fill="#13294B"/><rect x="230" y="120" width="105" height="105" fill="#FBAF3D"/><rect x="10" y="230" width="105" height="105" fill="#E1E5EA"/><rect x="120" y="230" width="105" height="105" fill="#FBAF3D"/><rect x="230" y="230" width="105" height="105" fill="#E1E5EA"/></g>
-<g stroke="#13294B" stroke-width="6" fill="#13294B">
-<line x1="172" y1="135" x2="172" y2="95"/><polygon points="172,82 161,100 183,100"/>
-<line x1="172" y1="210" x2="172" y2="250"/><polygon points="172,263 161,245 183,245"/>
-<line x1="135" y1="172" x2="95" y2="172"/><polygon points="82,172 100,161 100,183"/>
-<line x1="210" y1="172" x2="250" y2="172"/><polygon points="263,172 245,161 245,183"/>
-</g>
-</svg>
+<img src="figures/fig_spillover_center.png" style="width: 350px;" alt="Three by three grid with a treated center cell and its four edge neighbors raised by spillover">
 <p class="p1-caption" style="max-width: 420px;">The treated area (dark) raises outcomes in its neighbors (amber); without treatment there is none</p>
 </figure>
 </div>
@@ -362,32 +339,7 @@ Untreated children attending schools near treated schools had fewer worm infecti
 
 ## Spillover may reach only control clusters, or control and intervention clusters {data-menu-title="Two spillover types" data-footer-part="Methods"}
 
-<div class="p1-schematic">
-<figure>
-<figcaption>Control Clusters Only</figcaption>
-<svg width="460" height="240" viewBox="0 0 460 240" role="img" aria-label="Two by four grid with the left four cells treated; only the two control cells beside them are exposed">
-<g stroke="#fff" stroke-width="6">
-<rect x="10" y="10" width="105" height="105" fill="#13294B"/><rect x="120" y="10" width="105" height="105" fill="#13294B"/><rect x="230" y="10" width="105" height="105" fill="#E1E5EA"/><rect x="340" y="10" width="105" height="105" fill="#E1E5EA"/>
-<rect x="10" y="120" width="105" height="105" fill="#13294B"/><rect x="120" y="120" width="105" height="105" fill="#13294B"/><rect x="230" y="120" width="105" height="105" fill="#E1E5EA"/><rect x="340" y="120" width="105" height="105" fill="#E1E5EA"/>
-</g>
-<g fill="#FBAF3D" stroke="#13294B" stroke-width="2"><circle cx="282" cy="62" r="30"/><circle cx="282" cy="172" r="30"/></g>
-<g font-size="21" font-weight="700" fill="#13294B" text-anchor="middle"><text x="282" y="70">z=1</text><text x="282" y="180">z=1</text></g>
-</svg>
-</figure>
-<figure>
-<figcaption>Control &amp; Intervention Clusters</figcaption>
-<svg width="460" height="240" viewBox="0 0 460 240" role="img" aria-label="Same grid; the two exposed control cells and all four treated cells, which border other treated cells, are exposed">
-<g stroke="#fff" stroke-width="6">
-<rect x="10" y="10" width="105" height="105" fill="#13294B"/><rect x="120" y="10" width="105" height="105" fill="#13294B"/><rect x="230" y="10" width="105" height="105" fill="#E1E5EA"/><rect x="340" y="10" width="105" height="105" fill="#E1E5EA"/>
-<rect x="10" y="120" width="105" height="105" fill="#13294B"/><rect x="120" y="120" width="105" height="105" fill="#13294B"/><rect x="230" y="120" width="105" height="105" fill="#E1E5EA"/><rect x="340" y="120" width="105" height="105" fill="#E1E5EA"/>
-</g>
-<g fill="#FBAF3D" stroke="#13294B" stroke-width="2"><circle cx="62" cy="62" r="30"/><circle cx="172" cy="62" r="30"/><circle cx="282" cy="62" r="30"/><circle cx="62" cy="172" r="30"/><circle cx="172" cy="172" r="30"/><circle cx="282" cy="172" r="30"/></g>
-<g font-size="21" font-weight="700" fill="#13294B" text-anchor="middle"><text x="62" y="70">z=1</text><text x="172" y="70">z=1</text><text x="282" y="70">z=1</text><text x="62" y="180">z=1</text><text x="172" y="180">z=1</text><text x="282" y="180">z=1</text></g>
-</svg>
-</figure>
-</div>
-
-<div class="p1-legend"><span><span class="p1-swatch" style="background:#13294B"></span>Intervention cluster ($x_i = 1$)</span><span><span class="p1-swatch" style="background:#E1E5EA"></span>Control cluster ($x_i = 0$)</span><span><span class="p1-swatch" style="background:#FBAF3D; border-radius:50%"></span>Exposed to spillover ($z_i = 1$), unmarked $z_i = 0$</span></div>
+<img src="figures/fig_spill_types.png" class="p1-fig" style="width: 1100px;" alt="Two by four grid with the left four cells treated, shown under both spillover types: under Control Clusters Only the two control cells beside the treated block are exposed; under Control and Intervention Clusters those two and all four treated cells are exposed">
 
 - Exposure is **binary**. A cluster is exposed if at least one rook neighbor is an intervention cluster (and, for Control Clusters Only, it is itself a control), however many treated neighbors it has
 - **Control Clusters Only** is classic contamination; under **Control & Intervention Clusters** treated clusters next to other treated clusters gain extra
@@ -475,7 +427,7 @@ $$
 
 ::: {.columns .p1-vcenter}
 ::: {.column width="50%"}
-<img src="figures/SampledPoints_trim.png" class="p1-fig p1-wide" alt="Simulated subjects on the 2 by 4 grid, colored by cluster">
+<img src="figures/fig_sampled_points.png" class="p1-fig p1-wide" alt="Simulated subjects on the 2 by 4 grid, colored by cluster">
 <p class="p1-caption">One replication on the 2×4 grid, 160 subjects placed at random. Only cluster membership enters the fit.</p>
 :::
 ::: {.column .p1-small width="50%"}
@@ -631,7 +583,7 @@ $$
 
 ::: {.columns .p1-vcenter}
 ::: {.column width="68%"}
-<img src="figures/NC_DCS_Map_trim.png" class="p1-fig p1-wide" alt="North Carolina Division of Community Supervision map with 30 judicial districts grouped into 4 judicial divisions">
+<img src="figures/fig_nc_dcs_districts.png" class="p1-fig p1-wide" alt="North Carolina Division of Community Supervision map with 30 judicial districts grouped into 4 judicial divisions">
 :::
 ::: {.column .p1-small width="32%" style="font-size: 0.82em;"}
 - **30 judicial districts** in **4 divisions** (NC Division of Community Supervision)
@@ -656,7 +608,7 @@ $$
 
 ::: {.columns .p1-vcenter}
 ::: {.column width="68%"}
-<img src="figures/NC_MCO_Map_trim.png" class="p1-fig p1-wide" alt="Map of the four LME/MCO coverage areas across North Carolina counties">
+<img src="figures/fig_nc_mco.png" class="p1-fig p1-wide" alt="Map of the four LME/MCO coverage areas across North Carolina counties">
 <p class="p1-caption">Each county shaded by the LME/MCO that manages its behavioral health services.</p>
 :::
 ::: {.column .p1-small width="32%" style="font-size: 0.8em;"}
@@ -680,7 +632,7 @@ $$
 
 ::: {.columns}
 ::: {.column width="58%"}
-<img src="figures/BSS_Assignments_NC_Map_Applications_Text_Labels.png" class="p1-fig" style="max-height: 640px;" alt="Example block stratified allocation of North Carolina judicial districts, intervention in red and control in blue">
+<img src="figures/fig_nc_bss_assignment.png" class="p1-fig" style="max-height: 640px;" alt="Example block stratified allocation of North Carolina judicial districts, intervention in red and control in blue">
 <p class="p1-note">An example allocation of judicial districts (Case 1). Red, intervention; blue, control. Case 2 would do the same with counties within each MCO area.</p>
 :::
 ::: {.column .p1-small width="42%"}
@@ -825,7 +777,7 @@ Walther et al., *BMC Medical Research Methodology* (2026)
 
 ::: {.columns .p1-vcenter}
 ::: {.column width="66%"}
-<img src="figures/MSE_Estimates_3x3_corrected.png" class="p1-fig p1-wide" alt="3 by 3 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
+<img src="figures/fig_mse_3x3_all.png" class="p1-fig p1-wide" alt="3 by 3 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
 :::
 ::: {.column .p1-small width="34%"}
 - Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the six BSS allocations and "Random" every allocation, colored by $\psi$
@@ -842,7 +794,7 @@ Use when asked for the per-allocation distributions on the 3×3 grid. This is th
 
 ::: {.columns .p1-vcenter}
 ::: {.column width="66%"}
-<img src="figures/MSE_Estimates_3x4_corrected.png" class="p1-fig p1-wide" alt="3 by 4 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
+<img src="figures/fig_mse_3x4_all.png" class="p1-fig p1-wide" alt="3 by 4 grid MSE by sampling group, spillover size, spatial dependence and spillover type">
 :::
 ::: {.column .p1-small width="34%"}
 - Rows are spillover types (Control Only on top), columns are $\rho$. "Block" is the two checkerboards and "Random" all `r gi("3x4","n_alloc")` allocations, colored by $\psi$
@@ -938,13 +890,7 @@ Use when asked how outcomes were generated and how the model was estimated. The 
 
 ::: {.columns .p1-vcenter style="min-height: 600px;"}
 ::: {.column width="50%"}
-<svg width="100%" viewBox="0 0 560 300" role="img" aria-label="Two by four grid with cells numbered 1 to 8 row by row and cell 2 highlighted with its three rook neighbors">
-<g stroke="#fff" stroke-width="5">
-<rect x="10" y="10" width="130" height="130" fill="#FBAF3D"/><rect x="145" y="10" width="130" height="130" fill="#13294B"/><rect x="280" y="10" width="130" height="130" fill="#FBAF3D"/><rect x="415" y="10" width="130" height="130" fill="#E1E5EA"/>
-<rect x="10" y="145" width="130" height="130" fill="#E1E5EA"/><rect x="145" y="145" width="130" height="130" fill="#FBAF3D"/><rect x="280" y="145" width="130" height="130" fill="#E1E5EA"/><rect x="415" y="145" width="130" height="130" fill="#E1E5EA"/>
-</g>
-<g font-size="34" font-weight="700" text-anchor="middle" fill="#13294B"><text x="75" y="88">1</text><text x="210" y="88" fill="#fff">2</text><text x="345" y="88">3</text><text x="480" y="88">4</text><text x="75" y="223">5</text><text x="210" y="223">6</text><text x="345" y="223">7</text><text x="480" y="223">8</text></g>
-</svg>
+<img src="figures/fig_weights_2x4.png" class="p1-fig" alt="Two by four grid with cells numbered 1 to 8 row by row and cell 2 highlighted with its three rook neighbors">
 <p class="p1-note">Cells numbered row by row for this example; cluster 2 and its rook neighbors (amber).</p>
 :::
 ::: {.column width="50%"}
@@ -1017,15 +963,7 @@ Use when asked "is BSS still randomized?" or "how would you do inference?" Be di
 
 ::: {.columns}
 ::: {.column width="45%"}
-<svg width="560" height="420" viewBox="0 0 560 420" role="img" aria-label="Five by four style grid with a treated cell, a ring of excluded cells around it, and distant control cells">
-<g stroke="#fff" stroke-width="4">
-<rect x="10" y="10" width="100" height="100" fill="#E1E5EA"/><rect x="115" y="10" width="100" height="100" fill="#E1E5EA"/><rect x="220" y="10" width="100" height="100" fill="#E1E5EA"/><rect x="325" y="10" width="100" height="100" fill="#E1E5EA"/><rect x="430" y="10" width="100" height="100" fill="#E1E5EA"/>
-<rect x="10" y="115" width="100" height="100" fill="#E1E5EA"/><rect x="115" y="115" width="100" height="100" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="220" y="115" width="100" height="100" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="325" y="115" width="100" height="100" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="430" y="115" width="100" height="100" fill="#E1E5EA"/>
-<rect x="10" y="220" width="100" height="100" fill="#E1E5EA"/><rect x="115" y="220" width="100" height="100" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="220" y="220" width="100" height="100" fill="#13294B"/><rect x="325" y="220" width="100" height="100" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="430" y="220" width="100" height="100" fill="#E1E5EA"/>
-<rect x="10" y="325" width="100" height="90" fill="#E1E5EA"/><rect x="115" y="325" width="100" height="90" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="220" y="325" width="100" height="90" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="325" y="325" width="100" height="90" fill="#fff" stroke="#9aa3ad" stroke-dasharray="8 6"/><rect x="430" y="325" width="100" height="90" fill="#E1E5EA"/>
-</g>
-</svg>
-<div class="p1-legend"><span><span class="p1-swatch" style="background:#13294B"></span>Intervention</span><span><span class="p1-swatch" style="background:#fff; border-style:dashed"></span>Excluded buffer</span><span><span class="p1-swatch" style="background:#E1E5EA"></span>Unexposed control</span></div>
+<img src="figures/fig_buffer_zone.png" class="p1-fig" style="width: 560px;" alt="Five by four style grid with a treated cell, a ring of excluded cells around it, and distant control cells">
 :::
 ::: {.column width="55%"}
 - Exclude, or analyze separately, controls that border intervention clusters
