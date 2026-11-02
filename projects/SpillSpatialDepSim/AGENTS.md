@@ -144,8 +144,8 @@ CSV naming convention: `{param}_mse_results_{TrtSpill|TrtNoSpill}_{grid}_A02_B1_
 
 - `data/NC_Judicial_District_Assignments.csv` — the 31 DCS districts, division, and a
   seed-42 random draw (not the paper's BSS map, which is hard-coded in `NCTrtMaps.Rmd`)
-- `data/NC_DCS_District_Counties.csv` — county → district → division, transcribed
-  2026-11-02 from the DAC map (2025); Chowan and Dare differ from the paper's map
+- `data/NC_County_Assignments.csv` — county → district → division, the paper's own
+  county file (restored from OneDrive 2026-11-02; `NCTrtMaps.Rmd` read it)
 - `data/NC_LME_MCO_Counties_2025.csv` — county → LME/MCO (four areas, NCDHHS archive
   2025-05-31); see `data/README.md`
 - `docs/prompts/` — session kickoff prompts

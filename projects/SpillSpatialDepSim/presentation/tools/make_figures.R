@@ -314,15 +314,17 @@ save_png(p13, "fig_buffer_zone.png", 9, 8)
 
 # North Carolina maps ----
 # County shapes: US Census cartographic boundaries (tigris, cached), 2023 vintage.
-# County -> Division of Community Supervision district: data/NC_DCS_District_Counties.csv,
-# transcribed from the DAC district map (updated 2025-01-07). County -> LME/MCO:
+# County -> Division of Community Supervision district: data/NC_County_Assignments.csv,
+# the county file behind the paper's maps (read off the DAC district map). County -> LME/MCO:
 # data/NC_LME_MCO_Counties_2025.csv, from the NCDHHS LME/MCO directory as archived
 # 2025-05-31 (four LME/MCOs, before the Vaya-Partners merger). See data/README.md.
 suppressMessages({library(sf); library(tigris)})
 options(tigris_use_cache = TRUE)
+dcs <- read.csv("data/NC_County_Assignments.csv", colClasses = "character") %>%
+  transmute(county = trimws(County), district = trimws(District), division = trimws(Division))
 nc <- counties(state = "NC", cb = TRUE, year = 2023, progress_bar = FALSE) %>%
   select(county = NAME, geometry) %>%
-  left_join(read.csv("data/NC_DCS_District_Counties.csv", colClasses = c(district = "character")), by = "county") %>%
+  left_join(dcs, by = "county") %>%
   left_join(read.csv("data/NC_LME_MCO_Counties_2025.csv"), by = "county")
 stopifnot(nrow(nc) == 100, !anyNA(nc$district), !anyNA(nc$lme_mco))
 districts <- nc %>% group_by(division, district) %>% summarise(geometry = st_union(geometry), .groups = "drop")

@@ -1,4 +1,4 @@
-county,district,division
+County,District,Division
 Alamance,15,2
 Alexander,22,3
 Alleghany,23,3
@@ -19,14 +19,14 @@ Caswell,15,2
 Catawba,25,4
 Chatham,14,2
 Cherokee,30,4
-Chowan,1,1
+Chowan,6,1
 Clay,30,4
 Cleveland,27,4
 Columbus,13,2
 Craven,3,1
 Cumberland,12,2
 Currituck,1,1
-Dare,1,1
+Dare,2,1
 Davidson,22,3
 Davie,22,3
 Duplin,4,1
@@ -54,10 +54,10 @@ Jones,4,1
 Lee,11,2
 Lenoir,8,1
 Lincoln,27,4
+McDowell,29,4
 Macon,30,4
 Madison,24,4
 Martin,2,1
-McDowell,29,4
 Mecklenburg,26,4
 Mitchell,24,4
 Montgomery,19B,3
@@ -65,7 +65,7 @@ Moore,19B,3
 Nash,7,1
 New Hanover,5,1
 Northampton,6,1
-Onslow,4,1
+Onslow,3,1
 Orange,14,2
 Pamlico,3,1
 Pasquotank,1,1
