@@ -51,7 +51,11 @@ Builds on the 2026-11-02 cleanup (`37bf50b`, `c7d62fb`).
 1. Map the pipeline: for each manuscript exhibit and number group, the script that makes
    it, the results file it reads and that file's inputs. Write it as a table in
    `docs/findings/`. → check: every table label and figure in the three documents has a row.
-2. Code review of `code/06`–`27`, `application/code/` and `paper/tools/` for simplification:
+2. Code review of `code/06`–`27`, `application/code/` and `paper/tools/` for simplification.
+   Author aim (2026-11-02): anything the simulation and application can share should be
+   one shared function (the t + df interval first; also look at metric summaries, design
+   labels, seeding and figure themes), each move tested so both studies' stored values
+   stay unchanged. Also look for:
    repeated helpers (for example the relabel and `apply_tdf_intervals()` steps repeated in
    12–14), overlapping aggregations in 19–21, dead branches and unused outputs. Report
    findings first; change only what the author approves.
