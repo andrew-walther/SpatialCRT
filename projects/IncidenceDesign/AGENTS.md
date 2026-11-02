@@ -72,6 +72,9 @@ Reasons and history for each rule: `DECISIONS.md`.
 - **Allocation-risk numbers** (corner settings on all ten surfaces,
   `results/allocation_risk/surfaces10/`, author 2026-10-27; the two-surface `pilot/` is
   superseded) are never substituted for the full grid benchmark (Table 2).
+- **Figures are files built by code (author, 2026-11-02):** manuscripts and decks
+  include figure files written by scripts, never inline SVG/HTML or hand copies;
+  `paper/tools/copy_figures.sh` carries `results/` figures into both paper folders.
 - **Where to write things down:** project docs go in `docs/` by type (`plans/`,
   `findings/`, `reviews/`, `prompts/`, `meetings/`), named `YYYY-MM-DD-topic-type.md`
   with hyphens, and get a row in that folder's `README.md` (map: `docs/README.md`;
@@ -129,55 +132,74 @@ the reasoning behind this distinction.
 
 ## File Map
 
-| File | Lines | Role | Key Functions |
-|------|------:|------|---------------|
-| `00_mathematical_specification.Rmd` | ~495 | Theory & DGP formulas | (rendered to HTML) |
-| `01_spatial_setup.R` | 54 | Grid + weight matrices | `build_spatial_grid()`, `get_active_spatial()` |
-| `02_incidence_generation.R` | 112 | 3 incidence modes | `generate_incidence()`, `generate_incidence_iid/spatial/poisson()` |
-| `03_designs.R` | ~162 | 8 treatment designs | `get_designs()`, `get_design_names()`, `is_design_deterministic()` |
-| `04_estimation.R` | 102 | DIM + MLE estimation | `estimate_tau()` |
-| `05_run_simulation.R` | ~385 | Main orchestrator | `run_incidence_config()` |
-| `06_visualizations.R` | ~800 | Plots + tables | 18 plot/table/runner functions (see the script) |
-| `07_results_summary.Rmd` | ~800 | Rendered results report | Knitted HTML/PDF summary |
-| `08_design_recommendations.R` | ~891 | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
-| `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative report | Knitted to `results/MLE_design_recommendation_report.pdf` |
-| `10_statistical_comparisons.R` | ~1050 | Formal hypothesis tests on design MSE | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()`, `plot_conditional_cd_diagrams()`, `generate_comparison_report()` |
-| `11_statistical_comparisons_report.qmd` | ~543 | Narrative statistical comparisons report | Renders to `results/11_statistical_comparisons_report.{html,pdf}` |
-| `12_six_design_statistical_comparisons.R` | ~180 | Re-run Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs + named-label figures | Outputs to `results/six_design_manuscript/` |
-| `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
-| `14_manuscript_supplement_figures.R` | ~400 | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
-| `19_manuscript_exhibits.R` | ~60 | Current nine-design grid regime CSV, provenance and six-design CTJ vector figure | Reads verified September 27 oracle outputs only |
-| `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile conditional MSE as ratios to SRS (Table `tab:downside`) and the allocation-distribution figure (CTJ Figure 3, chapter/SI `fig:alloc-dist`) | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/downside_by_design.csv` |
-| `23_methods_extension_figures.R` | ~210 | NC methods-extension figures: power vs participating colleges, colleges needed for 80% power, grid spread vs incidence-guidance gain (PDF + PNG) | Reads stored 2026-10-21 summaries; writes `results/methods_ext_figures/` |
-| `24_methods_extension_tables.R` | ~200 | LaTeX table bodies for chapter Appendix A9 / SI S10 (power, translation, calibration, guidance, CAR, Bayes, spillover forms) plus in-text numbers | Writes `results/methods_ext_figures/tables/` |
-| `25_design_assignment_figures.R` | ~200 | Example assignment per design on one illustrative surface (ρ_X = 0.5): CTJ Table 1 thumbnails, SI/Chapter 3 panel figure, wide slide version | Writes `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf` (SI and chapter figure folders), `presentation/figures/design_assignments_panels_wide.{pdf,png}` |
-| `26_grid_tdf_intervals.R` | ~180 | Exact re-fit of the full grid recording t + df coverage/power beside Wald; reproduction check against the 2026-09-27 run | Writes `results/grid_tdf_2026-10/` (never `sim_data/`) |
-| `27_interval_comparison.R` | ~100 | Wald vs t + df coverage for grid and application (comparison table CSV) and the application's yearly t + df coverage; checks its Wald column against the production means | Writes `results/grid_tdf_2026-10/interval_comparison.csv`, `application/results/methods_ext_2026-10/stored/yearly_primary_coverage_tdf.csv` |
-| `paper/tools/verify_manuscripts.py` | ~290 | CSV-to-table and chapter-to-supplement reconciliation (incl. merged `tab:nc-annual`); assets/references/citations/exhibit count; `--chapter`, `--pending-si` for candidate copies | Stdlib; deliberately wrong-number fixture must fail |
-| `complete_after_mle.R` | ~685 | Post-MLE script | Runs viz, writes docs, prints stats |
-| **application/** | | | |
-| `application/code/run_sud_aggregation.R` | ~65 | Entry script: real SUD data → county + 58-cluster rates per 100k (by year, total, average) → `application/data/derived/` | Sources the three `sud_*.R` files below |
-| `application/code/sud_load_data.R` | ~105 | Load and join numerator + denominator; complete-panel checks | `load_sud_county_data()` |
-| `application/code/sud_incidence.R` | ~110 | Rate formulas; county → college aggregation | `compute_incidence()`, `aggregate_sud_to_clusters()` |
-| `application/code/sud_reconcile.R` | ~100 | QC report vs Habib (2026) and the 23,523 counts | `reconcile_sud_counts()` |
-| `application/code/manuscript_maps.R` | ~70 | Clean (title-free) manuscript copies of the NC maps, service-area map and application figures | Reuses `rs_maps()` (companion) and `generate_county_borders_map(show_title = FALSE)`; writes both paper figure folders |
-| `application/code/build_cluster_weights.R` | ~70 | Queen + rook contiguity (nb, binary A, row-standardized W) for the 58 clusters → tracked `application/data/nc_cluster_weights.rds` | Reuses `build_nc_application_clusters()`, `build_application_spatial_weights()` |
-| `application/tests/test_application_data.R` | ~130 | 23 checks: rate formulas (fixture), bad input, real data vs Habib (2026), weights | Real-data part skips if the gitignored sources are absent |
-| **paper/report/** | | | |
-| `IncidenceSpatialCRT_Report.qmd` | ~1100 | Unified project report (50+ pages, 8-design) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
-| **paper/archive/** | | | |
-| `pre_unification_20260702/` (retired) | — | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
-| `pre_completion_20261002/`, `manuscript_provenance_20261002.json` | — | Sources before the Oct 2 completion pass; Oct 2 SHA-256 manifest | Frozen provenance; do not reuse numbers |
-| **paper/ctj_manuscript/** | | | |
-| `manuscript_ctj/CTJ_Manuscript.tex` | ~220 | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas |
-| `manuscript_ctj/CTJ_Reading.tex`, `CTJ_Exhibits.tex` | wrapper/shared exhibits | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
-| `supplementary_info/Supplementary_Information.tex` | full draft | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
-| `cover_letter/`, `figures/` (incl. `Figure_Legends.md`), `submission_checklist.md` | — | Cover letter draft; shared main/SI figures written by the R scripts | Figure paths in both TeX sources are `../figures/...` |
-| **paper/thesis_chapter/** | | | |
-| `Thesis_Chapter.qmd` | ~330 | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
-| **paper/** | | | |
-| `SpatialCRT_IncidenceDesign.bib` | ~99K, 81 entries | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`; `habib_temporal_2026` added 2026-09-24 = Ashkan Habib's unpublished BIOS master's paper, source of the SUD county data) | Zotero base + SUD/SUDDEN citations + design-theory citations |
-| `SAGE_Journal_Template/` | — | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
+| File | Role | Key Functions |
+|------|------|---------------|
+| `00_design_names.R` | Canonical design display names (Design N → name) | `apply_design_names()` |
+| `00_mathematical_specification.Rmd` | Theory & DGP formulas | (rendered to HTML) |
+| `01_spatial_setup.R` | Grid + weight matrices | `build_spatial_grid()`, `get_active_spatial()` |
+| `02_incidence_generation.R` | 3 incidence modes | `generate_incidence()`, `generate_incidence_iid/spatial/poisson()` |
+| `03_designs.R` | 8 treatment designs + SRS (Design 9) | `get_designs()`, `get_design_names()`, `is_design_deterministic()` |
+| `04_estimation.R` | DIM + MLE estimation | `estimate_tau()` |
+| `05_run_simulation.R` | Main orchestrator | `generate_surfaces()`, `draw_assignments()`, `run_unit()`, `summarize_fits()` |
+| `06_visualizations.R` | Plots + tables | 18 plot/table/runner functions (see the script) |
+| `07_results_summary.Rmd` | Rendered results report | Knitted HTML/PDF summary |
+| `08_design_recommendations.R` | Personalized design recs | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
+| `09_MLE_design_recommendation_report.qmd` | Companion narrative report | Rendered to `results/09_MLE_design_recommendation_report.{html,pdf}` |
+| `10_statistical_comparisons.R` | Formal hypothesis tests on design MSE | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()`, `plot_conditional_cd_diagrams()`, `generate_comparison_report()` |
+| `11_statistical_comparisons_report.qmd` | Narrative statistical comparisons report | Renders to `results/11_statistical_comparisons_report.{html,pdf}` |
+| `12_six_design_statistical_comparisons.R` | Re-run Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs + named-label figures | Outputs to `results/six_design_manuscript/` |
+| `13_dissertation_results_extract.R` | Pulls per-incidence-mode / per-parameter / robustness numbers for the dissertation chapter's fuller Results section | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
+| `14_manuscript_supplement_figures.R` | Fresh 8-design consolidation test + CTJ SI figure suite + reordered/new main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/{queen,rook}/si_figures/`, reordered `fig_mse_by_design_6design.pdf`, new `fig_biasvar_6design.pdf`, `application_table_6design.txt` |
+| `15_srs_benchmark.R` | SRS (Design 9) benchmark against the proposed designs: relative efficiency, share of blocks beating SRS, paired surface-level tests | Writes `results/srs_benchmark/` |
+| `16_allocation_risk.R` | Allocation-specific MSE at fixed incidence surfaces; profiles smoke, benchmark, pilot, surfaces10 (current) | Writes `results/allocation_risk/<profile>/`; also sourced by `application/code/real_sud_setup.R` |
+| `17_allocation_risk_summary.R` | Allocation-risk summaries and precision by profile | Writes `results/allocation_risk/summary/<profile>/` |
+| `18_allocation_risk_precision.R` | Extends 50 matched blocks of a run from R = 100 to R = 400 outcomes | Writes `results/allocation_risk/<profile>_precision_R400/` |
+| `19_manuscript_exhibits.R` | Current nine-design grid regime CSV, provenance and six-design CTJ vector figure | Reads verified September 27 oracle outputs only |
+| `20_manuscript_figure_revision.R` | Compact CTJ figures (NC planning map, grid accuracy, bias–variance, NC annual accuracy) from completed results | Writes `results/manuscript_exhibit_revision_20261002/` and `figures/compact/` in both paper folders |
+| `21_downside_by_design.R` | Per-design mean and worst-decile conditional MSE as ratios to SRS (Table `tab:downside`) and the allocation-distribution figure (CTJ Figure 3, chapter/SI `fig:alloc-dist`) | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/surfaces10/downside_by_design.csv` (default profile surfaces10) |
+| `22_grid_burden_share.R` | Burden share treated by design on the stored grid surfaces (incidence guidance vs Saturation Quadrants) | Writes `results/grid_burden_share/` |
+| `23_methods_extension_figures.R` | NC methods-extension figures: power vs participating colleges, colleges needed for 80% power, grid spread vs incidence-guidance gain (PDF + PNG) | Reads stored 2026-10-21 summaries; writes `results/methods_ext_figures/` |
+| `24_methods_extension_tables.R` | LaTeX table bodies for chapter Appendix A9 / SI S10 (power, translation, calibration, guidance, CAR, Bayes, spillover forms) plus in-text numbers | Writes `results/methods_ext_figures/tables/` |
+| `25_design_assignment_figures.R` | Example assignment per design on one illustrative surface (ρ_X = 0.5): CTJ Table 1 thumbnails, SI/Chapter 3 panel figure, wide slide version | Writes `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf` (SI and chapter figure folders), `presentation/figures/design_assignments_panels_wide.{pdf,png}` |
+| `26_grid_tdf_intervals.R` | Exact re-fit of the full grid recording t + df coverage/power beside Wald; reproduction check against the 2026-09-27 run | Writes `results/grid_tdf_2026-10/` (never `sim_data/`) |
+| `27_interval_comparison.R` | Wald vs t + df coverage for grid and application (comparison table CSV) and the application's yearly t + df coverage; checks its Wald column against the production means | Writes `results/grid_tdf_2026-10/interval_comparison.csv`, `application/results/methods_ext_2026-10/stored/yearly_primary_coverage_tdf.csv` |
+| `paper/tools/verify_manuscripts.py` | CSV-to-table and chapter-to-supplement reconciliation (incl. merged `tab:nc-annual`); assets/references/citations/exhibit count; `--chapter`, `--pending-si` for candidate copies | Stdlib; deliberately wrong-number fixture must fail |
+| `paper/tools/copy_figures.sh` | Copies the figures scripts write under `results/` into both manuscript figure folders under their manuscript names; fails loud on a missing source | Run from the project root after re-running producers |
+| `presentation/tools/make_figures.R` | Spillover-regime schematic and case-identification flowchart for the SUDDEN deck, as PNG files | Writes `presentation/figures/`; counts from `presentation/data/case_identification_counts.csv` |
+| **application/** |  |  |
+| `application/code/run_sud_aggregation.R` | Entry script: real SUD data → county + 58-cluster rates per 100k (by year, total, average) → `application/data/derived/` | Sources the three `sud_*.R` files below |
+| `application/code/sud_load_data.R` | Load and join numerator + denominator; complete-panel checks | `load_sud_county_data()` |
+| `application/code/sud_incidence.R` | Rate formulas; county → college aggregation | `compute_incidence()`, `aggregate_sud_to_clusters()` |
+| `application/code/sud_reconcile.R` | QC report vs Habib (2026) and the 23,523 counts | `reconcile_sud_counts()` |
+| `application/code/manuscript_maps.R` | Clean (title-free) manuscript copies of the NC maps, service-area map and application figures | Reuses `rs_maps()` (companion) and `generate_county_borders_map(show_title = FALSE)`; writes both paper figure folders |
+| `application/code/build_cluster_weights.R` | Queen + rook contiguity (nb, binary A, row-standardized W) for the 58 clusters → tracked `application/data/nc_cluster_weights.rds` | Reuses `build_nc_application_clusters()`, `build_application_spatial_weights()` |
+| `application/tests/test_application_data.R` | 23 checks: rate formulas (fixture), bad input, real data vs Habib (2026), weights | Real-data part skips if the gitignored sources are absent |
+| `application/code/real_sud_setup.R` | Validates observed annual/pooled inputs, weights and geography; freezes regions and yearly blocks | Sources `application_designs.R`, `cc_mapping_data.R`, `code/16` |
+| `application/code/real_sud_simulation.R` | Nested allocation × outcome experiments with the SAR ML engine and MC precision rules | Sourced by `run_real_sud.R` |
+| `application/code/run_real_sud.R` | Manifest-checked observed-incidence profiles (smoke, pilot, production) | Writes `application/results/real_sud_rev_20261002/<profile>/` |
+| `application/code/refine_real_sud_tail.R` | Extends outcomes to R ≥ 400 at primary queen corners on the same allocations | Writes `.../real_sud_rev_20261002/tail_confirmation/` |
+| `application/code/real_sud_summary.R` | Traceable yearly comparisons and publication figures | Writes `.../real_sud_rev_20261002/exhibits/` |
+| `application/code/render_real_sud_companion.R` | Offline HTML companion | Writes `application/report/real_sud_companion.html` |
+| `application/code/application_designs.R` | Irregular-map adaptations of the designs | Sourced by `real_sud_setup.R` |
+| `application/code/cc_mapping_data.R`, `nc_community_college_map.R` | County → college mapping (100 counties → 58 colleges) and the service-area map | Mapping CSVs in `application/data/` |
+| `application/code/methods_ext_*.R` | Methods extensions A0–A7 (2026-10-20/21): `core` helpers, `stored` (A0–A2, A5 Stage 1), `participation` (A3/A4, a3v2), `summaries`, `sensitivity` and `sensitivity_summary` (A5 Stage 2, A6, A7), `bayes_lag_summary`, `bayes_long_summary`, `bayes_long_tdf` | Writes `application/results/methods_ext_2026-10/` (`summaries_v2/`, `sensitivity_summaries_v2/` current) |
+| `application/code/run_methods_ext_queue.sh`, `run_methods_ext_queue_v2.sh` | Unattended queues for the 2026-10-20 runs and the 2026-10-21 reruns (v2 stops on any failed step) | Logs `queue.log`, `queue_v2.log` |
+| `application/code/run_application_profiles.R`, `synthetic_sud_data.R` | Synthetic-incidence runner (July 2026), superseded; outputs in `application/archive/synthetic_2026-07/` | Not used for current results |
+| **paper/report/** |  |  |
+| `IncidenceSpatialCRT_Report.qmd` | Unified project report (50+ pages, 8-design) | Covers spatial setup → DGP → 8 designs → estimation → simulation → all MLE results → full statistical comparisons (Section 10) → design recommendations |
+| **paper/archive/** |  |  |
+| `pre_unification_20260702/` (retired) | Byte-identical snapshot of the pre-2026-07-02 `paper/manuscript/` + `paper/section_drafts/` content | Reference/fact-check source only — do not edit in place; both current manuscripts were written fresh, not derived from this |
+| `pre_completion_20261002/`, `manuscript_provenance_20261002.json` | Sources before the Oct 2 completion pass; Oct 2 SHA-256 manifest | Frozen provenance; do not reuse numbers |
+| **paper/ctj_manuscript/** |  |  |
+| `manuscript_ctj/CTJ_Manuscript.tex` | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas |
+| `manuscript_ctj/CTJ_Reading.tex`, `CTJ_Exhibits.tex` | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
+| `supplementary_info/Supplementary_Information.tex` | Chapter-derived detailed methods/results, full application and seven appendix components (S1–S10); all 22 source tables retained | Plain article class, S-prefixed exhibits, shared bib |
+| `cover_letter/`, `figures/` (incl. `Figure_Legends.md`), `submission_checklist.md` | Cover letter draft; shared main/SI figures written by the R scripts | Figure paths in both TeX sources are `../figures/...` |
+| **paper/thesis_chapter/** |  |  |
+| `Thesis_Chapter.qmd` | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |
+| **paper/** |  |  |
+| `SpatialCRT_IncidenceDesign.bib` | Single shared bibliography for both manuscripts (renamed from `IncidenceDesign_shared.bib` 2026-09-24; `baird`/`leung` entries synced to `bios-dissertation/prelim/references.bib`; `habib_temporal_2026` added 2026-09-24 = Ashkan Habib's unpublished BIOS master's paper, source of the SUD county data) | Zotero base + SUD/SUDDEN citations + design-theory citations |
+| `SAGE_Journal_Template/` | `sagej.cls`, `SageH.bst`, `SageV.bst` | CTJ manuscript render dependency |
 
 ---
 
@@ -259,6 +281,10 @@ results data frame — 1 row per scenario:
 | `spill_type` | control_only, both | 2 |
 | `design_id` | 1, 2, 3, 4, 5, 6, 7, 8 | 8 |
 | **Total** | 5 x 5 x 2 x 4 x 4 x 2 x 8 | **12,800** |
+
+The production run (`results/sim_data/*_20260927_000502*`, verified in
+`results/sim_data/full_run_verification.txt`) adds SRS as Design 9: 14,400 scenario rows per
+estimator, with Designs 1–8 identical to the superseded `20260924_025509` run.
 
 Scenarios per (tau × incidence config): 512 (= 2x4x4x2x8). Each scenario has 250 fits per
 estimator (K = 10 surfaces × J = 25 design draws). The `pilot` profile of 05 runs τ = 1,

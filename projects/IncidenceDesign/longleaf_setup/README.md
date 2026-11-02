@@ -1,9 +1,13 @@
 # Longleaf HPC Setup for IncidenceDesign
 
-> **Superseded by the 2026-09 revision.** `simulation.R` here implements the pre-revision
-> DGP (designs from `X[,1]`, 1,000 people per Poisson cluster, unkeyed seeds). The revised
+> **Kept for reference only; not used (status 2026-11-02).** This folder is the April 2026
+> Longleaf pipeline. `simulation.R` here implements the pre-revision DGP (designs from
+> `X[,1]`, 1,000 people per Poisson cluster, unkeyed seeds). The revised
 > `code/05_run_simulation.R` runs the full grid in ~14 minutes on a laptop, so Longleaf isn't
-> needed. Kept for reference only; don't run it.
+> needed. `run_overnight.sh` (the April local τ-sweep launcher) moved here from the project
+> root on 2026-11-02; it targets the pre-revision runner and checkpoint layout and does not
+> work with the revised `05`. The empty `results/longleaf/` placeholders named below were
+> removed on 2026-11-02 (they held only `.gitkeep` files). Don't run anything here.
 
 Run the MLE simulation (2,560 scenarios) on UNC's Longleaf cluster using SLURM job arrays. Each scenario runs as an independent task (~1-5 min), enabling massive parallelism.
 
@@ -18,6 +22,7 @@ longleaf_setup/
   submit_single.sl       # Alternative: single long-running job (not used)
   LONGLEAF_CHEATSHEET.md # Quick reference for Longleaf commands
   CLAUDE_CODE_BRIEFING.md # Context for Claude Code sessions
+  run_overnight.sh       # April 2026 local tau-sweep launcher/monitor (moved here 2026-11-02; obsolete)
   logs/                  # SLURM stdout/stderr (created at runtime, git-ignored)
   results/rds/           # Per-scenario .rds files (created at runtime, git-ignored)
 ```

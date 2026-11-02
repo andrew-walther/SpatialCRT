@@ -1,49 +1,14 @@
 # IncidenceDesign — Future Work Roadmap
 
-> **Current status (2026-10-25):** observed application (2026-10-02) and full chapter/appendix, CTJ/SI drafts complete. Methods extensions A0–A7 ran 2026-10-20/21 and the author decisions on them were recorded 2026-10-21. Steps 7–8 of `docs/plans/2026-10-20-methods-extensions-plan.md` were drafted overnight 2026-10-25 (figures, SRS in tests, chapter/SI/CTJ text, talk outline); next is the author's review of those drafts. A 20-minute application talk is due 2026-10-29 (`docs/prompts/2026-10-25-talk-kickoff-prompt.md`). See current progress log and `docs/TODO.md`. Historical statuses below are retained by date.
+> **Current status (2026-11-02):** grid simulation (production run `20260927_000502`),
+> observed-incidence NC application (2026-10-02) and methods extensions (2026-10-20/21) are
+> complete. CTJ (V5 revision 2026-10-27), SI and Chapter 3 are complete drafts, not yet
+> submitted. The SUDDEN talk was given 2026-10-29. Next is the full SI prose review; open
+> items are in `docs/TODO.md`. Older status notes are in the progress log below.
 >
 > A living task list of potential extensions, methodological improvements, and dissemination
 > goals for the IncidenceDesign project. Organized by theme. Add, edit, and check off items
 > as the project evolves.
->
-> **Status as of 2026-07-03:** Tau-sweep simulation complete (8 designs × 12,800 MLE
-> scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}), power metric and Monte Carlo SEs added,
-> statistical comparisons done at every τ level. Two manuscripts drafted from scratch — a
-> *Clinical Trials* (SAGE) submission and a longer-form dissertation chapter — plus a
-> completed Supplementary Information document for the CTJ submission. The application
-> study (NC's 58 Community College service areas) has a complete synthetic-incidence run;
-> real SUDDEN-derived data is still pending *(superseded 2026-10-02: the application now uses observed 2018–2021 SUD data)*. The modular Quarto manuscript framework
-> referenced by older items below (`paper/manuscript/_application.qmd` etc.) was retired
-> 2026-07-02 in favor of the two manuscripts written fresh — see `paper/archive/pre_unification_20260702/`.
->
-> **Status as of 2026-09-24 (later): simulation revised and re-run; downstream regeneration
-> (Phase C) in progress.**
-> - The M1–M8 fixes are implemented and tested. The pilot directions matched the scratch pilot.
-> - Full run: 12,800 scenarios × 250 fits × 2 estimators in 13.9 min, using the validated lean
->   ML engine. It's verified, and a 1% `lagsarlm` cross-check passed (max difference 6e-9).
-> - Headline (queen, τ = 1): Incidence-Guided Saturation Quadrants best (MSE 0.091), then
->   Balanced Quartiles (0.131). Checkerboard is worst (1.09). Coverage ≈ 0.94 for every design
->   except Checkerboard × rook (0.15, τ not identified).
-> - Decisions: keep the 6 designs; Balanced Quartiles treats exactly 50.
-> - Framing: which designs work under heterogeneous incidence, not whether incidence
->   knowledge is needed.
-> - April 2026 numbers are superseded, including those in the Completed section below.
->   The CTJ/SI still carry them until manuscript step 5.
->
-> Earlier the same day — **simulation revision planned; current results are provisional.**
-> A review of the dissertation chapter traced several results to simulation oversights:
-> - Designs saw a different incidence surface than the outcome model used.
-> - Poisson incidence at 1,000 people per cluster produced heavy ties.
-> - Seeding was not reproducible.
-> - Deterministic designs were copied 25×.
-> - Checkerboard under rook contiguity was silently aliased.
->
-> A pilot suggests the top and bottom designs are stable, while High Incidence Focus changes
-> substantially. Fix, test, re-run, and regenerate every downstream result before the
-> manuscripts' Methods/Results are rewritten:
-> [`docs/plans/2026-09-24-simulation-revision-plan.md`](docs/plans/2026-09-24-simulation-revision-plan.md),
-> which is step 0.5 of `docs/plans/2026-09-18-manuscript-unification-plan.md`.
-> The 2026-04-08 numbers below and in the Completed section are superseded once the re-run lands.
 
 ---
 
@@ -115,7 +80,7 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   useful for coverage estimates and Poisson/rare-event incidence scenarios. Current
   `SE_MSE`/`SE_Coverage` (delta-method, `add_mc_ses()`) are already small and uniform across
   designs at the current rep counts, so this is a precision refinement, not a correctness gap.
-  *Notes: HPC scripts in `longleaf_setup/` are ready for a per-scenario SLURM array if needed.*
+  *Notes: the April 2026 HPC scripts in `longleaf_setup/` are kept for reference only and are not used; they predate the 2026-09 revision.*
 
 - [ ] **Vary number of clusters (25, 50, 100)** `[Priority: Medium]` `[Effort: Medium]`
   All results are for N = 100 clusters (10×10 grid). Design rankings may differ substantially
@@ -167,8 +132,9 @@ Move completed items to the [Completed](#-completed) section at the bottom.
   into `code/14_manuscript_supplement_figures.R` for the CTJ SI) rather than fixed at the source.
 
 - [ ] **Presentation slides** `[Priority: Low]` `[Effort: Medium]`
-  Slides are built in `bios-dissertation/slides/` (prelim deck in per-part pieces; a Project 1
-  talk would be trimmed from its prelim section). The unused scaffold here was deleted 2026-10-13.
+  `presentation/` holds the SUDDEN meeting deck given 2026-10-29. Prelim Part II
+  (prelim 2026-12-07) is still to be adapted from it; prelim slides are built in
+  `bios-dissertation/slides/`.
 
 ## 2026-09 Simulation Revision (step 0.5)
 
@@ -232,15 +198,16 @@ Moved verbatim from `AGENTS.md` "Extensions & Future Work Roadmap" (done rows re
 ### Manuscript Development (open)
 
 First full drafts of both manuscripts, plus the CTJ Supplementary Information,
-are complete (see Current State above: `paper/ctj_manuscript/`,
+are complete (see the status at the top: `paper/ctj_manuscript/`,
 `paper/thesis_chapter/`). Remaining work:
 
 | Priority | Task | File |
 |----------|------|------|
-| **NEXT UP** | Consolidated author/Claude review of completed study and full drafts; finish author-only ethics/data-use and submission metadata | `docs/prompts/2026-10-02-claude-comprehensive-review-prompt.md`; `paper/ctj_manuscript/submission_checklist.md` |
-| **High** | Coauthor approval, mandatory reviewer corrections if any, then approved CTJ submission | Full chapter, CTJ and supplement |
+| **NEXT UP** | Full SI prose review | `paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex` |
+| **High** | Coauthor approval and IRB/ethics wording | `docs/TODO.md`; `paper/ctj_manuscript/submission_checklist.md` |
+| **High** | CTJ submission | Full chapter, CTJ and supplement |
 | Medium | Final UNC dissertation-template integration when chapters are combined | Canonical Chapter 3 source and approved sync |
-| Low | Project 2 prelim/conference slides | `bios-dissertation/slides/` |
+| Low | Prelim Part II slides, adapted from the SUDDEN deck | `presentation/`, then `bios-dissertation/slides/` |
 
 ---
 
@@ -248,6 +215,29 @@ are complete (see Current State above: `paper/ctj_manuscript/`,
 
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
+
+### 2026-11-02 — project cleanup
+
+Review and decisions: `docs/reviews/2026-11-02-project-cleanup-review.md`
+(commits `c7d62fb` to `230ea6b`).
+- Deleted `code/complete_after_mle.R` (it rewrote README/CLAUDE with April content),
+  `code/_generate_design_options.R` and the stale `.claude/agents/phase-d-*.md`.
+- Archived without deleting: synthetic application runs and proposal report
+  (`application/archive/synthetic_2026-07/`), unused figures (`archive/` in each figure
+  folder, with a README), `run_overnight.sh` (now in `longleaf_setup/`). Removed the empty
+  `results/longleaf/`. Ten byte-identical files in `results/archive/pre_revision_20260924`
+  are now symlinks to `pre_tau_sweep_20260408`.
+- `.gitignore`: the blanket `paper/**/*.tex` rule became explicit by-product entries.
+- Codes 12, 14 and 15 print "2×2 Blocking" in figures (CSVs keep "2x2 Blocking"); SI and
+  Chapter 3 PDFs rebuilt with them;
+  `code/24` reads `summaries_v2/a4_summary.csv`.
+- New `paper/tools/copy_figures.sh` (copies 20 figures from `results/` into both
+  manuscript figure folders, a step that was undocumented) and
+  `presentation/tools/make_figures.R` (deck spillover schematic and case-identification
+  flowchart as PNG files instead of inline SVG/HTML).
+- Status docs refreshed (README, AGENTS, this file, `docs/TODO.md`, application and
+  longleaf READMEs): production run `20260927_000502` (14,400 rows), surfaces10
+  allocation risk, methods extensions, archive locations.
 
 ### 2026-10-28 — SUDDEN meeting deck (draft 2) with speaker script
 

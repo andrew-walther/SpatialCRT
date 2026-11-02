@@ -1,20 +1,14 @@
 # NC SUD Application
 
-**Verified completion checkpoint (2026-10-02):** the observed-incidence application
-and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
-adds 2,280,000 outcomes on the same allocations. All settings pass completeness
-and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
-boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](../docs/findings/2026-10-02-nc-sud-application-findings.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../docs/findings/2026-10-02-manuscript-completion-findings.md).
-
-**Revised study planning (2026-10-02):** see the
-[application design document](../docs/plans/2026-10-02-nc-sud-application-plan.md).
-The author chose a continuous SAR application using observed SUD incidence to
-inform allocation. The concrete implementation plan is approved and execution
-is complete. The older synthetic results below are historical, not results of
-the revised real-SUD comparison.
+**Status (2026-11-02):** the observed-incidence application (2026-10-02, with a
+separate tail refinement) and the methods extensions (2026-10-20/21) are complete.
+Findings: [observed-incidence application](../docs/findings/2026-10-02-nc-sud-application-findings.md),
+[methods-extension findings](../docs/findings/2026-10-20-methods-extensions-findings.md) and
+[methods-extension report](../docs/findings/2026-10-21-methods-extensions-report.md). Design:
+[application plan](../docs/plans/2026-10-02-nc-sud-application-plan.md). The July 2026
+synthetic-incidence runs and proposal report are archived in
+[`archive/synthetic_2026-07/`](archive/synthetic_2026-07/README.md). Project-wide status:
+[`../ROADMAP.md`](../ROADMAP.md) and [`../docs/TODO.md`](../docs/TODO.md).
 
 ## Revised observed-incidence pipeline
 
@@ -89,6 +83,23 @@ Rscript application/tests/verify_methods_ext_manifests.R     # V9
 `run_methods_ext_queue.sh` chains the post-A3/A4 steps unattended (under `caffeinate`).
 Outputs: `results/methods_ext_2026-10/{stored,participation,summaries,a5,a6car,a6bayes,a7,sensitivity_summaries,verification}/`,
 each with a manifest; per-task checkpoints and per-fit tables are gitignored.
+
+**2026-10-21 reruns (author decisions of 2026-10-21, `../DECISIONS.md`).**
+`run_methods_ext_queue_v2.sh` runs `tests/test_methods_ext_v2.R`, the A3 rerun with
+≥ 2-college saturation regions and t + df test counts (`methods_ext_participation.R a3v2 10`,
+output `participation/a3v2/`), its reproduction check against the first A3 run
+(`tests/check_a3v2_reproduction.R a3 a3v2`), the long-chain Bayesian CAR rerun
+(`methods_ext_sensitivity.R a6bayeslong 10`), the v2 summaries
+(`methods_ext_summaries.R 10 a3v2 summaries_v2`), `methods_ext_bayes_long_summary.R` and
+V9; any failed step stops the queue (`queue_v2.log`). Separately,
+`methods_ext_sensitivity.R a6bayeslag` with `methods_ext_bayes_lag_summary.R` fits a
+Bayesian SAR-lag model, and `methods_ext_bayes_long_tdf.R` adds ML t + df coverage to the
+long-chain comparison.
+
+Current outputs are `summaries_v2/` and `sensitivity_summaries_v2/`. The first-run
+`summaries/` and `sensitivity_summaries/` are kept; `code/24_methods_extension_tables.R`
+still reads A5 Stage 2, A6 CAR and A7 from `sensitivity_summaries/` (those analyses were
+not rerun), A2 tests and A5 Stage 1 from `stored/`, and the rest from the v2 folders.
 `methods_ext_core.R` holds the shared helpers (key seeds in a new namespace,
 participant subsets, participant W with zero rows for islands, rule-A exposure,
 designs on subsets, manifests).
@@ -97,13 +108,16 @@ designs on subsets, manifests).
 
 ```text
 application/
-  code/      R scripts for mapping, real-data aggregation, weights, synthetic incidence, designs, and runs
+  code/      R scripts for mapping, real-data aggregation, weights, designs, the observed-incidence
+             runs, methods extensions, and the superseded synthetic runner
   data/      NC Community College mapping CSVs and nc_cluster_weights.rds (tracked) + restricted
              SUD source data and derived/ outputs (gitignored; see "Real SUD incidence data" below)
-  tests/     test_application_data.R
-  notes/     implementation notes and full-run instructions
-  report/    Quarto report source plus rendered HTML/PDF outputs
-  results/   smoke, pilot, full, and cached population outputs
+  tests/     data, observed-run, summary, tail, companion and methods-extension checks
+  notes/     service-area cluster map
+  report/    application study report (qmd/pdf), offline HTML companion and its assets
+  results/   real_sud_rev_20261002/ (observed-incidence runs), methods_ext_2026-10/,
+             cached population and tigris files
+  archive/   synthetic_2026-07/ (July 2026 synthetic runs and proposal report)
 ```
 
 ## Study Region
@@ -112,34 +126,19 @@ Counties are assigned to one of 58 clusters based on primary North Carolina Comm
 
 ![NC Community College service-area clusters](report/figures/community_college_service_area_clusters.png)
 
-## Current State
+## Historical: synthetic-incidence application (July 2026)
 
-The synthetic-incidence application pipeline is implemented and has been run end to end.
-
-- Synthetic baseline SUD incidence is generated with a Poisson SAR process over the 58 clusters.
-- All 8 treatment assignment designs have irregular-map adaptations.
-- Smoke, pilot, and full evaluation profiles are available through `code/run_application_profiles.R`.
-- The full synthetic run completed 640 scenarios and 160,000 converged MLE fits.
-- The current report is available in `report/IncidenceDesign_Application_Report.html` and `report/IncidenceDesign_Application_Report.pdf`.
-
-## Design rules changed 2026-09-24 (not yet re-run)
-
-`code/application_designs.R` now follows the simulation revision's design rules
-(`../docs/plans/2026-09-24-simulation-revision-spec.md` §3):
-- Incidence ties are broken at random for every draw.
-- High Incidence Focus treats exactly round(N/2) = 29.
-- Balanced Quartiles treats exactly floor(N/2) = 29.
-- Only the graph checkerboard is deterministic.
-
-The application has **not** been re-run with these rules (plan decision). The results below
-and in `results/` predate them, and `code/14_manuscript_supplement_figures.R` labels its
-application table STALE. The application still uses `lagsarlm`; porting the lean engine is
-future work.
+Before the observed data arrived, the pipeline ran on synthetic Poisson SAR incidence
+(`code/run_application_profiles.R`, `code/synthetic_sud_data.R`) with the pre-revision
+design rules and `lagsarlm`. Those runs, their proposal report and their findings are
+superseded and archived in `archive/synthetic_2026-07/`. The 2026-09-24 design rules
+(random tie-breaking, exact budgets, only the graph checkerboard deterministic) are in
+`code/application_designs.R` and are used by the observed-incidence runs.
 
 ## Real SUD incidence data (aggregated 2026-09-25)
 
-Real county-level SUD data now replace the synthetic placeholder **as input**. The design
-comparison has not yet been re-run on them; that is the next plan.
+Real county-level SUD data replace the synthetic placeholder as input. The design
+comparison on them is the observed-incidence run above (2026-10-02).
 
 **Sources** (copied from OneDrive `UNC Dissertation (Lin)/Project 2 - Prior Incidence
 Weighting/Application - Sudden Death/SUD Data - Ashkan/data/`; **gitignored**, because they are
@@ -260,20 +259,12 @@ Public geography only, so it's committed.
      in the chapter and CTJ; the author will obtain approval before publication (2026-09-25).
      Don't publish county-level counts.
 
-## Current Results
+## Current results
 
-Using synthetic incidence, the best-performing designs by mean MSE were Balanced Quartiles and Balanced Halves, followed closely by Saturation Regions, 2x2 Blocking, and Incidence-Guided Saturation Regions. Block Stratified Sampling, Isolation Buffer, and High Incidence Focus performed substantially worse.
-
-The current working recommendation is to carry Balanced Quartiles, Balanced Halves, Saturation Regions, and Incidence-Guided Saturation Regions forward as the main candidate designs. This recommendation should be finalized only after repeating the analysis with true SUD incidence data.
-
-## Outstanding Work
-
-- **Design comparison on the real surface (next plan).** Starting idea: the four yearly
-  surfaces (2018–2021) replace the synthetic surfaces, with design draws × simulated outcomes
-  within each year. Port the runner onto the revised engine (`fit_sar_lag()`, key-based
-  seeds, 6 manuscript designs, queen/rook). Decide which surface feeds X and the τ/ρ/γ grid.
-- Confirm the remaining source-data items with Ashkan Habib (listed above).
-- Then update the report, the recommendation, and the manuscripts' Application text.
+Observed-incidence results are in `results/real_sud_rev_20261002/` (`production/`,
+`tail_confirmation/`, `exhibits/`), and the methods extensions in
+`results/methods_ext_2026-10/`. Interpretation is in the findings documents linked at the
+top. The remaining source-data questions for Ashkan Habib are listed above.
 
 Exhibit generation: `Rscript application/code/real_sud_summary.R` requires verified
 production and tail outputs and writes traced tables/PNG/PDF figures under

@@ -1,87 +1,39 @@
 # Modular Incidence Simulation for Spatial CRT Design Evaluation
 
-**Verified completion checkpoint (2026-10-02):** the observed-incidence application
-and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
-adds 2,280,000 outcomes on the same allocations. All settings pass completeness
-and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
-boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](docs/findings/2026-10-02-nc-sud-application-findings.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](docs/findings/2026-10-02-manuscript-completion-findings.md).
+## Current status (2026-11-02)
 
-**CTJ layout review (October 2):** an [eight-page two-column reading preview](paper/ctj_manuscript/manuscript_ctj/CTJ_Reading.pdf)
-now accompanies the [21-page submission draft](paper/ctj_manuscript/manuscript_ctj/CTJ_Manuscript.pdf).
-Comprehensive review completed 2026-10-12 (see `docs/reviews/2026-10-12-ctj-comprehensive-review-findings.md`);
-the advisor-meeting application report is `application/report/IncidenceDesign_Application_Study_Report.pdf`.
-Both use one master manuscript and shared exhibit definitions. The approved original title is restored. Six revised exhibits show six-design-plus-SRS
-rules/benchmark, compact simulation accuracy/decomposition, observed NC geography
-and annual NC accuracy. Detailed tail/budget/parameter displays remain in supporting
-material. Author order is Walther, Habib, Simpson, Lin. See the
-[exhibit revision and teach-back](docs/findings/2026-10-02-ctj-exhibit-revision-findings.md).
-See [layout findings and build commands](docs/findings/2026-10-02-ctj-layout-review.md).
+The grid simulation, the observed-incidence NC application (2026-10-02) and the methods
+extensions (2026-10-20/21) are complete. The CTJ paper had its V5 revision on 2026-10-27;
+the CTJ paper, the Supplementary Information (SI) and Chapter 3
+(`paper/thesis_chapter/Thesis_Chapter.qmd`) are complete drafts, not yet submitted. The
+SUDDEN meeting talk (`presentation/sudden_talk_2026-10-29.qmd`) was given on 2026-10-29.
+Next is the full SI prose review. Open items are in [docs/TODO.md](docs/TODO.md), dated
+progress in the progress log of [ROADMAP.md](ROADMAP.md), and author decisions with their
+reasons in [DECISIONS.md](DECISIONS.md).
 
-**Full prelim assembly (October 2):** `bios-dissertation/prelim/prelim.pdf` now
-combines the current literature review, Chapters 2–4, appendices and one
-bibliography (192 pages as of 2026-10-13), including the requested List of Tables and List of
-Figures. Chapter 3 is 41 body + 27 appendix pages after the length review. CTJ
-reading references now flow from page 7 into both columns of page 8. See
-[assembly/reference review and rebuild commands](docs/findings/2026-10-02-prelim-assembly-ctj-reference-review.md).
-The individual Chapter 3 sync hook remains unchanged; rerun the full assembly
-builder after chapter syncs. Chapter 4's dated timeline is removed; continuing
-work describes additional methodology and expected results in prose. This
-full-length draft awaits author review.
+> For session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
-> For AI session context and quick technical reference, see [AGENTS.md](AGENTS.md).
+### Allocation risk (grid)
 
-**Application planning (2026-10-02):** the
-[NC SUD application design](docs/plans/2026-10-02-nc-sud-application-plan.md)
-and [integrated continuation prompt](docs/prompts/2026-10-02-continuation-prompt.md)
-combine the earlier manuscript decisions with the real-data application request.
-The author chose continuous SAR education outcomes, using observed SUD incidence
-for allocation without an assumed incidence–education baseline relationship.
-An incidence-related baseline is a hypothetical sensitivity; the grid study
-continues to include its incidence baseline term. The implementation plan is
-approved and execution is complete. The independent alignment review is
-complete; see the [review](docs/reviews/2026-10-02-nc-sud-independent-review.md) and
-[implementation plan](docs/plans/2026-10-02-nc-sud-implementation-plan.md). The
-author requests ASAP completion rather than the earlier date-based schedule.
-The plan covers verification, results and
-subsequent chapter/appendix and CTJ/supplement updates.
+A nested study compares all eight designs with Simple Random Sampling (SRS) on the
+spread and upper tail of allocation-specific mean squared error (MSE), at fixed incidence
+surfaces and parameter corners (queen weights, oracle ML, τ = 1). The current run uses all
+ten surfaces (`surfaces10`, 2026-10-27); it reproduces the earlier two-surface pilot
+exactly on surfaces 1–2 and changes no conclusion. Findings:
+[surfaces10](docs/findings/2026-10-27-allocation-risk-surfaces10-findings.md) and the
+original [methods note](docs/findings/2026-09-27-allocation-risk-findings.md). It does not
+replace the full grid benchmark.
 
-The [visual application companion](application/report/real_sud_companion.html)
-shows observed-rate maps, model meaning, adaptations and filterable performance.
-The current companion displays verified production and separate refined-risk results. Smoke/pilot outputs remain preliminary engineering checks. Run instructions and
-verification are in [application/README.md](application/README.md); the
-[implementation findings](docs/findings/2026-10-02-nc-sud-implementation-findings.md)
-record the code walkthrough and evidence. Full application and manuscript drafts are complete; author review is next.
-
-**Manuscript continuation (2026-09-27):** The [Chapter 2 check and accepted-manuscript
-review](docs/findings/2026-09-27-ch2-check-findings.md) records the evidence, limits and
-open decisions for the SRS benchmark and Checkerboard discussion. Project 1 remains
-finalized and read-only. October 2 decisions retain Checkerboard in the main
-Project 2 comparison, with detailed diagnostics in the appendix, and approve a
-brief Chapter 2 extension reference. CTJ will stand alone and cite Project 1.
-The allocation-risk pilot remains supporting evidence; the completed NC application provides the
-focused confirmation, without expanding the grid pilot first. See
-[TODO](docs/TODO.md) for remaining work.
-
-**Allocation-risk analysis (2026-09-27):** the author authorized a nested pilot
-comparing all eight designs with SRS, including variability and upper tails of
-allocation-specific MSE. See the [methods and findings note](docs/findings/2026-09-27-allocation-risk-findings.md)
-for scope, precision limitations, code walkthrough, and interpretation. This uses
-queen weights, oracle ML, tau=1, ten fixed incidence surfaces and parameter corners;
-it does not replace the main study or run the revised NC application.
-
-To reproduce it, from `code/`, run `16_allocation_risk.R pilot 8`, then
-`18_allocation_risk_precision.R`, with `VECLIB_MAXIMUM_THREADS=1`,
-`OPENBLAS_NUM_THREADS=1`, and `OMP_NUM_THREADS=1` set before starting R.
-`Rscript 17_allocation_risk_summary.R pilot` and
-`Rscript 17_allocation_risk_summary.R precision_R400` regenerate the tables in
-`results/allocation_risk/summary/`. Behavior checks are in
-`tests/test_allocation_risk.R` and `tests/test_allocation_risk_summary.R`.
-Individual-fit caches are gitignored; outputs and manifests are isolated from the
-existing simulation. Full commands and the rationale for outcome replication are
-in the linked note.
+From `code/`, with `VECLIB_MAXIMUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1` and
+`OMP_NUM_THREADS=1` set before starting R, run `Rscript 16_allocation_risk.R surfaces10 8`,
+then `Rscript 18_allocation_risk_precision.R surfaces10`. From the project root,
+`Rscript code/17_allocation_risk_summary.R surfaces10` (and `surfaces10_precision_R400`)
+writes `results/allocation_risk/summary/surfaces10/`, and `Rscript code/21_downside_by_design.R`
+writes the per-design downside table and the allocation-distribution figure there. Outputs
+are in `results/allocation_risk/surfaces10/` and `surfaces10_precision_R400/`; the
+two-surface `pilot/`, `precision_R400/` and the top-level files in `summary/` are
+superseded but kept. Behavior checks are in `code/tests/test_allocation_risk.R` and
+`code/tests/test_allocation_risk_summary.R`. Individual-fit caches are gitignored.
 
 ## Overview
 
@@ -117,32 +69,42 @@ The predecessor Rmd is preserved untouched.
 
 ## File Inventory
 
-| File | Lines | Purpose | Key Functions |
-|------|------:|---------|---------------|
-| `00_mathematical_specification.Rmd` | ~495 | Theory doc with full LaTeX DGP formulas | (rendered to HTML) |
-| `01_spatial_setup.R` | 54 | Regular lattice grid, rook/queen weight matrices | `build_spatial_grid()`, `get_active_spatial()` |
-| `02_incidence_generation.R` | 112 | Three incidence generation modes | `generate_incidence()` + 3 mode functions |
-| `03_designs.R` | ~162 | Eight treatment assignment strategies | `get_designs()`, `get_design_names()`, `is_design_deterministic()` |
-| `04_estimation.R` | 102 | DIM and MLE estimation with CI extraction | `estimate_tau()` |
-| `05_run_simulation.R` | ~385 | Main orchestrator, nested parameter loop | `run_incidence_config()` |
-| `06_visualizations.R` | ~800 | All plots and summary tables | 18 functions; entry point `run_all_visualizations()` |
-| `07_results_summary.Rmd` | ~800 | Rendered results report (HTML/PDF) | Knitted summary of all MLE findings |
-| `08_design_recommendations.R` | ~560 | Personalized design recommendations | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
-| `09_MLE_design_recommendation_report.Rmd` | ~984 | Companion narrative PDF report | Knitted to `results/MLE_design_recommendation_report.pdf` |
-| `10_statistical_comparisons.R` | ~1050 | Formal statistical hypothesis tests | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()` |
-| `11_statistical_comparisons_report.qmd` | ~543 | Statistical comparisons narrative report | Rendered to `results/11_statistical_comparisons_report.{html,pdf}` |
-| `12_six_design_statistical_comparisons.R` | ~180 | Re-runs Friedman/Nemenyi/Wilcoxon on the 6 manuscript designs, regenerates named-label figures | Outputs to `results/six_design_manuscript/` |
-| `13_dissertation_results_extract.R` | ~75 | Pulls per-incidence-mode/per-parameter/robustness numbers for the dissertation chapter | Outputs `results/six_design_manuscript/dissertation_results_extract.txt` |
-| `14_manuscript_supplement_figures.R` | ~470 | Fresh 8-design consolidation test (justifies dropping 2 designs) + CTJ Supplementary Information figure suite + reordered/merged main-text figures + application table | Outputs `results/eight_design_supplementary/`, `results/six_design_manuscript/si_figures/` |
-| `19_manuscript_exhibits.R` | ~60 | Export current full nine-design grid regime means and a six-design journal figure | `results/srs_benchmark/` and CTJ figures |
-| `21_downside_by_design.R` | ~165 | Per-design mean and worst-decile MSE ratios to SRS, and the allocation-to-allocation MSE distribution figure (CTJ Figure 3) | `results/allocation_risk/summary/downside_by_design.csv`, `allocation_distribution_by_design.{csv,pdf}` |
-| `23_methods_extension_figures.R` | ~210 | NC methods-extension figures (power vs N, colleges needed, spread vs gain) | `results/methods_ext_figures/*.{pdf,png}` |
-| `24_methods_extension_tables.R` | ~200 | Table bodies for chapter Appendix A9 and SI S10 | `results/methods_ext_figures/tables/` |
-| `26_grid_tdf_intervals.R` | ~180 | Exact re-fit of the grid recording t + df coverage and power; 12/13/14/19 apply them via `apply_tdf_intervals()` | `results/grid_tdf_2026-10/` |
-| `27_interval_comparison.R` | ~100 | Wald vs t + df coverage (grid and application) and the application's yearly t + df coverage | `results/grid_tdf_2026-10/interval_comparison.csv`, `application/results/methods_ext_2026-10/stored/` |
-| `25_design_assignment_figures.R` | ~200 | Example assignments on one illustrative surface: CTJ Table 1 maps, SI/Chapter 3 panel figure, slide version | `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf`, `presentation/figures/` |
-| `paper/tools/verify_manuscripts.py` | ~290 | Reconcile current manuscript cells, derived supplement and assets; `--chapter` checks another chapter file, `--pending-si` reports a table not yet in the SI | Aggregate CSV inputs; fails on drift |
-| `complete_after_mle.R` | ~250 | Post-completion script (viz + docs + stats) | Run once after MLE finishes |
+All scripts are in `code/` unless a path is given. Run `wc -l` for current lengths.
+
+| File | Purpose | Key Functions / Outputs |
+|------|---------|---------------|
+| `00_design_names.R` | Canonical design display names | `apply_design_names()` |
+| `00_mathematical_specification.Rmd` | Theory doc with full LaTeX DGP formulas | (rendered to HTML) |
+| `01_spatial_setup.R` | Regular lattice grid, rook/queen weight matrices | `build_spatial_grid()`, `get_active_spatial()` |
+| `02_incidence_generation.R` | Three incidence generation modes | `generate_incidence()` + 3 mode functions |
+| `03_designs.R` | Eight treatment assignment strategies | `get_designs()`, `get_design_names()`, `is_design_deterministic()` |
+| `04_estimation.R` | DIM and MLE estimation with CI extraction | `estimate_tau()` |
+| `05_run_simulation.R` | Main orchestrator, nested parameter loop | `run_incidence_config()` |
+| `06_visualizations.R` | All plots and summary tables | 18 functions; entry point `run_all_visualizations()` |
+| `07_results_summary.Rmd` | Rendered results report (HTML/PDF) | Knitted summary of all MLE findings |
+| `08_design_recommendations.R` | Personalized design recommendations | `run_recommendation_report()`, `table_scenario_lookup()`, `generate_commentary()` |
+| `09_MLE_design_recommendation_report.qmd` | Companion narrative report | Rendered to `results/09_MLE_design_recommendation_report.{html,pdf}` |
+| `10_statistical_comparisons.R` | Formal statistical hypothesis tests | `run_friedman_test()`, `run_nemenyi_posthoc()`, `run_pairwise_wilcoxon()`, `run_conditional_tests()`, `plot_cd_diagram()`, `plot_mse_boxplot_with_stars()`, `plot_pvalue_heatmap()` |
+| `11_statistical_comparisons_report.qmd` | Statistical comparisons narrative report | Rendered to `results/11_statistical_comparisons_report.{html,pdf}` |
+| `12_six_design_statistical_comparisons.R` | Friedman/Nemenyi/Wilcoxon on the six manuscript designs plus SRS, named-label figures | `results/six_design_manuscript/` |
+| `13_dissertation_results_extract.R` | Per-incidence-mode, per-parameter and robustness numbers for the chapter | `results/six_design_manuscript/dissertation_results_extract.txt` |
+| `14_manuscript_supplement_figures.R` | Eight-design consolidation test, SI figure suite, reordered main-text figures, STALE synthetic application table | `results/eight_design_supplementary/`, `results/six_design_manuscript/{queen,rook}/si_figures/` |
+| `15_srs_benchmark.R` | SRS benchmark against the proposed designs (relative efficiency, share beating SRS, paired tests) | `results/srs_benchmark/` |
+| `16_allocation_risk.R` | Allocation-specific MSE at fixed incidence surfaces (profiles smoke, benchmark, pilot, surfaces10) | `results/allocation_risk/<profile>/` |
+| `17_allocation_risk_summary.R` | Allocation-risk summaries and precision | `results/allocation_risk/summary/<profile>/` |
+| `18_allocation_risk_precision.R` | Extends 50 matched blocks from R = 100 to R = 400 outcomes | `results/allocation_risk/<profile>_precision_R400/` |
+| `19_manuscript_exhibits.R` | Nine-design grid regime means and paired ratios to SRS (CTJ Table 2) | `results/srs_benchmark/` |
+| `20_manuscript_figure_revision.R` | Compact CTJ figures from completed results | `results/manuscript_exhibit_revision_20261002/`, `paper/*/figures/compact/` |
+| `21_downside_by_design.R` | Per-design mean and worst-decile MSE ratios to SRS, allocation-distribution figure (CTJ Figure 3) | `results/allocation_risk/summary/surfaces10/` |
+| `22_grid_burden_share.R` | Burden share treated by design on the grid surfaces | `results/grid_burden_share/` |
+| `23_methods_extension_figures.R` | NC methods-extension figures (power vs N, colleges needed, spread vs gain) | `results/methods_ext_figures/*.{pdf,png}` |
+| `24_methods_extension_tables.R` | Table bodies for chapter Appendix A9 and SI S10 | `results/methods_ext_figures/tables/` |
+| `25_design_assignment_figures.R` | Example assignments on one illustrative surface: CTJ Table 1 maps, SI/Chapter 3 panel figure, slide version | `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf`, `presentation/figures/` |
+| `26_grid_tdf_intervals.R` | Exact re-fit of the grid recording t + df coverage and power; 12/13/14/19 apply them via `apply_tdf_intervals()` | `results/grid_tdf_2026-10/` |
+| `27_interval_comparison.R` | Wald vs t + df coverage (grid and application) and the application's yearly t + df coverage | `results/grid_tdf_2026-10/interval_comparison.csv`, `application/results/methods_ext_2026-10/stored/` |
+| `paper/tools/verify_manuscripts.py` | Reconcile manuscript cells, derived supplement and assets; `--chapter` checks another chapter file, `--pending-si` reports a table not yet in the SI | Aggregate CSV inputs; fails on drift |
+| `paper/tools/copy_figures.sh` | Copies the figures that scripts write under `results/` into both manuscript figure folders | `paper/ctj_manuscript/figures/`, `paper/thesis_chapter/figures/` |
+| `presentation/tools/make_figures.R` | Spillover-regime schematic and case-identification flowchart for the talk deck | `presentation/figures/` |
 
 ---
 
@@ -261,14 +223,16 @@ Incidence-Guided Saturation Quadrants.
 
 **True tau (tau-sweep):** τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} — swept to assess design robustness across effect sizes and estimate power curves.
 
-**Total scenarios:** 5 tau × 5 incidence configs × 2 neighbor types × 4 rho × 4 gamma × 2 spillover types × 8 designs = **12,800 scenarios**
-(× 250 fits × 2 estimators = 6.4M fits in the 2026-09 run)
+**Total scenarios:** 5 tau × 5 incidence configs × 2 neighbor types × 4 rho × 4 gamma × 2 spillover types × 8 designs = **12,800 scenarios**.
+The production run (2026-09-27, tag `20260927_000502`) adds Simple Random Sampling as
+Design 9, for **14,400 scenario rows** per estimator (× 250 fits × 2 estimators). Designs
+1–8 are identical to the earlier 2026-09-24 run (`results/srs_reproduction_check.txt`).
 
 ---
 
 ## Results Summary
 
-### Revised simulation (COMPLETE — 2026-09-24, 12,800 scenarios × 2 estimators)
+### Revised simulation (production run 2026-09-27, 14,400 scenario rows × 2 estimators)
 
 The results for oracle, τ = 1 and the 6 manuscript designs are below; `results/six_design_manuscript/`
 has the full detail.
@@ -314,19 +278,27 @@ results/
   MLE_statistical_comparisons.pdf             # 10 figures (8 designs, tau = 1)
   00/07/09/11 rendered reports                # regenerated in Phase C
   sim_data/
-    sim_results_MLE_tau_sweep_combined_20260924_025509.rds         # PRIMARY (oracle), 12,800 rows
-    sim_results_MLEnonoracle_tau_sweep_combined_20260924_025509.rds # non-oracle sensitivity
-    sim_results_*_{iid,spatial,poisson}_20260924_025509.rds          # per-mode splits
-    surface_results_*_20260924_025509.rds     # one row per (scenario, surface)
-    warnings_*_20260924_025509.csv            # non-aliasing warnings (none)
-    run_info_20260924_025509.rds              # manifest, parameters, sessionInfo
-    full_run_verification.txt
+    sim_results_MLE_tau_sweep_combined_20260927_000502.rds         # PRIMARY (oracle), 14,400 rows (9 designs incl. SRS)
+    sim_results_MLEnonoracle_tau_sweep_combined_20260927_000502.rds # non-oracle sensitivity
+    sim_results_*_{iid,spatial,poisson}_20260927_000502.rds          # per-mode splits
+    surface_results_*_20260927_000502.rds     # one row per (scenario, surface)
+    warnings_*_20260927_000502.csv            # non-aliasing warnings (none)
+    run_info_20260927_000502.rds              # manifest, parameters, sessionInfo
+    full_run_verification.txt                 # checks on the 20260927_000502 run
+    *_20260924_025509.*                       # earlier eight-design run (12,800 rows), superseded
     sim_results_DIM_*_20260304_195321.rds     # pre-revision DIM baseline (not re-run)
   six_design_manuscript/                      # 12 (oracle), 13, 14: summaries + queen/ and rook/ figures
   six_design_manuscript_nonoracle/            # 12 (non-oracle)
   eight_design_supplementary/                 # 14(a) consolidation check
   estimator_validation/                       # fit_sar_lag vs lagsarlm (5,120 fits) + 1% full-run cross-check
   pilot_rev_2026-09/                          # B4 pilot outputs + pilot_report.txt
+  srs_benchmark/                              # 15 and 19: SRS benchmark, regime means, paired ratios (CTJ Table 2)
+  grid_tdf_2026-10/                           # 26 and 27: t + df re-fit and interval comparison
+  allocation_risk/                            # 16-18, 21: surfaces10/ and surfaces10_precision_R400/ current;
+                                              #   pilot/, precision_R400/, top-level summary/ files superseded
+  grid_burden_share/                          # 22: burden share treated by design
+  methods_ext_figures/                        # 23 figures, 24 tables/ (NC methods extensions)
+  manuscript_exhibit_revision_20261002/       # 20: plot-data CSVs behind the compact CTJ figures
   mle_per_config/                             # 06 per-config PDFs
   figures/design_samples_8panel.{png,pdf}
   archive/pre_revision_20260924/              # everything from the April runs
@@ -362,18 +334,21 @@ paper/
                                                #   8-design comparison, sensitivity, NC application detail
     cover_letter/                             # Cover_Letter_Draft.{md,pdf}
     figures/                                  # Main-text + SI figures and Figure_Legends.md (incl.
-                                               #   compact/, real_sud/, application_maps/, si_figures/)
+                                               #   compact/, real_sud/); archive/ holds unused figures (README)
     submission_checklist.md
   thesis_chapter/                       # Canonical full chapter and appendix, no length ceiling
     Thesis_Chapter.{qmd,pdf}
+    figures/                                  # Chapter figures; archive/ holds unused figures (README)
     notes/trimmed-material.md                 # Text cut or moved by the length review
     shared-refs.bib -> ../SpatialCRT_IncidenceDesign.bib  # symlink (Quarto underscore workaround)
   tools/verify_manuscripts.py                 # Table/figure/reference consistency checker
+  tools/copy_figures.sh                       # Copies figures from results/ into both figure folders
   archive/                                    # Frozen snapshots, reference only (do not edit)
     pre_unification_20260702/                 # Retired modular-Quarto manuscript + section drafts
     pre_completion_20261002/                  # Chapter/CTJ/SI sources before the Oct 2 completion pass
     manuscript_provenance_20261002.json       # Oct 2 SHA-256 source/output manifest
-(Slides live in bios-dissertation/slides/, not here.)
+(The SUDDEN meeting deck is in presentation/ at the project root, with its own
+figures/archive/; prelim slides live in bios-dissertation/slides/.)
 ```
 
 The **unified report** (`paper/report/`) consolidates all code-side reports into a single
@@ -417,6 +392,7 @@ Submission components: [checklist](paper/ctj_manuscript/submission_checklist.md)
 [figure legends](paper/ctj_manuscript/figures/Figure_Legends.md).
 
 Regenerate journal grid exhibits: `Rscript code/19_manuscript_exhibits.R`.
+After re-running scripts that write figures under `results/`, run `bash paper/tools/copy_figures.sh` to copy them into both manuscript figure folders.
 Regenerate the per-design downside table source (chapter Table `tab:downside`, SI Table S12): `Rscript code/21_downside_by_design.R`.
 Verify document tables/figures/references: `python3 paper/tools/verify_manuscripts.py`.
 The checker reads authorized aggregate outputs and rejects incorrect values.
@@ -447,8 +423,8 @@ intermediates go to the hidden `.build/`, see AGENTS).
 6. **DIM iteration counts** — Originally planned at 100,000 iterations/scenario; reduced
    to 2,500 (25 design x 100 outcome resamples) for practical runtime.
 
-7. **All 8 designs included** — Design IDs 1–8 are all included in the default
-   `design_ids` sweep in `05_run_simulation.R`.
+7. **All designs included** — the default `design_ids` sweep in `05_run_simulation.R` is
+   1–9: the eight proposed designs plus Simple Random Sampling (Design 9).
 
 ---
 
@@ -461,7 +437,7 @@ intermediates go to the hidden `.build/`, see AGENTS).
 | 3 | Eta-squared > 1.0 | `var(group_means)/var(total)` incorrect formula | Proper: `SS_between/SS_total`, where `SS_between = sum(n_j*(mean_j - grand_mean)^2)` |
 | 4 | `I()` namespace conflict | `I <- diag(N)` shadowed `base::I()` | Renamed to `I_mat` |
 | 5 | Degenerate Z crash | Designs occasionally produce all-treated or all-control | Early `NA` return in `estimate_tau()` |
-| 6 | R sprintf 10k limit | `complete_after_mle.R` format string too long | Write docs via Claude Code `Write` tool |
+| 6 | R sprintf 10k limit | `complete_after_mle.R` format string too long | Docs written separately; the script was deleted 2026-11-02 (it overwrote the docs with April content) |
 
 Added 2026-10-14 from AGENTS.md (simulation revision and later):
 
@@ -481,104 +457,24 @@ Added 2026-10-14 from AGENTS.md (simulation revision and later):
 
 ---
 
-## Status & Next Steps
+## Status History
 
-**Completed:**
-- [x] **2026-09-24: simulation revision (step 0.5)** — spec, M1–M8 code changes, tests, pilot, full re-run, downstream code (12–14, 06, 08) and outputs regenerated; April outputs archived
-- [x] All code files (00–11) written and tested
-- [x] Mathematical specification document (00) rendered to HTML
-- [x] DIM simulation: 1,920 scenarios (prior 6-design sweep), visualizations generated (baseline)
-- [x] MLE simulation: 1,920 scenarios (prior 6-design sweep), visualizations generated, zero convergence failures
-- [x] Design recommendations module (08) with validation tests
-- [x] Narrative PDF report (09): `results/MLE_design_recommendation_report.pdf`
-- [x] Results directory reorganized: `sim_data/`, `mle_per_config/`, `dim/`, `archive/`
-- [x] Project documentation: AGENTS.md + README.md
-- [x] Design set expanded to 8 designs (Balanced Halves, Incidence-Guided Saturation Quadrants added)
-- [x] Re-run MLE simulation: 2,560 scenarios covering all 8 designs (1–8) — completed 2026-03-22
-- [x] Unified project report consolidating all code-side reports — completed 2026-03-23
-- [x] Modular manuscript framework with converted LaTeX section drafts — completed 2026-03-23
-- [x] Statistical comparisons module (10) + report (11): Friedman/Nemenyi/Wilcoxon tests — completed 2026-03-25
-- [x] Comprehensive report (`paper/report/`) expanded with full statistical section, design figures
-- [x] **Tau-sweep simulation: 12,800 scenarios across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0}** — completed 2026-04-08
-- [x] Power metric added (P(reject H₀: τ=0)) and Monte Carlo SEs via delta-method (N_Valid_Est, SE_MSE)
-- [x] All reports regenerated with tau sensitivity sections (MSE vs τ, power curves, coverage, rank stability)
-- [x] Statistical comparisons updated for tau-sweep; conditional Friedman/Nemenyi across all τ levels
-- [x] Pre-sweep deliverables archived: `results/archive/pre_tau_sweep_20260408/`
-- [x] **Two manuscripts drafted (first full pass): a short *Clinical Trials* (SAGE)
-      submission and a longer-form dissertation chapter** — completed 2026-07-02.
-      Both written fresh, sharing a bibliography (`paper/IncidenceDesign_shared.bib`)
-      but not prose files. Both present 6 designs (dropping Saturation Quadrants and
-      Balanced Halves as statistically redundant), have no DIM-vs-MLE comparison
-      anywhere, and use full design names throughout (no numbered shorthand). See
-      `paper/ctj_manuscript/` and `paper/dissertation_chapter/`. Application-section
-      numbers are an explicitly labeled simulated placeholder pending real
-      SUDDEN-derived NC county data (in progress with an epidemiology collaborator).
-      *(Superseded: the CTJ main text now has 6 designs + SRS and the thesis chapter
-      8 designs + SRS; the application uses observed SUD data. See DECISIONS.md.)*
-- [x] **CTJ Supplementary Information drafted and reviewed** — completed 2026-07-03.
-      `paper/ctj_manuscript/Supplementary_Information.tex` (14+ pages, S-prefixed
-      numbering) fulfills the three items the main text defers to "online
-      supplementary material": reproducibility/seeding/code (S1-S2), metric
-      formulas + estimation model (S3-S4), the full 8-design table (S5), and the
-      complete eight-design comparison (S6) — the only 8-design section anywhere.
-      Sections S7-S11 cover per-incidence-mode rankings, parameter/tau sensitivity,
-      robustness/win-rate, and an application-scale illustration for the 6 retained
-      designs. Generated by new `code/14_manuscript_supplement_figures.R`, which
-      also produced a reordered (best-to-worst) main-text MSE figure and a new
-      ranked bias-variance figure. Reviewed by a fresh agent against the plan's
-      hard constraints (6-design scope, no DIM comparison, no shorthand, numeric
-      accuracy, S-numbering) — one gap found and fixed.
-- [x] **NC application maps added to both documents** — completed 2026-07-03. The
-      three maps already produced by `application/` (58-cluster service-area map,
-      synthetic placeholder incidence surface, k-means saturation regions) were
-      added to SI Section S11 (Figures S8-S10) and the incidence map alone to the
-      main text's Application section (Figure 4), to visually motivate the study.
-      To stay within the CTJ's 6-exhibit cap, the separate coverage and
-      tau-sensitivity figures were merged into one 2-panel figure. **Open:** a
-      deliberate review of the full main-text + SI figure list (this was a quick
-      fit, not a considered final selection) — see Open To-Dos below.
-- [x] **Real-data ingestion pipeline built and ready** — completed 2026-09-04.
-      `application/code/run_application_profiles.R` now has `load_real_sud_data()`,
-      `integrate_real_sud_data()`, and `run_all_real_years()` to read, clean, and
-      aggregate the real county-level SUD data onto the 58 community-college
-      clusters once it arrives, writing to a separate `real_{year}_{profile}/`
-      output directory so the existing synthetic results are untouched. **Nothing
-      has been run yet** — this is dormant plumbing waiting on the actual dataset;
-      see Open To-Dos below for the two key next steps.
-      *(Superseded: run on the observed data 2026-10-02.)*
-- [x] **Real SUD data aggregated to the 58 clusters**, completed 2026-09-25.
-      `application/code/run_sud_aggregation.R` joins Habib's methodology death
-      counts (`sudden_county_year.csv`, 21,147 deaths) to SEER `pop_18_64`
-      (`final_county_sudden.csv`) and writes county- and cluster-level rates per 100,000
-      by year, total, and average to the gitignored `application/data/derived/`. It
-      reproduces Habib (2026) exactly (see `application/README.md`), and the tests pass (`application/tests/test_application_data.R`).
-      The design comparison on these surfaces has not been run yet.
-      *(Superseded: run 2026-10-02; see `docs/findings/2026-10-02-nc-sud-application-findings.md`.)*
+Short dated history; detail is in the progress log of [ROADMAP.md](ROADMAP.md), open
+items in [docs/TODO.md](docs/TODO.md), and future extensions in ROADMAP.md.
 
----
-
-## Open To-Dos / Future Work Roadmap
-
-The core simulation is complete. The following extensions would strengthen the study:
-
-### Simulation Extensions
-
-| Priority | Extension | Description | Notes |
-|----------|-----------|-------------|-------|
-| Done | **Non-oracle MLE** | Re-run MLE without true Spill covariate (`include_spill_covariate = FALSE`) | Done in the 2026-09-24 revision: fit beside the oracle model in every run and reported as a sensitivity analysis |
-| Medium | **Heterogeneous population** | Poisson mode with `pop_mode = "heterogeneous"` (unequal cluster sizes) | `pop_mode` parameter exists in `05`; needs `generate_incidence_poisson()` extension |
-| Medium | **Grid sensitivity** | Rerun with `grid_dim = 8` (64 clusters) or `grid_dim = 15` (225 clusters) | Tests whether D3/D8 dominance holds at different spatial scales |
-| Low | **DIM tau-sweep** | Re-run DIM across τ ∈ {0.8, 1.0, 1.5, 2.0, 3.0} to compute DIM power curves | Low priority — DIM is confirmed naive baseline; MLE results are primary |
-| Low | **Heterogeneous beta** | Vary `beta` (incidence coefficient) across incidence modes | Would test robustness to signal strength of incidence covariate |
-
-### Manuscript Development
-
-The application and all required full drafts are complete. Next: consolidated
-author review, author-only ethics/data-use and corresponding-author details,
-coauthor consent, then approved submission. No new full simulation is required by
-the independent review. Calendar deadlines were superseded by ASAP completion;
-CTJ remains the submission target. UNC thesis-template integration and conference
-slides are future work, not omitted deliverables of this study completion.
+- 2026-03 to 2026-04: modular pipeline (01–11), eight designs, statistical comparisons,
+  unified report and the April τ sweep. Those results are superseded and archived.
+- 2026-07-02/03: first CTJ and chapter drafts, SI, and a synthetic-incidence NC
+  application (now in `application/archive/synthetic_2026-07/`).
+- 2026-09-24 to 2026-09-27: simulation revision (M1–M8), full re-run, SRS added as
+  Design 9 (production run `20260927_000502`), real SUD data aggregated to 58 clusters.
+- 2026-10-02: observed-incidence NC application complete; chapter, CTJ and SI drafts complete.
+- 2026-10-20/21: methods extensions A0–A7 (power, partial participation, interval
+  calibration, estimation-method and spillover-form sensitivities).
+- 2026-10-26/27: t + df intervals throughout; grid allocation risk on ten surfaces;
+  CTJ V5 revision.
+- 2026-10-29: SUDDEN meeting talk.
+- 2026-11-02: project cleanup ([review](docs/reviews/2026-11-02-project-cleanup-review.md)).
 
 ---
 
@@ -594,8 +490,12 @@ and 7,598,000 independent fits; tail refinement adds 2,280,000 outcomes for the
 same sampled allocations. Results, models, budgets, precision and limitations
 are in [application README](application/README.md) and the
 [HTML companion](application/report/real_sud_companion.html). Restricted county
-sources/derived files and fit caches remain ignored. The old synthetic run is
-preserved as historical output and unused in current documents.
+sources/derived files and fit caches remain ignored. The methods extensions of
+2026-10-20/21 (power, partial participation, interval calibration and sensitivities) are in
+`application/results/methods_ext_2026-10/`, with the
+[report](docs/findings/2026-10-21-methods-extensions-report.md). The old synthetic runs and
+proposal report are archived in `application/archive/synthetic_2026-07/` and unused in
+current documents.
 
 ---
 

@@ -1,16 +1,16 @@
 # AGENTS.md — application/
 
-**Verified completion checkpoint (2026-10-02):** the observed-incidence application
-and focused tail refinement are complete. Production: 1,248 reporting rows,
-936 computational sources, 7,598,000 independent outcome fits; separate tail refinement
-adds 2,280,000 outcomes on the same allocations. All settings pass completeness
-and the approved mean-MSE/coverage Monte Carlo gates; no warnings, aliases,
-boundary fits or failures. Coverage remains below 95% and allocation tails remain
-uncertain. See [completed findings](../docs/findings/2026-10-02-nc-sud-application-findings.md).
-Full chapter/appendix and derived CTJ/SI drafts are complete and verified; author review and submission metadata remain. See [manuscript completion findings](../docs/findings/2026-10-02-manuscript-completion-findings.md).
+**Status (2026-11-02):** observed-incidence application complete (2026-10-02;
+[findings](../docs/findings/2026-10-02-nc-sud-application-findings.md)). Methods
+extensions A0–A7 ran 2026-10-20/21 with reruns on 2026-10-21
+([findings](../docs/findings/2026-10-20-methods-extensions-findings.md),
+[report](../docs/findings/2026-10-21-methods-extensions-report.md)); outputs in
+`results/methods_ext_2026-10/`, commands and current folders in [README.md](README.md).
+The July 2026 synthetic runs are archived in `archive/synthetic_2026-07/`.
 
 > Loaded only when working under `application/` (via the `@AGENTS.md` stub in `CLAUDE.md`).
-> Moved from the project-level [../AGENTS.md](../AGENTS.md) "Current State (2026-09-25)" section.
+> The real-data notes below came from a section of the project-level
+> [../AGENTS.md](../AGENTS.md) that has since been retired (dated history: `../ROADMAP.md`).
 
 ## Revised application pipeline
 

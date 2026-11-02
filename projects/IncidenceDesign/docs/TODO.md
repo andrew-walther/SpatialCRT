@@ -1,13 +1,13 @@
 # IncidenceDesign to-dos — completed study and drafts
 
-Updated 2026-10-13. The author superseded earlier deadline dates and requested ASAP
+Updated 2026-11-02. The author superseded earlier deadline dates and requested ASAP
 completion with CTJ remaining a required deliverable. Historical interview and
 execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Next up
 
-- [ ] Full SI prose review, right after the 2026-10-29 SUDDEN deck (author, 2026-10-28);
-  details under "After the V5 revision" below.
+- [ ] Full SI prose review (the 2026-10-29 SUDDEN talk is done); details under "After the
+  V5 revision" below.
 
 ## Completed
 
@@ -80,10 +80,10 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 - [x] **Generative-AI disclosure** (Sage policy requires one for AI-assisted code,
   code checking and visualization): draft in CTJ Acknowledgements (2026-10-14);
   tool list confirmed by the author 2026-10-27 (Claude Code and Codex only).
-- [ ] Coauthor ORCIDs if the submission system requests them (Walther's is on the
-  title page). Lin's telephone (919) 966-9431 added from his UNC profile.
-- [ ] Confirm contribution wording; obtain all coauthors' final approval and
-  submission attestations; confirm the pilot description with Simpson.
+- [x] ORCIDs: Walther's and Lin's (corresponding author) are in hand (author, 2026-11-02).
+- [ ] Obtain all coauthors' final approval and submission attestations, including the
+  contribution wording (settled by the author; only coauthor approval remains, 2026-11-02);
+  confirm the pilot description with Simpson.
 - [x] **Coverage below nominal (plan A5):** settled 2026-10-21. The application reports
   the t + df-corrected interval (94–96%) beside Wald (92.6–93.6%); see `DECISIONS.md`.
 - [x] **Grid coverage with the t + df interval** (done 2026-10-26): exact re-fit
@@ -93,7 +93,11 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 - [ ] Submit CTJ with the author-completed
   [checklist](../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
-  SpatialCRT `f67ab4b`, bios-dissertation `7d10596`). Future pushes still require explicit author authorization.
+  SpatialCRT `f67ab4b`, bios-dissertation `7d10596`).
+- [ ] **Reproducibility (author goal, 2026-11-02):** numbers in the CTJ, SI and chapter
+  text and tables are hand-entered and checked by `paper/tools/verify_manuscripts.py`.
+  Consider generating table bodies or macros from saved results so the papers build
+  from results directly.
 
 No additional analysis was required by the final independent source review.
 Actual pilot endpoint/enrollment/budget/network specification and interval
@@ -180,7 +184,7 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
 - [x] Update keywords (done 2026-10-19: dropped "simulation" and "mean squared error";
   added interference, design-stage treatment allocation, incidence-guided design).
 - [ ] **After the V5 revision (2026-10-27):** full SI prose review (human-writer pass plus
-  statistician and clinician reviewers), after the 2026-10-29 SUDDEN talk deck is ready
+  statistician and clinician reviewers), now that the 2026-10-29 SUDDEN talk is done
   (author); `application/report/IncidenceDesign_Application_Study_Report.qmd` still reads the
   pilot `downside_by_design.csv`. Service-area clusters need no explanation in the paper
   (the education would be delivered through the colleges; author, 2026-10-27).
@@ -190,19 +194,18 @@ thesis chapter and the prelim talk, main or backup slides; author, 2026-10-14)
   (γ × share of treated neighbors) with Chapter 2's on/off indicator (keep brief).
 - [ ] Keep CTJ word counts current after every edit (texcount, text + headers, math
   excluded; title page and checklist). 2026-10-27 (V5 revision): body 3,498; abstract 404.
-- [ ] Decide whether statistical tests of design differences belong in the CTJ/SI
-  (the SI has Nemenyi/Holm-Wilcoxon for variant consolidation; script 12 has six-design
-  Friedman/Nemenyi; none for the application).
+- [x] Statistical tests of design differences (decided 2026-11-02): they stay in the SI
+  (and may appear in the thesis chapter), not the CTJ main text.
 - [ ] Run the read-only review with the updated brief
   (`prompts/2026-10-26-claude-comprehensive-review-prompt.md`).
 
 - [x] Burden share treated by design (plan A1; run 2026-10-20, grid check 2026-10-21; findings Section 2).
 
 **Prelim and beyond**
-- [ ] Prelim slides (bios-dissertation/slides/): structure Project 1 / 2 / 3, brief
-  literature review, depth on completed projects; prepare for general-science
-  questions and the SAR vs CAR vs Bayesian question.
-- [ ] Ask Lin which project to submit as an ENAR 2027 abstract.
+- [ ] Prelim slides (bios-dissertation/slides/; prelim 2026-12-07): structure Project 1 / 2 / 3,
+  brief literature review, depth on completed projects; prepare for general-science
+  questions and the SAR vs CAR vs Bayesian question. Part II is to be adapted from the
+  SUDDEN deck in `presentation/`.
 - [ ] Final defense: focus on progress since the prelim (mainly Project 3).
 
 ### Methods-extension decisions for the author (2026-10-20 run)
@@ -238,10 +241,9 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 - [x] Step 8 (2026-10-25): draft talk outline in `presentation/OUTLINE.md` and
   `presentation/outline.html` (figures inline). The prelim Part II outline in
   bios-dissertation is unchanged; adapt it from the talk deck later.
-- [ ] 20-minute project talk for clinicians and epidemiologists, Thursday 2026-10-29:
-  full overview, discussion weighted toward the application; built in `presentation/`
-  and later adapted into prelim Part II. Kickoff prompt:
-  `prompts/2026-10-25-talk-kickoff-prompt.md`.
+- [x] 20-minute project talk for clinicians and epidemiologists, given 2026-10-29
+  (`presentation/sudden_talk_2026-10-29.qmd`). Adapting it into prelim Part II is listed
+  under "Prelim and beyond".
 
 ## Known minor code issues (low priority; moved from AGENTS.md 2026-10-14)
 
@@ -254,5 +256,8 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 **From the SUDDEN talk prep (2026-10-28)**
 - [ ] Ask Dr. Simpson who is assessed in control colleges (eligible EMS and healthcare professionals in every service area, trained or not) and how the education outcome is measured; update the application framing in the CTJ, SI and Chapter 3.
 - [x] `code/23` now prints "2×2 Blocking" in `fig_colleges_needed`; chapter and SI PDFs rebuilt (2026-10-28).
-- [ ] Older chapter/SI figures still print "2x2 Blocking" (chapter Figures 2, 3b, 4, 12, 16 and their SI copies, from earlier scripts such as `code/12`/`code/14`); regenerate with "2×2".
+- [x] Older chapter/SI figures printed "2x2 Blocking"; codes 12, 14 and 15 now print "2×2 Blocking" and the figures were regenerated and copied with `paper/tools/copy_figures.sh` (2026-11-02). Chapter and SI PDFs rebuilt.
+- [ ] Confirm with Habib the two upstream case-identification counts in the deck flowchart
+  (412,514 and 111,665, recorded in `presentation/data/case_identification_counts.csv`
+  and cited from Habib (2026), unconfirmed).
 - [ ] Confirm with Dr. Simpson who the pilot trains (students and staff in workforce-development and disaster-response programs, EMS or other healthcare trainees) and the outcome measured.
