@@ -13,8 +13,10 @@ code/*_cache/
 code/*_files/
 code/*.tex
 
-# Paper intermediate LaTeX files
-paper/**/*.tex
+# Paper intermediate LaTeX files (Quarto/knitr .tex by-products; hand-written .tex is tracked)
+paper/thesis_chapter/Thesis_Chapter.tex
+paper/archive/pre_unification_20260702/IncidenceSpatialCRT_Manuscript.tex
+paper/SAGE_Journal_Template/Sage_LaTeX_Guidelines.tex
 
 # Author's annotated reading PDFs (personal revision markups, versioned _V1, _V2, ...)
 paper/ctj_manuscript/manuscript_ctj/revision_markup/
@@ -22,8 +24,3 @@ application/report/revision_markup/
 
 # Worktrees
 .claude/worktrees/
-
-# Frozen pre-completion manuscript sources, not generated Quarto intermediates.
-!paper/archive/pre_completion_20261002/CTJ_Manuscript.tex
-!paper/archive/pre_completion_20261002/Supplementary_Information.tex
-!paper/archive/pre_unification_20260702/section_drafts/*.tex

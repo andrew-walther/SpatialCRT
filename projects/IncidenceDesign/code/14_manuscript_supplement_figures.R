@@ -93,6 +93,7 @@ stopifnot(identical(unname(full_name_map),
                        "Simple Random Sampling")))
 # Display layer only (author, 2026-10-21): manuscript names for the two saturation designs
 full_name_map[["Design 8"]] <- "Incidence-Guided Saturation"
+full_name_map[["Design 5"]] <- "2\u00d72 Blocking"  # true multiplication sign in figures
 
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
 
@@ -101,7 +102,7 @@ retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "D
 # keyed by short names and includes all 8).
 DESIGN_GROUPS_6 <- c(
   "Checkerboard"                            = "Blocking",
-  "2x2 Blocking"                            = "Blocking",
+  "2\u00d72 Blocking"                            = "Blocking",
   "Isolation Buffer"                        = "Blocking",
   "High Incidence Focus"                    = "Stratified",
   "Balanced Quartiles"                      = "Stratified",
@@ -570,7 +571,7 @@ p_tau_mse <- plot_mse_vs_tau(mle_full_6_leveled) +
 # neighbor type's best-to-worst order. Overridden here rather than in
 # plot_coverage_vs_tau() (06) so its other callers are unaffected.
 tau_colour_order <- c("Incidence-Guided Saturation", "Balanced Quartiles",
-                      "Isolation Buffer", "High Incidence Focus", "2x2 Blocking", "Checkerboard")
+                      "Isolation Buffer", "High Incidence Focus", "2\u00d72 Blocking", "Checkerboard")
 stopifnot(setequal(tau_colour_order, best_to_worst_6))
 tau_palette <- setNames(scales::viridis_pal(option = "D", end = 0.85)(length(tau_colour_order)),
                         tau_colour_order)
@@ -593,7 +594,7 @@ ggsave(file.path(si_dir, "si_fig_tau_coverage.pdf"), p_tau_cov, width = 8, heigh
 # (d) 6-DESIGN APPLICATION TABLE
 # ==============================================================================
 
-app_rds_path <- file.path(proj_dir, "application", "results", "full",
+app_rds_path <- file.path(proj_dir, "application", "archive", "synthetic_2026-07", "results", "full",
                           "application_full_results.rds")
 app_results <- readRDS(app_rds_path)
 app_summary <- app_results$summary_results
@@ -608,7 +609,7 @@ cat("======================================================================\n")
 cat("*** STALE: built from the pre-revision application run. The application uses the\n")
 cat("*** revised design rules (random tie-breaking, exact N/2) only after it is re-run.\n")
 cat("6-DESIGN APPLICATION-SCALE TABLE (NC 58-cluster community college network)\n")
-cat("Source: application/results/full/application_full_results.rds$summary_results\n")
+cat("Source: application/archive/synthetic_2026-07/results/full/application_full_results.rds$summary_results\n")
 cat("Filtered to design_id in {1,2,4,5,6,8} (the 6 retained manuscript designs),\n")
 cat("tau = 1.0, averaged over gamma/rho/spillover_type.\n")
 cat("\n")

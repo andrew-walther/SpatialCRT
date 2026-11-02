@@ -52,3 +52,11 @@ locations (the plan expected the `.rds` files to be untracked; they weren't).
 - `paper/ctj_manuscript/Supplementary_Information.tex` (Section S1) still cites
   `results/six_design_manuscript/…` and `results/eight_design_supplementary/…`. Those
   paths now live under this folder. The CTJ/SI stay untouched until manuscript step 5.
+
+## Symlinked files (2026-11-02)
+
+Ten files here were byte-identical to their copies in `../pre_tau_sweep_20260408/`
+(the April 8 outputs were archived twice). They are now relative symlinks to those
+copies: `00_mathematical_specification.pdf`, `07_results_summary.html`,
+`MLE_combined_design_recommendations.pdf`, `MLE_combined_incidence_overview.pdf`,
+`MLE_statistical_comparisons.pdf` and the five `mle_per_config/MLE_combined_*.pdf`.
