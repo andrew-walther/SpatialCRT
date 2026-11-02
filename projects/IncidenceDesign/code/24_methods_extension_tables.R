@@ -162,7 +162,7 @@ write_body("tab_nc_forms", list(form_col("proportional", "both"), form_col("coun
                                 form_col("count", "control_only"), form_col("binary", "control_only")))
 
 # 8. Unequal trained professionals and NC tests (in-text numbers) ----
-a4 <- rd("summaries/a4_summary.csv")
+a4 <- rd("summaries_v2/a4_summary.csv")
 a4d <- a4[abs(a4$Tau - 0.3) < 1e-9, ]
 for (n in c(20, 58)) for (reg in c("both", "control_only")) {
   x <- a4d[a4d$N == n & a4d$Regime == reg, ]
