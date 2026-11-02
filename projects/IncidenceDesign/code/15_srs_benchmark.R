@@ -250,7 +250,8 @@ saveRDS(c(res, list(stop_rule = stop_rule)), file.path(out_dir, "srs_benchmark.r
 #' @param nb "queen" or "rook" (for the subtitle)
 #' @return ggplot object
 plot_vs_srs <- function(tests, nb) {
-  display <- c("Incidence-Guided Saturation Quadrants" = "Incidence-Guided Saturation")
+  display <- c("Incidence-Guided Saturation Quadrants" = "Incidence-Guided Saturation",
+               "2x2 Blocking" = "2\u00d72 Blocking")
   d <- tests[tests$Design %in% c(retained, consolidated), ]
   stopifnot(nrow(d) == 16)
   d$Design <- ifelse(d$Design %in% names(display), display[d$Design], d$Design)

@@ -1,7 +1,7 @@
 ======================================================================
 SIX-DESIGN + SRS STATISTICAL COMPARISONS (manuscript design set; SRS tested as a seventh member)
 Estimator:  oracle (Y ~ Z + Spill + X), primary 
-Retained:  Checkerboard, High Incidence Focus, Isolation Buffer, 2x2 Blocking, Balanced Quartiles, Incidence-Guided Saturation 
+Retained:  Checkerboard, High Incidence Focus, Isolation Buffer, 2×2 Blocking, Balanced Quartiles, Incidence-Guided Saturation 
 Tested with: Simple Random Sampling (benchmark)
 Dropped:  Saturation Quadrants, Balanced Halves (redundant, see plan)
 Per-tau Friedman tests share Z and eps across tau (common random numbers):
@@ -16,15 +16,15 @@ Incidence-Guided Saturation      Simple Random Sampling
                       1.775                       2.600 
          Balanced Quartiles            Isolation Buffer 
                       2.688                       4.194 
-               2x2 Blocking                Checkerboard 
+               2×2 Blocking                Checkerboard 
                       5.244                       5.737 
        High Incidence Focus 
                       5.763 
 
 Nemenyi critical difference (alpha=0.05) = 0.712
 17 of 21 pairs significantly different (Nemenyi)
-                            2x2 Blocking Balanced Quartiles Checkerboard
-2x2 Blocking                          NA             0.0000       0.3865
+                            2×2 Blocking Balanced Quartiles Checkerboard
+2×2 Blocking                          NA             0.0000       0.3865
 Balanced Quartiles                0.0000                 NA       0.0000
 Checkerboard                      0.3865             0.0000           NA
 High Incidence Focus              0.3245             0.0000       1.0000
@@ -32,7 +32,7 @@ Incidence-Guided Saturation       0.0000             0.0030       0.0000
 Isolation Buffer                  0.0003             0.0000       0.0000
 Simple Random Sampling            0.0000             0.9998       0.0000
                             High Incidence Focus Incidence-Guided Saturation
-2x2 Blocking                              0.3245                      0.0000
+2×2 Blocking                              0.3245                      0.0000
 Balanced Quartiles                        0.0000                      0.0030
 Checkerboard                              1.0000                      0.0000
 High Incidence Focus                          NA                      0.0000
@@ -40,7 +40,7 @@ Incidence-Guided Saturation               0.0000                          NA
 Isolation Buffer                          0.0000                      0.0000
 Simple Random Sampling                    0.0000                      0.0113
                             Isolation Buffer Simple Random Sampling
-2x2 Blocking                           3e-04                 0.0000
+2×2 Blocking                           3e-04                 0.0000
 Balanced Quartiles                     0e+00                 0.9998
 Checkerboard                           0e+00                 0.0000
 High Incidence Focus                   0e+00                 0.0000
@@ -57,15 +57,15 @@ Mean MSE / Coverage by design (tau=1.0):
           Balanced Quartiles 0.13081366 0.945550
             Isolation Buffer 0.16016279 0.948875
         High Incidence Focus 0.24545517 0.947725
-                2x2 Blocking 0.31923193 0.948450
+                2×2 Blocking 0.31923193 0.948450
                 Checkerboard 1.08689503 0.949650
 
 --- Conditional test: stratify by True_Tau (full sweep) ---
-  True_Tau = 0.8: Friedman chi-sq = 564.09, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
-  True_Tau = 1: Friedman chi-sq = 560.33, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
-  True_Tau = 1.5: Friedman chi-sq = 540.92, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
-  True_Tau = 2: Friedman chi-sq = 526.55, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
-  True_Tau = 3: Friedman chi-sq = 497.55, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2x2 Blocking < Checkerboard < High Incidence Focus
+  True_Tau = 0.8: Friedman chi-sq = 564.09, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2×2 Blocking < Checkerboard < High Incidence Focus
+  True_Tau = 1: Friedman chi-sq = 560.33, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2×2 Blocking < Checkerboard < High Incidence Focus
+  True_Tau = 1.5: Friedman chi-sq = 540.92, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2×2 Blocking < Checkerboard < High Incidence Focus
+  True_Tau = 2: Friedman chi-sq = 526.55, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2×2 Blocking < Checkerboard < High Incidence Focus
+  True_Tau = 3: Friedman chi-sq = 497.55, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Simple Random Sampling < Balanced Quartiles < Isolation Buffer < 2×2 Blocking < Checkerboard < High Incidence Focus
 
 ######## ROOK (sensitivity / Chapter 2 continuity) ########
 Rook: tau not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged. 
@@ -76,15 +76,15 @@ Incidence-Guided Saturation          Balanced Quartiles
                       1.831                       2.225 
      Simple Random Sampling            Isolation Buffer 
                       2.450                       4.206 
-               2x2 Blocking        High Incidence Focus 
+               2×2 Blocking        High Incidence Focus 
                       4.331                       5.969 
                Checkerboard 
                       6.987 
 
 Nemenyi critical difference (alpha=0.05) = 0.712
 17 of 21 pairs significantly different (Nemenyi)
-                            2x2 Blocking Balanced Quartiles Checkerboard
-2x2 Blocking                          NA             0.0000        0e+00
+                            2×2 Blocking Balanced Quartiles Checkerboard
+2×2 Blocking                          NA             0.0000        0e+00
 Balanced Quartiles                0.0000                 NA        0e+00
 Checkerboard                      0.0000             0.0000           NA
 High Incidence Focus              0.0000             0.0000        5e-04
@@ -92,7 +92,7 @@ Incidence-Guided Saturation       0.0000             0.6626        0e+00
 Isolation Buffer                  0.9986             0.0000        0e+00
 Simple Random Sampling            0.0000             0.9676        0e+00
                             High Incidence Focus Incidence-Guided Saturation
-2x2 Blocking                               0e+00                      0.0000
+2×2 Blocking                               0e+00                      0.0000
 Balanced Quartiles                         0e+00                      0.6626
 Checkerboard                               5e-04                      0.0000
 High Incidence Focus                          NA                      0.0000
@@ -100,7 +100,7 @@ Incidence-Guided Saturation                0e+00                          NA
 Isolation Buffer                           0e+00                      0.0000
 Simple Random Sampling                     0e+00                      0.1378
                             Isolation Buffer Simple Random Sampling
-2x2 Blocking                          0.9986                 0.0000
+2×2 Blocking                          0.9986                 0.0000
 Balanced Quartiles                    0.0000                 0.9676
 Checkerboard                          0.0000                 0.0000
 High Incidence Focus                  0.0000                 0.0000
@@ -115,17 +115,17 @@ Mean MSE / Coverage by design (tau=1.0):
  Incidence-Guided Saturation 0.07165113 0.951725
           Balanced Quartiles 0.08371778 0.948125
       Simple Random Sampling 0.08504689 0.947450
-                2x2 Blocking 0.12812905 0.948050
+                2×2 Blocking 0.12812905 0.948050
             Isolation Buffer 0.13290418 0.949750
         High Incidence Focus 0.20623986 0.948375
                 Checkerboard 0.47992058 0.161500
 
 --- Conditional test: stratify by True_Tau (full sweep) ---
-  True_Tau = 0.8: Friedman chi-sq = 803.59, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 1: Friedman chi-sq = 795.77, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 1.5: Friedman chi-sq = 776.57, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 2: Friedman chi-sq = 752.60, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 3: Friedman chi-sq = 710.16, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 0.8: Friedman chi-sq = 803.59, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 1: Friedman chi-sq = 795.77, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 1.5: Friedman chi-sq = 776.57, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 2: Friedman chi-sq = 752.60, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 3: Friedman chi-sq = 710.16, p = <2e-16, n_blocks = 160; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
 
 ######## POOLED over rook and queen (label as pooled wherever used) ########
 Rook: tau not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged. 
@@ -136,15 +136,15 @@ Incidence-Guided Saturation          Balanced Quartiles
                       1.803                       2.456 
      Simple Random Sampling            Isolation Buffer 
                       2.525                       4.200 
-               2x2 Blocking        High Incidence Focus 
+               2×2 Blocking        High Incidence Focus 
                       4.787                       5.866 
                Checkerboard 
                       6.362 
 
 Nemenyi critical difference (alpha=0.05) = 0.504
 19 of 21 pairs significantly different (Nemenyi)
-                            2x2 Blocking Balanced Quartiles Checkerboard
-2x2 Blocking                          NA             0.0000       0.0000
+                            2×2 Blocking Balanced Quartiles Checkerboard
+2×2 Blocking                          NA             0.0000       0.0000
 Balanced Quartiles                0.0000                 NA       0.0000
 Checkerboard                      0.0000             0.0000           NA
 High Incidence Focus              0.0000             0.0000       0.0559
@@ -152,7 +152,7 @@ Incidence-Guided Saturation       0.0000             0.0025       0.0000
 Isolation Buffer                  0.0104             0.0000       0.0000
 Simple Random Sampling            0.0000             0.9997       0.0000
                             High Incidence Focus Incidence-Guided Saturation
-2x2 Blocking                              0.0000                      0.0000
+2×2 Blocking                              0.0000                      0.0000
 Balanced Quartiles                        0.0000                      0.0025
 Checkerboard                              0.0559                      0.0000
 High Incidence Focus                          NA                      0.0000
@@ -160,7 +160,7 @@ Incidence-Guided Saturation               0.0000                          NA
 Isolation Buffer                          0.0000                      0.0000
 Simple Random Sampling                    0.0000                      0.0005
                             Isolation Buffer Simple Random Sampling
-2x2 Blocking                          0.0104                 0.0000
+2×2 Blocking                          0.0104                 0.0000
 Balanced Quartiles                    0.0000                 0.9997
 Checkerboard                          0.0000                 0.0000
 High Incidence Focus                  0.0000                 0.0000
@@ -176,13 +176,13 @@ Mean MSE / Coverage by design (tau=1.0):
       Simple Random Sampling 0.10676386 0.9477625
           Balanced Quartiles 0.10726572 0.9468375
             Isolation Buffer 0.14653348 0.9493125
-                2x2 Blocking 0.22368049 0.9482500
+                2×2 Blocking 0.22368049 0.9482500
         High Incidence Focus 0.22584751 0.9480500
                 Checkerboard 0.78340780 0.5555750
 
 --- Conditional test: stratify by True_Tau (full sweep) ---
-  True_Tau = 0.8: Friedman chi-sq = 1321.64, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 1: Friedman chi-sq = 1310.21, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 1.5: Friedman chi-sq = 1272.07, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 2: Friedman chi-sq = 1233.77, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
-  True_Tau = 3: Friedman chi-sq = 1160.23, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2x2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 0.8: Friedman chi-sq = 1321.64, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 1: Friedman chi-sq = 1310.21, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 1.5: Friedman chi-sq = 1272.07, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 2: Friedman chi-sq = 1233.77, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard
+  True_Tau = 3: Friedman chi-sq = 1160.23, p = <2e-16, n_blocks = 320; rank order: Incidence-Guided Saturation < Balanced Quartiles < Simple Random Sampling < Isolation Buffer < 2×2 Blocking < High Incidence Focus < Checkerboard

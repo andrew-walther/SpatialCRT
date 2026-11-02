@@ -2,7 +2,7 @@
 *** STALE: built from the pre-revision application run. The application uses the
 *** revised design rules (random tie-breaking, exact N/2) only after it is re-run.
 6-DESIGN APPLICATION-SCALE TABLE (NC 58-cluster community college network)
-Source: application/results/full/application_full_results.rds$summary_results
+Source: application/archive/synthetic_2026-07/results/full/application_full_results.rds$summary_results
 Filtered to design_id in {1,2,4,5,6,8} (the 6 retained manuscript designs),
 tau = 1.0, averaged over gamma/rho/spillover_type.
 

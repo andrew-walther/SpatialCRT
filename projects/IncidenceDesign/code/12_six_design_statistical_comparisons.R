@@ -78,6 +78,7 @@ stopifnot(identical(unname(full_name_map),
                        "Simple Random Sampling")))
 # Display layer only (author, 2026-10-21): manuscript names for the two saturation designs
 full_name_map[["Design 8"]] <- "Incidence-Guided Saturation"
+full_name_map[["Design 5"]] <- "2\u00d72 Blocking"  # true multiplication sign in figures
 
 # 6 retained designs: drop "Design 3" (Saturation Quadrants) and "Design 7" (Balanced Halves)
 retained_ids <- c("Design 1", "Design 2", "Design 4", "Design 5", "Design 6", "Design 8")
@@ -281,10 +282,10 @@ for (nb in c("queen", "rook")) {
   # The ribbon is Mean_MSE +/- the AVERAGE of the stored scenario-level SE_MSE
   # (surface-level MC SEs) in each Design x tau cell, not the SE of the mean.
   tau_colour_order <- c("Incidence-Guided Saturation", "Balanced Quartiles",
-                        "Isolation Buffer", "High Incidence Focus", "2x2 Blocking", "Checkerboard")
+                        "Isolation Buffer", "High Incidence Focus", "2\u00d72 Blocking", "Checkerboard")
   tau_legend_order <- if (nb == "rook")
     c("Incidence-Guided Saturation", "Balanced Quartiles",
-      "2x2 Blocking", "Isolation Buffer", "High Incidence Focus", "Checkerboard") else tau_colour_order
+      "2\u00d72 Blocking", "Isolation Buffer", "High Incidence Focus", "Checkerboard") else tau_colour_order
   stopifnot(setequal(tau_legend_order, unique(res$Design)),
             setequal(tau_colour_order, tau_legend_order))
   tau_palette <- setNames(scales::viridis_pal(option = "D", end = 0.85)(length(tau_colour_order)), tau_colour_order)

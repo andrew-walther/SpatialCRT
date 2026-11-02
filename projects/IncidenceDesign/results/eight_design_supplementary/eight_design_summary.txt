@@ -15,7 +15,7 @@ Average ranks (lower = better MSE):
                       3.788                       3.831 
          Balanced Quartiles            Isolation Buffer 
                       3.906                       5.638 
-               2x2 Blocking                Checkerboard 
+               2×2 Blocking                Checkerboard 
                       7.244                       7.737 
        High Incidence Focus 
                       7.763 
@@ -33,7 +33,7 @@ All-8 + SRS mean MSE / Coverage / Rank (tau=1.0):
           Balanced Quartiles 0.13081366 0.945550    5
             Isolation Buffer 0.16016279 0.948875    6
         High Incidence Focus 0.24545517 0.947725    7
-                2x2 Blocking 0.31923193 0.948450    8
+                2×2 Blocking 0.31923193 0.948450    8
                 Checkerboard 1.08689503 0.949650    9
 
 --- Consolidation pair: Saturation Quadrants vs Incidence-Guided Saturation ---
@@ -43,8 +43,8 @@ MSE: 0.0900 vs 0.0907 (delta = -0.0006) | Nemenyi p = 0.9860 | Wilcoxon (Holm) p
 MSE: 0.1299 vs 0.1308 (delta = -0.0009) | Nemenyi p = 1.0000 | Wilcoxon (Holm) p = 1
 
 Full Nemenyi p-value matrix (8 designs + SRS):
-                            2x2 Blocking Balanced Halves Balanced Quartiles
-2x2 Blocking                          NA          0.0000             0.0000
+                            2×2 Blocking Balanced Halves Balanced Quartiles
+2×2 Blocking                          NA          0.0000             0.0000
 Balanced Halves                   0.0000              NA             1.0000
 Balanced Quartiles                0.0000          1.0000                 NA
 Checkerboard                      0.7983          0.0000             0.0000
@@ -54,7 +54,7 @@ Isolation Buffer                  0.0000          0.0000             0.0000
 Saturation Quadrants              0.0000          0.0001             0.0000
 Simple Random Sampling            0.0000          1.0000             1.0000
                             Checkerboard High Incidence Focus
-2x2 Blocking                      0.7983               0.7504
+2×2 Blocking                      0.7983               0.7504
 Balanced Halves                   0.0000               0.0000
 Balanced Quartiles                0.0000               0.0000
 Checkerboard                          NA               1.0000
@@ -64,7 +64,7 @@ Isolation Buffer                  0.0000               0.0000
 Saturation Quadrants              0.0000               0.0000
 Simple Random Sampling            0.0000               0.0000
                             Incidence-Guided Saturation Isolation Buffer
-2x2 Blocking                                     0.0000                0
+2×2 Blocking                                     0.0000                0
 Balanced Halves                                  0.0068                0
 Balanced Quartiles                               0.0026                0
 Checkerboard                                     0.0000                0
@@ -74,7 +74,7 @@ Isolation Buffer                                 0.0000               NA
 Saturation Quadrants                             0.9860                0
 Simple Random Sampling                           0.0115                0
                             Saturation Quadrants Simple Random Sampling
-2x2 Blocking                              0.0000                 0.0000
+2×2 Blocking                              0.0000                 0.0000
 Balanced Halves                           0.0001                 1.0000
 Balanced Quartiles                        0.0000                 1.0000
 Checkerboard                              0.0000                 0.0000
@@ -85,8 +85,8 @@ Saturation Quadrants                          NA                 0.0002
 Simple Random Sampling                    0.0002                     NA
 
 Full Wilcoxon (Holm-adjusted) p-value matrix (8 designs + SRS):
-                            2x2 Blocking Balanced Halves Balanced Quartiles
-2x2 Blocking                          NA               0             0.0000
+                            2×2 Blocking Balanced Halves Balanced Quartiles
+2×2 Blocking                          NA               0             0.0000
 Balanced Halves                        0              NA             1.0000
 Balanced Quartiles                     0               1                 NA
 Checkerboard                           0               0             0.0000
@@ -96,7 +96,7 @@ Isolation Buffer                       0               0             0.0000
 Saturation Quadrants                   0               0             0.0000
 Simple Random Sampling                 0               1             0.6009
                             Checkerboard High Incidence Focus
-2x2 Blocking                           0                    0
+2×2 Blocking                           0                    0
 Balanced Halves                        0                    0
 Balanced Quartiles                     0                    0
 Checkerboard                          NA                    0
@@ -106,7 +106,7 @@ Isolation Buffer                       0                    0
 Saturation Quadrants                   0                    0
 Simple Random Sampling                 0                    0
                             Incidence-Guided Saturation Isolation Buffer
-2x2 Blocking                                     0.0000                0
+2×2 Blocking                                     0.0000                0
 Balanced Halves                                  0.0000                0
 Balanced Quartiles                               0.0000                0
 Checkerboard                                     0.0000                0
@@ -116,7 +116,7 @@ Isolation Buffer                                 0.0000               NA
 Saturation Quadrants                             0.6195                0
 Simple Random Sampling                           0.0000                0
                             Saturation Quadrants Simple Random Sampling
-2x2 Blocking                              0.0000                 0.0000
+2×2 Blocking                              0.0000                 0.0000
 Balanced Halves                           0.0000                 1.0000
 Balanced Quartiles                        0.0000                 0.6009
 Checkerboard                              0.0000                 0.0000
@@ -136,7 +136,7 @@ Average ranks (lower = better MSE):
                       3.369                       3.569 
      Simple Random Sampling            Isolation Buffer 
                       3.612                       6.050 
-               2x2 Blocking        High Incidence Focus 
+               2×2 Blocking        High Incidence Focus 
                       6.206                       7.969 
                Checkerboard 
                       8.988 
@@ -152,7 +152,7 @@ All-8 + SRS mean MSE / Coverage / Rank (tau=1.0):
           Balanced Quartiles 0.08371778 0.948125    3
              Balanced Halves 0.08417786 0.948625    4
       Simple Random Sampling 0.08504689 0.947450    5
-                2x2 Blocking 0.12812905 0.948050    6
+                2×2 Blocking 0.12812905 0.948050    6
             Isolation Buffer 0.13290418 0.949750    7
         High Incidence Focus 0.20623986 0.948375    8
                 Checkerboard 0.47992058 0.161500    9
@@ -164,8 +164,8 @@ MSE: 0.0708 vs 0.0717 (delta = -0.0009) | Nemenyi p = 1.0000 | Wilcoxon (Holm) p
 MSE: 0.0842 vs 0.0837 (delta = 0.0005) | Nemenyi p = 0.9993 | Wilcoxon (Holm) p = 1
 
 Full Nemenyi p-value matrix (8 designs + SRS):
-                            2x2 Blocking Balanced Halves Balanced Quartiles
-2x2 Blocking                          NA          0.0000             0.0000
+                            2×2 Blocking Balanced Halves Balanced Quartiles
+2×2 Blocking                          NA          0.0000             0.0000
 Balanced Halves                   0.0000              NA             0.9993
 Balanced Quartiles                0.0000          0.9993                 NA
 Checkerboard                      0.0000          0.0000             0.0000
@@ -175,7 +175,7 @@ Isolation Buffer                  0.9999          0.0000             0.0000
 Saturation Quadrants              0.0000          0.0365             0.2075
 Simple Random Sampling            0.0000          1.0000             0.9970
                             Checkerboard High Incidence Focus
-2x2 Blocking                      0.0000               0.0000
+2×2 Blocking                      0.0000               0.0000
 Balanced Halves                   0.0000               0.0000
 Balanced Quartiles                0.0000               0.0000
 Checkerboard                          NA               0.0247
@@ -185,7 +185,7 @@ Isolation Buffer                  0.0000               0.0000
 Saturation Quadrants              0.0000               0.0000
 Simple Random Sampling            0.0000               0.0000
                             Incidence-Guided Saturation Isolation Buffer
-2x2 Blocking                                     0.0000           0.9999
+2×2 Blocking                                     0.0000           0.9999
 Balanced Halves                                  0.0671           0.0000
 Balanced Quartiles                               0.3136           0.0000
 Checkerboard                                     0.0000           0.0000
@@ -195,7 +195,7 @@ Isolation Buffer                                 0.0000               NA
 Saturation Quadrants                             1.0000           0.0000
 Simple Random Sampling                           0.0441           0.0000
                             Saturation Quadrants Simple Random Sampling
-2x2 Blocking                              0.0000                 0.0000
+2×2 Blocking                              0.0000                 0.0000
 Balanced Halves                           0.0365                 1.0000
 Balanced Quartiles                        0.2075                 0.9970
 Checkerboard                              0.0000                 0.0000
@@ -206,8 +206,8 @@ Saturation Quadrants                          NA                 0.0231
 Simple Random Sampling                    0.0231                     NA
 
 Full Wilcoxon (Holm-adjusted) p-value matrix (8 designs + SRS):
-                            2x2 Blocking Balanced Halves Balanced Quartiles
-2x2 Blocking                          NA               0             0.0000
+                            2×2 Blocking Balanced Halves Balanced Quartiles
+2×2 Blocking                          NA               0             0.0000
 Balanced Halves                   0.0000              NA             1.0000
 Balanced Quartiles                0.0000               1                 NA
 Checkerboard                      0.0000               0             0.0000
@@ -217,7 +217,7 @@ Isolation Buffer                  0.5142               0             0.0000
 Saturation Quadrants              0.0000               0             0.0000
 Simple Random Sampling            0.0000               1             0.5913
                             Checkerboard High Incidence Focus
-2x2 Blocking                           0                    0
+2×2 Blocking                           0                    0
 Balanced Halves                        0                    0
 Balanced Quartiles                     0                    0
 Checkerboard                          NA                    0
@@ -227,7 +227,7 @@ Isolation Buffer                       0                    0
 Saturation Quadrants                   0                    0
 Simple Random Sampling                 0                    0
                             Incidence-Guided Saturation Isolation Buffer
-2x2 Blocking                                          0           0.5142
+2×2 Blocking                                          0           0.5142
 Balanced Halves                                       0           0.0000
 Balanced Quartiles                                    0           0.0000
 Checkerboard                                          0           0.0000
@@ -237,7 +237,7 @@ Isolation Buffer                                      0               NA
 Saturation Quadrants                                  1           0.0000
 Simple Random Sampling                                0           0.0000
                             Saturation Quadrants Simple Random Sampling
-2x2 Blocking                                   0                 0.0000
+2×2 Blocking                                   0                 0.0000
 Balanced Halves                                0                 1.0000
 Balanced Quartiles                             0                 0.5913
 Checkerboard                                   0                 0.0000
@@ -257,7 +257,7 @@ Average ranks (lower = better MSE):
                       3.638                       3.700 
      Simple Random Sampling            Isolation Buffer 
                       3.700                       5.844 
-               2x2 Blocking        High Incidence Focus 
+               2×2 Blocking        High Incidence Focus 
                       6.725                       7.866 
                Checkerboard 
                       8.363 
@@ -274,7 +274,7 @@ All-8 + SRS mean MSE / Coverage / Rank (tau=1.0):
              Balanced Halves 0.10706068 0.9471375    4
           Balanced Quartiles 0.10726572 0.9468375    5
             Isolation Buffer 0.14653348 0.9493125    6
-                2x2 Blocking 0.22368049 0.9482500    7
+                2×2 Blocking 0.22368049 0.9482500    7
         High Incidence Focus 0.22584751 0.9480500    8
                 Checkerboard 0.78340780 0.5555750    9
 
@@ -285,8 +285,8 @@ MSE: 0.0804 vs 0.0812 (delta = -0.0008) | Nemenyi p = 0.9952 | Wilcoxon (Holm) p
 MSE: 0.1071 vs 0.1073 (delta = -0.0002) | Nemenyi p = 1.0000 | Wilcoxon (Holm) p = 1
 
 Full Nemenyi p-value matrix (8 designs + SRS):
-                            2x2 Blocking Balanced Halves Balanced Quartiles
-2x2 Blocking                          NA           0e+00              0e+00
+                            2×2 Blocking Balanced Halves Balanced Quartiles
+2×2 Blocking                          NA           0e+00              0e+00
 Balanced Halves                   0.0000              NA              1e+00
 Balanced Quartiles                0.0000           1e+00                 NA
 Checkerboard                      0.0000           0e+00              0e+00
@@ -296,7 +296,7 @@ Isolation Buffer                  0.0015           0e+00              0e+00
 Saturation Quadrants              0.0000           0e+00              0e+00
 Simple Random Sampling            0.0000           1e+00              1e+00
                             Checkerboard High Incidence Focus
-2x2 Blocking                       0.000                0.000
+2×2 Blocking                       0.000                0.000
 Balanced Halves                    0.000                0.000
 Balanced Quartiles                 0.000                0.000
 Checkerboard                          NA                0.345
@@ -306,7 +306,7 @@ Isolation Buffer                   0.000                0.000
 Saturation Quadrants               0.000                0.000
 Simple Random Sampling             0.000                0.000
                             Incidence-Guided Saturation Isolation Buffer
-2x2 Blocking                                     0.0000           0.0015
+2×2 Blocking                                     0.0000           0.0015
 Balanced Halves                                  0.0001           0.0000
 Balanced Quartiles                               0.0003           0.0000
 Checkerboard                                     0.0000           0.0000
@@ -316,7 +316,7 @@ Isolation Buffer                                 0.0000               NA
 Saturation Quadrants                             0.9952           0.0000
 Simple Random Sampling                           0.0001           0.0000
                             Saturation Quadrants Simple Random Sampling
-2x2 Blocking                              0.0000                  0e+00
+2×2 Blocking                              0.0000                  0e+00
 Balanced Halves                           0.0000                  1e+00
 Balanced Quartiles                        0.0000                  1e+00
 Checkerboard                              0.0000                  0e+00
@@ -327,8 +327,8 @@ Saturation Quadrants                          NA                  0e+00
 Simple Random Sampling                    0.0000                     NA
 
 Full Wilcoxon (Holm-adjusted) p-value matrix (8 designs + SRS):
-                            2x2 Blocking Balanced Halves Balanced Quartiles
-2x2 Blocking                          NA               0                  0
+                            2×2 Blocking Balanced Halves Balanced Quartiles
+2×2 Blocking                          NA               0                  0
 Balanced Halves                   0.0000              NA                  1
 Balanced Quartiles                0.0000               1                 NA
 Checkerboard                      0.0000               0                  0
@@ -338,7 +338,7 @@ Isolation Buffer                  0.2546               0                  0
 Saturation Quadrants              0.0000               0                  0
 Simple Random Sampling            0.0000               1                  1
                             Checkerboard High Incidence Focus
-2x2 Blocking                           0               0.1861
+2×2 Blocking                           0               0.1861
 Balanced Halves                        0               0.0000
 Balanced Quartiles                     0               0.0000
 Checkerboard                          NA               0.0000
@@ -348,7 +348,7 @@ Isolation Buffer                       0               0.0000
 Saturation Quadrants                   0               0.0000
 Simple Random Sampling                 0               0.0000
                             Incidence-Guided Saturation Isolation Buffer
-2x2 Blocking                                     0.0000           0.2546
+2×2 Blocking                                     0.0000           0.2546
 Balanced Halves                                  0.0000           0.0000
 Balanced Quartiles                               0.0000           0.0000
 Checkerboard                                     0.0000           0.0000
@@ -358,7 +358,7 @@ Isolation Buffer                                 0.0000               NA
 Saturation Quadrants                             0.5951           0.0000
 Simple Random Sampling                           0.0000           0.0000
                             Saturation Quadrants Simple Random Sampling
-2x2 Blocking                              0.0000                      0
+2×2 Blocking                              0.0000                      0
 Balanced Halves                           0.0000                      1
 Balanced Quartiles                        0.0000                      1
 Checkerboard                              0.0000                      0
