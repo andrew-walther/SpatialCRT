@@ -45,9 +45,12 @@ Y = rho * W * Y + alpha * Intervention + psi * Spillover + beta * X + epsilon
 | rho | 0.00, 0.01 | Spatial autocorrelation |
 | TrtSpill | FALSE, TRUE | Spillover reaches treatment districts? |
 
-**Block stratification:** Valid block-stratified assignments are those where no two
-adjacent districts have the same treatment status (rook contiguity). MSE is computed
-separately for Random vs. Block assignment groups.
+**Block stratification:** Neighbors are defined by rook contiguity. On 2×4 and 3×4 the
+BSS allocations are the two checkerboards, where no two adjacent districts share a
+treatment status. On 3×3 that strict rule leaves a single allocation, so the paper uses a
+relaxed rule there: no two intervention districts are adjacent, which gives 6
+allocations. (On 2×4 and 3×4 the two rules give the same allocations.) MSE is computed
+separately for the random and block assignment groups.
 
 ---
 
@@ -95,6 +98,10 @@ correction memo and a corrected Chapter 2 are in `review/manuscript/` and
 | `code/NCTrtMaps.Rmd` | NC judicial district map visualization |
 
 ### Unified Scripts (`code/UnifiedSpatialSim/`)
+
+A single-pipeline refactor written after the paper was final; it has not been run and
+did not produce any published result. It computes BSS with the strict rule, so its 3×3
+BSS group (1 allocation) differs from the paper's (6).
 
 | File | Description |
 |------|-------------|

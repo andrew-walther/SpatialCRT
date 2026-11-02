@@ -61,6 +61,11 @@ They produce inline HTML plots only (no saved figure files).
 
 ### Unified Scripts (`code/UnifiedSpatialSim/`)
 
+Written after the paper was final; never run; produced no published result. Its
+`build_valid_block_indices()` uses the strict rule, so its 3×3 BSS group is combo 77
+only, not the paper's relaxed-rule set {28,30,35,51,77,106}. 2×4 and 3×4 agree with the
+paper (2×4 up to numbering: 24, 47 row-major vs 28, 43).
+
 | File | Description |
 |------|-------------|
 | `code/UnifiedSpatialSim/01_grid_setup.R` | Programmatic grid geometry + rook neighbors |
@@ -80,7 +85,7 @@ saved results, never hand-typed numbers). `OUTLINE.md` slide entries are
 generated from the deck (`tools/outline_from_deck.py`); `presentation/README.md`
 lists the files, build commands and the steps to adapt the deck into
 `bios-dissertation/slides/prelim/part-1/`, which happens only after Andrew
-approves the deck. Reviews: `review/deck-reviews/`. Framing the author wants:
+approves the deck. Reviews: `presentation/reviews/`. Framing the author wants:
 BSS is a good, not best or worst, design, against rolling the dice with SRS;
 per-scenario "optimal allocation" counts are not the point; the slides never
 mention the correction.

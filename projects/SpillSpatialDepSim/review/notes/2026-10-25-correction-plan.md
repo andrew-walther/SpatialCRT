@@ -1,8 +1,10 @@
 # Plan: carrying the 3×3/3×4 correction through (2026-10-25)
 
 Status: **approved by Andrew on 2026-10-25 and implemented the same day**
-(see "Decisions" and "What was done" at the end). Nothing is committed or
-sent. The corrected Chapter 2 is not yet copied into bios-dissertation.
+(see "Decisions" and "What was done" at the end). Committed 2026-10-25.
+The corrected Chapter 2 was copied into bios-dissertation on 2026-10-28
+(uncorrected copy kept in `project1-spillover/draft-uncorrected/`). The
+correction memo has not been sent; that is to be decided with Dr. Lin.
 
 Inputs read: `review/README.md`, `review/COMPARISON.md`,
 `review/tables/corrected_tables_paper_units.md`,

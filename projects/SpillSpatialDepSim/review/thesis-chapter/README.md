@@ -1,7 +1,10 @@
-# review/thesis-chapter/ — corrected Chapter 2 (not yet integrated)
+# review/thesis-chapter/ — corrected Chapter 2 (integrated 2026-10-28)
 
-The corrected Chapter 2, ready to copy into bios-dissertation once Andrew
-approves.
+The corrected Chapter 2. Andrew approved it on 2026-10-28 and it was copied
+into bios-dissertation that day
+(`prelim/project-proposals/project1-spillover/`, with the uncorrected
+chapter kept in `draft-uncorrected/`). The bios-dissertation copy is now the
+working version; this folder is the build record.
 
 | Path | What | Copy back? |
 |---|---|---|
@@ -31,7 +34,7 @@ PATH="$HOME/Library/TinyTeX/bin/universal-darwin:$PATH" \
   -M csl:/Users/ajwalther/GithubProjects/bios-dissertation/templates/source/dissertation-resources-amber/apa.csl
 ```
 
-## Integrating into bios-dissertation (only after Andrew approves)
+## Integrating into bios-dissertation (done 2026-10-28; kept for reference)
 
 ```bash
 SRC=~/GithubProjects/SpatialCRT/projects/SpillSpatialDepSim/review/thesis-chapter

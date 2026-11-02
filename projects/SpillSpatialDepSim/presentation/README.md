@@ -23,7 +23,7 @@ only after Andrew approves it.
 | `tools/outline_from_deck.py` | Regenerates the slide entries of `OUTLINE.md` from the knitted deck; holds the carry-over tags and the prelim and conference notes. |
 | `tools/build_outline_html.py` | Builds `outline.html` from `OUTLINE.md`. |
 
-Reviews of the deck: `../review/deck-reviews/2026-10-28-part1-deck-*` (rounds 1–4, a statistician and a non-statistician reviewer each round).
+Reviews of the deck: `reviews/2026-10-28-part1-deck-*` (rounds 1–4, a statistician and a non-statistician reviewer each round).
 
 ## Build
 

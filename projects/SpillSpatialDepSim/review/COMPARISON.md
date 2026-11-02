@@ -101,48 +101,35 @@ What fails are the grid-specific statements for 3×3 and 3×4, the
 "consistently minimal MSE" sentence (already false for 2×4), the count of
 7 optimal allocations for 3×3 and 3×4, and the checkerboard paradox.
 
-## Next steps
+## Next steps (status as of 2026-11-02)
 
-Nothing below has been done. Items 3–6 touch Chapter 2, the paper or the
-slides, and need Andrew's explicit approval.
+Only item 1 is still open. The decisions are D1–D7 in
+`notes/2026-10-25-correction-plan.md` and in bios-dissertation
+`DECISIONS.md` (2026-10-25).
 
-1. **Advisor discussion.** Share this file and `README.md` with Dr. Lin.
-   Key message: the general conclusions and the recommendation hold; the
-   3×3 and 3×4 tables, figures and grid-specific text were wrong. Decide
-   whether a journal correction is warranted. A BMC correction notice
-   would replace two tables and two figures and revise a few paragraphs.
-2. **Record decisions in bios-dissertation `DECISIONS.md`.** These are the
-   two decisions from the side chat (retire "checkerboard paradox"; 2×4
-   primary in the prelim talk), plus whatever is decided in item 1.
-3. **Prelim slides.**
-   - Lead with 2×4, and use the collinearity-bias slide in place of slot
-     I.9 (already noted in `slides/prelim/OUTLINE.md`).
-   - The outline currently says to use the published 3×3 and 3×4 numbers
-     in backup unless updated ones are provided. These corrected numbers
-     are now available. Swapping them in would let the backup slides say
-     "the same pattern holds on 3×4". That is a stronger message than the
-     published tables give, and it is defensible.
-4. **Chapter 2 (when approved).**
-   - Replace the 3×3 and 3×4 tables and figures with the corrected ones.
-   - Rewrite the 3×3 and 3×4 results paragraphs.
-   - Remove the checkerboard paradox (Results, Discussion,
-     Recommendations), keeping the Limitations account of collinearity.
-   - Fix the "consistently minimal MSE" and "7 allocations" sentences.
-   - Add a one-line note that the 3×3 and 3×4 summaries were recomputed
-     after publication.
-   - Record the exception to the "ported from the paper" rule in
-     `DECISIONS.md`.
-5. **Fix the source scripts (when approved).** Correct `SpatialSim_3x3.Rmd:455`
-   and `SpatialSim_3x4.Rmd:463`, and the 3×3 and 3×4 indices in
-   `SimEstimateAnalysisAll.Rmd`. Then decide whether the corrected CSVs in
-   `review/results/` replace `results/beta_mse/`, or whether `results/`
-   stays frozen as the published record. Keeping it frozen is the safer
-   choice.
-6. **Not yet rerun.** The α, ψ and ρ CSVs (`results/{alpha,psi,rho}_mse/`)
-   for 3×3 and 3×4 Control Only have the same loop bug. The paper reports
-   only β̂, so they matter only if those parameters are reported anywhere.
-   `code/rerun_trtnospill.R` can save them with a small change.
-7. **`code/UnifiedSpatialSim/`** was written after the published results.
-   Check that it builds z with the full district range and the correct BSS
-   indices before relying on it. Its `build_valid_block_indices()` computes
-   the indices programmatically, which avoids the hardcoding problem.
+1. **Advisor discussion — open.** Whether to send a correction to BMC is
+   to be decided with Dr. Lin. The corrected manuscript, the latexdiff
+   markup and the memo are ready in `manuscript/`, and nothing has been
+   sent.
+2. **Decisions recorded — done.** bios-dissertation `DECISIONS.md`
+   (2026-10-25) retires "checkerboard paradox", makes 2×4 primary in the
+   talk, and records the Chapter 2 exception to the "ported from the
+   paper" rule.
+3. **Slides — done.** The Part I deck (`../presentation/`) uses the
+   corrected 3×3 and 3×4 results as the results, leads with 2×4, and has
+   a collinearity slide. The slides do not mention the correction.
+4. **Chapter 2 — done.** Corrected and copied into bios-dissertation on
+   2026-10-28. The uncorrected chapter is kept in
+   `project1-spillover/draft-uncorrected/`.
+5. **Source scripts — decided: no change (D7).** `code/` and `results/`
+   stay frozen as the published record. The corrected CSVs live only in
+   `review/results/`.
+6. **α, ψ and ρ CSVs — decided: not rerun.** The paper reports only β̂,
+   so the 3×3 and 3×4 Control Only CSVs for those parameters (which carry
+   the loop bug) are left as they are.
+7. **`code/UnifiedSpatialSim/` — checked.** It loops over every district
+   (`seq_len(n_dist)`), so it does not have the `1:8` bug. It computes BSS
+   with the strict rule (no two adjacent districts share a status), which
+   gives 2 allocations on 2×4 and 3×4 but only 1 on 3×3; the paper's 3×3
+   BSS used the relaxed rule (no two treated districts adjacent; 6
+   allocations). It was written after the paper and has not been run.

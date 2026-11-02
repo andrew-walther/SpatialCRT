@@ -92,12 +92,19 @@ setup_grid <- function(n_rows, n_cols, cell_length = 100, points_per_district = 
 
 #' Compute which combination indices satisfy full block stratification.
 #'
-#' A valid block-stratified assignment requires that:
+#' A valid block-stratified assignment here requires that:
 #'   (a) no two adjacent districts are BOTH intervention, AND
 #'   (b) no two adjacent districts are BOTH control.
 #'
-#' This is the same criterion used in all three original simulation scripts
-#' (is_valid_assignment in NC_DOC.Rmd and is_valid_assignment_full in 3x3/3x4.Rmd).
+#' This is the strict ("full separation") rule: is_valid_assignment in
+#' NC_DOC.Rmd and is_valid_assignment_full in 3x3/3x4.Rmd. The paper's 3x3
+#' BSS set instead uses the relaxed rule, (a) only
+#' (is_valid_assignment_intervention_only), because the strict rule leaves a
+#' single 3x3 allocation. The two rules agree on 2x4 (2 allocations) and 3x4
+#' (2 allocations); on 3x3 the strict rule gives combo 77 and the relaxed rule
+#' gives {28, 30, 35, 51, 77, 106}. So this function does NOT reproduce the
+#' paper's 3x3 BSS group. This unified code was written after the paper and
+#' has not been run; the paper's results come from the per-grid scripts.
 #'
 #' @param grid        Output of setup_grid()
 #' @param combinations List of integer vectors (each = set of intervention district indices)
