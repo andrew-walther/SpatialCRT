@@ -72,7 +72,9 @@ Builds on the 2026-11-02 cleanup (`37bf50b`, `c7d62fb`).
 3. `verify_manuscripts.py` expands `\input` and macros before its comparisons and fails
    on an undefined macro or a stale table; `test_manuscript_exhibits.R` reads the
    expanded text.
-4. Submission package: a script writes `CTJ_Submission.tex` from the master with the
+4. Submission package (the submission layout: one column, double-spaced, exhibits at the
+   end, which is `CTJ_Manuscript.tex` built on its own; the two-column `CTJ_Reading` layout
+   is for reading only): a script writes `CTJ_Submission.tex` from the master with the
    exhibits, tables and numbers inlined, and zips it with the figure files, `sagej.cls`,
    `SageV.bst`, the `.bib` and the rendered PDF (the author expects SAGE to want such a zip,
    2026-11-02). → check: the zip unpacked in an empty folder compiles, and its PDF text
@@ -120,6 +122,33 @@ and a new dependency.
   order in its README, and let the Stage 0 pipeline map and the Stage 4 `Makefile` span
   both folders.
 - Bibliography in the submission: settled, the `.bib` goes in the zip (see Stage 1).
+- Numbered application scripts (author prefers numbered scripts, 2026-11-02). Renaming
+  hashed production files (`real_sud_setup.R`, `real_sud_simulation.R`, `run_real_sud.R`,
+  `application_designs.R`, the `methods_ext_*` computation files) breaks the stored-run
+  manifest checks, so the choice is: (a) a numbered run order in `application/README.md`
+  and numbered names only for scripts outside any manifest; or (b) rename everything and
+  re-record the manifests, which needs a check that the stored runs still verify. Stage 0
+  lists which files are in a manifest.
+
+## Simulation vs application model code (checked 2026-11-02)
+
+The author's concern with keeping the folders apart is that the two studies might fit
+different models. They do not:
+
+- **Fitter.** Both call `fit_one_lag_model()` from `code/04_estimation.R` (the lean eigen
+  ML engine `fit_sar_lag()`): the grid through 05, the application through
+  `code/16_allocation_risk.R` and `application/code/real_sud_simulation.R`. The
+  application manifests hash `code/01`–`05` and `16`, so a change to the fitter would stop
+  the application runs from loading.
+- **Outcome model.** Same SAR lag form, Y = (I − ρW)⁻¹(τZ + S(Z) + βX + ε); the
+  application builds it in its own `rs_model()` because its W comes from the 58-college
+  map and its primary model has β = 0 with no X term (author decision 2026-10-02). Those
+  differences are by design, not separate model code.
+- **Interval.** Both use τ̂ ± t(0.975, n − p) × SE × √(n / (n − p)), with p the
+  coefficients plus ρ (grid n = 100, p = 5; application n = 58, p = 4, or 5 with X), but
+  written twice: `code/26_grid_tdf_intervals.R` and `ms_a0_a5()` in
+  `application/code/methods_ext_stored.R`. Stage 0 candidate: one shared helper, with a
+  test that both studies' stored values are unchanged.
 
 ## Afterwards
 
