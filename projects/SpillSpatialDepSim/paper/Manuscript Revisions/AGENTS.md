@@ -1,185 +1,75 @@
-# AGENTS.md — Project Context: Spatial CRT Manuscript Revisions
+# AGENTS.md — Manuscript Revisions (Project 1, BMC Medical Research Methodology)
 
-**Project:** Revisions to "Spatial Cluster Randomized Trials — Sampling Design with Spillover Effects & Spatial Dependence"
-**Journal:** BMC Medical Research Methodology
-**Author:** Andrew Walther (awalther@unc.edu), UNC Chapel Hill Biostatistics
-**Status:** Revision round 1 — all changes implemented; response letter finalized at V3 as of 2026-04-14
+**Status (2026-11-02): final.** The paper was accepted after Revision 2c. This
+folder is the archive of the peer-review rounds; nothing here is being edited.
+Treat it as read-only unless Andrew asks otherwise.
+
+- **Sent to the journal (accepted version):**
+  `Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2_Submission/Revisions_V2c.{tex,pdf}`.
+  This is the clean package that was uploaded, and it keeps its own real `figures/`
+  folder so it can be zipped or uploaded to Overleaf as is.
+- **Working copy of the same version:** `Revision 2c/Walther_SpatialCRT_LaTeX_Revisions_V2c/`.
+  Same `.tex`, `.pdf` and `.bib`, plus the annotated diff and the V2b → V2c diff.
+- **Post-publication correction (2026-10):** the corrected manuscript, markup and
+  memo to BMC are in `../../review/manuscript/`, not here. See `../../review/README.md`.
+
+For the project as a whole see `../../AGENTS.md`; for the `paper/` layout see
+`../README.md`.
 
 ---
 
-## Directory Structure
+## Rounds
 
+Each round folder holds the same kinds of things: the input manuscript
+(`Original & Annotated Manuscripts/`), the revised LaTeX package, the journal's
+comments, and the response letter.
+
+| Folder | Responds to | Manuscript | Response letter | Notes |
+|---|---|---|---|---|
+| `Revision 1/` | Round 1 reviews (editor, two reviewers; `.docx`) | `Revisions_V1.tex` (22 changes from `main.tex`, the initial submission) | `response_letter_V3` (earlier drafts in `revision response/archive/`) | Planning documents in `revision response/planning/` |
+| `Revision 2/` | Round 2 reviews (`BMC MRM review spatial 2.pdf`, editor comments) | `Revisions_V2.tex` | `response_letter_V4` | Working notes in `notes/` (`.qmd`/`.html`) |
+| `Revision 2a/` | Round 2 (same comments) | `Revisions_V2.tex` plus a shortened `Revisions_short_V2.tex` | `response_letter_V4` | Length-reduction attempt |
+| `Revision 2b/` | Round 2 (same comments) | `Revisions_V2b.tex` and `_V2b_short/` | `response_letter_V5` and `_V5_short` | `Notes/` holds six session handoffs and the letter-build scripts; `Diffs/` holds the change summaries |
+| `Revision 2c/` | 6/19/2026 meeting with Dr. Lin (notation, ICC statement) | `Revisions_V2c.tex` (accepted) | `response_letter_V6` | Plan in `Notes/SpatialCRT_manuscript_updates_plan_6_21_26.md` |
+| `Send to Dr. Lin/` | — | PDFs sent to Dr. Lin before the V2b and V2c submissions | — | See its `README.md` |
+
+The annotated diffs (`Revisions_Annotated_V*.tex`) are all baselined against
+`Revisions_V1.tex`.
+
+## Figures
+
+The figures did not change across the revision rounds. Every round's `figures/`
+folder is a relative symlink to `../figures/revision/` (in `paper/`), except
+`_V2_Submission/figures/`, which is a real copy. The initial-submission packages
+in `../Walther_Submission/` link to `../figures/submission/`. Each `.tex` still
+uses `figures/...` paths, so every round compiles without edits.
+
+## Rebuilding a round
+
+From inside a round's LaTeX folder:
+
+```bash
+pdflatex -interaction=nonstopmode Revisions_V2c.tex
+bibtex Revisions_V2c
+pdflatex -interaction=nonstopmode Revisions_V2c.tex
+pdflatex -interaction=nonstopmode Revisions_V2c.tex
 ```
-Manuscript Revisions/
-├── AGENTS.md                                  ← This file
-├── Walther_SpatialCRT_LaTeX_Revisions/        ← SUBMISSION PACKET (zip this folder)
-│   ├── main.tex                               ← ORIGINAL (read-only, do not modify)
-│   ├── main.pdf
-│   ├── Revisions_V1.tex                       ← REVISED manuscript (all 22 changes applied)
-│   ├── Revisions_V1.pdf
-│   ├── Revisions_Annotated_V1.tex             ← Annotated diff (red text + changebar markup)
-│   ├── Revisions_Annotated_V1.pdf
-│   ├── references.bib
-│   └── figures/
-│       ├── Applications/                      (NC DCS/MCO maps + BSS assignment maps)
-│       ├── BetaMSEresults/                    (MSE result plots — 6 grid×scenario + 3 combined)
-│       ├── InterventionSpilloverEffect/       (TrtSpill comparison figure)
-│       ├── Neighbors/                         (Rook/Queen/2nd-order contiguity figure)
-│       └── SpatialGridSetups/                 (Block/, Random/, combined grid PNGs)
-├── journal comments/                          ← Raw reviewer/editor comment files (Word)
-│   ├── editor_comments.docx
-│   ├── reviewer_1_comments.docx
-│   └── reviewer_2_comments.docx
-└── revision response/
-    ├── response_letter_V3.docx/.pdf           ← FINAL response letter for resubmission ✓
-    ├── planning/                              ← Working documents used during revision
-    │   ├── Revision_Plan_Item_by_Item.docx
-    │   └── Supplement_Proposal.docx
-    ├── response example/                      ← Style reference for response letter
-    │   ├── response_letter_example.docx
-    │   └── Ding-et-al-...-2025.pdf
-    └── archive/                              ← Superseded drafts
-        ├── Response_Letter.docx/.pdf          (V1 draft)
-        ├── response_letter_V2.docx/.pdf       (V2 draft)
-        └── Annotation_Reference_Guide.docx/.pdf
-```
 
-### Submission Packet
-Two items to upload to BMC:
-1. `Walther_SpatialCRT_LaTeX_Revisions/` — zip the entire folder (contains revised manuscript, annotated diff, figures)
-2. `revision response/response_letter_V3.pdf` — standalone response letter to guide reviewers
+Build by-products (`.aux`, `.log`, `.out`, ...) are git-ignored by `../.gitignore`;
+`.bbl` files are tracked because journal LaTeX submissions use them. To avoid
+overwriting an archived PDF, build into another folder with
+`-output-directory=<dir>` (run `bibtex` there with `BIBINPUTS` set to the round's
+folder).
 
----
+## Gotchas
 
-## Key Scientific Concepts
-
-### Study Design
-- **Spatial CRT**: Cluster Randomized Trial where clusters are spatial units (e.g., farms, villages). Treatment assignment uses spatial sampling strategies.
-- **SRS (Simple Random Sampling)**: All valid balanced allocations equally probable. 70 / 126 / 924 possible allocations for 2×4 / 3×3 / 3×4 grids.
-- **BSS (Block Stratified Sampling)**: "Checkerboard" allocation — no two same-treatment clusters share a Rook edge. Only 2 / 6 / 2 valid allocations for 2×4 / 3×3 / 3×4 grids.
-
-### Statistical Model
-- **SAR (Spatial Autoregressive) model**: y = ρWy + Xβ + ε
-  - ρ = spatial autocorrelation parameter (nuisance, background)
-  - ψ = spillover parameter (causal, design-level)
-  - These are **conceptually distinct**: ρ is a background property of the outcome; ψ is caused by the treatment spilling across cluster boundaries
-  - Fitted via `lagsarlm()` in R's `spdep` package
-- **Spillover mechanisms**:
-  - **TrtNoSpill**: Spillover goes only from Intervention → Control clusters
-  - **TrtSpill**: Spillover goes from any treated cluster boundary to neighbors (both directions)
-
-### Key Results Summary
-
-| Grid | Scenario | ρ | BSS MSE | SRS MSE | Winner |
-|------|----------|---|---------|---------|--------|
-| 2×4 | TrtNoSpill | 0.01 | 0.165 | 0.304 | BSS |
-| 2×4 | TrtNoSpill | 0 | 0.262 | 0.173 | SRS |
-| 2×4 | TrtSpill | 0 | 0.262 | 0.008 | SRS |
-| 3×3 | TrtNoSpill | 0 | 0.042 | 0.114 | BSS |
-| 3×3 | TrtSpill | 0.01 | 0.147 | 0.103 | SRS |
-| 3×4 | TrtNoSpill | 0 | 0.226 | 0.133 | SRS |
-| 3×4 | TrtSpill | 0.01 | 0.133 | 0.112 | SRS |
-
-ψ = 0.5 throughout. The 3×3 and 3×4 rows are the **corrected** values
-(2026-10-25). The published ones (e.g. 3×4 TrtSpill BSS ~0.223) came from two
-coding errors; see `../review/README.md` and `../review/COMPARISON.md`.
-
-**"Checkerboard paradox": retired (2026-10-22).** The published Discussion
-said BSS amplifies bias under TrtSpill with ρ > 0. That pattern came from the
-wrong BSS allocations. The real effect is collinearity: in a strict
-checkerboard every control borders a treated cluster, so z = 1 − x, β and ψ
-are not separately identifiable, and β̂ ≈ β − ψ, under both spillover types
-and both ρ. The corrected manuscript is in `../review/manuscript/`.
-
-**Risk-management framing (key R1.5 revision)**: BSS provides much lower variance across its 2–6 valid allocations (near zero on 2×4, not on the corrected 3×3) → bounds worst-case allocation risk. SRS sometimes achieves lower *average* MSE but with high variance across the 70–924 possible allocations → chance of good *or* bad draws.
-
----
-
-## Revision Inventory (22 items implemented in Revisions_V1.tex)
-
-### Supplement Moves (Appendix additions)
-| ID | Content Moved | Appendix |
-|----|--------------|----------|
-| SUPP-1 | Spatial weights matrix equations (W, W_ij) | Appendix A |
-| SUPP-2 | SAR log-likelihood formula | Appendix B |
-| SUPP-3 | 8-step simulation algorithm enumeration | Appendix C |
-| SUPP-4 | Moran's I and Geary's C formulas | Appendix D |
-| SUPP-5 | Section 2.2.2 Distance-Based Neighbors | Appendix E |
-
-### Editor Comment
-| ID | Change |
-|----|--------|
-| E1 | Restructured Declarations under `\section*{Declarations}` with 7 BMC-standard subsections |
-
-### Reviewer 1 (Major)
-| ID | Change |
-|----|--------|
-| R1.1 | Added BSS novelty statement + McCann et al. citation paragraph to Introduction |
-| R1.2 | Added ρ vs ψ distinction paragraph before Section 2.6 |
-| R1.3 | Added inferential scope paragraph before Section 3.2 |
-| R1.4 | Strengthened Introduction framing (same paragraph as R1.1/R2.2/R2.3) |
-| R1.5 | Rewrote Sections 3.4, 3.5, 3.6 with risk-management framing (BSS bounds worst-case, SRS lottery) |
-
-### Reviewer 1 (Minor)
-| ID | Change |
-|----|--------|
-| R1.M1 | (Addressed via R1.2) |
-| R1.M2 | Added boundary-level spillover limitation paragraph in Discussion |
-| R1.M3 | Added inference constraint paragraph in Limitations |
-| R1.M4 | (Addressed via R1.5 risk-management rewrite) |
-
-### Reviewer 2 (Major)
-| ID | Change |
-|----|--------|
-| R2.1 | (Addressed via SUPP moves) |
-| R2.2 | Added McCann et al. paragraph to Introduction (same as R1.1/R1.4) |
-| R2.3 | Same as above |
-| R2.4 | Added best-effort BSS note to Section 4.4 |
-| R2.5 | Added MSE = Bias² + Variance sentence to Section 3.3 |
-| R2.6 | (Addressed via SUPP-3 algorithm move to Appendix C) |
-
-### Reviewer 2 (Minor)
-| ID | Change |
-|----|--------|
-| R2.M1 | "prevention" → "limitation" in Section 4 |
-| R2.M2 | Added total effect note (ψ interpretation) |
-| R2.M3 | Updated Figure 2 caption |
-| R2.M4 | Added checkerboard paradox note to Section 5.1 Discussion (retired 2026-10-22; replaced by a collinearity note in the corrected manuscript, `../review/manuscript/`) |
-| R2.M5 | Fixed Y_ik notation |
-| R2.M6 | Fixed Z_i description |
-
----
-
-## Code & Scripts
-
-All scripts were session-local and are no longer needed — outputs are finalized and saved in the project directory. For reference, the approaches used were:
-
-- **Revision script** (Python): Loaded `main.tex`, applied 22 string replacements via exact boundary extraction (`str.find()` + slicing) to handle whitespace sensitivity, wrote `Revisions_V1.tex`
-- **Response letter script** (Node.js / `docx` package): Generated `response_letter_V3.docx` — B&W formatting, minor comments numbered R1.6–R1.9 / R2.7–R2.12
-- **Annotated diff script** (Python / `difflib.SequenceMatcher`): Compared `main.tex` to `Revisions_V1.tex`; text-mode changes → `{\color{red}...}%`; math/table/algorithm blocks → `\cbstart...\cbend` (`changebar` package)
-
----
-
-## Known Issues / Gotchas
-
-1. **Whitespace in LaTeX replacements**: The source file has trailing spaces on some equation lines. When matching multi-line blocks, extract the exact substring from the loaded source rather than hard-coding expected whitespace.
-2. **Moran's apostrophe**: In Python raw strings, `r"Moran\'s"` contains a literal backslash. Use a non-raw string or extract from source file directly.
-3. **BSS allocation counts**: 2×4 → 2 allocations, 3×3 → 6 allocations, 3×4 → 2 allocations. SRS: 2×4 → 70, 3×3 → 126, 3×4 → 924.
-4. **lagsarlm() in spdep**: Fits the SAR model; `listw` argument takes a spatial weights list object from `nb2listw()`.
-5. **`\float@end` redefinition errors**: Two benign `LaTeX Error: Command \float@end already defined.` warnings appear in all compiles due to a conflict between the `float` and `algorithm` packages. The PDF compiles correctly despite these warnings.
-6. **Annotated diff — math/table environments**: Lines inside equation/align/tabular/algorithm environments cannot be color-wrapped with `{\color{red}...}` because LaTeX alignment tokens (`&`, `\\`) must appear at the correct group depth. Use `changebar` (`\cbstart`/`\cbend`) for those blocks instead.
-7. **`latexdiff` not available**: The standard `latexdiff` Perl tool cannot be installed in user mode in this environment. The custom `create_annotated.py` script replicates its functionality using `difflib.SequenceMatcher` + environment-tracking.
-
----
-
-## R Packages Used in Paper
-- `spdep`: spatial weights, `lagsarlm()`, Moran's I, Geary's C
-- `spatialreg`: alternative SAR fitting
-- Standard simulation utilities
-
----
-
-## Next Steps (if additional revisions needed)
-- Increment version to `Revisions_V2.tex` for subsequent revision rounds
-- Compile revised `.tex` with pdflatex and verify no LaTeX errors before submission
-- Archive current V3 response letter and increment to `response_letter_V4.docx`
+- Two `LaTeX Error: Command \float@end already defined.` messages appear in every
+  compile (a `float`/`algorithm` package clash). They are harmless.
+- The initial-submission `main.tex` (`../Walther_Submission/`) needs `linegoal.sty`,
+  which the local TinyTeX does not have (`tlmgr install linegoal`).
+- "Checkerboard paradox", which appears in the Revision 1–2c text (R2.M4), was
+  retired on 2026-10-22. The pattern came from wrong 3×3/3×4 BSS allocations; the
+  real effect is collinearity (z = 1 − x when every control is exposed, so
+  β̂ ≈ β − ψ). See `../../review/COMPARISON.md`.
+- BSS allocation counts: 2 / 6 / 2 on 2×4 / 3×3 / 3×4 (3×3 uses the relaxed rule,
+  no two intervention districts adjacent). SRS: 70 / 126 / 924.

@@ -1,0 +1,11 @@
+# LaTeX and R build by-products (the .bbl files stay tracked: journal LaTeX submissions use them)
+*.aux
+*.log
+*.out
+*.blg
+*.cb
+*.cb2
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+.Rhistory
