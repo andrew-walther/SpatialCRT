@@ -16,7 +16,7 @@ at the SUDDEN project meeting on 2026-10-29, which also seeds prelim Part II
 | `theme/unc-gillings.css`, `theme/prelim-overrides.css`, `theme/footer-part.html` | Copies of the prelim template theme from `bios-dissertation/slides/prelim/test/`, unchanged. `footer-part.html` writes each slide's `data-footer-part` (the section name) into the footer. |
 | `theme/deck.css` | Everything specific to this deck (cards, glossary, tables, schematic). |
 | `figures/` | PNGs used by the deck. Manuscript figures are rasterized copies of the current PDFs; `nc_design_examples.png`, `deck_allocation_distribution.png`, `fig_spillover_regimes.png` and `fig_case_identification.png` are deck-only. Draft-1 outline PNGs are in `figures/archive/`. |
-| `data/case_identification_counts.csv` | The two upstream death counts in the case-identification flowchart (412,514 and 111,665), cited from Habib (2026). No repository data holds them and Habib has not yet confirmed them. |
+| `data/case_identification_counts.csv` | The two upstream death counts in the case-identification flowchart (412,514 and 111,665), external counts from Habib (2026) and/or Gan et al., not this project's results. No repository data holds them; which source each comes from is still to be confirmed. |
 | `tools/refresh_figures.sh` | Re-copies the current manuscript figures as PNGs and redraws the NC example map. |
 | `tools/deck_allocation_figure.R` | Slide-sized allocation-risk figure (CTJ Figure 3 data, larger text, SRS in dark grey). |
 | `tools/outline_from_deck.py` | Regenerates the slide entries of `OUTLINE.md` from the deck source. |

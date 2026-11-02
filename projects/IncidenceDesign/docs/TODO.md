@@ -257,7 +257,8 @@ Decided 2026-10-21 (`DECISIONS.md`). Details: `findings/2026-10-20-methods-exten
 - [ ] Ask Dr. Simpson who is assessed in control colleges (eligible EMS and healthcare professionals in every service area, trained or not) and how the education outcome is measured; update the application framing in the CTJ, SI and Chapter 3.
 - [x] `code/23` now prints "2×2 Blocking" in `fig_colleges_needed`; chapter and SI PDFs rebuilt (2026-10-28).
 - [x] Older chapter/SI figures printed "2x2 Blocking"; codes 12, 14 and 15 now print "2×2 Blocking" and the figures were regenerated and copied with `paper/tools/copy_figures.sh` (2026-11-02). Chapter and SI PDFs rebuilt.
-- [ ] Confirm with Habib the two upstream case-identification counts in the deck flowchart
-  (412,514 and 111,665, recorded in `presentation/data/case_identification_counts.csv`
-  and cited from Habib (2026), unconfirmed).
+- [ ] Confirm the source of the two upstream case-identification counts in the deck flowchart
+  (412,514 and 111,665, recorded in `presentation/data/case_identification_counts.csv`).
+  They are external counts from Habib (2026) and/or Gan et al. (author, 2026-11-02), not
+  this project's results; cite the right one beside the flowchart.
 - [ ] Confirm with Dr. Simpson who the pilot trains (students and staff in workforce-development and disaster-response programs, EMS or other healthcare trainees) and the outcome measured.

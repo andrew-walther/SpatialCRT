@@ -17,7 +17,7 @@
 #   application/results/real_sud_rev_20261002/exhibits/observed_cluster_inputs.csv
 #     (tracked 58-cluster aggregate; its 2018-2021 deaths sum to the case count)
 #   presentation/data/case_identification_counts.csv
-#     (the two upstream counts cited from Habib 2026; no repository data holds them)
+#     (two external upstream counts, from Habib 2026 and/or Gan et al.; not this project's results)
 # Outputs:
 #   presentation/figures/fig_spillover_regimes.png
 #   presentation/figures/fig_case_identification.png
