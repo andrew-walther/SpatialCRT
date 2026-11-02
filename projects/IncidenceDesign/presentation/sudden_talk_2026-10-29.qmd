@@ -50,12 +50,12 @@ Department of Biostatistics, University of North Carolina at Chapel Hill<br/>
 ::: {.notes}
 [0.5 min | running 0.5]
 
-- Good morning, and thank you for having me.
-- I'm Andrew Walther, a PhD student in biostatistics working with Dr. Lin.
+- Good afternoon - thanks for having me at the meeting!
 
-- In plain terms, the question today is which community colleges should get Dr. Simpson's SUD-prevention education program first, when death rates differ across the state and the program can spread between neighboring colleges.
+- I'm Andrew Walther, a PhD student in biostatistics working with Dr. Lin. I'll be presenting some work from one of my thesis projects where we've collaborated with Dr. Simpson & Ashkan with an application focused on trial design for a sudden unexpected death intervention.                                    
 
-- This is about designing the trial, not evidence yet that the program works, and I'd most like your feedback on the North Carolina application.
+- The research question of interest in this project focuses on the idea of how we can design an intervention allocation strategy that allows for effective estimation of the intervention effect when there is heterogeneous incidence of the outcome we hope to treat.
+
 :::
 
 ## Outline {data-menu-title="Outline" data-footer-part=""}
@@ -71,8 +71,10 @@ Department of Biostatistics, University of North Carolina at Chapel Hill<br/>
 ::: {.notes}
 [0.25 min | running 0.75]
 
-- Here is the plan.
-- I'll start with why sudden death matters and where the pilot idea came from, then the methods, a short simulation section, and most of the time on the North Carolina application, before the take-home and next steps.
+- Here's an overview of what I'll cover today
+- I'll start with why sudden death matters and where the pilot idea came from, then the methods, a short section covering a simulation study, then transition to focusing on the application of the method to SUD in North Carolina, and close with the take-home and next steps.
+- The plan is to leave plenty of time for questions, feedback, and discussion so I look forward to learning your perspectives as well.
+
 :::
 
 ## Sudden unexpected death takes a large and uneven toll on working-age adults {data-menu-title="SUD burden" data-footer-part="Background"}
@@ -101,13 +103,13 @@ Department of Biostatistics, University of North Carolina at Chapel Hill<br/>
 ::: {.notes}
 [0.75 min | running 1.5]
 
-- Sudden unexpected death is why this project exists, an unexpected natural death outside the hospital in a working-age adult.
+- Sudden unexpected death refers to cases of an unexpected natural death outside the hospital in a working-age adult and this topic is the focus applicatin of the project
 
-- Dr. Simpson's group estimated about 49 per 100,000 men and 22 per 100,000 women aged 20 to 64 die this way each year, about two million years of life lost.
+- It is estimated about 49 per 100,000 men and 22 per 100,000 women aged 20 to 64 die this way each year, about two million years of life lost.
 
 - In North Carolina, death certificates from 2018 to 2021 identify about 23,500 presumed sudden deaths among adults aged 18 to 64, and the statewide rate rose every year, from about 84 to about 101 per 100,000.
 
-- And the burden is uneven, about 100 per 100,000 in highly rural counties against 68 in highly urban ones in Gan and colleagues' 2014 data, which raises the question of where prevention should start.
+- The case burden is uneven, where about 100 per 100,000 in highly rural counties against 68 in highly urban ones in Gan and colleagues' 2014 data, which raises the question of where prevention should start.
 :::
 
 ## Dr. Simpson's Lenoir County pilot is the starting point for a statewide trial {data-menu-title="From pilot to statewide" data-footer-part="Background"}
@@ -127,11 +129,11 @@ Department of Biostatistics, University of North Carolina at Chapel Hill<br/>
 ::: {.columns style="margin-top: 0.5em;"}
 ::: {.column .smallcol width="50%"}
 - The pilot is delivered **county-wide through a college**, not by census tract, so the natural unit is a college's service area
-- Dr. Simpson expects early effects in **process measures** (taking medicine, timely clinic visits), not SUD rates; for the design study we assume a trainee **education score**
+- We expect early effects in **process measures** (taking medicine, timely clinic visits), not SUD rates; for the design study we assume a trainee **education score**
 :::
 ::: {.column .smallcol width="50%"}
-- A statewide trial treats some colleges and holds others as controls, and colleges talk to each other, so training can spread
-- Our proposal uses past SUD incidence to guide **where** the program goes while keeping the trial randomized
+- A proposed statewide trial treats some colleges and holds others as controls, and colleges ``talk" to each other, so training benefits can spread beyond treated areas
+- Our proposal uses past SUD incidence to guide **where** the program is targeted while keeping the trial randomized
 :::
 :::
 
@@ -140,15 +142,15 @@ Department of Biostatistics, University of North Carolina at Chapel Hill<br/>
 
 - SUDDEN showed that sudden death tracks access to care, income and rurality, so prevention has to reach communities, not only hospitals.
 
-- Dr. Simpson's pilot idea is to teach SUD prevention through Lenoir Community College's workforce-development and disaster-response training, which serves Lenoir, Greene and Jones counties.
-- Lenoir County floods regularly, and Dr. Simpson has seen SUD rates spike after flooding, which is part of why disaster response is the vehicle.
+- The pilot idea is to teach SUD prevention through Lenoir Community College's workforce-development and disaster-response training, which serves Lenoir, Greene and Jones counties.
+- Lenoir County floods regularly, and SUD rates have been observed to spike after flooding, which is part of why disaster response is the vehicle of treatment.
 
 - The trainees are students and staff in those programs, who earn credit for the work, and the aim is outreach that goes beyond getting people to the hospital.
-- For our model we assumed they include EMS and other healthcare trainees, and that is one of the points I'd most like clarified.
+- For our model we assumed they include EMS and other healthcare trainees - the target "trainee" population is something that can be further clarified.
 
-- Dr. Simpson expects early effects in process measures, such as people taking their medicine and timely clinic visits, and for the design study we assumed an education score of the trainees.
+- We expect early effects in process measures, such as people taking their medicine and timely clinic visits, and for the design study we assumed an education score of the trainees.
 
-- After the pilot, the plan is to share what works with all 58 community colleges, and colleges talk to each other, so the training can spill over.
+- After the pilot, the proposed plan is to expand the education intervention state-wide which could yield a greater impact and lead to spillover of education benefits from treated to untreated areas.
 
 - That is where this project comes in, asking which colleges should get the program first, and how past incidence should guide that while keeping the trial randomized.
 :::
@@ -182,9 +184,10 @@ Untreated children attending schools near treated schools had fewer worm infecti
 - In northern Ghana, children living near households with treated bed nets had lower mortality, even without a net of their own.
 - In western Kenya, deworming at one school reduced worm infections in untreated children at nearby schools.
 
-- That is spillover.
+- These are examples of "spillover".
+
 - A standard cluster trial assumes each cluster's outcome depends only on its own treatment.
-- With spillover, untreated neighbors look better than they otherwise would, so the simple treated-versus-control difference understates the effect.
+- With spillover, untreated neighbors may be affected by treated clusters, so a simple treated-versus-control difference understates the effect.
 - An education program can spread the same way, through colleagues, shared hospitals and regional meetings.
 :::
 
@@ -213,10 +216,10 @@ Untreated children attending schools near treated schools had fewer worm infecti
 ::: {.notes}
 [0.5 min | running 4.25]
 
-- Statisticians have good tools for analyzing spillover after a trial, but only if the design gave them enough contrast to work with, and that is decided when we choose which clusters to treat.
+- Statisticians have good tools for analyzing spillover after a trial, but only if the design gave them enough contrast to work with, and that's decided when we choose which clusters to treat.
 - Several allocation ideas exist, and few studies compare them when spillover and uneven incidence occur together.
-- Our earlier paper compared two simple rules on small grids.
-- This project adds uneven incidence, more designs and the real North Carolina map.
+- One of our previous papers compared two simple allocation rules on small grids.
+- This project adds heterogeneous incidence, more potential allocation designs, and an application to an irregular geographic region in North Carolina.
 :::
 
 ## The trial's clusters are North Carolina's 58 community college service areas {data-menu-title="Service-area clusters" data-footer-part="Background"}
@@ -239,15 +242,15 @@ Untreated children attending schools near treated schools had fewer worm infecti
 ::: {.notes}
 [1 min | running 5.25]
 
-- To set up the trial, we grouped the state's 100 counties into the service areas of the 58 community colleges, using the state's list of which college serves which county.
+- To set up the trial, we grouped the state's 100 counties into the service areas of the 58 community colleges, using the state's list of which counties are served by each college.
 
-- Each color is one college's service area, and those are our clusters.
+- Each colored region denotes one college's service area and the grouping of one or more counties each serve as a cluster in our study.
 
-- Thirty-one colleges serve a single county and the rest serve two to seven, and the two counties shared with Roanoke-Chowan went to their primary college.
+- Thirty-one colleges serve a single county and the rest serve two to seven, and the two counties shared with Roanoke-Chowan CC are just assigned to their primary college for the sake of simplicity.
 
-- Two service areas are neighbors if they share a border or a corner, and the pilot site, Lenoir Community College, is number 29 on the map.
+- Two service areas are neighbors if they share a border or a corner, and the pilot site, Lenoir Community College, is marked as number 29 on the map (light green in SE part of the map).
 
-- From here on I'll call the people trained and assessed in each college "professionals", and the outcome is their average education score, so incidence decides only who is treated.
+- From here on I'll call the people trained and assessed in each college "professionals", and the outcome is their average education score, so that prior SUD incidence decides only who is treated.
 
 - We model a simple two-arm comparison at one point in time, as if control colleges receive the program later.
 :::
@@ -295,16 +298,15 @@ Untreated children attending schools near treated schools had fewer worm infecti
 <span><span class="swatch" style="background:#FBAF3D; border-radius:50%"></span>Gains from treated neighbors (more treated neighbors, larger gain)</span>
 </div>
 
-- **Controls only** is classic contamination, in which untreated colleges learn from treated neighbors
-- **Both arms** means treated colleges also gain from treated neighbors, for example through shared trainings
-- Which one holds is a judgment about how the program spreads, and the best design depends on it
+- **Controls only**: represents classic contamination, in which untreated colleges learn from treated neighbors
+- **Both arms**: treated colleges also gain from treated neighbors, for example through shared training
+- The spillover regime that holds is a judgment about how the program spreads, and the adjudicated best design tends to strongly depend on it
 
 ::: {.notes}
 [1 min | running 6.25]
 
-- This is the most important idea in the talk.
-- Spillover can work in two ways.
-- Blue squares are treated colleges, grey are controls, and an orange plus marks a college that gains from treated neighbors.
+- We consider spillover being able to operate in two ways.
+- In the figures shown, blue squares are treated colleges, grey are controls, and an orange plus marks a college that gains from treated neighbors.
 
 - On the left, only untreated colleges gain.
 - That is classic contamination, where staff at an untreated college pick up the training from colleagues next door.
@@ -337,7 +339,7 @@ $$
 <span class="sym">$S(Z)$</span><span>Spillover, the gain from treated neighbors, in one of the two regimes above</span>
 <span class="sym">$(I-\rho W)^{-1}$</span><span>Spreads every cluster's outcome to its neighbors, neighbors' neighbors and so on ($I$ is the identity matrix)</span>
 <span class="sym">$\gamma$</span><span>Spillover magnitude, the gain when every neighbor is treated (0.5 to 0.8 on the grid; 50% or 80% of $\tau$ in the power analysis)</span>
-<span class="sym">$\beta$</span><span>How strongly incidence shifts the outcome. $\beta = 1$ on the grid; for the NC education outcome $\beta = 0$ (primary), with $\beta = 1$ only as a hypothetical sensitivity</span>
+<span class="sym">$\beta$</span><span>How strongly incidence shifts the outcome. for the NC education outcome $\beta = 0$ (primary), with $\beta = 1$ only as a hypothetical sensitivity</span>
 <span class="sym">$X$</span><span>Cluster incidence on a 0 to 1 scale (simulated on the grid; in NC, the rank of the observed SUD rate scaled to 0 to 1, used only when $\beta = 1$)</span>
 <span class="sym">$\epsilon$</span><span>Independent standard normal noise in each cluster's outcome</span>
 <span class="sym">$\circ$</span><span>Elementwise product, so $(1-Z)\circ WZ$ is zero for treated clusters</span>
@@ -346,15 +348,15 @@ $$
 ::: {.notes}
 [1 min | running 7.25]
 
-- You don't need the algebra, since every symbol is defined below, so I'll say it in words.
+- The model presented here represents the components that go into estimating the outcome, or in this case the estimated "education score"
 
 - A college's score Y is the direct effect of its own treatment, tau times Z, plus spillover from treated neighbors, S of Z, plus a possible effect of incidence, beta times X, plus noise.
 
-- The two spillover forms are the two regimes I just showed, with gamma the size of the gain, and the matrix in front lets neighboring colleges' scores move together, with rho setting how strongly.
+- The two spillover forms are the two regimes I just showed, with gamma the size of the gain (spillover effect), and the matrix in front lets neighboring colleges' scores move together (neighbor weight matrix), with rho setting how strong the relationship (spatial dependence) between neighbors is.
 
-- Tau is what we estimate, the push a college gets from its own training before it ripples out to neighbors.
+- Tau is what we estimate (the intervention effect), the push a college gets from its own training before it ripples out to neighbors.
 
-- To simulate one trial, we pick an allocation with a design, generate every college's score from this model, and fit the same model to estimate tau, thousands of times over.
+- To simulate one trial, we pick an allocation with a design, generate every college's score from this model, and fit the same model to estimate tau, thousands of times over based on different random initializations.
 
 - On the grid beta is one, so incidence shifts outcomes, and for the education outcome in North Carolina beta is zero.
 :::
@@ -386,11 +388,11 @@ A trial gets **one** allocation. How bad are the worst ones? For each allocation
 ::: {.notes}
 [0.75 min | running 8]
 
-- We judge each design three ways.
-- We simulate the trial thousands of times and estimate the effect each time with a spatial model that includes the spillover.
+- We judge each design (sampling allocation) in three ways.
+- We simulate the trial thousands of times and estimate the intervention/treatment effect each time with a spatial model that includes the spillover.
 
 - Mean squared error is the average squared distance between the estimate and the truth, so lower is better.
-- Coverage is how often the 95 percent confidence interval contains the truth, which should be about 95 percent.
+- Coverage is how often the 95 percent confidence interval contains the truth (true value of tau), which should be about 95 percent.
 - Allocation risk asks how bad the worst 10 percent of allocations are, since a real trial only gets one.
 - Most results are ratios to simple random sampling, the usual default, so a ratio below one is better than random.
 :::
@@ -413,13 +415,12 @@ A trial gets **one** allocation. How bad are the worst ones? For each allocation
 - Balanced Quartiles splits clusters into four incidence groups and treats half of each, so the arms have similar incidence.
 - Checkerboard strictly alternates, Isolation Buffer keeps treated clusters from touching, and 2×2 Blocking treats two of every four clusters in each small block.
 
-- The one I'll come back to most is Incidence-Guided Saturation.
-- It treats 80 percent of the clusters in the highest-incidence quadrant, then 60, 40 and 20 percent in the others.
+- The one I'll come back to most is Incidence-Guided Saturation. It treats 80 percent of the clusters in the highest-incidence quadrant, then 60, 40 and 20 percent in the others.
 - Every region has treated and control clusters, but the treated share varies, and the highest-burden region gets the most.
 - Simple random sampling, bottom right, is the reference.
 :::
 
-## The grid study varied every condition we cannot pin down in advance {data-menu-title="Grid study design" data-footer-part="Simulation Results"}
+## The grid simulation study varied each condition that could be specified in a trial {data-menu-title="Grid study design" data-footer-part="Simulation Results"}
 
 <table class="deck" style="font-size: 0.8em; margin-top: 0.4em;">
 <thead><tr><th style="text-align:left">Condition</th><th style="text-align:left">Values</th></tr></thead>
@@ -479,7 +480,7 @@ Checkerboard and 2×2 Blocking were worse than SRS in both regimes, and far wors
 ::: {.notes}
 [0.75 min | running 10.25]
 
-- The two regimes tell different stories.
+- The two spillover regimes tell different stories.
 - With spillover to controls only, Incidence-Guided Saturation has 37 percent lower error than random sampling, and Isolation Buffer is also better.
 - With spillover to both arms, nothing beats random sampling, Balanced Quartiles ties it, and Incidence-Guided Saturation is about 8 percent worse.
 
@@ -487,7 +488,7 @@ Checkerboard and 2×2 Blocking were worse than SRS in both regimes, and far wors
 - When treatment is finely interspersed, every control has about the same share of treated neighbors, so the model cannot tell treatment apart from spillover.
 - Saturation creates regions with many treated neighbors and regions with few, which gives the model that contrast.
 
-- So there is no single best design, and it depends on how spillover travels.
+- So there is no single best design to declare, and estimation performance depends on how spillover travels.
 :::
 
 ## SUD deaths were identified from death certificates with a validated algorithm {data-menu-title="Case identification" data-footer-part="Application"}
@@ -516,7 +517,7 @@ Checkerboard and 2×2 Blocking were worse than SRS in both regimes, and far wors
 ::: {.notes}
 [0.75 min | running 11]
 
-- For the North Carolina data, Ashkan identified sudden deaths from death certificates with the algorithm from Gan and colleagues, which was validated against SUDDEN's physician adjudication.
+- For the North Carolina data, we (Ashkan) identified sudden deaths from death certificates with the algorithm from Gan and colleagues, which was validated against SUDDEN's physician adjudication.
 
 - Of about 412,000 deaths in the state from 2018 to 2021, about 112,000 were in adults aged 18 to 64.
 
@@ -555,7 +556,7 @@ Checkerboard and 2×2 Blocking were worse than SRS in both regimes, and far wors
 ::: {.notes}
 [0.75 min | running 11.75]
 
-- Here is how we built the application.
+- Here is how we constructed the application.
 
 - We started from the county counts and population, grouped counties into the 58 service areas, and computed each area's SUD rate for each year.
 
@@ -632,10 +633,10 @@ Checkerboard and 2×2 Blocking were worse than SRS in both regimes, and far wors
 ::: {.notes}
 [0.5 min | running 13.75]
 
-- Treating half the colleges does not mean reaching half the people.
+- A key consideration in design is that treating half the colleges does not mean reaching half the people.
 - This table shows the share of the state's working-age adults living in treated service areas.
 
-- Most designs reach about half.
+- Most designs reach about half of the total population.
 - High Incidence Focus treats 29 colleges but reaches only 22 to 24 percent, since the highest-rate areas are small.
 - Isolation Buffer treats about 16 colleges and reaches about 27 percent.
 - This is geographic reach, not the number of professionals trained, which depends on how many staff each college puts through the program.
@@ -707,8 +708,8 @@ Checkerboard and 2×2 Blocking were worse than SRS in both regimes, and far wors
 - This counts participating colleges, about half treated and half control, needed for an 80 percent chance of detecting the effect, with effects in college-level standard deviations, roughly a third of an SD for an individual professional.
 
 - On the left, spillover to both arms, almost every design needs 35 to 37 participating colleges, so the design barely matters, while Checkerboard and Isolation Buffer don't get there even with all 58.
-- On the right, controls only is much harder.
-- No design reaches 80 percent power at one SD even with all 58, so the chart shows one and a half SDs, where Incidence-Guided Saturation needs 28 colleges against 32 for random sampling.
+- On the right, power in the "control only" spillover regime is much harder.
+- No design reaches 80 percent power at one SD even with all 58 colleges participating, so the chart shows one and a half SDs, where Incidence-Guided Saturation needs 28 colleges against 32 for random sampling.
 :::
 
 ## If fewer colleges join, Incidence-Guided Saturation's advantage shrinks {data-menu-title="Partial participation" data-footer-part="Application"}
