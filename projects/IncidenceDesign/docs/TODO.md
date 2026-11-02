@@ -96,8 +96,8 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
   SpatialCRT `f67ab4b`, bios-dissertation `7d10596`).
 - [ ] **Reproducibility (author goal, 2026-11-02):** numbers in the CTJ, SI and chapter
   text and tables are hand-entered and checked by `paper/tools/verify_manuscripts.py`.
-  Consider generating table bodies or macros from saved results so the papers build
-  from results directly.
+  Plan (on hold, author 2026-11-02): [manuscript-numbers-plan](plans/2026-11-02-manuscript-numbers-plan.md),
+  staged: pipeline review and cleanup, then CTJ, chapter, SI.
 
 No additional analysis was required by the final independent source review.
 Actual pilot endpoint/enrollment/budget/network specification and interval
