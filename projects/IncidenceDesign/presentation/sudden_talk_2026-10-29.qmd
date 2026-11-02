@@ -257,46 +257,7 @@ Untreated children attending schools near treated schools had fewer worm infecti
 
 ## Spillover can reach only the untreated colleges, or every college {data-menu-title="Two spillover regimes" data-footer-part="Methods"}
 
-<div class="schematic">
-<figure>
-<figcaption>Spillover to controls only<br/><span style="font-weight:400">untreated colleges gain</span></figcaption>
-<svg width="460" height="350" viewBox="0 0 460 350" role="img" aria-label="Grid in which only untreated cells next to treated cells gain">
-<g stroke="#8a96a3" stroke-width="2">
-<rect x="10" y="10" width="100" height="100" fill="#1f5fa6"/><rect x="120" y="10" width="100" height="100" fill="#e0e7ef"/><rect x="230" y="10" width="100" height="100" fill="#1f5fa6"/><rect x="340" y="10" width="100" height="100" fill="#e0e7ef"/>
-<rect x="10" y="120" width="100" height="100" fill="#e0e7ef"/><rect x="120" y="120" width="100" height="100" fill="#1f5fa6"/><rect x="230" y="120" width="100" height="100" fill="#e0e7ef"/><rect x="340" y="120" width="100" height="100" fill="#e0e7ef"/>
-<rect x="10" y="230" width="100" height="100" fill="#e0e7ef"/><rect x="120" y="230" width="100" height="100" fill="#e0e7ef"/><rect x="230" y="230" width="100" height="100" fill="#e0e7ef"/><rect x="340" y="230" width="100" height="100" fill="#1f5fa6"/>
-</g>
-<g fill="#FBAF3D" stroke="#13294B" stroke-width="2">
-<circle cx="190" cy="40" r="20"/><circle cx="410" cy="40" r="20"/><circle cx="80" cy="150" r="20"/><circle cx="300" cy="150" r="20"/><circle cx="410" cy="150" r="20"/><circle cx="80" cy="260" r="20"/><circle cx="190" cy="260" r="20"/><circle cx="300" cy="260" r="20"/>
-</g>
-<g font-size="30" font-weight="700" fill="#13294B" text-anchor="middle">
-<text x="190" y="50">+</text><text x="410" y="50">+</text><text x="80" y="160">+</text><text x="300" y="160">+</text><text x="410" y="160">+</text><text x="80" y="270">+</text><text x="190" y="270">+</text><text x="300" y="270">+</text>
-</g>
-</svg>
-</figure>
-<figure>
-<figcaption>Spillover to both arms<br/><span style="font-weight:400">treated and untreated colleges gain</span></figcaption>
-<svg width="460" height="350" viewBox="0 0 460 350" role="img" aria-label="Grid in which treated and untreated cells next to treated cells gain">
-<g stroke="#8a96a3" stroke-width="2">
-<rect x="10" y="10" width="100" height="100" fill="#1f5fa6"/><rect x="120" y="10" width="100" height="100" fill="#e0e7ef"/><rect x="230" y="10" width="100" height="100" fill="#1f5fa6"/><rect x="340" y="10" width="100" height="100" fill="#e0e7ef"/>
-<rect x="10" y="120" width="100" height="100" fill="#e0e7ef"/><rect x="120" y="120" width="100" height="100" fill="#1f5fa6"/><rect x="230" y="120" width="100" height="100" fill="#e0e7ef"/><rect x="340" y="120" width="100" height="100" fill="#e0e7ef"/>
-<rect x="10" y="230" width="100" height="100" fill="#e0e7ef"/><rect x="120" y="230" width="100" height="100" fill="#e0e7ef"/><rect x="230" y="230" width="100" height="100" fill="#e0e7ef"/><rect x="340" y="230" width="100" height="100" fill="#1f5fa6"/>
-</g>
-<g fill="#FBAF3D" stroke="#13294B" stroke-width="2">
-<circle cx="80" cy="40" r="20"/><circle cx="190" cy="40" r="20"/><circle cx="300" cy="40" r="20"/><circle cx="410" cy="40" r="20"/><circle cx="80" cy="150" r="20"/><circle cx="190" cy="150" r="20"/><circle cx="300" cy="150" r="20"/><circle cx="410" cy="150" r="20"/><circle cx="80" cy="260" r="20"/><circle cx="190" cy="260" r="20"/><circle cx="300" cy="260" r="20"/>
-</g>
-<g font-size="30" font-weight="700" fill="#13294B" text-anchor="middle">
-<text x="80" y="50">+</text><text x="190" y="50">+</text><text x="300" y="50">+</text><text x="410" y="50">+</text><text x="80" y="160">+</text><text x="190" y="160">+</text><text x="300" y="160">+</text><text x="410" y="160">+</text><text x="80" y="270">+</text><text x="190" y="270">+</text><text x="300" y="270">+</text>
-</g>
-</svg>
-</figure>
-</div>
-
-<div class="legend-row">
-<span><span class="swatch" style="background:#1f5fa6"></span>Treated college</span>
-<span><span class="swatch" style="background:#e0e7ef"></span>Control college</span>
-<span><span class="swatch" style="background:#FBAF3D; border-radius:50%"></span>Gains from treated neighbors (more treated neighbors, larger gain)</span>
-</div>
+<img src="figures/fig_spillover_regimes.png" class="fig-full" style="max-height: 640px;" alt="Two copies of the same 3 by 4 grid of treated and control colleges. With spillover to controls only, only control colleges next to treated ones gain; with spillover to both arms, treated colleges next to treated ones gain too. Circle size grows with the share of treated neighbors.">
 
 - **Controls only**: represents classic contamination, in which untreated colleges learn from treated neighbors
 - **Both arms**: treated colleges also gain from treated neighbors, for example through shared training
@@ -495,17 +456,7 @@ Checkerboard and 2×2 Blocking were worse than SRS in both regimes, and far wors
 
 ::: {.columns}
 ::: {.column width="64%"}
-<div class="flow-v">
-<div class="main"><b>412,514</b> North Carolina deaths, 2018–2021</div><div class="side">→</div><div class="excl">Exclude ages under 18 or over 64</div>
-<div class="down">↓</div><div></div><div></div>
-<div class="main"><b>111,665</b> deaths among adults aged 18–64</div><div class="side">→</div><div class="excl">Exclude deaths in a hospital, hospice or nursing home</div>
-<div class="down">↓</div><div></div><div></div>
-<div class="main">Out-of-hospital deaths</div><div class="side">→</div><div class="excl">Exclude suicide, homicide and accidents</div>
-<div class="down">↓</div><div></div><div></div>
-<div class="main">Natural out-of-hospital deaths</div><div class="side">→</div><div class="excl">Exclude expected deaths from cancer</div>
-<div class="down">↓</div><div></div><div></div>
-<div class="main final"><b>23,523</b> presumed sudden unexpected deaths</div><div></div><div></div>
-</div>
+<img src="figures/fig_case_identification.png" class="fig-full" style="max-height: 760px;" alt="Flowchart from 412,514 North Carolina deaths in 2018 to 2021, to 111,665 deaths among adults aged 18 to 64, then excluding in-hospital, external-cause and cancer deaths, to 23,523 presumed sudden unexpected deaths.">
 :::
 ::: {.column .smallcol width="36%"}
 - The algorithm (Gan et al. 2019) was **validated against SUDDEN physician adjudication** of health records, EMS and death-certificate reports (as described in Habib 2026)

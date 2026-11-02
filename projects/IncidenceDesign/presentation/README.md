@@ -15,12 +15,14 @@ at the SUDDEN project meeting on 2026-10-29, which also seeds prelim Part II
 | `outline.html` | Visual version of `OUTLINE.md` with figures inline (built by `tools/build_outline_html.py`). |
 | `theme/unc-gillings.css`, `theme/prelim-overrides.css`, `theme/footer-part.html` | Copies of the prelim template theme from `bios-dissertation/slides/prelim/test/`, unchanged. `footer-part.html` writes each slide's `data-footer-part` (the section name) into the footer. |
 | `theme/deck.css` | Everything specific to this deck (cards, glossary, tables, schematic). |
-| `figures/` | PNGs used by the deck and outline. Manuscript figures are rasterized copies of the current PDFs; `nc_design_examples.png` is deck-only. Older PNGs from Draft 1 of the outline remain for reference. |
+| `figures/` | PNGs used by the deck. Manuscript figures are rasterized copies of the current PDFs; `nc_design_examples.png`, `deck_allocation_distribution.png`, `fig_spillover_regimes.png` and `fig_case_identification.png` are deck-only. Draft-1 outline PNGs are in `figures/archive/`. |
+| `data/case_identification_counts.csv` | The two upstream death counts in the case-identification flowchart (412,514 and 111,665), cited from Habib (2026). No repository data holds them and Habib has not yet confirmed them. |
 | `tools/refresh_figures.sh` | Re-copies the current manuscript figures as PNGs and redraws the NC example map. |
 | `tools/deck_allocation_figure.R` | Slide-sized allocation-risk figure (CTJ Figure 3 data, larger text, SRS in dark grey). |
 | `tools/outline_from_deck.py` | Regenerates the slide entries of `OUTLINE.md` from the deck source. |
 | `tools/nc_design_examples.R` | Draws one example allocation per design (six designs + SRS) on the 58-college map, 2018, title-free and named without numbers. |
 | `tools/build_outline_html.py` | Builds `outline.html` from `OUTLINE.md`. |
+| `tools/make_figures.R` | Draws the spillover-regime schematic (treated-neighbor shares computed on a 3×4 queen grid) and the case-identification flowchart (final count summed from the tracked 58-cluster inputs). Replaces the inline SVG and HTML diagrams. |
 
 Reviews of the deck: `docs/reviews/2026-10-28-sudden-talk-*`.
 
@@ -49,6 +51,7 @@ offline.
 - Section names (Background, Methods, Simulation Results, Application, Discussion,
   Backup) appear in the footer; there are no section-divider slides.
 - Slide titles are claims stated as sentences; figures carry no in-figure titles.
+- Every figure is a file built by a script (author, 2026-11-02): no inline SVG or HTML diagrams, so each can be reused in a manuscript. HTML is for layout and tables only.
 - Design names exactly as in `AGENTS.md`; no DIM; numbers trace to the V5 manuscript,
   Chapter 3 or `results/`.
 

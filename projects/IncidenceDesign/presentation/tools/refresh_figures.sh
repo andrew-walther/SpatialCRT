@@ -53,3 +53,4 @@ im.crop((max(0, b[0] - 30), max(0, b[1] - 30), min(im.width, b[2] + 30), min(im.
 
 Rscript presentation/tools/nc_design_examples.R
 Rscript presentation/tools/deck_allocation_figure.R
+Rscript presentation/tools/make_figures.R
