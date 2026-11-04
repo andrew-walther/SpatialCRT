@@ -36,7 +36,7 @@ Reasons and history for each rule: `DECISIONS.md`.
   use the t + df interval, the one closest to nominal (grid: exact re-fit
   `code/26_grid_tdf_intervals.R`, applied by `apply_tdf_intervals()` in 06; application:
   stored-fit values via `code/27_interval_comparison.R`). Wald is kept in the data and
-  reported beside it in `tab:interval-comparison` (chapter appendix A9, SI S15).
+  reported beside it in `tab:interval-comparison` (chapter appendix A9, SI Section 15).
 - **CTJ authors:** Walther, Habib, Simpson, Lin, in that order; Lin corresponding. Never
   invent an IRB protocol number or claim approval/exemption.
 - **Manuscript conventions (author, 2026-10-12):** define every abbreviation at first
@@ -159,7 +159,7 @@ the reasoning behind this distinction.
 | `21_downside_by_design.R` | Per-design mean and worst-decile conditional MSE as ratios to SRS (Table `tab:downside`) and the allocation-distribution figure (CTJ Figure 3, chapter/SI `fig:alloc-dist`) | Reads completed aggregate CSVs; writes `results/allocation_risk/summary/surfaces10/downside_by_design.csv` (default profile surfaces10) |
 | `22_grid_burden_share.R` | Burden share treated by design on the stored grid surfaces (incidence guidance vs Saturation Quadrants) | Writes `results/grid_burden_share/` |
 | `23_methods_extension_figures.R` | NC methods-extension figures: power vs participating colleges, colleges needed for 80% power, grid spread vs incidence-guidance gain (PDF + PNG) | Reads stored 2026-10-21 summaries; writes `results/methods_ext_figures/` |
-| `24_methods_extension_tables.R` | LaTeX table bodies for chapter Appendix A9 / SI S15 (power, translation, calibration, guidance, CAR, Bayes, spillover forms) plus in-text numbers | Writes `results/methods_ext_figures/tables/` |
+| `24_methods_extension_tables.R` | LaTeX table bodies for chapter Appendix A9 / SI Section 15 (power, translation, calibration, guidance, CAR, Bayes, spillover forms) plus in-text numbers | Writes `results/methods_ext_figures/tables/` |
 | `25_design_assignment_figures.R` | Example assignment per design on one illustrative surface (ρ_X = 0.5): CTJ Table 1 thumbnails, SI/Chapter 3 panel figure, wide slide version | Writes `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf` (SI and chapter figure folders), `presentation/figures/design_assignments_panels_wide.{pdf,png}` |
 | `26_grid_tdf_intervals.R` | Exact re-fit of the full grid recording t + df coverage/power beside Wald; reproduction check against the 2026-09-27 run | Writes `results/grid_tdf_2026-10/` (never `sim_data/`) |
 | `27_interval_comparison.R` | Wald vs t + df coverage for grid and application (comparison table CSV) and the application's yearly t + df coverage; checks its Wald column against the production means | Writes `results/grid_tdf_2026-10/interval_comparison.csv`, `application/results/methods_ext_2026-10/stored/yearly_primary_coverage_tdf.csv` |
@@ -193,7 +193,7 @@ the reasoning behind this distinction.
 | **paper/ctj_manuscript/** |  |  |
 | `manuscript_ctj/CTJ_Manuscript.tex` | *Clinical Trials* (SAGE) submission draft, six designs + SRS in main text (variants in SI), exactly 6 exhibits (2 tables + 4 figures) | Compiles via `sagej.cls` — see Build gotchas |
 | `manuscript_ctj/CTJ_Reading.tex`, `CTJ_Exhibits.tex` | Reading wrapper selects the master's two-column branch; six shared exhibit macros provide identical captions, cells and graphics in both layouts | Build reading wrapper or submission master, not exhibit file |
-| `supplementary_info/Supplementary_Information.tex` | SI Appendix in the DeSurv layout (Contents, List of Figures, List of Tables; Part I Supplementary Methods S1–S6, Part II Supplementary Results S7–S15; map in `notes/si-reorg-map.md`; SI edits not yet carried to Chapter 3 listed in `notes/si-ch3-alignment-log.md`); all 28 supplement table bodies checked against the chapter | Plain article class, S-prefixed exhibits, shared bib |
+| `supplementary_info/Supplementary_Information.tex` | SI Appendix in the DeSurv layout (Contents, List of Figures, List of Tables; Part I Supplementary Methods, Sections 1–6, Part II Supplementary Results, Sections 7–15; sections numbered plainly, exhibits S-prefixed; map in `notes/si-reorg-map.md`; SI edits not yet carried to Chapter 3 listed in `notes/si-ch3-alignment-log.md`); all 28 supplement table bodies checked against the chapter | Plain article class, S-prefixed exhibits, shared bib |
 | `cover_letter/`, `figures/` (incl. `Figure_Legends.md`), `submission_checklist.md` | Cover letter draft; shared main/SI figures written by the R scripts | Figure paths in both TeX sources are `../figures/...` |
 | **paper/thesis_chapter/** |  |  |
 | `Thesis_Chapter.qmd` | Longer-form dissertation chapter, full long-form chapter/appendix, no length ceiling | Quarto → simple double-spaced `article`-class PDF matching Project 1's format |

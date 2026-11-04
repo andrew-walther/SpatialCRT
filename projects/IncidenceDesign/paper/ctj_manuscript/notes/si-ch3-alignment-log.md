@@ -5,7 +5,9 @@ Chapter 3 and the CTJ manuscript were deliberately left unchanged in that pass. 
 caption or passage whose old text also appears in the file named (at least half of its 12-word windows
 verbatim, or for short passages the first 60 characters), so the two now differ. Use this list in the
 later SI/Chapter 3/CTJ alignment pass. Blocks moved between SI sections without rewording are not
-listed (see si-reorg-map.md).
+listed (see si-reorg-map.md). Entry headings use the section numbers
+of the reorganized SI with an S prefix (S7.1 = Section 7.1); the prefix was later dropped from
+section numbers, which are otherwise unchanged.
 
 42 entries (25 captions, 17 prose passages).
 

@@ -89,7 +89,7 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 - [x] **Grid coverage with the t + df interval** (done 2026-10-26): exact re-fit
   (`code/26_grid_tdf_intervals.R`), carried through the CTJ, SI and Chapter 3.
 - [x] **Application coverage uses t + df too** (2026-10-26), with Wald beside it in
-  `tab:interval-comparison` (chapter A9, SI S15).
+  `tab:interval-comparison` (chapter A9, SI Section 15).
 - [ ] Submit CTJ with the author-completed
   [checklist](../paper/ctj_manuscript/submission_checklist.md)/cover letter.
 - [x] Completion work is pushed: `main` matches `origin/main` (verified 2026-10-13,
