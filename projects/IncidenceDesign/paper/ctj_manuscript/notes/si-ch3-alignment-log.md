@@ -513,3 +513,28 @@ strategies when both-arm exposure is expected.
 
 and SRS alongside other randomized
 strategies when both-arms exposure is expected.
+
+## Later structural cleanup (same day, after the entries above)
+
+Three SI passages were rewritten more heavily after the human-writer pass. Chapter 3
+has the old versions of each. Compare section by section rather than sentence by sentence.
+
+- **SI Section 2 opening and 2.1 (excluded variants).** The case for leaving out
+  Saturation Quadrants and Balanced Halves (MSEs, Nemenyi/Wilcoxon p-values, average
+  ranks) moved from the start of Section 2 into 2.1. Section 2 now opens with a short
+  pointer. The restated quadrant saturations (20/40/60/80%) were dropped from the prose
+  because Table S2 gives them. Chapter 3 counterpart: "Treatment assignment designs" in
+  Methods.
+- **SI Section 5.2 (geographic adaptations).** Rewritten as one sequence: adjacency,
+  rank and interspersion designs, saturation regions with the criterion C, blocking,
+  budgets. The criterion paragraph that sat after the budgets table was folded
+  in. No numbers dropped. Chapter 3 counterpart: "Geographic adaptations and treatment
+  budgets".
+- **SI Sections 15.1 and 15.4 (participation and sensitivity).** The unequal-professionals
+  result moved from 15.4 into 15.1 and replaced the rougher "about 0.1" sentence. In
+  15.4, the summary paragraph that repeated the detailed CAR/Bayesian, spillover-form
+  and formal-test numbers is now a three-sentence lead-in, followed by Spatial model,
+  Spillover form and Formal tests paragraphs. Unique facts from the summary (CAR ratios
+  0.76–0.82, the count-form result, why the Bayesian CAR fails) were kept in those
+  paragraphs. Chapter 3 counterpart: "Colleges needed under partial participation",
+  "Sensitivity analyses" and appendix A9.
