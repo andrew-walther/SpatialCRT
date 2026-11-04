@@ -538,3 +538,11 @@ has the old versions of each. Compare section by section rather than sentence by
   0.76–0.82, the count-form result, why the Bayesian CAR fails) were kept in those
   paragraphs. Chapter 3 counterpart: "Colleges needed under partial participation",
   "Sensitivity analyses" and appendix A9.
+- **SI Sections 13, 14, 15.3 and 5.3 (repeated passages).** Section 13's two targeting
+  paragraphs (incidence and death shares, grid gain of 2.1–3.1 points) are merged into
+  one. The two 15.3 paragraphs that both reported the guidance ratios are now one paragraph
+  for random volunteering and one for incidence-weighted volunteering. The split-half
+  worst-decile sentence is kept in full only in 5.4: it is dropped from 5.3 and shortened
+  to a pointer in 14. Chapter 3 counterparts: "Accuracy, coverage and reach",
+  "Allocation-specific risk in North Carolina", "Colleges needed under partial
+  participation" and appendix A9.
