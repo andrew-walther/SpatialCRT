@@ -98,7 +98,7 @@ All scripts are in `code/` unless a path is given. Run `wc -l` for current lengt
 | `21_downside_by_design.R` | Per-design mean and worst-decile MSE ratios to SRS, allocation-distribution figure (CTJ Figure 3) | `results/allocation_risk/summary/surfaces10/` |
 | `22_grid_burden_share.R` | Burden share treated by design on the grid surfaces | `results/grid_burden_share/` |
 | `23_methods_extension_figures.R` | NC methods-extension figures (power vs N, colleges needed, spread vs gain) | `results/methods_ext_figures/*.{pdf,png}` |
-| `24_methods_extension_tables.R` | Table bodies for chapter Appendix A9 and SI S10 | `results/methods_ext_figures/tables/` |
+| `24_methods_extension_tables.R` | Table bodies for chapter Appendix A9 and SI S15 | `results/methods_ext_figures/tables/` |
 | `25_design_assignment_figures.R` | Example assignments on one illustrative surface: CTJ Table 1 maps, SI/Chapter 3 panel figure, slide version | `paper/ctj_manuscript/figures/compact/design_thumbs/`, `design_assignments_panels.pdf`, `presentation/figures/` |
 | `26_grid_tdf_intervals.R` | Exact re-fit of the grid recording t + df coverage and power; 12/13/14/19 apply them via `apply_tdf_intervals()` | `results/grid_tdf_2026-10/` |
 | `27_interval_comparison.R` | Wald vs t + df coverage (grid and application) and the application's yearly t + df coverage | `results/grid_tdf_2026-10/interval_comparison.csv`, `application/results/methods_ext_2026-10/stored/` |
