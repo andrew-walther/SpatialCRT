@@ -110,7 +110,7 @@ Only item 1 is still open. The decisions are D1–D7 in
 1. **Advisor discussion — open.** Whether to send a correction to BMC is
    to be decided with Dr. Lin. The corrected manuscript, the latexdiff
    markup and the memo are ready in `manuscript/`, and nothing has been
-   sent. A five-page before/after brief for that meeting is in
+   sent. A four-page before/after brief for that meeting is in
    `change-brief/` (2026-11-04).
 2. **Decisions recorded — done.** bios-dissertation `DECISIONS.md`
    (2026-10-25) retires "checkerboard paradox", makes 2×4 primary in the

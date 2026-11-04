@@ -1,6 +1,6 @@
 ---
-title: "Project 1 Correction, Before and After"
-subtitle: "What changed in the accepted manuscript after fixing the 3×3 and 3×4 results"
+title: "Manuscript Correction Summary"
+subtitle: "Project 1 - Spatial CRT"
 author: "Andrew Walther"
 date: 2026-11-04
 format:
@@ -14,7 +14,6 @@ format:
     documentclass: article
     geometry: margin=0.8in
     fontsize: 10pt
-    mainfont: "STIX Two Text"
     fig-pos: "H"
     include-in-header:
       text: |
@@ -26,6 +25,15 @@ format:
         \usepackage{array}
         \usepackage{caption}
         \captionsetup{labelformat=empty}
+        % Latin Modern has no Greek glyphs, so map the Unicode letters used in the text to math
+        \usepackage{newunicodechar}
+        % pull the title block up to save space on page 1
+        \usepackage{titling}
+        \setlength{\droptitle}{-6em}
+        \postdate{\par\end{center}\vspace{-1.5em}}
+        \newunicodechar{ρ}{\ensuremath{\rho}}
+        \newunicodechar{ψ}{\ensuremath{\psi}}
+        \newunicodechar{β}{\ensuremath{\beta}}
 execute:
   echo: false
   warning: false
@@ -106,9 +114,9 @@ While porting the paper into Chapter 2 we found two coding errors that affect on
 
 Fixing both changes two figures (Figures 6 and 7), two tables (Tables 2 and 3), the results paragraphs for the 3×3 and 3×4 grids, and one Discussion paragraph (the "checkerboard paradox", which is removed). A handful of summary sentences elsewhere are softened to match. The methods, the 2×4 results (Table 1, Figure 5) and the North Carolina recommendation do not change.
 
-Some of the 3×3 and 3×4 numbers move a lot, and in two settings the better design flips. The paper's overall message holds, and it is more consistent across grids than before. After the fix, the 3×4 grid follows the same pattern as the 2×4 grid in all 16 scenarios. SRS has the lower average MSE whenever spillover reaches both arms, BSS has the lower MSE when spillover goes into control clusters and spatial dependence is present, and BSS is usually the less variable design.
+The paper's findings and its recommendation are unchanged, and the corrected results support them more consistently across grids than the published ones did. After the fix, the 3×4 grid follows the same pattern as the 2×4 grid in all 16 scenarios. On every grid SRS has the lower average MSE when spillover reaches both arms, BSS has the lower MSE when spillover goes into control clusters and spatial dependence is present, and BSS is usually the less variable design. Some individual 3×3 and 3×4 values do move a lot, and in two settings the better design flips. The tables and figures below show each of those changes.
 
-## Do the conclusions hold?
+## Findings and recommendation
 
 ```{r winners}
 #' Which design has lower mean MSE in one spillover x rho block.
@@ -177,8 +185,8 @@ concl <- data.frame(
     "Removed. The real mechanism is treatment-spillover collinearity in checkerboards (bias near −ψ)",
     "Holds"))
 kbl(concl, booktabs = TRUE, col.names = c("Claim in the accepted paper", "After the correction"),
-    caption = "The paper's claims, checked against the corrected results.") %>%
-  kable_styling(latex_options = c("HOLD_position"), full_width = !latex, font_size = if (latex) 9 else NULL) %>%
+    caption = "The paper's claims, checked against the corrected results.", longtable = latex) %>%
+  kable_styling(latex_options = c("repeat_header"), full_width = !latex, font_size = if (latex) 9 else NULL) %>%
   column_spec(1, width = "3.1in") %>% column_spec(2, width = "3.5in")
 ```
 
@@ -249,10 +257,6 @@ t3$k
 
 In Table 3 the BSS MSE (shown ×10 in the table) jumps from near zero to `r rng("3x4", "corrected", CO, 0, "BSS_MSE")` on the original scale under ρ = 0, because in a checkerboard the spillover indicator equals 1 − x and $\hat{\beta}$ absorbs the spillover. The BSS bias is close to −ψ there (`r v("3x4", "corrected", CO, 0, 0.5, "BSS_bias")` at ψ = 0.5). The SRS control-only MSE about doubles, and its mean bias goes from slightly positive to clearly negative (`r v("3x4", "published", CO, 0.01, 0.5, "SRS_bias")` to `r v("3x4", "corrected", CO, 0.01, 0.5, "SRS_bias")` at ψ = 0.5, ρ = 0.01). SRS under intervention-and-control spillover is unchanged.
 
-```{=latex}
-\clearpage
-```
-
 ## Text changes
 
 The text edits are limited to statements that depended on the 3×3 and 3×4 numbers. Section names follow the manuscript.
@@ -309,11 +313,8 @@ prose <- data.frame(
     "Reason restated as variance small relative to squared bias. Future work targets allocations where treatment and spillover are collinear.",
     "“National Institute of Mental Health” (typo fix, unrelated to the correction)."))
 kbl(prose, booktabs = TRUE, escape = FALSE, col.names = c("Section", "Before", "After"),
-    caption = "Text changes, by manuscript section. CO = control-only spillover, IC = intervention-and-control spillover.") %>%
-  kable_styling(latex_options = c("HOLD_position"), full_width = !latex, font_size = if (latex) 8 else NULL) %>%
+    caption = "Text changes, by manuscript section. CO = control-only spillover, IC = intervention-and-control spillover.",
+    longtable = latex) %>%
+  kable_styling(latex_options = c("repeat_header"), full_width = !latex, font_size = if (latex) 8 else NULL) %>%
   column_spec(1, width = "1.2in") %>% column_spec(2, width = "2.6in") %>% column_spec(3, width = "2.9in")
 ```
-
-## Full detail
-
-The corrected manuscript, a latexdiff markup of every change, and a draft correction letter to *BMC Medical Research Methodology* (not sent) are in `review/manuscript/`. The grid-by-grid comparison and the evidence for both errors are in `review/COMPARISON.md` and `review/notes/bss-spillover-check.md`.

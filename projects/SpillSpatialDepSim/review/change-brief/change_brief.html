@@ -9,7 +9,7 @@
 <meta name="author" content="Andrew Walther">
 <meta name="dcterms.date" content="2026-11-04">
 
-<title>Project 1 Correction, Before and After</title>
+<title>Manuscript Correction Summary</title>
 <style>
 
 span.smallcaps{font-variant: small-caps;}
@@ -2541,8 +2541,8 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project 1 Correction, Before and After</h1>
-<p class="subtitle lead">What changed in the accepted manuscript after fixing the 3×3 and 3×4 results</p>
+<h1 class="title">Manuscript Correction Summary</h1>
+<p class="subtitle lead">Project 1 - Spatial CRT</p>
 </div>
 
 
@@ -2575,10 +2575,10 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
 <p>While porting the paper into Chapter 2 we found two coding errors that affect only the 3×3 and 3×4 grids. The summary script used the 2×4 BSS allocations (combos 28 and 43) for every grid, so the BSS columns for 3×3 and 3×4 summarized two allocations that are not block stratified on those grids. The control-only spillover loop in the 3×3 and 3×4 simulation scripts also stopped at district 8, so the higher-numbered treated districts never passed spillover to their control neighbors. That second error changed the SRS control-only results only.</p>
 <p>Fixing both changes two figures (Figures 6 and 7), two tables (Tables 2 and 3), the results paragraphs for the 3×3 and 3×4 grids, and one Discussion paragraph (the “checkerboard paradox”, which is removed). A handful of summary sentences elsewhere are softened to match. The methods, the 2×4 results (Table 1, Figure 5) and the North Carolina recommendation do not change.</p>
-<p>Some of the 3×3 and 3×4 numbers move a lot, and in two settings the better design flips. The paper’s overall message holds, and it is more consistent across grids than before. After the fix, the 3×4 grid follows the same pattern as the 2×4 grid in all 16 scenarios. SRS has the lower average MSE whenever spillover reaches both arms, BSS has the lower MSE when spillover goes into control clusters and spatial dependence is present, and BSS is usually the less variable design.</p>
+<p>The paper’s findings and its recommendation are unchanged, and the corrected results support them more consistently across grids than the published ones did. After the fix, the 3×4 grid follows the same pattern as the 2×4 grid in all 16 scenarios. On every grid SRS has the lower average MSE when spillover reaches both arms, BSS has the lower MSE when spillover goes into control clusters and spatial dependence is present, and BSS is usually the less variable design. Some individual 3×3 and 3×4 values do move a lot, and in two settings the better design flips. The tables and figures below show each of those changes.</p>
 </section>
-<section id="do-the-conclusions-hold" class="level2">
-<h2 class="anchored" data-anchor-id="do-the-conclusions-hold">Do the conclusions hold?</h2>
+<section id="findings-and-recommendation" class="level2">
+<h2 class="anchored" data-anchor-id="findings-and-recommendation">Findings and recommendation</h2>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table caption-top table-sm table-striped small">
@@ -3194,10 +3194,6 @@ Block Stratified Sampling
 </table>
 </div>
 </div>
-</section>
-<section id="full-detail" class="level2">
-<h2 class="anchored" data-anchor-id="full-detail">Full detail</h2>
-<p>The corrected manuscript, a latexdiff markup of every change, and a draft correction letter to <em>BMC Medical Research Methodology</em> (not sent) are in <code>review/manuscript/</code>. The grid-by-grid comparison and the evidence for both errors are in <code>review/COMPARISON.md</code> and <code>review/notes/bss-spillover-check.md</code>.</p>
 </section>
 
 </main>
