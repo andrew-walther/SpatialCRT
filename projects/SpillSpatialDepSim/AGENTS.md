@@ -101,7 +101,8 @@ unaffected):
   `SpatialSim_3x4.Rmd:463`.
 
 Corrected reruns, tables, figures and a published-vs-corrected comparison
-are in `review/` (`README.md`, `COMPARISON.md`). As of 2026-10-25 it also
+are in `review/` (`README.md`, `COMPARISON.md`; a short before/after brief
+for Dr. Lin is in `review/change-brief/`, 2026-11-04). As of 2026-10-25 it also
 holds a corrected manuscript, a correction memo to BMC (not sent), and a
 corrected Chapter 2 (copied into bios-dissertation on 2026-10-28, with the
 uncorrected chapter kept in `project1-spillover/draft-uncorrected/`; the

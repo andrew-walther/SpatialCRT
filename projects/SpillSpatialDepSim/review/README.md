@@ -42,6 +42,7 @@ D1–D7, is `notes/2026-10-25-correction-plan.md`.
 | `tables/` | `beta_mse_table_<grid>_<published|corrected>.csv` (unscaled; SD = SD of per-allocation MSE); `optimal_combos_<grid>_<version>.csv` |
 | `figures/` | `MSE_Estimates_<grid>_<published|corrected>.png`; `paper_size/` at the published 700×432 |
 | `COMPARISON.md` | Published vs corrected, grid by grid |
+| `change-brief/` | Short before/after brief for Dr. Lin (2026-11-04): the changed figures, tables and text only. `change_brief.qmd` renders `.html` and `.pdf`; numbers read from `tables/` |
 
 ## How to run
 
