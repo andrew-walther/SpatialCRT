@@ -419,3 +419,249 @@ Reason: both support statements made in the text (coverage 0.936-0.941 for every
 Reason: three meaning-drift errors (queen-only order claim in the Discussion, replication schedule wording, antecedent for the alternative regional summaries), worst-case/regime and tau qualifiers, the non-oracle rook contrast, the bivand citation and intro wording restored; block-level detail moved to the end of B.7; duplicate 2x2 statement removed. Grid-accuracy figure (CTJ Figure 2, grid_accuracy_srs.pdf) added to 3.3.9 at the author's request.
 
 Numbering note (2026-10-13): appendix and table numbers above are labelled canonical or concise where they differ; LaTeX labels are given where numbering shifts.
+
+## 2026-11-05 — Round 3 human-writer review (AI tropes)
+
+Reason: Round 3 pass on Chapter 3 (edit lists and reviews in bios-dissertation `prelim/full-draft/notes/human-writer-review/round3/ch3/`). Each entry is a sentence or clause cut as a repeated caveat, recap, pointer, counted package or announcement; the point it made is still stated once where it applies. Matching SI edits are in `ch3-mirror-final-edits.md`.
+
+### E3.tb.meth.2
+Reason: cut: "How much treatment it redirects depends on how much incidence differs between regions (see Application)." The Discussion (line 696) says the same with the numbers, and line 548 shows it; in Methods it anticipates a result.
+
+Original text:
+
+> to the quadrants or regions with the highest incidence. How much treatment it redirects depends on how much incidence differs between regions (see Application). The accuracy advantage
+
+Replaced by:
+
+> to the quadrants or regions with the highest incidence. The accuracy advantage
+
+### E3.tb.meth.4
+Reason: cut: "Because the values of $\tau$ share assignments and noise, Friedman tests at different values of $\tau$ are not independent confirmations of one another." Line 151 already states the sharing and line 372, where the tau results are read, gives the same caveat with its consequence; Limitations repeats it again. Removes two $\tau$ tokens (intended).
+
+Original text:
+
+> with Holm's adjustment over the eight designs compared with SRS. Because the values of $\tau$ share assignments and noise, Friedman tests at different values of $\tau$ are not independent confirmations of one another.
+
+Replaced by:
+
+> with Holm's adjustment over the eight designs compared with SRS.
+
+### E3.tb.res.2
+Reason: cut: "The mechanism that generated the incidence surface therefore did not change the ranking." It restates the paragraph's opening sentence; the High Incidence Focus point is kept. SHARED: SI (M3.tb.2).
+
+Original text:
+
+> The mechanism that generated the incidence surface therefore did not change the ranking. The same held for High Incidence Focus, the design that uses the incidence ranks most directly: its MSE was no higher
+
+Replaced by:
+
+> High Incidence Focus, the design that uses the incidence ranks most directly, also had no higher MSE
+
+### E3.tb.res.3
+Reason: cut: "Its stable rank across regimes matters because a trial team may not know in advance which regime applies." Announces importance; the Discussion (lines 680 and 686) makes the unknown-regime point where it belongs.
+
+Original text:
+
+> Its stable rank across regimes matters because a trial team may not know in advance which regime applies. In the full benchmark
+
+Replaced by:
+
+> In the full benchmark
+
+### E3.tb.res.4
+Reason: cut: "The advantage of the saturation designs over SRS is therefore specific to control-only spillover, and under queen contiguity their small both-arms disadvantage is statistically detectable." Restates the numbers two sentences up and line 274's "small but statistically detectable difference". SHARED: SI (M3.tb.4).
+
+Original text:
+
+> and Checkerboard under control-only spillover. The advantage of the saturation designs over SRS is therefore specific to control-only spillover, and under queen contiguity their small both-arms disadvantage is statistically detectable.
+
+Replaced by:
+
+> and Checkerboard under control-only spillover.
+
+### E3.tb.res.6
+Reason: cut: "The mean is only part of the comparison, because a trial realizes a single allocation." Methods line 141 makes this the stated reason for the second criterion; the subsection can open with the result. Not mirrored: the SI has no earlier statement of this reason for the grid.
+
+Original text:
+
+> The mean is only part of the comparison, because a trial realizes a single allocation. Under control-only spillover, the worst 10\% of SRS
+
+Replaced by:
+
+> Under control-only spillover, the worst 10\% of SRS
+
+### E3.tb.app.1
+Reason: cut: "Monte Carlo precision describes uncertainty in simulated performance, not interval calibration." Line 544, two paragraphs later, makes the same point with the coverage numbers.
+
+Original text:
+
+> gives 9,878,000 distinct outcomes across the two stages. Monte Carlo precision describes uncertainty in simulated performance, not interval calibration.
+
+Replaced by:
+
+> gives 9,878,000 distinct outcomes across the two stages.
+
+### E3.tb.app.2
+Reason: The shared-structure explanation appears in Methods (line 90) and the Discussion (line 696); cut the clause from the middle instance.
+
+Original text:
+
+> as on the grid, the two performed similarly, and their advantage over SRS comes from the saturation structure both designs share.
+
+Replaced by:
+
+> as on the grid, the two performed similarly.
+
+### E3.tb.app.5
+Reason: cut: "This sensitivity analysis changes baseline and adjustment together and does not imply that SUD incidence predicts education ability." Near-verbatim repeat of line 520, where the analysis is set up. SHARED: SI (M3.tb.6; the SI has the setup sentence at its line 829).
+
+Original text:
+
+> leaves less residual treatment information. This sensitivity analysis changes baseline and adjustment together and does not imply that SUD incidence predicts education ability. Comparing rook
+
+Replaced by:
+
+> leaves less residual treatment information. Comparing rook
+
+### E3.tb.app.7
+Reason: cut: "The findings do not establish intervention effectiveness or a final trial protocol." Effectiveness is disclaimed at lines 58 and 447 and in Limitations (716); the protocol point is the preceding sentence. Not mirrored: the SI states the effectiveness caveat only once nearby (its line 625 is 1,800 lines earlier).
+
+Original text:
+
+> before selecting one realized allocation. The findings do not establish intervention effectiveness or a final trial protocol.
+
+Replaced by:
+
+> before selecting one realized allocation.
+
+### E3.tb.disc.3
+Reason: cut: "Together, the grid benchmark, the allocation-risk results (...) and the NC application give guidance by scenario." The heading already says this; the table reference moves to the claim it supports.
+
+Original text:
+
+> Together, the grid benchmark, the allocation-risk results (Table \ref{tab:downside}) and the NC application give guidance by scenario. When spillover is expected to reach mainly control clusters, Incidence-Guided Saturation and Saturation Quadrants had the lowest mean MSE and among the lowest worst-decile MSE, so
+
+Replaced by:
+
+> When spillover is expected to reach mainly control clusters, Incidence-Guided Saturation and Saturation Quadrants had the lowest mean MSE and among the lowest worst-decile MSE (Table \ref{tab:downside}), so
+
+### E3.tb.disc.5
+Reason: cut: "The NC model assesses education outcomes rather than assuming that historical SUD incidence predicts education ability or a heterogeneous intervention effect." The incidence-education caveat is stated at lines 54, 447, 518 and 520, and the constant effect at 518 and 716.
+
+Original text:
+
+> did not improve on SRS on either criterion. The NC model assesses education outcomes rather than assuming that historical SUD incidence predicts education ability or a heterogeneous intervention effect.
+
+Replaced by:
+
+> did not improve on SRS on either criterion.
+
+### E3.tb.disc.6
+Reason: cut: "No direct cross-chapter result comparison is needed to motivate these extensions." Repeats the third sentence of the same paragraph ("do not compare numerical results across chapters directly") and line 54.
+
+Original text:
+
+> from assumptions about education outcomes. No direct cross-chapter result comparison is needed to motivate these extensions.
+
+Replaced by:
+
+> from assumptions about education outcomes.
+
+### E3.tb.disc.7
+Reason: cut: "These conclusions have several limitations." The heading says it.
+
+Original text:
+
+> These conclusions have several limitations. First, the primary estimator is an oracle.
+
+Replaced by:
+
+> First, the primary estimator is an oracle.
+
+### E3.tb.disc.8
+Reason: cut: "These would extend the completed application and are not needed to characterize the prespecified settings reported here." Defends the completeness of the reported work against no stated objection; ends at the last concrete point.
+
+Original text:
+
+> if that precision is needed for a final choice. These would extend the completed application and are not needed to characterize the prespecified settings reported here.
+
+Replaced by:
+
+> if that precision is needed for a final choice.
+
+### E3.ta.A3.2
+Reason: cut: "A gray bar joins designs that no pairwise Nemenyi comparison separated." It repeats the caption of Figure fig:cd almost word for word. SHARED: SI (M3.ta.2).
+
+Original text:
+
+> The red arrow shows the critical difference, 0.712 at $\alpha = 0.05$. A gray bar joins designs that no pairwise Nemenyi comparison separated. Under queen contiguity, the bars join
+
+Replaced by:
+
+> The red arrow shows the critical difference, 0.712 at $\alpha = 0.05$. Under queen contiguity, gray bars join
+
+### E3.ta.A3.3
+Reason: cut: "Its estimates are kept and flagged." Already said at the end of the previous text paragraph (line 960). Chapter only: in the SI the two passages sit in different sections.
+
+Original text:
+
+> is Checkerboard, for which $\tau$ is not identified. Its estimates are kept and flagged. The five values
+
+Replaced by:
+
+> is Checkerboard, for which $\tau$ is not identified. The five values
+
+### E3.ta.A7.3
+Reason: cut: "Two consequences of Equation \ref{eq:error-decomposition} explain the results for $\tau$ reported in the body." It repeats the section's opening sentence 20 lines later; "First/Second" are separated by an intervening paragraph and do not organize the text. Removes one `\ref` and one `$\tau$` (intended invariant change). SHARED: SI (M3.ta.9).
+
+Original text:
+
+> Two consequences of Equation \ref{eq:error-decomposition} explain the results for $\tau$ reported in the body.  First, for designs whose treated clusters have treated neighbors,
+
+Replaced by:
+
+> For designs whose treated clusters have treated neighbors,
+
+### E3.ta.A7.5
+Reason: cut: "The higher coverage at large $\tau$ reflects wider intervals around the wrong quantity, not a recovery of $\tau$." The same paragraph already says the coefficient estimates $\tau - \gamma$ at every $\tau$ and that, "with the bias held near $-\gamma$, wider intervals covered $\tau$ more often". Removes two `$\tau$` (intended invariant change). SHARED: SI (M3.ta.11).
+
+Original text:
+
+> moving the mean bias from $-0.650$ to $-0.667$. The higher coverage at large $\tau$ reflects wider intervals around the wrong quantity, not a recovery of $\tau$.
+
+Replaced by:
+
+> moving the mean bias from $-0.650$ to $-0.667$.
+
+### E3.tb.res.7 (reworded)
+Reason: "They do not replace the full grid benchmark" answers a claim nobody made; the limitation it guards (extreme settings only) is now stated directly. SHARED: SI (M3.tb.5).
+
+Original text:
+
+> These results at the extreme parameter settings support a qualified downside argument for saturation. They do not replace the full grid benchmark.
+
+Replaced by:
+
+> These results come from the extreme parameter settings only and give qualified support to saturation on downside risk.
+
+### E3.tb.app.3 (reworded)
+Reason: No one claims universal optimality; the equivalence caveat is the one the reader needs.
+
+Original text:
+
+> Small point differences do not establish equivalence or universal optimality.
+
+Replaced by:
+
+> Small point differences do not establish equivalence.
+
+### E3.tb.disc.2 (reworded)
+Reason: "complement ... rather than replace it" rebuts an unstated claim; the paragraph's actual point is the dependence on the spillover model. Same strength as CTJ line 246 ("A good allocation does not remove the need for an analysis that models spillover").
+
+Original text:
+
+> These are design-stage results, and they complement analysis-stage modeling rather than replace it. Every design was analyzed with a spatial lag model that included the spillover term.
+
+Replaced by:
+
+> These design-stage results assume an analysis that models spillover: every design was analyzed with a spatial lag model that included the spillover term.
