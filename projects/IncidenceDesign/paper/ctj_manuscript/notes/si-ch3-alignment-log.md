@@ -1,5 +1,7 @@
 # SI edits with counterparts in Chapter 3 or the CTJ manuscript (2026-11-04)
 
+**Applied 2026-11-05** (SpatialCRT a33fafa): every entry ruled adopt, adopt partly or keep Chapter 3; verdict table in bios-dissertation `prelim/full-draft/notes/human-writer-review/round3/ch3/ch3-si-align-verdicts.md`. No CTJ change was needed.
+
 The SI was reorganized, its captions trimmed, and its prose revised (commits 582562b to c347f42).
 Chapter 3 and the CTJ manuscript were deliberately left unchanged in that pass. Each entry below is an SI
 caption or passage whose old text also appears in the file named (at least half of its 12-word windows
