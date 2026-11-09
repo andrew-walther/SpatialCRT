@@ -93,7 +93,7 @@ done
 git -C "$BIOS" add -- "${PATHS[@]}"
 BIOS_COMMIT="no commit (nothing changed)"
 if ! git -C "$BIOS" diff --cached --quiet -- "${PATHS[@]}"; then
-  git -C "$BIOS" commit -q -m "Sync CTJ manuscript from SpatialCRT $SHA" -- "${PATHS[@]}"
+  PRELIM_SYNC=1 git -C "$BIOS" commit -q -m "Sync CTJ manuscript from SpatialCRT $SHA" -- "${PATHS[@]}"
   BIOS_COMMIT="bios-dissertation $(git -C "$BIOS" rev-parse --short HEAD)"
 fi
 

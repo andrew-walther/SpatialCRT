@@ -104,8 +104,21 @@ if [ "$NO_RENDER" -eq 0 ]; then
   TINYTEX_BIN="$(ls -d "$HOME"/Library/TinyTeX/bin/* 2>/dev/null | head -1)"
   [ -n "$TINYTEX_BIN" ] || fail "TinyTeX not found under ~/Library/TinyTeX/bin"
   export PATH="$TINYTEX_BIN:$PATH"
+  # Render in a temporary copy of the draft folder, then copy back only the .tex
+  # and PDF. An editor previewing the draft .tex (e.g. Lattice) compiles in the
+  # real draft folder; rendering elsewhere keeps the two LaTeX runs from writing
+  # the same .aux/.pdf files at once. The copy keeps the draft's relative paths
+  # (../../../references.bib, ../../../../templates/...) by linking those in.
+  RENDER_ROOT="$(mktemp -d -t sync_to_prelim_root)"
+  RENDER_DIR="$RENDER_ROOT/prelim/project-proposals/project2-incidence/draft"
+  mkdir -p "$RENDER_DIR"
+  ln -s "$BIOS/prelim/references.bib" "$RENDER_ROOT/prelim/references.bib"
+  ln -s "$BIOS/templates" "$RENDER_ROOT/templates"
+  cp -R "$DRAFT_DIR/project2-incidence-draft.qmd" "$DRAFT_DIR/bios-prelim.cls" "$RENDER_DIR/"
+  if [ -d "$DRAFT_DIR/figures" ]; then cp -R "$DRAFT_DIR/figures" "$RENDER_DIR/"; fi
   RENDER_LOG="$(mktemp -t sync_to_prelim_render)"
-  if ! (cd "$DRAFT_DIR" && "$QUARTO" render project2-incidence-draft.qmd) >"$RENDER_LOG" 2>&1; then
+  if ! (cd "$RENDER_DIR" && "$QUARTO" render project2-incidence-draft.qmd) >"$RENDER_LOG" 2>&1; then
+    rm -rf "$RENDER_ROOT"
     tail -40 "$RENDER_LOG" >&2
     fail "quarto render failed (full log: $RENDER_LOG); nothing committed"
   fi
@@ -113,6 +126,8 @@ if [ "$NO_RENDER" -eq 0 ]; then
   if grep -i -E 'citeproc: reference .* not found|unable to resolve|undefined references|Reference .* undefined|Citation .* undefined' "$RENDER_LOG" >&2; then
     fail "render reported unresolved citations or references (log: $RENDER_LOG); nothing committed"
   fi
+  cp "$RENDER_DIR/project2-incidence-draft.tex" "$RENDER_DIR/project2-incidence-draft.pdf" "$DRAFT_DIR/"
+  rm -rf "$RENDER_ROOT"
   PDF="$DRAFT_DIR/project2-incidence-draft.pdf"
   if command -v pdftotext >/dev/null 2>&1; then
     n_qq="$(pdftotext "$PDF" - | grep -c '??' || true)"
@@ -178,7 +193,7 @@ if [ "$HAVE_PDF" -eq 1 ]; then
 fi
 BIOS_COMMIT="no commit (nothing changed)$PDF_NOTE"
 if ! git -C "$BIOS" diff --cached --quiet -- "${PATHS[@]}"; then
-  git -C "$BIOS" commit -q -m "Sync Chapter 3 from SpatialCRT $SHA" -- "${PATHS[@]}"
+  PRELIM_SYNC=1 git -C "$BIOS" commit -q -m "Sync Chapter 3 from SpatialCRT $SHA" -- "${PATHS[@]}"
   # Belt and braces: the commit must touch nothing outside the target dir.
   outside="$(git -C "$BIOS" show --name-only --format= HEAD | grep -v "^$TARGET_REL/" || true)"
   [ -z "$outside" ] || fail "commit $(git -C "$BIOS" rev-parse --short HEAD) touched paths outside $TARGET_REL: $outside"
