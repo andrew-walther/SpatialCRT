@@ -172,7 +172,9 @@ fig <- ggplot2::ggplot(f, ggplot2::aes(y = Label)) +
 fig_file <- file.path(out_dir, "allocation_distribution_by_design.pdf")
 ggplot2::ggsave(fig_file, fig, width = 174, height = 105, units = "mm")
 if (profile == "surfaces10") {
-  for (folder in c("paper/ctj_manuscript/figures/compact", "paper/thesis_chapter/figures/compact")) {
+  # The chapter's copy is drawn at its printed width (8 pt text) by
+  # 28_thesis_chapter_figures.R, so only the CTJ folder is written here.
+  for (folder in c("paper/ctj_manuscript/figures/compact")) {
     stopifnot(file.copy(fig_file, folder, overwrite = TRUE))
   }
 }

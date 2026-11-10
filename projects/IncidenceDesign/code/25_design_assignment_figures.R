@@ -19,7 +19,13 @@
 #       one map per CTJ Table 1 row (id = design number; "incidence" = surface)
 #   paper/ctj_manuscript/figures/design_assignments_panels.pdf      SI figure
 #   paper/thesis_chapter/figures/design_assignments_panels.pdf      Chapter 3 figure
+#       6.5 in wide (printed at \linewidth), all text >= 8 pt, fonts embedded
+#       (thesis_figure_device: cairo_pdf, or pdftocairo when cairo_pdf cannot load)
 #   presentation/figures/design_assignments_panels_wide.{pdf,png}   slides
+#
+# THESIS_ONLY=1 Rscript code/25_design_assignment_figures.R rewrites only the Chapter 3
+# figure and leaves the CTJ, SI and slide files untouched (their bytes would otherwise
+# change with the PDF creation time).
 #
 # Conventions: queen contiguity; treated clusters solid blue, controls white;
 # overlays show each design's structure (2x2 blocks, incidence quartiles,
@@ -38,6 +44,8 @@ suppressPackageStartupMessages({
 source("code/01_spatial_setup.R")
 source("code/02_incidence_generation.R")
 source("code/03_designs.R")
+source("code/00_thesis_figure_device.R")
+THESIS_ONLY <- identical(Sys.getenv("THESIS_ONLY"), "1")
 
 pdf(NULL)  # keep ggplot from opening a stray Rplots.pdf
 
@@ -162,8 +170,9 @@ incidence_map <- function(legend = "none") {
 #' @param order Design numbers in panel order
 #' @param title_size Panel title size (pt)
 #' @param wrap Break long names onto two lines
+#' @param text_size Size (mm) of the overlay text inside the maps (8 pt = 2.84 mm)
 #' @return A patchwork object
-panel_figure <- function(order, title_size = 8.5, wrap = TRUE) {
+panel_figure <- function(order, title_size = 8.5, wrap = TRUE, text_size = 2.6) {
   nm <- hy(DESIGN_NAME[as.character(order)])
   if (wrap) {
     nm <- sub("Incidence­Guided ", "Incidence­Guided\n", nm)
@@ -173,7 +182,8 @@ panel_figure <- function(order, title_size = 8.5, wrap = TRUE) {
     theme(plot.title = element_text(size = title_size, face = "bold", hjust = 0.5,
                                     lineheight = 0.9, margin = margin(b = 3)))
   plots <- c(list(titled(incidence_map("bottom"), "Incidence (all panels)")),
-             Map(function(d, t) titled(design_map(d, legend = "bottom"), t), order, nm))
+             Map(function(d, t) titled(design_map(d, text_size = text_size, legend = "bottom"), t),
+                 order, nm))
   wrap_plots(plots, ncol = 4) + plot_layout(guides = "collect") &
     theme(legend.position = "bottom", legend.title = element_text(size = 8),
           legend.text = element_text(size = 8), legend.key.size = unit(0.35, "cm"),
@@ -181,6 +191,13 @@ panel_figure <- function(order, title_size = 8.5, wrap = TRUE) {
 }
 
 # Outputs ----
+
+## Chapter 3 panel figure: printed at 6.5 in, overlay text 3 mm (8.5 pt) ----
+fig_ch3 <- panel_figure(CH3_ORDER, text_size = 3.0)
+method <- save_thesis_pdf(fig_ch3, OUT_CH3, width = 6.5, height = 3.9)
+cat("Wrote", OUT_CH3, "(", method, ")\n")
+
+if (!THESIS_ONLY) {
 
 ## CTJ Table 1 thumbnails ----
 ggsave(file.path(OUT_THUMB, "thumb_incidence.pdf"), incidence_map(),
@@ -190,10 +207,9 @@ for (d in CTJ_ORDER) {
          design_map(d, text_size = 1.6, lw = 0.55), width = 0.85, height = 0.85)
 }
 
-## SI and Chapter 3 panel figure ----
+## SI panel figure ----
 fig <- panel_figure(CH3_ORDER)
 ggsave(OUT_SI, fig, width = 7.2, height = 4.2)
-ggsave(OUT_CH3, fig, width = 7.2, height = 4.2)
 
 ## Slide version (wider, larger titles) ----
 ggsave(paste0(OUT_SLIDE, ".pdf"), panel_figure(CH3_ORDER, title_size = 10),
@@ -203,5 +219,7 @@ status <- system2("pdftoppm", c("-png", "-r", "200", "-singlefile",
                                 shQuote(paste0(OUT_SLIDE, ".pdf")), shQuote(OUT_SLIDE)))
 if (status != 0) stop("pdftoppm failed for ", OUT_SLIDE, ".pdf")
 
-cat("Wrote", length(CTJ_ORDER) + 1, "thumbnails,", OUT_SI, ",", OUT_CH3, "and",
+}  # end !THESIS_ONLY
+
+if (!THESIS_ONLY) cat("Wrote", length(CTJ_ORDER) + 1, "thumbnails,", OUT_SI, ",", OUT_CH3, "and",
     paste0(OUT_SLIDE, ".{pdf,png}"), "\n")

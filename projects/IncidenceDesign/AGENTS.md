@@ -75,6 +75,7 @@ Reasons and history for each rule: `DECISIONS.md`.
 - **Figures are files built by code (author, 2026-11-02):** manuscripts and decks
   include figure files written by scripts, never inline SVG/HTML or hand copies;
   `paper/tools/copy_figures.sh` carries `results/` figures into both paper folders.
+- **Thesis chapter formatting (2026-11-10):** Figures for the thesis chapter: save with cairo_pdf (embeds fonts) and keep all figure text at least 8 pt at printed size; tables stay within the 6.5 in text width with text no smaller than 10 pt (\footnotesize). `code/28_thesis_chapter_figures.R` (and `THESIS_ONLY=1 Rscript code/25_...`) rebuild the chapter's figures; `cairo_pdf` cannot load on this machine, so `code/00_thesis_figure_device.R` falls back to `pdftocairo`.
 - **Where to write things down:** project docs go in `docs/` by type (`plans/`,
   `findings/`, `reviews/`, `prompts/`, `meetings/`), named `YYYY-MM-DD-topic-type.md`
   with hyphens, and get a row in that folder's `README.md` (map: `docs/README.md`;

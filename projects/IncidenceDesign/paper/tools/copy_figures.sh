@@ -16,6 +16,11 @@
 # (compact/allocation_distribution_by_design.pdf), code/25 (design panels and
 # Table 1 thumbnails) and application/code/manuscript_maps.R (NC maps).
 # Fails loud if any source is missing; nothing is copied in that case.
+#
+# Chapter 3 figures listed in THESIS_BUILT are drawn at the printed width (6.5 in or
+# narrower) with 8 pt text and embedded fonts by code/28_thesis_chapter_figures.R, which
+# writes them straight into paper/thesis_chapter/figures/. This script copies those
+# files to the CTJ folder only, so it never overwrites the chapter's versions.
 set -euo pipefail
 
 SIX=results/six_design_manuscript
@@ -45,6 +50,17 @@ map=(
   "$EXH/refined_allocation_risk_journal.pdf|real_sud/refined_allocation_risk.pdf|application/code/real_sud_summary.R"
 )
 
+THESIS_BUILT=(
+  fig_mse_by_design_ranked_6design_queen.pdf fig_mse_by_design_ranked_6design_rook.pdf
+  fig_biasvar_6design_queen.pdf fig_biasvar_6design_rook.pdf
+  app_cd_diagram_rank_queen.pdf app_cd_diagram_rank_rook.pdf
+  app_tau_coverage_queen.pdf app_tau_coverage_rook.pdf
+  fig_coverage_by_design_6design_queen.pdf fig_coverage_by_design_6design_rook.pdf
+  fig_tau_sensitivity_6design_combined.pdf fig_vs_srs_by_regime_queen.pdf
+  fig_power_vs_n.pdf fig_colleges_needed.pdf fig_spread_vs_gain.pdf
+  real_sud/primary_setting_ratios.pdf real_sud/refined_allocation_risk.pdf
+)
+
 # Check every source first so a missing one copies nothing
 for row in "${map[@]}"; do
   IFS='|' read -r src dst script <<< "$row"
@@ -53,8 +69,12 @@ done
 
 for row in "${map[@]}"; do
   IFS='|' read -r src dst script <<< "$row"
-  for folder in paper/ctj_manuscript/figures paper/thesis_chapter/figures; do
+  folders=(paper/ctj_manuscript/figures paper/thesis_chapter/figures)
+  for built in "${THESIS_BUILT[@]}"; do
+    [[ "$built" == "$dst" ]] && folders=(paper/ctj_manuscript/figures)
+  done
+  for folder in "${folders[@]}"; do
     cp "$src" "$folder/$dst"
   done
-  echo "copied $src -> {ctj_manuscript,thesis_chapter}/figures/$dst"
+  echo "copied $src -> ${folders[*]}/$dst"
 done

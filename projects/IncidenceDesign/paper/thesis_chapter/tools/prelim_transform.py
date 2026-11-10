@@ -130,6 +130,9 @@ def cited_keys(qmd_text):
     keys = set()
     for m in re.finditer(r"(?<![\w@])@([A-Za-z0-9_][A-Za-z0-9_:.#$%&\-+?<>~/]*)", t):
         k = m.group(1).rstrip(".:;,?")
+        # Quarto cross-references (@sec-x, @fig-x, @tbl-x, @eq-x) are not citations
+        if re.match(r"(sec|fig|tbl|eq|lst)-", k):
+            continue
         keys.add(k)
     return keys
 

@@ -287,8 +287,11 @@ export_compact_exhibits <- function(project_dir) {
   for (folder in c("ctj_manuscript", "thesis_chapter")) {
     destination <- file.path(project_dir, "paper", folder, "figures/compact")
     dir.create(destination, recursive = TRUE, showWarnings = FALSE)
+    # The chapter's compact figures (grid_accuracy_srs.pdf, nc_annual_accuracy.pdf) are
+    # drawn at the printed width with 8 pt text by 28_thesis_chapter_figures.R, which
+    # writes them into paper/thesis_chapter/figures/compact/; nothing is copied there.
     selected <- if (folder == "ctj_manuscript") list.files(out, pattern = "[.]pdf$", full.names = TRUE) else
-      file.path(out, "nc_annual_accuracy.pdf")
+      character(0)
     stopifnot(all(file.copy(selected, destination, overwrite = TRUE)))
   }
   writeLines(c("Read-only export of completed oracle/primary aggregate results.",
