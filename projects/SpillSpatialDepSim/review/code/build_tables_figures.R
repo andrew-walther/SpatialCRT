@@ -125,7 +125,7 @@ for (version in c("published", "corrected")) for (grid in grids) {
   # same figure at the published pixel size (700 x 432), for the corrected manuscript
   dir.create("figures/paper_size", showWarnings = FALSE)
   ggsave(sprintf("figures/paper_size/MSE_Estimates_%s_%s.png", grid, version), plot_grid(df),
-         width = 7, height = 4.32, dpi = 100, bg = "white")
+         width = 7, height = 4.32, dpi = 300, bg = "white")
   opt <- optimal_combos(version, grid)
   write.csv(opt, sprintf("tables/optimal_combos_%s_%s.csv", grid, version), row.names = FALSE)
   cat(sprintf("%s %s: %d distinct optimal allocations across 16 scenarios; BSS optimal in %d\n",
