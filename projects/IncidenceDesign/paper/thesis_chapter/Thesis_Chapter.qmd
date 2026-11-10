@@ -900,8 +900,8 @@ $$
 \text{MSE} = \frac{1}{n}\sum_{f=1}^{n}(\hat\tau_f - \tau)^2,
 $$
 $$
-\text{Coverage} = \frac{1}{n}\sum_{f=1}^{n}\mathbf{1}\{L_f \le \tau \le U_f\}, \qquad
-\text{Power} = \frac{1}{n}\sum_{f=1}^{n}\mathbf{1}\{L_f > 0\},
+\text{Coverage} = \frac{1}{n}\sum_{f=1}^{n}\mathbb{I}\{L_f \le \tau \le U_f\}, \qquad
+\text{Power} = \frac{1}{n}\sum_{f=1}^{n}\mathbb{I}\{L_f > 0\},
 $$
 so that $\text{MSE} = \text{Bias}^2 + (n-1)\,\text{SD}^2/n$.
 
@@ -1651,7 +1651,7 @@ Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
 \end{table}
 ```
 
-**Spillover form.** Under the binary form, $\mathbf{S}(\mathbf{Z}) = \gamma\,\mathbf{1}\{\text{any treated queen neighbor}\}$, times $\mathbf{1} - \mathbf{Z}$ under control-only spillover. Under the count form, $\mathbf{S}(\mathbf{Z}) = (\gamma/\bar d) \times$ (number of treated queen neighbors), where $\bar d = 4.93$ is the mean number of queen neighbors, so a college of average degree with every neighbor treated receives $\gamma$, as under the proportional form. Table \ref{tab:nc-forms} compares the three forms. With the binary form, Isolation Buffer is never identified, because every control has a treated neighbor, and under control-only spillover no strategy was identified in every fit. The saturation designs were identified most often there (in 89.7\% and 91.7\% of fits) and, among identified fits, had MSE 0.70 to 0.71 times that of SRS.
+**Spillover form.** Under the binary form, $\mathbf{S}(\mathbf{Z}) = \gamma\,\mathbb{I}\{\text{any treated queen neighbor}\}$, times $\mathbf{1} - \mathbf{Z}$ under control-only spillover. Under the count form, $\mathbf{S}(\mathbf{Z}) = (\gamma/\bar d) \times$ (number of treated queen neighbors), where $\bar d = 4.93$ is the mean number of queen neighbors, so a college of average degree with every neighbor treated receives $\gamma$, as under the proportional form. Table \ref{tab:nc-forms} compares the three forms. With the binary form, Isolation Buffer is never identified, because every control has a treated neighbor, and under control-only spillover no strategy was identified in every fit. The saturation designs were identified most often there (in 89.7\% and 91.7\% of fits) and, among identified fits, had MSE 0.70 to 0.71 times that of SRS.
 
 ```{=latex}
 \begin{table}[!htb]

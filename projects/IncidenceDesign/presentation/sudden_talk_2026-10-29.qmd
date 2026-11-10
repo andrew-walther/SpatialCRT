@@ -282,28 +282,28 @@ Untreated children attending schools near treated schools had fewer worm infecti
 
 <div class="eq-box">
 $$
-Y = (I - \rho W)^{-1}\left[\,\tau Z + S(Z) + \beta X + \epsilon\,\right], \qquad \epsilon \sim N(0, I)
+\mathbf{Y} = (\mathbf{I} - \rho \mathbf{W})^{-1}\left[\,\tau \mathbf{Z} + \mathbf{S}(\mathbf{Z}) + \beta \mathbf{X} + \boldsymbol{\varepsilon}\,\right], \qquad \boldsymbol{\varepsilon} \sim N(\mathbf{0}, \mathbf{I})
 $$
 </div>
 
 <div class="spill-forms">
-<span class="grp"><span class="lab">Spillover to both arms</span> $S(Z) = \gamma\, WZ$</span>
-<span class="grp"><span class="lab">Spillover to controls only</span> $S(Z) = \gamma\,(1 - Z) \circ WZ$</span>
+<span class="grp"><span class="lab">Spillover to both arms</span> $\mathbf{S}(\mathbf{Z}) = \gamma\, \mathbf{W}\mathbf{Z}$</span>
+<span class="grp"><span class="lab">Spillover to controls only</span> $\mathbf{S}(\mathbf{Z}) = \gamma\,(\mathbf{1} - \mathbf{Z}) \circ \mathbf{W}\mathbf{Z}$</span>
 </div>
 
 <div class="glossary" style="margin-top: 0.5em;">
-<span class="sym">$Y$</span><span>Outcome of each cluster (in the application, a college's mean education score)</span>
-<span class="sym">$Z$</span><span>Treatment indicator, 1 if the cluster is treated and 0 if control</span>
-<span class="sym">$W$</span><span>Neighbor matrix. Under queen contiguity two clusters are neighbors if they share an edge or a corner. Each row sums to 1, so $(WZ)_i$ is the share of cluster $i$'s neighbors that are treated</span>
-<span class="sym">$\tau$</span><span>Direct effect of a cluster's own treatment before outcomes spread between neighbors through $(I-\rho W)^{-1}$ (not a total effect), in standard deviations of the noise $\epsilon$; the quantity we estimate</span>
+<span class="sym">$\mathbf{Y}$</span><span>Outcome of each cluster (in the application, a college's mean education score)</span>
+<span class="sym">$\mathbf{Z}$</span><span>Treatment indicator, 1 if the cluster is treated and 0 if control</span>
+<span class="sym">$\mathbf{W}$</span><span>Neighbor matrix. Under queen contiguity two clusters are neighbors if they share an edge or a corner. Each row sums to 1, so $(\mathbf{W}\mathbf{Z})_i$ is the share of cluster $i$'s neighbors that are treated</span>
+<span class="sym">$\tau$</span><span>Direct effect of a cluster's own treatment before outcomes spread between neighbors through $(\mathbf{I}-\rho \mathbf{W})^{-1}$ (not a total effect), in standard deviations of the noise $\boldsymbol{\varepsilon}$; the quantity we estimate</span>
 <span class="sym">$\rho$</span><span>Spatial dependence, how much a cluster's outcome follows its neighbors' outcomes (0 to 0.5)</span>
-<span class="sym">$S(Z)$</span><span>Spillover, the gain from treated neighbors, in one of the two regimes above</span>
-<span class="sym">$(I-\rho W)^{-1}$</span><span>Spreads every cluster's outcome to its neighbors, neighbors' neighbors and so on ($I$ is the identity matrix)</span>
+<span class="sym">$\mathbf{S}(\mathbf{Z})$</span><span>Spillover, the gain from treated neighbors, in one of the two regimes above</span>
+<span class="sym">$(\mathbf{I}-\rho \mathbf{W})^{-1}$</span><span>Spreads every cluster's outcome to its neighbors, neighbors' neighbors and so on ($\mathbf{I}$ is the identity matrix)</span>
 <span class="sym">$\gamma$</span><span>Spillover magnitude, the gain when every neighbor is treated (0.5 to 0.8 on the grid; 50% or 80% of $\tau$ in the power analysis)</span>
 <span class="sym">$\beta$</span><span>How strongly incidence shifts the outcome. for the NC education outcome $\beta = 0$ (primary), with $\beta = 1$ only as a hypothetical sensitivity</span>
-<span class="sym">$X$</span><span>Cluster incidence on a 0 to 1 scale (simulated on the grid; in NC, the rank of the observed SUD rate scaled to 0 to 1, used only when $\beta = 1$)</span>
-<span class="sym">$\epsilon$</span><span>Independent standard normal noise in each cluster's outcome</span>
-<span class="sym">$\circ$</span><span>Elementwise product, so $(1-Z)\circ WZ$ is zero for treated clusters</span>
+<span class="sym">$\mathbf{X}$</span><span>Cluster incidence on a 0 to 1 scale (simulated on the grid; in NC, the rank of the observed SUD rate scaled to 0 to 1, used only when $\beta = 1$)</span>
+<span class="sym">$\boldsymbol{\varepsilon}$</span><span>Independent standard normal noise in each cluster's outcome</span>
+<span class="sym">$\circ$</span><span>Elementwise product, so $(\mathbf{1}-\mathbf{Z})\circ \mathbf{W}\mathbf{Z}$ is zero for treated clusters</span>
 </div>
 
 ::: {.notes}
@@ -931,7 +931,7 @@ Use when asked whether the way incidence varies changes the conclusions. It move
 <img src="figures/fig_vs_srs_by_regime_rook.png" class="fig-full" style="max-height: 640px;" alt="Grid design comparison with SRS under rook contiguity">
 :::
 ::: {.column .smallcol width="42%"}
-- Rook neighbors share an edge only. Under rook, Checkerboard gives $WZ = 1 - Z$, so exposure cannot be separated from treatment, $\tau$ is **not identified**, and the estimate centers on $\tau - \gamma$ (coverage 0.16)
+- Rook neighbors share an edge only. Under rook, Checkerboard gives $\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$, so exposure cannot be separated from treatment, $\tau$ is **not identified**, and the estimate centers on $\tau - \gamma$ (coverage 0.16)
 - Under queen, Checkerboard is identified but imprecise, since interior clusters all have half their neighbors treated
 - Other designs keep the regime-specific pattern, with differences. Under controls only the saturation advantage is smaller (23–24% lower MSE than SRS, against 37% under queen), and Isolation Buffer loses its advantage (5.8% higher than SRS). Pooled MSE, Incidence-Guided Saturation 0.072 and Balanced Quartiles 0.084 lead
 :::
