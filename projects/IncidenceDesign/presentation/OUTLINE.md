@@ -300,8 +300,8 @@ figure was redrawn at slide size (`deck_allocation_distribution.png`).
 
 ### B4. Grid benchmark with absolute error and coverage
 - Figure: none
-- Slide text: Design Both arms Controls only MSE Coverage Ratio to SRS (95% CI) MSE Coverage Ratio to SRS (95% CI) Checkerboard 0.0624 0.948 1.47 (1.44, 1.51) 2.1114 0.951 9.84 (9.65, 10.03) High Incidence Focus 0.1617 0.950 3.82 (3.71, 3.92) 0.3292 0.945 1.53 (1.45, 1.62) Isolation Buffer 0.1608 0.948 3.80 (3.72, 3.87) 0.1595 0.950 0.74 (0.72, 0.77) 2×2 Blocking 0.0623 0.947 1.47 (1.44, 1.50) 0.5761 0.950 2.68 (2.62, 2.74) …
-- Notes: Use when asked for the absolute numbers behind the grid results slide, or whether differences exceed simulation error. Source: CTJ Table 2 (results/srs_benchmark/manuscript_regime_means.csv and manuscript_paired_ratios.csv). Pooled over regimes, Incidence-Guided Saturation 0.0907 vs SRS 0.1285.
+- Slide text: Design Both arms Controls only MSE Coverage Ratio to SRS (95% CI) MSE Coverage Ratio to SRS (95% CI) Checkerboard 0.062 0.948 1.47 (1.44, 1.51) 2.111 0.951 9.84 (9.65, 10.03) High Incidence Focus 0.162 0.950 3.82 (3.71, 3.92) 0.329 0.945 1.53 (1.45, 1.62) Isolation Buffer 0.161 0.948 3.80 (3.72, 3.87) 0.159 0.950 0.74 (0.72, 0.77) 2×2 Blocking 0.062 0.947 1.47 (1.44, 1.50) 0.576 0.950 2.68 (2.62, 2.74) …
+- Notes: Use when asked for the absolute numbers behind the grid results slide, or whether differences exceed simulation error. Source: CTJ Table 2 (results/srs_benchmark/manuscript_regime_means.csv and manuscript_paired_ratios.csv). Pooled over regimes, Incidence-Guided Saturation 0.091 vs SRS 0.128.
 - Carry-over: technical
 
 ### B5. The grid ordering holds in every incidence configuration

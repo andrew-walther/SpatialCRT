@@ -46,13 +46,13 @@ Simple Random Sampling\CTJCat{Unrestricted reference} & \CTJThumb{9} & Treat a c
 \cmidrule(lr){2-4}\cmidrule(lr){5-7}
 Design & MSE & Coverage & Ratio to SRS (95\% CI) & MSE & Coverage & Ratio to SRS (95\% CI) \\
 \midrule
-Checkerboard & 0.0624 & 0.948 & 1.47 (1.44, 1.51) & 2.1114 & 0.951 & 9.84 (9.65, 10.03) \\
-High Incidence Focus & 0.1617 & 0.950 & 3.82 (3.71, 3.92) & 0.3292 & 0.945 & 1.53 (1.45, 1.62) \\
-Isolation Buffer & 0.1608 & 0.948 & 3.80 (3.72, 3.87) & 0.1595 & 0.950 & 0.74 (0.72, 0.77) \\
-$2\times2$ Blocking & 0.0623 & 0.947 & 1.47 (1.44, 1.50) & 0.5761 & 0.950 & 2.68 (2.62, 2.74) \\
-Balanced Quartiles & 0.0421 & 0.949 & 0.99 (0.97, 1.02) & 0.2195 & 0.942 & 1.02 (1.00, 1.05) \\
-Incidence-Guided Saturation & 0.0459 & 0.949 & 1.08 (1.06, 1.11) & 0.1355 & 0.945 & 0.63 (0.61, 0.65) \\
-Simple Random Sampling & 0.0424 & 0.950 & N/A & 0.2146 & 0.946 & N/A \\
+Checkerboard & 0.062 & 0.948 & 1.47 (1.44, 1.51) & 2.111 & 0.951 & 9.84 (9.65, 10.03) \\
+High Incidence Focus & 0.162 & 0.950 & 3.82 (3.71, 3.92) & 0.329 & 0.945 & 1.53 (1.45, 1.62) \\
+Isolation Buffer & 0.161 & 0.948 & 3.80 (3.72, 3.87) & 0.159 & 0.950 & 0.74 (0.72, 0.77) \\
+$2\times2$ Blocking & 0.062 & 0.947 & 1.47 (1.44, 1.50) & 0.576 & 0.950 & 2.68 (2.62, 2.74) \\
+Balanced Quartiles & 0.042 & 0.949 & 0.99 (0.97, 1.02) & 0.219 & 0.942 & 1.02 (1.00, 1.05) \\
+Incidence-Guided Saturation & 0.046 & 0.949 & 1.08 (1.06, 1.11) & 0.135 & 0.945 & 0.63 (0.61, 0.65) \\
+Simple Random Sampling & 0.042 & 0.950 & N/A & 0.215 & 0.946 & N/A \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -86,6 +86,6 @@ Simple Random Sampling & 0.0424 & 0.950 & N/A & 0.2146 & 0.946 & N/A \\
 \begin{figure*}[tp]
 \centering
 \includegraphics[width=\linewidth]{../figures/compact/nc_annual_accuracy_six.pdf}
-\caption{Application mean MSE by year, divided by the mean MSE of simple random sampling (SRS) in the same year and spillover regime, for the six designs with queen contiguity. Each cell averages six $\rho$ and $\gamma$ settings. Blue indicates lower error than SRS and orange higher error, on a logarithmic color scale. SRS mean MSE is 0.07638 under both arms and 0.30761 under control-only spillover. In the application, $2\times2$ Blocking denotes its spatial-blocking adaptation. Absolute MSE, bias and coverage are in the SI.}\label{fig:nc-mse}
+\caption{Application mean MSE by year, divided by the mean MSE of simple random sampling (SRS) in the same year and spillover regime, for the six designs with queen contiguity. Each cell averages six $\rho$ and $\gamma$ settings. Blue indicates lower error than SRS and orange higher error, on a logarithmic color scale. SRS mean MSE is 0.076 under both arms and 0.308 under control-only spillover. In the application, $2\times2$ Blocking denotes its spatial-blocking adaptation. Absolute MSE, bias and coverage are in the SI.}\label{fig:nc-mse}
 \end{figure*}
 }

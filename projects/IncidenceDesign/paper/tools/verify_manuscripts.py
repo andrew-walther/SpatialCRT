@@ -125,11 +125,11 @@ def verify():
         cells = []
         for regime in ('both', 'control_only'):
             row = grid[(f'Design {design_id}', regime)]
-            cells.extend([f"{float(row['MSE']):.4f}", f"{float(row['Coverage']):.3f}"])
+            cells.extend([f"{float(row['MSE']):.3f}", f"{float(row['Coverage']):.3f}"])
         expected_grid.append(cells)
     expected_year = []
     for year in ('2018', '2019', '2020', '2021'):
-        cells = [f"{float(yearly[(year, regime, design)]['Mean_MSE']):.5f}"
+        cells = [f"{float(yearly[(year, regime, design)]['Mean_MSE']):.3f}"
                  for regime, design in [('both', 9), ('both', 8),
                                         ('control_only', 9), ('control_only', 3),
                                         ('control_only', 8)]]
@@ -148,7 +148,7 @@ def verify():
         cells = []
         for regime in ('both', 'control_only'):
             row = grid[(f'Design {design_id}', regime)]
-            cells.extend([f"{float(row['MSE']):.4f}", f"{float(row['Coverage']):.3f}"])
+            cells.extend([f"{float(row['MSE']):.3f}", f"{float(row['Coverage']):.3f}"])
             if design_id != 9:
                 q = paired[(design_id, regime)]
                 cells.extend(f"{float(q[c]):.2f}" for c in ('Ratio', 'Ratio_Lo', 'Ratio_Hi'))
@@ -189,7 +189,7 @@ def verify():
                 cells = [year]
                 for regime in ('both', 'control_only'):
                     row = yearly[(year, regime, name_index)]
-                    cells.extend([f"{float(row['Mean_MSE']):.5f}", f"{float(row['Bias']):.4f}",
+                    cells.extend([f"{float(row['Mean_MSE']):.3f}", f"{float(row['Bias']):.3f}",
                                   f"{float(tdf_cov[(year, regime, name_index)]):.3f}"])
                 expected.append((label, cells))
         for line in table(chapter, 'tab:nc-annual').splitlines():
@@ -206,7 +206,7 @@ def verify():
                 row = yearly[(year, regime, design)]
                 expected.append([f"{float(row[column])*scale:.{digits}f}"
                                  for column, digits, scale in
-                                 [('Mean_MSE', 5, 1), ('Bias', 4, 1), ('Coverage', 3, 1),
+                                 [('Mean_MSE', 3, 1), ('Bias', 3, 1), ('Coverage', 3, 1),
                                   ('Mean_Treated', 2, 1), ('Mean_Population_Share', 1, 100)]])
         actual = numerical_rows(table(chapter, 'tab:nc-full-' + year))
         require_equal([n for _, n in actual], expected, f'{year}: full annual performance')
@@ -288,7 +288,9 @@ def verify():
             cites.extend(key.strip() for key in block.split(','))
         if path == CHAPTER:
             prose = source.split('---', 2)[-1]
-            cites.extend(re.findall(r'(?<![\w])@([\w:.-]+)', prose))
+            # Quarto cross-references (@sec-, @fig-, @tbl-, @eq-, @lst-) are not citations.
+            cites.extend(k for k in re.findall(r'(?<![\w])@([\w:.-]+)', prose)
+                         if not k.startswith(('sec-', 'fig-', 'tbl-', 'eq-', 'lst-')))
         require_equal(set(cites) - keys, set(), f'{path.name}: unknown bibliography keys')
     require_equal(len(re.findall(r'\\begin\{(?:table|figure)\*?\}', main)), 6, 'CTJ exhibit cap')
     for source in (main, supplement):

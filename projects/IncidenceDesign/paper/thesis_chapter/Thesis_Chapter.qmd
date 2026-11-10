@@ -170,31 +170,31 @@ At the primary scenario, $\tau = 1$, under queen contiguity and pooled over the 
 \small
 \centering
 
-\caption[Performance of the six designs at the primary scenario]{Performance of the six designs at the primary scenario, $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Monte Carlo standard errors of MSE, in parentheses, are computed from the 50 configuration-by-surface means (Section~\ref{sec-methods}). Those of bias, coverage, and power are all below 0.007. Average rank is the mean of each design's within-block MSE rank among the six designs and SRS over the 160 blocks (1 = lowest MSE). SRS's average rank is 2.600 under queen contiguity and 2.450 under rook contiguity. Clusters treated is the mean number of clusters treated per assignment. Under rook contiguity, $\tau$ is not identified for Checkerboard ($WZ = 1 - Z$). Its estimates are kept and flagged, and its coefficient on $Z$ estimates $\tau - \gamma$.}
+\caption[Performance of the six designs at the primary scenario]{Performance of the six designs at the primary scenario, $\tau = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\gamma$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Monte Carlo standard errors of MSE, multiplied by 100 in the third column, are computed from the 50 configuration-by-surface means (Section~\ref{sec-methods}). Those of bias, coverage, and power are all below 0.007. Average rank is the mean of each design's within-block MSE rank among the six designs and SRS over the 160 blocks (1 = lowest MSE). SRS's average rank is 2.600 under queen contiguity and 2.450 under rook contiguity. Clusters treated is the mean number of clusters treated per assignment. Under rook contiguity, $\tau$ is not identified for Checkerboard ($WZ = 1 - Z$). Its estimates are kept and flagged, and its coefficient on $Z$ estimates $\tau - \gamma$.}
 \label{tab:performance}
 
-\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}cccccc}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}ccccccc}
 
 \toprule
-Design & MSE (SE) & Bias & Coverage & Power & \shortstack{Average\\rank} & \shortstack{Clusters\\treated} \\
+Design & MSE & \shortstack{SE of MSE\\($\times 100$)} & Bias & Coverage & Power & \shortstack{Average\\rank} & \shortstack{Clusters\\treated} \\
 
 \midrule
-\multicolumn{7}{l}{\textit{Queen contiguity (primary)}} \\
-Incidence-Guided Saturation & 0.091 (0.0008) & 0.032 & 0.947 & 0.921 & 1.775 & 50 \\
-Balanced Quartiles & 0.131 (0.0011) & 0.017 & 0.946 & 0.814 & 2.688 & 50 \\
-Isolation Buffer & 0.160 (0.0011) & 0.003 & 0.949 & 0.706 & 4.194 & 21.4 \\
-High Incidence Focus & 0.245 (0.0047) & 0.031 & 0.948 & 0.582 & 5.763 & 50 \\
-2$\times$2 Blocking & 0.319 (0.0032) & 0.010 & 0.948 & 0.629 & 5.244 & 50 \\
-Checkerboard & 1.087 (0.0101) & 0.001 & 0.950 & 0.538 & 5.737 & 50 \\
+\multicolumn{8}{l}{\textit{Queen contiguity (primary)}} \\
+Incidence-Guided Saturation & 0.091 & 0.082 & 0.032 & 0.947 & 0.921 & 1.775 & 50 \\
+Balanced Quartiles & 0.131 & 0.115 & 0.017 & 0.946 & 0.814 & 2.688 & 50 \\
+Isolation Buffer & 0.160 & 0.112 & 0.003 & 0.949 & 0.706 & 4.194 & 21.4 \\
+High Incidence Focus & 0.245 & 0.466 & 0.031 & 0.948 & 0.582 & 5.763 & 50 \\
+2$\times$2 Blocking & 0.319 & 0.319 & 0.010 & 0.948 & 0.629 & 5.244 & 50 \\
+Checkerboard & 1.087 & 1.011 & 0.001 & 0.950 & 0.538 & 5.737 & 50 \\
 
 \midrule
-\multicolumn{7}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Incidence-Guided Saturation & 0.072 (0.0006) & 0.018 & 0.952 & 0.956 & 1.831 & 50 \\
-Balanced Quartiles & 0.084 (0.0006) & 0.008 & 0.948 & 0.907 & 2.225 & 50 \\
-Isolation Buffer & 0.133 (0.0009) & 0.003 & 0.950 & 0.784 & 4.206 & 38.2 \\
-High Incidence Focus & 0.206 (0.0030) & 0.018 & 0.948 & 0.617 & 5.969 & 50 \\
-2$\times$2 Blocking & 0.128 (0.0012) & 0.004 & 0.948 & 0.803 & 4.331 & 50 \\
-Checkerboard (flagged) & 0.480 (0.0015) & $-0.652$ & 0.162 & 0.390 & 6.987 & 50 \\
+\multicolumn{8}{l}{\textit{Rook contiguity (sensitivity)}} \\
+Incidence-Guided Saturation & 0.072 & 0.056 & 0.018 & 0.952 & 0.956 & 1.831 & 50 \\
+Balanced Quartiles & 0.084 & 0.064 & 0.008 & 0.948 & 0.907 & 2.225 & 50 \\
+Isolation Buffer & 0.133 & 0.091 & 0.003 & 0.950 & 0.784 & 4.206 & 38.2 \\
+High Incidence Focus & 0.206 & 0.301 & 0.018 & 0.948 & 0.617 & 5.969 & 50 \\
+2$\times$2 Blocking & 0.128 & 0.124 & 0.004 & 0.948 & 0.803 & 4.331 & 50 \\
+Checkerboard (flagged) & 0.480 & 0.145 & $-0.652$ & 0.162 & 0.390 & 6.987 & 50 \\
 
 \bottomrule
 
@@ -303,11 +303,11 @@ Checkerboard (flagged under rook) & 0.062 & 2.111 & 0.477 & 0.483 \\
 \end{table}
 ```
 
-The increase under the control-only regime was variance, not bias. The oracle model includes the true regime-specific spillover covariate, so it has no omitted-variable bias. At $\tau = 1$, in every combination of design and regime under queen contiguity, the absolute bias was at most 0.048 and squared bias, averaged over scenarios, was at most 2.2\% of MSE. Checkerboard showed the mechanism most clearly: under the control-only regime its spillover covariate is a linear combination of the intercept and $Z$ at every interior cluster, so only the boundary clusters separate the spillover effect from the treatment effect (@sec-methods). Checkerboard's MSE rose from 0.062 under the both-arms regime to 2.111 under the control-only regime, while its bias stayed near zero (0.004) and its coverage stayed at 0.951, because its intervals widened with its variance. Its pooled MSE of 1.087 was almost entirely variance, and squared bias, averaged over scenarios, was 0.0045, less than 0.5\% of MSE. Figure \ref{fig:biasvar} in Appendix \ref{app:rook-figures} shows the decomposition for the Poisson configuration with $\rho_X = 0.20$. $2\times2$ Blocking showed the same pattern on a smaller scale, with MSE rising from 0.062 to 0.576 and a bias of 0.016 under the control-only regime.
+The increase under the control-only regime was variance, not bias. The oracle model includes the true regime-specific spillover covariate, so it has no omitted-variable bias. At $\tau = 1$, in every combination of design and regime under queen contiguity, the absolute bias was at most 0.048 and squared bias, averaged over scenarios, was at most 2.2\% of MSE. Checkerboard showed the mechanism most clearly: under the control-only regime its spillover covariate is a linear combination of the intercept and $Z$ at every interior cluster, so only the boundary clusters separate the spillover effect from the treatment effect (@sec-methods). Checkerboard's MSE rose from 0.062 under the both-arms regime to 2.111 under the control-only regime, while its bias stayed near zero (0.004) and its coverage stayed at 0.951, because its intervals widened with its variance. Its pooled MSE of 1.087 was almost entirely variance, and squared bias, averaged over scenarios, was 0.004, less than 0.5\% of MSE. Figure \ref{fig:biasvar} in Appendix \ref{app:rook-figures} shows the decomposition for the Poisson configuration with $\rho_X = 0.20$. $2\times2$ Blocking showed the same pattern on a smaller scale, with MSE rising from 0.062 to 0.576 and a bias of 0.016 under the control-only regime.
 
 ## Comparison with Simple Random Sampling {#sec-vs-srs}
 
-At $\tau=1$ under queen contiguity, pooled over the five incidence configurations and all spatial and spillover settings, Incidence-Guided Saturation had mean MSE 0.0907 against 0.1285 for SRS, and Saturation Quadrants had 0.0900. Table \ref{tab:grid-srs} separates the regimes and includes all eight strategies. Figure \ref{fig:grid-srs} shows the six detailed designs and SRS with the five incidence configurations kept separate. Within each regime the configurations lie close together for every design, whereas the regime changes how each design compares with SRS. Incidence-Guided Saturation's MSE was 0.631 times that of SRS under control-only spillover and 1.083 times under both arms. SRS, Balanced Quartiles and Balanced Halves had similar both-arms accuracy. Small mean differences do not establish equivalence. Pooling over the regimes also hides how the design guidance differs between them.
+At $\tau=1$ under queen contiguity, pooled over the five incidence configurations and all spatial and spillover settings, Incidence-Guided Saturation had mean MSE 0.091 against 0.128 for SRS, and Saturation Quadrants had 0.090. Table \ref{tab:grid-srs} separates the regimes and includes all eight strategies. Figure \ref{fig:grid-srs} shows the six detailed designs and SRS with the five incidence configurations kept separate. Within each regime the configurations lie close together for every design, whereas the regime changes how each design compares with SRS. Incidence-Guided Saturation's MSE was 0.631 times that of SRS under control-only spillover and 1.083 times under both arms. SRS, Balanced Quartiles and Balanced Halves had similar both-arms accuracy. Small mean differences do not establish equivalence. Pooling over the regimes also hides how the design guidance differs between them.
 
 Figure \ref{fig:vs-srs} tests each design against SRS within each regime, over the 50 independent configuration-by-surface units. Under control-only spillover, Incidence-Guided Saturation had 36.9\% lower MSE than SRS (95\% interval 34.5\% to 39.2\% lower), Saturation Quadrants 36.7\% lower and Isolation Buffer 25.7\% lower, each in all 50 units (Holm-adjusted $p = 6.2\times10^{-9}$). Under both-arms spillover, Incidence-Guided Saturation had 8.3\% higher MSE than SRS (5.6\% to 11.0\% higher; $p = 6.1\times10^{-6}$) and Saturation Quadrants 4.3\% higher ($p = 0.017$). Balanced Quartiles and Balanced Halves did not differ significantly from SRS under either regime. The remaining designs had significantly higher MSE than SRS under both-arms spillover, as did High Incidence Focus, $2\times2$ Blocking and Checkerboard under control-only spillover.
 
@@ -349,15 +349,15 @@ Under rook contiguity the saturation designs had 23\% to 24\% lower control-only
 Design & MSE & Coverage & MSE & Coverage \\
 
 \midrule
-Checkerboard & 0.0624 & 0.948 & 2.1114 & 0.951 \\
-High Incidence Focus & 0.1617 & 0.950 & 0.3292 & 0.945 \\
-Saturation Quadrants & 0.0442 & 0.952 & 0.1359 & 0.940 \\
-Isolation Buffer & 0.1608 & 0.948 & 0.1595 & 0.950 \\
-$2\times2$ Blocking & 0.0623 & 0.947 & 0.5761 & 0.950 \\
-Balanced Quartiles & 0.0421 & 0.949 & 0.2195 & 0.942 \\
-Balanced Halves & 0.0420 & 0.949 & 0.2179 & 0.943 \\
-Incidence-Guided Saturation & 0.0459 & 0.949 & 0.1355 & 0.945 \\
-Simple Random Sampling & 0.0424 & 0.950 & 0.2146 & 0.946 \\
+Checkerboard & 0.062 & 0.948 & 2.111 & 0.951 \\
+High Incidence Focus & 0.162 & 0.950 & 0.329 & 0.945 \\
+Saturation Quadrants & 0.044 & 0.952 & 0.136 & 0.940 \\
+Isolation Buffer & 0.161 & 0.948 & 0.159 & 0.950 \\
+$2\times2$ Blocking & 0.062 & 0.947 & 0.576 & 0.950 \\
+Balanced Quartiles & 0.042 & 0.949 & 0.219 & 0.942 \\
+Balanced Halves & 0.042 & 0.949 & 0.218 & 0.943 \\
+Incidence-Guided Saturation & 0.046 & 0.949 & 0.135 & 0.945 \\
+Simple Random Sampling & 0.042 & 0.950 & 0.215 & 0.946 \\
 
 \bottomrule
 
@@ -382,7 +382,7 @@ Under queen contiguity, the order by average within-block rank and the order by 
 \end{figure}
 ```
 
-Within that stable order, the gap in MSE between Incidence-Guided Saturation and Balanced Quartiles under queen contiguity stayed between 0.037 and 0.041, and Incidence-Guided Saturation had the lower MSE of the two in 101 to 103 of the 160 blocks at every value of $\tau$. Isolation Buffer closed the gap instead: its MSE stayed at 0.160 at every value of $\tau$, while that of Incidence-Guided Saturation rose from 0.088 to 0.115 and that of Balanced Quartiles from 0.130 to 0.152. Isolation Buffer's gain came under the control-only regime, where the mean MSE of Incidence-Guided Saturation rose from 0.131 at $\tau = 0.8$ to 0.182 at $\tau = 3$, while that of Isolation Buffer stayed between 0.159 and 0.160. At $\tau = 2$ the two were level (0.1596 for Isolation Buffer against 0.1604), and at $\tau = 3$ Isolation Buffer had the lower control-only MSE (0.160 against 0.182). At $\tau = 2$ and $\tau = 3$, Isolation Buffer also had the lower worst case across all 160 blocks (0.207 against 0.210, and 0.208 against 0.238). Incidence-Guided Saturation remained second under the control-only regime at those two values, second to Balanced Quartiles under the both-arms regime at every value of $\tau$, and lowest in pooled MSE at every value of $\tau$. The rise in its MSE was mostly variance: its mean bias grew from 0.029 at $\tau = 0.8$ to 0.047 at $\tau = 3$, but squared bias stayed at or below 3.0\% of its MSE. Appendix \ref{app:technical-notes} traces both rises to a term of the estimation error that grows with $\tau$ when treated clusters have treated neighbors, and gives the block-level detail.
+Within that stable order, the gap in MSE between Incidence-Guided Saturation and Balanced Quartiles under queen contiguity stayed between 0.037 and 0.041, and Incidence-Guided Saturation had the lower MSE of the two in 101 to 103 of the 160 blocks at every value of $\tau$. Isolation Buffer closed the gap instead: its MSE stayed at 0.160 at every value of $\tau$, while that of Incidence-Guided Saturation rose from 0.088 to 0.115 and that of Balanced Quartiles from 0.130 to 0.152. Isolation Buffer's gain came under the control-only regime, where the mean MSE of Incidence-Guided Saturation rose from 0.131 at $\tau = 0.8$ to 0.182 at $\tau = 3$, while that of Isolation Buffer stayed between 0.159 and 0.160. At $\tau = 2$ the two were level (0.160 for Isolation Buffer against 0.160), and at $\tau = 3$ Isolation Buffer had the lower control-only MSE (0.160 against 0.182). At $\tau = 2$ and $\tau = 3$, Isolation Buffer also had the lower worst case across all 160 blocks (0.207 against 0.210, and 0.208 against 0.238). Incidence-Guided Saturation remained second under the control-only regime at those two values, second to Balanced Quartiles under the both-arms regime at every value of $\tau$, and lowest in pooled MSE at every value of $\tau$. The rise in its MSE was mostly variance: its mean bias grew from 0.029 at $\tau = 0.8$ to 0.047 at $\tau = 3$, but squared bias stayed at or below 3.0\% of its MSE. Appendix \ref{app:technical-notes} traces both rises to a term of the estimation error that grows with $\tau$ when treated clusters have treated neighbors, and gives the block-level detail.
 
 Under rook contiguity, Incidence-Guided Saturation kept the lowest control-only MSE at every value of $\tau$, although its margin over Isolation Buffer narrowed, from 0.095 against 0.134 at $\tau = 0.8$ to 0.131 against 0.136 at $\tau = 3$.
 
@@ -423,9 +423,9 @@ Checkerboard & 0.051 & 0.063 & 0.899 & 2.093 & 2.843 \\
 
 ## Allocation-Specific Risk
 
-Under control-only spillover, the worst 10\% of SRS allocations on the grid had mean conditional MSE 60\% above that of the average SRS allocation (0.3462 against 0.2165). The saturation designs' worst-decile MSE was 0.54 to 0.55 times SRS's on the grid and 0.64 to 0.68 times in NC. Under both-arms spillover, their worst-decile MSE was 1.06 to 1.07 times SRS's on the grid and 0.93 to 0.94 times in NC (Table \ref{tab:downside}), so the small mean disadvantage there comes with no worse downside in NC.
+Under control-only spillover, the worst 10\% of SRS allocations on the grid had mean conditional MSE 60\% above that of the average SRS allocation (0.346 against 0.217). The saturation designs' worst-decile MSE was 0.54 to 0.55 times SRS's on the grid and 0.64 to 0.68 times in NC. Under both-arms spillover, their worst-decile MSE was 1.06 to 1.07 times SRS's on the grid and 0.93 to 0.94 times in NC (Table \ref{tab:downside}), so the small mean disadvantage there comes with no worse downside in NC.
 
-Averaged over the 200 units per regime (fixed surfaces crossed with the extreme combinations of $\rho$ and $\gamma$), Incidence-Guided Saturation's control-only mean MSE was 0.1402 against 0.2165 for SRS. Its estimated 90th percentile of allocation-specific MSE was 0.1733 against 0.2962, and its estimated worst-decile mean was 0.1912 against 0.3462, lower than SRS in all 200 units on both measures. Under both arms, the corresponding mean MSE was 0.0457 against 0.0427 and the worst-decile mean 0.0583 against 0.0544. Saturation Quadrants also performed favorably under control-only spillover. Table \ref{tab:downside} in @sec-application compares every design with SRS on both criteria. These results come from the extreme parameter settings only and give qualified support to saturation on downside risk. The precision check preserved the control-only direction, but outcome noise contributed substantially to the estimated variation across allocations, especially under both arms. Quantiles and worst-decile membership estimated from a finite number of outcomes remain uncertain. We therefore use the completed NC application below as the next setting-specific assessment rather than extrapolate exact tail protection from these settings.
+Averaged over the 200 units per regime (fixed surfaces crossed with the extreme combinations of $\rho$ and $\gamma$), Incidence-Guided Saturation's control-only mean MSE was 0.140 against 0.217 for SRS. Its estimated 90th percentile of allocation-specific MSE was 0.173 against 0.296, and its estimated worst-decile mean was 0.191 against 0.346, lower than SRS in all 200 units on both measures. Under both arms, the corresponding mean MSE was 0.046 against 0.043 and the worst-decile mean 0.058 against 0.054. Saturation Quadrants also performed favorably under control-only spillover. Table \ref{tab:downside} in @sec-application compares every design with SRS on both criteria. These results come from the extreme parameter settings only and give qualified support to saturation on downside risk. The precision check preserved the control-only direction, but outcome noise contributed substantially to the estimated variation across allocations, especially under both arms. Quantiles and worst-decile membership estimated from a finite number of outcomes remain uncertain. We therefore use the completed NC application below as the next setting-specific assessment rather than extrapolate exact tail protection from these settings.
 
 ## Rook Contiguity {#sec-rook}
 
@@ -534,11 +534,11 @@ The trial outcome is a score measured on each trained professional and averaged 
 
 ## Accuracy, Coverage and Reach
 
-The main run generated 7,598,000 independent outcome fits. Every setting is complete and meets its prespecified precision targets for mean MSE and coverage. The largest relative Monte Carlo standard error of mean MSE is 0.04871 and the largest Monte Carlo standard error of coverage is 0.00892. No setting produced warnings, aliased columns, estimates of $\rho$ at the boundary of its parameter space or estimation failures. The tail refinement adds 2,280,000 independent outcomes. Counting the outcomes reused from the main run only once gives 9,878,000 distinct outcomes across the two stages.
+The main run generated 7,598,000 independent outcome fits. Every setting is complete and meets its prespecified precision targets for mean MSE and coverage. The largest relative Monte Carlo standard error of mean MSE is 0.049 and the largest Monte Carlo standard error of coverage is 0.00892. No setting produced warnings, aliased columns, estimates of $\rho$ at the boundary of its parameter space or estimation failures. The tail refinement adds 2,280,000 independent outcomes. Counting the outcomes reused from the main run only once gives 9,878,000 distinct outcomes across the two stages.
 
-Figure \ref{fig:nc-mse} compares the eight designs with SRS by year and regime. Under control-only spillover, Saturation Quadrants has descriptive mean MSE 0.22329 against SRS 0.30761, a 27.4\% reduction. Incidence-Guided Saturation reduces mean MSE by 21.1--29.9\% across the four observed years (Table \ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best: as on the grid, the two performed similarly. Under control-only spillover, the performance of High Incidence Focus depends on the year, so we cannot recommend it for every year.
+Figure \ref{fig:nc-mse} compares the eight designs with SRS by year and regime. Under control-only spillover, Saturation Quadrants has descriptive mean MSE 0.223 against SRS 0.308, a 27.4\% reduction. Incidence-Guided Saturation reduces mean MSE by 21.1--29.9\% across the four observed years (Table \ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best: as on the grid, the two performed similarly. Under control-only spillover, the performance of High Incidence Focus depends on the year, so we cannot recommend it for every year.
 
-Under both-arms spillover, SRS mean MSE is 0.07638, Saturation Quadrants 0.07518, and Incidence-Guided Saturation ranges from 0.07428 to 0.07682 across years. SRS remains competitive with balancing, blocking and saturation. Small point differences do not establish equivalence. High Incidence Focus has low both-arms MSE in the primary model, but its allocation is deterministic for these fixed rates. Its low MSE is model-based accuracy conditional on that allocation, not evidence of randomization-based causal validity.
+Under both-arms spillover, SRS mean MSE is 0.076, Saturation Quadrants 0.075, and Incidence-Guided Saturation ranges from 0.074 to 0.077 across years. SRS remains competitive with balancing, blocking and saturation. Small point differences do not establish equivalence. High Incidence Focus has low both-arms MSE in the primary model, but its allocation is deterministic for these fixed rates. Its low MSE is model-based accuracy conditional on that allocation, not evidence of randomization-based causal validity.
 
 Mean coverage of the 95\% intervals across the four years was between 94.1\% and 94.9\% for every design and regime, and between 94.1\% and 95.1\% in single years. The Wald interval covered only 92.6\% to 93.6\% (Table \ref{tab:interval-comparison}). Meeting the Monte Carlo precision targets did not repair that finite-sample undercoverage, but the corrected $t$ interval described in @sec-nc-outcome did (Appendix \ref{app:nc-ext}). Appendix \ref{app:nc} gives bias and coverage for every year, design and regime. Checkerboard's treatment effect is identified on this irregular graph, but weak treatment--spillover separation makes its estimates imprecise. On the rectangular grid under rook contiguity, by contrast, $\tau$ is not identified for Checkerboard.
 
@@ -550,7 +550,7 @@ Incidence-Guided Saturation sends more treatment to high-incidence regions when 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\linewidth]{figures/compact/nc_annual_accuracy.pdf}
-\caption[Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE]{Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE, for the eight other designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS and orange higher error. Colors use a logarithmic ratio scale, and cells print the ratios. SRS mean MSE is 0.07638 under both arms and 0.30761 control-only. Years that share the same simulations are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in Appendix \ref{app:nc}.}
+\caption[Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE]{Completed primary application: yearly mean MSE divided by year- and regime-matched SRS MSE, for the eight other designs with queen weights and education outcomes. Each cell averages six $\rho/\gamma$ settings equally before taking the ratio. Blue indicates lower error than SRS and orange higher error. Colors use a logarithmic ratio scale, and cells print the ratios. SRS mean MSE is 0.076 under both arms and 0.308 control-only. Years that share the same simulations are not independent replications. Absolute MSE, bias, coverage, budgets and setting-specific comparisons are in Appendix \ref{app:nc}.}
 \label{fig:nc-mse}
 \end{figure}
 ```
@@ -569,10 +569,10 @@ Incidence-Guided Saturation sends more treatment to high-incidence regions when 
 & \multicolumn{2}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
 Year & SRS & \shortstack{Incidence-Guided\\Saturation} & SRS & \shortstack{Saturation\\Quadrants} & \shortstack{Incidence-Guided\\Saturation} \\
 \midrule
-2018 & 0.07638 & 0.07428 & 0.30761 & 0.22329 & 0.24285 \\
-2019 & 0.07638 & 0.07628 & 0.30761 & 0.22329 & 0.21565 \\
-2020 & 0.07638 & 0.07682 & 0.30761 & 0.22329 & 0.22029 \\
-2021 & 0.07638 & 0.07450 & 0.30761 & 0.22329 & 0.23732 \\
+2018 & 0.076 & 0.074 & 0.308 & 0.223 & 0.243 \\
+2019 & 0.076 & 0.076 & 0.308 & 0.223 & 0.216 \\
+2020 & 0.076 & 0.077 & 0.308 & 0.223 & 0.220 \\
+2021 & 0.076 & 0.075 & 0.308 & 0.223 & 0.237 \\
 
 \bottomrule
 \end{tabular}
@@ -678,7 +678,7 @@ The application supports considering either saturation strategy when control-onl
 
 We compared six treatment assignment designs in the detailed grid ranking, plus two related variants and SRS, for a spatial cluster randomized trial on a grid of 100 clusters. The comparison covered three mechanisms of heterogeneous baseline incidence, two spillover regimes, and a range of values for spatial dependence, spillover magnitude, and the treatment effect. Some findings held across the incidence configurations and the values of $\rho$, $\gamma$, and $\tau$ under queen contiguity. Others depended on the spillover regime, which a trial team may not know in advance.
 
-We judged each design on two criteria: its average MSE, and the spread of MSE across the allocations it can produce. A trial realizes one allocation, so a design with a low average MSE can still give a poor estimate if some of its allocations perform badly. Chapter 2 compared simple random and block stratified sampling on the same two criteria. For SRS under control-only spillover, the spread was large: on the grid, the worst 10\% of SRS allocations had mean conditional MSE 0.3462, against 0.2165 for SRS allocations overall.
+We judged each design on two criteria: its average MSE, and the spread of MSE across the allocations it can produce. A trial realizes one allocation, so a design with a low average MSE can still give a poor estimate if some of its allocations perform badly. Chapter 2 compared simple random and block stratified sampling on the same two criteria. For SRS under control-only spillover, the spread was large: on the grid, the worst 10\% of SRS allocations had mean conditional MSE 0.346, against 0.217 for SRS allocations overall.
 
 Under queen contiguity, Incidence-Guided Saturation had the lowest mean squared error (0.091) and Balanced Quartiles the second lowest (0.131), and the same two designs led under rook contiguity (0.072 and 0.084). Under queen contiguity, the order of the six designs was the same in each of the five incidence configurations and at every value of $\tau$, and neither the strength of spatial dependence in the outcome nor the spillover magnitude changed it. The mechanism that generated the incidence surface changed each design's MSE by under 10\%, except for High Incidence Focus. Coverage of the 95\% intervals was close to 0.95 for every design under both neighbor types, except Checkerboard under rook contiguity, so the designs differed in precision and coverage did not separate them.
 
@@ -766,7 +766,7 @@ Balanced Halves & Clusters are divided by incidence rank into two strata of 50; 
 \end{table}
 ```
 
-We compared each excluded design with its retained counterpart using the Nemenyi and Holm-adjusted Wilcoxon signed-rank tests described in @sec-simulation, applied here to all eight designs and SRS. Saturation Quadrants' mean squared error was 0.0900, against 0.0907 for Incidence-Guided Saturation, under queen contiguity (Nemenyi $p = 0.99$; Holm-adjusted Wilcoxon signed-rank $p = 0.62$), and 0.0708 against 0.0717 under rook contiguity (Nemenyi $p = 1.00$; Wilcoxon $p = 1.00$). Saturation Quadrants had the marginally lower mean under both neighbor types and the better average rank in this comparison (2.394 against 2.700 under queen contiguity and 2.587 against 2.650 under rook contiguity). Retaining Incidence-Guided Saturation as the representative of the saturation mechanism therefore does not rest on performance. Balanced Halves had a mean squared error of 0.1299, against 0.1308 for Balanced Quartiles, under queen contiguity (Nemenyi $p = 1.00$; Wilcoxon $p = 1.00$), and 0.0842 against 0.0837 under rook contiguity (Nemenyi $p = 1.00$; Wilcoxon $p = 1.00$). Balanced Halves had the marginally lower mean and the better average rank under queen contiguity (3.831 against 3.906), and Balanced Quartiles had both under rook contiguity (3.369 against 3.569). The two designs differ only in how finely they stratify on incidence, and we retain the finer, four-stratum version. Under both neighbor types, each excluded design is adjacent to its retained counterpart in mean MSE (Table \ref{tab:eight-design}). The MSEs and coverages of the six retained designs are those of Table \ref{tab:performance}, given here to four and three decimal places.
+We compared each excluded design with its retained counterpart using the Nemenyi and Holm-adjusted Wilcoxon signed-rank tests described in @sec-simulation, applied here to all eight designs and SRS. Saturation Quadrants' mean squared error was 0.090, against 0.091 for Incidence-Guided Saturation, under queen contiguity (Nemenyi $p = 0.99$; Holm-adjusted Wilcoxon signed-rank $p = 0.62$), and 0.071 against 0.072 under rook contiguity (Nemenyi $p = 1.00$; Wilcoxon $p = 1.00$). Saturation Quadrants had the marginally lower mean under both neighbor types and the better average rank in this comparison (2.394 against 2.700 under queen contiguity and 2.587 against 2.650 under rook contiguity). Retaining Incidence-Guided Saturation as the representative of the saturation mechanism therefore does not rest on performance. Balanced Halves had a mean squared error of 0.130, against 0.131 for Balanced Quartiles, under queen contiguity (Nemenyi $p = 1.00$; Wilcoxon $p = 1.00$), and 0.084 against 0.084 under rook contiguity (Nemenyi $p = 1.00$; Wilcoxon $p = 1.00$). Balanced Halves had the marginally lower mean and the better average rank under queen contiguity (3.831 against 3.906), and Balanced Quartiles had both under rook contiguity (3.369 against 3.569). The two designs differ only in how finely they stratify on incidence, and we retain the finer, four-stratum version. Under both neighbor types, each excluded design is adjacent to its retained counterpart in mean MSE (Table \ref{tab:eight-design}). The MSEs and coverages of the six retained designs are those of Table \ref{tab:performance}, given here to four and three decimal places.
 
 ```{=latex}
 \begin{table}[!htb]
@@ -784,27 +784,27 @@ Design & Retained & MSE & Coverage & Average rank \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Queen contiguity (primary)}} \\
-Saturation Quadrants & No & 0.0900 & 0.946 & 2.394 \\
-Incidence-Guided Saturation & Yes & 0.0907 & 0.947 & 2.700 \\
-Simple Random Sampling & Benchmark & 0.1285 & 0.948 & 3.788 \\
-Balanced Halves & No & 0.1299 & 0.946 & 3.831 \\
-Balanced Quartiles & Yes & 0.1308 & 0.946 & 3.906 \\
-Isolation Buffer & Yes & 0.1602 & 0.949 & 5.638 \\
-High Incidence Focus & Yes & 0.2455 & 0.948 & 7.763 \\
-2$\times$2 Blocking & Yes & 0.3192 & 0.948 & 7.244 \\
-Checkerboard & Yes & 1.0869 & 0.950 & 7.737 \\
+Saturation Quadrants & No & 0.090 & 0.946 & 2.394 \\
+Incidence-Guided Saturation & Yes & 0.091 & 0.947 & 2.700 \\
+Simple Random Sampling & Benchmark & 0.128 & 0.948 & 3.788 \\
+Balanced Halves & No & 0.130 & 0.946 & 3.831 \\
+Balanced Quartiles & Yes & 0.131 & 0.946 & 3.906 \\
+Isolation Buffer & Yes & 0.160 & 0.949 & 5.638 \\
+High Incidence Focus & Yes & 0.245 & 0.948 & 7.763 \\
+2$\times$2 Blocking & Yes & 0.319 & 0.948 & 7.244 \\
+Checkerboard & Yes & 1.087 & 0.950 & 7.737 \\
 
 \midrule
 \multicolumn{5}{l}{\textit{Rook contiguity (sensitivity)}} \\
-Saturation Quadrants & No & 0.0708 & 0.949 & 2.587 \\
-Incidence-Guided Saturation & Yes & 0.0717 & 0.952 & 2.650 \\
-Simple Random Sampling & Benchmark & 0.0850 & 0.947 & 3.612 \\
-Balanced Halves & No & 0.0842 & 0.949 & 3.569 \\
-Balanced Quartiles & Yes & 0.0837 & 0.948 & 3.369 \\
-Isolation Buffer & Yes & 0.1329 & 0.950 & 6.050 \\
-High Incidence Focus & Yes & 0.2062 & 0.948 & 7.969 \\
-2$\times$2 Blocking & Yes & 0.1281 & 0.948 & 6.206 \\
-Checkerboard (flagged) & Yes & 0.4799 & 0.162 & 8.988 \\
+Saturation Quadrants & No & 0.071 & 0.949 & 2.587 \\
+Incidence-Guided Saturation & Yes & 0.072 & 0.952 & 2.650 \\
+Simple Random Sampling & Benchmark & 0.085 & 0.947 & 3.612 \\
+Balanced Halves & No & 0.084 & 0.949 & 3.569 \\
+Balanced Quartiles & Yes & 0.084 & 0.948 & 3.369 \\
+Isolation Buffer & Yes & 0.133 & 0.950 & 6.050 \\
+High Incidence Focus & Yes & 0.206 & 0.948 & 7.969 \\
+2$\times$2 Blocking & Yes & 0.128 & 0.948 & 6.206 \\
+Checkerboard (flagged) & Yes & 0.480 & 0.162 & 8.988 \\
 
 \bottomrule
 
@@ -927,9 +927,9 @@ with $s$ taken over the 50 values $\bar m_{c,k}$. These are the standard errors 
 
 \applabel{A3}{app:supp-comparisons}Below are the pairwise test results and two figures behind results stated in the body of this chapter.
 
-**Pairwise tests under queen contiguity.** With SRS as a seventh member, the four pairs that Nemenyi comparisons did not separate were Balanced Quartiles against SRS ($p = 1.00$), $2\times2$ Blocking against High Incidence Focus ($p = 0.32$) and Checkerboard ($p = 0.39$), and Checkerboard against High Incidence Focus ($p = 1.00$). We also compared designs adjacent in the six-design mean-MSE order over the 50 independent configuration-by-surface units. The mean paired differences in MSE, with $t_{49}$ 95\% intervals, were $-0.0401$ ($-0.0431$, $-0.0372$) for Incidence-Guided Saturation against Balanced Quartiles, $-0.0293$ ($-0.0332$, $-0.0255$) for Balanced Quartiles against Isolation Buffer, $-0.0853$ ($-0.0954$, $-0.0752$) for Isolation Buffer against High Incidence Focus, $-0.0738$ ($-0.0858$, $-0.0617$) for High Incidence Focus against $2\times2$ Blocking, and $-0.7677$ ($-0.7893$, $-0.7460$) for $2\times2$ Blocking against Checkerboard, with Wilcoxon $p \le 4.9\times10^{-9}$ in every case. The better design of each pair had the lower MSE in all 50 units, except High Incidence Focus against $2\times2$ Blocking, where it did so in 48 (96\%). This test follows the mean-MSE order, and it separated High Incidence Focus from $2\times2$ Blocking where the Nemenyi comparison of within-block ranks did not. It did so because each unit's MSE averages over both spillover regimes, and in that average the control-only losses of $2\times2$ Blocking outweigh its both-arms wins.
+**Pairwise tests under queen contiguity.** With SRS as a seventh member, the four pairs that Nemenyi comparisons did not separate were Balanced Quartiles against SRS ($p = 1.00$), $2\times2$ Blocking against High Incidence Focus ($p = 0.32$) and Checkerboard ($p = 0.39$), and Checkerboard against High Incidence Focus ($p = 1.00$). We also compared designs adjacent in the six-design mean-MSE order over the 50 independent configuration-by-surface units. The mean paired differences in MSE, with $t_{49}$ 95\% intervals, were $-0.040$ ($-0.043$, $-0.037$) for Incidence-Guided Saturation against Balanced Quartiles, $-0.029$ ($-0.033$, $-0.026$) for Balanced Quartiles against Isolation Buffer, $-0.085$ ($-0.095$, $-0.075$) for Isolation Buffer against High Incidence Focus, $-0.074$ ($-0.086$, $-0.062$) for High Incidence Focus against $2\times2$ Blocking, and $-0.768$ ($-0.789$, $-0.746$) for $2\times2$ Blocking against Checkerboard, with Wilcoxon $p \le 4.9\times10^{-9}$ in every case. The better design of each pair had the lower MSE in all 50 units, except High Incidence Focus against $2\times2$ Blocking, where it did so in 48 (96\%). This test follows the mean-MSE order, and it separated High Incidence Focus from $2\times2$ Blocking where the Nemenyi comparison of within-block ranks did not. It did so because each unit's MSE averages over both spillover regimes, and in that average the control-only losses of $2\times2$ Blocking outweigh its both-arms wins.
 
-**Pairwise tests under rook contiguity.** Nemenyi comparisons, with SRS as a seventh member, separated 17 of 21 pairs. The four they did not separate were Incidence-Guided Saturation against Balanced Quartiles ($p = 0.66$) and SRS ($p = 0.14$), Balanced Quartiles against SRS ($p = 0.97$), and $2\times2$ Blocking against Isolation Buffer ($p = 1.00$). Holm-adjusted Wilcoxon tests separated every pair except $2\times2$ Blocking against Isolation Buffer and Balanced Quartiles against SRS (both $p = 0.21$). In the surface-level comparison, Incidence-Guided Saturation had a lower MSE than Balanced Quartiles in 48 of the 50 units (mean difference $-0.0121$; $-0.0139$, $-0.0102$; Wilcoxon $p = 9.9\times10^{-10}$). $2\times2$ Blocking and Isolation Buffer were close: $2\times2$ Blocking had the lower MSE in 36 of the 50 units (72\%; mean difference $-0.0048$; $-0.0078$, $-0.0017$; Wilcoxon $p = 0.0027$). Isolation Buffer, however, had the slightly better average rank (4.21 against 4.33), and the two designs traded places in mean MSE at $\tau = 3$. Every other adjacent pair differed in all 50 units. Within single incidence configurations, rook coverage was between 0.944 and 0.954 for every design except Checkerboard, whose coverage was between 0.155 and 0.165.
+**Pairwise tests under rook contiguity.** Nemenyi comparisons, with SRS as a seventh member, separated 17 of 21 pairs. The four they did not separate were Incidence-Guided Saturation against Balanced Quartiles ($p = 0.66$) and SRS ($p = 0.14$), Balanced Quartiles against SRS ($p = 0.97$), and $2\times2$ Blocking against Isolation Buffer ($p = 1.00$). Holm-adjusted Wilcoxon tests separated every pair except $2\times2$ Blocking against Isolation Buffer and Balanced Quartiles against SRS (both $p = 0.21$). In the surface-level comparison, Incidence-Guided Saturation had a lower MSE than Balanced Quartiles in 48 of the 50 units (mean difference $-0.012$; $-0.014$, $-0.010$; Wilcoxon $p = 9.9\times10^{-10}$). $2\times2$ Blocking and Isolation Buffer were close: $2\times2$ Blocking had the lower MSE in 36 of the 50 units (72\%; mean difference $-0.005$; $-0.008$, $-0.002$; Wilcoxon $p = 0.0027$). Isolation Buffer, however, had the slightly better average rank (4.21 against 4.33), and the two designs traded places in mean MSE at $\tau = 3$. Every other adjacent pair differed in all 50 units. Within single incidence configurations, rook coverage was between 0.944 and 0.954 for every design except Checkerboard, whose coverage was between 0.155 and 0.165.
 
 ```{=latex}
 \begin{figure}[!htb]
@@ -1349,50 +1349,50 @@ Table \ref{tab:nc-annual} gives MSE, bias and coverage for every design in every
 \cmidrule(lr){3-5}\cmidrule(lr){6-8}
 Design & Year & MSE & Bias & Coverage & MSE & Bias & Coverage \\
 \midrule
-Checkerboard & 2018 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
- & 2019 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
- & 2020 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
- & 2021 & 0.21591 & -0.0074 & 0.949 & 0.92036 & 0.0100 & 0.948 \\
+Checkerboard & 2018 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
+ & 2019 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
+ & 2020 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
+ & 2021 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
 \addlinespace
-High Incidence Focus & 2018 & 0.07172 & 0.0160 & 0.948 & 0.21426 & 0.0237 & 0.948 \\
- & 2019 & 0.07180 & 0.0063 & 0.951 & 0.43019 & 0.0227 & 0.945 \\
- & 2020 & 0.07292 & 0.0094 & 0.946 & 0.25918 & 0.0327 & 0.946 \\
- & 2021 & 0.07031 & 0.0104 & 0.951 & 0.35318 & 0.0296 & 0.945 \\
+High Incidence Focus & 2018 & 0.072 & 0.016 & 0.948 & 0.214 & 0.024 & 0.948 \\
+ & 2019 & 0.072 & 0.006 & 0.951 & 0.430 & 0.023 & 0.945 \\
+ & 2020 & 0.073 & 0.009 & 0.946 & 0.259 & 0.033 & 0.946 \\
+ & 2021 & 0.070 & 0.010 & 0.951 & 0.353 & 0.030 & 0.945 \\
 \addlinespace
-Saturation Quadrants & 2018 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
- & 2019 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
- & 2020 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
- & 2021 & 0.07518 & 0.0208 & 0.949 & 0.22329 & 0.0464 & 0.941 \\
+Saturation Quadrants & 2018 & 0.075 & 0.021 & 0.949 & 0.223 & 0.046 & 0.941 \\
+ & 2019 & 0.075 & 0.021 & 0.949 & 0.223 & 0.046 & 0.941 \\
+ & 2020 & 0.075 & 0.021 & 0.949 & 0.223 & 0.046 & 0.941 \\
+ & 2021 & 0.075 & 0.021 & 0.949 & 0.223 & 0.046 & 0.941 \\
 \addlinespace
-Isolation Buffer & 2018 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
- & 2019 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
- & 2020 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
- & 2021 & 0.28591 & 0.0088 & 0.947 & 0.28575 & 0.0106 & 0.947 \\
+Isolation Buffer & 2018 & 0.286 & 0.009 & 0.947 & 0.286 & 0.011 & 0.947 \\
+ & 2019 & 0.286 & 0.009 & 0.947 & 0.286 & 0.011 & 0.947 \\
+ & 2020 & 0.286 & 0.009 & 0.947 & 0.286 & 0.011 & 0.947 \\
+ & 2021 & 0.286 & 0.009 & 0.947 & 0.286 & 0.011 & 0.947 \\
 \addlinespace
-$2\times2$ Blocking & 2018 & 0.07609 & 0.0099 & 0.948 & 0.30622 & 0.0281 & 0.944 \\
- & 2019 & 0.07808 & 0.0143 & 0.945 & 0.43630 & 0.0314 & 0.942 \\
- & 2020 & 0.07764 & 0.0122 & 0.949 & 0.31848 & 0.0281 & 0.945 \\
- & 2021 & 0.07736 & 0.0107 & 0.947 & 0.36168 & 0.0289 & 0.943 \\
+$2\times2$ Blocking & 2018 & 0.076 & 0.010 & 0.948 & 0.306 & 0.028 & 0.944 \\
+ & 2019 & 0.078 & 0.014 & 0.945 & 0.436 & 0.031 & 0.942 \\
+ & 2020 & 0.078 & 0.012 & 0.949 & 0.318 & 0.028 & 0.945 \\
+ & 2021 & 0.077 & 0.011 & 0.947 & 0.362 & 0.029 & 0.943 \\
 \addlinespace
-Balanced Quartiles & 2018 & 0.07610 & 0.0170 & 0.947 & 0.29352 & 0.0315 & 0.944 \\
- & 2019 & 0.07624 & 0.0175 & 0.948 & 0.30616 & 0.0367 & 0.944 \\
- & 2020 & 0.07530 & 0.0158 & 0.947 & 0.28932 & 0.0356 & 0.943 \\
- & 2021 & 0.07453 & 0.0175 & 0.948 & 0.28439 & 0.0354 & 0.944 \\
+Balanced Quartiles & 2018 & 0.076 & 0.017 & 0.947 & 0.294 & 0.031 & 0.944 \\
+ & 2019 & 0.076 & 0.017 & 0.948 & 0.306 & 0.037 & 0.944 \\
+ & 2020 & 0.075 & 0.016 & 0.947 & 0.289 & 0.036 & 0.943 \\
+ & 2021 & 0.075 & 0.018 & 0.948 & 0.284 & 0.035 & 0.944 \\
 \addlinespace
-Balanced Halves & 2018 & 0.07458 & 0.0158 & 0.948 & 0.29101 & 0.0395 & 0.945 \\
- & 2019 & 0.07517 & 0.0167 & 0.949 & 0.29955 & 0.0360 & 0.945 \\
- & 2020 & 0.07466 & 0.0150 & 0.948 & 0.30610 & 0.0372 & 0.944 \\
- & 2021 & 0.07584 & 0.0160 & 0.946 & 0.29089 & 0.0340 & 0.944 \\
+Balanced Halves & 2018 & 0.075 & 0.016 & 0.948 & 0.291 & 0.040 & 0.945 \\
+ & 2019 & 0.075 & 0.017 & 0.949 & 0.300 & 0.036 & 0.945 \\
+ & 2020 & 0.075 & 0.015 & 0.948 & 0.306 & 0.037 & 0.944 \\
+ & 2021 & 0.076 & 0.016 & 0.946 & 0.291 & 0.034 & 0.944 \\
 \addlinespace
-Incidence-Guided Saturation & 2018 & 0.07428 & 0.0174 & 0.949 & 0.24285 & 0.0464 & 0.943 \\
- & 2019 & 0.07628 & 0.0233 & 0.949 & 0.21565 & 0.0522 & 0.941 \\
- & 2020 & 0.07682 & 0.0209 & 0.947 & 0.22029 & 0.0474 & 0.942 \\
- & 2021 & 0.07450 & 0.0197 & 0.950 & 0.23732 & 0.0451 & 0.942 \\
+Incidence-Guided Saturation & 2018 & 0.074 & 0.017 & 0.949 & 0.243 & 0.046 & 0.943 \\
+ & 2019 & 0.076 & 0.023 & 0.949 & 0.216 & 0.052 & 0.941 \\
+ & 2020 & 0.077 & 0.021 & 0.947 & 0.220 & 0.047 & 0.942 \\
+ & 2021 & 0.075 & 0.020 & 0.950 & 0.237 & 0.045 & 0.942 \\
 \addlinespace
-Simple Random Sampling & 2018 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
- & 2019 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
- & 2020 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
- & 2021 & 0.07638 & 0.0135 & 0.947 & 0.30761 & 0.0378 & 0.945 \\
+Simple Random Sampling & 2018 & 0.076 & 0.013 & 0.947 & 0.308 & 0.038 & 0.945 \\
+ & 2019 & 0.076 & 0.013 & 0.947 & 0.308 & 0.038 & 0.945 \\
+ & 2020 & 0.076 & 0.013 & 0.947 & 0.308 & 0.038 & 0.945 \\
+ & 2021 & 0.076 & 0.013 & 0.947 & 0.308 & 0.038 & 0.945 \\
 \bottomrule
 \end{tabular}
 \end{table}
