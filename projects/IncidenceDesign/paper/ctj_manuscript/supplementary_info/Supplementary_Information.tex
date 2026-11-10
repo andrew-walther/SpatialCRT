@@ -45,36 +45,36 @@ neighbors if they share an edge or a corner; under rook contiguity, they
 must share an edge. Queen contiguity is the primary analysis. Rook contiguity is a sensitivity analysis that also keeps
 continuity with earlier work, whose grids used rook neighbors. For
 each definition, the binary adjacency matrix was row-standardized to
-form the spatial weights matrix \(W\), so that \(WZ\) gives, for each
-cluster, the proportion of its neighbors that are treated, and \(WY\)
+form the spatial weights matrix \(\mathbf{W}\), so that \(\mathbf{W}\mathbf{Z}\) gives, for each
+cluster, the proportion of its neighbors that are treated, and \(\mathbf{W}\mathbf{Y}\)
 gives the average outcome among its neighbors. Row-standardization
 expresses each cluster's spillover exposure as an average over its own
 neighborhood rather than a raw sum, which would otherwise depend on how
 many neighbors the cluster has. Within a scenario, the same neighbor
-type defines \(W\) in the outcome model, in the Isolation Buffer design,
+type defines \(\mathbf{W}\) in the outcome model, in the Isolation Buffer design,
 and in the fitted model.
 
-Cluster-level outcomes \(Y\) were generated from a spatial lag model
+Cluster-level outcomes \(\mathbf{Y}\) were generated from a spatial lag model
 with a spillover term, \begin{equation}
-Y = (I - \rho W)^{-1}\left[\tau Z + S(Z) + \beta X + \epsilon\right], \qquad \epsilon \sim N(0, \sigma^2 I),
+\mathbf{Y} = (\mathbf{I} - \rho \mathbf{W})^{-1}\left[\tau \mathbf{Z} + \mathbf{S}(\mathbf{Z}) + \beta \mathbf{X} + \boldsymbol{\varepsilon}\right], \qquad \boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2 \mathbf{I}),
 \label{eq:outcome}
-\end{equation} where \(Z \in \{0,1\}^{100}\) is the treatment assignment
+\end{equation} where \(\mathbf{Z} \in \{0,1\}^{100}\) is the treatment assignment
 produced by the design under evaluation, \(\tau\) is the direct
-treatment effect of interest, \(S(Z)\) is the spillover term defined in
+treatment effect of interest, \(\mathbf{S}(\mathbf{Z})\) is the spillover term defined in
 Equation \ref{eq:spillover}, \(\rho\) is the spatial autoregressive
 coefficient governing dependence in the outcome beyond that induced by
-treatment and spillover, \(X\) is the baseline incidence covariate with
+treatment and spillover, \(\mathbf{X}\) is the baseline incidence covariate with
 coefficient \(\beta = 1\), and \(\sigma = 1\). The spatial multiplier
-\((I-\rho W)^{-1}\) propagates each cluster's shocks through the network
+\((\mathbf{I}-\rho \mathbf{W})^{-1}\) propagates each cluster's shocks through the network
 of neighbors. We tested \(\rho \in \{0, 0.01, 0.20, 0.50\}\). When
 \(\rho = 0\) the multiplier is the identity and the model is a linear
 regression with independent errors,
-\(Y = \tau Z + S(Z) + \beta X + \epsilon\), in which spatial structure
+\(\mathbf{Y} = \tau \mathbf{Z} + \mathbf{S}(\mathbf{Z}) + \beta \mathbf{X} + \boldsymbol{\varepsilon}\), in which spatial structure
 enters only through the spillover term; larger values of \(\rho\) induce
 progressively stronger spatial clustering in the outcome.
 
 We evaluated two spillover regimes, \begin{equation}
-S(Z) = \gamma\, WZ \quad \text{(both arms)}, \qquad S(Z) = \gamma\, WZ \circ (1 - Z) \quad \text{(control only)},
+\mathbf{S}(\mathbf{Z}) = \gamma\, \mathbf{W}\mathbf{Z} \quad \text{(both arms)}, \qquad \mathbf{S}(\mathbf{Z}) = \gamma\, \mathbf{W}\mathbf{Z} \circ (\mathbf{1} - \mathbf{Z}) \quad \text{(control only)},
 \label{eq:spillover}
 \end{equation} where \(\circ\) denotes the elementwise product. Under
 the control-only regime, only untreated clusters respond to the
@@ -96,16 +96,16 @@ The earlier small-grid study \citep{walther_spatialcrt_2026} assumed a
 spatially uniform baseline outcome risk. Cluster-level health outcomes
 typically vary across space, and the designs studied here differ in
 whether and how they use that variation. We generated the baseline
-incidence covariate \(X\), with values in \((0, 1)\), under three
+incidence covariate \(\mathbf{X}\), with values in \((0, 1)\), under three
 mechanisms. Under the independent (iid) mechanism, each \(X_i\) is drawn
 from a Uniform\((0,1)\) distribution, with no spatial structure. Under
 the spatially autocorrelated mechanism,
-\(X = \Phi\{(I - \rho_X W_Q)^{-1} u\}\), where \(u \sim N(0, I)\),
+\(\mathbf{X} = \Phi\{(\mathbf{I} - \rho_X \mathbf{W}_Q)^{-1} \mathbf{u}\}\), where \(\mathbf{u} \sim N(\mathbf{0}, \mathbf{I})\),
 \(\Phi\) is the standard normal distribution function applied
-elementwise, \(W_Q\) is the queen weights matrix, and
+elementwise, \(\mathbf{W}_Q\) is the queen weights matrix, and
 \(\rho_X \in \{0.20, 0.50\}\). Under the Poisson mechanism, a spatially
 autocorrelated log-rate surface,
-\(\log \lambda = \log(35/100{,}000) + (I - \rho_X W_Q)^{-1} u\) with
+\(\log \boldsymbol{\lambda} = \log(35/100{,}000) + (\mathbf{I} - \rho_X \mathbf{W}_Q)^{-1} \mathbf{u}\) with
 \(\rho_X \in \{0.20, 0.50\}\), generates cluster death counts
 \(C_i \sim \text{Poisson}(\lambda_i P)\), with an equal population of
 \(P = 100{,}000\) in every cluster, so that a cluster at the base rate
@@ -121,25 +121,25 @@ per 100,000) and women (21.7 per 100,000) aged 20--64, close to their
 average \citep{mirzaei_years_2019}. It is not the observed rate of the
 county data described in the Application section, which come from a
 different source, age range, period, and case definition. The incidence
-filters always use the queen weights \(W_Q\), whichever neighbor type
+filters always use the queen weights \(\mathbf{W}_Q\), whichever neighbor type
 the scenario uses, so the incidence surfaces are identical under rook
 and queen contiguity. The iid mechanism and the two strengths of each of
 the other two mechanisms give five incidence configurations.
 
 For each configuration we generated \(K = 10\) incidence surfaces,
-\(X_1, \dots, X_{10}\), each from its own seed. The same ten surfaces
+\(\mathbf{X}_1, \dots, \mathbf{X}_{10}\), each from its own seed. The same ten surfaces
 are used by every scenario in that configuration, across neighbor types,
 outcome-model parameters, designs, and values of \(\tau\); the design
 draws and the outcome noise are shared more selectively, as described
 in Section \ref{simulation-design-resampling-and-metrics}. Each design is applied
 to the surface that generates the outcome: assignments for surface \(k\)
-are drawn from \(X_k\), and the outcome and the fitted model for those
-assignments use \(X_k\) as well. This assumes that the incidence
+are drawn from \(\mathbf{X}_k\), and the outcome and the fitted model for those
+assignments use \(\mathbf{X}_k\) as well. This assumes that the incidence
 observed when a trial is planned is the incidence that drives its
 outcome (the matched-surface assumption). The target of each scenario is
-performance averaged over incidence surfaces; for example, the mean squared error (MSE) is \(\text{MSE} = E_X E_{Z \mid X} E_\epsilon[(\hat\tau - \tau)^2]\), with
-\(X\) drawn from the configuration's generator, \(Z\) from the design
-given \(X\), and \(\epsilon \sim N(0, I)\). Bias, coverage, and power
+performance averaged over incidence surfaces; for example, the mean squared error (MSE) is \(\text{MSE} = E_{\mathbf{X}} E_{\mathbf{Z} \mid \mathbf{X}} E_{\boldsymbol{\varepsilon}}[(\hat\tau - \tau)^2]\), with
+\(\mathbf{X}\) drawn from the configuration's generator, \(\mathbf{Z}\) from the design
+given \(\mathbf{X}\), and \(\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \mathbf{I})\). Bias, coverage, and power
 are defined in the same way.
 
 \FloatBarrier
@@ -180,7 +180,7 @@ Every other design treats exactly 50.
 \small
 \centering
 
-\caption{The six treatment assignment designs compared in the detailed analysis, ordered by mean squared error under queen contiguity at $\tau = 1$, pooled over the five incidence configurations (Table \ref{tab:performance}). Incidence rank is a cluster's rank by the baseline incidence surface $X_k$, with ties broken at random in every draw. Clusters treated is per assignment; for Isolation Buffer it is the mean under each neighbor type.}
+\caption{The six treatment assignment designs compared in the detailed analysis, ordered by mean squared error under queen contiguity at $\tau = 1$, pooled over the five incidence configurations (Table \ref{tab:performance}). Incidence rank is a cluster's rank by the baseline incidence surface $\mathbf{X}_k$, with ties broken at random in every draw. Clusters treated is per assignment; for Isolation Buffer it is the mean under each neighbor type.}
 \label{tab:designs}
 
 \begin{tabular}{p{3.4cm}p{6.4cm}p{2.0cm}p{2.3cm}}
@@ -287,14 +287,14 @@ Balanced Halves & Clusters are divided by incidence rank into two strata of 50; 
 
 We estimated \(\tau\) with two maximum likelihood spatial lag models,
 both fit to every simulated outcome and both including an intercept. The
-primary, oracle model has the spatial lag \(\rho WY\) and the covariates
-\(Z\), \(\text{Spill} = S(Z)\), and \(X_k\), so it matches the outcome
+primary, oracle model has the spatial lag \(\rho \mathbf{W}\mathbf{Y}\) and the covariates
+\(\mathbf{Z}\), \(\text{Spill} = \mathbf{S}(\mathbf{Z})\), and \(\mathbf{X}_k\), so it matches the outcome
 model in Equation \ref{eq:outcome}, including the true regime-specific
 spillover covariate from Equation \ref{eq:spillover}. The oracle model
 assumes that the analyst knows the form of the spillover mechanism and
 has the exact exposure term, so its results are a best case for each
 design; we return to this assumption as a limitation. The non-oracle
-model, a sensitivity analysis, has the covariates \(Z\) and \(X_k\) only
+model, a sensitivity analysis, has the covariates \(\mathbf{Z}\) and \(\mathbf{X}_k\) only
 and omits the spillover term. Both models are fit to the same outcomes.
 
 We fit both models with our own implementation of the maximum likelihood
@@ -302,7 +302,7 @@ estimator of the spatial lag model \citep{bivand_comparing_2015}, the
 same estimator that the \texttt{lagsarlm} function of the R package
 \texttt{spatialreg} computes with \texttt{method\ =\ "eigen"}. It
 maximizes the concentrated log-likelihood over \(\rho\), computing the
-log-determinant from the eigenvalues of \(W\)
+log-determinant from the eigenvalues of \(\mathbf{W}\)
 \citep{ord_estimation_1975}, estimates the remaining coefficients by
 least squares given \(\hat\rho\), and computes standard errors from the
 analytic information matrix. On 5,120 validation fits it agreed with
@@ -311,7 +311,7 @@ a relative difference of \(1.1\times10^{-8}\) in its standard error, at
 roughly 1\% of the computing time; we also refit a 1\% sample of the
 full simulation with \texttt{lagsarlm} itself as a check. Confidence intervals are 95\% intervals with a $t$ reference distribution and a degrees-of-freedom-corrected standard error, $\hat\tau \pm t_{0.975,\,N-p}\,\widehat{\text{SE}}\sqrt{N/(N-p)}$, where $\widehat{\text{SE}}$ is the estimated standard error, $N = 100$ is the number of clusters and $p$ is the number of regression coefficients plus $\rho$ (5 for the oracle model; 4 for the non-oracle model and for rook Checkerboard, whose aliased spillover column is dropped). The application uses the same interval. The 95\% Wald interval, $\hat\tau \pm 1.96\,\widehat{\text{SE}}$, covered about one percentage point less for every design.
 
-For Checkerboard, strict interspersion makes treatment and spillover hard or impossible to separate. Under rook contiguity on the rectangular grid, \(WZ=1-Z\), so
+For Checkerboard, strict interspersion makes treatment and spillover hard or impossible to separate. Under rook contiguity on the rectangular grid, \(\mathbf{W}\mathbf{Z}=\mathbf{1}-\mathbf{Z}\), so
 treatment and spillover cannot be separately identified; the fitted
 coefficient on treatment estimates \(\tau-\gamma\). Under queen
 contiguity, treatment is identified but control-only spillover is weakly
@@ -327,32 +327,32 @@ implemented here.
 
 Two combinations of design and neighbor type weaken or remove the
 information that separates \(\tau\) from the spillover term. Under rook
-contiguity, Checkerboard gives \(WZ = 1 - Z\) exactly, because every
+contiguity, Checkerboard gives \(\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}\) exactly, because every
 neighbor of a treated cluster is a control and every neighbor of a
 control is treated. Both spillover covariates then equal
-\(\gamma(1 - Z)\), a linear combination of the intercept and \(Z\), so
+\(\gamma(\mathbf{1} - \mathbf{Z})\), a linear combination of the intercept and \(\mathbf{Z}\), so
 \(\tau\) is not identified: the fitting routine drops the aliased
-spillover column, and the coefficient on \(Z\) estimates
+spillover column, and the coefficient on \(\mathbf{Z}\) estimates
 $\tau - \gamma$. The earlier small-grid study noted the same
 consequence of exact collinearity between treatment and spillover
 exposure, \(\hat\beta \approx \beta - \psi\) in its notation. The
 non-oracle model has no spillover column to drop, but its Checkerboard
 estimates under rook contiguity have the same defect. Under queen
 contiguity, each of the 64 interior clusters has four treated and four
-control neighbors, so \(WZ = 1/2\) at every interior cluster. Under the
+control neighbors, so \(\mathbf{W}\mathbf{Z} = 1/2\) at every interior cluster. Under the
 control-only regime the spillover covariate then equals
-\((\gamma/2)(1 - Z)\) at those clusters, a linear combination of the
-intercept and \(Z\), and only the 36 clusters on the grid boundary carry
-information that separates it from the intercept and \(Z\); \(\tau\) is
+\((\gamma/2)(\mathbf{1} - \mathbf{Z})\) at those clusters, a linear combination of the
+intercept and \(\mathbf{Z}\), and only the 36 clusters on the grid boundary carry
+information that separates it from the intercept and \(\mathbf{Z}\); \(\tau\) is
 identified, but imprecisely. Under the both-arms regime it is the
 constant \(\gamma/2\) at interior clusters, confounded with the
-intercept but not with \(Z\). Isolation Buffer under rook contiguity can
+intercept but not with \(\mathbf{Z}\). Isolation Buffer under rook contiguity can
 also, rarely, draw exactly the checkerboard pattern, a maximal
 independent set that equals one color class of the grid. This happened
 in 4 of its 40,000 rook draws and affected one fit in each of 20
 scenarios, 4 at each value of \(\tau\). We flag every fit in which the
 fitting routine reports an aliased column and every scenario in which
-some draw has \(\text{rank}([1, Z, WZ]) < 3\). Aliased estimates are
+some draw has \(\text{rank}([\mathbf{1}, \mathbf{Z}, \mathbf{W}\mathbf{Z}]) < 3\). Aliased estimates are
 kept in all summaries. In the exhibits, we flag Checkerboard under rook
 contiguity, where every fit is aliased; the Isolation Buffer scenarios,
 each with one aliased fit among its 250, are noted here and carry no
@@ -376,7 +376,7 @@ give 1,920 scenarios, and every block contains all six.
 Within each scenario, we drew \(J = 25\) assignments from each of the
 \(K = 10\) incidence surfaces, for 250 fits per scenario, and gave every
 fit its own noise vector, so that fit \((k, j)\) has outcome
-\(Y_{kj} = (I - \rho W)^{-1}[\tau Z_{kj} + S(Z_{kj}) + \beta X_k + \epsilon_{kj}]\).
+\(\mathbf{Y}_{kj} = (\mathbf{I} - \rho \mathbf{W})^{-1}[\tau \mathbf{Z}_{kj} + \mathbf{S}(\mathbf{Z}_{kj}) + \beta \mathbf{X}_k + \boldsymbol{\varepsilon}_{kj}]\).
 Checkerboard's 250 fits share one assignment but have 250 distinct noise
 vectors. Given a surface, its 25 pairs of assignment and noise are
 independent, and the ten surfaces are independent of one another, so the
@@ -456,7 +456,7 @@ wherever a conclusion changes.
 \subsection{Allocation-risk study}\label{allocation-risk-study-design}
 
 
-A separate allocation-risk study used queen weights, \(\tau=1\), all ten surfaces from each incidence configuration and the extreme combinations of $\rho$ and $\gamma$, $\rho\in\{0,0.5\}$ and $\gamma\in\{0.5,0.8\}$. The risk of assignment $a$ is its conditional MSE $m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,X]$. We estimated it by simulating repeated outcomes for each sampled assignment and then compared its distribution across assignments. This distribution differs from that
+A separate allocation-risk study used queen weights, \(\tau=1\), all ten surfaces from each incidence configuration and the extreme combinations of $\rho$ and $\gamma$, $\rho\in\{0,0.5\}$ and $\gamma\in\{0.5,0.8\}$. The risk of assignment $a$ is its conditional MSE $m(a)=E_{\boldsymbol{\varepsilon}}[(\hat\tau-\tau)^2\mid a,\mathbf{X}]$. We estimated it by simulating repeated outcomes for each sampled assignment and then compared its distribution across assignments. This distribution differs from that
 of squared errors in a single allocation and from MSE across parameter
 scenarios. The study used 100 assignment draws for each randomized design and 100 simulated outcomes per distinct assignment. One setting (surface 1, $\rho=0.5$, $\gamma=0.8$) was refined to 400 outcomes on the same assignments as a precision check; a design with only one possible assignment received its own outcome replication.
 
@@ -538,7 +538,7 @@ of execution and common random numbers, are described in Section \ref{simulation
 Draw & Key parameters & Shared by \\
 
 \midrule
-Incidence surface $X_k$ & Incidence mechanism, $\rho_X$, $k$ & Every block, design, and value of $\tau$ of the configuration \\
+Incidence surface $\mathbf{X}_k$ & Incidence mechanism, $\rho_X$, $k$ & Every block, design, and value of $\tau$ of the configuration \\
 The $J = 25$ assignments of design $d$ on surface $k$ & Incidence mechanism, $\rho_X$, neighbor type, $\rho$, $\gamma$, spillover regime, $k$, $d$ & All five values of $\tau$ and both estimators \\
 The 250 noise vectors of a block & Incidence mechanism, $\rho_X$, neighbor type, $\rho$, $\gamma$, spillover regime & All eight designs, all five values of $\tau$, and both estimators \\
 
@@ -550,8 +550,8 @@ The 250 noise vectors of a block & Incidence mechanism, $\rho_X$, neighbor type,
 
 \textbf{Monte Carlo structure and checkpoints.} Within a scenario, fit
 \((k, j)\), with \(k = 1, \dots, 10\) and \(j = 1, \dots, 25\), uses
-surface \(X_k\), assignment \(Z_{kj}\), and noise vector
-\(\epsilon_{kj}\), the \((k, j)\) column of the block's
+surface \(\mathbf{X}_k\), assignment \(\mathbf{Z}_{kj}\), and noise vector
+\(\boldsymbol{\varepsilon}_{kj}\), the \((k, j)\) column of the block's
 \(100 \times 250\) noise matrix (Section \ref{simulation-design-resampling-and-metrics}). The unit of computation is a combination of incidence
 configuration, neighbor type, and \(\rho\): 40 units, each covering 4
 values of \(\gamma\), 2 spillover regimes, 8 designs, 5 values of
@@ -677,9 +677,9 @@ and report years separately (Figure \ref{fig:nc-observed}). The county death-cer
 Queen contiguity between service areas, computed from legal county
 boundaries, defines the primary adjacency, and rook contiguity is a
 sensitivity analysis. Before simulation, we checked the 58-cluster
-row-standardized contiguity matrix $W$, its binary adjacency and its row
+row-standardized contiguity matrix $\mathbf{W}$, its binary adjacency and its row
 order against the boundary geometry. Legal boundaries shared across water
-can create adjacency, so $W$ is a prespecified proxy for geographic
+can create adjacency, so $\mathbf{W}$ is a prespecified proxy for geographic
 exposure, not a measured network of communication among professionals.
 
 All eight designs and SRS keep their grid names, adapted to the map as
@@ -723,7 +723,7 @@ clusters more heavily. Mean raw rates and pooled regional rates were
 prespecified as sensitivity analyses rather than chosen by performance,
 and Table \ref{tab:nc-order} gives the regional ordering under each
 summary, documented before performance was evaluated. The grid rule
-averages \(X\) directly. Mean ranks agree with it in the rank-scaled
+averages \(\mathbf{X}\) directly. Mean ranks agree with it in the rank-scaled
 Poisson configurations but are a deliberate adaptation for the
 application, not the exact grid rule for continuous incidence.
 
@@ -807,20 +807,20 @@ Year & Mean cluster rank & Mean cluster rate & Pooled regional rate \\
 
 
 For the primary education outcome, we set \(\beta=0\) in Equation
-\ref{eq:outcome}, use the 58-cluster \(W\), and fix \(\tau=1\),
+\ref{eq:outcome}, use the 58-cluster \(\mathbf{W}\), and fix \(\tau=1\),
 \(\sigma=1\): \begin{equation}
-Y=(I-\rho W)^{-1}[\tau Z+S(Z)+\epsilon],\qquad \epsilon\sim N(0,I).
+\mathbf{Y}=(\mathbf{I}-\rho \mathbf{W})^{-1}[\tau \mathbf{Z}+\mathbf{S}(\mathbf{Z})+\boldsymbol{\varepsilon}],\qquad \boldsymbol{\varepsilon}\sim N(\mathbf{0},\mathbf{I}).
 \label{eq:nc-education}
 \end{equation} Observed incidence affects assignments but neither
-baseline education nor the constant structural intervention effect. We estimate $\tau$ with the same validated maximum likelihood implementation as in the grid study, with an intercept, \(Z\)
-and the true regime-specific \(S(Z)\), without \(X\). As in the grid
+baseline education nor the constant structural intervention effect. We estimate $\tau$ with the same validated maximum likelihood implementation as in the grid study, with an intercept, \(\mathbf{Z}\)
+and the true regime-specific \(\mathbf{S}(\mathbf{Z})\), without \(\mathbf{X}\). As in the grid
 model, \(\tau\) is the coefficient before spatial propagation, not an
-average total impact after applying \((I-\rho W)^{-1}\). For the main application and for the analyses of partial participation and sample size below, we report $\hat\tau \pm t_{0.975,\,n-p}\,\widehat{\mathrm{SE}}\sqrt{n/(n-p)}$, where $n$ is the number of participating colleges and $p$ the number of fitted coefficients plus $\rho$, and we test $\tau = 0$ against the same $t$ distribution. The maximum likelihood variance divides by $n$, and the normal reference distribution ignores the estimated parameters. With 58 or fewer clusters, both make the Wald interval too narrow.
+average total impact after applying \((\mathbf{I}-\rho \mathbf{W})^{-1}\). For the main application and for the analyses of partial participation and sample size below, we report $\hat\tau \pm t_{0.975,\,n-p}\,\widehat{\mathrm{SE}}\sqrt{n/(n-p)}$, where $n$ is the number of participating colleges and $p$ the number of fitted coefficients plus $\rho$, and we test $\tau = 0$ against the same $t$ distribution. The maximum likelihood variance divides by $n$, and the normal reference distribution ignores the estimated parameters. With 58 or fewer clusters, both make the Wald interval too narrow.
 
 Primary queen settings cross \(\rho=0,0.2,0.5\), \(\gamma=0.5,0.8\),
 both regimes, four years and nine designs (432 reported settings). A
 matched hypothetical baseline sensitivity adds
-\(X=(\operatorname{rank}_{\rm average}(rate)-0.5)/58\) with \(\beta=1\)
+\(\mathbf{X}=(\operatorname{rank}_{\rm average}(rate)-0.5)/58\) with \(\beta=1\)
 to both the outcome baseline and the fitted covariates (432 settings). It
 changes baseline and adjustment together and is not an empirical
 incidence--education association. A rook-contiguity sensitivity analysis of the primary model uses the extreme values $\rho=0,0.5$ (288 settings), and the two alternative regional summaries add 96 Incidence-Guided Saturation settings. The full application reports 1,248 settings, computed from 936 distinct simulation settings, because reported settings with the same allocations and outcome model share one simulation.
@@ -828,7 +828,7 @@ incidence--education association. A rook-contiguity sensitivity analysis of the 
 We initially sampled $J=100$ assignments and simulated $R=100$ independent outcomes per distinct assignment. A design whose set of possible assignments contains only one assignment instead received $R=1,000$ outcomes for that assignment, rather than 100 repeated copies of it counted as separate allocations. An adaptive, prespecified replication schedule extended allocations or outcomes until the Monte Carlo standard error of mean MSE was at most 5\% of mean MSE and that of coverage at most 0.01. Two single-assignment settings in the matched sensitivity analysis required $R=2,000$; all randomized designs met these targets at $J=100$ and $R=100$. Each random draw used a fixed, reproducible seed. Settings with the same set of possible assignments shared their simulations, with annual treatment counts and population shares recalculated. In the primary model, Checkerboard, Saturation Quadrants, Isolation Buffer and SRS reuse the same simulations across years, because annual incidence enters neither their allocation nor the outcome model, so their repeated values are not independent
 annual confirmations.
 
-For each allocation $a$, the repeated outcomes estimate the conditional MSE \(m(a)=E_\epsilon[(\hat\tau-\tau)^2\mid a,\text{observed inputs}]\). We report its distribution across sampled allocations, its estimated 90th percentile and the estimated mean among the worst 10\% of sampled allocations, alongside unconditional mean MSE, bias and coverage. An allocation drawn more than once keeps its sampled frequency but uses one conditional estimate, and the Monte Carlo uncertainty accounts for the resulting covariance. A separate tail refinement at queen $\rho=0,0.5$, $\gamma=0.8$, both regimes and all years and designs kept the same allocations and extended the randomized designs to $R=400$ outcomes per allocation, keeping $R=1,000$ for single-assignment designs. The refinement is not a new allocation sample. The rank of the fitted design matrix, residual treatment information, aliased columns, warnings, invalid estimates or intervals, and estimates of $\rho$ at the boundary of its parameter space were recorded. Section
+For each allocation $a$, the repeated outcomes estimate the conditional MSE \(m(a)=E_{\boldsymbol{\varepsilon}}[(\hat\tau-\tau)^2\mid a,\text{observed inputs}]\). We report its distribution across sampled allocations, its estimated 90th percentile and the estimated mean among the worst 10\% of sampled allocations, alongside unconditional mean MSE, bias and coverage. An allocation drawn more than once keeps its sampled frequency but uses one conditional estimate, and the Monte Carlo uncertainty accounts for the resulting covariance. A separate tail refinement at queen $\rho=0,0.5$, $\gamma=0.8$, both regimes and all years and designs kept the same allocations and extended the randomized designs to $R=400$ outcomes per allocation, keeping $R=1,000$ for single-assignment designs. The refinement is not a new allocation sample. The rank of the fitted design matrix, residual treatment information, aliased columns, warnings, invalid estimates or intervals, and estimates of $\rho$ at the boundary of its parameter space were recorded. Section
 \ref{app:nc} gives the reproducibility and precision details.
 
 
@@ -852,7 +852,7 @@ To avoid selection bias, worst-decile assignments were identified with one half 
 \subsection{Partial participation and sample size}\label{partial-participation-methods}
 
 
-All 58 colleges will be invited to take part after the pilot, but not every college will join. We therefore repeated the application for subsets of $N$ participating colleges, $N \in \{15, 20, 25, 29, 30, 35, 40, 45, 50, 58\}$, under the education outcome model with $\beta = 0$. Under random volunteering, 50 subsets were drawn for each $N$ and shared by every design and year, so designs are compared on the same participants. In a sensitivity analysis at $N = 20$ and $N = 29$, a college's chance of joining rose linearly with its incidence rank, so that the highest-burden college was three times as likely to join as the lowest. Each design was rebuilt on the participants with its own rule, and the four saturation regions were required to contain at least two colleges each. Spatial dependence links participating colleges only, so a participant with no participating neighbor has a zero row in the participants' weights matrix $W_P$. Spillover exposure counts treated participating neighbors over all geographic neighbors, $e_j(Z) = \sum_{k \in \mathcal{N}(j)} Z_k / |\mathcal{N}(j)|$, so a non-participating neighbor counts as untreated. Spillover scales with the effect, $\gamma = \kappa\tau$ with $\kappa \in \{0.5, 0.8\}$, and the effect $\tau$ took nine values from 0 to 2 in units of the college-level outcome standard deviation. Settings crossed these with $\rho \in \{0, 0.5\}$, both spillover regimes, the nine strategies and the four planning years. With fewer than 58 participants, each setting used 20 allocations and 10 outcomes on each of the 50 subsets (10,000 fits), and a design with a single possible allocation on a subset used 200 outcomes instead. With all 58 colleges, each setting used 100 allocations and 100 outcomes, as in the main application, and it reproduced the main application's MSE and coverage within Monte Carlo error. All effect sizes share the same subsets, allocations and noise, so power curves are smooth in $\tau$. For each setting we estimated power with the corrected $t$ test above, the number of colleges needed for 80\% power, and the smallest effect detectable with 80\% power at each $N$.
+All 58 colleges will be invited to take part after the pilot, but not every college will join. We therefore repeated the application for subsets of $N$ participating colleges, $N \in \{15, 20, 25, 29, 30, 35, 40, 45, 50, 58\}$, under the education outcome model with $\beta = 0$. Under random volunteering, 50 subsets were drawn for each $N$ and shared by every design and year, so designs are compared on the same participants. In a sensitivity analysis at $N = 20$ and $N = 29$, a college's chance of joining rose linearly with its incidence rank, so that the highest-burden college was three times as likely to join as the lowest. Each design was rebuilt on the participants with its own rule, and the four saturation regions were required to contain at least two colleges each. Spatial dependence links participating colleges only, so a participant with no participating neighbor has a zero row in the participants' weights matrix $\mathbf{W}_P$. Spillover exposure counts treated participating neighbors over all geographic neighbors, $e_j(\mathbf{Z}) = \sum_{k \in \mathcal{N}(j)} Z_k / |\mathcal{N}(j)|$, so a non-participating neighbor counts as untreated. Spillover scales with the effect, $\gamma = \kappa\tau$ with $\kappa \in \{0.5, 0.8\}$, and the effect $\tau$ took nine values from 0 to 2 in units of the college-level outcome standard deviation. Settings crossed these with $\rho \in \{0, 0.5\}$, both spillover regimes, the nine strategies and the four planning years. With fewer than 58 participants, each setting used 20 allocations and 10 outcomes on each of the 50 subsets (10,000 fits), and a design with a single possible allocation on a subset used 200 outcomes instead. With all 58 colleges, each setting used 100 allocations and 100 outcomes, as in the main application, and it reproduced the main application's MSE and coverage within Monte Carlo error. All effect sizes share the same subsets, allocations and noise, so power curves are smooth in $\tau$. For each setting we estimated power with the corrected $t$ test above, the number of colleges needed for 80\% power, and the smallest effect detectable with 80\% power at each $N$.
 
 The trial outcome is a score measured on each trained professional and averaged within each college. We write a professional's score as a college effect plus individual variation, with total variance 1, so that effects are in individual standard-deviation units. The intraclass correlation coefficient (ICC) is the share of that variance that lies between colleges, so the between-college variance is the ICC and the within-college variance is $1 - \text{ICC}$. Averaging the scores of $m$ professionals leaves the college part unchanged and divides the individual part by $m$, so the college mean has standard deviation $\sigma_c = \sqrt{\text{ICC} + (1 - \text{ICC})/m}$ \citep{donner_design_2000, hayes_cluster_2017}. A college-level effect of $\tau$ standard deviations is therefore an individual-level standardized effect $d = \tau\sigma_c$. With $\beta = 0$, multiplying the effect and the noise by the same constant leaves $\hat\tau/\widehat{\mathrm{SE}}$ unchanged, so power for any $m$, ICC and $d$ follows from the simulated college-level results. Rerunning one setting with the effect and the noise both halved reproduced its estimates to within $6\times10^{-8}$. In a sensitivity analysis, the number of trained professionals grew with college population ($m$ averaging 25 over participants, ICC $= 0.05$), so the noise variance differed between colleges while the fitted model stayed unweighted, as an analyst unaware of the difference would fit it.
 
@@ -864,15 +864,15 @@ We compared the nine strategies with the Friedman, Nemenyi and Holm-adjusted Wil
 
 To check that the design comparison does not depend on the spatial model, we generated data at $N = 58$ with $\beta = 0$ from the spatial lag model and fitted them by a conditional autoregressive (CAR) model \citep{besag_spatial_1974, cressie_statistics_1993} as well as by the spatial lag model. In the reverse direction, we generated data from a CAR model with the same mean and fitted them by both models. We also fitted two Bayesian models to the spatial lag data, a CAR model with the prior of Leroux and colleagues \citep{leroux_estimation_2000, lee_carbayes_2013} and a Bayesian spatial lag model \citep{lesage_introduction_2009}. The paragraphs below give the four models, their priors, the Markov chain Monte Carlo settings and the convergence checks. Finally, we replaced the proportional spillover exposure by a binary indicator of any treated neighbor and by a count of treated neighbors scaled by the mean number of neighbors, with the same form in the outcome model and the fit.
 
-\textbf{Estimation models.} Every model in the sensitivity analysis has the mean $\mu = \alpha \mathbf{1} + \tau Z + \text{Spill}$ with the proportional spillover covariate of the main analysis, and uses the 58-college queen geography. The spatial lag model of the main analysis is $Y = \rho W Y + \mu + \epsilon$, $\epsilon \sim N(0, \sigma^2 I)$. The CAR model is $Y = \mu + u$, $u \sim N\{0, \sigma^2 (I - \lambda S)^{-1}\}$, where $S$ is the symmetric matrix similar to the row-standardized $W$ \citep{ord_estimation_1975}, fitted by maximum likelihood with the \texttt{spautolm} function of the R package \texttt{spatialreg} \citep{bivand_r_2022}. For the reverse comparison, data were generated as $Y = \mu + L\epsilon$ with $LL^\top = (I - \rho S)^{-1}$ and the same values of $\rho$ as the spatial lag data. These runs used four years, $\rho \in \{0, 0.2, 0.5\}$, $\gamma \in \{0.5, 0.8\}$, both regimes and the nine strategies, with 500 fits per setting.
+\textbf{Estimation models.} Every model in the sensitivity analysis has the mean $\boldsymbol{\mu} = \alpha \mathbf{1} + \tau \mathbf{Z} + \text{Spill}$ with the proportional spillover covariate of the main analysis, and uses the 58-college queen geography. The spatial lag model of the main analysis is $\mathbf{Y} = \rho \mathbf{W} \mathbf{Y} + \boldsymbol{\mu} + \boldsymbol{\varepsilon}$, $\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})$. The CAR model is $\mathbf{Y} = \boldsymbol{\mu} + \mathbf{u}$, $\mathbf{u} \sim N\{\mathbf{0}, \sigma^2 (\mathbf{I} - \lambda \mathbf{S})^{-1}\}$, where $\mathbf{S}$ is the symmetric matrix similar to the row-standardized $\mathbf{W}$ \citep{ord_estimation_1975}, fitted by maximum likelihood with the \texttt{spautolm} function of the R package \texttt{spatialreg} \citep{bivand_r_2022}. For the reverse comparison, data were generated as $\mathbf{Y} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{\varepsilon}$ with $\mathbf{L}\mathbf{L}^\top = (\mathbf{I} - \rho \mathbf{S})^{-1}$ and the same values of $\rho$ as the spatial lag data. These runs used four years, $\rho \in \{0, 0.2, 0.5\}$, $\gamma \in \{0.5, 0.8\}$, both regimes and the nine strategies, with 500 fits per setting.
 
 The Bayesian CAR model \citep{leroux_estimation_2000} is $Y_j = \mu_j + \phi_j + e_j$, $e_j \sim N(0, \nu^2)$, with
 \begin{equation*}
 \phi_j \mid \phi_{-j} \sim N\left(\frac{\lambda \sum_k a_{jk}\phi_k}{\lambda \sum_k a_{jk} + 1 - \lambda},\; \frac{\sigma_\phi^2}{\lambda \sum_k a_{jk} + 1 - \lambda}\right),
 \end{equation*}
-where $a_{jk}$ is the binary queen adjacency. We used the defaults of the \texttt{S.CARleroux} function of the R package \texttt{CARBayes} \citep{lee_carbayes_2013}, version 6.1.1: independent $N(0, 10^5)$ priors for the regression coefficients, inverse-gamma(1, 0.01) priors for $\nu^2$ and $\sigma_\phi^2$, and a uniform(0, 1) prior for $\lambda$. Each chain ran 25,000 iterations, of which the first 5,000 were discarded, thinned by 5. At $\rho = 0.5$, where fewer than half the chains converged, we reran the same data with 100,000 iterations, 20,000 discarded and thinning by 20. The Bayesian spatial lag model \citep{lesage_introduction_2009} has the same form as the maximum likelihood model, with the defaults of the \texttt{spBreg\_lag} function of \texttt{spatialreg}, version 1.4.3: a $N(0, 10^{12} I)$ prior for the regression coefficients, the prior $p(\sigma^2) \propto 1/\sigma^2$, a Beta(1.01, 1.01) prior for $\rho$ rescaled to its feasible interval, and 10,000 draws of which the first 2,000 were discarded. Both Bayesian models used four years, $\rho \in \{0, 0.5\}$, $\gamma = 0.8$, both regimes and the nine strategies, with 100 fits per setting (14,400 fits per model), and both were fitted to the same data as the maximum likelihood model. We report the posterior mean of $\tau$ and the 95\% equal-tailed credible interval. A chain was counted as converged when the effective sample size of $\tau$ was at least 400 and the absolute Geweke $z$ statistic \citep{geweke_evaluating_1992} was below 1.96.
+where $a_{jk}$ is the binary queen adjacency. We used the defaults of the \texttt{S.CARleroux} function of the R package \texttt{CARBayes} \citep{lee_carbayes_2013}, version 6.1.1: independent $N(0, 10^5)$ priors for the regression coefficients, inverse-gamma(1, 0.01) priors for $\nu^2$ and $\sigma_\phi^2$, and a uniform(0, 1) prior for $\lambda$. Each chain ran 25,000 iterations, of which the first 5,000 were discarded, thinned by 5. At $\rho = 0.5$, where fewer than half the chains converged, we reran the same data with 100,000 iterations, 20,000 discarded and thinning by 20. The Bayesian spatial lag model \citep{lesage_introduction_2009} has the same form as the maximum likelihood model, with the defaults of the \texttt{spBreg\_lag} function of \texttt{spatialreg}, version 1.4.3: a $N(\mathbf{0}, 10^{12} \mathbf{I})$ prior for the regression coefficients, the prior $p(\sigma^2) \propto 1/\sigma^2$, a Beta(1.01, 1.01) prior for $\rho$ rescaled to its feasible interval, and 10,000 draws of which the first 2,000 were discarded. Both Bayesian models used four years, $\rho \in \{0, 0.5\}$, $\gamma = 0.8$, both regimes and the nine strategies, with 100 fits per setting (14,400 fits per model), and both were fitted to the same data as the maximum likelihood model. We report the posterior mean of $\tau$ and the 95\% equal-tailed credible interval. A chain was counted as converged when the effective sample size of $\tau$ was at least 400 and the absolute Geweke $z$ statistic \citep{geweke_evaluating_1992} was below 1.96.
 
-\textbf{Spillover form.} Under the binary form, $S(Z) = \gamma\,\mathbf{1}\{\text{any treated queen neighbor}\}$, times $1 - Z$ under control-only spillover. Under the count form, $S(Z) = (\gamma/\bar d) \times$ (number of treated queen neighbors), where $\bar d = 4.93$ is the mean number of queen neighbors, so a college of average degree with every neighbor treated receives $\gamma$, as under the proportional form.
+\textbf{Spillover form.} Under the binary form, $\mathbf{S}(\mathbf{Z}) = \gamma\,\mathbf{1}\{\text{any treated queen neighbor}\}$, times $\mathbf{1} - \mathbf{Z}$ under control-only spillover. Under the count form, $\mathbf{S}(\mathbf{Z}) = (\gamma/\bar d) \times$ (number of treated queen neighbors), where $\bar d = 4.93$ is the mean number of queen neighbors, so a college of average degree with every neighbor treated receives $\gamma$, as under the proportional form.
 
 \FloatBarrier
 \section{\texorpdfstring{Estimation error and its dependence on \(\tau\)}{Estimation error and its dependence on tau}}\label{app:technical}\label{app:technical-notes}\label{estimation-error-and-its-dependence-on-tau}
@@ -889,31 +889,31 @@ standard error, and the re-run reproduced the stored results in all
 error, or the terms of Equation \ref{eq:error-decomposition} come from
 this re-run; the others come from the stored results.
 
-For one fit \((k, j)\), write \(Y\), \(Z\), and \(\epsilon\) for
-\(Y_{kj}\), \(Z_{kj}\), and \(\epsilon_{kj}\) (Section \ref{simulation-design-resampling-and-metrics}). Let \(V = [1, Z, S(Z), X_k]\) be the
+For one fit \((k, j)\), write \(\mathbf{Y}\), \(\mathbf{Z}\), and \(\boldsymbol{\varepsilon}\) for
+\(\mathbf{Y}_{kj}\), \(\mathbf{Z}_{kj}\), and \(\boldsymbol{\varepsilon}_{kj}\) (Section \ref{simulation-design-resampling-and-metrics}). Let \(\mathbf{V} = [\mathbf{1}, \mathbf{Z}, \mathbf{S}(\mathbf{Z}), \mathbf{X}_k]\) be the
 \(100 \times 4\) covariate matrix of the oracle model, so that Equation
-\ref{eq:outcome} reads \((I - \rho W)Y = V\theta + \epsilon\) with
-\(\theta = (0, \tau, 1, \beta)^\top\). Let \(A = (I - \rho W)^{-1}\) and
-\(V^{+} = (V^\top V)^{-1}V^\top\), and for a vector \(v\) write
-\([V^{+}v]_Z\) for the coefficient on \(Z\) when \(v\) is regressed on
-the columns of \(V\) by least squares. Given \(\hat\rho\), the estimated
-coefficients are \(V^{+}(I - \hat\rho W)Y\) (Section \ref{estimation}). Because
-\((I - \hat\rho W)Y = V\theta + \epsilon + (\rho - \hat\rho)WY\) and
-\(WY = WA(V\theta + \epsilon)\), \begin{equation}
-\hat\tau - \tau = [V^{+}\epsilon]_Z + (\rho - \hat\rho)\,h + \tau(\rho - \hat\rho)\,g,
+\ref{eq:outcome} reads \((\mathbf{I} - \rho \mathbf{W})\mathbf{Y} = \mathbf{V}\boldsymbol{\theta} + \boldsymbol{\varepsilon}\) with
+\(\boldsymbol{\theta} = (0, \tau, 1, \beta)^\top\). Let \(\mathbf{A} = (\mathbf{I} - \rho \mathbf{W})^{-1}\) and
+\(\mathbf{V}^{+} = (\mathbf{V}^\top \mathbf{V})^{-1}\mathbf{V}^\top\), and for a vector \(\mathbf{v}\) write
+\([\mathbf{V}^{+}\mathbf{v}]_Z\) for the coefficient on \(\mathbf{Z}\) when \(\mathbf{v}\) is regressed on
+the columns of \(\mathbf{V}\) by least squares. Given \(\hat\rho\), the estimated
+coefficients are \(\mathbf{V}^{+}(\mathbf{I} - \hat\rho \mathbf{W})\mathbf{Y}\) (Section \ref{estimation}). Because
+\((\mathbf{I} - \hat\rho \mathbf{W})\mathbf{Y} = \mathbf{V}\boldsymbol{\theta} + \boldsymbol{\varepsilon} + (\rho - \hat\rho)\mathbf{W}\mathbf{Y}\) and
+\(\mathbf{W}\mathbf{Y} = \mathbf{W}\mathbf{A}(\mathbf{V}\boldsymbol{\theta} + \boldsymbol{\varepsilon})\), \begin{equation}
+\hat\tau - \tau = [\mathbf{V}^{+}\boldsymbol{\varepsilon}]_Z + (\rho - \hat\rho)\,h + \tau(\rho - \hat\rho)\,g,
 \label{eq:error-decomposition}
 \end{equation} where \[
-g = [V^{+}WAZ]_Z, \qquad h = [V^{+}WA\{S(Z) + \beta X_k + \epsilon\}]_Z.
-\] The first term has mean zero given \(Z\) and \(X_k\). The last term
+g = [\mathbf{V}^{+}\mathbf{W}\mathbf{A}\mathbf{Z}]_Z, \qquad h = [\mathbf{V}^{+}\mathbf{W}\mathbf{A}\{\mathbf{S}(\mathbf{Z}) + \beta \mathbf{X}_k + \boldsymbol{\varepsilon}\}]_Z.
+\] The first term has mean zero given \(\mathbf{Z}\) and \(\mathbf{X}_k\). The last term
 has a factor of \(\tau\). It is present exactly when \(g \neq 0\),
-where \(g\) is the coefficient on \(Z\) when the lagged treatment
-\(WAZ = WZ + \rho W^2 Z + \rho^2 W^3 Z + \cdots\) is regressed on the
+where \(g\) is the coefficient on \(\mathbf{Z}\) when the lagged treatment
+\(\mathbf{W}\mathbf{A}\mathbf{Z} = \mathbf{W}\mathbf{Z} + \rho \mathbf{W}^2 \mathbf{Z} + \rho^2 \mathbf{W}^3 \mathbf{Z} + \cdots\) is regressed on the
 model's own covariates, and its sign and size are set by the error in
-\(\hat\rho\). The concentrated likelihood depends on \(Y\) only through
-the residual sum of squares of \((I - \tilde\rho W)Y\) on \(V\), and the
+\(\hat\rho\). The concentrated likelihood depends on \(\mathbf{Y}\) only through
+the residual sum of squares of \((\mathbf{I} - \tilde\rho \mathbf{W})\mathbf{Y}\) on \(\mathbf{V}\), and the
 part of that residual that involves \(\tau\) is
-\(\tau(\rho - \tilde\rho)\) times the residual of \(WAZ\) on \(V\). If
-\(WAZ\) lies in the column space of \(V\), that part vanishes for every
+\(\tau(\rho - \tilde\rho)\) times the residual of \(\mathbf{W}\mathbf{A}\mathbf{Z}\) on \(\mathbf{V}\). If
+\(\mathbf{W}\mathbf{A}\mathbf{Z}\) lies in the column space of \(\mathbf{V}\), that part vanishes for every
 \(\tilde\rho\), so \(\hat\rho\) is the same at every value of \(\tau\);
 if in addition \(g = 0\), then \(\hat\tau - \tau\) is the same at every
 value of \(\tau\). Equation \ref{eq:error-decomposition} held on every
@@ -942,14 +942,14 @@ the last term contributed 0.001 and 0.004.
 
 Most of the difference in
 \(g\) comes from the control-only regime. Under the both-arms regime
-with \(\rho = 0\), the lagged treatment is \(WZ = S(Z)/\gamma\), one of
+with \(\rho = 0\), the lagged treatment is \(\mathbf{W}\mathbf{Z} = \mathbf{S}(\mathbf{Z})/\gamma\), one of
 the covariates, so \(g = 0\) for every design. Under the control-only
-regime, \(WZ = S(Z)/\gamma + Z \circ WZ\), and at \(\rho = 0\), \(g\) is
+regime, \(\mathbf{W}\mathbf{Z} = \mathbf{S}(\mathbf{Z})/\gamma + \mathbf{Z} \circ \mathbf{W}\mathbf{Z}\), and at \(\rho = 0\), \(g\) is
 close to the average share of treated neighbors among treated clusters.
 That share is 0.57 for Incidence-Guided Saturation, whose
 treated clusters are concentrated in the high-saturation quadrants, and
 exactly 0 for Isolation Buffer, whose treated clusters have no treated
-neighbors. For Isolation Buffer, \(Z \circ WZ = 0\), so the two regimes
+neighbors. For Isolation Buffer, \(\mathbf{Z} \circ \mathbf{W}\mathbf{Z} = \mathbf{0}\), so the two regimes
 define the same spillover covariate and the same \(g\), which is 0 at
 \(\rho = 0\) and about 0.06 at \(\rho = 0.5\); at \(\rho = 0\), its
 \(\hat\rho\) and its estimation error were the same at every value of
@@ -973,15 +973,15 @@ The decomposition also explains why the coverage of Checkerboard
 under rook contiguity rose with \(\tau\). Under rook contiguity,
 Checkerboard's coverage rose from 0.150 at \(\tau = 0.8\) to 0.464 at
 \(\tau = 3\) (Section \ref{stability-across-treatment-effect-sizes}), although its
-coefficient on \(Z\) estimates \(\tau - \gamma\) at every value of
-\(\tau\). For this design \(WZ = 1 - Z\), and because \(W\) is
-row-standardized, \(W^2 Z = W(1 - Z) = Z\). The powers of \(W\) applied
-to \(Z\) therefore alternate between \(1 - Z\) and \(Z\), and
-\(WAZ = \{(1 - Z) + \rho Z\}/(1 - \rho^2)\) lies in the span of the
-intercept and \(Z\). The derivation of Equation
+coefficient on \(\mathbf{Z}\) estimates \(\tau - \gamma\) at every value of
+\(\tau\). For this design \(\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}\), and because \(\mathbf{W}\) is
+row-standardized, \(\mathbf{W}^2 \mathbf{Z} = \mathbf{W}(\mathbf{1} - \mathbf{Z}) = \mathbf{Z}\). The powers of \(\mathbf{W}\) applied
+to \(\mathbf{Z}\) therefore alternate between \(\mathbf{1} - \mathbf{Z}\) and \(\mathbf{Z}\), and
+\(\mathbf{W}\mathbf{A}\mathbf{Z} = \{(\mathbf{1} - \mathbf{Z}) + \rho \mathbf{Z}\}/(1 - \rho^2)\) lies in the span of the
+intercept and \(\mathbf{Z}\). The derivation of Equation
 \ref{eq:error-decomposition} applies with the aliased spillover column
-dropped, \(V = [1, Z, X_k]\) and
-\(\theta = (\gamma, \tau - \gamma, \beta)^\top\), so that
+dropped, \(\mathbf{V} = [\mathbf{1}, \mathbf{Z}, \mathbf{X}_k]\) and
+\(\boldsymbol{\theta} = (\gamma, \tau - \gamma, \beta)^\top\), so that
 \(\tau - \gamma\) takes the place of \(\tau\), and
 \(g = -1/(1 + \rho)\). Two consequences follow: \(\hat\rho\) is the same
 at every value of \(\tau\), and \[
@@ -1028,7 +1028,7 @@ Each entry of Table \ref{tab:performance} averages the 160 scenarios of one desi
 \small
 \centering
 
-\caption{Performance of the six designs at $\tau = 1$, pooled over the five incidence configurations, under queen and rook contiguity. Each entry averages 160 scenarios of 250 oracle fits each. Rows follow queen-contiguity mean squared error (MSE); SE of MSE is its Monte Carlo standard error, multiplied by 100. Average rank is the within-block MSE rank among the six designs and SRS (1 = lowest); clusters treated is a mean per assignment. Under rook contiguity Checkerboard is not identified ($WZ = 1 - Z$), and its coefficient on $Z$ estimates $\tau - \gamma$.}
+\caption{Performance of the six designs at $\tau = 1$, pooled over the five incidence configurations, under queen and rook contiguity. Each entry averages 160 scenarios of 250 oracle fits each. Rows follow queen-contiguity mean squared error (MSE); SE of MSE is its Monte Carlo standard error, multiplied by 100. Average rank is the within-block MSE rank among the six designs and SRS (1 = lowest); clusters treated is a mean per assignment. Under rook contiguity Checkerboard is not identified ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$), and its coefficient on $\mathbf{Z}$ estimates $\tau - \gamma$.}
 \label{tab:performance}
 
 \begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}ccccccc}
@@ -1231,7 +1231,7 @@ Incidence-Guided Saturation (0.135), Isolation Buffer (0.159),
 Balanced Quartiles (0.219), High Incidence Focus (0.329), \(2\times2\)
 Blocking (0.576), and Checkerboard (2.111); at larger values of
 \(\tau\), Isolation Buffer matched or passed Incidence-Guided Saturation under this regime (Section \ref{stability-across-treatment-effect-sizes}). For Isolation Buffer, no treated cluster has a treated neighbor,
-so \(WZ = 0\) at every treated cluster and \(WZ \circ (1 - Z) = WZ\).
+so \(\mathbf{W}\mathbf{Z} = 0\) at every treated cluster and \(\mathbf{W}\mathbf{Z} \circ (\mathbf{1} - \mathbf{Z}) = \mathbf{W}\mathbf{Z}\).
 The two regimes in Equation \ref{eq:spillover} therefore define the same
 outcome model, and so the same expected MSE; the observed values, 0.161
 and 0.159, differ only by Monte Carlo error, because the two regimes use
@@ -1277,7 +1277,7 @@ of design and regime under queen contiguity, the absolute bias was at
 most 0.048 and squared bias, averaged over scenarios, was at most 2.2\%
 of MSE. Checkerboard showed the mechanism most clearly: under the
 control-only regime its spillover covariate is a linear combination of
-the intercept and \(Z\) at every interior cluster, so only the boundary
+the intercept and \(\mathbf{Z}\) at every interior cluster, so only the boundary
 clusters separate the spillover effect from the treatment effect
 (Section \ref{identification-diagnostics}). Checkerboard's MSE rose from 0.062 under the both-arms regime
 to 2.111 under the control-only regime, while its bias stayed near zero
@@ -1597,7 +1597,7 @@ average rank (4.21 against 4.33), and the two designs traded places in mean MSE 
 other adjacent pair differed in all 50 units.
 
 Checkerboard under rook contiguity is a different case: \(\tau\) is not
-identified, and the coefficient on \(Z\) estimates \(\tau - \gamma\)
+identified, and the coefficient on \(\mathbf{Z}\) estimates \(\tau - \gamma\)
 (Section \ref{identification-diagnostics}). The estimates behaved accordingly. At \(\tau = 1\),
 Checkerboard's mean bias was \(-0.502\), \(-0.600\), \(-0.704\), and
 \(-0.802\) at \(\gamma = 0.5\), 0.6, 0.7, and 0.8, while its mean
@@ -1606,9 +1606,9 @@ over scenarios, accounted for 0.438 of its MSE of 0.480 (Figure
 \ref{fig:biasvar-rook} shows the
 decomposition for the Poisson configuration with \(\rho_X = 0.20\)). Its
 coverage fell from 0.337 at \(\gamma = 0.5\) to 0.031 at
-\(\gamma = 0.8\). Because \(WZ = 1 - Z\), the two spillover covariates
+\(\gamma = 0.8\). Because \(\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}\), the two spillover covariates
 in Equation \ref{eq:spillover} coincide,
-\(\gamma\, WZ \circ (1 - Z) = \gamma(1 - Z) = \gamma\, WZ\), so the two
+\(\gamma\, \mathbf{W}\mathbf{Z} \circ (\mathbf{1} - \mathbf{Z}) = \gamma(\mathbf{1} - \mathbf{Z}) = \gamma\, \mathbf{W}\mathbf{Z}\), so the two
 regimes define the same outcome model and the same expected MSE; the
 observed values, 0.477 under the both-arms regime and 0.483 under the
 control-only regime, differ only by Monte Carlo error, because the two
@@ -1645,7 +1645,7 @@ Rook & 0.171 & 0.168 & 0.161 & 0.146 \\
 Figures \ref{fig:mse-rook}, \ref{fig:coverage-rook} and \ref{fig:biasvar-rook} are the rook-contiguity
 versions of three queen-contiguity figures in Section \ref{detailed-grid-results-and-allocation-risk-pilot}. Each has the layout of its queen counterpart,
 with the designs reordered for rook contiguity. Under rook contiguity, \(\tau\) is not
-identified for Checkerboard (\(WZ = 1 - Z\)), and its estimates are kept and
+identified for Checkerboard (\(\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}\)), and its estimates are kept and
 flagged. Figure \ref{fig:mse-rook} corresponds to Figure \ref{fig:mse}.
 
 \begin{figure}[!htb]
@@ -1675,7 +1675,7 @@ configurations (Table \ref{tab:performance}), is far below it.
 
 Figure \ref{fig:biasvar-rook} corresponds to Figure \ref{fig:biasvar}.
 Nearly all of Checkerboard's MSE is squared bias, because its
-coefficient on \(Z\) estimates \(\tau - \gamma\) (Section \ref{identification-diagnostics}).
+coefficient on \(\mathbf{Z}\) estimates \(\tau - \gamma\) (Section \ref{identification-diagnostics}).
 
 \begin{figure}[!htb]
 
@@ -1706,7 +1706,7 @@ identical to the oracle estimates (MSE 0.480, bias \(-0.652\), coverage 0.162), 
 models are the same.
 
 Omitting the spillover term also removes a column that can be nearly
-collinear with \(Z\), and the non-oracle estimates were accordingly less
+collinear with \(\mathbf{Z}\), and the non-oracle estimates were accordingly less
 variable for some designs. Under queen contiguity, the non-oracle MSE
 was lower than the oracle MSE for every design, most of all for
 Checkerboard (oracle 1.087, non-oracle 0.108) and \(2\times2\) Blocking
@@ -1728,7 +1728,7 @@ non-oracle models for each of the six designs, as summarized above.
 \small
 \centering
 
-\caption{Oracle and non-oracle estimates of $\tau$ by design at $\tau = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type. The non-oracle model omits $\text{Spill}$. Rows follow oracle MSE under queen contiguity. Under rook contiguity, $\tau$ is not identified for Checkerboard ($WZ = 1 - Z$). Its estimates are kept and flagged, and the two models coincide.}
+\caption{Oracle and non-oracle estimates of $\tau$ by design at $\tau = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type. The non-oracle model omits $\text{Spill}$. Rows follow oracle MSE under queen contiguity. Under rook contiguity, $\tau$ is not identified for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$). Its estimates are kept and flagged, and the two models coincide.}
 \label{tab:oracle-nonoracle}
 
 \begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}cccccc}
@@ -2119,7 +2119,7 @@ contains only ten sampled draws, and extra outcomes reduce noise in
 
 
 In the matched sensitivity analysis that adds a hypothetical incidence
-baseline and adjusts for \(X\), the MSE of High Incidence Focus rises to roughly 3.68--4.44 times its primary
+baseline and adjusts for \(\mathbf{X}\), the MSE of High Incidence Focus rises to roughly 3.68--4.44 times its primary
 value under both arms and 1.42--2.52 times under control-only spillover.
 When treatment follows incidence, adjusting for incidence leaves less
 residual information about treatment. Comparing rook and queen contiguity at the same extreme combinations of $\rho$ and $\gamma$ leaves the regime-specific conclusions broadly unchanged. Alternative regional summaries change the regional ordering in some years; where an alternative summary gives the same ordering and ties, it gives the same set of possible assignments and so the same results. We retain the
@@ -2146,7 +2146,7 @@ analyses.
 \small
 \centering
 
-\caption{Incidence-Guided Saturation sensitivity MSE divided by matched primary MSE, by year and regime. Baseline adds rank-scaled $X$ to both generation and fit; rook uses the matched extreme combinations of $\rho$ and $\gamma$. Regional-summary alternatives preserve fixed regions.}
+\caption{Incidence-Guided Saturation sensitivity MSE divided by matched primary MSE, by year and regime. Baseline adds rank-scaled $\mathbf{X}$ to both generation and fit; rook uses the matched extreme combinations of $\rho$ and $\gamma$. Regional-summary alternatives preserve fixed regions.}
 \label{tab:nc-summary-sens}
 % SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_sensitivity_means.csv
 

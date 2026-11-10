@@ -76,6 +76,7 @@ Reasons and history for each rule: `DECISIONS.md`.
   include figure files written by scripts, never inline SVG/HTML or hand copies;
   `paper/tools/copy_figures.sh` carries `results/` figures into both paper folders.
 - **Thesis chapter formatting (2026-11-10):** Figures for the thesis chapter: save with cairo_pdf (embeds fonts) and keep all figure text at least 8 pt at printed size; tables stay within the 6.5 in text width with text no smaller than 10 pt (\footnotesize). `code/28_thesis_chapter_figures.R` (and `THESIS_ONLY=1 Rscript code/25_...`) rebuild the chapter's figures; `cairo_pdf` cannot load on this machine, so `code/00_thesis_figure_device.R` falls back to `pdftocairo`.
+- Notation: matrices and vectors bold (\mathbf{W}, \mathbf{Z}, \mathbf{Y}, \mathbf{X}, \mathbf{I}; Greek vectors \boldsymbol{\varepsilon}), scalars and single elements italic (z_i, \rho, \tau), matching Chapters 1-2 of the dissertation (decided 2026-11-10).
 - **MSE precision (author, 2026-11-10):** MSE and MSE-derived values (relative MSE, bias, variance, SD) are reported to 3 decimals; a table column too small for that gets a header multiplier (e.g. MSE ($\times 10$)), and prose uses the first significant figure (e.g. 0.0004), never 0.000.
 - **Where to write things down:** project docs go in `docs/` by type (`plans/`,
   `findings/`, `reviews/`, `prompts/`, `meetings/`), named `YYYY-MM-DD-topic-type.md`

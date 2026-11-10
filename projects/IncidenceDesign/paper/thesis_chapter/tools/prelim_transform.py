@@ -239,6 +239,12 @@ def transform(chapter_text, header_text, source_label):
     yaml_text, body = strip_yaml(chapter_text)
     title = yaml_title(yaml_text)
 
+    # T1b: drop the standalone-only {.unnumbered .unlisted} heading marks
+    #      (References, Appendix and the hand-numbered A<n> appendix
+    #      headings). The standalone numbers its sections; the prelim numbers
+    #      the appendix itself (B.1, B.7.1) and handles References in T2/T6.
+    body = re.sub(r"^(#{1,6} .*?) \{\.unnumbered \.unlisted\}[ \t]*$", r"\1", body, flags=re.M)
+
     # T2: remove the standalone References heading + refs div + \clearpage.
     #     The prelim puts References at the very end, after the appendix,
     #     as an unnumbered chapter (Chapter 2's convention; see T6).
