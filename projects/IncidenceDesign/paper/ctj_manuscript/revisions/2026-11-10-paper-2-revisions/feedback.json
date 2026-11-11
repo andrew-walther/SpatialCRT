@@ -1,0 +1,2152 @@
+{
+  "title": "CTJ manuscript feedback register",
+  "author": "Andrew Walther",
+  "created": "2026-11-11",
+  "source_pdf": "2026-11-11-Project-2-Manuscript-Feedback-FCL.pdf",
+  "source_sha256": "84b5d3e49c0da7760d64386c72774709b6d522daef0e1632624b65f6140ec0c9",
+  "source_pages": 9,
+  "page_numbering": "One-based PDF page numbers, matching the printed page numbers in this reading preview. These are not submission-layout or thesis page numbers.",
+  "annotation_counts": {
+    "Highlight": 58,
+    "StrikeOut": 2
+  },
+  "excluded_objects": "60 empty popup objects and 53 link annotations; popups are companions to the 60 substantive marks, not additional feedback.",
+  "record_order": "IDs follow PDF annotation-array order within each page, not necessarily visual reading order.",
+  "annotations": [
+    {
+      "id": "FCL-001",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Put citation to the end of the sentence?",
+      "annotation_author": "flin33",
+      "selected_text_raw": ",5–8",
+      "rects": [
+        [
+          144.293,
+          636.423,
+          154.754,
+          644.827
+        ],
+        [
+          140.807,
+          637.278,
+          143.298,
+          649.2819999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Design-stage methods include covariate-constrained randomization, randomized saturation and independent-set or spatial cluster designs,⁵–⁸ which serve different objectives.",
+      "related_ids": [
+        "FCL-009"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-002",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "who is \"its\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "its",
+      "rects": [
+        [
+          110.79,
+          709.009,
+          120.204,
+          721.013
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "In a strict checkerboard with edge neighbors, for example, a cluster’s exposure to treated neighbors is fully determined by its own treatment.",
+      "related_ids": [
+        "FCL-003",
+        "FCL-004",
+        "FCL-010"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-003",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "use \"checkerboard design\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "checkerboard",
+      "rects": [
+        [
+          139.86,
+          685.098,
+          193.419,
+          697.102
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "In a strict checkerboard with edge neighbors, for example, a cluster’s exposure to treated neighbors is fully determined by its own treatment.",
+      "related_ids": [
+        "FCL-002",
+        "FCL-004",
+        "FCL-010"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-004",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Do you want to cite the first paper here?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "treatment.",
+      "rects": [
+        [
+          142.092,
+          709.009,
+          182.212,
+          721.013
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "In a strict checkerboard with edge neighbors, for example, a cluster’s exposure to treated neighbors is fully determined by its own treatment.",
+      "related_ids": [
+        "FCL-002",
+        "FCL-003",
+        "FCL-010"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-005",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "What does this sentence mean?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "That work weighed average estimation accuracy against the risk of a poor",
+      "rects": [
+        [
+          204.937,
+          756.8287,
+          291.661,
+          768.8335
+        ],
+        [
+          51.024,
+          768.7846999999999,
+          291.661,
+          780.7895
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "That work weighed average estimation accuracy against the risk of a poor realized allocation.",
+      "related_ids": [
+        "FCL-006",
+        "FCL-007",
+        "FCL-011"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "The highlight ends at “poor” on page 1. The context sentence continues “realized allocation” at the top of the right column."
+    },
+    {
+      "id": "FCL-006",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Consider deleting this sentence and revise the first sentence of the paragraph to cover SRS and checkerboard.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "The comparison includes simple random sampling (SRS), meaning complete randomization of a fixed number of clusters, and the alternating allocation, here called Checkerboard.",
+      "rects": [
+        [
+          475.44,
+          512.745,
+          544.251,
+          524.749
+        ],
+        [
+          303.615,
+          524.7,
+          544.252,
+          536.704
+        ],
+        [
+          303.615,
+          536.655,
+          544.252,
+          548.659
+        ],
+        [
+          303.615,
+          548.61,
+          522.393,
+          560.614
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "The comparison includes simple random sampling (SRS), meaning complete randomization of a fixed number of clusters, and the alternating allocation, here called Checkerboard.",
+      "related_ids": [
+        "FCL-005",
+        "FCL-007",
+        "FCL-011"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-007",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "This sentence is more like the last sentence of the paragraph.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "We extend the question to heterogeneous incidence, a larger study region, additional strategies, and an irregular observed geography",
+      "rects": [
+        [
+          381.682,
+          488.834,
+          544.252,
+          500.83799999999997
+        ],
+        [
+          303.615,
+          500.78999999999996,
+          544.252,
+          512.794
+        ],
+        [
+          303.615,
+          512.745,
+          466.732,
+          524.749
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "We extend the question to heterogeneous incidence, a larger study region, additional strategies, and an irregular observed geography",
+      "related_ids": [
+        "FCL-005",
+        "FCL-006",
+        "FCL-011"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-008",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Cite some paper.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Two allocations with the same number of treated clusters can then provide very different information about the treatment effect.",
+      "rects": [
+        [
+          274.295,
+          577.502,
+          291.66,
+          589.506
+        ],
+        [
+          51.024,
+          589.457,
+          291.661,
+          601.461
+        ],
+        [
+          51.024,
+          601.412,
+          291.66,
+          613.4159999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Two allocations with the same number of treated clusters can then provide very different information about the treatment effect.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-009",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "How about this? \"Design-stage methods, including covariate-constrained randomization, randomized saturation and independent-set, and spatial cluster designs,5–8 serve different objectives.\"",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Design-stage methods include covariate-constrained ran- domization, randomized saturation and independent-set or spatial cluster designs,5–8 which serve different objectives.",
+      "rects": [
+        [
+          60.986,
+          613.367,
+          291.66,
+          625.371
+        ],
+        [
+          51.024,
+          625.323,
+          291.661,
+          637.327
+        ],
+        [
+          144.293,
+          636.423,
+          154.754,
+          644.827
+        ],
+        [
+          51.024,
+          637.278,
+          143.298,
+          649.2819999999999
+        ],
+        [
+          158.914,
+          637.278,
+          291.656,
+          649.2819999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Design-stage methods include covariate-constrained ran- domization, randomized saturation and independent-set or spatial cluster designs,5–8 which serve different objectives.",
+      "related_ids": [
+        "FCL-001"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-010",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Not sure I understand this sentence",
+      "annotation_author": "flin33",
+      "selected_text_raw": "In a strict checkerboard with edge neighbors, for example, a cluster’s exposure to treated neighbors is fully determined by its own treatment.",
+      "rects": [
+        [
+          100.967,
+          685.098,
+          291.66,
+          697.102
+        ],
+        [
+          51.024,
+          697.054,
+          291.661,
+          709.058
+        ],
+        [
+          51.024,
+          709.009,
+          182.212,
+          721.013
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "In a strict checkerboard with edge neighbors, for example, a cluster’s exposure to treated neighbors is fully determined by its own treatment.",
+      "related_ids": [
+        "FCL-002",
+        "FCL-003",
+        "FCL-004"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-011",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Is this checkerboard design?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "block stratified sampling",
+      "rects": [
+        [
+          160.961,
+          732.919,
+          271.337,
+          744.9235
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "In previous work on small grids, we compared simple random sampling with block stratified sampling, an alternating allocation in which no two clusters that share an edge are in the same arm.",
+      "related_ids": [
+        "FCL-005",
+        "FCL-006",
+        "FCL-007"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-012",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Suggestion: \"In this article, we aim to plan\"",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Our application supports planning",
+      "rects": [
+        [
+          313.578,
+          608.386,
+          458.355,
+          620.39
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Our application supports planning an education intervention for healthcare professionals involved in sudden unexpected death (SUD) prevention.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-013",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "use \"further challenges\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "challenges",
+      "rects": [
+        [
+          233.195,
+          529.681,
+          275.248,
+          541.685
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Introduction",
+      "subsection": "No subsection",
+      "chapter_followup": "Introduction",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Spatial interference challenges the assumption that a cluster’s outcome depends only on its own treatment.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-014",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "Need to understand this",
+      "annotation_author": "flin33",
+      "selected_text_raw": "the error under an unfavorable realized assignment (allocation risk)",
+      "rects": [
+        [
+          499.411,
+          199.36,
+          531.6,
+          209.90499999999997
+        ],
+        [
+          51.024,
+          209.82100000000003,
+          268.369,
+          220.36599999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Abstract",
+      "subsection": "Background/Aims",
+      "chapter_followup": "Abstract",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "We compared six treatment assignment designs and simple random sampling (SRS) on two criteria, the average estimation error and the error under an unfavorable realized assignment (allocation risk).",
+      "related_ids": [
+        "FCL-029",
+        "FCL-043"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-015",
+      "page": 1,
+      "type": "Highlight",
+      "comment": "use \"pilot trial\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "pilot",
+      "rects": [
+        [
+          158.018,
+          220.28099999999995,
+          173.64,
+          230.82600000000002
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Abstract",
+      "subsection": "Background/Aims",
+      "chapter_followup": "Abstract",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "We then applied the designs to planning a sudden unexpected death (SUD) prevention education pilot in North Carolina.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-016",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "Suggest moving it to the sentence. Make a one-line formula, if possible.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "ϵ ∼ N(0,I),",
+      "rects": [
+        [
+          89.285,
+          220.15199999999993,
+          93.3288,
+          230.115
+        ],
+        [
+          96.0984,
+          220.15199999999993,
+          103.847,
+          229.55700000000002
+        ],
+        [
+          106.617,
+          220.15199999999993,
+          140.794,
+          230.115
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Equation (1): Y = (I − ρW)⁻¹[τZ + S(Z) + βX + ε], ε ∼ N(0, I).",
+      "related_ids": [
+        "FCL-030"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-017",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "This sentence came from nowhere.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Queen contiguity was used for the primary analysis and rook contiguity for a sensitivity analysis",
+      "rects": [
+        [
+          119.566,
+          126.76800000000003,
+          291.66,
+          138.77199999999993
+        ],
+        [
+          51.024,
+          138.72299999999996,
+          266.226,
+          150.72699999999998
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Queen contiguity was used for the primary analysis and rook contiguity for a sensitivity analysis",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-018",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "noise; \\tau is in units...",
+      "annotation_author": "flin33",
+      "selected_text_raw": "noise",
+      "rects": [
+        [
+          84.0798,
+          258.89099999999996,
+          105.111,
+          270.895
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "ε is independent standard normal noise (so τ is in units of its standard deviation) and ρ is the spatial dependence of the outcomes.",
+      "related_ids": [
+        "FCL-019",
+        "FCL-020"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-019",
+      "page": 2,
+      "type": "StrikeOut",
+      "comment": "",
+      "annotation_author": "flin33",
+      "selected_text_raw": "(so",
+      "rects": [
+        [
+          109.943,
+          258.89099999999996,
+          122.117,
+          270.895
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "ε is independent standard normal noise (so τ is in units of its standard deviation) and ρ is the spatial dependence of the outcomes.",
+      "related_ids": [
+        "FCL-018",
+        "FCL-020"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Strikeout only. The PDF contains no written comment for this mark; the marked text is the feedback."
+    },
+    {
+      "id": "FCL-020",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "deviation,",
+      "annotation_author": "flin33",
+      "selected_text_raw": "deviation)",
+      "rects": [
+        [
+          251.513,
+          258.89099999999996,
+          291.663,
+          270.895
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "ε is independent standard normal noise (so τ is in units of its standard deviation) and ρ is the spatial dependence of the outcomes.",
+      "related_ids": [
+        "FCL-018",
+        "FCL-019"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-021",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "Using \"baseline outcome\" may be confusing to statistical readers.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "The coefficient β sets how strongly incidence shifts the baseline outcome.",
+      "rects": [
+        [
+          97.4896,
+          402.353,
+          159.457,
+          414.35699999999997
+        ],
+        [
+          174.965,
+          402.353,
+          291.657,
+          414.35699999999997
+        ],
+        [
+          164.129,
+          404.086,
+          169.764,
+          414.049
+        ],
+        [
+          51.024,
+          414.308,
+          163.631,
+          426.312
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "The coefficient β sets how strongly incidence shifts the baseline outcome.",
+      "related_ids": [
+        "FCL-022",
+        "FCL-047",
+        "FCL-053"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-022",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "\"choose\", but \"not estimated\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Investigators can choose β to suit their own outcome.",
+      "rects": [
+        [
+          108.827,
+          450.173,
+          208.902,
+          462.17699999999996
+        ],
+        [
+          222.775,
+          450.173,
+          291.657,
+          462.17699999999996
+        ],
+        [
+          212.757,
+          451.906,
+          218.392,
+          461.86899999999997
+        ],
+        [
+          51.024,
+          462.12899999999996,
+          87.8259,
+          474.133
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Investigators can choose β to suit their own outcome.",
+      "related_ids": [
+        "FCL-021",
+        "FCL-047",
+        "FCL-053"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-023",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "This sentence is too much broken.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "We estimated τ, giving τˆ, by maximum likelihood (ML), fitting the SAR lag model with an intercept, treatment, the true regime-specific spillover covariate and, in the grid study, incidence.",
+      "rects": [
+        [
+          60.986,
+          474.084,
+          291.664,
+          486.08799999999997
+        ],
+        [
+          118.092,
+          475.817,
+          122.447,
+          485.78
+        ],
+        [
+          157.167,
+          475.817,
+          162.676,
+          485.78
+        ],
+        [
+          51.024,
+          486.039,
+          291.661,
+          498.043
+        ],
+        [
+          51.024,
+          497.99399999999997,
+          291.66,
+          509.998
+        ],
+        [
+          51.024,
+          509.949,
+          91.6914,
+          521.953
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "We estimated τ, giving τˆ, by maximum likelihood (ML), fitting the SAR lag model with an intercept, treatment, the true regime-specific spillover covariate and, in the grid study, incidence.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-024",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "need reference",
+      "annotation_author": "flin33",
+      "selected_text_raw": "This interval covered τ more reliably than the standard Wald interval, τˆ ± 1.96Sˆ︂E.",
+      "rects": [
+        [
+          273.948,
+          608.8489999999999,
+          291.662,
+          620.853
+        ],
+        [
+          51.024,
+          620.804,
+          117.315,
+          632.808
+        ],
+        [
+          132.54,
+          620.804,
+          291.662,
+          632.808
+        ],
+        [
+          122.187,
+          622.537,
+          126.542,
+          632.5
+        ],
+        [
+          124.683,
+          630.671,
+          134.646,
+          643.125
+        ],
+        [
+          51.024,
+          633.947,
+          83.7013,
+          645.951
+        ],
+        [
+          123.507,
+          633.947,
+          138.313,
+          645.951
+        ],
+        [
+          86.4709,
+          635.68,
+          91.9802,
+          645.643
+        ],
+        [
+          94.1739,
+          635.68,
+          101.923,
+          645.085
+        ],
+        [
+          104.135,
+          635.68,
+          121.846,
+          645.643
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "This interval covered τ more reliably than the standard Wald interval, τ̂ ± 1.96 SÊ.",
+      "related_ids": [
+        "FCL-026",
+        "FCL-027"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-025",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "add \"mean squared error\"",
+      "annotation_author": "flin33",
+      "selected_text_raw": "MSE",
+      "rects": [
+        [
+          253.74,
+          633.947,
+          274.223,
+          645.951
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Accuracy was measured by MSE, the average of (τ̂ − τ)² over simulated trials, and coverage by the proportion of 95% intervals containing τ.",
+      "related_ids": [
+        "FCL-026",
+        "FCL-027"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-026",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "confidence intervals",
+      "annotation_author": "flin33",
+      "selected_text_raw": "intervals",
+      "rects": [
+        [
+          141.783,
+          657.858,
+          175.845,
+          669.862
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Accuracy was measured by MSE, the average of (τ̂ − τ)² over simulated trials, and coverage by the proportion of 95% intervals containing τ.",
+      "related_ids": [
+        "FCL-024",
+        "FCL-025",
+        "FCL-027"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-027",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "\"coverage was measured\"",
+      "annotation_author": "flin33",
+      "selected_text_raw": "coverage",
+      "rects": [
+        [
+          242.565,
+          645.903,
+          278.221,
+          657.9069999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Accuracy was measured by MSE, the average of (τ̂ − τ)² over simulated trials, and coverage by the proportion of 95% intervals containing τ.",
+      "related_ids": [
+        "FCL-024",
+        "FCL-025",
+        "FCL-026"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-028",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "identifiable?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "identified",
+      "rects": [
+        [
+          51.024,
+          717.634,
+          88.6628,
+          729.638
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "With rook contiguity, Checkerboard gives WZ = 1 − Z, so treatment and spillover cannot be separated, τ is not identified (cannot be estimated), and the treatment coefficient estimates τ − γ.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-029",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "Is one assignment possible?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "A design with only one possible assignment has no spread, although its error can still be high.",
+      "rects": [
+        [
+          417.398,
+          187.53999999999996,
+          544.252,
+          199.54499999999996
+        ],
+        [
+          303.615,
+          199.49599999999998,
+          544.252,
+          211.50099999999998
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "A design with only one possible assignment has no spread, although its error can still be high.",
+      "related_ids": [
+        "FCL-014",
+        "FCL-043"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-030",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "Why not \\gamma S(Z)?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "S(Z)",
+      "rects": [
+        [
+          186.278,
+          205.20799999999997,
+          208.222,
+          215.17099999999994
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Outcome model, estimation and allocation risk",
+      "chapter_followup": "Methods → Spatial Structure, Outcome Model and Estimand; Estimation and Performance Criteria",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Equation (1) includes S(Z). The following paragraph defines S(Z) = γWZ for both arms and S(Z) = γ(1 − Z) ∘ WZ for control-only spillover.",
+      "related_ids": [
+        "FCL-016",
+        "FCL-056"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-031",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "regimes,",
+      "annotation_author": "flin33",
+      "selected_text_raw": "regimes",
+      "rects": [
+        [
+          466.126,
+          543.804,
+          497.518,
+          555.808
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "The simulation crossed ρ = 0, 0.01, 0.2, 0.5, γ = 0.5, 0.6, 0.7, 0.8, both spillover regimes and τ = 0.8, 1, 1.5, 2, 3.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-032",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "write the spatial model for X specifically?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "two dependence strengths (ρX = 0.2,0.5),",
+      "rects": [
+        [
+          303.615,
+          579.67,
+          424.202,
+          591.674
+        ],
+        [
+          467.365,
+          579.67,
+          485.904,
+          591.674
+        ],
+        [
+          424.202,
+          581.403,
+          435.888,
+          592.113
+        ],
+        [
+          439.695,
+          581.403,
+          465.711,
+          591.366
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "The five incidence configurations were independent Uniform(0, 1) incidence, spatial incidence at two dependence strengths (ρX = 0.2, 0.5), and Poisson incidence at the same two strengths.",
+      "related_ids": [
+        "FCL-033",
+        "FCL-034",
+        "FCL-035",
+        "FCL-036",
+        "FCL-042"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-033",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "One normal and one Poisson?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Poisson",
+      "rects": [
+        [
+          513.251,
+          579.67,
+          544.255,
+          591.674
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "The five incidence configurations were independent Uniform(0, 1) incidence, spatial incidence at two dependence strengths (ρX = 0.2, 0.5), and Poisson incidence at the same two strengths.",
+      "related_ids": [
+        "FCL-032",
+        "FCL-034"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-034",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "How?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Spatial incidence smoothed independent normal values across queen neighbors with a SAR filter and mapped them to (0,1) with the normal distribution function",
+      "rects": [
+        [
+          472.192,
+          591.625,
+          544.252,
+          603.629
+        ],
+        [
+          303.615,
+          603.5799999999999,
+          544.252,
+          615.584
+        ],
+        [
+          303.615,
+          615.535,
+          489.547,
+          627.539
+        ],
+        [
+          526.534,
+          615.535,
+          544.248,
+          627.539
+        ],
+        [
+          496.969,
+          617.268,
+          519.112,
+          627.231
+        ],
+        [
+          303.615,
+          627.491,
+          439.256,
+          639.495
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Spatial incidence smoothed independent normal values across queen neighbors with a SAR filter and mapped them to (0,1) with the normal distribution function",
+      "related_ids": [
+        "FCL-032",
+        "FCL-033"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-035",
+      "page": 2,
+      "type": "Highlight",
+      "comment": "What does that mean by \"surface k assignment\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "surface",
+      "rects": [
+        [
+          515.589,
+          758.9977,
+          544.251,
+          771.0024999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "For each configuration we generated ten independent incidence surfaces, each shared by every parameter setting and design, and for surface k the assignments, outcomes and fitted model all used the same incidence Xk.",
+      "related_ids": [
+        "FCL-032",
+        "FCL-042"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Only “surface” is highlighted at the bottom of page 2; the sentence continues on page 3. The reviewer’s wording refers to the longer passage."
+    },
+    {
+      "id": "FCL-036",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "rho?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "ρX",
+      "rects": [
+        [
+          279.535,
+          76.79499999999996,
+          290.267,
+          86.00999999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Treatment assignment designs · Table 1",
+      "chapter_followup": "Methods → Treatment Assignment Designs; Application → Geographic Adaptations and Treatment Budgets",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 1 caption: a representative spatial surface (incidence dependence ρX = 0.5) drawn for illustration.",
+      "related_ids": [
+        "FCL-032",
+        "FCL-037"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-037",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "This is not design, right?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Incidence surface",
+      "rects": [
+        [
+          60.076,
+          173.85500000000002,
+          123.567,
+          184.56100000000004
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Treatment assignment designs · Table 1",
+      "chapter_followup": "Methods → Treatment Assignment Designs; Application → Geographic Adaptations and Treatment Budgets",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 1, first row: Incidence surface. Representative incidence surface used in the design examples below; darker cells represent higher incidence, and dashed lines mark quadrant boundaries.",
+      "related_ids": [
+        "FCL-036",
+        "FCL-038"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-038",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "use \"region\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "cluster",
+      "rects": [
+        [
+          402.026,
+          179.08500000000004,
+          425.93,
+          189.89
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Treatment assignment designs · Table 1",
+      "chapter_followup": "Methods → Treatment Assignment Designs; Application → Geographic Adaptations and Treatment Budgets",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 1, Incidence surface row, NC column: Observed annual SUD rate of each cluster.",
+      "related_ids": [
+        "FCL-037"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-039",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "I need to understand this.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "gives each the arm less common among its assigned neighbor",
+      "rects": [
+        [
+          454.82,
+          236.21699999999998,
+          521.441,
+          247.02099999999996
+        ],
+        [
+          402.026,
+          246.678,
+          519.585,
+          257.48199999999997
+        ],
+        [
+          402.026,
+          257.139,
+          433.901,
+          267.943
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Treatment assignment designs · Table 1",
+      "chapter_followup": "Methods → Treatment Assignment Designs; Application → Geographic Adaptations and Treatment Budgets",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 1, Checkerboard row, NC column: Deterministic map version that visits clusters from most to fewest neighbors and gives each the arm less common among its assigned neighbors (27 treated).",
+      "related_ids": [
+        "FCL-011"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "The coordinate extraction clips the last letters of “neighbors”. The full sentence is supplied as context and is visible in the image."
+    },
+    {
+      "id": "FCL-040",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "Need to understand this",
+      "annotation_author": "flin33",
+      "selected_text_raw": "k-means clustering on location",
+      "rects": [
+        [
+          504.243,
+          418.949,
+          535.196,
+          429.753
+        ],
+        [
+          402.026,
+          429.40999999999997,
+          479.729,
+          440.214
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Treatment assignment designs · Table 1",
+      "chapter_followup": "Methods → Treatment Assignment Designs; Application → Geographic Adaptations and Treatment Budgets",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 1, 2 × 2 Blocking row, NC column: Spatial blocking, which treats a random half (rounded) of each of 14 groups formed each year by k-means clustering on location, incidence rank and log-population (27–31 treated by year).",
+      "related_ids": [
+        "FCL-054"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-041",
+      "page": 3,
+      "type": "StrikeOut",
+      "comment": "",
+      "annotation_author": "flin33",
+      "selected_text_raw": "so",
+      "rects": [
+        [
+          249.14,
+          768.1516,
+          257.997,
+          780.1564
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Every performance metric is estimated from a finite number of simulated datasets and so carries simulation (Monte Carlo) error.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Strikeout only. The PDF contains no written comment for this mark; the marked text is the feedback."
+    },
+    {
+      "id": "FCL-042",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "I am confused by \"configuration\".",
+      "annotation_author": "flin33",
+      "selected_text_raw": "configurations",
+      "rects": [
+        [
+          384.093,
+          720.331,
+          441.099,
+          732.335
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "MCSEs and paired comparisons between designs used the 50 independent configuration-by-surface units (five configurations by ten surfaces), rather than treating settings that share a surface as independent replications.",
+      "related_ids": [
+        "FCL-032",
+        "FCL-035"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-043",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "Is this part of the results?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "To estimate allocation risk on the grid",
+      "rects": [
+        [
+          313.578,
+          756.1966,
+          474.962,
+          768.2014
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Simulation study",
+      "chapter_followup": "Methods → Heterogeneous Baseline Incidence; Simulation Design, Resampling, and Metrics",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "To estimate allocation risk on the grid, we used all 50 configuration-by-surface units with queen contiguity, τ = 1, ρ ∈ {0, 0.5} and γ ∈ {0.5, 0.8}.",
+      "related_ids": [
+        "FCL-014",
+        "FCL-029"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-044",
+      "page": 3,
+      "type": "Highlight",
+      "comment": "Is that fair to say this design is not incidence guided but performs very well in the simulation?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Isolation Buffer",
+      "rects": [
+        [
+          60.076,
+          355.711,
+          116.878,
+          366.515
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Treatment assignment designs · Table 1",
+      "chapter_followup": "Methods → Treatment Assignment Designs; Application → Geographic Adaptations and Treatment Budgets",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 1, Isolation Buffer row: treat clusters one at a time, each chosen at random from the untreated clusters with no treated neighbor, until none remain.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-045",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "What is \"simulated\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "rather than simulated",
+      "rects": [
+        [
+          268.428,
+          278.001,
+          291.661,
+          290.006
+        ],
+        [
+          51.024,
+          289.956,
+          109.774,
+          301.961
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Application to sudden unexpected death in North Carolina",
+      "chapter_followup": "Application to Sudden Unexpected Death in North Carolina → Purpose and Observed Inputs; Geographic Adaptations and Treatment Budgets; Outcome Model, Evaluation and Sensitivity Analyses",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "The observed rates were used as fixed inputs rather than simulated (Figure 1), and the four years were analyzed as separate planning scenarios rather than as follow-up of an intervention.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-046",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "Use \"(1)\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "1",
+      "rects": [
+        [
+          151.228,
+          349.73199999999997,
+          159.347,
+          361.73699999999997
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Application to sudden unexpected death in North Carolina",
+      "chapter_followup": "Application to Sudden Unexpected Death in North Carolina → Purpose and Observed Inputs; Geographic Adaptations and Treatment Budgets; Outcome Model, Evaluation and Sensitivity Analyses",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "It followed Equation 1 with β = 0, τ = 1 and the row-standardized queen contiguity matrix of the 58 clusters.",
+      "related_ids": [
+        "FCL-016"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-047",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "Not sure about this",
+      "annotation_author": "flin33",
+      "selected_text_raw": "with β = 0, τ = 1",
+      "rects": [
+        [
+          162.475,
+          349.73199999999997,
+          180.189,
+          361.73699999999997
+        ],
+        [
+          202.778,
+          349.73199999999997,
+          210.25,
+          361.73699999999997
+        ],
+        [
+          183.327,
+          351.465,
+          200.009,
+          361.428
+        ],
+        [
+          213.378,
+          351.465,
+          237.129,
+          361.428
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Application to sudden unexpected death in North Carolina",
+      "chapter_followup": "Application to Sudden Unexpected Death in North Carolina → Purpose and Observed Inputs; Geographic Adaptations and Treatment Budgets; Outcome Model, Evaluation and Sensitivity Analyses",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "It followed Equation 1 with β = 0, τ = 1 and the row-standardized queen contiguity matrix of the 58 clusters.",
+      "related_ids": [
+        "FCL-021",
+        "FCL-022",
+        "FCL-053"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-048",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "should this section be shown after simulation results?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Application to sudden unexpected death in North Carolina",
+      "rects": [
+        [
+          51.024,
+          103.03300000000002,
+          264.714,
+          117.082
+        ],
+        [
+          51.024,
+          116.981,
+          124.688,
+          131.02999999999997
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Application to sudden unexpected death in North Carolina",
+      "chapter_followup": "Application to Sudden Unexpected Death in North Carolina → Purpose and Observed Inputs; Geographic Adaptations and Treatment Budgets; Outcome Model, Evaluation and Sensitivity Analyses",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Methods subsection heading: Application to sudden unexpected death in North Carolina.",
+      "related_ids": [
+        "FCL-049"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-049",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "Should this sentence be mentioned later?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Incidence configuration changed each design’s MSE by less than 10%, except for High Incidence Focus (Figure 2).",
+      "rects": [
+        [
+          505.527,
+          384.203,
+          544.251,
+          396.20799999999997
+        ],
+        [
+          303.615,
+          396.15799999999996,
+          544.252,
+          408.163
+        ],
+        [
+          303.615,
+          408.114,
+          512.53,
+          420.11899999999997
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Spillover Regime; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Incidence configuration changed each design’s MSE by less than 10%, except for High Incidence Focus (Figure 2).",
+      "related_ids": [
+        "FCL-048"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-050",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "three significant digits? I can't find this number in Table 2.",
+      "annotation_author": "flin33",
+      "selected_text_raw": "0.0907",
+      "rects": [
+        [
+          343.286,
+          432.024,
+          370.683,
+          444.029
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Spillover Regime; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Pooled over both regimes, Incidence-Guided Saturation had a mean MSE of 0.0907 against 0.1285 for SRS, but separating the regimes was essential.",
+      "related_ids": [
+        "FCL-051",
+        "FCL-055"
+      ],
+      "status": "Partly addressed",
+      "status_note": "Author confirmed on 2026-11-11 that the three-decimal reporting rule was adopted after this draft was circulated. The current CTJ source uses 0.091 here. The question about locating the pooled result in the regime-specific Table 2 remains open.",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-051",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "What does this mean?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "separating the regimes was essential.",
+      "rects": [
+        [
+          503.305,
+          432.024,
+          544.252,
+          444.029
+        ],
+        [
+          303.615,
+          443.979,
+          410.833,
+          455.984
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Spillover Regime; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Pooled over both regimes, Incidence-Guided Saturation had a mean MSE of 0.0907 against 0.1285 for SRS, but separating the regimes was essential.",
+      "related_ids": [
+        "FCL-050",
+        "FCL-058"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-052",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "What does this mean?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "(SI)",
+      "rects": [
+        [
+          303.615,
+          623.307,
+          319.107,
+          635.3109999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Spillover Regime; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Their worse control-only accuracy reflects imprecision rather than bias (SI).",
+      "related_ids": [
+        "FCL-059"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-053",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "why beta=1?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "β = 1",
+      "rects": [
+        [
+          267.232,
+          387.33099999999996,
+          291.665,
+          397.294
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Application to sudden unexpected death in North Carolina",
+      "chapter_followup": "Application to Sudden Unexpected Death in North Carolina → Purpose and Observed Inputs; Geographic Adaptations and Treatment Budgets; Outcome Model, Evaluation and Sensitivity Analyses",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "The education outcome is not expected to depend on SUD incidence, so incidence guided allocation only, and β = 1 served as a hypothetical sensitivity analysis.",
+      "related_ids": [
+        "FCL-021",
+        "FCL-022",
+        "FCL-047"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-054",
+      "page": 4,
+      "type": "Highlight",
+      "comment": "Need to understand this",
+      "annotation_author": "flin33",
+      "selected_text_raw": "chosen from 250 k-means candidate partitions for compactness and balance in population, clusters and counties",
+      "rects": [
+        [
+          88.852,
+          493.19399999999996,
+          291.657,
+          505.198
+        ],
+        [
+          51.024,
+          505.149,
+          291.661,
+          517.153
+        ],
+        [
+          51.024,
+          517.105,
+          84.2295,
+          529.1089999999999
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Methods",
+      "subsection": "Application to sudden unexpected death in North Carolina",
+      "chapter_followup": "Application to Sudden Unexpected Death in North Carolina → Purpose and Observed Inputs; Geographic Adaptations and Treatment Budgets; Outcome Model, Evaluation and Sensitivity Analyses",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Incidence-Guided Saturation used four fixed geographic regions, chosen from 250 k-means candidate partitions for compactness and balance in population, clusters and counties.",
+      "related_ids": [
+        "FCL-040"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-055",
+      "page": 5,
+      "type": "Highlight",
+      "comment": "change to \"spatial dependence coefficient\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "outcome-dependence values",
+      "rects": [
+        [
+          125.36,
+          399.28499999999997,
+          234.518,
+          409.83099999999996
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best · Table 2",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 2 caption: Each regime-specific entry averages 80 scenarios (five incidence configurations, four outcome-dependence values ρ and four spillover-magnitude values γ).",
+      "related_ids": [
+        "FCL-050"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-056",
+      "page": 5,
+      "type": "Highlight",
+      "comment": "true \\gamma?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "the true spillover term",
+      "rects": [
+        [
+          331.71,
+          420.207,
+          413.602,
+          430.753
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best · Table 2",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 2 caption: Both use the spatial lag model that includes the true spillover term.",
+      "related_ids": [
+        "FCL-030"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-057",
+      "page": 5,
+      "type": "Highlight",
+      "comment": "change to \"Reference\"?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "N/A",
+      "rects": [
+        [
+          300.239,
+          571.412,
+          315.679,
+          582.216
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best · Table 2",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 2, Simple Random Sampling row: N/A in the Both arms Ratio to SRS (95% CI) column. The Control only reference cell also displays N/A.",
+      "related_ids": [],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-058",
+      "page": 5,
+      "type": "Highlight",
+      "comment": "Is it fair to say if the spillover happens in both arm, don't bother to design a more complicated sampling? —> Yes, there is no clear alternative design that outperforms SRS",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Both arms",
+      "rects": [
+        [
+          252.058,
+          477.921,
+          289.17,
+          488.72499999999997
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best · Table 2",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 2: Both arms column-group heading, over MSE, Coverage and Ratio to SRS (95% CI).",
+      "related_ids": [
+        "FCL-051",
+        "FCL-059"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original. The arrow response is part of the current annotation contents. It is preserved verbatim, without assigning authorship to that addition."
+    },
+    {
+      "id": "FCL-059",
+      "page": 5,
+      "type": "Highlight",
+      "comment": "This one is a winner. How sensitive can it be for a certain scenario that can damage the estimation?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "Incidence-Guided Saturation",
+      "rects": [
+        [
+          80.616,
+          560.951,
+          183.954,
+          571.755
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "Simulation study: the spillover regime determines which designs perform best · Table 2",
+      "chapter_followup": "Results → Design Performance Under Queen Contiguity; Comparison with Simple Random Sampling",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Table 2: Incidence-Guided Saturation row, with both-arms MSE 0.0459 and control-only MSE 0.1355 in the annotated draft.",
+      "related_ids": [
+        "FCL-044",
+        "FCL-052",
+        "FCL-058",
+        "FCL-060"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original."
+    },
+    {
+      "id": "FCL-060",
+      "page": 5,
+      "type": "Highlight",
+      "comment": "use \"the best\"? —> preferred?",
+      "annotation_author": "flin33",
+      "selected_text_raw": "strong",
+      "rects": [
+        [
+          314.972,
+          618.361,
+          346.535,
+          632.409
+        ]
+      ],
+      "page_width": 595.276,
+      "page_height": 841.89,
+      "section": "Results",
+      "subsection": "SUD application: Incidence-Guided Saturation is strong under control-only spillover",
+      "chapter_followup": "Application to Sudden Unexpected Death in North Carolina → Accuracy, Coverage and Reach",
+      "chapter_followup_status": "Provisional topic mapping, not a verified line-level match or an approved revision.",
+      "context": "Results subsection heading: SUD application: Incidence-Guided Saturation is strong under control-only spillover.",
+      "related_ids": [
+        "FCL-059"
+      ],
+      "status": "Open",
+      "status_note": "",
+      "selection_note": "Text selected by annotation coordinates; line-wrap hyphens and mathematical glyph order may reflect PDF extraction. The image below preserves the marked original. The arrow response is part of the current annotation contents. It is preserved verbatim, without assigning authorship to that addition."
+    }
+  ]
+}

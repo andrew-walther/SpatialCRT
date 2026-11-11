@@ -216,6 +216,22 @@ are complete (see the status at the top: `paper/ctj_manuscript/`,
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
+### 2026-11-11 — FCL manuscript feedback register
+
+- Grouped the annotated PDF and feedback outputs in
+  `paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/` at the author's request.
+- Extracted all 58 written comments and two strikeouts into `feedback.json` and
+  a self-contained `feedback.html`, with selected text, page, section/subsection,
+  original passage images, related IDs and provisional Chapter 3 destinations.
+- The author confirmed that the three-decimal rule postdates the reviewed draft.
+  FCL-050 is partly addressed: precision is settled; the pooled-result/Table 2
+  question remains open. Arrow responses already in annotations are preserved.
+- The annotated PDF is preserved byte-for-byte. Neither CTJ source nor Chapter 3
+  was edited. Additional author notes and a revision plan remain to be assembled.
+- Independent extraction/mapping review found no errors. Record, link, embedded-image
+  and JavaScript logic checks passed; the browser's local-file policy prevented
+  a browser layout check.
+
 ### 2026-11-02 — project cleanup
 
 Review and decisions: `docs/reviews/2026-11-02-project-cleanup-review.md`

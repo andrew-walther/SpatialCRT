@@ -5,6 +5,7 @@ Reports from independent reviewers. The brief each reviewer worked from is in
 
 | Date | Document | Purpose | Status |
 |---|---|---|---|
+| 2026-11-11 | [FCL manuscript feedback register](../../paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/feedback.html) | 60 PDF annotations mapped to marked passages, paper pages/sections and provisional Chapter 3 destinations; additional author notes pending | active |
 | 2026-09-23 | [step0-review-findings](2026-09-23-step0-review-findings.md) | First citation, number and voice review of the chapter draft | complete |
 | 2026-10-02 | [nc-sud-independent-review](2026-10-02-nc-sud-independent-review.md) | Design review of the NC SUD study before production | complete |
 | 2026-10-12 | [ctj-comprehensive-review-findings](2026-10-12-ctj-comprehensive-review-findings.md) | Four read-only review tracks on the CTJ paper before the advisor meeting | complete |

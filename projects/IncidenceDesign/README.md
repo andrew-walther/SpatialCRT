@@ -13,6 +13,17 @@ reasons in [DECISIONS.md](DECISIONS.md).
 
 > For session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
+### Manuscript feedback (2026-11-11)
+
+The [FCL feedback register](paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/feedback.html)
+groups 58 written comments and two strikeouts with their marked text, PDF page,
+paper section and provisional Chapter 3 destination. Open the HTML file in a browser;
+no server or build is needed. Search and filters help locate comments, and note fields
+support the next revision plan. Notes save in browser storage only; use **Export your
+notes** to keep or share a copy. The annotated PDF, extracted JSON and usage notes
+are in the same [revision folder](paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/README.md).
+The papers have not been revised in response to this register yet.
+
 ### Allocation risk (grid)
 
 A nested study compares all eight designs with Simple Random Sampling (SRS) on the
