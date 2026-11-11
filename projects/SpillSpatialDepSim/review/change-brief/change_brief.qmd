@@ -110,9 +110,9 @@ n_opt <- function(grid, version) {
 
 ## Summary
 
-While porting the paper into Chapter 2 we found two coding errors that affect only the 3×3 and 3×4 grids. The summary script used the 2×4 BSS allocations (combos 28 and 43) for every grid, so the BSS columns for 3×3 and 3×4 summarized two allocations that are not block stratified on those grids. The control-only spillover loop in the 3×3 and 3×4 simulation scripts also stopped at district 8, so the higher-numbered treated districts never passed spillover to their control neighbors. That second error changed the SRS control-only results only.
+While reviewing the paper and corresponding code for thesis integration, we found two coding errors that affect only the 3×3 and 3×4 grids. The summary script used the 2×4 BSS allocations for every grid, such that the BSS columns for 3×3 and 3×4 summarized two allocations that are not the block stratified design on those grids. The control-only spillover loop in the 3×3 and 3×4 simulation scripts also stopped at district 8 (for the 2x4 grid) instead of indexing to 9 and 12. Therefore, the higher-numbered (9-12) treated districts never passed spillover to their control neighbors. That second error changed the SRS control-only results only.
 
-Fixing both changes two figures (Figures 6 and 7), two tables (Tables 2 and 3), the results paragraphs for the 3×3 and 3×4 grids, and one Discussion paragraph (the "checkerboard paradox", which is removed). A handful of summary sentences elsewhere are softened to match. The methods, the 2×4 results (Table 1, Figure 5) and the North Carolina recommendation do not change.
+Fixing both issues changes two figures (Figures 6 and 7), two tables (Tables 2 and 3), the results paragraphs for the 3×3 and 3×4 grids, and one paragraph of the discussion section (the "checkerboard paradox", which is removed). A handful of summary sentences elsewhere are altered to match the updated results. The methods, the 2×4 results (Table 1, Figure 5) and the North Carolina recommendation (Application) do not change.
 
 The paper's findings and its recommendation are unchanged, and the corrected results support them more consistently across grids than the published ones did. After the fix, the 3×4 grid follows the same pattern as the 2×4 grid in all 16 scenarios. On every grid SRS has the lower average MSE when spillover reaches both arms, BSS has the lower MSE when spillover goes into control clusters and spatial dependence is present, and BSS is usually the less variable design. Some individual 3×3 and 3×4 values do move a lot, and in two settings the better design flips. The tables and figures below show each of those changes.
 
@@ -155,7 +155,7 @@ kbl(win, escape = FALSE, booktabs = TRUE, align = "lccccc",
   kable_styling(latex_options = c("HOLD_position"), full_width = FALSE, font_size = if (latex) 9 else NULL)
 ```
 
-Before the fix, the 3×3 grid showed BSS winning everywhere, and the 3×4 grid showed BSS winning in every setting except intervention-and-control spillover with ρ = 0.01. Those results came from the wrong allocations. After the fix, the only disagreement between grids is control-only spillover with ρ = 0, where BSS still wins on 3×3.
+Prior to the correction, the 3×3 grid showed BSS leading SRS everywhere, and the 3×4 grid showed BSS leading in every setting except intervention-and-control spillover with ρ = 0.01. Those results were derived from incorrect allocations. After the fix, the only disagreement between grids is control-only spillover with ρ = 0, where BSS still outperforms SRS on the 3×3 grid.
 
 ```{r conclusions}
 o2 <- n_opt("2x4", "corrected"); o3 <- n_opt("3x3", "corrected"); o4 <- n_opt("3x4", "corrected")
@@ -196,15 +196,15 @@ In each pair the published figure is on the left and the corrected one on the ri
 
 ![](../figures/paper_size/MSE_Estimates_3x3_published.png){width=49% fig-alt="Published Figure 6"} ![](../figures/paper_size/MSE_Estimates_3x3_corrected.png){width=49% fig-alt="Corrected Figure 6"}
 
-*Figure 6, 3×3 grid. The BSS boxes are now built from the six valid 3×3 allocations instead of combos 28 and 43. Under ρ = 0.01 they rise from near zero to a level below SRS for control-only spillover but above SRS for intervention-and-control spillover. Under ρ = 0 most BSS allocations still sit near zero, with one outlier (combo 77, a checkerboard-like allocation where $\hat{\beta}$ absorbs the spillover). The SRS control-only boxes rise slightly from the loop fix.*
+*Figure 6, 3×3 grid. The BSS boxes are now built from the six valid 3×3 allocations instead of the BSS allocations from the 2x4 grid. Under ρ = 0.01 they rise from near zero to a level below SRS for control-only spillover but above SRS for intervention-and-control spillover. Under ρ = 0 most BSS allocations still sit near zero, with one outlier (combo 77, a checkerboard-like allocation where $\hat{\beta}$ absorbs the spillover). The SRS control-only boxes rise slightly from the loop fix.*
 
 ![](../figures/paper_size/MSE_Estimates_3x4_published.png){width=49% fig-alt="Published Figure 7"} ![](../figures/paper_size/MSE_Estimates_3x4_corrected.png){width=49% fig-alt="Corrected Figure 7"}
 
-*Figure 7, 3×4 grid. BSS is now the two 3×4 checkerboards (combos 313 and 612), which give identical results under both spillover types. Their MSE rises with ψ and sits well above zero in every panel. The SRS control-only boxes roughly double after the loop fix (note the y-axis now runs past 2). The intervention-and-control SRS panels are unchanged.*
+*Figure 7, 3×4 grid. Now BSS is the two 3×4 checkerboards (combos 313 and 612), which give identical results under both spillover types. Their MSE rises with ψ and sits well above zero in every panel. The SRS control-only boxes roughly double after the loop fix (y-axis now runs past MSE=2). The intervention-and-control SRS panels are unchanged.*
 
 ## Tables 2 and 3
 
-Each cell shows the corrected value. Where the value changed, the published value comes first and the cell is shaded. Units follow the paper.
+Each cell shows the corrected value. When a value changed, the published value comes first and the cell is shaded. Units follow the mechanics of the original paper.
 
 ```{r tables}
 cols <- c("SRS_MSE", "SRS_SD", "SRS_bias", "BSS_MSE", "BSS_SD", "BSS_bias")
@@ -249,13 +249,13 @@ t2 <- ba_table("3x3"); t3 <- ba_table("3x4")
 t2$k
 ```
 
-In Table 2 the published BSS values of about 0.001 under ρ = 0 come from two allocations that are not block stratified on 3×3. With the six valid allocations BSS MSE is `r rng("3x3", "corrected", CO, 0, "BSS_MSE")` and still well below SRS for control-only spillover, but above SRS for intervention-and-control spillover. The one SRS change under intervention-and-control spillover (ψ = 0.8, ρ = 0.01) comes from regenerating a stored result file that had used a different random stream. It moves only the third decimal.
+In Table 2, the published BSS values of about 0.001 under ρ = 0 come from two allocations that are not block stratified on 3×3. For the six valid allocations, BSS MSE is `r rng("3x3", "corrected", CO, 0, "BSS_MSE")` and still well below SRS for control-only spillover, but above SRS for intervention-and-control spillover. The one SRS change under intervention-and-control spillover (ψ = 0.8, ρ = 0.01) comes from regenerating a stored result file and only the third decimal place is altered.
 
 ```{r table3}
 t3$k
 ```
 
-In Table 3 the BSS MSE (shown ×10 in the table) jumps from near zero to `r rng("3x4", "corrected", CO, 0, "BSS_MSE")` on the original scale under ρ = 0, because in a checkerboard the spillover indicator equals 1 − x and $\hat{\beta}$ absorbs the spillover. The BSS bias is close to −ψ there (`r v("3x4", "corrected", CO, 0, 0.5, "BSS_bias")` at ψ = 0.5). The SRS control-only MSE about doubles, and its mean bias goes from slightly positive to clearly negative (`r v("3x4", "published", CO, 0.01, 0.5, "SRS_bias")` to `r v("3x4", "corrected", CO, 0.01, 0.5, "SRS_bias")` at ψ = 0.5, ρ = 0.01). SRS under intervention-and-control spillover is unchanged.
+In Table 3, the BSS MSE (×10 in the table) increases from near zero to `r rng("3x4", "corrected", CO, 0, "BSS_MSE")` on the original scale under ρ = 0. This is due to the fact that in a BSS allocation the spillover indicator equals 1 − x and $\hat{\beta}$ absorbs the spillover. The BSS bias is close to −ψ there (`r v("3x4", "corrected", CO, 0, 0.5, "BSS_bias")` at ψ = 0.5). The SRS control-only MSE approximately doubles, and its mean bias goes from slightly positive to clearly negative (`r v("3x4", "published", CO, 0.01, 0.5, "SRS_bias")` to `r v("3x4", "corrected", CO, 0.01, 0.5, "SRS_bias")` at ψ = 0.5, ρ = 0.01). SRS under intervention-and-control spillover is unchanged.
 
 ## Text changes
 
