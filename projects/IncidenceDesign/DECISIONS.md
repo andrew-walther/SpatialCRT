@@ -5,6 +5,24 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-11-11 — Notation reparameterization (pending) and Chapter 3 introduction structure
+
+**Decision.** Following reviewer feedback, the outcome model will be reparameterized so
+that $\beta$ is the intervention effect in both Chapter 2 and Chapter 3: $\beta$ multiplies
+the treatment indicator $Z$, $\tau$ multiplies the incidence covariate $X$, and the spillover
+term is written $\gamma\,S(Z)$ with $S(Z) = WZ$, so $\gamma$ is a scalar multiplier of the
+spillover effect. Not yet carried out. It must be applied consistently to the Chapter 3
+source (`paper/thesis_chapter/Thesis_Chapter.qmd`), the CTJ manuscript, the supplementary
+appendix, figure and table labels, and code comments.
+
+The Chapter 3 introduction now has two subsections, Background & Motivation and Aims &
+Contributions, matching Chapter 2. The sentence reconciling $\beta$/$\tau$ with Chapter 2
+was dropped because the reparameterization removes the difference.
+
+**Reason.** Andrew, 2026-11-11: reviewer comment on the paper; consistent notation
+across chapters; the introduction should state the gap, aims and contributions without a
+heading framed as an extension of Chapter 2.
+
 ## 2026-10-28 — SUDDEN meeting talk: framing, structure and outcome population
 
 **Decision.** From the author's answers on the talk deck (`presentation/`):

@@ -6,6 +6,9 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Next up
 
+- [ ] Reparameterize the outcome model per reviewer feedback (DECISIONS 2026-11-11):
+  $\beta$ on $Z$ as the intervention effect, $\tau$ on $X$, spillover $\gamma\,S(Z)$ with
+  $S(Z)=WZ$. Carry through Chapter 3, the CTJ manuscript, the SI, exhibits and code comments.
 - [ ] Full SI prose review (the 2026-10-29 SUDDEN talk is done); details under "After the
   V5 revision" below.
 
