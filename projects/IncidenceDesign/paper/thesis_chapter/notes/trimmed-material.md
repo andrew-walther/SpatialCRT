@@ -690,3 +690,28 @@ Andrew asked for the Chapter 2 structure: drop the "Extending Chapter 2" and "Th
 > 
 > The Methods set out the outcome model, the baseline incidence mechanisms used on the grid, the treatment assignment designs, and the estimator and performance criteria, and then describe the grid simulation. The Results compare the designs on the 100-cluster grid, overall and by incidence configuration, spatial dependence and spillover regime, and then compare each design with SRS. Later subsections report how the comparison changes with the treatment effect, across parameter settings and across allocations, and the last two give sensitivity analyses for rook contiguity and for a model without the spillover term. The application then evaluates the same designs on the observed NC geography, including participation and power. The Discussion draws out implications for trial design and for the SUD education pilot.
 > 
+
+## 2026-11-11 — BSS/Checkerboard link stated once; two citation sentences tightened
+
+Reason: Andrew asked that the Checkerboard = Chapter 2 BSS link be made once,
+at first mention in the Introduction, and not repeated in Methods, the design
+table or the Discussion. The Binka and Jarvis sentences were reworded after a
+source check (PubMed abstract for Binka 1998; full text, exclusion criterion 5,
+for Jarvis 2017).
+
+Removed from Methods (Treatment Assignment Designs paragraph):
+
+> Checkerboard is the strict block-stratified allocation of Chapter 2, in which no two rook neighbors share an arm. Chapter 2's Block Stratified Sampling design also admitted relaxed allocations on its $3\times3$ grid, where the arms cannot be balanced. On its $2\times4$ and $3\times4$ grids, as on the $10\times10$ grid here, the strict allocations are the two checkerboard patterns. We use the two names interchangeably for this allocation and use Checkerboard in the rest of this chapter.
+
+Design table row label, old: "Checkerboard (strict Block Stratified Sampling allocation in Chapter 2)".
+Discussion, old: "Checkerboard, the strict allocation of Chapter 2, failed ...".
+
+Introduction, old sentences:
+
+> It compared simple random assignment with block stratified sampling, which in its strict form lets no two rook neighbors share a treatment arm, on small grids of 8 to 12 clusters.
+
+> The strategies include Chapter 2's block stratified allocation, called Checkerboard here, along with incidence balancing, incidence targeting, saturation and isolation designs.
+
+> In a trial of insecticide-treated bed nets in northern Ghana, child mortality was lower in control villages close to treated villages than in control villages farther away [@binka_impact_1998].
+
+> In their systematic review of spatial analysis methods for cluster randomized trials, Jarvis and colleagues placed trials that used spatial separation or buffers outside the primary review of statistical methods [@jarvis_spatial_2017].

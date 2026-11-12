@@ -9,6 +9,9 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 - [ ] Reparameterize the outcome model per reviewer feedback (DECISIONS 2026-11-11):
   $\beta$ on $Z$ as the intervention effect, $\tau$ on $X$, spillover $\gamma\,S(Z)$ with
   $S(Z)=WZ$. Carry through Chapter 3, the CTJ manuscript, the SI, exhibits and code comments.
+- [ ] In the Paper 2 revision pass, state once in the CTJ manuscript (line ~145) and the SI
+  (lines ~158, ~197) that Checkerboard is the earlier study's Block Stratified Sampling (BSS)
+  design, then use Checkerboard only (done in Chapter 3 on 2026-11-11).
 - [ ] Full SI prose review (the 2026-10-29 SUDDEN talk is done); details under "After the
   V5 revision" below.
 
