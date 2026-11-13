@@ -13,6 +13,11 @@ reasons in [DECISIONS.md](DECISIONS.md).
 
 > For session context and quick technical reference, see [AGENTS.md](AGENTS.md).
 
+From the project root, run `Rscript code/tests/test_manuscript_exhibits.R` and
+`python3 paper/tools/verify_manuscripts.py` to check the documents against saved
+results and each other. MSE comparisons use the approved three-decimal precision.
+These checks do not rerun the simulations.
+
 ### Manuscript feedback (2026-11-11)
 
 The [FCL feedback register](paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/feedback.html)

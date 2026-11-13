@@ -50,8 +50,13 @@ for (tau in c(2, 3)) {
     mean(r$MSE[r$Neighbor_Type == "queen" & r$True_Tau == tau &
                  r$Spillover_Type == "control_only" & r$Design == design])
   }, numeric(1))
-  stopifnot(all(vapply(sprintf("%.4f", values), grepl, logical(1),
-                       x = manuscript, fixed = TRUE)))
+  # MSE is reported to three decimals. Match the two values in their
+  # treatment-effect clause, rather than accepting them elsewhere in the paper.
+  pattern <- paste0("\\$\\\\tau=", tau,
+                    "\\$[^()]*\\(([0-9]+\\.[0-9]{3}) (?:and|versus) ([0-9]+\\.[0-9]{3})\\)")
+  reported <- regmatches(manuscript, regexec(pattern, manuscript, perl = TRUE))[[1]]
+  stopifnot(length(reported) == 3L,
+            identical(reported[-1], sprintf("%.3f", values)))
 }
 # Reported coverage uses the t + df-corrected interval (author, 2026-10-26); its
 # metrics come from the exact re-fit in code/26_grid_tdf_intervals.R

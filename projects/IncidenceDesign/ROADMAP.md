@@ -213,6 +213,15 @@ are complete (see the status at the top: `paper/ctj_manuscript/`,
 
 ## Progress Log (moved from AGENTS.md 2026-10-01)
 
+### 2026-11-13 — Manuscript consistency checks
+
+The effect-size crossover check now compares the saved MSEs at three-decimal
+precision within each treatment-effect clause, rather than searching the entire
+manuscript for four-decimal values. The supplement's Checkerboard table label now
+matches the chapter. Its explanation of the relationship to Block Stratified
+Sampling remains in the surrounding prose. No scientific result was changed.
+
+
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
 
