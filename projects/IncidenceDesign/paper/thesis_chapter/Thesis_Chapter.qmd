@@ -677,7 +677,9 @@ The application supports considering either saturation strategy when control-onl
 
 # Discussion {#sec-discussion}
 
-## Summary of Findings
+## Relevance of Results
+
+### Summary of Findings
 
 We compared six treatment assignment designs in the detailed grid ranking, plus two related variants and SRS, for a spatial cluster randomized trial on a grid of 100 clusters. The comparison covered three mechanisms of heterogeneous baseline incidence, two spillover regimes, and a range of values for spatial dependence, spillover magnitude, and the treatment effect. Some findings held across the incidence configurations and the values of $\rho$, $\gamma$, and $\tau$ under queen contiguity. Others depended on the spillover regime, which a trial team may not know in advance.
 
@@ -691,7 +693,7 @@ Checkerboard failed for different reasons under the two neighbor types. Under qu
 
 These design-stage results assume an analysis that models spillover: every design was analyzed with a spatial lag model that included the spillover term. In the grid study, the estimates were close to unbiased for every design whose $\tau$ was identified: at $\tau = 1$, the absolute bias of each design under each regime was at most 0.048 under queen contiguity and 0.027 under rook contiguity. Given that model, the choice of design determined how precisely $\tau$ was estimated.
 
-## Design Guidance by Spillover Regime
+### Design Guidance by Spillover Regime
 
 When spillover is expected to reach mainly control clusters, Incidence-Guided Saturation and Saturation Quadrants had the lowest mean MSE and among the lowest worst-decile MSE (Table \ref{tab:downside}), so they are the designs we recommend over SRS. Isolation Buffer also limited downside in that regime, but it should be considered only when both-arms spillover is implausible and a smaller treated budget is acceptable. When spillover is expected to reach both arms, the spread of MSE across allocations was small for SRS and the balancing and saturation designs. SRS, Balanced Quartiles and Balanced Halves performed about equally. The saturation designs had mean MSE 4\% to 8\% above SRS on the grid and within 3\% of it in NC, with worst-decile MSE within 7\% of SRS's in both, so SRS and the saturation designs are both reasonable choices.
 
@@ -701,7 +703,7 @@ High Incidence Focus gave one fixed allocation whose MSE in NC was below the SRS
 
 Saturation Quadrants, which assigns the same saturations without reference to incidence, performed similarly to Incidence-Guided Saturation (see @sec-designs). Their accuracy advantage over SRS under control-only spillover therefore comes from the shared saturation structure, and incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy. How much treatment it redirects depends on how much incidence differs between regions, a few percentage points of incidence share on the grid and less than one on the NC map, whose regions have similar incidence.
 
-## Relation to Chapter 2
+### Relation to prior Spatial CRT work
 
 Chapter 2's practical argument considered reasonably good estimation together with protection against poor allocation in the small-grid settings it studied. We preserve both criteria while extending the designs, geography and incidence conditions. Our findings concern these new models and settings and do not compare numerical results across chapters directly. The rectangular Checkerboard and its graph adaptation illustrate why a restricted allocation's low assignment variation must be interpreted together with its level of estimation error. The application also separates incidence-guided assignment from assumptions about education outcomes.
 
@@ -725,7 +727,7 @@ Eighth, the 95\% Wald intervals under-covered in both the grid and the applicati
 
 Ninth, the participation analysis assumes that colleges volunteer at random or with probability rising with incidence, and that non-participating colleges neither transmit nor receive spillover.
 
-## Future Work
+## Future Considerations
 
 The next trial-design steps are to specify the education endpoint, eligible professionals, implementation budget and plausible spillover network, then assess interval calibration for that protocol before randomization. Additional methodological work could study noisy planning incidence, effect heterogeneity, exposure networks beyond contiguity and a broader set of graph geometries. The trial endpoint here is a measured education score, an intermediate outcome. Designing for a later reduction in SUD incidence would need a count outcome model and is left for future work. A larger allocation sample could make the downside estimates more precise if that precision is needed for a final choice.
 
