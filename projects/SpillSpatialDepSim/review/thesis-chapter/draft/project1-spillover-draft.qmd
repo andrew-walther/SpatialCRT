@@ -281,9 +281,9 @@ higher-order neighbors, which share no edge or vertex with the reference cluster
 
 #### Distance-Based
 
-Distance-based neighbors [@fotheringham_sage_2009] identify as neighbors
-of any cluster whose centroid falls within a specified radius of a reference
-cluster (illustrated in @fig-neighbor-types (c)). A complete description of
+Distance-based neighbors [@fotheringham_sage_2009] of a reference cluster
+are all clusters whose centroids fall within a specified radius of its
+centroid (illustrated in @fig-neighbor-types (c)). A complete description of
 distance-based neighbor construction and the corresponding spatial weights
 formulation is provided in [Appendix @sec-apx-distance]. The simulation
 study presented in this paper relies exclusively on Rook contiguity for
@@ -679,9 +679,7 @@ favorable bias–variance properties when the true data-generating model
 The simulation is performed over
 all potential cluster treatment combinations (intervention/control) for
 each of the $2\times4$, $3\times3$, and $3\times4$ cluster spatial grid
-geometries. The simulation procedure is as follows:
-
-For each spatial grid geometry and simulation scenario, the complete set
+geometries. For each spatial grid geometry and simulation scenario, the complete set
 of possible treatment combinations was enumerated exhaustively (70 for the
 2×4 grid, 126 for the 3×3 grid, and 924 for the 3×4
 grid). For each combination, $N = 50$ simulation replications were
@@ -893,9 +891,7 @@ differ in structure, so their MSE also varies across allocations. The SD of BSS 
 
 @tbl-est-3x4 and @fig-beta-mse-3x4 present the intervention effect estimates
 for the 3×4 spatial grid. These results follow the same pattern as the 2×4
-grid in every scenario.
-
-When spillover is restricted to control clusters,
+grid in every scenario. When spillover is restricted to control clusters,
 performance again depends on the level of spatial dependence. With spatial
 dependence ($\rho = 0.01$), BSS achieves lower MSE than SRS (e.g., BSS MSE
 $= 0.133$ vs. SRS MSE $= 0.244$ at $\psi = 0.5$). With no spatial dependence
@@ -907,13 +903,9 @@ grid give similar estimation error.
 Under Intervention & Control spillover,
 SRS achieves lower average MSE in every scenario (e.g., SRS MSE $= 0.112$
 vs. BSS MSE $= 0.133$ at $\psi = 0.5$, $\rho = 0.01$, and $0.001$ vs.
-$0.226$ at $\rho = 0$). In both checkerboard allocations, every control
-cluster borders an intervention cluster and no intervention cluster borders
-another, so the spillover indicator equals $1 - x_i$ and the two spillover
-types produce identical BSS results. The intervention and spillover
-coefficients are then not
-separately identifiable, and $\hat{\beta}$ absorbs the spillover effect,
-with bias near $-\psi$ when $\rho = 0$ (e.g., $-0.463$ at $\psi = 0.5$;
+$0.226$ at $\rho = 0$). In both checkerboard allocations the spillover
+indicator equals $1 - x_i$, so the two spillover types produce identical BSS
+results and $\hat{\beta}$ absorbs the spillover effect, with bias near $-\psi$ when $\rho = 0$ (e.g., $-0.463$ at $\psi = 0.5$;
 @sec-limitations).
 
 The 3×4 results reinforce the broader conclusion that BSS bounds worst-case
@@ -1266,7 +1258,7 @@ neighbors, not block stratification in particular, as the equally collinear
 Simple Random Sampling allocations exhibit comparable bias. Second, where
 the allocation instead permits the spillover term to be estimated
 separately, as in many Simple Random Sampling allocations under Intervention & Control spillover, the bias of $\hat{\beta}$ falls to roughly
-$1$–$2\%$ of $\beta$ (@tbl-est-2x4). The comparative, risk-management
+$1$–$3\%$ of $\beta$ (@tbl-est-2x4). The comparative, risk-management
 findings of this study are therefore unaffected by the magnitude of the
 absolute bias. That magnitude instead motivates analysis-stage remedies that
 restore identifiability directly, which we discuss in
