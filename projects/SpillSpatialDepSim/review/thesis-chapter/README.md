@@ -22,6 +22,8 @@ the end of the paragraph that introduces the results, saying the 3×3 and 3×4
 results were recomputed after acceptance. It renders to 52 pages, as before,
 with no unresolved cross-references and the same reference list.
 
+Synced from bios-dissertation on 2026-11-13 (commit 77e3c74). That copy has Andrew's review notes applied, and the two N1 sentences on the post-acceptance recomputation are cut. The cut text is in bios-dissertation's `draft/trimmed-material.md`. The chapter renders to 51 pages.
+
 The `.qmd` keeps its bios-dissertation paths (`bibliography:
 ../../../references.bib` and the `apa.csl` path), so it can be copied back
 unchanged. To render it here, override those two paths:
