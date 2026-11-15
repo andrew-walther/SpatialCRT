@@ -64,8 +64,10 @@ Reasons and history for each rule: `DECISIONS.md`.
   `CTJ_Manuscript.tex`/`CTJ_Exhibits.tex` (the reading layout follows); rebuild both
   `CTJ_Manuscript.pdf` and `CTJ_Reading.pdf`. After any edit to the CTJ paper or Chapter 3,
   check whether the other needs it and say so (content edits usually do; journal-structure
-  edits usually do not). The author's annotated copies live in the gitignored
-  `manuscript_ctj/revision_markup/` as `CTJ_Reading_Markup_V<n>.pdf`; never edit or overwrite them.
+  edits usually do not). The author's annotated copies live in
+  `manuscript_ctj/revision_markup/` as `CTJ_Reading_Markup_V<n>.pdf`, tracked in git since
+  2026-11-14; never edit or overwrite them. When the author approves a CTJ version as final for a
+  revision round, copy `CTJ_Reading.pdf` there as the next `V<n>` and commit it.
 - **Project 1 is final.** Treat `projects/SpillSpatialDepSim/` as read-only. Changes
   reach `bios-dissertation` only through the Chapter 3 sync (below) unless the author
   asks otherwise.

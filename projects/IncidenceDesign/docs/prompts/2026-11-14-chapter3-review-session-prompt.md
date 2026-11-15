@@ -34,19 +34,16 @@ draft. I want the insights from that feedback carried into Chapter 3. Work as de
 
 Chapter 3, working location:
 /Users/ajwalther/GithubProjects/bios-dissertation/prelim/project-proposals/project2-incidence/draft/
-- Review, edit and render the chapter there, in the draft .tex (project2-incidence-draft.tex),
-  using the prelim-edit-sync skill and prelim/full-draft/tools/prelim_review.py:
-  `start ch3` (baseline), edit the .tex, `diff ch3`, `prompt ch3` (back-port prompt), carry
-  the edits into the source, `verify ch3`, `finish ch3`.
-- The draft folder is generated, so every edit must be carried back to the source,
-  paper/thesis_chapter/Thesis_Chapter.qmd in this project. Commit the source in SpatialCRT. Its
-  post-commit hook re-renders the draft and commits it in bios-dissertation. Never commit a
-  hand edit to the draft folder: the bios-dissertation pre-commit guard refuses it, and the next
-  sync would overwrite it. `verify ch3` must show no remaining difference before an edit
-  counts as done.
-- Structural changes (moving or merging sections, appendix reordering, figure or table
-  changes made by code) go straight into Thesis_Chapter.qmd or the figure scripts, since they
-  do not carry back cleanly from the .tex. Then check the result in the re-rendered draft.
+is where the chapter is read, rendered and checked.
+- Make your edits in the source, paper/thesis_chapter/Thesis_Chapter.qmd in this project (and
+  in the figure scripts for exhibits built by code). Commit and push in SpatialCRT as you work,
+  after each approved group. The post-commit hook re-renders the draft and commits it in
+  bios-dissertation. Check each change in the re-rendered draft.
+- Never edit or commit the draft folder by hand: the bios-dissertation pre-commit guard refuses
+  it, and the next sync would overwrite it.
+- I will not edit the draft .tex by hand until the revamped chapter is complete. When I do, my
+  edits are carried back with the prelim-edit-sync skill (prelim/full-draft/tools/prelim_review.py:
+  start, diff, prompt, verify, finish ch3).
 
 CTJ manuscript, working location:
 /Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/paper/ctj_manuscript/manuscript_ctj/
@@ -57,7 +54,7 @@ CTJ manuscript, working location:
 - When I approve a version as final for a revision round, copy CTJ_Reading.pdf to
   revision_markup/CTJ_Reading_Markup_V<n>.pdf, with n one more than the highest existing
   number (V1 to V5 exist now, so the next is V6). Never edit or overwrite an existing markup copy.
-  revision_markup/ is git-ignored, so the copy is local only. Tell me the file name.
+  The markup copies are tracked in git: commit and push the new copy, and tell me its name.
 
 Both: render with RStudio's Quarto 1.10 (bios-dissertation/AGENTS.md), and after every render
 compare page counts with the committed PDFs. After any edit to one of Chapter 3 or CTJ, say
@@ -89,8 +86,9 @@ whether the other needs it too.
   human-writer-review/ (ch3/, round2/ch3/, round3/ch3/; see RESOLVED.md and round2/GO-NO-GO.md).
   Do not reopen settled items.
 - The written prelim is due 2026-11-15/16. Confirm the date with me.
-- Priority: Chapter 3 for the prelim first, then a first round of revisions in CTJ. Do not
-  spend effort on the CTJ 3,500-word limit now.
+- Priority: Chapter 3 ready for the prelim is the deliverable. The targeted revisions are made
+  first in CTJ and then carried into Chapter 3, so CTJ gets its first revision round on the way.
+  Do not spend effort on the CTJ 3,500-word limit now.
 - Settled in the meeting (see the notes file): the β/τ/γ reparameterization, a pre-specified
   incidence coefficient whose value is given in the simulation settings, "Application"
   renamed to a "Case Study" (a simulation based on the North Carolina data), cited t and
@@ -137,8 +135,7 @@ Phase 2. Plan, content map and feedback triage (STOP for me at the end).
     proposed decline with reason / after the prelim). Use the register's provisional Chapter 3
     destinations only as hints, and check each against the current chapter text. Check the code
     before writing A-03 (how the blocks were built on the North Carolina geography).
- d. Decisions for me: the order of work (my default is Chapter 3 first, then the same changes in
-    CTJ); whether the reparameterization lands before the prelim given that it touches figures
+ d. Decisions for me: whether the reparameterization lands before the prelim given that it touches figures
     and tables; Chapter 2 notation; which items wait until after the prelim; Q-02 (Q-01 is settled); the
     scope of Future Considerations.
 
@@ -147,9 +144,10 @@ interval convention and notation symbol across Chapter 3, CTJ and the supplement
 the saved results. Output one row per mismatch to
 bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch3/consistency-check.md.
 
-Phase 4. Edits, in the order I approve in Phase 2. Default order: the reparameterization (if
-approved) and the accepted feedback items in Chapter 3, with the content-map restructuring section
-by section; then the same feedback items in CTJ and the supplement. STOP after each Chapter 3 section, and after
+Phase 4. Edits, in this order (settled): first the targeted revisions and clarifications in CTJ
+and the supplement (the reparameterization if approved, then the accepted feedback items); then
+carry the same changes into Chapter 3, together with the chapter's content-map restructuring,
+section by section. STOP after each Chapter 3 section, and after
 each CTJ section, so I can approve before you commit. Carry each approved Chapter 3 edit back to the source and commit in SpatialCRT after each approved
 group so the hooks re-render and each step can be reverted.
 
@@ -166,8 +164,7 @@ session's conclusions):
  STOP for my accept/reject decisions by item ID.
 
 Phase 6. Apply the accepted items, re-render the chapter, CTJ, the supplement and the full
-prelim, check numbering, cross-references and page counts against the baseline, run
-`verify ch3` and `finish ch3`, place the approved CTJ reading copy in revision_markup/ as the
+prelim, check numbering, cross-references and page counts against the baseline, place the approved CTJ reading copy in revision_markup/ as the
 next CTJ_Reading_Markup_V<n>.pdf, and update the feedback disposition table, ROADMAP.md, docs/TODO.md and DECISIONS.md here and
 bios-dissertation/ROADMAP.md.
 

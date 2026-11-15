@@ -7,8 +7,9 @@ and the Zoom AI summary of the same meeting. Both are preserved at the end of th
 Feng-Chang's written annotations (the FCL register in
 `paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/`) followed the meeting.
 
-**Priority.** Chapter 3 for the prelim comes first. A first round of these revisions in the CTJ
-manuscript comes second. The CTJ 3,500-word limit is not a priority now.
+**Priority.** Chapter 3 ready for the prelim is the deliverable. The targeted revisions are made
+first in the CTJ manuscript and then carried into Chapter 3. The CTJ 3,500-word limit is not a
+priority now.
 
 **Reading the Zoom summary.** It contains transcription errors. "Sunderland data" is the SUDDEN
 data. "gamma XZ" should read γ S(Z), with γ a scalar multiplier outside S(Z). "trickle ball"

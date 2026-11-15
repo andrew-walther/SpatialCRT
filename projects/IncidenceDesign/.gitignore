@@ -18,8 +18,8 @@ paper/thesis_chapter/Thesis_Chapter.tex
 paper/archive/pre_unification_20260702/IncidenceSpatialCRT_Manuscript.tex
 paper/SAGE_Journal_Template/Sage_LaTeX_Guidelines.tex
 
-# Author's annotated reading PDFs (personal revision markups, versioned _V1, _V2, ...)
-paper/ctj_manuscript/manuscript_ctj/revision_markup/
+# Author's annotated reading PDFs (personal revision markups, versioned _V1, _V2, ...).
+# The CTJ markups are tracked since 2026-11-14 (author request); the application report's stay ignored.
 application/report/revision_markup/
 
 # Worktrees
