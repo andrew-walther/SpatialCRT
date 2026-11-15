@@ -116,3 +116,14 @@ deferred until after the proposal (Decision C).
 - T-36 (FCL-044) and T-47 (FCL-058): already stated in C 239 and 204; reply only.
 - Ratios to SRS stay as they are (Decision H).
 - CTJ word limit, full SI prose review: after the proposal (Decision C).
+
+## Applied (2026-11-15)
+
+Applied in SpatialCRT `7e51487` (P items), `43b6f99` (the rest) and `09803e1` (fixes from an
+independent check). Departures from the list:
+- R-05 / S-06: the bias range is −0.121 to −0.400. The list's −0.123 is the queen-only minimum;
+  the rook Incidence-Guided Saturation value is −0.121 (SI Table S14).
+- S-05: the generic metric is u, not θ, because the SI already uses bold θ for the coefficient vector.
+- M-21: no change needed (the text already matched).
+- New text from M-08, M-11 and M-13 had ", so" joins; reworded. C 156 named β twice; one name kept.
+- Open: "pilot trial" (abstract, I-08) and "pilot study" (Introduction, I-06 edit) are both used.
