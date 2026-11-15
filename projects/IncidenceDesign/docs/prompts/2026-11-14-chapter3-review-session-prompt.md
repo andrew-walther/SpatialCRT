@@ -199,8 +199,10 @@ carry the same changes into Chapter 3, together with the chapter's content-map r
     re-render and each step can be reverted.
 
 Phase 5. Independent reviews (two subagents in parallel, on the revised chapter, without this
-session's conclusions):
- - Writing review with the human-writer skill: tics, typos, choppy sentences, ambiguous
+session's conclusions). Give each the chapter source and PDF, the CTJ files, and the writing
+rules above ("Principles carried over" and the AGENTS.md author rules). Neither applies any edit.
+ - Writing review with the human-writer skill, reading all of ~/.claude/skills/human-writer/ (SKILL.md, ai-tropes.md, voice-profile.md)
+   before starting and applying every rule in them: tics, typos, choppy sentences, ambiguous
    referents ("it", "this", "that"), undefined or uncited terms, jargon, overstated claims.
    Output round5/ch3/proposed-edits.md in the Chapter 1 round-5 format (grouped by issue, with
    ID, location, current text and proposed text; claim-changing items in a final group).
