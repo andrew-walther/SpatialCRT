@@ -365,7 +365,10 @@ n80_data <- function(n80, regime, tau) {
     Reached = ifelse(reached, "Reached in every year", "Not reached with 58 colleges in at least one year"),
     Label = ifelse(reached, sprintf("%d", as.integer(ceiling(x$N80_Tdf_Mean))),
                    ifelse(is.finite(x$N80_Tdf_Min),
-                          sprintf("> 58 in %d/4 yr, else %d+", x$N80_Tdf_Years_Above58, as.integer(ceiling(x$N80_Tdf_Min))),
+                          # Other years: the needed count lies between the minimum over years and 58
+                          sprintf("> 58 in %d/4 yr, else %s", x$N80_Tdf_Years_Above58,
+                                  ifelse(ceiling(x$N80_Tdf_Min) >= 58, "58",
+                                         sprintf("%d\u201358", as.integer(ceiling(x$N80_Tdf_Min))))),
                           "> 58 in 4/4 yr")),
     Label_x = ifelse(reached, ceiling(x$N80_Tdf_Max), 58) + 1.5)
 }
@@ -383,7 +386,7 @@ p_n80 <- ggplot(nd, aes(Value, Design, fill = Reached)) +
   scale_y_discrete(labels = hy) +
   scale_fill_manual(values = c("Reached in every year" = "grey30",
                                "Not reached with 58 colleges in at least one year" = "grey80"), name = NULL) +
-  scale_x_continuous(limits = c(0, 118), breaks = c(0, 20, 29, 40, 58)) +
+  scale_x_continuous(limits = c(0, 124), breaks = c(0, 20, 29, 40, 58)) +
   labs(x = "Colleges needed for 80% power", y = NULL) +
   theme_bw(base_size = 10) +
   theme(legend.position = "bottom", panel.grid.minor = element_blank()) +
