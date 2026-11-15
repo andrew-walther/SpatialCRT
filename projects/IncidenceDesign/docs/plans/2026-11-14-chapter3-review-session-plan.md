@@ -407,6 +407,13 @@ Answers on the check rows (T-59 to T-74):
 
 Model use (prompt, added 2026-11-15): from 4b on, approved edits are applied by Sonnet subagents item by item, and I check each diff before committing. Render, page-count, cross-reference and citation checks and the writing review also go to Sonnet. Restructuring decisions, new prose, and the committee review stay on Opus.
 4b. Apply accepted CTJ and supplement items; rebuild; commit.
+   Notation swap committed 2026-11-15 (`7e51487`). Figure labels: the SI's 6-design figures
+   (ranked MSE, coverage, β sensitivity, `app_tau_coverage`) are THESIS_BUILT, drawn by
+   `code/28_thesis_chapter_figures.R` and copied to the CTJ folder by `paper/tools/copy_figures.sh`.
+   Their "True τ" labels change only when script 28 is edited and rerun, which also redraws the
+   chapter's figures. Deferred to Phase 4d (chapter notation), then rerun 28 and the copy script
+   once for both. Script 28 also has a "rho=…, gamma=…" label (l. 466); `real_sud_summary.R`
+   has ASCII "rho/gamma" in captions.
 4c. Chapter 3 carry-over list with the restructuring: `.../round5/ch3/carry-over-edits.md`. **Stop.**
 4d. Apply section by section; **stop after each section**; commit after each approved group.
 5. Writing review and committee review (parallel subagents, without this session's
