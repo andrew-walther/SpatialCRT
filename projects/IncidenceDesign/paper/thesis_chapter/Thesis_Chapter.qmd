@@ -1141,7 +1141,7 @@ Checkerboard under rook contiguity is a different case: $\beta$ is not identifia
 \begin{subfigure}{\linewidth}
 
 \centering
-\includegraphics[width=0.7\linewidth]{figures/fig_biasvar_6design_queen.pdf}
+\includegraphics[width=0.65\linewidth]{figures/fig_biasvar_6design_queen.pdf}
 
 \caption{Queen contiguity (primary)}
 \label{fig:biasvar-queen}
@@ -1151,7 +1151,7 @@ Checkerboard under rook contiguity is a different case: $\beta$ is not identifia
 \begin{subfigure}{\linewidth}
 
 \centering
-\includegraphics[width=0.7\linewidth]{figures/fig_biasvar_6design_rook.pdf}
+\includegraphics[width=0.65\linewidth]{figures/fig_biasvar_6design_rook.pdf}
 
 \caption{Rook contiguity (sensitivity)}
 \label{fig:biasvar-rook}
