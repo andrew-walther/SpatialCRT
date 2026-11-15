@@ -114,6 +114,7 @@ whether the other needs it too.
   guidance framed as stated there, and the three-decimal rule.
 - Writing: apply the human-writer skill. No mannered prose. Avoid semicolons and dashes as
   punctuation. Define every abbreviation at first use. Title Case headings.
+- American English throughout: spelling and usage.
 - "Fitted" only as an adjective before a noun ("the fitted model", "the fitted coefficients").
   The passive verb is "fit": "the model is fit by maximizing...", never "is fitted by" or "is
   fitted to". The same holds for the active past ("we fit the model") and a verb right after a
@@ -219,7 +220,8 @@ Done when: the content map is confirmed and followed; every FCL and meeting item
 disposition;
 the reparameterization (if approved) is consistent across all documents; the consistency check
 and the math check have no open rows; the CTJ and Chapter 3 sign-off lists have a decision on
-every item and accepted items are applied; both review files have decisions and accepted items are applied; everything
+every item and accepted items are applied; both review files have decisions and accepted items are applied; Chapter 3, CTJ and the
+supplement are in American English with "fitted" only before a noun; everything
 renders with page counts recorded.
 
 Whenever you stop, tell me which done-when items are still open. If the session runs long, split
