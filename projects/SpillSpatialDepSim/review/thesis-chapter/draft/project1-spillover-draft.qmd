@@ -168,22 +168,13 @@ rather than a discrete cluster-level intervention or spillover effect.
 
 These analytical tools correct for spatial effects after the data are collected. The same problem can also be addressed at the design stage. Minimal research has examined how the sampling and allocation of treatments across a geographic area can be optimized to manage these known spatial complexities. The review by @jarvis_spatial_2017 highlights this gap, noting that in practice, the impact of
 location on trial results is an afterthought and oftentimes
-entirely ignored. In fact, trial designs explicitly intended to mitigate
-spatial effects, such as creating well-separated clusters or buffer zones,
-were so uncommon that studies employing them were excluded from their
-primary analysis, showing how peripheral these considerations have
-been to standard practice [@jarvis_spatial_2017].
+entirely ignored. The review also excluded trials that addressed spatial effects only at the design stage, such as trials with well-separated clusters or buffer zones [@jarvis_spatial_2017].
 
-This oversight has consequences because known studies that
-compare spatial analytical approaches consistently find that accounting
-for spatial effects is important. @silcocks_spatial_2010 demonstrated
+Studies that compare spatial analytical approaches have found that accounting for spatial effects changes the estimates. @silcocks_spatial_2010 demonstrated
 that spatial models not only fit primary care trial data better than
 standard CRT models, but also that their inclusion altered both the
 intervention effect point estimate and its precision. Similarly, @chao_contribution_2015 found that adjusting for their spatial exposure metric lowered
-the estimated effect of a typhoid vaccine. The logical conclusion is that
-standard trial designs that rely on the simple random allocation of
-clusters may be systematically producing biased or inefficient estimates
-without investigators being aware. This motivates the central question of
+the estimated effect of a typhoid vaccine. Trials that allocate clusters by simple random sampling may therefore produce imprecise estimates when spillover and spatial dependence are present, without investigators being aware of it. This motivates the central question of
 this study: “How does the choice of an *a priori* treatment assignment
 sampling strategy impact the estimation of intervention effects in the
 presence of both spatial spillover effects and spatial dependence?" While
@@ -562,7 +553,7 @@ the SAR model is
 
 $$
 \rho\mathbf{Wy} = \rho\sum_{j \in \mathcal{N}(i)}w_{ij}y_j,
-$$ {#eq-spatial-dep-term}
+$$
 
 where $j$ indexes clusters and $w_{ij} = 0$ whenever clusters $i$ and $j$
 are not rook neighbors, which means the sum reduces to neighboring clusters only. Full definitions of indicator-based and distance-based
@@ -1035,7 +1026,7 @@ effect.
 In Case 2 (SMHP Implementation), the rationale for BSS is even stronger
 due to the complex potential for spillover. A simple random assignment of
 counties would ignore the structural influence of the MCOs.
-The most effective design would be to stratify by MCO coverage area,
+We recommend stratifying by MCO coverage area,
 randomizing counties to the implementation strategy (intervention) or
 control condition within each MCO. This approach directly controls for confounding by MCO-level policies and provider networks. However, some challenges with this MCO stratification do
 persist. For example, it is possible that a county is selected for the
@@ -1086,9 +1077,7 @@ scenarios, offering practical guidance for investigators designing such
 trials.
 
 The spatial separation principle underlying BSS has antecedents in
-spatially balanced experimental designs. For example, @mccann_spatial_2018
-demonstrated that spatially stratified allocation in field trials reduces
-confounding by ensuring treatment balance across the spatial domain.
+spatially balanced experimental designs. For example, @mccann_spatial_2018 proposed including or excluding whole clusters, in place of excluding boundary areas within clusters, to reduce contamination between arms.
 However, the formal comparison of SRS and BSS within the context of
 spatial cluster randomized trials that incorporate both a spatial
 autoregressive (SAR) model for background dependence *and* an explicit
@@ -1121,10 +1110,7 @@ grids, randomly selected treatment assignments led to lower bias when
 estimating intervention effects, while block stratified treatment
 assignments resulted in less variation in MSE across allocations in most
 scenarios. On the 3×3 grid, whose six BSS allocations are near-checkerboards because both dimensions are odd and the treated and control counts cannot be equal, BSS had the smaller bias in most scenarios, and under
-the Intervention & Control regime its MSE varied more across allocations than that of SRS. This
-suggests a trade-off: SRS provides a more accurate central estimate on
-average. BSS offers greater precision and consistency across
-repeated trials, potentially with higher bias.
+the Intervention & Control regime its MSE varied more across allocations than that of SRS. This suggests a trade-off: SRS gives a more accurate estimate on average, and BSS gives an error that varies less from one allocation to another, often with higher bias.
 
 The study also clarifies the impact of spatial dependence ($\rho$) on
 intervention effect estimation error. The presence of even a small degree of
@@ -1181,8 +1167,7 @@ In summary, this study offers a comparison of two opposing sampling
 methodologies in spatial CRTs. The patterns observed regarding spillover
 magnitude, spatial dependence, and spillover application types provide
 practical information for investigators. They must consider the goal of an
-unbiased average estimate (generally favored by SRS) versus the need for
-consistent, low-variance estimates (generally achieved with BSS), especially
+unbiased average estimate (generally favored by SRS) versus the need for an error that varies little across allocations (generally achieved with BSS), especially
 when designing studies where spillover effects are expected.
 
 ### Limitations {#sec-limitations}
