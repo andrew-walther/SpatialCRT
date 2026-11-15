@@ -182,7 +182,7 @@ were so uncommon that studies employing them were excluded from their
 primary analysis, showing how peripheral these considerations have
 been to standard practice [@jarvis_spatial_2017].
 
-This oversight has significant consequences because known studies that
+This oversight has consequences because known studies that
 compare spatial analytical approaches consistently find that accounting
 for spatial effects is important. @silcocks_spatial_2010 demonstrated
 that spatial models not only fit primary care trial data better than
@@ -216,7 +216,7 @@ variance, varies across a range of realistic conditions. These include
 different magnitudes of spillover effects, the presence or absence of
 underlying spatial dependence, and restrictions on which clusters can receive spillover. From the patterns that emerge, we provide practical guidance to investigators designing spatial CRTs on choosing a sampling strategy that fits their study goals.
 
-The remainder of this article is organized as follows: [@sec-design] outlines
+The remainder of this chapter is organized as follows: [@sec-design] outlines
 the theoretical framework of the study, including the data generation
 process, treatment sampling procedures, and estimation methods employed.
 [@sec-simulation] details the procedure and results of the simulation study
@@ -330,14 +330,12 @@ general, a spillover effect can be specified as a function of spatial
 proximity to the locations where an intervention is applied, for example
 as a decay function of the distance from a unit to the nearest intervention
 cluster, or as a function of the number of neighboring intervention
-clusters to which a unit is exposed. In this study, however, spillover is
-modeled as a single binary cluster-level exposure: the indicator $z_i \in
+clusters to which a unit is exposed. However, in this study spillover is modeled as a single binary cluster-level exposure: the indicator $z_i \in
 \{0,1\}$ equals 1 when cluster $i$ shares a Rook edge with at least one
 intervention cluster (and the spillover type permits it) and 0 otherwise.
-$z_i$ is a binary $0/1$ indicator rather than a distance- or count-valued quantity, so the associated parameter $\psi$ is a single scalar
+$z_i$ is a binary $0/1$ indicator rather than a distance- or count-valued quantity, which makes the associated parameter $\psi$ a single scalar
 multiplier rather than a function. With $z_i$ defined at the cluster
-level, all subjects within a cluster share the same spillover exposure, so
-spillover does not vary across individuals within a cluster. Richer
+level, all subjects within a cluster share the same spillover exposure, which means spillover does not vary across individuals within a cluster. Richer
 specifications that allow spillover to decay with distance or to
 accumulate over multiple treated neighbors are natural extensions,
 discussed in [@sec-discussion], but are beyond the scope of
@@ -363,7 +361,7 @@ permitted to spillover into other intervention cells. This suggests a case
 where the intervention effect applied is the maximum observable effect and
 any potential spillover cannot increase the observed effect of a
 particular intervention. Under the second mechanism, spillover reaches both control *and* intervention cells that neighbor an intervention cell. This represents a case where an effect greater than that of the intervention alone can be observed in a cell that received an intervention and also had spillover from another
-intervention cell. Under an allocation that satisfies the block stratification condition, where no intervention cell is a rook neighbor of another intervention cell, no intervention cell receives spillover, so the two spillover types produce identical data and identical estimates. @fig-trt-spill-comparison provides a comparative representation of
+intervention cell. Under an allocation that satisfies the block stratification condition, where no intervention cell is a rook neighbor of another intervention cell, no intervention cell receives spillover. The two spillover types therefore produce identical data and identical estimates. @fig-trt-spill-comparison provides a comparative representation of
 how these two methods permit the application of spillover effects on
 clusters based on their treatment assignment. Across all scenarios in this
 simulation study, the application of any spillover effect is simply a
@@ -482,7 +480,7 @@ effect; $x_i \in \{0,1\}$ is the cluster-level treatment indicator (1 if
 cluster $i$ receives the intervention, 0 otherwise); $\psi$ is the scalar
 spillover parameter (in this study, spillover is determined by binary
 cluster adjacency, with the indicator $z_i$ capturing which clusters are
-exposed, so $\psi$ is a scalar multiplier rather than a function of
+exposed, which makes $\psi$ a scalar multiplier rather than a function of
 distance); $z_i \in \{0,1\}$ is the cluster-level spillover indicator (1 if
 cluster $i$ is a Rook neighbor of at least one treated cluster and the
 spillover type permits it; 0 otherwise); $\mathcal{N}(i)$ denotes the set
@@ -516,9 +514,7 @@ contrast, the spillover effect $\psi$ is a *structural, design-level*
 parameter, specifically the coefficient on the spillover indicator $z_i$,
 representing the indirect effect that an intervention in one
 cluster exerts on outcomes in neighboring clusters. While both quantities
-involve spatial proximity, $\rho$ is an intrinsic property of the
-data-generating process that must be accounted for in order to obtain
-valid inferences, whereas $\psi$ is of direct scientific interest and
+involve spatial proximity, $\rho$ is an intrinsic property of the data-generating process that must be accounted for to obtain valid inferences. The effect $\psi$ is of direct scientific interest and
 often a primary estimand alongside the intervention effect $\beta$.
 Failure to distinguish these two quantities, or to include both in the
 model, can produce confounded estimates of the intervention effect. In
@@ -529,8 +525,7 @@ intervention.
 
 The quantities $\beta$, $\psi$, and $\rho$ are *structural coefficients* of
 the spatial autoregressive model rather than marginal potential-outcome
-contrasts. The SAR specification in @eq-sar places the response on both sides of the equation, so the
-model's reduced (equilibrium) form is
+contrasts. The SAR specification in @eq-sar places the response on both sides of the equation, which gives the model's reduced (equilibrium) form
 
 $$
 \mathbf{y} = \left(\mathbf{I}-\rho \mathbf{W}\right)^{-1}\left(\boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon\right),
@@ -547,7 +542,7 @@ contrast between every other cluster being treated versus untreated while
 a focal cluster is held at control) is a *derived* quantity that depends
 jointly on $\beta$, $\psi$, $\rho$, and $\mathbf{W}$, and equals no single
 coefficient in the model. In particular, when $\rho \neq 0$ even Control Only spillover induces propagation among treated clusters
-through the multiplier, so $\psi$ should be read as the structural
+through the multiplier, which means $\psi$ should be read as the structural
 spillover coefficient on $z_i$ rather than as the marginal indirect effect
 itself. Accordingly, the simulation study that follows evaluates how well
 each design recovers the *structural* intervention coefficient $\beta$
@@ -586,8 +581,7 @@ $$
 $$ {#eq-spatial-dep-term}
 
 where $j$ indexes clusters and $w_{ij} = 0$ whenever clusters $i$ and $j$
-are not Rook neighbors, so the sum reduces naturally to neighboring
-clusters only. Full definitions of indicator-based and distance-based
+are not Rook neighbors, which means the sum reduces to neighboring clusters only. Full definitions of indicator-based and distance-based
 weight construction, including row-normalization formulas, are provided in
 [Appendix @sec-apx-weights].
 
@@ -642,8 +636,7 @@ investigator adopting BSS deliberately selects one of the spatially
 isolated allocations that satisfy the block stratification condition,
 rather than drawing an allocation at random from the full set of balanced
 assignments. Only a small number of allocations satisfy this
-condition (2 for the 2×4 grid, 6 for the 3×3 grid, and 2 for
-the 3×4 grid), so BSS does not induce a usable randomization
+condition (2 for the 2×4 grid, 6 for the 3×3 grid, and 2 for the 3×4 grid), which means BSS does not induce a usable randomization
 distribution, and we make no claim that it supports permutation-based or
 randomization-based inference. This near-determinism is a deliberate
 property of the design rather than a defect: by restricting allocation to
@@ -652,8 +645,7 @@ that simple random sampling can draw by chance, bounding an investigator's
 worst-case estimation error across the feasible allocations for a given
 grid.
 
-Frequentist inference for the intervention effect does not, however, rely
-on a randomization distribution over allocations. For any single realized
+However, Frequentist inference for the intervention effect does not rely on a randomization distribution over allocations. For any single realized
 allocation, including a BSS allocation, the estimator $\hat{\beta}$ has a
 well-defined sampling distribution arising from the stochastic outcome
 process: model-based inference via SAR maximum likelihood estimation (the
@@ -717,8 +709,7 @@ unexposed, as every other point in that cluster. The individual
 within-cluster coordinates are used only to assign subjects to clusters
 and to visualize the sampled grid; beyond determining cluster membership,
 they are not consequential to the SAR fit. All cluster-level quantities
-($x_i$, $z_i$, $w_{ij}$) are shared by every subject in the cluster, so
-the fitted model depends on each subject only through cluster membership.
+($x_i$, $z_i$, $w_{ij}$) are shared by every subject in the cluster, which means the fitted model depends on each subject only through cluster membership.
 Within-cluster variation in individual outcomes contributes to the
 error-variance estimate but carries no information about $\beta$, $\psi$,
 or $\rho$. Treating spillover or treatment as a function of a specific
@@ -751,7 +742,7 @@ between each estimate and the true value of a parameter. It combines variance, w
 
 Given that $\text{MSE} = \text{Bias}^2 + \text{Variance}$, differences in MSE
 between SRS and BSS stem from either systematic bias or
-sampling variability across allocations. The box plots in the Results section (`Figures~\ref{fig-beta-mse-2x4}--\ref{fig-beta-mse-3x4}`{=latex}) show how this MSE is distributed across allocations for each sampling method and condition, and the tables report the bias.
+sampling variability across allocations. The box plots in the following subsections (`Figures~\ref{fig-beta-mse-2x4}--\ref{fig-beta-mse-3x4}`{=latex}) show how this MSE is distributed across allocations for each sampling method and condition, and the tables report the bias.
 
 Mean Squared Error is the primary metric of consideration to understand the
 efficient estimation of the intervention effect under all simulation
@@ -790,8 +781,7 @@ relative to the no-dependence setting in every scenario, a pattern that
 persists across all grid sizes. For BSS on this grid, spatial dependence
 lowered MSE (e.g., $0.165$ vs. $0.262$ at $\psi = 0.5$). The central message
 from the 2×4 results is that BSS bounds the worst-case outcome at the cost
-of a somewhat higher average MSE in certain spillover regimes, whereas SRS
-offers the possibility of a lower average MSE but with substantially greater
+of a somewhat higher average MSE in certain spillover regimes. SRS offers the possibility of a lower average MSE but with substantially greater
 risk of a high-MSE realization.
 
 ![Intervention effect MSE for $2\times4$ cluster grid grouped by spillover effect magnitude, spatial dependence, sampling design, and spillover application type](figures/BetaMSEresults/MSE_Estimates_2x4.png){#fig-beta-mse-2x4 width=80%}
@@ -835,20 +825,18 @@ risk of a high-MSE realization.
 
 The results for the 3×3 spatial grid are summarized in
 @tbl-est-3x3 and @fig-beta-mse-3x3. With spillover restricted to control clusters, BSS
-yielded lower MSE, SD, and bias than SRS in every scenario. With $\rho=0$,
-BSS MSE ranged from $0.042$ to $0.106$, while SRS MSE ranged from $0.114$ to
-$0.291$. With spatial dependence ($\rho=0.01$), BSS MSE ranged from $0.147$
+yielded lower MSE, SD, and bias than SRS in every scenario. At $\rho=0$, BSS MSE ranged from $0.042$ to $0.106$, while SRS MSE ranged from $0.114$ to $0.291$. When $\rho=0.01$, BSS MSE ranged from $0.147$
 to $0.240$, against $0.274$ to $0.455$ for SRS. Both designs showed negative
 bias that grew in magnitude with $\psi$, and the bias was smaller for BSS
 (e.g., $-0.078$ vs. $-0.226$ at $\rho=0$, $\psi=0.5$).
 
 Under Intervention & Control spillover, SRS
 achieved lower average MSE than BSS in every scenario. For $\rho=0$, SRS MSE
-ranged from $0.002$ to $0.005$, whereas BSS MSE ranged from $0.042$ to
+ranged from $0.002$ to $0.005$, while BSS MSE ranged from $0.042$ to
 $0.106$. With $\rho=0.01$, SRS MSE ranged from $0.103$ to $0.167$ and BSS
 MSE from $0.147$ to $0.240$. Unlike the 2×4 and 3×4 grids, where the BSS
 allocations are the two checkerboards, the six BSS allocations on this grid
-differ in structure, so their MSE also varies across allocations. The SD of BSS was also larger than that of SRS.
+differ in structure, and their MSE therefore also varies across allocations. The SD of BSS was also larger than that of SRS.
 
 ![Intervention effect MSE for $3\times3$ cluster grid grouped by spillover effect magnitude, spatial dependence, sampling design, and spillover application type](figures/BetaMSEresults/MSE_Estimates_3x3.png){#fig-beta-mse-3x3 width=80%}
 
@@ -904,8 +892,7 @@ Under Intervention & Control spillover,
 SRS achieves lower average MSE in every scenario (e.g., SRS MSE $= 0.112$
 vs. BSS MSE $= 0.133$ at $\psi = 0.5$, $\rho = 0.01$, and $0.001$ vs.
 $0.226$ at $\rho = 0$). In both checkerboard allocations the spillover
-indicator equals $1 - x_i$, so the two spillover types produce identical BSS
-results and $\hat{\beta}$ absorbs the spillover effect, with bias near $-\psi$ when $\rho = 0$ (e.g., $-0.463$ at $\psi = 0.5$;
+indicator equals $1 - x_i$, and the two spillover types therefore produce identical BSS results and $\hat{\beta}$ absorbs the spillover effect, with bias near $-\psi$ when $\rho = 0$ (e.g., $-0.463$ at $\psi = 0.5$;
 @sec-limitations).
 
 The 3×4 results reinforce the broader conclusion that BSS bounds worst-case
@@ -1073,7 +1060,7 @@ effect.
 
 In Case 2 (SMHP Implementation), the rationale for BSS is even stronger
 due to the complex potential for spillover. A simple random assignment of
-counties would ignore the significant structural influence of the MCOs.
+counties would ignore the structural influence of the MCOs.
 The most effective design would be to stratify by MCO coverage area,
 randomizing counties to the implementation strategy (intervention) or
 control condition within each MCO. This approach directly controls for confounding by MCO-level policies and provider networks. However, some challenges with this MCO stratification do
@@ -1145,8 +1132,7 @@ covariate balance across treatment arms [@crisp_covariate-constrained_2023].
 While BSS and covariate-constrained randomization both restrict the
 allocation space, they operate on fundamentally different principles: BSS
 imposes a spatial isolation condition based on cluster adjacency (no two
-same-treatment clusters share a Rook boundary), whereas
-covariate-constrained randomization restricts allocations based on
+same-treatment clusters share a Rook boundary), and covariate-constrained randomization restricts allocations based on
 balance of measured covariates. These approaches are complementary and
 could in principle be combined, but the present work focuses on the
 spatial isolation constraint as the design criterion, leaving
@@ -1166,7 +1152,7 @@ scenarios. On the 3×3 grid, whose six BSS allocations are not all
 checkerboards, BSS had the smaller bias in most scenarios, and under
 the Intervention & Control regime its MSE varied more across allocations than that of SRS. This
 suggests a trade-off: SRS provides a more accurate central estimate on
-average, whereas BSS offers greater precision and consistency across
+average. BSS offers greater precision and consistency across
 repeated trials, potentially with higher bias.
 
 The study also clarifies the impact of spatial dependence ($\rho$) on
@@ -1210,8 +1196,7 @@ dependence is present.
 Strict checkerboard allocations, which are the BSS allocations on the 2×4
 and 3×4 grids, warrant a further note in the context of practical design
 recommendations. In a checkerboard, every control cluster borders an
-intervention cluster and no intervention cluster borders another, so the
-spillover indicator equals $1 - x_i$ under both spillover types. The two
+intervention cluster and no intervention cluster borders another, which makes the spillover indicator equal $1 - x_i$ under both spillover types. The two
 spillover types then produce identical data, $\beta$ and $\psi$ are not
 separately identifiable, and $\hat{\beta}$ absorbs the spillover effect,
 with bias near $-\psi$ when $\rho = 0$ (@sec-limitations). This is why the
@@ -1245,7 +1230,7 @@ limited, rather than a limitation of the estimation approach itself.
 With a true
 intervention effect of $\beta = 1.0$ and spillover magnitudes $\psi \in
 [0.5, 0.8]$, an exactly collinear allocation yields $\hat{\beta} \approx
-\beta - \psi$, so the bias of $\hat{\beta}$ is approximately $-\psi$, a
+\beta - \psi$, and the bias of $\hat{\beta}$ is therefore approximately $-\psi$, a
 distortion of $50$–$80\%$ of the true effect, large enough to materially
 understate or even reverse a practical conclusion. We acknowledge that, in
 this regime, the estimation error can be severe. Two observations place that
@@ -1305,11 +1290,11 @@ of subjects within clusters.
 
 Given that this study evaluates estimator properties through exhaustive
 enumeration of all possible treatment allocations, the findings
-characterize the *design-space* performance of each sampling strategy
+characterize the performance of each sampling strategy across the full set of feasible allocations
 rather than the sampling distribution arising from a single
 randomization. A consequence of the block stratification condition is
 that BSS admits only a small number of valid allocations (2–6 across the
-grids studied), so it does not generate a randomization distribution and
+grids studied), which means it does not generate a randomization distribution and
 does not support permutation- or randomization-based inference. This does
 not constrain the Frequentist inference available to investigators:
 model-based SAR maximum likelihood estimation conditions on the realized
@@ -1326,10 +1311,8 @@ does not estimate or account for intra-cluster correlation (ICC).
 Incorporating individual-level outcomes with a cluster-specific random
 effect to capture within-cluster correlation is left to future work. The
 model also considered only immediate (Rook) neighbors, and the study used
-homogeneous cluster sizes on regular grids, whereas real-world clusters
-often have irregular shapes and varying sizes that could change both
-spillover dynamics and the relative efficiency of the sampling strategies,
-so the current findings may not fully extend to such heterogeneous spatial
+homogeneous cluster sizes on regular grids. Real-world clusters often have irregular shapes and varying sizes that could change both
+spillover dynamics and the relative efficiency of the sampling strategies, which means the current findings may not fully extend to such heterogeneous spatial
 arrangements. Furthermore, the
 study assumes a fixed treatment allocation ratio (primarily 1:1 or near
 1:1). Varying the proportion of intervention to control clusters could
@@ -1392,10 +1375,7 @@ realism to the simulations. An extension of the simulation parameters to
 cover a broader range of values for spillover effects, spatial dependence,
 and grid dimensions would allow for a more comprehensive mapping of the
 parameter space and a more robust set of recommendations for
-investigators. This would enable a deeper understanding of the conditions
-under which each sampling method (SRS vs. BSS) is most advantageous,
-leading to more efficient and reliable designs for spatial cluster
-randomized trials.
+investigators. This would show the conditions under which each sampling method (SRS vs. BSS) is most advantageous.
 
 Research could also test the robustness of findings to
 model misspecification. This includes evaluating how different sampling
@@ -1421,12 +1401,10 @@ controls, they restore $z_i = 0$ for the analyzed control clusters, breaking
 the exact $x_i$–$z_i$ collinearity by construction and allowing $\beta$ and
 $\psi$ to be estimated separately rather than conflated. In this respect,
 buffer zones target the source of the large biases characterized in
-[@sec-limitations], whereas the allocation-stage strategies studied here
-manage that error only through the bias–variance trade-off. A practical
+[@sec-limitations]. The allocation-stage strategies studied here manage that error only through the bias–variance trade-off. A practical
 obstacle is that buffer-zone exclusion is not feasible on the compact grids
 examined in this study: under the block-stratified checkerboard, every
-control cluster borders an intervention cluster, so excluding the boundary
-controls would remove the entire control arm. Evaluating buffer-zone designs
+control cluster borders an intervention cluster, which means excluding the boundary controls would remove the entire control arm. Evaluating buffer-zone designs
 therefore requires larger spatial layouts in which interior clusters survive
 boundary exclusion. Characterizing the comparative performance of SRS, BSS,
 and buffer-zone exclusion on such layouts, especially for allocations in
