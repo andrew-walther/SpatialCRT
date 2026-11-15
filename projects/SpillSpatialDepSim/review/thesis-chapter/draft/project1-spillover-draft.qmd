@@ -103,7 +103,7 @@ converted on 2026-11-10 so citeproc formats them in APA 7 style).
 
 ## Introduction {#sec-introduction}
 
-### Background & Motivation
+### Background and Motivation
 
 Randomized controlled trials (RCTs) represent the gold standard for
 assessing the efficacy and safety of new interventions [@pocock_clinical_1983; @smith_field_2015]. However, in many
@@ -200,7 +200,7 @@ currently a lack of evidence-based guidance for investigators on how to
 design a cluster randomized trial to mitigate these issues from the outset
 of study planning.
 
-### Aims & Contributions
+### Aims and Contributions
 
 This study addresses that gap by moving beyond post-hoc analysis to examine the role of treatment sampling design in spatial CRTs. In a simulation study, we compare the performance of two contrasting approaches for assigning study
 clusters to intervention and control arms: simple random sampling (SRS),
@@ -289,7 +289,7 @@ formulation is provided in [Appendix @sec-apx-distance]. The simulation
 study presented in this paper relies exclusively on Rook contiguity for
 neighbor definition.
 
-### Intervention & Spillover Effects
+### Intervention and Spillover Effects
 
 Two primary effect types are considered to understand how treatments
 affect subjects in clusters where they are applied and subjects in the
@@ -609,7 +609,7 @@ consideration for spillover effects, spatial dependence, and restrictions
 on spillover application between intervention and control regions. The
 results of this study are detailed in the remainder of this section.
 
-### Simulation Scenarios & Response
+### Simulation Scenarios and Response
 
 We carry out a simulation study to explore how estimation error of the
 intervention effect in a Spatial CRT varies across a range of spillover
@@ -1114,7 +1114,7 @@ ideal.
 
 ## Discussion {#sec-discussion}
 
-### Relevance of Results
+### Interpretation of the Results
 
 This simulation study provides insights into the efficiency of treatment
 assignment methodologies in spatial cluster randomized trials (CRTs) when
@@ -1354,7 +1354,7 @@ interpretations under additional identifying assumptions. Pursuing such
 causal-centered estimands, rather than the design-focused error comparison
 studied here, is a natural direction for future work.
 
-### Future Considerations {#sec-future-considerations}
+### Future Work {#sec-future-considerations}
 
 Building on this study's findings, several areas for future research can
 further improve our understanding of sampling design in spatial cluster
