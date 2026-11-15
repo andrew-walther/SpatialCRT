@@ -321,7 +321,7 @@ being absorbed into $\beta$.
 #### Spillover Effect Methods {#sec-spillover-effect-methods}
 
 The spillover effect ($\psi$) is the structural coefficient on the
-spillover indicator $z_i$ in the SAR model ([@sec-sar]),
+spillover indicator $z_i$ in the spatial autoregressive (SAR) model ([@sec-sar]),
 quantifying the model-estimated change in outcome for a cluster that is
 adjacent to at least one intervention cluster, an indirect
 effect on clusters where the intervention was not directly applied
@@ -835,8 +835,7 @@ achieved lower average MSE than BSS in every scenario. For $\rho=0$, SRS MSE
 ranged from $0.002$ to $0.005$, while BSS MSE ranged from $0.042$ to
 $0.106$. With $\rho=0.01$, SRS MSE ranged from $0.103$ to $0.167$ and BSS
 MSE from $0.147$ to $0.240$. Unlike the 2×4 and 3×4 grids, where the BSS
-allocations are the two checkerboards, the six BSS allocations on this grid
-differ in structure, and their MSE therefore also varies across allocations. The SD of BSS was also larger than that of SRS.
+allocations are the two checkerboards, the six BSS allocations on this grid are near-checkerboards, because both dimensions are odd and the treated and control counts cannot be equal. They differ slightly in structure, and their MSE therefore also varies across allocations. The SD of BSS was also larger than that of SRS.
 
 ![Intervention effect MSE for $3\times3$ cluster grid grouped by spillover effect magnitude, spatial dependence, sampling design, and spillover application type](figures/BetaMSEresults/MSE_Estimates_3x3.png){#fig-beta-mse-3x3 width=80%}
 
@@ -1148,8 +1147,7 @@ diminish the accuracy of intervention effect estimates. On the 2×4 and 3×4
 grids, randomly selected treatment assignments led to lower bias when
 estimating intervention effects, while block stratified treatment
 assignments resulted in less variation in MSE across allocations in most
-scenarios. On the 3×3 grid, whose six BSS allocations are not all
-checkerboards, BSS had the smaller bias in most scenarios, and under
+scenarios. On the 3×3 grid, whose six BSS allocations are near-checkerboards because both dimensions are odd and the treated and control counts cannot be equal, BSS had the smaller bias in most scenarios, and under
 the Intervention & Control regime its MSE varied more across allocations than that of SRS. This
 suggests a trade-off: SRS provides a more accurate central estimate on
 average. BSS offers greater precision and consistency across
