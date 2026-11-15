@@ -114,6 +114,9 @@ whether the other needs it too.
   guidance framed as stated there, and the three-decimal rule.
 - Writing: apply the human-writer skill. No mannered prose. Avoid semicolons and dashes as
   punctuation. Define every abbreviation at first use. Title Case headings.
+- "Fitted" only as an adjective before a noun ("the fitted model", "the fitted coefficients").
+  The passive verb is "fit": "the model is fit by maximizing...", never "is fitted by" or "is
+  fitted to". The writing review flags every misuse.
 
 ## Math accuracy
 
