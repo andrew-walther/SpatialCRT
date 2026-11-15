@@ -416,6 +416,12 @@ Model use (prompt, added 2026-11-15): from 4b on, approved edits are applied by 
    has ASCII "rho/gamma" in captions.
 4c. Chapter 3 carry-over list with the restructuring: `.../round5/ch3/carry-over-edits.md`. **Stop.**
 4d. Apply section by section; **stop after each section**; commit after each approved group.
+   **Status 2026-11-15:** 4b done (CTJ/SI: 7e51487, 43b6f99, 09803e1, 324cd80; trim plan in the
+   revisions folder, deferred). 4c/4d done in SpatialCRT: globals fcf0c70, Intro+Methods 1eaf4da
+   (+ bib fix 44eb69a, bios 1ba1609), Results a1558af, Case Study 227e3db, Discussion 67d9b39,
+   Appendix 6b8da5a. Chapter 3 in the bios draft: 88 pp (was 95). Cut text is in
+   `paper/thesis_chapter/notes/trimmed-material.md`. Still open from Phase 4: rebuild CTJ PDFs
+   (bib title changes from 44eb69a). Next: Phase 5.
 5. Writing review and committee review (parallel subagents, without this session's
    conclusions): `round5/ch3/proposed-edits.md`, `committee-proposals.md`, `new-citations.bib`.
    **Stop.**
