@@ -111,8 +111,7 @@ real-world scenarios, particularly in public health, education, and the
 social sciences, randomizing individuals is not feasible due to logistical
 constraints, ethical considerations, or the inherent nature of the
 intervention itself, which may be administered at a community level. In
-these cases, the cluster randomized trial (CRT) emerges as the preferred and
-most rigorous design, where intact social units or groups such as
+these cases, the cluster randomized trial (CRT) is the standard design, where intact social units or groups such as
 villages, schools, or clinics are randomized to intervention or control
 arms [@hayes_cluster_2017; @donner_design_2000].
 
@@ -133,19 +132,14 @@ dependence [@hayes_cluster_2017; @smith_field_2015].
 
 Spillover occurs when an intervention's effects in one cluster extend, or “spill over,” into neighboring clusters, which complicates the analysis [@anayaizquierdo_spatial_2021; @jarvis_spatial_2017]. This is
 especially common in trials of infectious disease interventions. A study on
-the use of permethrin-impregnated bed nets by @binka_impact_1998 provided
-early, compelling evidence of this phenomenon, demonstrating that child
+the use of permethrin-impregnated bed nets by @binka_impact_1998 provided early evidence of spillover, showing that child
 mortality was significantly lower in control villages situated near
 intervention villages, presumably due to a reduction in the local mosquito
 population [@gimnig_effect_2003; @hawley_community-wide_2003]. Similarly,
 the work by @miguel_worms_2004 on a school-based de-worming program in
 Kenya found significant positive externalities, showing that the health and
 school attendance of untreated children improved if they lived near schools
-that were part of the intervention. The critical implication is that
-failing to account for such positive spillover can lead to a substantial
-underestimation of the intervention's true effect, as the measured outcomes
-in the control group are artificially improved by their proximity to the
-intervention arm. Compounding this issue is spatial dependence, a
+that were part of the intervention. Ignoring positive spillover can therefore underestimate the intervention effect, since outcomes in the control group improve through their proximity to the intervention arm. Compounding this issue is spatial dependence, a
 fundamental concept supported by Tobler's First Law of Geography that
 asserts nearby observations tend to be more related than distant ones
 [@jarvis_spatial_2017; @tobler_computer_1970]. In the context of a CRT,
@@ -166,15 +160,13 @@ include measuring the straight-line distance from control participants to
 the nearest intervention household [@hawley_community-wide_2003; @gimnig_effect_2003], calculating outcome rates across different distance bands [@binka_impact_1998], or quantifying the density of treated individuals within a
 predefined radius [@miguel_worms_2004; @lenhart_insecticidetreated_2008]. More
 recently, @chao_contribution_2015 developed a “potential exposure" metric to
-quantify the spatially heterogeneous risk surrounding an individual. In
-contrast, the spatial modeling approach is more statistically sophisticated,
-directly incorporating the geographic structure of the data into the random
+quantify the spatially heterogeneous risk surrounding an individual. The spatial modeling approach instead incorporates the geographic structure of the data into the random
 effects component of a statistical method. @alexander_spatial_2003 include a distance-decay function in the covariance matrix. @silcocks_spatial_2010 instead use spatial weights matrices and treat spatial correlation as an underlying unobserved process. @watson_design_2025 propose a distinct framework in
 which treatment is measured as a continuous dose based on distance to the
 nearest intervention site, estimating a dose-response function (DRF)
 rather than a discrete cluster-level intervention or spillover effect.
 
-However sophisticated, these analytical tools are post-hoc corrections for a problem that could, and should, be addressed at the design stage. Minimal research has examined how the sampling and allocation of treatments across a geographic area can be optimized to manage these known spatial complexities. The review by @jarvis_spatial_2017 highlights this gap, noting that in practice, the impact of
+These analytical tools correct for spatial effects after the data are collected. The same problem can also be addressed at the design stage. Minimal research has examined how the sampling and allocation of treatments across a geographic area can be optimized to manage these known spatial complexities. The review by @jarvis_spatial_2017 highlights this gap, noting that in practice, the impact of
 location on trial results is an afterthought and oftentimes
 entirely ignored. In fact, trial designs explicitly intended to mitigate
 spatial effects, such as creating well-separated clusters or buffer zones,
@@ -211,7 +203,7 @@ treatment assignment by isolating them to potentially reduce the
 confounding influence of spillover and spatial dependence.
 
 Our simulations explore how the estimation error of the intervention
-effect, quantified by Mean Squared Error, which is composed of bias and
+effect, quantified by mean squared error, which is composed of bias and
 variance, varies across a range of realistic conditions. These include
 different magnitudes of spillover effects, the presence or absence of
 underlying spatial dependence, and restrictions on which clusters can receive spillover. From the patterns that emerge, we provide practical guidance to investigators designing spatial CRTs on choosing a sampling strategy that fits their study goals.
@@ -262,22 +254,20 @@ frameworks provided by @donner_design_2000 and @hayes_cluster_2017.
 #### Contiguity-Based
 
 Contiguity-based neighbors [@fotheringham_sage_2009] are constructed with
-the assumption that neighbors of a given area (individual cells in the case
-of this study) are other clusters (or cells) that share a common boundary.
-This boundary may be an edge and/or vertex. The *spdep* R package
+the assumption that neighbors of a given area, here a grid cell, are the other cells that share a common boundary with it.
+This boundary may be an edge, a vertex or both. The *spdep* R package
 [@bivand_r_2022; @bivand_comparing_2018; @pebesma_spatial_2023;
 @bivand_applied_2008] includes functions for working with spatial
 neighbors and spatial dependence structures. In this study, we consider
-Rook neighbors (shown in @fig-neighbor-types (a)), which fulfill a
+rook neighbors (shown in @fig-neighbor-types (a)), which fulfill a
 contiguity condition where a pair of clusters share a common boundary made
 up by an edge. Queen neighbors (shown in @fig-neighbor-types (b)) are
 another type of contiguity-based neighbors that fulfill a contiguity
-condition where a pair of clusters share a common boundary of either an
-edge and/or a vertex [@fotheringham_sage_2009]. Clusters may also have
+condition where a pair of clusters share a common edge, vertex or both [@fotheringham_sage_2009]. Clusters may also have
 Bishop neighbors, which share only a common vertex (corner), and
 higher-order neighbors, which share no edge or vertex with the reference cluster but border one of its neighbors. These are the “neighbors of neighbors" of the reference cluster.
 
-![(a) Rook neighbors (blue) share an edge with a reference spatial region (red), (b) Queen neighbors (blue) share either an edge or vertex (or both) with a reference spatial region (red), and (c) Distance-based neighbors (blue) have centroids within a fixed radius of the reference cluster (red). Clusters with centroids beyond this distance are not considered as neighbors (white) [@moraga_spatial_2024]](figures/Neighbors/RookQueen2ndContiguityColored.png){#fig-neighbor-types width=100% fig-scap="Rook, Queen, and distance-based neighbor definitions"}
+![(a) rook neighbors (blue) share an edge with a reference spatial region (red), (b) queen neighbors (blue) share either an edge or vertex (or both) with a reference spatial region (red), and (c) Distance-based neighbors (blue) have centroids within a fixed radius of the reference cluster (red). Clusters with centroids beyond this distance are not considered as neighbors (white) [@moraga_spatial_2024]](figures/Neighbors/RookQueen2ndContiguityColored.png){#fig-neighbor-types width=100% fig-scap="Rook, queen, and distance-based neighbor definitions"}
 
 #### Distance-Based
 
@@ -285,9 +275,7 @@ Distance-based neighbors [@fotheringham_sage_2009] of a reference cluster
 are all clusters whose centroids fall within a specified radius of its
 centroid (illustrated in @fig-neighbor-types (c)). A complete description of
 distance-based neighbor construction and the corresponding spatial weights
-formulation is provided in [Appendix @sec-apx-distance]. The simulation
-study presented in this paper relies exclusively on Rook contiguity for
-neighbor definition.
+formulation is provided in [Appendix @sec-apx-distance]. The simulation study in this chapter uses only rook contiguity to define neighbors.
 
 ### Intervention and Spillover Effects
 
@@ -312,8 +300,7 @@ is possible due to the presence of clusters assigned as controls for
 comparison. The relevant intervention could be a vaccine to prevent
 infectious disease, a training program for government employees, an
 educational program for students, or many others. When spillover
-propagates back into intervention clusters (the Intervention & Control
-mechanism; see [@sec-spillover-effect-types]), $\beta$
+propagates back into intervention clusters (the Intervention & Control mechanism of [@sec-spillover-effect-types]), $\beta$
 remains the direct coefficient, and the spillover received by treated
 units is carried separately by the coefficient $\psi$ on $z_i$ rather than
 being absorbed into $\beta$.
@@ -331,7 +318,7 @@ proximity to the locations where an intervention is applied, for example
 as a decay function of the distance from a unit to the nearest intervention
 cluster, or as a function of the number of neighboring intervention
 clusters to which a unit is exposed. However, in this study spillover is modeled as a single binary cluster-level exposure: the indicator $z_i \in
-\{0,1\}$ equals 1 when cluster $i$ shares a Rook edge with at least one
+\{0,1\}$ equals 1 when cluster $i$ shares a rook edge with at least one
 intervention cluster (and the spillover type permits it) and 0 otherwise.
 $z_i$ is a binary $0/1$ indicator rather than a distance- or count-valued quantity, which makes the associated parameter $\psi$ a single scalar
 multiplier rather than a function. With $z_i$ defined at the cluster
@@ -370,7 +357,7 @@ Even if spillover exposure could potentially be directed from multiple
 neighboring clusters, the modeling in this study does not consider any
 additive spillover effects.
 
-![(a) Control Only: Spillover arrows flow *outward* from intervention cells (red) into neighboring control cells (blue) only; no spillover enters other intervention cells. (b) Intervention & Control: Spillover arrows flow from intervention cells (red) into *both* neighboring control cells (blue) and neighboring intervention cells (red).](figures/InterventionSpilloverEffect/TrtSpillComparisonV2.png){#fig-trt-spill-comparison width=80% fig-scap="Control Only and Intervention & Control spillover application types"}
+![(a) Control Only: Spillover arrows flow *outward* from intervention cells (red) into neighboring control cells (blue) only. No spillover enters other intervention cells. (b) Intervention & Control: Spillover arrows flow from intervention cells (red) into *both* neighboring control cells (blue) and neighboring intervention cells (red).](figures/InterventionSpilloverEffect/TrtSpillComparisonV2.png){#fig-trt-spill-comparison width=80% fig-scap="Control Only and Intervention & Control spillover application types"}
 
 ### Simple Random vs. Block Stratified Sampling
 
@@ -384,18 +371,16 @@ $_{6}C_{3}=20$ different combinations of treatments for this specific
 spatial region.
 
 Block stratified sampling ensures a balanced number of intervention and
-control cells are selected, with the added condition that no intervention
-or control cells share a common edge boundary. This approach is analogous
+control cells are selected, with the added condition that no two cells in the same arm share an edge. This approach is analogous
 to geographically stratified randomization in standard CRTs, where spatial
 proximity is used to define strata rather than demographic or clinical
 covariates [@mccann_spatial_2018; @crisp_covariate-constrained_2023;
 @hayes_cluster_2017]. The added spatial isolation condition, that no two
-same-treatment clusters may share a Rook edge, is a novel constraint
+same-treatment clusters may share a rook edge, is a novel constraint
 introduced in this work to directly minimize cross-cluster spillover at
 the design stage. An exception to this rule occurs in spatial setups where
 both dimensions are odd. In this case, the count of intervention and
-control cells must be out of balance and we assert that the control class
-will always be in the majority. In these instances, we relax the common
+control cells must be out of balance and we make the control arm the majority. In these instances, we relax the common
 edge boundary restriction for control cells and only require that
 intervention cells not share a common edge boundary in order to satisfy
 the block stratification condition.
@@ -482,12 +467,12 @@ spillover parameter (in this study, spillover is determined by binary
 cluster adjacency, with the indicator $z_i$ capturing which clusters are
 exposed, which makes $\psi$ a scalar multiplier rather than a function of
 distance); $z_i \in \{0,1\}$ is the cluster-level spillover indicator (1 if
-cluster $i$ is a Rook neighbor of at least one treated cluster and the
+cluster $i$ is a rook neighbor of at least one treated cluster and the
 spillover type permits it; 0 otherwise); $\mathcal{N}(i)$ denotes the set
-of clusters that share a Rook edge with cluster $i$ (i.e., its immediate
+of clusters that share a rook edge with cluster $i$ (i.e., its immediate
 horizontal and vertical neighbors); $w_{ij}$ are elements of the
 row-normalized spatial weights matrix $\mathbf{W}$, equal to
-$1/|\mathcal{N}(i)|$ for each Rook neighbor $j$ of cluster $i$ and 0
+$1/|\mathcal{N}(i)|$ for each rook neighbor $j$ of cluster $i$ and 0
 otherwise (full construction in [Appendix @sec-apx-weights]); $\rho$ is
 the spatial autocorrelation coefficient; and $\varepsilon_i$ is the i.i.d.
 error term for cluster $i$. In matrix form, the SAR model is
@@ -500,8 +485,7 @@ Within any given cluster, all subjects share the same intervention status
 ($x_i$), spillover exposure ($z_i$), and spatial neighborhood structure ($w_{ij}$). The only within-cluster variation in outcomes is through an
 independent (i.i.d.) random error. The outcome $y_i$ is modeled
 at the cluster level, reflecting the shared structural signal across all
-subjects in cluster $i$. This model specification does not parameterize
-intracluster correlation coefficient (ICC). Rather, the cluster-level outcome $y_i$
+subjects in cluster $i$. This model does not include an intracluster correlation coefficient (ICC). Rather, the cluster-level outcome $y_i$
 captures the structural and design signal while individual variation is
 treated as independent noise.
 
@@ -569,10 +553,10 @@ the spatial weights matrix. Both can be computed in R via the *spdep*
 package [@bivand_comparing_2018].
 
 The spatial weights matrix $\mathbf{W}$ encodes the strength of spatial
-connections between clusters; its elements $w_{ij}$ can be constructed as
-indicator-based (Rook contiguity) or distance-based weights, both of which
+connections between clusters. Its elements $w_{ij}$ can be constructed as
+indicator-based (rook contiguity) or distance-based weights, both of which
 are row-normalized to ensure comparability across clusters with differing
-numbers of neighbors. In this study, row-normalized indicator (Rook
+numbers of neighbors. In this study, row-normalized indicator (rook
 contiguity) weights are used throughout. The spatial dependence term of
 the SAR model is
 
@@ -581,7 +565,7 @@ $$
 $$ {#eq-spatial-dep-term}
 
 where $j$ indexes clusters and $w_{ij} = 0$ whenever clusters $i$ and $j$
-are not Rook neighbors, which means the sum reduces to neighboring clusters only. Full definitions of indicator-based and distance-based
+are not rook neighbors, which means the sum reduces to neighboring clusters only. Full definitions of indicator-based and distance-based
 weight construction, including row-normalization formulas, are provided in
 [Appendix @sec-apx-weights].
 
@@ -590,22 +574,21 @@ weight construction, including row-normalization formulas, are provided in
 Maximum likelihood estimation is used to estimate the cluster-level
 spatial lag model in Equation [-@eq-sar] [@ord_estimation_1975;
 @bivand_comparing_2015; @bivand_computing_2013]. The full likelihood and
-log-likelihood expressions, along with details of the MLE derivation, are
+log-likelihood expressions, along with details of the maximum likelihood derivation, are
 provided in [Appendix @sec-apx-sar]. In practice, estimates are obtained
 via the `lagsarlm()` function from the *spdep* R library
 [@bivand_r_2022].
 
 ## Simulation Study {#sec-simulation}
 
-A simulation study was carried out to consider the contrast of block
-stratified and random treatment assignment sampling methods with
+We carried out a simulation study to compare block stratified and simple random treatment assignment with
 consideration for spillover effects, spatial dependence, and restrictions
 on spillover application between intervention and control regions. The
 results of this study are detailed in the remainder of this section.
 
 ### Simulation Scenarios and Response
 
-We carry out a simulation study to explore how estimation error of the
+We carried out a simulation study to explore how estimation error of the
 intervention effect in a Spatial CRT varies across a range of spillover
 effect sizes, the presence or absence of spatial dependence, varying
 restrictions on clusters where spillover is permitted to occur, and the
@@ -638,14 +621,13 @@ rather than drawing an allocation at random from the full set of balanced
 assignments. Only a small number of allocations satisfy this
 condition (2 for the 2×4 grid, 6 for the 3×3 grid, and 2 for the 3×4 grid), which means BSS does not induce a usable randomization
 distribution, and we make no claim that it supports permutation-based or
-randomization-based inference. This near-determinism is a deliberate
-property of the design rather than a defect: by restricting allocation to
+randomization-based inference. BSS is nearly deterministic by design: by restricting allocation to
 spatially favorable arrangements, BSS removes the high-error allocations
 that simple random sampling can draw by chance, bounding an investigator's
 worst-case estimation error across the feasible allocations for a given
 grid.
 
-However, Frequentist inference for the intervention effect does not rely on a randomization distribution over allocations. For any single realized
+However, frequentist inference for the intervention effect does not rely on a randomization distribution over allocations. For any single realized
 allocation, including a BSS allocation, the estimator $\hat{\beta}$ has a
 well-defined sampling distribution arising from the stochastic outcome
 process: model-based inference via SAR maximum likelihood estimation (the
@@ -656,10 +638,7 @@ appropriate framework for investigators implementing either SRS or BSS in
 an applied study, and the small size of the BSS allocation set does not
 invalidate it. The replication-to-replication variation in our simulation
 is correspondingly outcome-level Monte Carlo variation for a fixed
-allocation, not variation induced by re-randomizing the allocation. Within
-this framing, the relevant question is not how many allocations a design
-admits but whether the principled fixed allocation it selects yields a
-low-error estimator. This study uses exhaustive enumeration of all
+allocation, not variation induced by re-randomizing the allocation. The relevant question is whether the fixed allocation a design selects yields a low-error estimator. This study uses exhaustive enumeration of all
 possible treatment allocations, feasible here given the small grids (70,
 126, and 924 total combinations, respectively), precisely to characterize
 that full design space and identify which sampling strategy produces more
@@ -707,8 +686,7 @@ the grid are subject to the selected treatment (intervention/control) and
 experience the same spillover exposure, either all exposed or all
 unexposed, as every other point in that cluster. The individual
 within-cluster coordinates are used only to assign subjects to clusters
-and to visualize the sampled grid; beyond determining cluster membership,
-they are not consequential to the SAR fit. All cluster-level quantities
+and to visualize the sampled grid, and they do not otherwise enter the SAR fit. All cluster-level quantities
 ($x_i$, $z_i$, $w_{ij}$) are shared by every subject in the cluster, which means the fitted model depends on each subject only through cluster membership.
 Within-cluster variation in individual outcomes contributes to the
 error-variance estimate but carries no information about $\beta$, $\psi$,
@@ -744,7 +722,7 @@ Given that $\text{MSE} = \text{Bias}^2 + \text{Variance}$, differences in MSE
 between SRS and BSS stem from either systematic bias or
 sampling variability across allocations. The box plots in the following subsections (`Figures~\ref{fig-beta-mse-2x4}--\ref{fig-beta-mse-3x4}`{=latex}) show how this MSE is distributed across allocations for each sampling method and condition, and the tables report the bias.
 
-Mean Squared Error is the primary metric of consideration to understand the
+Mean squared error is the primary metric of consideration to understand the
 efficient estimation of the intervention effect under all simulation
 settings. The following subsections detail the findings from the simulation
 study, focusing on the Mean Squared Error (MSE) and bias of the intervention effect ($\beta$) estimates, each averaged over allocations, and on the standard deviation (SD) of MSE across allocations, under various conditions (simulation scenarios). The analysis compares Simple Random
@@ -953,8 +931,7 @@ their designs.
 ### Background of Probation in North Carolina
 
 The North Carolina Department of Adult Correction Division of Community
-Supervision (NC DCS) provides a clear example of a spatially structured
-organization, making it an ideal context for applying our research. The NC
+Supervision (NC DCS) is a spatially structured organization, which makes it a suitable setting for applying these results. The NC
 DCS is organized into four geographic Divisions numbered 1 through 4 from
 East to West, which are subdivided into 30 Districts that make up the
 entirety of the state. Each district is composed of one or more counties.
@@ -980,7 +957,7 @@ intervention. Furthermore, adjacent counties within the same region often
 share demographic characteristics, labor market conditions, and similar
 judicial cultures, as well as the same managed care organizations and
 treatment providers, leading to spatial dependence in probation outcomes.
-In this setting, the choice between simple random sampling (SRS) and block-stratified sampling (BSS) is non-trivial, because it can affect the error of the intervention and spillover estimates.
+In this setting, the choice between SRS and BSS is non-trivial, because it can affect the error of the intervention and spillover estimates.
 
 ### Case 1: Trauma-Informed and Engaged Supervision
 
@@ -1020,8 +997,7 @@ regions. This creates multiple, overlapping layers of potential spillover.
 @fig-ncmco-map shows the counties in which each MCO operates. An intervention implemented in one county could be adopted by a
 provider and informally carried into a neighboring control county, or an
 MCO could promote a similar initiative, confounding the study's results.
-This complex spatial linkage underscores the importance of a well-chosen treatment assignment strategy in order to efficiently estimate the impact
-of the intervention.
+These overlapping links make the choice of treatment assignment more important for estimating the intervention effect efficiently.
 
 ![Map of Local Management Entity/Managed Care Organizations (LME/MCOs) for each county in the state of North Carolina. There are 4 LME/MCOs of which one operates in each of the 100 counties of the state.](figures/Applications/NC_MCO_Map.png){#fig-ncmco-map width=80% fig-scap="Map of LME/MCOs for each county in North Carolina"}
 
@@ -1041,7 +1017,7 @@ correctional-supervision settings flows primarily from intervention units
 into neighboring control units, the regime in which BSS reliably controls
 estimation variance and bounds worst-case allocation risk. If substantial
 spillover among treated units is instead anticipated, SRS achieved lower
-average MSE in every simulated scenario of that type (@sec-discussion). In
+average MSE in every simulated scenario of that type (@sec-simulation). In
 that regime, Simple Random Sampling, or an analysis-stage buffer-zone design
 (@sec-future-considerations), may be preferable. We therefore
 encourage investigators to state their anticipated spillover mechanism
@@ -1051,8 +1027,7 @@ In Case 1 (Trauma-Informed Supervision), a simple random assignment of
 districts could, by chance, result in a geographic imbalance,
 concentrating treated districts in one part of the state. This would
 confound the intervention effect with regional characteristics. A safer design would be to stratify by the four state divisions and
-randomize districts to intervention and control conditions within each
-division with a block stratification strategy. This ensures geographic
+assign districts to intervention and control conditions within each division with a block stratification strategy. This ensures geographic
 balance and uses the finding that BSS reduces the variation in estimation error across allocations,
 providing a more stable and defensible estimate of the intervention
 effect.
@@ -1131,7 +1106,7 @@ covariate balance across treatment arms [@crisp_covariate-constrained_2023].
 While BSS and covariate-constrained randomization both restrict the
 allocation space, they operate on fundamentally different principles: BSS
 imposes a spatial isolation condition based on cluster adjacency (no two
-same-treatment clusters share a Rook boundary), and covariate-constrained randomization restricts allocations based on
+same-treatment clusters share a rook boundary), and covariate-constrained randomization restricts allocations based on
 balance of measured covariates. These approaches are complementary and
 could in principle be combined, but the present work focuses on the
 spatial isolation constraint as the design criterion, leaving
@@ -1141,9 +1116,7 @@ Our findings show a clear relationship between the magnitude of spillover
 effects and the estimation error of the intervention effect. As the
 magnitude of the spillover effect ($\psi$) increases, the Mean Squared Error (MSE) for the
 intervention effect ($\beta$) generally rises, regardless of the sampling
-method or the presence of spatial dependence. This highlights the importance
-of accounting for spillover effects, as their increasing influence can
-diminish the accuracy of intervention effect estimates. On the 2×4 and 3×4
+method or the presence of spatial dependence. Larger spillover therefore lowers the accuracy of the intervention effect estimate. On the 2×4 and 3×4
 grids, randomly selected treatment assignments led to lower bias when
 estimating intervention effects, while block stratified treatment
 assignments resulted in less variation in MSE across allocations in most
@@ -1265,19 +1238,18 @@ thoroughly investigated within the current framework.
 An additional notable limitation is the rudimentary spillover mechanism
 (binary effect) applied. This simulation study modeled spillover as a
 fixed, binary event, meaning a unit either experienced the full potential
-spillover effect or none, based solely on contiguity (Rook neighbors).
+spillover effect or none, based solely on contiguity (rook neighbors).
 This approach does not account for more realistic scenarios where
 spillover effects may decay with distance, or where cumulative exposure
 from multiple treated neighbors could lead to additive or non-linear
 effects. The absence of more sophisticated distance-based decay functions
 (e.g., linear, categorical, exponential, or Gaussian decay) or mechanisms
 for additive spillover limits the direct applicability of these specific
-quantitative results to real-world situations where such nuanced
-spillover dynamics are likely. A further limitation is the cluster-level
+quantitative results to real-world situations where spillover is likely to decay with distance or accumulate across treated neighbors. A further limitation is the cluster-level
 uniformity of spillover exposure. The current simulation assigns binary
 spillover at the cluster level: all subjects within a cluster either
 experience or do not experience spillover based solely on whether their
-cluster shares a Rook boundary with an intervention cluster. In practice,
+cluster shares a rook boundary with an intervention cluster. In practice,
 subjects near the boundary of a control cluster may experience stronger
 spillover than those near the center, while subjects near
 non-intervention boundaries may experience none at all. This
@@ -1294,21 +1266,19 @@ randomization. A consequence of the block stratification condition is
 that BSS admits only a small number of valid allocations (2–6 across the
 grids studied), which means it does not generate a randomization distribution and
 does not support permutation- or randomization-based inference. This does
-not constrain the Frequentist inference available to investigators:
+not constrain the frequentist inference available to investigators:
 model-based SAR maximum likelihood estimation conditions on the realized
 allocation and yields a valid sampling distribution for the intervention
 effect from a single fixed design, whether that design was obtained
 through SRS or BSS. The simulation results should accordingly be
 interpreted as describing how well each design tends to perform across the
-full space of feasible allocations for a given grid geometry, with the
-near-deterministic BSS allocation understood as a deliberate, risk-averse
-design choice rather than a limitation of inference.
+full space of feasible allocations for a given grid geometry, with the near-deterministic BSS allocation treated as a deliberate design choice.
 
 The current specification models cluster-level outcomes and therefore
 does not estimate or account for intracluster correlation (ICC).
 Incorporating individual-level outcomes with a cluster-specific random
 effect to capture within-cluster correlation is left to future work. The
-model also considered only immediate (Rook) neighbors, and the study used
+model also considered only immediate (rook) neighbors, and the study used
 homogeneous cluster sizes on regular grids. Real-world clusters often have irregular shapes and varying sizes that could change both
 spillover dynamics and the relative efficiency of the sampling strategies, which means the current findings may not fully extend to such heterogeneous spatial
 arrangements. Furthermore, the
@@ -1358,7 +1328,7 @@ intervention's indirect effects scales with the number or proximity of
 treated neighbors. Understanding how sampling methods perform under such
 additive spillover mechanisms is important for interventions where
 collective exposure drives indirect effects. Exploring other neighbor
-structures beyond Rook contiguity is also warranted. Investigating Queen
+structures beyond rook contiguity is also warranted. Investigating queen
 neighbors (sharing an edge or vertex) or higher-order neighbors (neighbors
 of neighbors) would provide a more complete understanding of how
 different definitions of “proximity" influence spillover propagation and,
@@ -1391,8 +1361,7 @@ Incorporating cost-effectiveness analysis into the design framework would
 also be beneficial, as different sampling strategies may have varying
 logistical and financial implications in real-world implementation.
 
-A particularly promising direction is the evaluation of buffer-zone
-or fried-egg designs, in which control clusters bordering an intervention
+A particularly promising direction is the evaluation of buffer-zone designs, in which control clusters bordering an intervention
 cluster are excluded from the primary analysis to reduce spillover
 contamination [@jarvis_spatial_2017]. Such designs address the identifiability problem directly: by removing the contaminated boundary
 controls, they restore $z_i = 0$ for the analyzed control clusters, breaking
@@ -1401,7 +1370,7 @@ $\psi$ to be estimated separately rather than conflated. In this respect,
 buffer zones target the source of the large biases characterized in
 [@sec-limitations]. The allocation-stage strategies studied here manage that error only through the bias–variance trade-off. A practical
 obstacle is that buffer-zone exclusion is not feasible on the compact grids
-examined in this study: under the block-stratified checkerboard, every
+examined in this study: under the block stratified checkerboard, every
 control cluster borders an intervention cluster, which means excluding the boundary controls would remove the entire control arm. Evaluating buffer-zone designs
 therefore requires larger spatial layouts in which interior clusters survive
 boundary exclusion. Characterizing the comparative performance of SRS, BSS,
@@ -1430,7 +1399,7 @@ Indicator-based weights are defined as
 $$
 \tilde{w}_{ij} =
 \begin{cases}
-1, & \text{if clusters $i$ and $j$ are Rook neighbors (shared edge)}\\
+1, & \text{if clusters $i$ and $j$ are rook neighbors (shared edge)}\\
 0, & \text{otherwise}
 \end{cases}
 $$
@@ -1466,7 +1435,7 @@ $$
 W_{ij} = \frac{\tilde{w}_{ij}}{\displaystyle\sum_{j \neq i}\tilde{w}_{ij}}.
 $$
 
-In this study, indicator-based (Rook contiguity) weights are used in all simulation experiments.
+In this study, indicator-based (rook contiguity) weights are used in all simulation experiments.
 
 ## SAR Model: Full Likelihood {#sec-apx-sar}
 
@@ -1520,7 +1489,7 @@ spatial grid geometries and scenarios is as follows.
 
     \item \textbf{Enumerate treatment combinations.} List all possible combinations of intervention and control cluster assignments for the specified grid: 70 for the $2\times4$ grid, 126 for the $3\times3$ grid, and 924 for the $3\times4$ grid.
 
-    \item \textbf{Construct spatial object.} Build the grid object (8, 9, or 12 clusters) using the \textit{sf} R package and define Rook neighbors for each cluster.
+    \item \textbf{Construct spatial object.} Build the grid object (8, 9, or 12 clusters) using the \textit{sf} R package and define rook neighbors for each cluster.
 
     \item \textbf{Identify BSS allocations.} From the full set of combinations, identify those satisfying the block stratification condition: 2 for the $2\times4$ grid, 6 for the $3\times3$ grid, and 2 for the $3\times4$ grid.
 
@@ -1528,7 +1497,7 @@ spatial grid geometries and scenarios is as follows.
     \begin{enumerate}
         \item Sample subjects with uniformly distributed coordinates over the spatial extent (160, 180, or 240 subjects in total, about 20 per cluster on average).
         \item Assign each subject to its cluster and intervention/control status.
-        \item Determine spillover eligibility: for each subject, set $z_i = 1$ if the subject's cluster has at least one Rook neighbor assigned to the intervention and the spillover application type permits it; otherwise $z_i = 0$.
+        \item Determine spillover eligibility: for each subject, set $z_i = 1$ if the subject's cluster has at least one rook neighbor assigned to the intervention and the spillover application type permits it; otherwise $z_i = 0$.
         \item Generate outcomes from the reduced (equilibrium) form (Equation~\ref{eq-reduced-form}): $\mathbf{y} = (\mathbf{I}-\rho \mathbf{W})^{-1}(\boldsymbol\alpha + \mathbf{X}\beta + \mathbf{Z}\psi + \boldsymbol\varepsilon)$, where $\boldsymbol\varepsilon \sim \mathcal{N}(\mathbf{0}, \sigma^2\mathbf{I})$ with $\sigma^2 = 0.01$.
         \item Fit the spatial lag model via \texttt{lagsarlm()} and retain estimates $(\hat\alpha, \hat\beta, \hat\psi, \hat\rho)$.
         \item Repeat (a)--(e) $N = 50$ times for the $2\times4$ and $3\times3$ grids; $N = 10$ times for the $3\times4$ grid.
@@ -1538,7 +1507,7 @@ spatial grid geometries and scenarios is as follows.
 
     \item \textbf{Summarize by design.} Aggregate metrics across all SRS combinations and separately across all BSS combinations to produce the summary statistics reported in Tables~\ref{tbl-est-2x4}--\ref{tbl-est-3x4}.
 
-    \item\label{step-repeat} \textbf{Repeat.} Repeat Steps~\ref{step-define}--\ref{step-sim} for each grid geometry ($2\times4$, $3\times3$, $3\times4$).
+    \item\label{step-repeat} \textbf{Repeat.} Repeat the steps above for each grid geometry ($2\times4$, $3\times3$, $3\times4$).
 \end{enumerate}
 ```
 
@@ -1555,11 +1524,10 @@ $$
 
 where $d_{ij}$ is the Euclidean distance between the centroids of clusters
 $i$ and $j$. Distance-based neighborhoods can also be defined for
-individual point observations rather than areal units; in that case, any
-point within $d_{\max}$ of the reference point is a neighbor. This
-definition generalizes Rook contiguity in the sense that, for a regular
+individual point observations rather than areal units. In that case, any point within $d_{\max}$ of the reference point is a neighbor. This
+definition generalizes rook contiguity in the sense that, for a regular
 grid with appropriately chosen $d_{\max}$, the distance-based neighbors
-coincide with the Rook neighbors (or Queen neighbors if $d_{\max}$ is
+coincide with the rook neighbors (or queen neighbors if $d_{\max}$ is
 slightly larger). For irregular geographies, distance-based neighbors offer
 a flexible alternative that does not require shared boundaries. The
 corresponding distance-based spatial weights and their row normalization
