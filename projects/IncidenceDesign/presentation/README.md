@@ -11,6 +11,7 @@ at the SUDDEN project meeting on 2026-10-29, which also seeds prelim Part II
 |---|---|
 | `sudden_talk_2026-10-29.qmd` | Deck source (Quarto revealjs, 1920×1080). Speaker notes hold the read-aloud script (one sentence per bullet) with per-slide timing; backup slides have short "use when asked" notes. |
 | `sudden_talk_2026-10-29.html` | Rendered deck, self-contained (fonts, figures and MathJax embedded). Open in a browser; **S** opens the speaker view (notes, next slide, timer), **M** the slide menu, **F** full screen. |
+| `prelim-qa-prep.md` | Likely prelim questions on Project 2 with suggested answers and whether each needs a main slide, a backup slide or a spoken answer (from the Chapter 3 committee review, 2026-11-15). Use it to plan the Part II slides and backups. |
 | `OUTLINE.md` | Slide-by-slide plan: sections, timing, figure, slide text and prelim carry-over tag for every slide, plus open questions. |
 | `outline.html` | Visual version of `OUTLINE.md` with figures inline (built by `tools/build_outline_html.py`). |
 | `theme/unc-gillings.css`, `theme/prelim-overrides.css`, `theme/footer-part.html` | Copies of the prelim template theme from `bios-dissertation/slides/prelim/test/`, unchanged. `footer-part.html` writes each slide's `data-footer-part` (the section name) into the footer. |

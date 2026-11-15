@@ -1360,3 +1360,58 @@ More granular setting-specific results, precision components, residual treatment
 ~~~~
 They are not quantiles of realized errors or a fresh allocation confirmation.
 ~~~~
+
+## 2026-11-15 (round 5 committee review)
+
+Committee-review edits C-01 to C-31 applied to `Thesis_Chapter.qmd`. Each entry gives the committee item, the former location and the reason, then the text verbatim. Moves within the chapter (C-23) are not listed.
+
+*C-21. Section 3.1 (Design Performance Under Queen Contiguity), last paragraph. Reason: Technical aside on how mean MSE and average rank order the bottom three designs. Appendix A7 makes the same point for the adjacent-pair test (mean-MSE order versus within-block rank order).*
+
+~~~~
+The bottom three designs were ordered differently by mean MSE (High Incidence Focus, $2\times2$ Blocking, Checkerboard) and by average rank ($2\times2$ Blocking, Checkerboard, High Incidence Focus). The MSEs of $2\times2$ Blocking and Checkerboard depended strongly on the spillover regime: each was lower than that of High Incidence Focus in all 80 both-arms blocks and higher in all 80 control-only blocks, and average rank counts these wins and losses equally while mean MSE weights the losses by their size.
+~~~~
+
+*C-24. Appendix A6, second paragraph (text before 'In each pair', reworded to 'For each variant and its retained counterpart'). Reason: Repeats the definitions in Table tab:excluded-designs and the statement in Section 2.3 that the variants could not be distinguished.*
+
+~~~~
+The two variants each share the mechanism of a retained design. In a comparison of the eight designs and SRS at $\beta = 1$, neither could be distinguished from its counterpart under either neighbor type. Saturation Quadrants assigns the saturations 20\%, 40\%, 60\%, and 80\% to the four $5\times5$ quadrants of the grid in random order, without reference to incidence. Its retained counterpart, Incidence-Guided Saturation, assigns the higher saturations to the quadrants with higher mean incidence (Table \ref{tab:designs} in @sec-designs). On the NC map, both designs use four fixed geographic regions in place of the quadrants. Balanced Halves divides clusters into two halves by incidence rank and treats 25 at random in each. Its retained counterpart, Balanced Quartiles, uses four strata. In each pair the excluded design had
+~~~~
+
+*C-20 (part 1). Section 3.6 (Allocation-Specific Risk on the Grid), first paragraph. Reason: Forward references to North Carolina worst-decile ratios before the case study is introduced (committee item C-20, option a); Table tab:downside in the Allocation-Specific Risk in North Carolina section carries these numbers.*
+
+~~~~
+ on the grid and 0.64 to 0.68 times in the case study of @sec-application. Under both-arms
+~~~~
+
+*C-20 (part 2). Section 3.6 (Allocation-Specific Risk on the Grid), first paragraph. Reason: Forward references to North Carolina worst-decile ratios before the case study is introduced (committee item C-20, option a); Table tab:downside in the Allocation-Specific Risk in North Carolina section carries these numbers. The deleted final sentence is the reworded 'no worse downside in NC' sentence (committee item C-30, satisfied by this deletion).*
+
+~~~~
+ on the grid and 0.93 to 0.94 times in the case study (Table \ref{tab:downside}). In the case study, the small mean disadvantage under both arms did not come with a higher worst-decile MSE, although the both-arms tail differences are small and uncertain (see below).
+~~~~
+
+*C-22 (Summary of Findings, Checkerboard paragraph). Discussion, Summary of Findings, fourth paragraph. Reason: Restates Sections 3.2 and 3.4 and Appendix A2 (committee item C-22).*
+
+~~~~
+Checkerboard failed for different reasons under the two neighbor types. Under queen contiguity its estimates were centered on $\beta$ but imprecise, and under rook contiguity $\beta$ was not identifiable and its estimates were centered on $\beta - \psi$. Both failures come from the dependence between $\mathbf{Z}$ and the spillover covariate that fine interspersion creates (Appendix \ref{app:technical}).
+~~~~
+
+*C-22 (Summary of Findings, bias paragraph). Discussion, Summary of Findings, last paragraph. Reason: Restates the oracle-model bias bound reported in the Results and Limitations (committee item C-22).*
+
+~~~~
+These results assume an analysis that models spillover. With the spillover term in the fitted model, the estimates were close to unbiased for every design whose $\beta$ was identifiable (absolute bias at most 0.048 at $\beta = 1$), and the choice of design affected how precisely $\beta$ was estimated.
+~~~~
+
+*C-22 (Connection to Prior Spatial CRT Work, whole paragraph; heading '### Connection to Prior Spatial CRT Work' removed). Discussion, Interpretation of the Results, last subsection. Reason: Says little beyond 'this chapter extends Chapter 2'. Its first two sentences are folded into the first paragraph of Summary of Findings; the Chapter 2 comparison is also stated in the Introduction. No label or cross-reference pointed to the heading.*
+
+~~~~
+### Connection to Prior Spatial CRT Work
+
+Chapter 2 compared SRS and Checkerboard (called Block Stratified Sampling there) on small grids and weighed average estimation error against protection from a poor allocation. This chapter keeps both criteria and the same notation, with $\beta$ the intervention effect and $\psi$ the spillover magnitude, while extending the designs, geography and incidence conditions. Its findings concern these new models and settings and are not a numerical comparison with Chapter 2. The rectangular Checkerboard and its map adaptation show that low variation across assignments in a restricted design says little unless the estimation error is also low. In the case study, incidence guided only the assignment and did not enter the simulated education outcome, except in a sensitivity analysis.
+~~~~
+
+*C-27 (reworded, not cut). Case study, Allocation-Specific Risk in North Carolina, last paragraph. Reason: Replaced by the committee-proposed text: the CAR exception applies to CAR fits of spatial lag data, not to the Bayesian CAR model alone. Old wording recorded for reference.*
+
+~~~~
+The exception is the Bayesian CAR model with strong spatial dependence ($\rho = 0.5$). Its estimates were biased by 0.138 to 0.219 even when its chains converged, its coverage was 0.88 to 0.90, and it did not reproduce the saturation designs' control-only advantage. That model assumes a different dependence structure from the one that generated the data, and the correctly specified Bayesian model does not share the problem.
+~~~~
+
