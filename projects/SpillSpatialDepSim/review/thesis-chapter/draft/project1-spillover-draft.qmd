@@ -245,10 +245,10 @@ is the limitation of treatment contamination, where control group members
 are inadvertently exposed to the intervention, which would otherwise bias
 the estimated treatment effect toward the null [@hayes_cluster_2017].
 Statistical analysis of a CRT concerns both the measured response to an intervention and the inherent correlation among outcomes of individuals
-within the same cluster, a dependency quantified by the intraclass
+within the same cluster, a dependency quantified by the intracluster
 correlation coefficient (ICC) [@donner_design_2000; @hemming_how_2017]. The
 ICC measures how similar the outcomes of individuals within a cluster are
-likely to be, relative to those of other clusters. This intra-cluster
+likely to be, relative to those of other clusters. This intracluster
 correlation violates the standard assumption of independence between
 observations. The failure to account for this feature in the analysis
 leads to underestimated standard errors and an inflated probability of a
@@ -501,7 +501,7 @@ Within any given cluster, all subjects share the same intervention status
 independent (i.i.d.) random error. The outcome $y_i$ is modeled
 at the cluster level, reflecting the shared structural signal across all
 subjects in cluster $i$. This model specification does not parameterize
-intra-cluster correlation (ICC). Rather, the cluster-level outcome $y_i$
+intracluster correlation coefficient (ICC). Rather, the cluster-level outcome $y_i$
 captures the structural and design signal while individual variation is
 treated as independent noise.
 
@@ -1307,7 +1307,7 @@ near-deterministic BSS allocation understood as a deliberate, risk-averse
 design choice rather than a limitation of inference.
 
 The current specification models cluster-level outcomes and therefore
-does not estimate or account for intra-cluster correlation (ICC).
+does not estimate or account for intracluster correlation (ICC).
 Incorporating individual-level outcomes with a cluster-specific random
 effect to capture within-cluster correlation is left to future work. The
 model also considered only immediate (Rook) neighbors, and the study used
@@ -1383,7 +1383,7 @@ strategies perform when alternative spatial models (e.g., Spatial Error
 Model, Spatial Durbin Model) are used for analysis, or when the true
 underlying spatial process deviates from the assumed SAR model. A natural
 model extension is to incorporate individual-level outcomes with a
-cluster-specific random effect, which would allow intra-cluster
+cluster-specific random effect, which would allow intracluster
 correlation (ICC) to be parameterized and estimated alongside the SAR
 spatial dependence and spillover coefficients. Finally, exploring optimal
 allocation ratios of intervention to control clusters in the presence of
