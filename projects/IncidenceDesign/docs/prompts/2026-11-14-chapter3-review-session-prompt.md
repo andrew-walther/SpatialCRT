@@ -115,6 +115,26 @@ whether the other needs it too.
 - Writing: apply the human-writer skill. No mannered prose. Avoid semicolons and dashes as
   punctuation. Define every abbreviation at first use. Title Case headings.
 
+## Math accuracy
+
+Every equation, symbol and formula in Chapter 3, CTJ and the supplement must be correct for the
+current code and results. This applies to the text as it stands and to every edit.
+- Each symbol is defined at or before its first use, with the same meaning across the three
+  documents (after the β/τ/γ reparameterization, if approved).
+- Math taken from outside work (estimators, the t interval and its degrees of freedom, the Wald
+  interval, spillover models, design definitions) is cited to its source.
+- Math that describes this project's own model, data-generating process, designs or estimators
+  is checked against the code that produced the results: code/00_mathematical_specification.Rmd,
+  code/02_incidence_generation.R, code/03_designs.R, code/04_estimation.R, the interval scripts
+  (code/26_grid_tdf_intervals.R, code/27_interval_comparison.R) and the case-study code in
+  application/. Check parameter values against the settings actually run, not the comments.
+- The Phase 3b subagent writes one row per equation or symbol: location, the math as written,
+  its source (citation, or file and line of the code), status (verified / cited / wrong /
+  undefined / inconsistent / uncited), and a proposed fix. Wrong or inconsistent math is fixed
+  before Phase 5, through the Phase 4 sign-off lists. If the code and the text disagree and it is
+  unclear which is right, ask me. Never change the code to match the text.
+- An edit that adds or changes math names its source in the sign-off list item.
+
 ## Work plan
 
 Phase 1. Set-up. Confirm the deadline and sync state (git status in SpatialCRT and
@@ -144,12 +164,34 @@ interval convention and notation symbol across Chapter 3, CTJ and the supplement
 the saved results. Output one row per mismatch to
 bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch3/consistency-check.md.
 
+Phase 3b. Math check (subagent, during Phase 2). See "Math accuracy" above. Output
+bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch3/math-check.md.
+
 Phase 4. Edits, in this order (settled): first the targeted revisions and clarifications in CTJ
 and the supplement (the reparameterization if approved, then the accepted feedback items); then
-carry the same changes into Chapter 3, together with the chapter's content-map restructuring,
-section by section. STOP after each Chapter 3 section, and after
-each CTJ section, so I can approve before you commit. Carry each approved Chapter 3 edit back to the source and commit in SpatialCRT after each approved
-group so the hooks re-render and each step can be reverted.
+carry the same changes into Chapter 3, together with the chapter's content-map restructuring.
+ a. CTJ sign-off list (STOP). Before editing CTJ or the supplement, write every proposed edit to
+    paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/proposed-edits.md, in the format
+    of bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch1/proposed-edits.md:
+    a "How to respond" note, a decisions log table at the top, items grouped by section or issue,
+    and for each item an ID, the source IDs it answers (FCL-xxx, M-xx, S-xx, A-xx, I-xx, W-xx,
+    Q-xx, consistency-check and math-check rows), the location (file and line), the current text
+    and the proposed text. Cover every "to do" row of the Phase 2 triage table, whether it came
+    from an annotation on the draft or from my meeting notes. Where an item needs a new analysis,
+    figure or table rather than wording, describe the change and what it would take instead of
+    giving text. Notation changes from the reparameterization get one item per passage. Items that
+    change a claim or a number go in a final group that needs my decision. Rows triaged as already
+    addressed, declined or after the prelim are listed at the end for confirmation, without text.
+    I reply by item ID ("accept all A, reject C3, edit B2"). Record my decisions in the log table.
+ b. Apply only the accepted items to CTJ and the supplement, rebuild both PDFs, and show me the
+    result. Commit in SpatialCRT.
+ c. Chapter 3 carry-over list (STOP). For each accepted CTJ item that applies to Chapter 3, write
+    the matching Chapter 3 edit (current and proposed text from Thesis_Chapter.qmd, since the
+    wording differs) to round5/ch3/carry-over-edits.md in the same format, together with the
+    content-map restructuring for each section. I sign off by item ID as in (a).
+ d. Apply the accepted Chapter 3 items section by section. STOP after each section so I can check
+    it in the re-rendered draft. Commit in SpatialCRT after each approved group so the hooks
+    re-render and each step can be reverted.
 
 Phase 5. Independent reviews (two subagents in parallel, on the revised chapter, without this
 session's conclusions):
@@ -158,7 +200,8 @@ session's conclusions):
    Output round5/ch3/proposed-edits.md in the Chapter 1 round-5 format (grouped by issue, with
    ID, location, current text and proposed text; claim-changing items in a final group).
  - Committee-member review: inconsistencies, gaps, unsupported claims, missing citations,
-   notation or number errors, likely oral-prelim questions, and content that could be cut.
+   notation or number errors, any equation that is undefined, uncited or disagrees with the
+   code, likely oral-prelim questions, and content that could be cut.
    Output round5/ch3/committee-proposals.md in the Chapter 1 format. Stage new references in
    round5/ch3/new-citations.bib after checking them on Crossref or PubMed.
  STOP for my accept/reject decisions by item ID.
@@ -171,7 +214,8 @@ bios-dissertation/ROADMAP.md.
 Done when: the content map is confirmed and followed; every FCL and meeting item has a recorded
 disposition;
 the reparameterization (if approved) is consistent across all documents; the consistency check
-has no open rows; both review files have decisions and accepted items are applied; everything
+and the math check have no open rows; the CTJ and Chapter 3 sign-off lists have a decision on
+every item and accepted items are applied; both review files have decisions and accepted items are applied; everything
 renders with page counts recorded.
 
 Whenever you stop, tell me which done-when items are still open. If the session runs long, split
