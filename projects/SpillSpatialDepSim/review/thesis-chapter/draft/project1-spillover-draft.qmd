@@ -560,7 +560,7 @@ negative, where dissimilar values are close together. Appropriate
 consideration of spatial dependence is necessary for performing valid
 statistical inference as well as for accurate estimation of effects that
 are modeled. A pair of common methods for assessing spatial autocorrelation
-are Moran's $\textit{I}$ [@moran_interpretation_1948; @moran_notes_1950] and
+are Moran's $\textit{I}$ [@moran_notes_1950] and
 Geary's $\textit{C}$ [@geary_contiguity_1954; @waller_applied_2004]. Moran's $\textit{I}$
 standardizes the spatial autocovariance by the variance of the data and
 Geary's $\textit{C}$ utilizes the sum of the squared differences between pairs of
