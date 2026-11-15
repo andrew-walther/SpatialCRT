@@ -1272,3 +1272,91 @@ Nearly all of Checkerboard's MSE in Figure \ref{fig:biasvar-rook}, the rook vers
 
 \end{figure}
 ~~~~
+
+## 2026-11-15 (round 5 writing review)
+
+Sentences removed from `Thesis_Chapter.qmd` when the approved round 5 writing edits (W-01 to W-117, `bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch3/proposed-edits.md`) were applied. Each entry gives the item, the former location (section), the verbatim text and the reason. Sentences that were only reworded are not listed.
+
+*W-83. Appendix A5 (opening paragraph). Reason: describes file handling, not the study.*
+
+~~~~
+These runs left the production case-study files unchanged.
+~~~~
+
+*W-112. Methods, Estimation and Performance Criteria. Reason: no outcome of the check was reported, and the sentence is not critical.*
+
+~~~~
+As a further check, we refit a 1\% sample of the full simulation with `lagsarlm` itself.
+~~~~
+
+*W-59. Results, Case Study, Accuracy, Coverage and Share of Population Treated (both-arms paragraph). Reason: repeats the caveat given in the grid results (W-65).*
+
+~~~~
+Small point differences do not establish equivalence.
+~~~~
+
+*W-59. Same paragraph. Replaced by "...does not show that the design has the protection that randomization provides." Reason: "randomization-based causal validity" is jargon.*
+
+~~~~
+Its low MSE is model-based accuracy conditional on that allocation, not evidence of randomization-based causal validity.
+~~~~
+
+*W-65. Results, Sampling Designs Compared to Simple Random Sampling. Merged into one sentence with "although" and a rewritten last sentence. Reason: a stand-alone caveat sentence, and "hides" gave the pooled average an action.*
+
+~~~~
+Small mean differences do not establish equivalence. Pooling over the regimes also hides how the design guidance differs between them.
+~~~~
+
+*W-16. Case Study, Accuracy paragraph. Reason: duplicate figure reference (the figure is cited in the first sentence of the paragraph).*
+
+~~~~
+(Figure \ref{fig:nc-mse}; Table \ref{tab:nc-year} in Appendix \ref{app:nc-results})
+~~~~
+
+*W-99. Appendix A4 (opening paragraph). Reason: repeated from the body (Case Study, Observed Inputs).*
+
+~~~~
+The county death-certificate source data are restricted and not publicly available. We report only 58-cluster summaries.
+~~~~
+
+*W-99. Appendix A4, Data Conventions. Reason: repeated from the body; the remaining sentence points to the body for the corrected numerator.*
+
+~~~~
+The corrected numerator supplied by Habib includes heart-failure deaths formerly excluded as presumed non-sudden. It totals 23,523 deaths over 25,594,321 person-years. The earlier numerator, which excluded them, reproduces the totals behind Habib's unpublished report [@habib_temporal_2026]. The case study uses the corrected numerator.
+~~~~
+
+*W-100. Appendix A6 (variants paragraph). Reason: self-reference to its own appendix.*
+
+~~~~
+(Appendix \ref{app:eight-design})
+~~~~
+
+*W-100. Appendix A6 (variants paragraph). Reason: repeats the Discussion (Design Guidance by Spillover Regime).*
+
+~~~~
+The accuracy advantage of both designs over SRS, which arises under control-only spillover (see @sec-vs-srs), comes from the saturation structure they share.
+~~~~
+
+*W-88. Appendix A9 (rook results). Reason: repeats the sentence that squared bias accounted for 0.438 of Checkerboard's rook MSE of 0.480, which already cites the figure.*
+
+~~~~
+Nearly all of Checkerboard's MSE under rook contiguity (Figure \ref{fig:biasvar-rook}) is squared bias, because its coefficient on $\mathbf{Z}$ estimates $\beta - \psi$ (@sec-methods).
+~~~~
+
+*W-88. Appendix A9 (before the rook MSE figure). Reason: repeats the opening paragraph of A9, which says Figure \ref{fig:mse-rook} gives the rook version of Figure \ref{fig:mse}.*
+
+~~~~
+Figure \ref{fig:mse-rook} corresponds to Figure \ref{fig:mse}.
+~~~~
+
+*W-29. Appendix A11 (opening text before Table `tab:nc-annual`). Replaced by a statement that the records were checked. Reason: file-management language.*
+
+~~~~
+More granular setting-specific results, precision components, residual treatment information and warning and failure records are kept as aggregate output tables. These records were checked, so the absence of warnings and failures is a verified result.
+~~~~
+
+*W-82. Appendix A11, caption of `fig:nc-risk`. Replaced by the statement of what the tail estimates are. Reason: "a fresh allocation confirmation" was unclear.*
+
+~~~~
+They are not quantiles of realized errors or a fresh allocation confirmation.
+~~~~
