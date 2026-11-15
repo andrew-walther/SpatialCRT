@@ -171,7 +171,7 @@ We report results separately for each neighbor type, with queen contiguity prima
 
 ## Design Performance Under Queen Contiguity {#sec-queen}
 
-At the primary scenario, $\beta = 1$, under queen contiguity and pooled over the five incidence configurations, Incidence-Guided Saturation had the lowest mean squared error (MSE = 0.091), followed by Balanced Quartiles (0.131), Isolation Buffer (0.160), High Incidence Focus (0.245), $2\times2$ Blocking (0.319), and Checkerboard (1.087) (Table \ref{tab:performance}, Figure \ref{fig:mse}). Coverage of the 95\% intervals was between 0.946 and 0.950 for all six designs (Figure \ref{fig:coverage} in Appendix \ref{app:rook-figures}). Power to reject $\beta = 0$ was 0.921 for Incidence-Guided Saturation, 0.814 for Balanced Quartiles, 0.706 for Isolation Buffer, 0.629 for $2\times2$ Blocking, 0.582 for High Incidence Focus, and 0.538 for Checkerboard.
+At the primary scenario, $\beta = 1$, under queen contiguity and pooled over the five incidence configurations, Incidence-Guided Saturation had the lowest mean squared error (MSE = 0.091), followed by Balanced Quartiles (0.131), Isolation Buffer (0.160), High Incidence Focus (0.245), $2\times2$ Blocking (0.319), and Checkerboard (1.087) (Table \ref{tab:performance}, Figure \ref{fig:mse}). Coverage of the 95\% $t$-based intervals was between 0.946 and 0.950 for all six designs. Power to reject $\beta = 0$ (one-sided, level 0.025) was 0.921 for Incidence-Guided Saturation, 0.814 for Balanced Quartiles, 0.706 for Isolation Buffer, 0.629 for $2\times2$ Blocking, 0.582 for High Incidence Focus, and 0.538 for Checkerboard.
 
 ```{=latex}
 \begin{table}[!htb]
@@ -179,7 +179,7 @@ At the primary scenario, $\beta = 1$, under queen contiguity and pooled over the
 \small
 \centering
 
-\caption[Performance of the six designs at the primary scenario]{Performance of the six designs at the primary scenario, $\beta = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Monte Carlo standard errors of MSE, multiplied by 100 in the third column, are computed from the 50 configuration-by-surface means (Section~\ref{sec-methods}). Those of bias, coverage, and power are all below 0.007. Average rank is the mean of each design's within-block MSE rank among the six designs and SRS over the 160 blocks (1 = lowest MSE). SRS's average rank is 2.600 under queen contiguity and 2.450 under rook contiguity. Clusters treated is the mean number of clusters treated per assignment. Under rook contiguity, $\beta$ is not identifiable for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$). Its estimates are kept and flagged, and its coefficient on $\mathbf{Z}$ estimates $\beta - \psi$.}
+\caption[Performance of the six designs at the primary scenario]{Performance of the six designs at the primary scenario, $\beta = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. Rows in both panels are in order of mean squared error (MSE) under queen contiguity. Monte Carlo standard errors of MSE, multiplied by 100 in the third column, are computed from the 50 configuration-by-surface means (Section~\ref{sec-methods}). Those of bias, coverage, and power are all below 0.007. Average rank is the mean of each design's within-block MSE rank among the six designs and SRS over the 160 blocks (1 = lowest MSE). SRS's average rank is 2.600 under queen contiguity and 2.450 under rook contiguity. Coverage and power use the 95\% $t$-based interval, and power is one-sided at level 0.025. Clusters treated is the mean number of clusters treated per assignment. Under rook contiguity, $\beta$ is not identifiable for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$). Its estimates are kept and flagged, and its coefficient on $\mathbf{Z}$ estimates $\beta - \psi$.}
 \label{tab:performance}
 
 \begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}ccccccc}
@@ -226,120 +226,14 @@ Incidence-Guided Saturation also led block by block. Of the 160 queen blocks at 
 \end{figure}
 ```
 
-The Friedman test rejected equal MSE ranks across the six designs and SRS under queen contiguity at $\beta = 1$ ($\chi^2 = 560.33$, $\text{df} = 6$, 160 blocks, $p < 2.2\times10^{-16}$). Nemenyi comparisons (critical difference 0.712) separated 17 of the 21 pairs. Incidence-Guided Saturation ranked significantly better than every other design and than SRS ($p = 0.011$). SRS and Balanced Quartiles, whose average ranks were 2.60 and 2.69, could not be distinguished from each other ($p = 1.00$), and both ranked significantly better than the remaining four designs. The other three pairs not separated all lay among the bottom three designs. Holm-adjusted Wilcoxon signed-rank tests separated 20 of the 21 pairs, all except Balanced Quartiles against SRS ($p = 0.15$). We also compared each pair of designs adjacent in the mean-MSE order over the 50 independent configuration-by-surface units. Every adjacent pair differed significantly (Wilcoxon $p \le 4.9\times10^{-9}$), and the better design had the lower MSE in all 50 units for every pair except High Incidence Focus against $2\times2$ Blocking (48 of 50). Appendix \ref{app:supp-comparisons} gives the pairwise results and the critical-difference diagrams.
+The Friedman test rejected equal MSE ranks across the six designs and SRS ($\chi^2 = 560.33$, $\text{df} = 6$, 160 blocks, $p < 2.2\times10^{-16}$), and in Nemenyi comparisons Incidence-Guided Saturation ranked significantly better than every other design and than SRS. Appendix \ref{app:supp-comparisons} gives the pairwise results.
 
-The bottom three designs were ordered differently by average rank and by mean MSE: by mean MSE, High Incidence Focus (0.245), $2\times2$ Blocking (0.319), and Checkerboard (1.087). By average rank, the order was $2\times2$ Blocking (5.24), Checkerboard (5.74), and High Incidence Focus (5.76). Both reversals arise because the MSEs of $2\times2$ Blocking and Checkerboard depended strongly on the spillover regime. Each had a lower MSE than High Incidence Focus in all 80 both-arms blocks (mean MSE 0.062 for each, against 0.162) and a higher MSE in all 80 control-only blocks (0.576 and 2.111, against 0.329). Average rank counts each block once, so their wins under the both-arms regime offset their losses under the control-only regime. Mean MSE weights those losses by their size. The surface-level comparison, which averages each unit over both regimes, also separated High Incidence Focus from $2\times2$ Blocking.
+The bottom three designs were ordered differently by mean MSE (High Incidence Focus, $2\times2$ Blocking, Checkerboard) and by average rank ($2\times2$ Blocking, Checkerboard, High Incidence Focus). The MSEs of $2\times2$ Blocking and Checkerboard depended strongly on the spillover regime: each was lower than that of High Incidence Focus in all 80 both-arms blocks and higher in all 80 control-only blocks, and average rank counts these wins and losses equally while mean MSE weights the losses by their size.
 
-## Incidence Configuration, Spatial Dependence and Spillover Magnitude {#sec-config}
+## The Spillover Regime Changes the Ranking
 
-Table \ref{tab:by-config} gives each design's MSE within each of the five incidence configurations. Under queen contiguity, the mean-MSE order within every configuration was the same as the pooled order: Incidence-Guided Saturation, Balanced Quartiles, Isolation Buffer, High Incidence Focus, $2\times2$ Blocking, and Checkerboard. The configuration changed each design's MSE only slightly. In this order, each design's highest MSE across the five configurations was lower than the next design's lowest. Incidence-Guided Saturation had the lowest MSE in 18 to 21 of the 32 blocks in each configuration. Coverage did not depend on the configuration either: within each configuration, every design's coverage, averaged over its 32 scenarios, was between 0.941 and 0.952. High Incidence Focus, the design that uses the incidence ranks most directly, also had no higher MSE under the two Poisson configurations than under the iid and spatial configurations.
+The spillover regime was the one factor that changed the queen ranking (Table \ref{tab:grid-srs}, Figure \ref{fig:mse}). Under the both-arms regime, Balanced Quartiles had the lowest MSE (0.042), followed by Incidence-Guided Saturation (0.046), $2\times2$ Blocking (0.062), Checkerboard (0.062), Isolation Buffer (0.161), and High Incidence Focus (0.162). Under the control-only regime, the order was Incidence-Guided Saturation (0.135), Isolation Buffer (0.159), Balanced Quartiles (0.219), High Incidence Focus (0.329), $2\times2$ Blocking (0.576), and Checkerboard (2.111). At larger values of $\beta$, Isolation Buffer matched or passed Incidence-Guided Saturation under this regime (see @sec-tau). For Isolation Buffer, no treated cluster has a treated neighbor, so $\mathbf{W}\mathbf{Z} = 0$ at every treated cluster and $\mathbf{W}\mathbf{Z} \circ (\mathbf{1} - \mathbf{Z}) = \mathbf{W}\mathbf{Z}$. The two regimes in Equation \ref{eq:spillover} therefore define the same outcome model and the same expected MSE. The observed values, 0.161 and 0.159, differ only by Monte Carlo error because the two regimes use separate draws. Every other design had a higher MSE under the control-only regime. The increase was largest for Checkerboard and $2\times2$ Blocking, which went from close to the best designs under the both-arms regime to the two worst under the control-only regime. Among the six detailed designs, Incidence-Guided Saturation was first or second under both regimes, at this and every other value of $\beta$. In the full benchmark that includes SRS (Table \ref{tab:grid-srs}), however, its both-arms MSE was 8\% above that of SRS, a small but statistically detectable difference (Figure \ref{fig:vs-srs}).
 
-```{=latex}
-\begin{table}[!htb]
-
-\small
-\centering
-\setlength{\tabcolsep}{4pt}
-
-\caption[Mean squared error by design within each of the five incidence configurations at $\beta = 1$]{Mean squared error by design within each of the five incidence configurations at $\beta = 1$, under queen contiguity (primary) and rook contiguity (sensitivity). Each entry averages the 32 scenarios of one design, neighbor type, and configuration (4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. The spatially autocorrelated and Poisson configurations are labeled by the strength of dependence in the incidence surface, $\rho_X$. Rows in both panels are ordered by pooled mean MSE under queen contiguity (Table \ref{tab:performance}). Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.} \label{tab:by-config}
-
-\begin{tabular}{lccccc}
-
-\toprule
-& & \multicolumn{2}{c}{Spatial} & \multicolumn{2}{c}{Poisson} \\
-\cmidrule(lr){3-4}\cmidrule(lr){5-6}
-Design & iid & $\rho_X=0.20$ & $\rho_X=0.50$ & $\rho_X=0.20$ & $\rho_X=0.50$ \\
-
-\midrule
-\multicolumn{6}{l}{\textit{Queen contiguity}} \\
-Incidence-Guided Saturation & 0.093 & 0.087 & 0.092 & 0.090 & 0.092 \\
-Balanced Quartiles & 0.130 & 0.130 & 0.131 & 0.128 & 0.135 \\
-Isolation Buffer & 0.160 & 0.159 & 0.159 & 0.162 & 0.161 \\
-High Incidence Focus & 0.245 & 0.267 & 0.245 & 0.232 & 0.238 \\
-2$\times$2 Blocking & 0.311 & 0.315 & 0.323 & 0.326 & 0.320 \\
-Checkerboard & 1.091 & 1.068 & 1.086 & 1.112 & 1.077 \\
-
-\midrule
-\multicolumn{6}{l}{\textit{Rook contiguity}} \\
-Incidence-Guided Saturation & 0.072 & 0.072 & 0.073 & 0.073 & 0.069 \\
-Balanced Quartiles & 0.081 & 0.084 & 0.084 & 0.084 & 0.085 \\
-Isolation Buffer & 0.131 & 0.131 & 0.132 & 0.136 & 0.134 \\
-High Incidence Focus & 0.205 & 0.213 & 0.200 & 0.202 & 0.211 \\
-2$\times$2 Blocking & 0.129 & 0.125 & 0.129 & 0.130 & 0.129 \\
-Checkerboard (flagged) & 0.480 & 0.482 & 0.474 & 0.481 & 0.482 \\
-
-\bottomrule
-
-\end{tabular}
-
-\end{table}
-```
-
-Under queen contiguity, neither the strength of spatial dependence in the outcome nor the spillover magnitude changed the ranking. Across $\rho \in \{0, 0.01, 0.20, 0.50\}$, no design's MSE changed by more than 0.020. Across $\psi \in \{0.5, 0.6, 0.7, 0.8\}$, the MSE of every design except Checkerboard also varied by less than 0.020, and Checkerboard's varied between 1.052 and 1.108 with no trend in $\psi$ (Tables \ref{tab:rho} and \ref{tab:gamma} in Appendix \ref{app:sensitivity-tables}). Under rook contiguity, $\psi$ mattered for Checkerboard alone, for the reason given in the rook results below.
-
-## Spillover Regime
-
-The spillover regime was the one factor that changed the queen ranking (Table \ref{tab:regime}, Figure \ref{fig:mse}). Under the both-arms regime, Balanced Quartiles had the lowest MSE (0.042), followed by Incidence-Guided Saturation (0.046), $2\times2$ Blocking (0.062), Checkerboard (0.062), Isolation Buffer (0.161), and High Incidence Focus (0.162). Under the control-only regime, the order was Incidence-Guided Saturation (0.135), Isolation Buffer (0.159), Balanced Quartiles (0.219), High Incidence Focus (0.329), $2\times2$ Blocking (0.576), and Checkerboard (2.111). At larger values of $\beta$, Isolation Buffer matched or passed Incidence-Guided Saturation under this regime (see @sec-tau). For Isolation Buffer, no treated cluster has a treated neighbor, so $\mathbf{W}\mathbf{Z} = 0$ at every treated cluster and $\mathbf{W}\mathbf{Z} \circ (\mathbf{1} - \mathbf{Z}) = \mathbf{W}\mathbf{Z}$. The two regimes in Equation \ref{eq:spillover} therefore define the same outcome model, and so the same expected MSE. The observed values, 0.161 and 0.159, differ only by Monte Carlo error because the two regimes use separate draws. Every other design had a higher MSE under the control-only regime. The increase was largest for Checkerboard and $2\times2$ Blocking, which went from close to the best designs under the both-arms regime to the two worst under the control-only regime. Among the six detailed designs, Incidence-Guided Saturation was first or second under both regimes, at this and every other value of $\beta$. In the full benchmark that includes SRS (Table \ref{tab:grid-srs}), however, its both-arms MSE was 8\% above that of SRS, a small but statistically detectable difference (Figure \ref{fig:vs-srs}).
-
-```{=latex}
-\begin{table}[!htb]
-
-\small
-\centering
-\setlength{\tabcolsep}{4pt}
-
-\caption[Mean squared error by design under each spillover regime at $\beta = 1$]{Mean squared error by design under each spillover regime at $\beta = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages 80 scenarios (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\psi$). Rows are ordered by pooled mean MSE under queen contiguity (Table \ref{tab:performance}). Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.}
-\label{tab:regime}
-
-\begin{tabular}{lcccc}
-
-\toprule
-& \multicolumn{2}{c}{Queen} & \multicolumn{2}{c}{Rook} \\
-Design & Both arms & Control only & Both arms & Control only \\
-
-\midrule
-Incidence-Guided Saturation & 0.046 & 0.135 & 0.045 & 0.098 \\
-Balanced Quartiles & 0.042 & 0.219 & 0.042 & 0.125 \\
-Isolation Buffer & 0.161 & 0.159 & 0.131 & 0.134 \\
-High Incidence Focus & 0.162 & 0.329 & 0.164 & 0.249 \\
-2$\times$2 Blocking & 0.062 & 0.576 & 0.051 & 0.206 \\
-Checkerboard (flagged under rook) & 0.062 & 2.111 & 0.477 & 0.483 \\
-
-\bottomrule
-
-\end{tabular}
-
-\end{table}
-```
-
-The increase under the control-only regime was variance, not bias. The oracle model includes the true regime-specific spillover covariate, so it has no omitted-variable bias. At $\beta = 1$, in every combination of design and regime under queen contiguity, the absolute bias was at most 0.048 and squared bias, averaged over scenarios, was at most 2.2\% of MSE. Checkerboard showed the mechanism most clearly: under the control-only regime its spillover covariate is a linear combination of the intercept and $\mathbf{Z}$ at every interior cluster, so only the boundary clusters separate the spillover effect from the treatment effect (@sec-methods). Checkerboard's MSE rose from 0.062 under the both-arms regime to 2.111 under the control-only regime, while its bias stayed near zero (0.004) and its coverage stayed at 0.951, because its intervals widened with its variance. Its pooled MSE of 1.087 was almost entirely variance, and squared bias, averaged over scenarios, was 0.004, less than 0.5\% of MSE. Figure \ref{fig:biasvar} in Appendix \ref{app:rook-figures} shows the decomposition for the Poisson configuration with $\rho_X = 0.20$. $2\times2$ Blocking showed the same pattern on a smaller scale, with MSE rising from 0.062 to 0.576 and a bias of 0.016 under the control-only regime.
-
-## Comparison with Simple Random Sampling {#sec-vs-srs}
-
-At $\beta=1$ under queen contiguity, pooled over the five incidence configurations and all spatial and spillover settings, Incidence-Guided Saturation had mean MSE 0.091 against 0.128 for SRS, and Saturation Quadrants had 0.090. Table \ref{tab:grid-srs} separates the regimes and includes all eight strategies. Figure \ref{fig:grid-srs} shows the six detailed designs and SRS with the five incidence configurations kept separate. Within each regime the configurations lie close together for every design, whereas the regime changes how each design compares with SRS. Incidence-Guided Saturation's MSE was 0.631 times that of SRS under control-only spillover and 1.083 times under both arms. SRS, Balanced Quartiles and Balanced Halves had similar both-arms accuracy. Small mean differences do not establish equivalence. Pooling over the regimes also hides how the design guidance differs between them.
-
-Figure \ref{fig:vs-srs} tests each design against SRS within each regime, over the 50 independent configuration-by-surface units. Under control-only spillover, Incidence-Guided Saturation had 36.9\% lower MSE than SRS (95\% interval 34.5\% to 39.2\% lower), Saturation Quadrants 36.7\% lower and Isolation Buffer 25.7\% lower, each in all 50 units (Holm-adjusted $p = 6.2\times10^{-9}$). Under both-arms spillover, Incidence-Guided Saturation had 8.3\% higher MSE than SRS (5.6\% to 11.0\% higher; $p = 6.1\times10^{-6}$) and Saturation Quadrants 4.3\% higher ($p = 0.017$). Balanced Quartiles and Balanced Halves did not differ significantly from SRS under either regime. The remaining designs had significantly higher MSE than SRS under both-arms spillover, as did High Incidence Focus, $2\times2$ Blocking and Checkerboard under control-only spillover.
-
-Under rook contiguity the saturation designs had 23\% to 24\% lower control-only MSE than SRS and 3\% to 5\% higher both-arms MSE, significant for Incidence-Guided Saturation ($p = 0.0075$) but not for Saturation Quadrants ($p = 0.15$). Isolation Buffer's control-only MSE under rook contiguity was 5.8\% higher than that of SRS.
-
-```{=latex}
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\linewidth]{figures/fig_vs_srs_by_regime_queen.pdf}
-\caption[Each design's mean squared error (MSE) compared with simple random sampling (SRS) at $\beta = 1$ under queen contiguity]{Each design's mean squared error (MSE) compared with simple random sampling (SRS) at $\beta = 1$ under queen contiguity, within each spillover regime. Each point is one plus the mean paired difference in MSE over the 50 independent configuration-by-surface units divided by SRS's mean MSE in that regime, so that 1 marks equal error and values below 1 mark lower error than SRS. The $t_{49}$ 95\% interval is shown for each point. Filled points are significant after Holm's adjustment over the eight designs compared with SRS within the regime (Wilcoxon signed-rank test). The horizontal axis is logarithmic, ratios above 2 are printed, and rows are sorted by the control-only ratio.}
-\label{fig:vs-srs}
-\end{figure}
-```
-
-
-```{=latex}
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=\linewidth]{figures/compact/grid_accuracy_srs.pdf}
-\caption[Grid mean MSE at $\beta=1$ with queen weights]{Grid mean MSE at $\beta=1$ with queen weights, for the six designs and simple random sampling (SRS), under each spillover regime. Points keep the five incidence configurations separate, each averaging the 16 combinations of outcome spatial dependence $\rho$ and spillover magnitude $\psi$ within that configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Horizontal lines are 95\% Monte Carlo intervals over the ten simulated incidence surfaces and are often narrower than the symbols. Designs share surfaces and outcome noise, so Figure \ref{fig:vs-srs} gives the paired comparison of each design with SRS. Table \ref{tab:grid-srs} gives the values pooled over configurations for all nine strategies.}
-\label{fig:grid-srs}
-\end{figure}
-```
 
 ```{=latex}
 \begin{table}[!htb]
@@ -347,7 +241,7 @@ Under rook contiguity the saturation designs had 23\% to 24\% lower control-only
 \small
 \centering
 
-\caption[Full grid benchmark at $\beta=1$]{Full grid benchmark at $\beta=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\psi$ values). MSE and coverage both use the oracle fit, the spatial lag model that includes the true spillover term, and coverage is that of 95\% $t$-based confidence intervals with a degrees-of-freedom-corrected standard error. Simple random sampling treats 50 of the 100 clusters at random. No value pools queen and rook.}
+\caption[Full grid benchmark at $\beta=1$]{Full grid benchmark at $\beta=1$, queen contiguity. Each regime-specific entry averages 80 scenarios (five incidence configurations, four $\rho$ and four $\psi$ values). MSE and coverage both use the oracle fit, the spatial lag model that includes the true spillover covariate $\mathbf{S}(\mathbf{Z})$ with $\psi$ estimated, and coverage is that of 95\% $t$-based confidence intervals with a degrees-of-freedom-corrected standard error. Simple random sampling treats 50 of the 100 clusters at random and is the reference for the comparisons in @sec-vs-srs. Saturation Quadrants and Balanced Halves are the two variants described in Appendix \ref{app:eight-design}. No value pools queen and rook.}
 \label{tab:grid-srs}
 % SOURCE: results/sim_data/sim_results_MLE_tau_sweep_combined_20260927_000502.rds
 
@@ -375,29 +269,42 @@ Simple Random Sampling & 0.042 & 0.950 & 0.215 & 0.946 \\
 \end{table}
 ```
 
-## Stability Across Treatment Effect Sizes {#sec-tau}
+The increase under the control-only regime was variance, not bias. The oracle model includes the true regime-specific spillover covariate, so it has no omitted-variable bias. At $\beta = 1$, in every combination of design and regime under queen contiguity, the absolute bias was at most 0.048 and squared bias, averaged over scenarios, was at most 2.2\% of MSE. Checkerboard showed the mechanism most clearly: under the control-only regime its spillover covariate is a linear combination of the intercept and $\mathbf{Z}$ at every interior cluster, so only the boundary clusters separate the spillover effect from the treatment effect (@sec-methods). Checkerboard's MSE rose from 0.062 under the both-arms regime to 2.111 under the control-only regime, while its bias stayed near zero (0.004) and its coverage stayed at 0.951, because its intervals widened with its variance. Its pooled MSE of 1.087 was almost entirely variance, and squared bias, averaged over scenarios, was 0.004, less than 0.5\% of MSE. Figure \ref{fig:biasvar} in Appendix \ref{app:rook-figures} shows the decomposition for the Poisson configuration with $\rho_X = 0.20$. $2\times2$ Blocking showed the same pattern on a smaller scale, with MSE rising from 0.062 to 0.576 and a bias of 0.016 under the control-only regime.
 
-Under queen contiguity, the order by average within-block rank and the order by mean MSE were each the same at every $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$. The two orders differ from each other in the bottom three designs (see @sec-queen; Figure \ref{fig:tau-mse}a shows mean MSE). With SRS included, the order by average rank placed SRS second at every value of $\beta$, and the Friedman statistic was 564.09, 560.33, 540.92, 526.55, and 497.55 at these five values ($p < 2.2\times10^{-16}$ at each). Under rook contiguity the order was also stable (Figure \ref{fig:tau-mse}b). By average rank among the six designs and SRS, it was the same at every value of $\beta$, with SRS third behind Incidence-Guided Saturation and Balanced Quartiles. By mean MSE, the close pair of $2\times2$ Blocking and Isolation Buffer traded places, with Isolation Buffer ahead only at $\beta = 3$. The five values of $\beta$ share their assignments and noise, so these five comparisons are not independent confirmations of one another. They show only that, under queen contiguity, the order did not change across the five values of $\beta$ we tested, given the same draws.
+## Sampling Designs Compared to Simple Random Sampling {#sec-vs-srs}
+
+At $\beta=1$ under queen contiguity, pooled over the five incidence configurations and all spatial and spillover settings, Incidence-Guided Saturation had mean MSE 0.091 against 0.128 for SRS, and Saturation Quadrants had 0.090. Table \ref{tab:grid-srs} separates the regimes for all eight designs and SRS. Figure \ref{fig:grid-srs} shows the six detailed designs and SRS with the five incidence configurations kept separate. Within each regime the configurations lie close together for every design, but the regime changes how each design compares with SRS. Incidence-Guided Saturation's MSE was 0.631 times that of SRS under control-only spillover and 1.083 times under both arms. SRS, Balanced Quartiles and Balanced Halves had similar both-arms accuracy. Small mean differences do not establish equivalence. Pooling over the regimes also hides how the design guidance differs between them.
+
+Figure \ref{fig:vs-srs} tests each design against SRS within each regime, over the 50 independent configuration-by-surface units. Under control-only spillover, Incidence-Guided Saturation had 36.9\% lower MSE than SRS (95\% interval 34.5\% to 39.2\% lower), Saturation Quadrants 36.7\% lower and Isolation Buffer 25.7\% lower, each in all 50 units (Holm-adjusted $p = 6.2\times10^{-9}$). Under both-arms spillover, Incidence-Guided Saturation had 8.3\% higher MSE than SRS (5.6\% to 11.0\% higher; $p = 6.1\times10^{-6}$) and Saturation Quadrants 4.3\% higher ($p = 0.017$). Balanced Quartiles and Balanced Halves did not differ significantly from SRS under either regime. The remaining designs had significantly higher MSE than SRS under both-arms spillover, as did High Incidence Focus, $2\times2$ Blocking and Checkerboard under control-only spillover.
+
+Under rook contiguity the saturation designs had 23\% to 24\% lower control-only MSE than SRS and 3\% to 5\% higher both-arms MSE, significant for Incidence-Guided Saturation ($p = 0.0075$) but not for Saturation Quadrants ($p = 0.15$). Isolation Buffer's control-only MSE under rook contiguity was 5.8\% higher than that of SRS.
 
 ```{=latex}
 \begin{figure}[!htb]
-
 \centering
-\includegraphics[width=\linewidth]{figures/fig_tau_sensitivity_6design_combined.pdf}
-
-\caption[Mean squared error by design across the five values of the treatment effect]{Mean squared error by design across the five values of the treatment effect, $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$, under (a) queen contiguity (primary) and (b) rook contiguity (sensitivity). Each point averages the 160 scenarios of one design at one value of $\beta$, pooled over the five incidence configurations. Shaded bands show $\pm 1$ times the average of the scenario-level Monte Carlo standard errors of MSE. They describe the precision of a single scenario's MSE, not of the plotted average, whose standard error is smaller (Table \ref{tab:performance}). The shared legend lists the designs in order of pooled mean MSE under queen contiguity at $\beta = 1$. The vertical scales of the two panels differ. The gray dashed line marks simple random sampling (SRS). Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged. The five values of $\beta$ share their assignments and noise.}
-\label{fig:tau-mse}
-
+\includegraphics[width=\linewidth]{figures/fig_vs_srs_by_regime_queen.pdf}
+\caption[Each design's mean squared error (MSE) compared with simple random sampling (SRS) at $\beta = 1$ under queen contiguity]{Each design's mean squared error (MSE) compared with simple random sampling (SRS) at $\beta = 1$ under queen contiguity, within each spillover regime. Each point is one plus the mean paired difference in MSE over the 50 independent configuration-by-surface units divided by SRS's mean MSE in that regime, so that 1 marks equal error and values below 1 mark lower error than SRS. The $t_{49}$ 95\% interval is shown for each point. Filled points are significant after Holm's adjustment over the eight designs compared with SRS within the regime (Wilcoxon signed-rank test). The horizontal axis is logarithmic, ratios above 2 are printed, and rows are sorted by the control-only ratio.}
+\label{fig:vs-srs}
 \end{figure}
 ```
 
-Within that stable order, the gap in MSE between Incidence-Guided Saturation and Balanced Quartiles under queen contiguity stayed between 0.037 and 0.041, and Incidence-Guided Saturation had the lower MSE of the two in 101 to 103 of the 160 blocks at every value of $\beta$. Isolation Buffer closed the gap instead: its MSE stayed at 0.160 at every value of $\beta$, while that of Incidence-Guided Saturation rose from 0.088 to 0.115 and that of Balanced Quartiles from 0.130 to 0.152. Isolation Buffer's gain came under the control-only regime, where the mean MSE of Incidence-Guided Saturation rose from 0.131 at $\beta = 0.8$ to 0.182 at $\beta = 3$, while that of Isolation Buffer stayed between 0.159 and 0.160. At $\beta = 2$ the two were level (0.160 for Isolation Buffer against 0.160), and at $\beta = 3$ Isolation Buffer had the lower control-only MSE (0.160 against 0.182). At $\beta = 2$ and $\beta = 3$, Isolation Buffer also had the lower worst case across all 160 blocks (0.207 against 0.210, and 0.208 against 0.238). Incidence-Guided Saturation remained second under the control-only regime at those two values, second to Balanced Quartiles under the both-arms regime at every value of $\beta$, and lowest in pooled MSE at every value of $\beta$. The rise in its MSE was mostly variance: its mean bias grew from 0.029 at $\beta = 0.8$ to 0.047 at $\beta = 3$, but squared bias stayed at or below 3.0\% of its MSE. Appendix \ref{app:technical-notes} traces both rises to a term of the estimation error that grows with $\beta$ when treated clusters have treated neighbors, and gives the block-level detail.
 
-Under rook contiguity, Incidence-Guided Saturation kept the lowest control-only MSE at every value of $\beta$, although its margin over Isolation Buffer narrowed, from 0.095 against 0.134 at $\beta = 0.8$ to 0.131 against 0.136 at $\beta = 3$.
+```{=latex}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\linewidth]{figures/compact/grid_accuracy_srs.pdf}
+\caption[Grid mean MSE at $\beta=1$ with queen weights]{Grid mean MSE at $\beta=1$ with queen weights, for the six designs and simple random sampling (SRS), under each spillover regime. Points keep the five incidence configurations separate, each averaging the 16 combinations of outcome spatial dependence $\rho$ and spillover magnitude $\psi$ within that configuration and regime. Parentheses in the legend give incidence dependence $\rho_X$. Horizontal lines are 95\% Monte Carlo intervals over the ten simulated incidence surfaces and are often narrower than the symbols. Designs share surfaces and outcome noise, so Figure \ref{fig:vs-srs} gives the paired comparison of each design with SRS. Table \ref{tab:grid-srs} gives the values pooled over configurations for all nine strategies.}
+\label{fig:grid-srs}
+\end{figure}
+```
 
-Except for Checkerboard under rook contiguity, coverage stayed close to 0.95 at every value of $\beta$: between 0.946 and 0.950 for every design under queen contiguity, and between 0.947 and 0.952 for every other design under rook contiguity. The coverage of rook Checkerboard, for which $\beta$ is not identifiable, rose from 0.150 at $\beta = 0.8$ to 0.464 at $\beta = 3$, because its intervals widened around the wrong quantity (Appendix \ref{app:technical-notes}). Appendix \ref{app:supp-comparisons} shows coverage across $\beta$ for each design.
 
-## Variation Across Parameter Settings
+## Robustness to Incidence Pattern, Spatial Dependence and Spillover Magnitude {#sec-config}
+
+Table \ref{tab:by-config} in Appendix \ref{app:sensitivity-tables} gives each design's MSE within each of the five incidence configurations. Under queen contiguity, the mean-MSE order within every configuration was the same as the pooled order: Incidence-Guided Saturation, Balanced Quartiles, Isolation Buffer, High Incidence Focus, $2\times2$ Blocking, and Checkerboard. The configuration changed each design's MSE only slightly. In this order, each design's highest MSE across the five configurations was lower than the next design's lowest. Incidence-Guided Saturation had the lowest MSE in 18 to 21 of the 32 blocks in each configuration. Coverage did not depend on the configuration either: within each configuration, every design's coverage, averaged over its 32 scenarios, was between 0.941 and 0.952. High Incidence Focus, the design that uses the incidence ranks most directly, also had no higher MSE under the two Poisson configurations than under the iid and spatial configurations.
+
+
+Under queen contiguity, neither the strength of spatial dependence in the outcome nor the spillover magnitude changed the ranking. Across $\rho \in \{0, 0.01, 0.20, 0.50\}$, no design's MSE changed by more than 0.020. Across $\psi \in \{0.5, 0.6, 0.7, 0.8\}$, the MSE of every design except Checkerboard also varied by less than 0.020, and Checkerboard's varied between 1.052 and 1.108 with no trend in $\psi$ (Tables \ref{tab:rho} and \ref{tab:gamma} in Appendix \ref{app:sensitivity-tables}). Under rook contiguity, $\psi$ mattered for Checkerboard alone, for the reason given in Appendix \ref{app:rook-figures}.
 
 Table \ref{tab:robustness} gives the distribution of MSE across the 160 queen blocks at $\beta = 1$. Incidence-Guided Saturation had the lowest median (0.080) and the lowest worst-case MSE of any design (0.169). Isolation Buffer had the narrowest range (0.128 to 0.206), because its MSE does not depend on the spillover regime, but at a higher median than the two leading designs. Balanced Quartiles had a low median (0.115) and a worst case of 0.290. The distributions of $2\times2$ Blocking and Checkerboard reflected their dependence on the spillover regime: both had low first quartiles (0.062 and 0.063) and high upper quartiles (0.580 and 2.093). Checkerboard had the highest MSE in all 80 control-only blocks. In the 80 both-arms blocks, the highest MSE belonged to High Incidence Focus in 42 and to Isolation Buffer in 38. Under rook contiguity, Incidence-Guided Saturation also had the lowest worst-case MSE (0.138). These worst cases summarize variation across parameter settings, not the conditional risk across assignments within one setting.
 
@@ -430,21 +337,33 @@ Checkerboard & 0.051 & 0.063 & 0.899 & 2.093 & 2.843 \\
 \end{table}
 ```
 
-## Allocation-Specific Risk
+Two sensitivity analyses are reported in Appendix B. Under rook contiguity, the same two designs led (Incidence-Guided Saturation 0.072, Balanced Quartiles 0.084), and $\beta$ was not identifiable for Checkerboard (Appendix \ref{app:rook-figures}). A model that omitted the spillover term was biased for every design, with bias from $-0.121$ to $-0.400$ and under-covering intervals, although Incidence-Guided Saturation still had the lowest MSE under both neighbor types (Appendix \ref{app:oracle-nonoracle}).
 
-Under control-only spillover, the worst 10\% of SRS allocations on the grid had mean conditional MSE 60\% above that of the average SRS allocation (0.346 against 0.217). The saturation designs' worst-decile MSE was 0.54 to 0.55 times SRS's on the grid and 0.64 to 0.68 times in NC. Under both-arms spillover, their worst-decile MSE was 1.06 to 1.07 times SRS's on the grid and 0.93 to 0.94 times in NC (Table \ref{tab:downside}), so the small mean disadvantage there comes with no worse downside in NC.
+## Stability Across Treatment Effect Sizes {#sec-tau}
 
-Averaged over the 200 units per regime (fixed surfaces crossed with the extreme combinations of $\rho$ and $\psi$), Incidence-Guided Saturation's control-only mean MSE was 0.140 against 0.217 for SRS. Its estimated 90th percentile of allocation-specific MSE was 0.173 against 0.296, and its estimated worst-decile mean was 0.191 against 0.346, lower than SRS in all 200 units on both measures. Under both arms, the corresponding mean MSE was 0.046 against 0.043 and the worst-decile mean 0.058 against 0.054. Saturation Quadrants also performed favorably under control-only spillover. Table \ref{tab:downside} in @sec-application compares every design with SRS on both criteria. These results come from the extreme parameter settings only and give qualified support to saturation on downside risk. The precision check preserved the control-only direction, but outcome noise contributed substantially to the estimated variation across allocations, especially under both arms. Quantiles and worst-decile membership estimated from a finite number of outcomes remain uncertain. We therefore use the completed NC case study below as the next setting-specific assessment rather than extrapolate exact tail protection from these settings.
+Under queen contiguity, the order of the designs by mean MSE and the order by average within-block rank were each the same at every $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ (Figure \ref{fig:tau-mse}a), and with SRS included, average rank placed SRS second at every value of $\beta$. Under rook contiguity the order was also stable (Figure \ref{fig:tau-mse}b), except that the close pair of $2\times2$ Blocking and Isolation Buffer traded places at $\beta = 3$. The five values of $\beta$ share their assignments and noise, and these comparisons are therefore not independent confirmations of one another.
 
-## Rook Contiguity {#sec-rook}
+```{=latex}
+\begin{figure}[!htb]
 
-Under rook contiguity at $\beta = 1$, pooled over the five incidence configurations, the mean-MSE order was Incidence-Guided Saturation (0.072), Balanced Quartiles (0.084), $2\times2$ Blocking (0.128), Isolation Buffer (0.133), High Incidence Focus (0.206), and Checkerboard (0.480) (Table \ref{tab:performance}; Figure \ref{fig:mse-rook} in Appendix \ref{app:rook-figures}). The same order held within each of the five incidence configurations (Table \ref{tab:by-config}). Incidence-Guided Saturation had the lowest MSE in 97 of the 160 rook blocks (61\%) and Balanced Quartiles in 60 (38\%). Coverage was between 0.948 and 0.952 for every design except Checkerboard, whose coverage was 0.162 (Figure \ref{fig:coverage-rook} in Appendix \ref{app:rook-figures}). With SRS as a seventh member, the Friedman test rejected equal ranks ($\chi^2 = 795.77$, $\text{df} = 6$, 160 blocks, $p < 2.2\times10^{-16}$). Holm-adjusted Wilcoxon tests separated every pair except two: Balanced Quartiles against SRS, and $2\times2$ Blocking against Isolation Buffer, which were close and traded places at some values of $\beta$. Nemenyi comparisons also left Incidence-Guided Saturation, Balanced Quartiles and SRS unseparated from one another. Incidence-Guided Saturation nevertheless had the lower MSE in 48 of the 50 independent configuration-by-surface units against Balanced Quartiles (Appendix \ref{app:supp-comparisons}), and its paired comparisons with SRS within each regime appear under Comparison with simple random sampling.
+\centering
+\includegraphics[width=\linewidth]{figures/fig_tau_sensitivity_6design_combined.pdf}
 
-Checkerboard under rook contiguity is a different case: $\beta$ is not identifiable, and the coefficient on $\mathbf{Z}$ estimates $\beta - \psi$ (@sec-methods). At $\beta = 1$, Checkerboard's mean bias was $-0.502$, $-0.600$, $-0.704$, and $-0.802$ at $\psi = 0.5$, 0.6, 0.7, and 0.8, while its mean standard deviation stayed between 0.201 and 0.208. Squared bias, averaged over scenarios, accounted for 0.438 of its MSE of 0.480 (Figure \ref{fig:biasvar-rook} in Appendix \ref{app:rook-figures}). Its coverage fell from 0.337 at $\psi = 0.5$ to 0.031 at $\psi = 0.8$, and was between 0.146 and 0.171 at every level of $\rho$, against 0.949 to 0.952 under queen contiguity (Table \ref{tab:checkerboard-coverage} in Appendix \ref{app:sensitivity-tables}). Because $\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$, the two spillover regimes define the same outcome model. The observed MSEs, 0.477 under the both-arms regime and 0.483 under the control-only regime, differ only by Monte Carlo error. Under rook contiguity, Checkerboard's estimates were precise but centered on the wrong quantity, whereas under queen contiguity they were valid but imprecise. We keep these estimates in every ranking and flag them.
+\caption[Mean squared error by design across the five values of the treatment effect]{Mean squared error by design across the five values of the treatment effect, $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$, under (a) queen contiguity (primary) and (b) rook contiguity (sensitivity). Each point averages the 160 scenarios of one design at one value of $\beta$, pooled over the five incidence configurations. Shaded bands show $\pm 1$ times the average of the scenario-level Monte Carlo standard errors of MSE. They describe the precision of a single scenario's MSE, not of the plotted average, whose standard error is smaller (Table \ref{tab:performance}). The shared legend lists the designs in order of pooled mean MSE under queen contiguity at $\beta = 1$. The vertical scales of the two panels differ. The gray dashed line marks simple random sampling (SRS). Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged. The five values of $\beta$ share their assignments and noise.}
+\label{fig:tau-mse}
 
-## Non-Oracle Sensitivity Analysis {#sec-nonoracle}
+\end{figure}
+```
 
-The non-oracle model, which omits the spillover term, was biased for every design. Table \ref{tab:oracle-nonoracle} in Appendix \ref{app:oracle-nonoracle} gives both models' MSE, bias, and coverage for each design. At $\beta = 1$, and setting aside Checkerboard under rook contiguity, its bias ranged from $-0.121$ to $-0.400$ and its coverage from 0.536 to 0.907 across designs and neighbor types. For Checkerboard under rook contiguity, the two models coincide: once the aliased spillover column is dropped, the oracle model is the non-oracle model. Omitting the spillover term also removes a column that can be nearly collinear with $\mathbf{Z}$, and the non-oracle estimates were accordingly less variable for some designs. Under queen contiguity, the non-oracle MSE was lower than the oracle MSE for every design, most of all for Checkerboard (oracle 1.087, non-oracle 0.108) and $2\times2$ Blocking (oracle 0.319, non-oracle 0.121). Under rook contiguity it was higher for every design except $2\times2$ Blocking (0.128 under both models) and Checkerboard (identical). Where a design's non-oracle MSE was lower, however, its estimate was biased and its intervals under-covered, so the lower MSE does not support valid inference. These results do not change the recommendation: Incidence-Guided Saturation also had the lowest non-oracle MSE under both neighbor types (0.087 under queen contiguity and 0.086 under rook contiguity).
+Within that order, Isolation Buffer closed the gap on Incidence-Guided Saturation under control-only spillover. There, the MSE of Incidence-Guided Saturation rose from 0.131 at $\beta = 0.8$ to 0.182 at $\beta = 3$, while that of Isolation Buffer stayed between 0.159 and 0.160. The two were level at $\beta = 2$ (0.160 each), and at $\beta = 3$ Isolation Buffer had the lower control-only MSE. Incidence-Guided Saturation remained lowest in pooled MSE at every value of $\beta$, and the rise in its MSE was mostly variance: squared bias stayed at or below 3.0\% of its MSE. Appendix \ref{app:technical-notes} traces the rise to a term of the estimation error that grows with $\beta$ when treated clusters have treated neighbors. Under rook contiguity, Incidence-Guided Saturation kept the lowest control-only MSE at every value of $\beta$, although its margin over Isolation Buffer narrowed from 0.095 against 0.134 at $\beta = 0.8$ to 0.131 against 0.136 at $\beta = 3$.
+
+Coverage stayed between 0.946 and 0.952 at every value of $\beta$ for every design except Checkerboard under rook contiguity. Its coverage rose from 0.150 at $\beta = 0.8$ to 0.464 at $\beta = 3$ because its intervals widened around the wrong quantity (Appendix \ref{app:technical-notes}).
+
+## Allocation-Specific Risk on the Grid
+
+Under control-only spillover, the worst 10\% of SRS allocations on the grid had mean conditional MSE 60\% above that of the average SRS allocation (0.346 against 0.217). The saturation designs' worst-decile MSE was 0.54 to 0.55 times SRS's on the grid and 0.64 to 0.68 times in NC. Under both-arms spillover, their worst-decile MSE was 1.06 to 1.07 times SRS's on the grid and 0.93 to 0.94 times in NC (Table \ref{tab:downside}). The small mean disadvantage under both arms therefore comes with no worse downside in NC.
+
+Averaged over the 200 units per regime (fixed surfaces crossed with the extreme combinations of $\rho$ and $\psi$), Incidence-Guided Saturation's control-only mean MSE was 0.140 against 0.217 for SRS. Its estimated 90th percentile of allocation-specific MSE was 0.173 against 0.296, and its estimated worst-decile mean was 0.191 against 0.346, lower than SRS in all 200 units on both measures. Under both arms, the corresponding mean MSE was 0.046 against 0.043 and the worst-decile mean 0.058 against 0.054. Saturation Quadrants also performed favorably under control-only spillover. Table \ref{tab:downside} in @sec-application compares every design with SRS on both criteria. These results come from the extreme parameter settings only and give qualified support to saturation on downside risk. The precision check preserved the control-only direction, but outcome noise contributed substantially to the estimated variation across allocations, especially under both arms: it accounted for a median 63\% of the variance of Incidence-Guided Saturation's estimated risk under control-only spillover and 92\% under both arms. Quantiles and worst-decile membership estimated from a finite number of outcomes remain uncertain. We therefore use the completed NC case study below as the next setting-specific assessment rather than extrapolate exact tail protection from these settings.
 
 # Case Study: Simulation Based on Sudden Unexpected Death in North Carolina {#sec-application}
 
@@ -942,7 +861,7 @@ with $s$ taken over the 50 values $\bar u_{c,k}$. These are the standard errors 
 
 **Test methods.** We compared designs within each neighbor type with a Friedman rank-sum test on scenario MSE [@friedman_use_1937], treating the 160 blocks as repeated measures across the six designs and SRS. SRS is the usual default for a cluster randomized trial, so it enters every test as a seventh member and each design is compared with it as well as with the other designs. At $\beta = 1$ we followed the Friedman test with Nemenyi post-hoc comparisons [@nemenyi_distributionfree_1963; @demsar_statistical_2006] and paired Wilcoxon signed-rank tests [@wilcoxon_individual_1945] with Holm's adjustment for multiple comparisons [@holm_simple_1979] for all 21 pairs. We repeated the Friedman test at each other value of $\beta$. Blocks within an incidence configuration share their surfaces, so these tests treat dependent blocks as independent, which overstates the information about variation from surface to surface. We therefore also ran paired Wilcoxon signed-rank tests, with $t_{49}$ intervals for the mean difference, over 50 independent units, the 5 configurations times 10 surfaces. Each unit's MSE was averaged over that surface's blocks. These tests compared each pair of designs adjacent in the mean-MSE order, and each design with SRS within each spillover regime, with Holm's adjustment over the eight designs compared with SRS.
 
-**Pairwise tests under queen contiguity.** With SRS as a seventh member, the four pairs that Nemenyi comparisons did not separate were Balanced Quartiles against SRS ($p = 1.00$), $2\times2$ Blocking against High Incidence Focus ($p = 0.32$) and Checkerboard ($p = 0.39$), and Checkerboard against High Incidence Focus ($p = 1.00$). We also compared designs adjacent in the six-design mean-MSE order over the 50 independent configuration-by-surface units. The mean paired differences in MSE, with $t_{49}$ 95\% intervals, were $-0.040$ ($-0.043$, $-0.037$) for Incidence-Guided Saturation against Balanced Quartiles, $-0.029$ ($-0.033$, $-0.026$) for Balanced Quartiles against Isolation Buffer, $-0.085$ ($-0.095$, $-0.075$) for Isolation Buffer against High Incidence Focus, $-0.074$ ($-0.086$, $-0.062$) for High Incidence Focus against $2\times2$ Blocking, and $-0.768$ ($-0.789$, $-0.746$) for $2\times2$ Blocking against Checkerboard, with Wilcoxon $p \le 4.9\times10^{-9}$ in every case. The better design of each pair had the lower MSE in all 50 units, except High Incidence Focus against $2\times2$ Blocking, where it did so in 48 (96\%). This test follows the mean-MSE order, and it separated High Incidence Focus from $2\times2$ Blocking where the Nemenyi comparison of within-block ranks did not. It did so because each unit's MSE averages over both spillover regimes, and in that average the control-only losses of $2\times2$ Blocking outweigh its both-arms wins.
+**Pairwise tests under queen contiguity.** Nemenyi comparisons (critical difference 0.712) separated 17 of the 21 pairs, and Incidence-Guided Saturation ranked better than SRS ($p = 0.011$). Holm-adjusted Wilcoxon signed-rank tests separated 20 of the 21 pairs, all except Balanced Quartiles against SRS ($p = 0.15$). With SRS as a seventh member, the four pairs that Nemenyi comparisons did not separate were Balanced Quartiles against SRS ($p = 1.00$), $2\times2$ Blocking against High Incidence Focus ($p = 0.32$) and Checkerboard ($p = 0.39$), and Checkerboard against High Incidence Focus ($p = 1.00$). We also compared designs adjacent in the six-design mean-MSE order over the 50 independent configuration-by-surface units. The mean paired differences in MSE, with $t_{49}$ 95\% intervals, were $-0.040$ ($-0.043$, $-0.037$) for Incidence-Guided Saturation against Balanced Quartiles, $-0.029$ ($-0.033$, $-0.026$) for Balanced Quartiles against Isolation Buffer, $-0.085$ ($-0.095$, $-0.075$) for Isolation Buffer against High Incidence Focus, $-0.074$ ($-0.086$, $-0.062$) for High Incidence Focus against $2\times2$ Blocking, and $-0.768$ ($-0.789$, $-0.746$) for $2\times2$ Blocking against Checkerboard, with Wilcoxon $p \le 4.9\times10^{-9}$ in every case. The better design of each pair had the lower MSE in all 50 units, except High Incidence Focus against $2\times2$ Blocking, where it did so in 48 (96\%). This test follows the mean-MSE order, and it separated High Incidence Focus from $2\times2$ Blocking where the Nemenyi comparison of within-block ranks did not. It did so because each unit's MSE averages over both spillover regimes, and in that average the control-only losses of $2\times2$ Blocking outweigh its both-arms wins.
 
 **Pairwise tests under rook contiguity.** Nemenyi comparisons, with SRS as a seventh member, separated 17 of 21 pairs. The four they did not separate were Incidence-Guided Saturation against Balanced Quartiles ($p = 0.66$) and SRS ($p = 0.14$), Balanced Quartiles against SRS ($p = 0.97$), and $2\times2$ Blocking against Isolation Buffer ($p = 1.00$). Holm-adjusted Wilcoxon tests separated every pair except $2\times2$ Blocking against Isolation Buffer and Balanced Quartiles against SRS (both $p = 0.21$). In the surface-level comparison, Incidence-Guided Saturation had a lower MSE than Balanced Quartiles in 48 of the 50 units (mean difference $-0.012$; $-0.014$, $-0.010$; Wilcoxon $p = 9.9\times10^{-10}$). $2\times2$ Blocking and Isolation Buffer were close: $2\times2$ Blocking had the lower MSE in 36 of the 50 units (72\%; mean difference $-0.005$; $-0.008$, $-0.002$; Wilcoxon $p = 0.0027$). Isolation Buffer, however, had the slightly better average rank (4.21 against 4.33), and the two designs traded places in mean MSE at $\beta = 3$. Every other adjacent pair differed in all 50 units. Within single incidence configurations, rook coverage was between 0.944 and 0.954 for every design except Checkerboard, whose coverage was between 0.155 and 0.165.
 
@@ -975,7 +894,7 @@ with $s$ taken over the 50 values $\bar u_{c,k}$. These are the standard errors 
 \end{figure}
 ```
 
-Figure \ref{fig:cd} gives the Nemenyi critical-difference diagrams for the comparison of the six designs and SRS at $\beta = 1$, whose results are reported in @sec-queen and @sec-rook. Each design is placed at its average within-block MSE rank among the six designs and SRS over the 160 blocks of its neighbor type. The red arrow shows the critical difference, 0.712 at $\alpha = 0.05$. Under queen contiguity, gray bars join Balanced Quartiles with SRS, and $2\times2$ Blocking with Checkerboard and High Incidence Focus. Under rook contiguity, they join Incidence-Guided Saturation, Balanced Quartiles and SRS, and Isolation Buffer with $2\times2$ Blocking. The rook diagram includes Checkerboard, for which $\beta$ is not identifiable, with its estimates kept and flagged.
+Figure \ref{fig:cd} gives the Nemenyi critical-difference diagrams for the comparison of the six designs and SRS at $\beta = 1$, whose results are reported in @sec-queen and Appendix \ref{app:rook-figures}. Each design is placed at its average within-block MSE rank among the six designs and SRS over the 160 blocks of its neighbor type. The red arrow shows the critical difference, 0.712 at $\alpha = 0.05$. Under queen contiguity, gray bars join Balanced Quartiles with SRS, and $2\times2$ Blocking with Checkerboard and High Incidence Focus. Under rook contiguity, they join Incidence-Guided Saturation, Balanced Quartiles and SRS, and Isolation Buffer with $2\times2$ Blocking. The rook diagram includes Checkerboard, for which $\beta$ is not identifiable, with its estimates kept and flagged.
 
 ```{=latex}
 \begin{figure}[!htb]
@@ -1010,7 +929,48 @@ Across the five values of $\beta$, Figure \ref{fig:tau-coverage} gives the cover
 
 ## A4. Additional Sensitivity Tables {.unnumbered .unlisted}
 
-\applabel{A4}{app:sensitivity-tables}@sec-config discusses mean squared error by level of outcome spatial dependence $\rho$ (Table \ref{tab:rho}) and by level of spillover magnitude $\psi$ (Table \ref{tab:gamma}). Checkerboard's coverage by level of $\rho$ under each neighbor type (Table \ref{tab:checkerboard-coverage}) is discussed in @sec-rook.
+\applabel{A4}{app:sensitivity-tables}@sec-config discusses mean squared error by incidence configuration (Table \ref{tab:by-config}), by level of outcome spatial dependence $\rho$ (Table \ref{tab:rho}) and by level of spillover magnitude $\psi$ (Table \ref{tab:gamma}). Checkerboard's coverage by level of $\rho$ under each neighbor type (Table \ref{tab:checkerboard-coverage}) is discussed in Appendix \ref{app:rook-figures}.
+
+```{=latex}
+\begin{table}[!htb]
+
+\small
+\centering
+\setlength{\tabcolsep}{4pt}
+
+\caption[Mean squared error by design within each of the five incidence configurations at $\beta = 1$]{Mean squared error by design within each of the five incidence configurations at $\beta = 1$, under queen contiguity (primary) and rook contiguity (sensitivity). Each entry averages the 32 scenarios of one design, neighbor type, and configuration (4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes), each summarizing 250 fits of the oracle model. The spatially autocorrelated and Poisson configurations are labeled by the strength of dependence in the incidence surface, $\rho_X$. Rows in both panels are ordered by pooled mean MSE under queen contiguity (Table \ref{tab:performance}). Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.} \label{tab:by-config}
+
+\begin{tabular}{lccccc}
+
+\toprule
+& & \multicolumn{2}{c}{Spatial} & \multicolumn{2}{c}{Poisson} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Design & iid & $\rho_X=0.20$ & $\rho_X=0.50$ & $\rho_X=0.20$ & $\rho_X=0.50$ \\
+
+\midrule
+\multicolumn{6}{l}{\textit{Queen contiguity}} \\
+Incidence-Guided Saturation & 0.093 & 0.087 & 0.092 & 0.090 & 0.092 \\
+Balanced Quartiles & 0.130 & 0.130 & 0.131 & 0.128 & 0.135 \\
+Isolation Buffer & 0.160 & 0.159 & 0.159 & 0.162 & 0.161 \\
+High Incidence Focus & 0.245 & 0.267 & 0.245 & 0.232 & 0.238 \\
+2$\times$2 Blocking & 0.311 & 0.315 & 0.323 & 0.326 & 0.320 \\
+Checkerboard & 1.091 & 1.068 & 1.086 & 1.112 & 1.077 \\
+
+\midrule
+\multicolumn{6}{l}{\textit{Rook contiguity}} \\
+Incidence-Guided Saturation & 0.072 & 0.072 & 0.073 & 0.073 & 0.069 \\
+Balanced Quartiles & 0.081 & 0.084 & 0.084 & 0.084 & 0.085 \\
+Isolation Buffer & 0.131 & 0.131 & 0.132 & 0.136 & 0.134 \\
+High Incidence Focus & 0.205 & 0.213 & 0.200 & 0.202 & 0.211 \\
+2$\times$2 Blocking & 0.129 & 0.125 & 0.129 & 0.130 & 0.129 \\
+Checkerboard (flagged) & 0.480 & 0.482 & 0.474 & 0.481 & 0.482 \\
+
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+```
 
 ```{=latex}
 \begin{table}[!htb]
@@ -1111,7 +1071,13 @@ Checkerboard (flagged) & 0.295 & 0.403 & 0.538 & 0.684 \\
 
 ## A5. Coverage, Bias--Variance and Rook Contiguity Figures {.unnumbered .unlisted}
 
-\applabel{A5}{app:rook-figures}Two queen-contiguity figures summarized in the Results come first: the coverage of each design (Figure \ref{fig:coverage}) and the decomposition of MSE into squared bias and variance for one incidence configuration (Figure \ref{fig:biasvar}). The rook-contiguity versions of these two figures and of Figure \ref{fig:mse} follow, as described in @sec-rook. Each rook figure has the layout of its queen counterpart, with the designs ordered for rook contiguity. Under rook contiguity, $\beta$ is not identifiable for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$). Its estimates are kept and flagged.
+\applabel{A5}{app:rook-figures}Two queen-contiguity figures summarized in the Results come first: the coverage of each design (Figure \ref{fig:coverage}) and the decomposition of MSE into squared bias and variance for one incidence configuration (Figure \ref{fig:biasvar}). The rook-contiguity versions of these two figures and of Figure \ref{fig:mse} follow. Each rook figure has the layout of its queen counterpart, with the designs ordered for rook contiguity. Under rook contiguity, $\beta$ is not identifiable for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$). Its estimates are kept and flagged.
+
+**Rook contiguity results.** Under rook contiguity at $\beta = 1$, pooled over the five incidence configurations, the mean-MSE order was Incidence-Guided Saturation (0.072), Balanced Quartiles (0.084), $2\times2$ Blocking (0.128), Isolation Buffer (0.133), High Incidence Focus (0.206), and Checkerboard (0.480) (Table \ref{tab:performance}; Figure \ref{fig:mse-rook} in Appendix \ref{app:rook-figures}). The same order held within each of the five incidence configurations (Table \ref{tab:by-config}). Incidence-Guided Saturation had the lowest MSE in 97 of the 160 rook blocks (61\%) and Balanced Quartiles in 60 (38\%). Coverage was between 0.948 and 0.952 for every design except Checkerboard, whose coverage was 0.162 (Figure \ref{fig:coverage-rook} in Appendix \ref{app:rook-figures}). With SRS as a seventh member, the Friedman test rejected equal ranks ($\chi^2 = 795.77$, $\text{df} = 6$, 160 blocks, $p < 2.2\times10^{-16}$). Holm-adjusted Wilcoxon tests separated every pair except two: Balanced Quartiles against SRS, and $2\times2$ Blocking against Isolation Buffer, which were close and traded places at some values of $\beta$. Nemenyi comparisons also left Incidence-Guided Saturation, Balanced Quartiles and SRS unseparated from one another. Incidence-Guided Saturation nevertheless had the lower MSE in 48 of the 50 independent configuration-by-surface units against Balanced Quartiles (Appendix \ref{app:supp-comparisons}), and its paired comparisons with SRS within each regime appear in @sec-vs-srs.
+
+Checkerboard under rook contiguity is a different case: $\beta$ is not identifiable, and the coefficient on $\mathbf{Z}$ estimates $\beta - \psi$ (@sec-estimation). At $\beta = 1$, Checkerboard's mean bias was $-0.502$, $-0.600$, $-0.704$, and $-0.802$ at $\psi = 0.5$, 0.6, 0.7, and 0.8, while its mean standard deviation stayed between 0.201 and 0.208. Squared bias, averaged over scenarios, accounted for 0.438 of its MSE of 0.480 (Figure \ref{fig:biasvar-rook} in Appendix \ref{app:rook-figures}). Its coverage fell from 0.337 at $\psi = 0.5$ to 0.031 at $\psi = 0.8$, and was between 0.146 and 0.171 at every level of $\rho$, against 0.949 to 0.952 under queen contiguity (Table \ref{tab:checkerboard-coverage} in Appendix \ref{app:sensitivity-tables}). Because $\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$, the two spillover regimes define the same outcome model. The observed MSEs, 0.477 under the both-arms regime and 0.483 under the control-only regime, differ only by Monte Carlo error. Under rook contiguity, Checkerboard's estimates were precise but centered on the wrong quantity, whereas under queen contiguity they were valid but imprecise. We keep these estimates in every ranking and flag them.
+
+Under rook contiguity, Incidence-Guided Saturation's MSE was 0.045 under both-arms spillover and 0.098 under control-only spillover, against 0.042 and 0.125 for Balanced Quartiles.
 
 ```{=latex}
 \begin{figure}[!htb]
@@ -1185,7 +1151,7 @@ Nearly all of Checkerboard's MSE in Figure \ref{fig:biasvar-rook}, the rook vers
 
 ## A6. Oracle and Non-Oracle Estimates {.unnumbered .unlisted}
 
-\applabel{A6}{app:oracle-nonoracle}Table \ref{tab:oracle-nonoracle} gives the mean squared error, bias, and coverage of the oracle and non-oracle models for each of the six designs, as summarized in @sec-nonoracle.
+\applabel{A6}{app:oracle-nonoracle}The non-oracle model, which omits the spillover term, was biased for every design. Table \ref{tab:oracle-nonoracle} gives both models' MSE, bias, and coverage for each design. At $\beta = 1$, and setting aside Checkerboard under rook contiguity, its bias ranged from $-0.121$ to $-0.400$ and its coverage from 0.536 to 0.907 across designs and neighbor types. For Checkerboard under rook contiguity, the two models coincide: once the aliased spillover column is dropped, the oracle model is the non-oracle model. Omitting the spillover term also removes a column that can be nearly collinear with $\mathbf{Z}$, and the non-oracle estimates were accordingly less variable for some designs. Under queen contiguity, the non-oracle MSE was lower than the oracle MSE for every design, most of all for Checkerboard (oracle 1.087, non-oracle 0.108) and $2\times2$ Blocking (oracle 0.319, non-oracle 0.121). Under rook contiguity it was higher for every design except $2\times2$ Blocking (0.128 under both models) and Checkerboard (identical). Where a design's non-oracle MSE was lower, however, its estimate was biased and its intervals under-covered, so the lower MSE does not support valid inference. These results do not change the recommendation: Incidence-Guided Saturation also had the lowest non-oracle MSE under both neighbor types (0.087 under queen contiguity and 0.086 under rook contiguity).
 
 ```{=latex}
 \begin{table}[!htb]
