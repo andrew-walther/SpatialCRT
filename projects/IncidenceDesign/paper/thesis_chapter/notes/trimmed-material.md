@@ -792,3 +792,43 @@ Reason: Removed: the Discussion's Design Guidance by Spillover Regime says the s
 
 > The case study supports considering either saturation strategy when control-only spillover is plausible, and SRS alongside other randomized strategies when both-arms exposure is expected. A trial team should consider likely spillover, recruitment, cluster and participant budgets, achievable measurement precision and interval calibration before selecting one realized allocation.
 
+## 2026-11-15 — Round 5 carry-over, Discussion (Thesis_Chapter.qmd)
+
+Items 5-01 to 5-05. The numbers dropped from the Summary are all stated in the Results.
+
+### Summary of Findings (full, before shortening)
+
+> We compared six treatment assignment designs in the detailed grid ranking, plus two related variants and SRS, for a spatial cluster randomized trial on a grid of 100 clusters. The comparison covered three mechanisms of heterogeneous incidence, two spillover regimes, and a range of values for spatial dependence, spillover magnitude, and the treatment effect. Some findings held across the incidence configurations and the values of $\rho$, $\psi$, and $\beta$ under queen contiguity. Others depended on the spillover regime, which a trial team may not know in advance.
+>
+> We judged each design on two criteria: its average MSE, and the spread of MSE across the allocations it can produce. A trial realizes one allocation, so a design with a low average MSE can still give a poor estimate if some of its allocations perform badly. Chapter 2 compared SRS and BSS on the same two criteria. For SRS under control-only spillover, the spread was large: on the grid, the worst 10\% of SRS allocations had mean conditional MSE 0.346, against 0.217 for SRS allocations overall.
+>
+> Under queen contiguity, Incidence-Guided Saturation had the lowest mean squared error (0.091) and Balanced Quartiles the second lowest (0.131), and the same two designs led under rook contiguity (0.072 and 0.084). Under queen contiguity, the order of the six designs was the same in each of the five incidence configurations and at every value of $\beta$, and neither the strength of spatial dependence in the outcome nor the spillover magnitude changed it. The mechanism that generated the incidence surface changed each design's MSE by under 10\%, except for High Incidence Focus. Coverage of the 95\% intervals was close to 0.95 for every design under both neighbor types, except Checkerboard under rook contiguity, so the designs differed in precision and coverage did not separate them.
+>
+> The spillover regime was the one factor that changed the queen ranking. Under queen contiguity at $\beta = 1$, Checkerboard and $2\times2$ Blocking were close to the best designs when spillover reached both arms and were the two worst when it reached only control clusters (MSE 0.062 and 2.111 for Checkerboard, 0.062 and 0.576 for $2\times2$ Blocking). Balanced Quartiles also lost ground under the control-only regime (0.042 and 0.219). Incidence-Guided Saturation, by contrast, was first or second among the six detailed designs under both regimes at every value of $\beta$, with a both-arms MSE 8\% above that of SRS. Its control-only MSE did rise with $\beta$, and Isolation Buffer, whose MSE did not, matched or passed it under that regime at $\beta = 2$ and passed it at $\beta = 3$. For a design whose performance depends on the regime, average MSE does not show the risk of choosing it when the regime is unknown.
+>
+> Checkerboard failed for different reasons under the two neighbor types. Under queen contiguity its estimates stayed centered on $\beta$ with close to nominal coverage but were imprecise, because under the control-only regime only the boundary clusters separate the spillover effect from the treatment effect. Under rook contiguity, $\beta$ is not identifiable, and its estimates were centered on $\beta - \psi$. Checkerboard intersperses treated and control clusters as finely as the grid allows, and both failures come from the dependence this pattern creates between $\mathbf{Z}$ and the spillover covariate (@sec-methods).
+>
+> These design-stage results assume an analysis that models spillover: every design was analyzed with a spatial lag model that included the spillover term. In the grid study, the estimates were close to unbiased for every design whose $\beta$ was identifiable: at $\beta = 1$, the absolute bias of each design under each regime was at most 0.048 under queen contiguity and 0.027 under rook contiguity. Given that model, the choice of design determined how precisely $\beta$ was estimated.
+
+### Relation to prior Spatial CRT work (before rewrite)
+
+> ### Relation to prior Spatial CRT work
+>
+> Chapter 2's practical argument considered reasonably good estimation together with protection against poor allocation in the small-grid settings it studied. We preserve both criteria while extending the designs, geography and incidence conditions. Our findings concern these new models and settings and do not compare numerical results across chapters directly. The rectangular Checkerboard and its graph adaptation illustrate why a restricted allocation's low assignment variation must be interpreted together with its level of estimation error. The case study also separates incidence-guided assignment from assumptions about education outcomes.
+
+### Limitations, Fifth (before)
+
+> Fifth, the simulation shares random draws by design. Blocks within an incidence configuration share its ten incidence surfaces, so the block-level tests treat dependent blocks as independent, which is why we also compared adjacent designs over the 50 independent configuration-by-surface units. The five values of $\beta$ also share their draws, so the stability of the design order across $\beta$ is not an independent replication at each value (see @sec-tau). Settings and years that share the same simulations cannot be treated as independent confirmation.
+
+### Limitations, Sixth (before)
+
+> Sixth, the simulation's base rate of 35 per 100,000 is not the rate of the county data described in @sec-application (see @sec-incidence). We kept it deliberately, because the simulation is a general design study rather than a calibration to one data set. In the Poisson mechanism, incidence enters the designs and the fitted model only through the ranks of the observed rates, so the base rate affects the simulation only through the spatial pattern of those ranks and the number of tied rates.
+
+### Limitations, Eighth (before)
+
+> Eighth, the 95\% Wald intervals under-covered in both the grid and the case study, and the Wald test was anti-conservative with few colleges. A small-sample correction, a $t$ reference distribution with a degrees-of-freedom-corrected standard error, restored coverage to between 94\% and 96\% for every design in the case study at every number of participating colleges (Appendix \ref{app:nc-ext}) and to between 0.946 and 0.952 for every identifiable design on the grid. We therefore report it in both studies. The finite-outcome allocation-tail estimates do not remove noise from individual risks or establish population worst cases. Budgets also differ, so these are evaluations of the retained strategies, not an equal-cost optimization.
+
+### Future Considerations (before expansion)
+
+> The next trial-design steps are to specify the education endpoint, eligible professionals, implementation budget and plausible spillover network, then assess interval calibration for that protocol before randomization. Additional methodological work could study noisy planning incidence, effect heterogeneity, exposure networks beyond contiguity and a broader set of graph geometries. The trial endpoint here is a measured education score, an intermediate outcome. Designing for a later reduction in SUD incidence would need a count outcome model and is left for future work. A larger allocation sample could make the downside estimates more precise if that precision is needed for a final choice.
+
