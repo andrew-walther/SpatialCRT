@@ -142,6 +142,17 @@ current code and results. This applies to the text as it stands and to every edi
 
 ## Work plan
 
+Model use. The main session (Opus) plans, decides with me, and checks every subagent result
+before relying on it. Delegate bounded work to Sonnet subagents (model "sonnet"), each with a
+complete brief (goal, files, what done looks like):
+- applying approved edits from a sign-off list or review file, item by item, and reporting the
+  diff for the main session to check;
+- the Phase 3 consistency check, citation lookups on Crossref or PubMed, render and page-count
+  checks, numbering and cross-reference checks, and searches across files;
+- the writing review (human-writer).
+Keep on Opus: content-map and restructuring decisions, new or substantially rewritten prose, the
+math check, and the committee-member review, since these depend on statistical reasoning.
+
 Phase 1. Set-up. Confirm the deadline and sync state (git status in SpatialCRT and
 bios-dissertation, draft PDFs dated after the last source commits). Record the baseline: commit
 hashes and page counts for the chapter, CTJ, the supplement and the full prelim.
