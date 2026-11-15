@@ -778,3 +778,17 @@ Reason: Shortened to about 300 words (carry-over 3-05). Block-level counts, wors
 >
 > Except for Checkerboard under rook contiguity, coverage stayed close to 0.95 at every value of $\beta$: between 0.946 and 0.950 for every design under queen contiguity, and between 0.947 and 0.952 for every other design under rook contiguity. The coverage of rook Checkerboard, for which $\beta$ is not identifiable, rose from 0.150 at $\beta = 0.8$ to 0.464 at $\beta = 3$, because its intervals widened around the wrong quantity (Appendix \ref{app:technical-notes}). Appendix \ref{app:supp-comparisons} shows coverage across $\beta$ for each design.
 
+## 2026-11-15 — Round 5 carry-over, Case Study (Thesis_Chapter.qmd)
+
+Items 4-01 to 4-08. Moved (not cut): county conventions, numerator history and run sizes to A8; tab:nc-year to A8; CAR/Bayesian/spillover-form methods, the ICC translation and fig:power-n to A9.
+
+### Case Study, Allocation-Specific Risk in North Carolina, tail-uncertainty paragraph (full)
+Reason: Shortened to four sentences (carry-over 4-07).
+
+> The tail estimates remain uncertain. With $J=100$, the worst decile contains only ten sampled draws. Extra outcomes reduce noise in $\hat m(a)$ but do not enlarge the allocation sample. All 112 reported settings in the tail refinement for designs with more than one possible assignment flag uncertain worst-decile membership. Under both arms, the Jaccard index of the worst deciles identified by the two outcome halves (allocations in both divided by allocations in either) was 0--0.25 for Incidence-Guided Saturation, and approximately 61--86\% of the raw variance of estimated risk across allocations was attributable to outcome Monte Carlo noise. Saturation Quadrants' worst-decile membership was similarly unstable. Small both-arms tail differences therefore do not establish superior downside protection. Checkerboard and High Incidence Focus each have only one possible assignment for these inputs. Their 90th percentile and worst-decile mean equal their conditional mean MSE, which does not imply low error or absence of outcome uncertainty.
+
+### Case Study, closing paragraph of the power subsection
+Reason: Removed: the Discussion's Design Guidance by Spillover Regime says the same (carry-over 4-08); its practical list is carried into that subsection.
+
+> The case study supports considering either saturation strategy when control-only spillover is plausible, and SRS alongside other randomized strategies when both-arms exposure is expected. A trial team should consider likely spillover, recruitment, cluster and participant budgets, achievable measurement precision and interval calibration before selecting one realized allocation.
+
