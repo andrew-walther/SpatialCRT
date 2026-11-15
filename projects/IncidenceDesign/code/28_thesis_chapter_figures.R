@@ -172,7 +172,7 @@ for (nb in c("queen", "rook")) {
               linetype = "dashed", colour = "grey40", linewidth = 0.5) +
     scale_color_manual(values = tau_palette, breaks = best_to_worst, labels = hy) +
     scale_fill_manual(values = tau_palette, breaks = best_to_worst, labels = hy) +
-    labs(x = expression("True " * tau)) +
+    labs(x = expression("True " * beta)) +
     theme_bw(base_size = 10) + thesis_text_sizes() + MS_CLEAN +
     theme(legend.position = "right")
   save_fig(p_ctau, sprintf("app_tau_coverage_%s.pdf", nb), PRINT_W, 3.5)
@@ -244,7 +244,7 @@ for (nb in c("queen", "rook")) {
     scale_color_manual(values = tau_palette, breaks = tau_colour_order, labels = hy) +
     scale_fill_manual(values = tau_palette, breaks = tau_colour_order, labels = hy) +
     labs(title = c(queen = "(a) Queen", rook = "(b) Rook")[[nb]],
-         x = expression("True " * tau),
+         x = expression("True " * beta),
          y = if (nb == "queen") "Mean MSE\n(band: ± average scenario-level\nMonte Carlo SE)" else NULL,
          color = NULL, fill = NULL) +
     theme_bw(base_size = 10)
@@ -463,7 +463,7 @@ ex_labels <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "
 comparisons <- read.csv(file.path(ex_dir, "primary_setting_srs_comparison.csv"),
                         colClasses = c(Year = "character"))
 comparisons$Design_Label <- factor(comparisons$Design_ID, levels = 1:9, labels = ex_labels)
-comparisons$Parameter <- paste0("rho=", comparisons$Rho, ", gamma=", comparisons$Gamma)
+comparisons$Parameter <- paste0("rho=", comparisons$Rho, ", psi=", comparisons$Gamma)
 comparisons$Regime_Label <- ifelse(comparisons$Regime == "both", "Both arms", "Control only")
 stopifnot(nrow(comparisons) == 4 * 9 * 6 * 2, all(is.finite(comparisons$MSE_Ratio_SRS)))
 p_ratios <- ggplot(comparisons, aes(x = Design_Label, y = Parameter, fill = log10(MSE_Ratio_SRS))) +

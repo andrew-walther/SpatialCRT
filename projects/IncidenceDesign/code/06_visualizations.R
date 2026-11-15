@@ -203,7 +203,7 @@ plot_mse_per_design <- function(results, inc_label = "") {
       labs(
         title = paste("MSE Dynamics for", current_design),
         subtitle = paste0("Incidence: ", inc_label),
-        x = expression("Spillover Magnitude (" * gamma * ")"),
+        x = expression("Spillover Magnitude (" * psi * ")"),
         y = "Mean Squared Error (MSE)",
         color = "Spillover Target"
       ) +
@@ -235,7 +235,7 @@ plot_master_comparison <- function(results, nb_filter = "queen", inc_label = "")
                                              "control_only" = "Spillover: Control"))
     ) +
     scale_fill_viridis_d(option = "turbo",
-                         name = expression("Spillover\nMagnitude (" * gamma * ")")) +
+                         name = expression("Spillover\nMagnitude (" * psi * ")")) +
     theme_bw(base_size = 13) +
     labs(
       title = "Design Comparison: Mean Squared Error across Scenarios",
