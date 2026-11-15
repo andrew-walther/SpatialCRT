@@ -249,21 +249,21 @@ for (nb in c("queen", "rook")) {
   # unchanged because it is also written to the summary .txt and .rds. It goes
   # in a left-aligned plot-wide caption so it is never clipped.
   fig_rook_note <- if (nb == "rook")
-    expression("Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.") else NULL
+    expression("Rook: " * beta * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.") else NULL
   # Two-line captions use atop() because plotmath has no newline
   tau_caption <- if (nb == "rook")
     expression(atop("Gray dashed: Simple Random Sampling benchmark (mean MSE).",
-                    "Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")) else SRS_CAPTION
+                    "Rook: " * beta * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")) else SRS_CAPTION
   cov_caption <- if (nb == "rook")
     expression(atop("Gray dotted: Simple Random Sampling benchmark (median coverage).",
-                    "Rook: " * tau * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")) else
+                    "Rook: " * beta * " not identified for Checkerboard (WZ = 1 - Z); its estimates are kept but flagged.")) else
     "Gray dotted: Simple Random Sampling benchmark (median coverage)."
   note_theme <- theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
   srs_nb <- srs_full[srs_full$Neighbor_Type == nb, ]
   srs_cov_median <- median(srs_nb$Coverage[srs_nb$True_Tau == 1.0])
   p_coverage <- plot_coverage_by_design(tau1) +
     geom_hline(yintercept = srs_cov_median, linetype = "dotted", colour = "grey30", linewidth = 0.6) +
-    labs(subtitle = expression("Incidence: all configs, " * tau * " = 1.0 | Red dashed = nominal 95%"),
+    labs(subtitle = expression("Incidence: all configs, " * beta * " = 1.0 | Red dashed = nominal 95%"),
          caption = cov_caption) +
     note_theme +
     # Manuscript figure (author, 2026-10-25): no title, subtitle or note, since the
@@ -294,7 +294,7 @@ for (nb in c("queen", "rook")) {
   p_tau <- plot_mse_vs_tau(res_tau) + srs_tau_layers(nb) +
     scale_color_manual(values = tau_palette, breaks = tau_legend_order) +
     scale_fill_manual(values = tau_palette, breaks = tau_legend_order) +
-    labs(title = expression("MSE vs. True " * tau * " by Design"), x = expression("True " * tau),
+    labs(title = expression("MSE vs. True " * beta * " by Design"), x = expression("True " * beta),
          y = "Mean MSE\n(band: ± average scenario-level Monte Carlo SE)",
          caption = tau_caption) +
     note_theme
@@ -319,7 +319,7 @@ tau_panel <- function(nb, panel_title, y_lab) {
   plot_mse_vs_tau(res_tau) + srs_tau_layers(nb) +
     scale_color_manual(values = tau_palette, breaks = tau_colour_order, labels = hy) +
     scale_fill_manual(values = tau_palette, breaks = tau_colour_order, labels = hy) +
-    labs(title = panel_title, x = expression("True " * tau), y = y_lab,
+    labs(title = panel_title, x = expression("True " * beta), y = y_lab,
          color = NULL, fill = NULL) +
     theme_bw(base_size = 10) +
     theme(plot.title = element_text(size = 10))

@@ -59,7 +59,7 @@ p <- plot_master_comparison(d, "queen") +
   ggplot2::geom_errorbar(ggplot2::aes(ymin = MSE, ymax = MSE),
                         position = ggplot2::position_dodge(width = 0.8),
                         width = 0.7, linewidth = 0.2) +
-  ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL, fill = expression(gamma)) +
+  ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL, fill = expression(psi)) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 55, hjust = 1, size = 9),
                  legend.position = "bottom", strip.text = ggplot2::element_text(size = 11))
 stopifnot(nrow(d) == 960, all(table(d$Design) == 160))

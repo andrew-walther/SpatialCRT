@@ -246,10 +246,10 @@ best_to_worst_6 <- mle_tau1_6 %>%
 # are identical to the helper's. The rook note is a Greek-letter copy of
 # ROOK_NOTE (ROOK_NOTE itself is written to the .txt summaries, so it stays).
 mse_subtitle <- if (nb_sel == "rook") {
-  expression("Rook Contiguity | Incidence: all configs, " * tau * " = 1.0 [Rook: " * tau *
+  expression("Rook Contiguity | Incidence: all configs, " * beta * " = 1.0 [Rook: " * beta *
                " not identified for Checkerboard (WZ = 1 - Z); estimates kept but flagged.]")
 } else {
-  expression("Queen Contiguity | Incidence: all configs, " * tau * " = 1.0")
+  expression("Queen Contiguity | Incidence: all configs, " * beta * " = 1.0")
 }
 p_mse_reordered <- plot_master_comparison(mle_tau1_6, nb_filter = nb_sel) +
   scale_x_discrete(limits = best_to_worst_6, labels = hy) +
@@ -582,7 +582,7 @@ p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
   labs(caption = "Gray dashed: Simple Random Sampling benchmark (mean coverage)") +
   scale_color_manual(values = tau_palette, breaks = best_to_worst_6, labels = hy) +
   scale_fill_manual(values = tau_palette, breaks = best_to_worst_6, labels = hy) +
-  labs(x = expression("True " * tau)) +
+  labs(x = expression("True " * beta)) +
   MS_CLEAN
 
 ggsave(file.path(si_dir, "si_fig_tau_mse.pdf"), p_tau_mse, width = 8, height = 5)
