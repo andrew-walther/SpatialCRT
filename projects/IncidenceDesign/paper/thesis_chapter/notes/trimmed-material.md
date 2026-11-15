@@ -832,3 +832,443 @@ Items 5-01 to 5-05. The numbers dropped from the Summary are all stated in the R
 
 > The next trial-design steps are to specify the education endpoint, eligible professionals, implementation budget and plausible spillover network, then assess interval calibration for that protocol before randomization. Additional methodological work could study noisy planning incidence, effect heterogeneity, exposure networks beyond contiguity and a broader set of graph geometries. The trial endpoint here is a measured education score, an intermediate outcome. Designing for a later reduction in SUD incidence would need a count outcome model and is left for future work. A larger allocation sample could make the downside estimates more precise if that precision is needed for a final choice.
 
+
+## 2026-11-15 — Round 5 carry-over, Appendix holds (H-01 to H-12)
+
+Held out of the appendix when it was reorganized into A1–A12. Each block is verbatim from the chapter at the commit before this step. All numbers appear in the SI and in the sentences named in the check table of the session report. Reasons are those of Section H of `bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch3/carry-over-edits.md`.
+
+### H-01 `tab:seed-keys` (old A2, now A1)
+
+**Reason:** Reproducibility detail; the SI and the code have it.
+
+*Sentence removed from the Random-number streams paragraph: *
+
+~~~~latex
+Table \ref{tab:seed-keys} lists the three kinds of draw, the parameters in their keys, and the scenarios that therefore share them.
+~~~~
+
+*Table*
+
+~~~~latex
+```{=latex}
+\begin{table}[!htb]
+
+\small
+\centering
+
+\caption[Seed keys]{Seed keys. Each key names the kind of draw and the parameters listed here. The incidence mechanism is iid, spatial, or Poisson, and the iid configuration, which has no $\rho_X$, uses 0 in its place. $k$ indexes the incidence surface and $d$ the design. A draw is shared by every scenario whose key parameters match its own.}
+\label{tab:seed-keys}
+
+\begin{tabular}{p{4.2cm}p{5.0cm}p{5.2cm}}
+
+\toprule
+Draw & Key parameters & Shared by \\
+
+\midrule
+Incidence surface $\mathbf{X}_k$ & Incidence mechanism, $\rho_X$, $k$ & Every block, design, and value of $\beta$ of the configuration \\
+The $J = 25$ assignments of design $d$ on surface $k$ & Incidence mechanism, $\rho_X$, neighbor type, $\rho$, $\psi$, spillover regime, $k$, $d$ & All five values of $\beta$ and both estimators \\
+The 250 noise vectors of a block & Incidence mechanism, $\rho_X$, neighbor type, $\rho$, $\psi$, spillover regime & All eight designs, all five values of $\beta$, and both estimators \\
+
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+```
+~~~~
+
+### H-02 `fig:cd-rook` and the rook half of the pairwise text (old A3, now A7)
+
+**Reason:** The rook ranking is stated in A9; the queen diagram stays (single figure, label `fig:cd-queen`).
+
+*Paragraph*
+
+~~~~latex
+**Pairwise tests under rook contiguity.** Nemenyi comparisons, with SRS as a seventh member, separated 17 of 21 pairs. The four they did not separate were Incidence-Guided Saturation against Balanced Quartiles ($p = 0.66$) and SRS ($p = 0.14$), Balanced Quartiles against SRS ($p = 0.97$), and $2\times2$ Blocking against Isolation Buffer ($p = 1.00$). Holm-adjusted Wilcoxon tests separated every pair except $2\times2$ Blocking against Isolation Buffer and Balanced Quartiles against SRS (both $p = 0.21$). In the surface-level comparison, Incidence-Guided Saturation had a lower MSE than Balanced Quartiles in 48 of the 50 units (mean difference $-0.012$; $-0.014$, $-0.010$; Wilcoxon $p = 9.9\times10^{-10}$). $2\times2$ Blocking and Isolation Buffer were close: $2\times2$ Blocking had the lower MSE in 36 of the 50 units (72\%; mean difference $-0.005$; $-0.008$, $-0.002$; Wilcoxon $p = 0.0027$). Isolation Buffer, however, had the slightly better average rank (4.21 against 4.33), and the two designs traded places in mean MSE at $\beta = 3$. Every other adjacent pair differed in all 50 units. Within single incidence configurations, rook coverage was between 0.944 and 0.954 for every design except Checkerboard, whose coverage was between 0.155 and 0.165.
+~~~~
+
+*Original two-panel figure (queen panel kept, rook panel held)*
+
+~~~~latex
+```{=latex}
+\begin{figure}[!htb]
+
+\centering
+\begin{subfigure}{\linewidth}
+
+\centering
+\includegraphics[width=\linewidth]{figures/app_cd_diagram_rank_queen.pdf}
+
+\caption{Queen contiguity (primary)}
+\label{fig:cd-queen}
+\end{subfigure}
+
+\vspace{0.5em}
+\begin{subfigure}{\linewidth}
+
+\centering
+\includegraphics[width=\linewidth]{figures/app_cd_diagram_rank_rook.pdf}
+
+\caption{Rook contiguity (sensitivity)}
+\label{fig:cd-rook}
+\end{subfigure}
+
+\caption[Nemenyi critical-difference diagrams for the six designs and simple random sampling (SRS) at $\beta = 1$]{Nemenyi critical-difference diagrams for the six designs and simple random sampling (SRS) at $\beta = 1$, pooled over the five incidence configurations. Designs are placed at their average within-block MSE rank, given in parentheses (1 = lowest MSE). Gray bars join designs that the Nemenyi comparisons did not separate.}
+\label{fig:cd}
+
+\end{figure}
+~~~~
+
+*Sentences removed from the figure description*
+
+~~~~latex
+Figure \ref{fig:cd} gives the Nemenyi critical-difference diagrams for the comparison of the six designs and SRS at $\beta = 1$, whose results are reported in @sec-queen and Appendix \ref{app:rook-figures}. Each design is placed at its average within-block MSE rank among the six designs and SRS over the 160 blocks of its neighbor type. The red arrow shows the critical difference, 0.712 at $\alpha = 0.05$. Under queen contiguity, gray bars join Balanced Quartiles with SRS, and $2\times2$ Blocking with Checkerboard and High Incidence Focus. Under rook contiguity, they join Incidence-Guided Saturation, Balanced Quartiles and SRS, and Isolation Buffer with $2\times2$ Blocking. The rook diagram includes Checkerboard, for which $\beta$ is not identifiable, with its estimates kept and flagged.
+~~~~
+
+### H-03 `fig:coverage-rook` (old A5, now A9)
+
+**Reason:** Only Checkerboard differs, and its 0.162 is in the A9 text; `fig:mse-rook` stays.
+
+*Lead-in sentence*
+
+~~~~latex
+In Figure \ref{fig:coverage-rook}, the rook version of Figure \ref{fig:coverage}, every design except Checkerboard has coverage close to the nominal level. Checkerboard's coverage, 0.162 pooled over the five incidence configurations (Table \ref{tab:performance}), is far below it.
+~~~~
+
+*Figure*
+
+~~~~latex
+```{=latex}
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_coverage_by_design_6design_rook.pdf}
+
+\caption[Coverage of the 95\% confidence intervals by design at $\beta = 1$]{Coverage of the 95\% confidence intervals by design at $\beta = 1$, under rook contiguity, with the layout of Figure \ref{fig:coverage}. Checkerboard is flagged ($\beta$ not identifiable).}
+\label{fig:coverage-rook}
+
+\end{figure}
+~~~~
+
+### H-04 `fig:tau-coverage-queen` and `fig:tau-coverage-rook` (old A3, now A7)
+
+**Reason:** Coverage is 0.946–0.952 at every β, stated in one sentence in the body (Results across β).
+
+*Figure*
+
+~~~~latex
+```{=latex}
+\begin{figure}[!htb]
+
+\centering
+\begin{subfigure}{\linewidth}
+
+\centering
+\includegraphics[width=\linewidth]{figures/app_tau_coverage_queen.pdf}
+
+\caption{Queen contiguity (primary)}
+\label{fig:tau-coverage-queen}
+\end{subfigure}
+
+\vspace{0.5em}
+\begin{subfigure}{\linewidth}
+
+\centering
+\includegraphics[width=\linewidth]{figures/app_tau_coverage_rook.pdf}
+
+\caption{Rook contiguity (sensitivity)}
+\label{fig:tau-coverage-rook}
+\end{subfigure}
+
+\caption[Coverage of the 95\% confidence intervals by design across $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$]{Coverage of the 95\% confidence intervals by design across $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$, pooled over the five incidence configurations. Each point averages the 160 scenarios of one design at one value of $\beta$. The dashed red line marks the nominal 0.95 level, and the gray dashed line marks the mean coverage of simple random sampling.}
+\label{fig:tau-coverage}
+
+\end{figure}
+~~~~
+
+*Paragraph*
+
+~~~~latex
+Across the five values of $\beta$, Figure \ref{fig:tau-coverage} gives the coverage of each design, as summarized in @sec-tau. The shaded bands show $\pm 1$ times the average of the scenario-level Monte Carlo standard errors of coverage. They describe the precision of a single scenario's coverage, not of the plotted average. The legend lists the designs in order of pooled mean MSE at $\beta = 1$ for the neighbor type of the panel (Table \ref{tab:performance}). The vertical axis runs from 0 to 1, so lines close to 0.95 overlap: all six under queen contiguity, between 0.946 and 0.950, and all but Checkerboard under rook contiguity, between 0.947 and 0.952. The lowest line under rook contiguity, which the legend does not mark, is Checkerboard, for which $\beta$ is not identifiable. The five values of $\beta$ share their assignments and noise.
+~~~~
+
+### H-05 Estimation-error subsection of old A7 (now A3, replaced by the shortened text)
+
+**Reason:** Long derivation for a secondary result; the full version stays in SI Section 6. Kept in A3: the one-line error decomposition, the downward bias of ρ̂ (about 0.06), g for Incidence-Guided Saturation (0.57) and Isolation Buffer (0), the variance of the last term, and the rook Checkerboard coverage (0.150 to 0.464).
+
+*Old A7 introduction (after the applabel)*
+
+~~~~latex
+\applabel{A7}{app:technical-notes}This section explains why the bias of Incidence-Guided Saturation and the coverage of Checkerboard under rook contiguity both grow with $\beta$, as reported in the body of this chapter. It closes with block-level detail for the results across $\beta$. The stored results keep neither $\hat\rho$ nor the standard error of each fit, so we re-ran every block for the six designs, both neighbor types, and all five values of $\beta$, 2.4 million fits of the oracle model, recording $\hat\rho$ and the standard error. The re-run reproduced the stored results in all 9,600 scenarios. Numbers below that involve $\hat\rho$, the standard error, or the terms of Equation \ref{eq:error-decomposition} come from this re-run. The others come from the stored results.
+~~~~
+
+*Old subsection 'Estimation Error and Its Dependence on β', including the block-level detail paragraph*
+
+~~~~latex
+### Estimation Error and Its Dependence on $\beta$ {.unnumbered .unlisted}
+
+For one fit $(k, j)$, write $\mathbf{Y}$, $\mathbf{Z}$, and $\boldsymbol{\varepsilon}$ for $\mathbf{Y}_{kj}$, $\mathbf{Z}_{kj}$, and $\boldsymbol{\varepsilon}_{kj}$ (Simulation design, resampling, and metrics). Let $\mathbf{V} = [\mathbf{1}, \mathbf{Z}, \mathbf{S}(\mathbf{Z}), \mathbf{X}_k]$ be the $100 \times 4$ covariate matrix of the oracle model, so that Equation \ref{eq:outcome} reads $(\mathbf{I} - \rho \mathbf{W})\mathbf{Y} = \mathbf{V}\boldsymbol{\theta} + \boldsymbol{\varepsilon}$ with $\boldsymbol{\theta} = (0, \beta, \psi, \tau)^\top$. Let $\mathbf{A} = (\mathbf{I} - \rho \mathbf{W})^{-1}$ and $\mathbf{V}^{+} = (\mathbf{V}^\top \mathbf{V})^{-1}\mathbf{V}^\top$, and for a vector $\mathbf{v}$ write $[\mathbf{V}^{+}\mathbf{v}]_Z$ for the coefficient on $\mathbf{Z}$ when $\mathbf{v}$ is regressed on the columns of $\mathbf{V}$ by least squares. Given $\hat\rho$, the estimated coefficients are $\mathbf{V}^{+}(\mathbf{I} - \hat\rho \mathbf{W})\mathbf{Y}$ (@sec-estimation). Because $(\mathbf{I} - \hat\rho \mathbf{W})\mathbf{Y} = \mathbf{V}\boldsymbol{\theta} + \boldsymbol{\varepsilon} + (\rho - \hat\rho)\mathbf{W}\mathbf{Y}$ and $\mathbf{W}\mathbf{Y} = \mathbf{W}\mathbf{A}(\mathbf{V}\boldsymbol{\theta} + \boldsymbol{\varepsilon})$,
+\begin{equation}
+\hat\beta - \beta = [\mathbf{V}^{+}\boldsymbol{\varepsilon}]_Z + (\rho - \hat\rho)\,h + \beta(\rho - \hat\rho)\,g,
+\label{eq:error-decomposition}
+\end{equation}
+where
+$$
+g = [\mathbf{V}^{+}\mathbf{W}\mathbf{A}\mathbf{Z}]_Z, \qquad h = [\mathbf{V}^{+}\mathbf{W}\mathbf{A}\{\psi\,\mathbf{S}(\mathbf{Z}) + \tau \mathbf{X}_k + \boldsymbol{\varepsilon}\}]_Z.
+$$
+The first term has mean zero given $\mathbf{Z}$ and $\mathbf{X}_k$. The last term has a factor of $\beta$. It is present exactly when $g \neq 0$, where $g$ is the coefficient on $\mathbf{Z}$ when the lagged treatment $\mathbf{W}\mathbf{A}\mathbf{Z} = \mathbf{W}\mathbf{Z} + \rho \mathbf{W}^2 \mathbf{Z} + \rho^2 \mathbf{W}^3 \mathbf{Z} + \cdots$ is regressed on the model's own covariates. The sign and size of the last term are set by the error in $\hat\rho$. The concentrated likelihood depends on $\mathbf{Y}$ only through the residual sum of squares of $(\mathbf{I} - \tilde\rho \mathbf{W})\mathbf{Y}$ on $\mathbf{V}$, and the part of that residual that involves $\beta$ is $\beta(\rho - \tilde\rho)$ times the residual of $\mathbf{W}\mathbf{A}\mathbf{Z}$ on $\mathbf{V}$. If $\mathbf{W}\mathbf{A}\mathbf{Z}$ lies in the column space of $\mathbf{V}$, that part vanishes for every $\tilde\rho$, so $\hat\rho$ is the same at every value of $\beta$. If, in addition, $g = 0$, then $\hat\beta - \beta$ is the same at every value of $\beta$. Equation \ref{eq:error-decomposition} held on every re-run fit, with a largest residual of $4.2\times10^{-13}$. For Checkerboard under rook contiguity, it held in the reduced form given below.
+
+For designs whose treated clusters have treated neighbors, the last term gives a small positive bias that grows with $\beta$. Under queen contiguity, pooled over the 160 blocks, the bias of Incidence-Guided Saturation rose from 0.029 at $\beta = 0.8$ to 0.047 at $\beta = 3$ (@sec-tau), while that of Isolation Buffer stayed between 0.002 and 0.004. Almost all of the rise comes from the last term of Equation \ref{eq:error-decomposition}. In our fits, $\hat\rho$ was biased downward by about 0.06 on average (for Incidence-Guided Saturation, by 0.071 at $\beta = 0.8$ and 0.054 at $\beta = 3$). We observed this downward bias in these simulations but did not derive it or check it against a published finite-sample result. With $\rho - \hat\rho$ positive on average, the last term is positive and grows with $\beta$ for any design with $g > 0$. For Incidence-Guided Saturation, $g$ averaged 0.371 over the queen fits, and the last term contributed 0.021 of the bias at $\beta = 0.8$ and 0.043 at $\beta = 3$. The first term contributed 0.001 at both values, and the second 0.007 and 0.002. For Isolation Buffer, $g$ averaged 0.020, and the last term contributed 0.001 and 0.004.
+
+Most of the difference in $g$ comes from the control-only regime. Under the both-arms regime with $\rho = 0$, the lagged treatment is $\mathbf{W}\mathbf{Z} = \mathbf{S}(\mathbf{Z})$, one of the covariates, so $g = 0$ for every design. Under the control-only regime, $\mathbf{W}\mathbf{Z} = \mathbf{S}(\mathbf{Z}) + \mathbf{Z} \circ \mathbf{W}\mathbf{Z}$, and at $\rho = 0$, $g$ is close to the average share of treated neighbors among treated clusters. That share is 0.57 for Incidence-Guided Saturation, whose treated clusters are concentrated in the high-saturation quadrants, and exactly 0 for Isolation Buffer, whose treated clusters have no treated neighbors. For Isolation Buffer, $\mathbf{Z} \circ \mathbf{W}\mathbf{Z} = \mathbf{0}$, so the two regimes define the same spillover covariate and the same $g$, which is 0 at $\rho = 0$ and about 0.06 at $\rho = 0.5$. At $\rho = 0$, its $\hat\rho$ and its estimation error were the same at every value of $\beta$, up to the optimizer's tolerance.
+
+The same term explains why the control-only MSE of Incidence-Guided Saturation rose from 0.131 at $\beta = 0.8$ to 0.182 at $\beta = 3$ while that of Isolation Buffer did not. Under that regime, averaged over the 80 queen blocks, the variance of the last term of Equation \ref{eq:error-decomposition} rose from 0.008 to 0.061 for Incidence-Guided Saturation, while the variance of the rest of the error changed little (0.119 and 0.115). The variance of the last term grew more slowly than $\beta^2$ because $\hat\rho$ became less variable as $\beta$ grew. For Isolation Buffer, the variance of the last term stayed below 0.0002. The rise in bias slowed at larger values of $\beta$ for a related reason: the part of the likelihood that involves $\beta$ sharpens the likelihood around the true $\rho$ as $\beta$ grows, so the downward bias of $\hat\rho$ shrank.
+
+The decomposition also explains why the coverage of Checkerboard under rook contiguity rose with $\beta$, from 0.150 at $\beta = 0.8$ to 0.464 at $\beta = 3$ (@sec-tau), although its coefficient on $\mathbf{Z}$ estimates $\beta - \psi$ at every value of $\beta$. For this design $\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$, and because $\mathbf{W}$ is row-standardized, $\mathbf{W}^2 \mathbf{Z} = \mathbf{W}(\mathbf{1} - \mathbf{Z}) = \mathbf{Z}$. The powers of $\mathbf{W}$ applied to $\mathbf{Z}$ therefore alternate between $\mathbf{1} - \mathbf{Z}$ and $\mathbf{Z}$, and $\mathbf{W}\mathbf{A}\mathbf{Z} = \{(\mathbf{1} - \mathbf{Z}) + \rho \mathbf{Z}\}/(1 - \rho^2)$ lies in the span of the intercept and $\mathbf{Z}$. The derivation of Equation \ref{eq:error-decomposition} applies with the aliased spillover column dropped, $\mathbf{V} = [\mathbf{1}, \mathbf{Z}, \mathbf{X}_k]$ and $\boldsymbol{\theta} = (\psi, \beta - \psi, \tau)^\top$, so that $\beta - \psi$ takes the place of $\beta$, and $g = -1/(1 + \rho)$. Two consequences follow: $\hat\rho$ is the same at every value of $\beta$, and
+$$
+\hat\beta - \beta = -\psi + \delta + (\beta - \psi)\,\frac{\hat\rho - \rho}{1 + \rho},
+$$
+where $\delta$ collects the first two terms of that decomposition and, like $\hat\rho$, does not depend on $\beta$. The error in $\hat\rho$ is therefore multiplied by $\beta - \psi$, which grows with $\beta$. The mean standard deviation of $\hat\beta$ rose from 0.202 at $\beta = 0.8$ to 0.327 at $\beta = 3$, and the standard error tracked it, rising on average from 0.199 to 0.322. With the bias held near $-\psi$, wider intervals covered $\beta$ more often. The rise was largest at $\rho = 0$ (coverage 0.157 to 0.562) and smallest at $\rho = 0.5$ (0.142 to 0.284), consistent with the factor $1/(1 + \rho)$. The same term raised the MSE from 0.477 to 0.567. About three quarters of that increase was variance, $(n-1)\text{SD}^2/n$ averaged over scenarios (Appendix \ref{app:mechanics}), which rose from 0.041 to 0.109. The other quarter was squared bias, which rose from 0.436 to 0.458 because $\hat\rho$ was biased slightly downward, moving the mean bias from $-0.650$ to $-0.667$.
+
+**Block-level detail.** Under queen contiguity, the average rank of Incidence-Guided Saturation among the six designs rose from 1.41 at $\beta = 0.8$ to 1.85 at $\beta = 3$, while that of Balanced Quartiles stayed between 2.13 and 2.14 and that of Isolation Buffer fell from 3.71 to 3.31. Incidence-Guided Saturation had a lower MSE than Balanced Quartiles in 103, 102, 102, 102, and 101 of the 160 blocks at $\beta = 0.8$, 1, 1.5, 2, and 3, and a lower MSE than Isolation Buffer in 75, 73, 56, 40, and 12 of the 80 control-only blocks. Its worst case across blocks was the lowest of the six designs at $\beta \le 1.5$, but at $\beta = 2$ and $\beta = 3$ that of Isolation Buffer was lower (0.207 against 0.210, and 0.208 against 0.238). Under rook contiguity, at $\beta = 3$, Incidence-Guided Saturation had a lower MSE than Isolation Buffer in 47 of the 80 control-only blocks, and its worst case across rook blocks was the lowest of the six designs at every value of $\beta$ except $\beta = 3$, where that of Isolation Buffer was lower (0.173 against 0.174). The coverage of rook Checkerboard was 0.150, 0.162, 0.212, 0.286, and 0.464 at $\beta = 0.8$, 1, 1.5, 2, and 3.
+~~~~
+
+### H-06 `tab:nc-summary-sens` and `fig:nc-setting-ratios` (old A8)
+
+**Reason:** Overlap with `fig:nc-mse` and `tab:nc-annual`.
+
+*Figure*
+
+~~~~latex
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\linewidth]{figures/real_sud/primary_setting_ratios.pdf}
+
+\caption[Primary queen setting-specific mean MSE ratios to year-matched SRS]{Primary queen setting-specific mean MSE ratios to year-matched SRS. Teal cells have lower MSE than SRS and red cells higher. Setting-specific Monte Carlo errors are kept in the aggregate output tables and not shown here. Parameters and spillover regimes are shown separately, and neighbor definitions are not pooled.}
+\label{fig:nc-setting-ratios}
+
+\end{figure}
+~~~~
+
+*Paragraph*
+
+~~~~latex
+For Incidence-Guided Saturation, Table \ref{tab:nc-summary-sens} reports the matched annual mean-MSE ratios. Rook means use only the four extreme combinations of $\rho$ and $\psi$ shared with the primary analysis. Means for the matched sensitivity analysis in which incidence shifts the outcome and for the regional summaries use the six queen pairs. These are matched contrasts, not ratios of unmatched pooled analyses.
+~~~~
+
+*Table*
+
+~~~~latex
+```{=latex}
+\begin{table}[!htb]
+\small
+\centering
+
+\caption[Incidence-Guided Saturation sensitivity MSE divided by matched primary MSE]{Incidence-Guided Saturation sensitivity MSE divided by matched primary MSE, by year and regime. Incidence shift adds rank-scaled $\mathbf{X}$ to both generation and fit. Rook uses the matched extreme combinations of $\rho$ and $\psi$. Regional-summary alternatives preserve fixed regions.}
+\label{tab:nc-summary-sens}
+% SOURCE: application/results/real_sud_rev_20261002/exhibits/yearly_sensitivity_means.csv
+
+\begin{tabular}{llrrrr}
+\toprule
+Sensitivity & Regime & 2018 & 2019 & 2020 & 2021 \\
+\midrule
+Incidence shift / adjusted & Both & 1.016 & 1.030 & 1.015 & 1.035 \\
+Incidence shift / adjusted & Control & 1.026 & 1.023 & 1.042 & 1.040 \\
+Rook contiguity & Both & 1.005 & 0.998 & 0.985 & 0.998 \\
+Rook contiguity & Control & 0.967 & 0.969 & 0.971 & 1.036 \\
+Mean regional rate & Both & 1.034 & 1.000 & 1.000 & 1.031 \\
+Mean regional rate & Control & 0.907 & 1.000 & 1.000 & 0.928 \\
+Pooled regional rate & Both & 1.015 & 0.979 & 0.981 & 1.003 \\
+Pooled regional rate & Control & 0.962 & 1.133 & 1.061 & 1.030 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+```
+~~~~
+
+### H-07 `tab:nc-bayes` (old A9)
+
+**Reason:** The body and A5/A12 say the Bayesian lag model reproduced the ML results and the Bayesian CAR model did not.
+
+*Table*
+
+~~~~latex
+\begin{table}[!htb]
+\small
+\centering
+\setlength{\tabcolsep}{4pt}
+\caption[Mean MSE relative to simple random sampling (SRS) at $\rho = 0.5$]{Mean MSE relative to simple random sampling (SRS) at $\rho = 0.5$ for maximum likelihood (ML), the Bayesian spatial lag model (Bayes SAR) and the Bayesian CAR model with converged chains only (Bayes CAR), all fitted to the same spatial lag data. 58 colleges, $\tau = 0$, $\psi = 0.8$, mean over the four planning years.}
+\label{tab:nc-bayes}
+% SOURCE: application/results/methods_ext_2026-10/sensitivity_summaries_v2/a6_bayes_lag_ratio_to_srs.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{Both arms} & \multicolumn{3}{c}{Control only} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Design & ML & Bayes SAR & Bayes CAR & ML & Bayes SAR & Bayes CAR \\
+\midrule
+Checkerboard & 3.14 & 3.18 & 2.90 & 3.16 & 3.16 & 2.31 \\
+High Incidence Focus & 0.96 & 0.96 & 0.83 & 1.19 & 1.19 & 1.04 \\
+Saturation Quadrants & 1.12 & 1.10 & 1.11 & 0.86 & 0.86 & 1.05 \\
+Isolation Buffer & 3.89 & 3.94 & 3.80 & 1.01 & 1.02 & 0.87 \\
+$2\times2$ Blocking & 1.14 & 1.14 & 1.11 & 1.48 & 1.48 & 1.34 \\
+Balanced Quartiles & 1.00 & 1.00 & 1.05 & 1.10 & 1.10 & 1.15 \\
+Balanced Halves & 0.97 & 0.97 & 0.99 & 1.05 & 1.06 & 1.01 \\
+Incidence-Guided Saturation & 1.12 & 1.10 & 1.13 & 0.81 & 0.81 & 0.95 \\
+Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+~~~~
+
+*Sentence removed from the convergence paragraph (shared with H-08)*
+
+~~~~latex
+Tables \ref{tab:nc-car} and \ref{tab:nc-bayes} give each strategy's MSE relative to SRS under each model.
+~~~~
+
+### H-08 `tab:nc-car` (old A9)
+
+**Reason:** Same reason; one sentence of its result is kept in A12.
+
+*Table*
+
+~~~~latex
+\begin{table}[!htb]
+\small
+\centering
+\caption[Mean MSE relative to simple random sampling (SRS) under four combinations of data-generating model and fitted model]{Mean MSE relative to simple random sampling (SRS) under four combinations of data-generating model and fitted model: spatial lag (SAR) or conditional autoregressive (CAR). 58 colleges, $\tau = 0$, mean over 24 blocks (year $\times$ $\rho$ $\times$ $\psi$). Below 1 is lower error than SRS.}
+\label{tab:nc-car}
+% SOURCE: application/results/methods_ext_2026-10/sensitivity_summaries/a6_car_ratio_to_srs.csv (code/24_methods_extension_tables.R)
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{Both arms} & \multicolumn{4}{c}{Control only} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+Data & SAR & SAR & CAR & CAR & SAR & SAR & CAR & CAR \\
+Fit & SAR & CAR & SAR & CAR & SAR & CAR & SAR & CAR \\
+\midrule
+Checkerboard & 2.88 & 2.83 & 2.93 & 3.09 & 2.99 & 2.64 & 3.01 & 3.00 \\
+High Incidence Focus & 1.06 & 1.02 & 1.07 & 1.07 & 1.08 & 1.03 & 1.10 & 1.09 \\
+Saturation Quadrants & 1.04 & 1.02 & 1.04 & 1.03 & 0.79 & 0.81 & 0.81 & 0.78 \\
+Isolation Buffer & 4.11 & 4.13 & 4.16 & 4.45 & 1.03 & 0.95 & 1.03 & 1.05 \\
+$2\times2$ Blocking & 0.98 & 0.99 & 1.00 & 1.02 & 1.21 & 1.17 & 1.22 & 1.22 \\
+Balanced Quartiles & 1.04 & 1.05 & 1.04 & 1.06 & 1.03 & 1.00 & 1.03 & 1.02 \\
+Balanced Halves & 1.04 & 1.03 & 1.05 & 1.04 & 1.02 & 0.98 & 1.03 & 0.99 \\
+Incidence-Guided Saturation & 1.03 & 1.04 & 1.04 & 1.03 & 0.81 & 0.82 & 0.81 & 0.76 \\
+Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+~~~~
+
+### H-09 `tab:rho` (old A4; `tab:regime` was already removed)
+
+**Reason:** ρ changed no MSE by more than 0.020; stated in the body (Sensitivity subsection).
+
+*Table*
+
+~~~~latex
+```{=latex}
+\begin{table}[!htb]
+
+\small
+\centering
+
+\caption[Mean squared error by design across the four levels of outcome spatial dependence $\rho$]{Mean squared error by design across the four levels of outcome spatial dependence $\rho$, under queen contiguity at $\beta = 1$, pooled over the five incidence configurations. Each entry averages 40 scenarios (5 incidence configurations $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes). Rows are ordered by pooled mean MSE under queen contiguity (Table \ref{tab:performance}).}
+\label{tab:rho}
+
+\begin{tabular}{lcccc}
+
+\toprule
+Design & $\rho=0$ & $\rho=0.01$ & $\rho=0.20$ & $\rho=0.50$ \\
+
+\midrule
+Incidence-Guided Saturation & 0.090 & 0.087 & 0.093 & 0.093 \\
+Balanced Quartiles & 0.129 & 0.129 & 0.132 & 0.133 \\
+Isolation Buffer & 0.161 & 0.157 & 0.158 & 0.165 \\
+High Incidence Focus & 0.243 & 0.242 & 0.249 & 0.248 \\
+2$\times$2 Blocking & 0.318 & 0.320 & 0.314 & 0.324 \\
+Checkerboard & 1.095 & 1.077 & 1.084 & 1.092 \\
+
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+~~~~
+
+### H-10 `fig:spread-gain` (old A9)
+
+**Reason:** Its point (gain rises with the spread of regional incidence, correlation 0.84 to 0.99) is one sentence in the body.
+
+*Figure*
+
+~~~~latex
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_spread_vs_gain.pdf}
+\caption[Gain in treated incidence share from incidence guidance against the spread of the regions' mean incidence ranks]{Gain in treated incidence share from incidence guidance (Incidence-Guided Saturation minus Saturation Quadrants) against the spread of the regions' mean incidence ranks, the largest minus the smallest regional mean rank divided by the number of clusters. Filled symbols are the 50 grid surfaces (queen, production allocations) by incidence configuration, with a least-squares line fitted to them. Open triangles are the fixed NC regions in each of the four planning years, whose spread divides by 58 clusters rather than 100.}
+\label{fig:spread-gain}
+\end{figure}
+~~~~
+
+*Sentence removed from the Targeting paragraph*
+
+~~~~latex
+Figure \ref{fig:spread-gain} shows that the gain rose almost linearly with the spread of the regions' mean incidence ranks, and that the NC regions lie at the low end of that spread.
+~~~~
+
+### H-11 `fig:coverage` (old A5)
+
+**Reason:** Every design is at 0.946–0.950, and `tab:performance` already has a coverage column.
+
+*Figure*
+
+~~~~latex
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_coverage_by_design_6design_queen.pdf}
+
+\caption[Coverage of the 95\% confidence intervals by design at $\beta = 1$]{Coverage of the 95\% confidence intervals by design at $\beta = 1$, under queen contiguity. Each box summarizes the coverage of the 160 scenarios of one design (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes), each estimated from 250 fits. Designs are ordered by median coverage, not by MSE. The dashed red line marks the nominal 0.95 level, and the gray dotted line the median coverage of simple random sampling. Figure \ref{fig:coverage-rook} shows rook contiguity.}
+\label{fig:coverage}
+
+\end{figure}
+~~~~
+
+### H-12 `fig:biasvar` and `fig:biasvar-rook` (old A5), combined into one two-panel figure (not held; originals kept for the record)
+
+**Reason:** One figure instead of two; the same layout and configuration.
+
+*Original `fig:biasvar`*
+
+~~~~latex
+```{=latex}
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_biasvar_6design_queen.pdf}
+
+\caption[Decomposition of mean squared error into squared bias and variance by design at $\beta = 1$ for one incidence configuration]{Decomposition of mean squared error into squared bias and variance by design at $\beta = 1$ for one incidence configuration, Poisson with $\rho_X = 0.20$, under queen contiguity. For each design, the two stacked components are the squared bias and the variance ($\text{SD}^2$) of $\hat\beta$, each averaged over the 32 scenarios of that configuration (4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes). Designs are ordered by pooled mean MSE (Table \ref{tab:performance}). The gray dashed line marks the MSE of simple random sampling (SRS) in the same configuration. Figure \ref{fig:biasvar-rook} shows rook contiguity.}
+\label{fig:biasvar}
+
+\end{figure}
+```
+~~~~
+
+*Original `fig:biasvar-rook` and its lead-in sentence*
+
+~~~~latex
+Nearly all of Checkerboard's MSE in Figure \ref{fig:biasvar-rook}, the rook version of Figure \ref{fig:biasvar}, is squared bias, because its coefficient on $\mathbf{Z}$ estimates $\beta - \psi$ (@sec-methods).
+
+```{=latex}
+\begin{figure}[!htb]
+
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_biasvar_6design_rook.pdf}
+
+\caption[Squared bias and variance of $\hat\beta$ by design at $\beta = 1$ for the Poisson configuration with $\rho_X = 0.20$]{Squared bias and variance of $\hat\beta$ by design at $\beta = 1$ for the Poisson configuration with $\rho_X = 0.20$, under rook contiguity, with the layout of Figure \ref{fig:biasvar}. Checkerboard is flagged ($\beta$ not identifiable).}
+\label{fig:biasvar-rook}
+
+\end{figure}
+~~~~
