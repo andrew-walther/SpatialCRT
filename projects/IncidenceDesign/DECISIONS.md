@@ -5,15 +5,50 @@ one-line rule each decision implies.
 
 ---
 
-## 2026-11-11 — Notation reparameterization (pending) and Chapter 3 introduction structure
+## 2026-11-15 — Chapter 3 review (round 5) and first CTJ revision
+
+**Decision.** From Andrew's answers in `docs/plans/2026-11-14-chapter3-review-session-plan.md`
+(Section 6) and the round 5 review files in
+`bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch3/`:
+- The reparameterization (2026-11-11 entry) is carried out in Chapter 3, CTJ and the SI:
+  β on **Z**, τ on **X**, and the spillover coefficient is ψ (not γ), as in Chapter 2. Code
+  internals (`MLE_tau_sweep`, column names) keep their old names; only plot labels changed.
+- Chapter 2 is not changed. Chapter 3 keeps **Z** and **X** and adds one sentence mapping the
+  symbols to Chapter 2's.
+- The incidence coefficient is the investigator's choice: 1 on the grid (one noise SD across the
+  incidence range), 0 in the case study with 1 as a sensitivity analysis. Estimating it is
+  future work.
+- "Application" is renamed "Case Study" everywhere; in Chapter 3 it stays its own section
+  after Results.
+- N is the number of colleges (clusters analyzed); n is kept for samples within a cluster.
+  **S** stays for the CAR matrix, defined where used.
+- Ratios to SRS keep their current precision (two decimals in tables, three in two passages).
+- The interval's √(N/(N−p)) factor is described as the HC1-style correction, approximate in the
+  spatial lag model and justified by calibration (MacKinnon and White 1985; Leyrat et al. 2018).
+- Limitations: the six designs came from ideas developed for this trial, not an exhaustive
+  search; varying the saturations and the number of regions is future work.
+- The recommendation assumes full participation; partial participation is an added
+  consideration (advantage of 5% or less with 30 or fewer colleges).
+- Appendix paragraphs no longer open with bold lead-ins; they are `###` headings kept out of the
+  table of contents. Section headings use "and", not "&"; the discussion subsections are
+  "Interpretation of the Results" and "Future Work" (also applied to Chapters 2 and 4).
+- Deferred until after the proposal: the CTJ 3,500-word trim (plan in the revisions folder) and
+  the full SI prose review.
+
+**Reason.** Andrew, 2026-11-15: Dr. Lin's meeting and written annotations, the consistency and
+math checks, and the round 5 writing and committee reviews. Committee-style questions are kept
+for the defense in `presentation/prelim-qa-prep.md`.
+
+## 2026-11-11 — Notation reparameterization (carried out 2026-11-15) and Chapter 3 introduction structure
 
 **Decision.** Following reviewer feedback, the outcome model will be reparameterized so
 that $\beta$ is the intervention effect in both Chapter 2 and Chapter 3: $\beta$ multiplies
 the treatment indicator $Z$, $\tau$ multiplies the incidence covariate $X$, and the spillover
 term is written $\gamma\,S(Z)$ with $S(Z) = WZ$, so $\gamma$ is a scalar multiplier of the
-spillover effect. Not yet carried out. It must be applied consistently to the Chapter 3
+spillover effect. Carried out 2026-11-15, with the spillover coefficient named ψ instead of
+γ (see the 2026-11-15 entry). It was applied to the Chapter 3
 source (`paper/thesis_chapter/Thesis_Chapter.qmd`), the CTJ manuscript, the supplementary
-appendix, figure and table labels, and code comments.
+appendix and the figure and table labels; code internals keep their old names.
 
 The Chapter 3 introduction now has two subsections, Background & Motivation and Aims &
 Contributions, matching Chapter 2. The sentence reconciling $\beta$/$\tau$ with Chapter 2

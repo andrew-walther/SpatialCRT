@@ -1,22 +1,27 @@
 # IncidenceDesign to-dos — completed study and drafts
 
-Updated 2026-11-02. The author superseded earlier deadline dates and requested ASAP
+Updated 2026-11-15. The author superseded earlier deadline dates and requested ASAP
 completion with CTJ remaining a required deliverable. Historical interview and
 execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Next up
 
-- [ ] Reparameterize the outcome model per reviewer feedback (DECISIONS 2026-11-11):
-  $\beta$ on $Z$ as the intervention effect, $\tau$ on $X$, spillover $\gamma\,S(Z)$ with
-  $S(Z)=WZ$. Carry through Chapter 3, the CTJ manuscript, the SI, exhibits and code comments.
-- [ ] In the Paper 2 revision pass, state once in the CTJ manuscript (line ~145) and the SI
-  (lines ~158, ~197) that Checkerboard is the earlier study's Block Stratified Sampling (BSS)
-  design, then use Checkerboard only (done in Chapter 3 on 2026-11-11).
-- [ ] Full SI prose review (the 2026-10-29 SUDDEN talk is done); details under "After the
-  V5 revision" below.
+- [ ] Andrew's markup of `CTJ_Reading_Markup_V6.pdf` (round 5 revision, 2026-11-15).
+- [ ] After the proposal: trim CTJ to the 3,500-word limit (plan:
+  `paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/word-limit-trim-plan.md`).
+- [ ] After the proposal: full SI prose review; details under "After the V5 revision" below.
+  The SI already carries the reparameterization and the round 5 check items.
 
 ## Completed
 
+- [x] Chapter 3 review and first CTJ revision (round 5, 2026-11-15): Dr. Lin's annotations and
+  meeting items, consistency and math checks, writing and committee reviews, all applied
+  (dispositions in `docs/plans/2026-11-14-chapter3-review-session-plan.md`, decisions in
+  DECISIONS 2026-11-15). Prelim Q&A prep in `presentation/prelim-qa-prep.md`.
+- [x] Reparameterize the outcome model (DECISIONS 2026-11-11, 2026-11-15): β on **Z**, τ on
+  **X**, spillover ψ S(**Z**), in Chapter 3, CTJ, the SI and figure labels.
+- [x] State once in CTJ and the SI that Checkerboard is the earlier study's Block Stratified
+  Sampling (BSS) design (2026-11-15).
 - [x] SRS benchmark added and verified without altering original eight-design results.
 - [x] Average MSE and allocation-specific downside interpreted together; grid pilot
   distinguished from the full study and finite tail uncertainty acknowledged.

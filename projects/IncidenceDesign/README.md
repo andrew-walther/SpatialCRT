@@ -216,6 +216,11 @@ neighbors. Two spillover modes: `control_only` (gamma applied only to control un
 `both` (applied to all units). (Despite the historical "SDM" label, only treatment is
 spatially lagged.)
 
+This is the code's notation. Since 2026-11-15 the chapter, CTJ and SI write the same model as
+Y = (I − ρW)⁻¹[βZ + ψS(Z) + τX + ε]: code `tau` is the paper's β (intervention effect), code
+`beta` is the paper's τ (incidence coefficient) and code `gamma` is the paper's ψ. Code names
+were not changed (DECISIONS 2026-11-15).
+
 **Monte Carlo structure (2026-09 revision):** K = 10 incidence surfaces per config ×
 J = 25 design draws per surface = 250 fits per scenario. The design for surface k is drawn
 from X_k, the outcome and analysis use the same X_k, and every fit has its own noise draw.

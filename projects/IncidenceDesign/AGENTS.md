@@ -117,7 +117,8 @@ NOT which estimator is better, and NOT whether knowing prior incidence is necess
 
 **The oracle ML spatial-lag estimator is primary** (Y ~ Z + Spill + X, true spillover
 covariate). It's the methodologically appropriate choice because spatial dependence ($\rho$)
-and spillover ($\gamma$) are both present in the outcome DGP. The non-oracle ML fit
+and spillover ($\gamma$) are both present in the outcome DGP. (Code notation: `tau` on Z, `beta` on X, `gamma` for
+spillover. The documents write β on **Z**, τ on **X** and ψ since 2026-11-15; DECISIONS 2026-11-15.) The non-oracle ML fit
 (Y ~ Z + X) is a sensitivity analysis. DIM ignores both and produced ~72% coverage in the
 (pre-revision) April runs.
 

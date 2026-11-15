@@ -1,10 +1,13 @@
 # IncidenceDesign — Future Work Roadmap
 
-> **Current status (2026-11-02):** grid simulation (production run `20260927_000502`),
-> observed-incidence NC application (2026-10-02) and methods extensions (2026-10-20/21) are
-> complete. CTJ (V5 revision 2026-10-27), SI and Chapter 3 are complete drafts, not yet
-> submitted. The SUDDEN talk was given 2026-10-29. Next is the full SI prose review; open
-> items are in `docs/TODO.md`. Older status notes are in the progress log below.
+> **Current status (2026-11-15):** grid simulation (production run `20260927_000502`),
+> observed-incidence NC case study (2026-10-02) and methods extensions (2026-10-20/21) are
+> complete. The round 5 Chapter 3 review and first CTJ revision are done (2026-11-15):
+> reparameterization (β on **Z**, τ on **X**, ψ S(**Z**)), Dr. Lin's annotations, consistency and
+> math checks, writing and committee reviews. Chapter 3 is 85 pages standalone and 90 in the
+> prelim draft; CTJ 23 pages (reading layout 10, markup copy V6); SI 65. Not yet submitted. The
+> CTJ word-limit trim and the full SI prose review wait until after the proposal; open items
+> are in `docs/TODO.md`. Older status notes are in the progress log below.
 >
 > A living task list of potential extensions, methodological improvements, and dissemination
 > goals for the IncidenceDesign project. Organized by theme. Add, edit, and check off items
@@ -224,6 +227,18 @@ Sampling remains in the surrounding prose. No scientific result was changed.
 
 Dated status checkpoints, newest first, moved verbatim from `AGENTS.md`. Add new
 checkpoints here, not in `AGENTS.md`.
+
+### 2026-11-15 — Chapter 3 review (round 5) and first CTJ revision
+
+Followed `docs/prompts/2026-11-14-chapter3-review-session-prompt.md` and
+`docs/plans/2026-11-14-chapter3-review-session-plan.md` (Section 5 holds every item's
+disposition). Applied the reparameterization (β, τ, ψ), Dr. Lin's annotations and meeting
+items, the consistency and math checks, then the round 5 writing review (W-01 to W-117) and
+committee review (C-01 to C-31), with decisions in DECISIONS 2026-11-15. Chapter commits
+fcf0c70 through d8639d5. Chapter 3: 85 pages standalone, 90 in the prelim draft (was 95); CTJ 23
+pages, reading layout 10 (`revision_markup/CTJ_Reading_Markup_V6.pdf`); SI 65. Cut text is in
+`paper/thesis_chapter/notes/trimmed-material.md`; defense questions in
+`presentation/prelim-qa-prep.md`. Full prelim rebuilt (240 pages) and assembly test passed.
 
 ### 2026-11-11 — FCL manuscript feedback register
 

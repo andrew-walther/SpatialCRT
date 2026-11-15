@@ -160,10 +160,10 @@ Page budget, as a guide: body about 45 pages, Appendix B about 38. Andrew (2026-
 is too long; the Phase 4c list also names appendix content that can be held out (moved to
 `trimmed-material.md`, never deleted) to shorten the chapter and appendix together.
 
-## 5. Feedback triage (proposed)
+## 5. Feedback triage (final, 2026-11-15)
 
-Status: **to do**, **addressed** (already handled; listed for confirmation), **decline**
-(with reason), **after** (after the prelim). "Where": C = CTJ, S = supplement, 3 = Chapter 3.
+Status: **done**, **addressed** (already handled), **declined** (with reason), **after**
+(after the prelim), **OPEN** (not confirmed applied; none remain). "Where": C = CTJ, S = supplement, 3 = Chapter 3.
 Chapter 3 locations are source lines in `Thesis_Chapter.qmd` as of `9e64dca`; CTJ lines are in
 `CTJ_Manuscript.tex`. Rows from the consistency and math checks are added under 5.9 when those
 files are in.
@@ -172,99 +172,99 @@ files are in.
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-01 | FCL-013 | "Spatial interference challenges the assumption" | C 141 | Reword ("Spatial interference violates the assumption ...") | to do |
-| T-02 | FCL-008, I-01 | Cite "Two allocations with the same number of treated clusters ..." and add references to the first paragraph | C 141; 3 l. 49 (last two sentences) | Two or more verified citations (candidates: the BMC paper, Baird et al. 2018, Leung 2022, Halloran and Hudgens 2016); checked on Crossref before use | to do |
-| T-03 | FCL-001, FCL-009 | Citation placement; restructure the design-stage methods sentence | C 143 | Adopt Dr. Lin's wording with the citation at the end | to do |
-| T-04 | FCL-002, -003, -004, -010, I-03 | "In a strict checkerboard with edge neighbors ... its own treatment" is unclear | C 143 | Rewrite in plain terms: under rook contiguity every neighbor of a treated cluster is a control, so a cluster's share of treated neighbors is set by its own arm and the two effects cannot be separated; cite the BMC paper. Chapter 3 has no such sentence | to do (C only) |
-| T-05 | FCL-011, I-02, TODO | Checkerboard = the earlier study's block stratified sampling; define once, then "Checkerboard" only | C 145; S ~158, ~197; 3 l. 55, 61 | State once in CTJ and SI. Chapter 3 done 2026-11-11 | to do (C, S); addressed (3) |
-| T-06 | FCL-005, I-04 | "That work weighed ..." unclear; "that work" | C 145 | Name the prior study ("In that study, we judged each design by ...") keeping CTJ self-contained | to do (C); addressed (3, l. 55 already clear) |
-| T-07 | FCL-006, FCL-007, I-05 | Move the Checkerboard definition earlier, drop "meaning complete randomization ...", reorder sentences, make clear the comparison is this paper's and covers more than two designs | C 145 | Rewrite the paragraph: prior work and its two designs first, then "In this paper, we compare six designs and SRS ..." as the closing sentence | to do (C); check 3 l. 61 |
-| T-08 | FCL-012, I-06 | "Our application supports planning" → "In this paper, we plan ..." | C 147; 3 l. 449, 59 | Reword with "case study" | to do |
-| T-09 | FCL-014 | Abstract: "error under an unfavorable realized assignment (allocation risk)" unclear | C abstract | Say it in words: how large the error can be for the particular assignment a trial happens to draw | to do (C) |
-| T-10 | FCL-015 | "pilot" → "pilot trial" | C abstract; 3 l. 59, 445 | "education pilot trial" at first use | to do |
+| T-01 | FCL-013 | "Spatial interference challenges the assumption" | C 141 | Reword ("Spatial interference violates the assumption ...") | done (C) |
+| T-02 | FCL-008, I-01 | Cite "Two allocations with the same number of treated clusters ..." and add references to the first paragraph | C 141; 3 l. 49 (last two sentences) | Two or more verified citations (candidates: the BMC paper, Baird et al. 2018, Leung 2022, Halloran and Hudgens 2016); checked on Crossref before use | done (C, 3) |
+| T-03 | FCL-001, FCL-009 | Citation placement; restructure the design-stage methods sentence | C 143 | Adopt Dr. Lin's wording with the citation at the end | done (C) |
+| T-04 | FCL-002, -003, -004, -010, I-03 | "In a strict checkerboard with edge neighbors ... its own treatment" is unclear | C 143 | Rewrite in plain terms: under rook contiguity every neighbor of a treated cluster is a control, so a cluster's share of treated neighbors is set by its own arm and the two effects cannot be separated; cite the BMC paper. Chapter 3 has no such sentence | done (C only) |
+| T-05 | FCL-011, I-02, TODO | Checkerboard = the earlier study's block stratified sampling; define once, then "Checkerboard" only | C 145; S ~158, ~197; 3 l. 55, 61 | State once in CTJ and SI. Chapter 3 done 2026-11-11 | done (C, S); addressed (3) |
+| T-06 | FCL-005, I-04 | "That work weighed ..." unclear; "that work" | C 145 | Name the prior study ("In that study, we judged each design by ...") keeping CTJ self-contained | done (C); addressed (3) |
+| T-07 | FCL-006, FCL-007, I-05 | Move the Checkerboard definition earlier, drop "meaning complete randomization ...", reorder sentences, make clear the comparison is this paper's and covers more than two designs | C 145 | Rewrite the paragraph: prior work and its two designs first, then "In this paper, we compare six designs and SRS ..." as the closing sentence | done (C, 3) |
+| T-08 | FCL-012, I-06 | "Our application supports planning" → "In this paper, we plan ..." | C 147; 3 l. 449, 59 | Reword with "case study" | done (C, 3) |
+| T-09 | FCL-014 | Abstract: "error under an unfavorable realized assignment (allocation risk)" unclear | C abstract | Say it in words: how large the error can be for the particular assignment a trial happens to draw | done (C) |
+| T-10 | FCL-015 | "pilot" → "pilot trial" | C abstract; 3 l. 59, 445 | "education pilot trial" at first use | done (C, 3) |
 
 ### 5.2 Model and notation
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-11 | M-01, D-1, FCL-030 | Reparameterize: β **Z**, τ **X**, γ S(**Z**); update derived statements (Checkerboard estimates β − γ) | C, S, 3; figure and table labels; code comments | One item per passage in the sign-off lists, driven by the symbol list in `consistency-check.md` | to do (Decision A on timing) |
-| T-12 | M-02, FCL-016, FCL-018, -019, -020 | One-line equation; ε in prose; "noise; τ is in units ..." without parentheses | C 152–163 (the reading layout splits the equation); 3 l. 72–76 | One-line equation in both layouts; prose: "ε is independent standard normal noise, the intervention effect is in standard-deviation units, and ρ is ..." | to do |
-| T-13 | M-03 | Define **W**; avoid "the ith element of **WZ**" | C 151; 3 l. 69 | Define w_ij (1/number of neighbors if j is a neighbor of i, else 0), then (**WZ**)_i in words | to do |
-| T-14 | M-04 | "cluster incidence" → "cluster-level incidence" | C 163; 3 l. 76 | As stated | to do |
-| T-15 | M-05, FCL-021 | "baseline outcome" | C 163; 3 l. 76, 644, 702 | "shifts the outcome" / outcome shift; "baseline" kept only for historical incidence where it means incidence before the trial (to confirm) | to do |
-| T-16 | M-06, D-2, FCL-022, FCL-047, FCL-053, Q-02 | Value of the incidence coefficient: move to the simulation settings, explain why it is pre-specified, why 1 on the grid and 0 / 1 in the case study | C 163, 192; 3 l. 76, 515, 522 | Text from Decision D; scale meaning from math check question (a) | to do |
-| T-17 | M-07, FCL-017 | Queen/rook sentence "came from nowhere" | C 151; 3 l. 69 | Move to Simulation Design / Simulation study | to do |
-| T-18 | M-13, FCL-023 | Split "We estimated τ, giving τ̂, by ML, fitting ..." | C 165 | Two or three sentences | to do (C); addressed (3, l. 138) |
-| T-19 | M-10, D-4, FCL-024 | Cite the t interval, the df-corrected SE √(N/(N−p)) and the Wald interval; general quantile notation | C 165; 3 l. 140, 520; S | Write θ̂ ± q·SE with q = t_{0.975, N−p} or z_{0.975}; verified citations for the small-sample variance correction (to be found and checked); the "covered more reliably" claim points to the interval comparison table | to do |
-| T-20 | M-12, FCL-025 | Define MSE at first use (Methods) | C 165; 3 l. 59 (defined in Aims) | Spell out at the Methods definition in CTJ; Chapter 3 already defines it at first use | to do (C); addressed (3) |
-| T-21 | FCL-026, FCL-027 | "confidence intervals"; "coverage was measured" | C 165; 3 l. 156 | As suggested | to do |
-| T-22 | M-08, FCL-028 | "identified" → "identifiable"; rook: not identifiable; queen: identifiable but imprecise; drop "(cannot be estimated)" | C 167, 204; 3 l. 142, 392, 437, 546, 692; S | Every use | to do |
-| T-23 | M-09, FCL-029 | Delete "A design with only one possible assignment has no spread ..." | C 169, 229; 3 l. 639 | Delete in C 169; shorten the parallel sentences | to do |
-| T-24 | M-11, FCL-014 | Define m(a) clearly at first use | C 169; 3 l. 144 | One sentence in words before the formula | to do |
+| T-11 | M-01, D-1, FCL-030 | Reparameterize: β **Z**, τ **X**, γ S(**Z**); update derived statements (Checkerboard estimates β − γ) | C, S, 3; figure and table labels; code comments | One item per passage in the sign-off lists, driven by the symbol list in `consistency-check.md` | done (C, S, 3; spillover coefficient is ψ, not γ) |
+| T-12 | M-02, FCL-016, FCL-018, -019, -020 | One-line equation; ε in prose; "noise; τ is in units ..." without parentheses | C 152–163 (the reading layout splits the equation); 3 l. 72–76 | One-line equation in both layouts; prose: "ε is independent standard normal noise, the intervention effect is in standard-deviation units, and ρ is ..." | done (C, 3) |
+| T-13 | M-03 | Define **W**; avoid "the ith element of **WZ**" | C 151; 3 l. 69 | Define w_ij (1/number of neighbors if j is a neighbor of i, else 0), then (**WZ**)_i in words | done (C, 3) |
+| T-14 | M-04 | "cluster incidence" → "cluster-level incidence" | C 163; 3 l. 76 | As stated | done (C, 3) |
+| T-15 | M-05, FCL-021 | "baseline outcome" | C 163; 3 l. 76, 644, 702 | "shifts the outcome" / outcome shift; "baseline" kept only for historical incidence where it means incidence before the trial (to confirm) | done (C, 3) |
+| T-16 | M-06, D-2, FCL-022, FCL-047, FCL-053, Q-02 | Value of the incidence coefficient: move to the simulation settings, explain why it is pre-specified, why 1 on the grid and 0 / 1 in the case study | C 163, 192; 3 l. 76, 515, 522 | Text from Decision D; scale meaning from math check question (a) | done (C, 3) |
+| T-17 | M-07, FCL-017 | Queen/rook sentence "came from nowhere" | C 151; 3 l. 69 | Move to Simulation Design / Simulation study | done (C, 3) |
+| T-18 | M-13, FCL-023 | Split "We estimated τ, giving τ̂, by ML, fitting ..." | C 165 | Two or three sentences | done (C); addressed (3) |
+| T-19 | M-10, D-4, FCL-024 | Cite the t interval, the df-corrected SE √(N/(N−p)) and the Wald interval; general quantile notation | C 165; 3 l. 140, 520; S | Write θ̂ ± q·SE with q = t_{0.975, N−p} or z_{0.975}; verified citations for the small-sample variance correction (to be found and checked); the "covered more reliably" claim points to the interval comparison table | done (C, 3) |
+| T-20 | M-12, FCL-025 | Define MSE at first use (Methods) | C 165; 3 l. 59 (defined in Aims) | Spell out at the Methods definition in CTJ; Chapter 3 already defines it at first use | done (C); addressed (3) |
+| T-21 | FCL-026, FCL-027 | "confidence intervals"; "coverage was measured" | C 165; 3 l. 156 | As suggested | done (C, 3) |
+| T-22 | M-08, FCL-028 | "identified" → "identifiable"; rook: not identifiable; queen: identifiable but imprecise; drop "(cannot be estimated)" | C 167, 204; 3 l. 142, 392, 437, 546, 692; S | Every use | done (C, S, 3) |
+| T-23 | M-09, FCL-029 | Delete "A design with only one possible assignment has no spread ..." | C 169, 229; 3 l. 639 | Delete in C 169; shorten the parallel sentences | done (C, 3) |
+| T-24 | M-11, FCL-014 | Define m(a) clearly at first use | C 169; 3 l. 144 | One sentence in words before the formula | done (C, 3) |
 
 ### 5.3 Simulation design
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-25 | FCL-031 | Missing comma after "regimes" | C 180 | As suggested | to do |
-| T-26 | S-02, FCL-032, FCL-033, FCL-034, FCL-036 | Write the model for **X**, including ρ_X; "One normal and one Poisson?"; "How?" | C 180; 3 l. 87 (formulas present); S | CTJ gets the formulas (short form); Chapter 3 clarifies that the spatial mechanism is a normal SAR field mapped by Φ and the Poisson mechanism is counts from a log-normal SAR rate, each at ρ_X = 0.2 and 0.5 | to do (C, S); check (3) |
-| T-27 | S-03 | Justify or reduce the five configurations | C 180; 3 l. 87, 229 | Keep all five (already run): state what each tests and that none changed the ranking; detail table to the appendix (content map) | to do |
-| T-28 | S-04 | Why incidence is on (0, 1) | C 180; 3 l. 87 | State the reason (a common scale, so one coefficient value means the same in every configuration; rank-scaling for counts) | to do |
-| T-29 | S-01 | SUDDEN data used only in the case study | C 180; 3 l. 69, 87 | One sentence | to do |
-| T-30 | FCL-035, FCL-042, W-04 | "surface k", "configuration" undefined | C 180, 182; 3 l. 87–89 | Define "incidence surface" (one draw of **X** over the grid) and "incidence configuration" (generating mechanism and ρ_X) at first use | to do (C); check (3) |
-| T-31 | FCL-041, W-03 | Remove "so" | C 182; 3 l. 156 | "... and therefore carries ..." | to do |
-| T-32 | FCL-043 | Is the grid allocation-risk paragraph a result? | C 184 | Decline the move: it describes the design of a separate study. Reword to say so ("We also ran a separate allocation-risk study ...") | decline move; to do (wording) |
+| T-25 | FCL-031 | Missing comma after "regimes" | C 180 | As suggested | done (C) |
+| T-26 | S-02, FCL-032, FCL-033, FCL-034, FCL-036 | Write the model for **X**, including ρ_X; "One normal and one Poisson?"; "How?" | C 180; 3 l. 87 (formulas present); S | CTJ gets the formulas (short form); Chapter 3 clarifies that the spatial mechanism is a normal SAR field mapped by Φ and the Poisson mechanism is counts from a log-normal SAR rate, each at ρ_X = 0.2 and 0.5 | done (C, S, 3) |
+| T-27 | S-03 | Justify or reduce the five configurations | C 180; 3 l. 87, 229 | Keep all five (already run): state what each tests and that none changed the ranking; detail table to the appendix (content map) | done (3) |
+| T-28 | S-04 | Why incidence is on (0, 1) | C 180; 3 l. 87 | State the reason (a common scale, so one coefficient value means the same in every configuration; rank-scaling for counts) | done (C, 3) |
+| T-29 | S-01 | SUDDEN data used only in the case study | C 180; 3 l. 69, 87 | One sentence | done (C, 3) |
+| T-30 | FCL-035, FCL-042, W-04 | "surface k", "configuration" undefined | C 180, 182; 3 l. 87–89 | Define "incidence surface" (one draw of **X** over the grid) and "incidence configuration" (generating mechanism and ρ_X) at first use | done (C, 3) |
+| T-31 | FCL-041, W-03 | Remove "so" | C 182; 3 l. 156 | "... and therefore carries ..." | done (C, 3) |
+| T-32 | FCL-043 | Is the grid allocation-risk paragraph a result? | C 184 | Decline the move: it describes the design of a separate study. Reword to say so ("We also ran a separate allocation-risk study ...") | declined (move; separate study stays in Methods); done (wording) |
 
 ### 5.4 Designs and Table 1
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-33 | FCL-037, FCL-038 | Table 1's "Incidence surface" row is not a design; "cluster" → "region"? | C Exhibits Table 1 | Relabel the row ("Example incidence surface") so it reads as context, not a design. Decline "region": the cluster is the unit; "region" means the four saturation groups | to do; decline (FCL-038) |
-| T-34 | FCL-039 | NC Checkerboard rule unclear | C Exhibits; 3 l. 483 and Appendix A8 | Plain wording: visits clusters from most to fewest neighbors and gives each the arm held by fewer of its already-assigned neighbors | to do |
-| T-35 | FCL-040, FCL-054, A-03 | How the blocks and regions were built (k-means) | C 194 and Exhibits; 3 l. 483 and A8; S | Code (math check (e)): the 14 blocks come from `kmeans` on four standardized features (projected coordinates, that year's rank-scaled incidence, log person-years), 25 starts, rerun each year (`application_designs.R:134-139`, `real_sud_setup.R:109-112`). It is **not** k-means on pairwise distances, as the meeting notes say. The four saturation regions are a separate k-means on coordinates only: 250 candidate partitions, scored by the criterion C. CTJ 194 already describes the blocks correctly; Chapter 3 l. 483 says only "nearby clusters". Wording: explain both in plain terms, in the body of both documents | to do |
+| T-33 | FCL-037, FCL-038 | Table 1's "Incidence surface" row is not a design; "cluster" → "region"? | C Exhibits Table 1 | Relabel the row ("Example incidence surface") so it reads as context, not a design. Decline "region": the cluster is the unit; "region" means the four saturation groups | done (C Exhibits); declined (FCL-038, "region" means the saturation groups) |
+| T-34 | FCL-039 | NC Checkerboard rule unclear | C Exhibits; 3 l. 483 and Appendix A8 | Plain wording: visits clusters from most to fewest neighbors and gives each the arm held by fewer of its already-assigned neighbors | done (C, 3) |
+| T-35 | FCL-040, FCL-054, A-03 | How the blocks and regions were built (k-means) | C 194 and Exhibits; 3 l. 483 and A8; S | Code (math check (e)): the 14 blocks come from `kmeans` on four standardized features (projected coordinates, that year's rank-scaled incidence, log person-years), 25 starts, rerun each year (`application_designs.R:134-139`, `real_sud_setup.R:109-112`). It is **not** k-means on pairwise distances, as the meeting notes say. The four saturation regions are a separate k-means on coordinates only: 250 candidate partitions, scored by the criterion C. CTJ 194 already describes the blocks correctly; Chapter 3 l. 483 says only "nearby clusters". Wording: explain both in plain terms, in the body of both documents | done (C, 3) |
 | T-36 | FCL-044 | Isolation Buffer is not incidence-guided yet performs well: fair? | C Table 1, Results | Yes, under control-only spillover (no treated cluster has a treated neighbor), but not under both arms, and it treats fewer clusters. Already stated in Chapter 3 l. 698 and CTJ 239; reply only | addressed |
 
 ### 5.5 Case study
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-37 | D-3, A-01, FCL-048 | Rename "Application" → "Case Study"; should it follow the simulation results? | C 186, 219 and all "application" uses; 3 §Application and all uses; S | Rename everywhere. CTJ keeps its design in Methods and results in Results (meeting decision). Chapter 3 placement is Decision F | to do |
-| T-38 | A-02, FCL-045 | Observed vs simulated; drop "rather than simulated" | C 187; 3 l. 453 | "Observed incidence and geography were fixed inputs. Outcomes were simulated." | to do |
-| T-39 | FCL-046 | "Equation 1" → "Equation (1)" | C 192 and every equation reference | Check SAGE style, then apply | to do (C) |
-| T-40 | FCL-060 | Results heading "Incidence-Guided Saturation is strong" → "the best" / "preferred"? | C 219 | Neither word fits, since Saturation Quadrants did as well: "The saturation designs had the lowest error under control-only spillover" | to do (claim group) |
+| T-37 | D-3, A-01, FCL-048 | Rename "Application" → "Case Study"; should it follow the simulation results? | C 186, 219 and all "application" uses; 3 §Application and all uses; S | Rename everywhere. CTJ keeps its design in Methods and results in Results (meeting decision). Chapter 3 placement is Decision F | done (C, S, 3) |
+| T-38 | A-02, FCL-045 | Observed vs simulated; drop "rather than simulated" | C 187; 3 l. 453 | "Observed incidence and geography were fixed inputs. Outcomes were simulated." | done (C, 3) |
+| T-39 | FCL-046 | "Equation 1" → "Equation (1)" | C 192 and every equation reference | Check SAGE style, then apply | done (C) |
+| T-40 | FCL-060 | Results heading "Incidence-Guided Saturation is strong" → "the best" / "preferred"? | C 219 | Neither word fits, since Saturation Quadrants did as well: "The saturation designs had the lowest error under control-only spillover" | done (C, edited: lower error than SRS; no "lowest" claim) |
 
 ### 5.6 Results and exhibits
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-41 | FCL-049 | "Incidence configuration changed each design's MSE by less than 10% ..." mentioned too early | C 204 | Move after the regime results | to do |
-| T-42 | FCL-050, FCL-051 | Pooled 0.091 is not in Table 2; "separating the regimes was essential" | C 204; 3 l. 313 | Three-decimal part addressed. Drop the pooled figure from the CTJ results paragraph and lead with the regimes ("The pooled average hides opposite results under the two regimes"). Chapter 3 reports the pooled value in `tab:performance`, so it stays there | partly addressed; to do |
-| T-43 | FCL-052 | "(SI)" is unclear | C 211, 213, 217, 222, 229 | Cite the SI section and table each time | to do |
-| T-44 | FCL-055 | "outcome-dependence values" → "spatial dependence coefficient" | C Exhibits Table 2, Figure 2 captions; 3 captions | As suggested | to do |
-| T-45 | FCL-056 | "the true spillover term" → "true γ?" | C Exhibits Table 2 caption; 3 l. 138 | After D-1: the fitted model includes the true exposure S(**Z**) and estimates γ. The code fits the column γ**WZ** (coefficient 1). Fitting **WZ** with coefficient γ gives the same τ̂ and SE, because rescaling a covariate leaves the other ML estimates unchanged, so the D-1 description is exact | to do (with T-11) |
-| T-46 | FCL-057 | "N/A" → "Reference" for SRS | C Exhibits Table 2; 3 `tab:grid-srs` | As suggested | to do |
+| T-41 | FCL-049 | "Incidence configuration changed each design's MSE by less than 10% ..." mentioned too early | C 204 | Move after the regime results | done (C) |
+| T-42 | FCL-050, FCL-051 | Pooled 0.091 is not in Table 2; "separating the regimes was essential" | C 204; 3 l. 313 | Three-decimal part addressed. Drop the pooled figure from the CTJ results paragraph and lead with the regimes ("The pooled average hides opposite results under the two regimes"). Chapter 3 reports the pooled value in `tab:performance`, so it stays there | done (C); addressed (3) |
+| T-43 | FCL-052 | "(SI)" is unclear | C 211, 213, 217, 222, 229 | Cite the SI section and table each time | done (C) |
+| T-44 | FCL-055 | "outcome-dependence values" → "spatial dependence coefficient" | C Exhibits Table 2, Figure 2 captions; 3 captions | As suggested | done (C, 3) |
+| T-45 | FCL-056 | "the true spillover term" → "true γ?" | C Exhibits Table 2 caption; 3 l. 138 | After D-1: the fitted model includes the true exposure S(**Z**) and estimates γ. The code fits the column γ**WZ** (coefficient 1). Fitting **WZ** with coefficient γ gives the same τ̂ and SE, because rescaling a covariate leaves the other ML estimates unchanged, so the D-1 description is exact | done (C, 3) |
+| T-46 | FCL-057 | "N/A" → "Reference" for SRS | C Exhibits Table 2; 3 `tab:grid-srs` | As suggested | done (C, 3) |
 | T-47 | FCL-058 | Under both arms, no design beats SRS: fair to say? | C 204, 239 | Already stated in both; the answer recorded in the annotation agrees | addressed |
-| T-48 | FCL-059 | How sensitive is Incidence-Guided Saturation; where can it fail? | C Discussion; 3 l. 698 | One short paragraph from existing results: 8% above SRS under both arms, control-only MSE rising with τ (Isolation Buffer lower at τ = 3), advantage shrinking with fewer colleges and gone when high-incidence colleges volunteer more | to do (no new analysis) |
+| T-48 | FCL-059 | How sensitive is Incidence-Guided Saturation; where can it fail? | C Discussion; 3 l. 698 | One short paragraph from existing results: 8% above SRS under both arms, control-only MSE rising with τ (Isolation Buffer lower at τ = 3), advantage shrinking with fewer colleges and gone when high-incidence colleges volunteer more | done (C, 3) |
 
 ### 5.7 Writing throughout
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-49 | W-01 | Unneeded parentheses | all | Sweep in the sign-off lists; the Phase 5 writing review checks again | to do |
-| T-50 | W-02 | Long sentences with many commas | all | Same | to do |
-| T-51 | W-03 | "so" as a connective | all | Same | to do |
-| T-52 | W-04 | Undefined terms ("tractable" in the meeting; none found in the current CTJ text) | all | Same | to do |
+| T-49 | W-01 | Unneeded parentheses | all | Sweep in the sign-off lists; the Phase 5 writing review checks again | done (sign-off items; round 5 W-01 to W-117) |
+| T-50 | W-02 | Long sentences with many commas | all | Same | done (sign-off items; round 5 W-01 to W-117) |
+| T-51 | W-03 | "so" as a connective | all | Same | done (C, 3) |
+| T-52 | W-04 | Undefined terms ("tractable" in the meeting; none found in the current CTJ text) | all | Same | done (none found in CTJ; round 5 review) |
 
 ### 5.8 Open questions, future work and pending TODO items
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-53 | Q-01 (settled) | Binary vs proportional spillover | 3 Methods and Appendix A9 (`tab:nc-forms`); C (previous work, self-contained); S | One sentence in Methods: the earlier study used a binary indicator; the case study compares binary, count and proportional forms (appendix); no new analysis | to do |
-| T-54 | Q-02 | What the incidence coefficient's value represents | 3, C | Decision D | decision |
-| T-55 | D-5 | Estimating the incidence coefficient after a trial | 3 Future Considerations; C Continued work (optional) | One or two sentences | to do |
-| T-56 | FCL-050 (rest), FCL-058 | see T-42, T-47 | | | |
-| T-57 | CTJ word limit | 3,500 words | C | Not now | after |
-| T-58 | TODO "Full SI prose review" | | S | Only passages touched by this round now; full review after the prelim | after |
+| T-53 | Q-01 (settled) | Binary vs proportional spillover | 3 Methods and Appendix A9 (`tab:nc-forms`); C (previous work, self-contained); S | One sentence in Methods: the earlier study used a binary indicator; the case study compares binary, count and proportional forms (appendix); no new analysis | done (3, S) |
+| T-54 | Q-02 | What the incidence coefficient's value represents | 3, C | Decision D | done (Decision D; C, 3) |
+| T-55 | D-5 | Estimating the incidence coefficient after a trial | 3 Future Considerations; C Continued work (optional) | One or two sentences | done (3) |
+| T-56 | FCL-050 (rest), FCL-058 | see T-42, T-47 | | | addressed (see T-42, T-47) |
+| T-57 | CTJ word limit | 3,500 words | C | Not now | after (prelim) |
+| T-58 | TODO "Full SI prose review" | | S | Only passages touched by this round now; full review after the prelim | after (prelim) |
 
 ### 5.9 Consistency and math checks
 
@@ -275,22 +275,22 @@ inconsistent. The consistency check found 11 mismatches. Every row below becomes
 
 | Row | IDs | Issue | Where | Proposed change | Status |
 |---|---|---|---|---|---|
-| T-59 | CC-01 | CTJ case-study coverage 94.2–94.9% (t) and 92.7–93.6% (Wald) omits Saturation Quadrants; the correct values are 94.1–94.9% and 92.6–93.6% | C 53, 222 | Use the chapter's values (`a5_stage1_coverage_by_design_regime.csv`) | to do (number) |
-| T-60 | CC-02 | CTJ "median 63%" noise share is cited to the SI, which does not state it | C 217; S ~1890; 3 l. 431 | Add the grid medians (63% control only, 92% both arms; `conditional_summary.csv`) to the SI and Chapter 3 | to do |
-| T-61 | CC-03 | CTJ says the SI has per-year cluster allocations; it has budgets, orderings and one example | C 276 | Reword | to do |
-| T-62 | CC-04, MC-55 | n and N both used for the number of colleges | 3 l. 520 vs 534; S 818 vs 855 | N throughout | to do |
-| T-63 | CC-05, MC-54, SI-31 | Reused symbols: **S** (spillover and CAR matrix), λ, m, d, n, P, and ρ written for the CAR parameter | 3, S | Rename the secondary uses (CAR matrix, professionals per college, generic metric) | to do |
-| T-64 | CC-06 | σ² **I** (chapter, SI) vs **I** (CTJ) | 3 l. 73; S 59 | Settles with T-12: equation without ε's distribution, σ = 1 stated in prose | to do |
-| T-65 | CC-07 | Bias and SD at two decimals | C 215; 3 l. 437, 441, 646, 1600; S | Three decimals per the MSE precision rule | to do (number format) |
-| T-66 | CC-08 | Ratios to SRS: two decimals in tables, three in 3 l. 313 and S 1832 | C Table 2; `tab:downside`; 3; S | Decision H | decision |
-| T-67 | CC-09 | Grid power one-sided (0.025), case-study power two-sided (0.05); the case-study sidedness is never stated | 3 l. 520; S 818; C 200 | State both sidednesses; CTJ 200 names the t interval | to do |
-| T-68 | CC-10 | Coverage and power captions do not name the interval | 3 `tab:performance`, `tab:by-config`, `tab:regime`; S; C 215 | Add "t-based" | to do |
-| T-69 | CC-11 | "BSS" reused at 3 l. 686 | 3 l. 686 | "SRS and Checkerboard" | to do |
-| T-70 | MC-32, SI-22 | `rate` in the rank formula prints as italic | 3 l. 522; S 823 | `\text{rate}` | to do |
-| T-71 | MC-56 | "**WZ** = 1/2" sets a vector equal to a scalar | 3 l. 1233; S 342 | (**WZ**)_i = 1/2 | to do |
-| T-72 | math check, uncited | t + df interval, γ**WZ** spillover form, MSE decomposition, MC SE formulas (morris_using_2019 is in the bib), SAR equation in the SI | 3, C, S | Verified citations, staged in `round5/ch3/new-citations.bib`; merges with T-19 | to do |
-| T-73 | math check, question | "The application uses the same interval" follows N = 100, p = 5 | 3 l. 140 | Say the case study uses N = 58, p = 4 (df 54) | to do |
-| T-74 | math check, question | 4 aliased rook Isolation Buffer fits keep p = 5 in the df | 3 Appendix A7 | Footnote or leave (a difference of one degree of freedom) | to do (minor; propose leave plus one clause) |
+| T-59 | CC-01 | CTJ case-study coverage 94.2–94.9% (t) and 92.7–93.6% (Wald) omits Saturation Quadrants; the correct values are 94.1–94.9% and 92.6–93.6% | C 53, 222 | Use the chapter's values (`a5_stage1_coverage_by_design_regime.csv`) | declined (range kept: six designs and SRS; text now says so) |
+| T-60 | CC-02 | CTJ "median 63%" noise share is cited to the SI, which does not state it | C 217; S ~1890; 3 l. 431 | Add the grid medians (63% control only, 92% both arms; `conditional_summary.csv`) to the SI and Chapter 3 | done (C, S, 3) |
+| T-61 | CC-03 | CTJ says the SI has per-year cluster allocations; it has budgets, orderings and one example | C 276 | Reword | done (C) |
+| T-62 | CC-04, MC-55 | n and N both used for the number of colleges | 3 l. 520 vs 534; S 818 vs 855 | N throughout | done (3, S) |
+| T-63 | CC-05, MC-54, SI-31 | Reused symbols: **S** (spillover and CAR matrix), λ, m, d, n, P, and ρ written for the CAR parameter | 3, S | Rename the secondary uses (CAR matrix, professionals per college, generic metric) | done (3, S; S kept for the CAR matrix, m renamed n_c, generic metric u) |
+| T-64 | CC-06 | σ² **I** (chapter, SI) vs **I** (CTJ) | 3 l. 73; S 59 | Settles with T-12: equation without ε's distribution, σ = 1 stated in prose | done (C, 3, S) |
+| T-65 | CC-07 | Bias and SD at two decimals | C 215; 3 l. 437, 441, 646, 1600; S | Three decimals per the MSE precision rule | done (C, 3, S) |
+| T-66 | CC-08 | Ratios to SRS: two decimals in tables, three in 3 l. 313 and S 1832 | C Table 2; `tab:downside`; 3; S | Decision H | declined (Decision H: ratios left as is) |
+| T-67 | CC-09 | Grid power one-sided (0.025), case-study power two-sided (0.05); the case-study sidedness is never stated | 3 l. 520; S 818; C 200 | State both sidednesses; CTJ 200 names the t interval | done (C, 3, S) |
+| T-68 | CC-10 | Coverage and power captions do not name the interval | 3 `tab:performance`, `tab:by-config`, `tab:regime`; S; C 215 | Add "t-based" | done (C, 3, S) |
+| T-69 | CC-11 | "BSS" reused at 3 l. 686 | 3 l. 686 | "SRS and Checkerboard" | done (3) |
+| T-70 | MC-32, SI-22 | `rate` in the rank formula prints as italic | 3 l. 522; S 823 | `\text{rate}` | done (3, S) |
+| T-71 | MC-56 | "**WZ** = 1/2" sets a vector equal to a scalar | 3 l. 1233; S 342 | (**WZ**)_i = 1/2 | done (3, S) |
+| T-72 | math check, uncited | t + df interval, γ**WZ** spillover form, MSE decomposition, MC SE formulas (morris_using_2019 is in the bib), SAR equation in the SI | 3, C, S | Verified citations, staged in `round5/ch3/new-citations.bib`; merges with T-19 | done (C, 3, S) |
+| T-73 | math check, question | "The application uses the same interval" follows N = 100, p = 5 | 3 l. 140 | Say the case study uses N = 58, p = 4 (df 54) | done (3) |
+| T-74 | math check, question | 4 aliased rook Isolation Buffer fits keep p = 5 in the df | 3 Appendix A7 | Footnote or leave (a difference of one degree of freedom) | declined (left as is; one-df difference, not stated in the chapter) |
 
 Facts the checks settled, for the sign-off wording:
 - **Scale of X (Q-02, S-04).** X lies in (0, 1) in every configuration. With σ = 1, an
@@ -428,6 +428,9 @@ Model use (prompt, added 2026-11-15): from 4b on, approved edits are applied by 
 6. Apply accepted items; re-render everything; check numbering, cross-references and page
    counts; V6 markup copy; update the triage table, ROADMAP.md, docs/TODO.md, DECISIONS.md here
    and bios-dissertation/ROADMAP.md.
+   **Status 2026-11-15:** done. Writing review applied in adb27df, committee review in d8639d5;
+   V6 markup copy made; Section 5 final; prelim rebuilt (240 pp; Chapter 3 body pp. 75–121,
+   Appendix B pp. 171–207) with the assembly test passing.
 
 ## 8. Done when
 
