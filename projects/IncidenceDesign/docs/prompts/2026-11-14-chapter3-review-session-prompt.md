@@ -116,7 +116,8 @@ whether the other needs it too.
   punctuation. Define every abbreviation at first use. Title Case headings.
 - "Fitted" only as an adjective before a noun ("the fitted model", "the fitted coefficients").
   The passive verb is "fit": "the model is fit by maximizing...", never "is fitted by" or "is
-  fitted to". The writing review flags every misuse.
+  fitted to". The same holds for the active past ("we fit the model") and a verb right after a
+  noun ("a line fit to them"). The writing review flags every misuse.
 
 ## Math accuracy
 
