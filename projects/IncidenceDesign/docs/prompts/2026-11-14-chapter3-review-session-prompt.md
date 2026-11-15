@@ -1,7 +1,9 @@
 # Chapter 3 (incidence design) review and CTJ revision: session prompt
 
 Written 2026-11-14. Author: Andrew Walther. Paste the block below into a new session started in
-`SpatialCRT/projects/IncidenceDesign` (or in `bios-dissertation`, with this folder added). It is
+`SpatialCRT/projects/IncidenceDesign`, with
+`bios-dissertation/prelim/project-proposals/project2-incidence/draft/` added to the session (or
+the reverse). It is
 modeled on the Chapter 4 plan,
 `multiomicsGEP/docs/plans/2026-11-14-chapter4-review-session-plan.md`, so the two reviews run
 the same way.
@@ -28,18 +30,38 @@ draft. I want the insights from that feedback carried into Chapter 3. Work as de
    (README.md, feedback.json with FCL-001 to FCL-060, feedback.html). Ask me whether I have an
    exported notes JSON from feedback.html to add.
 
-## Where edits go
+## Where to work and how edits are synced
 
-- Chapter 3's only source is paper/thesis_chapter/Thesis_Chapter.qmd. Committing it runs a
-  post-commit hook that re-renders and commits the draft in
-  bios-dissertation/prelim/project-proposals/project2-incidence/draft/. Never edit that copy.
-  The bios-dissertation pre-commit guard refuses hand edits. Edits I make in the rendered .tex
-  are carried back with the prelim-edit-sync skill.
-- The CTJ manuscript is paper/ctj_manuscript/manuscript_ctj/CTJ_Manuscript.tex, and its
-  supplement is paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex. A hook
-  copies the committed manuscript to bios-dissertation/manuscripts/project2-incidence/.
-- Render with RStudio's Quarto 1.10 (bios-dissertation/AGENTS.md). After every render, compare
-  page counts with the committed PDFs.
+Chapter 3, working location:
+/Users/ajwalther/GithubProjects/bios-dissertation/prelim/project-proposals/project2-incidence/draft/
+- Review, edit and render the chapter there, in the draft .tex (project2-incidence-draft.tex),
+  using the prelim-edit-sync skill and prelim/full-draft/tools/prelim_review.py:
+  `start ch3` (baseline), edit the .tex, `diff ch3`, `prompt ch3` (back-port prompt), carry
+  the edits into the source, `verify ch3`, `finish ch3`.
+- The draft folder is generated, so every edit must be carried back to the source,
+  paper/thesis_chapter/Thesis_Chapter.qmd in this project. Commit the source in SpatialCRT. Its
+  post-commit hook re-renders the draft and commits it in bios-dissertation. Never commit a
+  hand edit to the draft folder: the bios-dissertation pre-commit guard refuses it, and the next
+  sync would overwrite it. `verify ch3` must show no remaining difference before an edit
+  counts as done.
+- Structural changes (moving or merging sections, appendix reordering, figure or table
+  changes made by code) go straight into Thesis_Chapter.qmd or the figure scripts, since they
+  do not carry back cleanly from the .tex. Then check the result in the re-rendered draft.
+
+CTJ manuscript, working location:
+/Users/ajwalther/GithubProjects/SpatialCRT/projects/IncidenceDesign/paper/ctj_manuscript/manuscript_ctj/
+- Edit CTJ_Manuscript.tex and CTJ_Exhibits.tex there (CTJ_Reading.tex only selects the reading
+  layout). Rebuild both CTJ_Manuscript.pdf and CTJ_Reading.pdf after each edit. The supplement is
+  ../supplementary_info/Supplementary_Information.tex. A hook copies the committed manuscript to
+  bios-dissertation/manuscripts/project2-incidence/.
+- When I approve a version as final for a revision round, copy CTJ_Reading.pdf to
+  revision_markup/CTJ_Reading_Markup_V<n>.pdf, with n one more than the highest existing
+  number (V1 to V5 exist now, so the next is V6). Never edit or overwrite an existing markup copy.
+  revision_markup/ is git-ignored, so the copy is local only. Tell me the file name.
+
+Both: render with RStudio's Quarto 1.10 (bios-dissertation/AGENTS.md), and after every render
+compare page counts with the committed PDFs. After any edit to one of Chapter 3 or CTJ, say
+whether the other needs it too.
 
 ## Context
 
@@ -128,7 +150,7 @@ bios-dissertation/prelim/full-draft/notes/human-writer-review/round5/ch3/consist
 Phase 4. Edits, in the order I approve in Phase 2. Default order: the reparameterization (if
 approved) and the accepted feedback items in Chapter 3, with the content-map restructuring section
 by section; then the same feedback items in CTJ and the supplement. STOP after each Chapter 3 section, and after
-each CTJ section, so I can approve before you commit. Commit in SpatialCRT after each approved
+each CTJ section, so I can approve before you commit. Carry each approved Chapter 3 edit back to the source and commit in SpatialCRT after each approved
 group so the hooks re-render and each step can be reverted.
 
 Phase 5. Independent reviews (two subagents in parallel, on the revised chapter, without this
@@ -144,8 +166,9 @@ session's conclusions):
  STOP for my accept/reject decisions by item ID.
 
 Phase 6. Apply the accepted items, re-render the chapter, CTJ, the supplement and the full
-prelim, check numbering, cross-references and page counts against the baseline, and update the
-feedback disposition table, ROADMAP.md, docs/TODO.md and DECISIONS.md here and
+prelim, check numbering, cross-references and page counts against the baseline, run
+`verify ch3` and `finish ch3`, place the approved CTJ reading copy in revision_markup/ as the
+next CTJ_Reading_Markup_V<n>.pdf, and update the feedback disposition table, ROADMAP.md, docs/TODO.md and DECISIONS.md here and
 bios-dissertation/ROADMAP.md.
 
 Done when: the content map is confirmed and followed; every FCL and meeting item has a recorded
