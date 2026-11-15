@@ -18,3 +18,4 @@ are in [`../findings/`](../findings/README.md).
 | 2026-10-21 | [overnight-plan](2026-10-21-overnight-plan.md) | Three methods-extension reruns after the author's 2026-10-21 decisions | complete |
 | 2026-10-22 | [ctj-structure-and-prose-review-plan](2026-10-22-ctj-structure-and-prose-review-plan.md) | Structure and wording review of the CTJ paper | not started: waits on the author's own review and the Chapter 3 structure decisions |
 | 2026-11-02 | [manuscript-numbers-plan](2026-11-02-manuscript-numbers-plan.md) | Build table bodies and numbers in the text from saved results; pipeline review and cleanup first | not started: on hold by the author; stages in order, CTJ first |
+| 2026-11-14 | [chapter3-review-session-plan](2026-11-14-chapter3-review-session-plan.md) | Chapter 3 prelim review and the first CTJ revision from Dr. Lin's feedback: content map, feedback triage, sign-off lists | active: Phase 2 awaiting author decisions |
