@@ -1,16 +1,27 @@
 # IncidenceDesign to-dos — completed study and drafts
 
-Updated 2026-11-15. The author superseded earlier deadline dates and requested ASAP
+Updated 2026-11-24. The author superseded earlier deadline dates and requested ASAP
 completion with CTJ remaining a required deliverable. Historical interview and
 execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Next up
 
-- [ ] Andrew's markup of `CTJ_Reading_Markup_V6.pdf` (round 5 revision, 2026-11-15).
-- [ ] After the proposal: trim CTJ to the 3,500-word limit (plan:
-  `paper/ctj_manuscript/revisions/2026-11-10-paper-2-revisions/word-limit-trim-plan.md`).
-- [ ] After the proposal: full SI prose review; details under "After the V5 revision" below.
-  The SI already carries the reparameterization and the round 5 check items.
+Start from `docs/plans/2026-11-25-morning-review-guide.md` and the brief
+`docs/prompts/2026-11-24-project2-post-prelim-prompt.md`.
+
+- [x] ~~Andrew's markup of `CTJ_Reading_Markup_V6.pdf`~~: V6 is a frozen copy after Dr. Lin's
+  feedback was applied, not a markup (author, 2026-11-24).
+- [ ] Author: decide the CTJ round 6 cuts (`paper/ctj_manuscript/revisions/2026-11-24-round6-word-limit/signoff.md`,
+  recommended set 3,385 words) and the human-writer edits (`human-writer-review.md` there), then
+  apply, rebuild both layouts, check Chapter 3 carry-over. Choose a Wald-interval reference (FCL-024).
+- [ ] Author: SI curation decisions (`docs/reviews/2026-11-24-si-review.md`): full version by switch or
+  separate file, abridged outline (~29 pp), ratio decimals; then curate, prose review, alignment.
+- [ ] Author: review the Incidence-Guided Saturation sensitivity spec and findings
+  (`docs/findings/2026-11-24-igs-sensitivity-findings.md`); then SI section, Chapter 3 mirror,
+  optional CTJ sentence, Q-16 backup slide.
+- [ ] Fix "application" in the cover letter and submission checklist (D-3).
+- [ ] After the CTJ and SI work: a prompt for the prelim slides, script, Chapter 2 question review
+  and rehearsals (with Dr. Lin 2026-12-02 to 12-04).
 
 ## Completed
 

@@ -6,6 +6,7 @@ code/MLE_design_recommendation_report.log
 # Checkpoint files (intermediate simulation state)
 results/checkpoints/
 results/grid_tdf_2026-10/checkpoints/
+results/igs_sensitivity_2026-11/*/checkpoints/
 results/checkpoints_pre_revision_2026-09/
 
 # Quarto/knitr intermediate files

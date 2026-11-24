@@ -216,6 +216,19 @@ are complete (see the status at the top: `paper/ctj_manuscript/`,
 
 ## Progress Log (moved from AGENTS.md 2026-10-01)
 
+### 2026-11-24 — Post-prelim CTJ, SI and sensitivity preparation (overnight, proposals only)
+
+- The written prelim was submitted 2026-11-15; local tag `prelim-submitted-2026-11-15` at `e632aeb`.
+- CTJ revision audit (81 of 97 items done, 10 partial), word-growth map (3,498 → 3,853 since V5),
+  scripted count `paper/tools/ctj_wordcount.py`, round 6 cut list (recommended set 3,385 words,
+  independently reviewed) and a human-writer review (51 edits). Nothing applied to the CTJ.
+- SI claim inventory and review with a ~29-page curated outline. Checkers fixed (legends, β in the
+  exhibit test, held-out table checked in the SI); the verifier now stops on real chapter-vs-SI
+  table differences.
+- Incidence-Guided Saturation sensitivity study run on the full grid (`code/29`, `code/30`; 33
+  designs, exact reproduction of Designs 3, 8, 9), reviewed, findings written. Awaits the author.
+- Morning guide: `docs/plans/2026-11-25-morning-review-guide.md`.
+
 ### 2026-11-13 — Manuscript consistency checks
 
 The effect-size crossover check now compares the saved MSEs at three-decimal

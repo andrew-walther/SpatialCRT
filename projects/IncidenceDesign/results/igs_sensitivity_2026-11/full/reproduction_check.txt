@@ -1,0 +1,8 @@
+Rows: production 9600, rerun 9600, matched 9600
+max |production - rerun|  Mean_Estimate  0
+max |production - rerun|  Bias           0
+max |production - rerun|  SD             0
+max |production - rerun|  MSE            0
+max |production - rerun|  Coverage       0
+max |production - rerun|  Power          0
+max |production - rerun|  N_Valid_Est    0

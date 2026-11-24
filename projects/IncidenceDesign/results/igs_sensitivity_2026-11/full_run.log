@@ -1,0 +1,40 @@
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Loading required package: sf
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+Loading required package: Matrix
+
+Attaching package: ‘spatialreg’
+
+The following objects are masked from ‘package:spdep’:
+
+    get.ClusterOption, get.coresOption, get.mcOption,
+    get.VerboseOption, get.ZeroPolicyOption, set.ClusterOption,
+    set.coresOption, set.mcOption, set.VerboseOption,
+    set.ZeroPolicyOption
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Run complete in 78.5 min (40 units, 33 designs)
+Fail rate max 0.0000; aliased fits 0; other warnings 0
+Rows: production 9600, rerun 9600, matched 9600
+max |production - rerun|  Mean_Estimate  0
+max |production - rerun|  Bias           0
+max |production - rerun|  SD             0
+max |production - rerun|  MSE            0
+max |production - rerun|  Coverage       0
+max |production - rerun|  Power          0
+max |production - rerun|  N_Valid_Est    0
+Reproduction exact for Designs 3, 8, 9
+Saved to results/igs_sensitivity_2026-11/full 

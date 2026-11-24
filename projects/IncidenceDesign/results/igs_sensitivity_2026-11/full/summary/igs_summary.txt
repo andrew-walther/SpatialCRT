@@ -1,0 +1,151 @@
+Incidence-Guided Saturation sensitivity study: queen, oracle fit, five effect sizes pooled
+RE_SRS = MSE / MSE_SRS with the paired-unit ratio interval; RE_orig = MSE / MSE_original;
+vsTwin = guided / unguided twin (paired ratio). cov_t = t + df coverage.
+Rows: production 9600, rerun 9600, matched 9600
+max |production - rerun|  Mean_Estimate  0
+max |production - rerun|  Bias           0
+max |production - rerun|  SD             0
+max |production - rerun|  MSE            0
+max |production - rerun|  Coverage       0
+max |production - rerun|  Power          0
+max |production - rerun|  N_Valid_Est    0
+
+== Spillover regime: control_only ==
+Guided R=2 s=0.1                           MSE 0.204  RE_SRS 0.899 [0.868, 0.929] holm 0.000  RE_orig 1.348  vsTwin 0.984  cov_t 0.946  bias 0.048
+Guided R=2 s=0.2                           MSE 0.153  RE_SRS 0.676 [0.648, 0.703] holm 0.000  RE_orig 1.013  vsTwin 1.022  cov_t 0.944  bias 0.057
+Guided R=2 s=0.3                           MSE 0.126  RE_SRS 0.555 [0.530, 0.581] holm 0.000  RE_orig 0.833  vsTwin 1.032  cov_t 0.942  bias 0.069
+Guided R=2 s=0.4                           MSE 0.125  RE_SRS 0.551 [0.527, 0.575] holm 0.000  RE_orig 0.826  vsTwin 1.020  cov_t 0.941  bias 0.086
+Guided R=4 s=0.1                           MSE 0.236  RE_SRS 1.040 [1.007, 1.072] holm 0.142  RE_orig 1.560  vsTwin 0.996  cov_t 0.946  bias 0.047
+Guided R=4 s=0.2                           MSE 0.190  RE_SRS 0.837 [0.809, 0.865] holm 0.000  RE_orig 1.256  vsTwin 1.032  cov_t 0.944  bias 0.050
+Original IGS (Guided R=4 s=0.3)            MSE 0.151  RE_SRS 0.667 [0.643, 0.690] holm 0.000  RE_orig 1.000  vsTwin 0.998  cov_t 0.945  bias 0.058
+Guided R=4 s=0.4                           MSE 0.134  RE_SRS 0.588 [0.562, 0.614] holm 0.000  RE_orig 0.882  vsTwin 1.031  cov_t 0.945  bias 0.074
+Guided R=10 s=0.1                          MSE 0.288  RE_SRS 1.267 [1.233, 1.300] holm 0.000  RE_orig 1.900  vsTwin 1.034  cov_t 0.947  bias 0.042
+Guided R=10 s=0.2                          MSE 0.236  RE_SRS 1.041 [1.006, 1.076] holm 0.152  RE_orig 1.562  vsTwin 1.032  cov_t 0.947  bias 0.049
+Guided R=10 s=0.3                          MSE 0.201  RE_SRS 0.887 [0.858, 0.917] holm 0.000  RE_orig 1.331  vsTwin 1.019  cov_t 0.946  bias 0.050
+Guided R=10 s=0.4                          MSE 0.174  RE_SRS 0.767 [0.737, 0.797] holm 0.000  RE_orig 1.151  vsTwin 1.047  cov_t 0.945  bias 0.058
+Guided R=25 s=0.1                          MSE 0.607  RE_SRS 2.674 [2.611, 2.737] holm 0.000  RE_orig 4.012  vsTwin 1.036  cov_t 0.946  bias 0.031
+Guided R=25 s=0.2                          MSE 0.344  RE_SRS 1.514 [1.467, 1.562] holm 0.000  RE_orig 2.272  vsTwin 1.040  cov_t 0.949  bias 0.038
+Guided R=25 s=0.3                          MSE 0.289  RE_SRS 1.273 [1.228, 1.318] holm 0.000  RE_orig 1.910  vsTwin 1.038  cov_t 0.947  bias 0.043
+Guided R=25 s=0.4                          MSE 0.238  RE_SRS 1.048 [1.004, 1.091] holm 0.327  RE_orig 1.572  vsTwin 1.076  cov_t 0.945  bias 0.050
+Unguided R=2 s=0.1                         MSE 0.207  RE_SRS 0.913 [0.881, 0.945] holm 0.000  RE_orig 1.370  vsTwin    -    cov_t 0.943  bias 0.046
+Unguided R=2 s=0.2                         MSE 0.150  RE_SRS 0.661 [0.636, 0.686] holm 0.000  RE_orig 0.992  vsTwin    -    cov_t 0.944  bias 0.051
+Unguided R=2 s=0.3                         MSE 0.122  RE_SRS 0.538 [0.514, 0.562] holm 0.000  RE_orig 0.807  vsTwin    -    cov_t 0.944  bias 0.063
+Unguided R=2 s=0.4                         MSE 0.123  RE_SRS 0.540 [0.515, 0.565] holm 0.000  RE_orig 0.810  vsTwin    -    cov_t 0.940  bias 0.087
+Unguided R=4 s=0.1                         MSE 0.237  RE_SRS 1.044 [1.011, 1.076] holm 0.045  RE_orig 1.566  vsTwin    -    cov_t 0.945  bias 0.040
+Unguided R=4 s=0.2                         MSE 0.184  RE_SRS 0.811 [0.785, 0.838] holm 0.000  RE_orig 1.217  vsTwin    -    cov_t 0.946  bias 0.044
+Saturation Quadrants (Unguided R=4 s=0.3)  MSE 0.152  RE_SRS 0.668 [0.640, 0.695] holm 0.000  RE_orig 1.002  vsTwin    -    cov_t 0.942  bias 0.052
+Unguided R=4 s=0.4                         MSE 0.129  RE_SRS 0.570 [0.548, 0.592] holm 0.000  RE_orig 0.855  vsTwin    -    cov_t 0.943  bias 0.069
+Unguided R=10 s=0.1                        MSE 0.278  RE_SRS 1.225 [1.187, 1.262] holm 0.000  RE_orig 1.837  vsTwin    -    cov_t 0.948  bias 0.041
+Unguided R=10 s=0.2                        MSE 0.229  RE_SRS 1.008 [0.975, 1.042] holm 0.475  RE_orig 1.513  vsTwin    -    cov_t 0.946  bias 0.037
+Unguided R=10 s=0.3                        MSE 0.198  RE_SRS 0.871 [0.842, 0.900] holm 0.000  RE_orig 1.306  vsTwin    -    cov_t 0.946  bias 0.042
+Unguided R=10 s=0.4                        MSE 0.166  RE_SRS 0.733 [0.708, 0.757] holm 0.000  RE_orig 1.100  vsTwin    -    cov_t 0.945  bias 0.049
+Unguided R=25 s=0.1                        MSE 0.586  RE_SRS 2.580 [2.526, 2.634] holm 0.000  RE_orig 3.871  vsTwin    -    cov_t 0.947  bias 0.029
+Unguided R=25 s=0.2                        MSE 0.331  RE_SRS 1.456 [1.427, 1.485] holm 0.000  RE_orig 2.185  vsTwin    -    cov_t 0.949  bias 0.040
+Unguided R=25 s=0.3                        MSE 0.278  RE_SRS 1.226 [1.189, 1.263] holm 0.000  RE_orig 1.839  vsTwin    -    cov_t 0.946  bias 0.037
+Unguided R=25 s=0.4                        MSE 0.221  RE_SRS 0.974 [0.942, 1.006] holm 0.327  RE_orig 1.461  vsTwin    -    cov_t 0.945  bias 0.040
+SRS MSE 0.227
+
+== Spillover regime: both ==
+Guided R=2 s=0.1                           MSE 0.042  RE_SRS 0.977 [0.945, 1.008] holm 1.000  RE_orig 0.898  vsTwin 0.955  cov_t 0.951  bias 0.012
+Guided R=2 s=0.2                           MSE 0.045  RE_SRS 1.051 [1.018, 1.084] holm 0.053  RE_orig 0.966  vsTwin 0.991  cov_t 0.952  bias 0.014
+Guided R=2 s=0.3                           MSE 0.054  RE_SRS 1.276 [1.243, 1.308] holm 0.000  RE_orig 1.173  vsTwin 1.021  cov_t 0.951  bias 0.019
+Guided R=2 s=0.4                           MSE 0.083  RE_SRS 1.940 [1.885, 1.994] holm 0.000  RE_orig 1.783  vsTwin 1.003  cov_t 0.952  bias 0.020
+Guided R=4 s=0.1                           MSE 0.043  RE_SRS 1.005 [0.975, 1.034] holm 1.000  RE_orig 0.923  vsTwin 1.015  cov_t 0.950  bias 0.013
+Guided R=4 s=0.2                           MSE 0.043  RE_SRS 1.018 [0.989, 1.047] holm 1.000  RE_orig 0.936  vsTwin 1.012  cov_t 0.947  bias 0.013
+Original IGS (Guided R=4 s=0.3)            MSE 0.046  RE_SRS 1.088 [1.061, 1.115] holm 0.000  RE_orig 1.000  vsTwin 1.039  cov_t 0.949  bias 0.018
+Guided R=4 s=0.4                           MSE 0.052  RE_SRS 1.218 [1.184, 1.253] holm 0.000  RE_orig 1.120  vsTwin 1.007  cov_t 0.950  bias 0.019
+Guided R=10 s=0.1                          MSE 0.044  RE_SRS 1.037 [1.007, 1.066] holm 0.318  RE_orig 0.953  vsTwin 1.018  cov_t 0.950  bias 0.010
+Guided R=10 s=0.2                          MSE 0.043  RE_SRS 1.003 [0.978, 1.027] holm 1.000  RE_orig 0.922  vsTwin 1.000  cov_t 0.952  bias 0.014
+Guided R=10 s=0.3                          MSE 0.043  RE_SRS 1.020 [0.988, 1.053] holm 1.000  RE_orig 0.938  vsTwin 1.004  cov_t 0.951  bias 0.015
+Guided R=10 s=0.4                          MSE 0.046  RE_SRS 1.077 [1.045, 1.110] holm 0.001  RE_orig 0.990  vsTwin 1.076  cov_t 0.948  bias 0.016
+Guided R=25 s=0.1                          MSE 0.062  RE_SRS 1.463 [1.430, 1.497] holm 0.000  RE_orig 1.345  vsTwin 1.008  cov_t 0.947  bias 0.007
+Guided R=25 s=0.2                          MSE 0.051  RE_SRS 1.196 [1.164, 1.227] holm 0.000  RE_orig 1.099  vsTwin 1.095  cov_t 0.948  bias 0.014
+Guided R=25 s=0.3                          MSE 0.049  RE_SRS 1.140 [1.106, 1.173] holm 0.000  RE_orig 1.047  vsTwin 1.087  cov_t 0.949  bias 0.015
+Guided R=25 s=0.4                          MSE 0.047  RE_SRS 1.100 [1.069, 1.131] holm 0.000  RE_orig 1.011  vsTwin 1.091  cov_t 0.950  bias 0.015
+Unguided R=2 s=0.1                         MSE 0.044  RE_SRS 1.022 [0.989, 1.056] holm 1.000  RE_orig 0.940  vsTwin    -    cov_t 0.946  bias 0.013
+Unguided R=2 s=0.2                         MSE 0.045  RE_SRS 1.060 [1.031, 1.089] holm 0.007  RE_orig 0.975  vsTwin    -    cov_t 0.947  bias 0.016
+Unguided R=2 s=0.3                         MSE 0.053  RE_SRS 1.249 [1.213, 1.285] holm 0.000  RE_orig 1.148  vsTwin    -    cov_t 0.953  bias 0.017
+Unguided R=2 s=0.4                         MSE 0.082  RE_SRS 1.933 [1.893, 1.974] holm 0.000  RE_orig 1.777  vsTwin    -    cov_t 0.952  bias 0.017
+Unguided R=4 s=0.1                         MSE 0.042  RE_SRS 0.990 [0.962, 1.019] holm 1.000  RE_orig 0.910  vsTwin    -    cov_t 0.951  bias 0.012
+Unguided R=4 s=0.2                         MSE 0.043  RE_SRS 1.006 [0.982, 1.031] holm 1.000  RE_orig 0.925  vsTwin    -    cov_t 0.948  bias 0.013
+Saturation Quadrants (Unguided R=4 s=0.3)  MSE 0.045  RE_SRS 1.047 [1.019, 1.074] holm 0.027  RE_orig 0.962  vsTwin    -    cov_t 0.951  bias 0.011
+Unguided R=4 s=0.4                         MSE 0.052  RE_SRS 1.210 [1.183, 1.236] holm 0.000  RE_orig 1.112  vsTwin    -    cov_t 0.952  bias 0.017
+Unguided R=10 s=0.1                        MSE 0.043  RE_SRS 1.018 [0.990, 1.046] holm 1.000  RE_orig 0.936  vsTwin    -    cov_t 0.949  bias 0.010
+Unguided R=10 s=0.2                        MSE 0.043  RE_SRS 1.003 [0.979, 1.027] holm 1.000  RE_orig 0.922  vsTwin    -    cov_t 0.948  bias 0.008
+Unguided R=10 s=0.3                        MSE 0.043  RE_SRS 1.017 [0.987, 1.047] holm 1.000  RE_orig 0.935  vsTwin    -    cov_t 0.946  bias 0.011
+Unguided R=10 s=0.4                        MSE 0.043  RE_SRS 1.001 [0.973, 1.029] holm 1.000  RE_orig 0.920  vsTwin    -    cov_t 0.953  bias 0.014
+Unguided R=25 s=0.1                        MSE 0.062  RE_SRS 1.452 [1.418, 1.487] holm 0.000  RE_orig 1.335  vsTwin    -    cov_t 0.946  bias 0.006
+Unguided R=25 s=0.2                        MSE 0.046  RE_SRS 1.092 [1.062, 1.121] holm 0.000  RE_orig 1.003  vsTwin    -    cov_t 0.947  bias 0.007
+Unguided R=25 s=0.3                        MSE 0.045  RE_SRS 1.049 [1.025, 1.073] holm 0.008  RE_orig 0.964  vsTwin    -    cov_t 0.946  bias 0.010
+Unguided R=25 s=0.4                        MSE 0.043  RE_SRS 1.009 [0.978, 1.039] holm 1.000  RE_orig 0.927  vsTwin    -    cov_t 0.949  bias 0.010
+SRS MSE 0.043
+
+== Spillover regime: pooled (pooled over regimes) ==
+Guided R=2 s=0.1                           MSE 0.123  RE_SRS 0.911 [0.884, 0.937] holm 0.000  RE_orig 1.243  vsTwin 0.979  cov_t 0.948  bias 0.030
+Guided R=2 s=0.2                           MSE 0.099  RE_SRS 0.735 [0.711, 0.759] holm 0.000  RE_orig 1.002  vsTwin 1.015  cov_t 0.948  bias 0.036
+Guided R=2 s=0.3                           MSE 0.090  RE_SRS 0.669 [0.647, 0.692] holm 0.000  RE_orig 0.913  vsTwin 1.029  cov_t 0.947  bias 0.044
+Guided R=2 s=0.4                           MSE 0.104  RE_SRS 0.770 [0.747, 0.793] holm 0.000  RE_orig 1.051  vsTwin 1.013  cov_t 0.947  bias 0.053
+Guided R=4 s=0.1                           MSE 0.139  RE_SRS 1.034 [1.006, 1.062] holm 0.084  RE_orig 1.411  vsTwin 0.999  cov_t 0.948  bias 0.030
+Guided R=4 s=0.2                           MSE 0.117  RE_SRS 0.866 [0.842, 0.890] holm 0.000  RE_orig 1.181  vsTwin 1.028  cov_t 0.946  bias 0.032
+Original IGS (Guided R=4 s=0.3)            MSE 0.099  RE_SRS 0.733 [0.712, 0.754] holm 0.000  RE_orig 1.000  vsTwin 1.007  cov_t 0.947  bias 0.038
+Guided R=4 s=0.4                           MSE 0.093  RE_SRS 0.688 [0.665, 0.711] holm 0.000  RE_orig 0.938  vsTwin 1.024  cov_t 0.947  bias 0.046
+Guided R=10 s=0.1                          MSE 0.166  RE_SRS 1.230 [1.202, 1.259] holm 0.000  RE_orig 1.678  vsTwin 1.032  cov_t 0.949  bias 0.026
+Guided R=10 s=0.2                          MSE 0.140  RE_SRS 1.035 [1.004, 1.066] holm 0.087  RE_orig 1.412  vsTwin 1.027  cov_t 0.949  bias 0.031
+Guided R=10 s=0.3                          MSE 0.122  RE_SRS 0.908 [0.883, 0.934] holm 0.000  RE_orig 1.239  vsTwin 1.016  cov_t 0.948  bias 0.032
+Guided R=10 s=0.4                          MSE 0.110  RE_SRS 0.816 [0.790, 0.843] holm 0.000  RE_orig 1.113  vsTwin 1.053  cov_t 0.947  bias 0.037
+Guided R=25 s=0.1                          MSE 0.335  RE_SRS 2.483 [2.429, 2.537] holm 0.000  RE_orig 3.387  vsTwin 1.034  cov_t 0.946  bias 0.019
+Guided R=25 s=0.2                          MSE 0.197  RE_SRS 1.464 [1.422, 1.505] holm 0.000  RE_orig 1.997  vsTwin 1.047  cov_t 0.949  bias 0.026
+Guided R=25 s=0.3                          MSE 0.169  RE_SRS 1.252 [1.212, 1.292] holm 0.000  RE_orig 1.708  vsTwin 1.045  cov_t 0.948  bias 0.029
+Guided R=25 s=0.4                          MSE 0.142  RE_SRS 1.056 [1.019, 1.093] holm 0.056  RE_orig 1.441  vsTwin 1.079  cov_t 0.948  bias 0.033
+Unguided R=2 s=0.1                         MSE 0.125  RE_SRS 0.930 [0.903, 0.958] holm 0.000  RE_orig 1.269  vsTwin    -    cov_t 0.945  bias 0.030
+Unguided R=2 s=0.2                         MSE 0.098  RE_SRS 0.724 [0.702, 0.746] holm 0.000  RE_orig 0.988  vsTwin    -    cov_t 0.946  bias 0.033
+Unguided R=2 s=0.3                         MSE 0.088  RE_SRS 0.650 [0.629, 0.672] holm 0.000  RE_orig 0.887  vsTwin    -    cov_t 0.948  bias 0.040
+Unguided R=2 s=0.4                         MSE 0.102  RE_SRS 0.760 [0.738, 0.781] holm 0.000  RE_orig 1.037  vsTwin    -    cov_t 0.946  bias 0.052
+Unguided R=4 s=0.1                         MSE 0.140  RE_SRS 1.035 [1.007, 1.063] holm 0.048  RE_orig 1.412  vsTwin    -    cov_t 0.948  bias 0.026
+Unguided R=4 s=0.2                         MSE 0.114  RE_SRS 0.842 [0.819, 0.865] holm 0.000  RE_orig 1.149  vsTwin    -    cov_t 0.947  bias 0.028
+Saturation Quadrants (Unguided R=4 s=0.3)  MSE 0.098  RE_SRS 0.728 [0.704, 0.752] holm 0.000  RE_orig 0.993  vsTwin    -    cov_t 0.946  bias 0.032
+Unguided R=4 s=0.4                         MSE 0.091  RE_SRS 0.671 [0.652, 0.691] holm 0.000  RE_orig 0.916  vsTwin    -    cov_t 0.947  bias 0.043
+Unguided R=10 s=0.1                        MSE 0.161  RE_SRS 1.192 [1.159, 1.225] holm 0.000  RE_orig 1.626  vsTwin    -    cov_t 0.948  bias 0.025
+Unguided R=10 s=0.2                        MSE 0.136  RE_SRS 1.008 [0.978, 1.037] holm 0.417  RE_orig 1.375  vsTwin    -    cov_t 0.947  bias 0.022
+Unguided R=10 s=0.3                        MSE 0.121  RE_SRS 0.894 [0.869, 0.919] holm 0.000  RE_orig 1.219  vsTwin    -    cov_t 0.946  bias 0.027
+Unguided R=10 s=0.4                        MSE 0.105  RE_SRS 0.775 [0.753, 0.797] holm 0.000  RE_orig 1.058  vsTwin    -    cov_t 0.949  bias 0.032
+Unguided R=25 s=0.1                        MSE 0.324  RE_SRS 2.402 [2.356, 2.448] holm 0.000  RE_orig 3.277  vsTwin    -    cov_t 0.947  bias 0.018
+Unguided R=25 s=0.2                        MSE 0.189  RE_SRS 1.399 [1.374, 1.423] holm 0.000  RE_orig 1.908  vsTwin    -    cov_t 0.948  bias 0.024
+Unguided R=25 s=0.3                        MSE 0.162  RE_SRS 1.198 [1.167, 1.229] holm 0.000  RE_orig 1.634  vsTwin    -    cov_t 0.946  bias 0.024
+Unguided R=25 s=0.4                        MSE 0.132  RE_SRS 0.979 [0.952, 1.007] holm 0.335  RE_orig 1.336  vsTwin    -    cov_t 0.947  bias 0.025
+SRS MSE 0.135
+
+== Burden share treated (queen block, mean over configurations) ==
+Guided R=2 s=0.1                           0.507
+Guided R=2 s=0.2                           0.513
+Guided R=2 s=0.3                           0.522
+Guided R=2 s=0.4                           0.529
+Guided R=4 s=0.1                           0.510
+Guided R=4 s=0.2                           0.519
+Original IGS (Guided R=4 s=0.3)            0.527
+Guided R=4 s=0.4                           0.538
+Guided R=10 s=0.1                          0.516
+Guided R=10 s=0.2                          0.527
+Guided R=10 s=0.3                          0.538
+Guided R=10 s=0.4                          0.549
+Guided R=25 s=0.1                          0.500
+Guided R=25 s=0.2                          0.547
+Guided R=25 s=0.3                          0.559
+Guided R=25 s=0.4                          0.577
+Unguided R=2 s=0.1                         0.501
+Unguided R=2 s=0.2                         0.500
+Unguided R=2 s=0.3                         0.499
+Unguided R=2 s=0.4                         0.500
+Unguided R=4 s=0.1                         0.501
+Unguided R=4 s=0.2                         0.500
+Saturation Quadrants (Unguided R=4 s=0.3)  0.500
+Unguided R=4 s=0.4                         0.500
+Unguided R=10 s=0.1                        0.500
+Unguided R=10 s=0.2                        0.501
+Unguided R=10 s=0.3                        0.499
+Unguided R=10 s=0.4                        0.502
+Unguided R=25 s=0.1                        0.500
+Unguided R=25 s=0.2                        0.501
+Unguided R=25 s=0.3                        0.501
+Unguided R=25 s=0.4                        0.499
+Simple Random Sampling                     0.500
