@@ -52,7 +52,8 @@ for (tau in c(2, 3)) {
   }, numeric(1))
   # MSE is reported to three decimals. Match the two values in their
   # treatment-effect clause, rather than accepting them elsewhere in the paper.
-  pattern <- paste0("\\$\\\\tau=", tau,
+  # The documents write beta for the code's tau (reparameterization, DECISIONS 2026-11-15).
+  pattern <- paste0("\\$\\\\beta=", tau,
                     "\\$[^()]*\\(([0-9]+\\.[0-9]{3}) (?:and|versus) ([0-9]+\\.[0-9]{3})\\)")
   reported <- regmatches(manuscript, regexec(pattern, manuscript, perl = TRUE))[[1]]
   stopifnot(length(reported) == 3L,

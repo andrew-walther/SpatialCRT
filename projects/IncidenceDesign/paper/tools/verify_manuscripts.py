@@ -233,7 +233,9 @@ def verify():
             expected_sensitivity.append([
                 f"{float(matched[(model, neighbor, summary, year, regime)]['Ratio_of_Matched_Mean_MSE']):.3f}"
                 for year in ('2018', '2019', '2020', '2021')])
-    require_equal([n for _, n in numerical_rows(table(chapter, 'tab:nc-summary-sens'))],
+    # Held out of the chapter on 2026-11-15 (trimmed-material.md, H-06); the SI keeps it.
+    sens_source = chapter if '\\label{tab:nc-summary-sens}' in chapter else supplement
+    require_equal([n for _, n in numerical_rows(table(sens_source, 'tab:nc-summary-sens'))],
                   expected_sensitivity, '32 parameter-matched sensitivity ratio cells')
     # Per-design downside table: mean and worst-decile ratios to SRS
     # (code/21_downside_by_design.R), grid (all ten surfaces, 2026-10-27) then NC,
