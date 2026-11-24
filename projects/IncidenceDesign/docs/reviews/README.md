@@ -18,3 +18,5 @@ Reports from independent reviewers. The brief each reviewer worked from is in
 | 2026-11-24 | [ctj-revision-audit](2026-11-24-ctj-revision-audit.md) | Every FCL annotation and meeting item checked against the CTJ and Chapter 3 after round 5 (81 done, 10 partial, none missing or deviating) | open: partial items await the author |
 | 2026-11-24 | [si-claim-inventory](2026-11-24-si-claim-inventory.md) | SI section and exhibit inventory: contents, CTJ pointers, claim supported, length, keep/shorten/move | open |
 | 2026-11-24 | [si-review](2026-11-24-si-review.md) | SI correctness, rule conflicts and prose findings, with a proposed 29-page abridged SI and a full-version switch | open: curation decisions await the author |
+| 2026-11-24 | [ctj-round5-word-growth](2026-11-24-ctj-round5-word-growth.md) | Which round 5 revision items grew the CTJ body from 3,498 to 3,853 words, item by item | complete |
+| 2026-11-24 | [ctj-cut-list-review](2026-11-24-ctj-cut-list-review.md) | Independent review of the round 6 word-cut list: verdict per item, R2/R3 verified against results and SI, new candidates (folded into the list) | complete |
