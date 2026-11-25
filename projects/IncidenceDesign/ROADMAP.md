@@ -216,6 +216,16 @@ are complete (see the status at the top: `paper/ctj_manuscript/`,
 
 ## Progress Log (moved from AGENTS.md 2026-10-01)
 
+### 2026-11-25 — Incidence coefficient sensitivity completed
+
+- Completed the smoke test, pilot, and full τ sweep. The full sweep took 145.8
+  minutes on five workers. At τ = 1, the full grid exactly reproduced all stored
+  intervention metrics for both estimators from the September 27 production run.
+- Saved the paired intervention comparisons, incidence estimates, and figures in
+  `results/incidence_coef_2026-11/`. See the [findings](docs/findings/2026-11-25-incidence-coefficient-findings.md)
+  and [independent review](docs/reviews/2026-11-25-incidence-coefficient-review.md).
+- The author will decide placement in the Supplementary Information and Chapter 3.
+
 ### 2026-11-24 — Post-prelim CTJ, SI and sensitivity preparation (overnight, proposals only)
 
 - The written prelim was submitted 2026-11-15; local tag `prelim-submitted-2026-11-15` at `e632aeb`.

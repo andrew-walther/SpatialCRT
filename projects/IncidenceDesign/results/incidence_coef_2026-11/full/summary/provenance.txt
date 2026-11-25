@@ -1,0 +1,10 @@
+R version 4.5.2 (2025-10-31)
+dplyr 1.2.1
+ggplot2 4.0.3
+Input and source MD5 hashes
+reproduction_check.txt b3aefea56ee6550ff325d586dc587101
+run_info.rds 0e56aef67542e86496954336c127f5f2
+scenarios.rds 8429d24816391186df5cbdcbb6a3e3bb
+surfaces.rds 7cefad59d5574a23ecca702af84f1fba
+code/31_incidence_coefficient_summary.R d0030f72d5e27f4053c0f6b8f8e3fa56
+code/00_design_names.R 6920f257e730387e73bdd2a38b85968b

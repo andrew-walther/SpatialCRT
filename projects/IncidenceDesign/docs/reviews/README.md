@@ -21,3 +21,4 @@ Reports from independent reviewers. The brief each reviewer worked from is in
 | 2026-11-24 | [ctj-round5-word-growth](2026-11-24-ctj-round5-word-growth.md) | Which round 5 revision items grew the CTJ body from 3,498 to 3,853 words, item by item | complete |
 | 2026-11-24 | [ctj-cut-list-review](2026-11-24-ctj-cut-list-review.md) | Independent review of the round 6 word-cut list: verdict per item, R2/R3 verified against results and SI, new candidates (folded into the list) | complete |
 | 2026-11-24 | [igs-sensitivity-review](2026-11-24-igs-sensitivity-review.md) | Independent review of the Incidence-Guided Saturation sensitivity code, statistics and report: code correct; report errors and overstatements corrected in the findings | complete |
+| 2026-11-25 | [incidence-coefficient-review](2026-11-25-incidence-coefficient-review.md) | Independent verification of the incidence coefficient simulation code, metrics and interpretation | complete |

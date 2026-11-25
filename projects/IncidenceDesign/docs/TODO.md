@@ -30,8 +30,10 @@ Master checklist: `docs/plans/2026-11-25-project2-phased-plan.md` (phases 0 to 5
   optional CTJ sentence, Q-16 backup slide (phased plan Phase 3, with s = 0.5 and repeated-level
   choices).
 - [ ] Review package for Dr. Lin after V7 (phased plan 1h).
-- [ ] Incidence coefficient τ in Codex (phased plan Phase 4; prompt
-  `docs/prompts/2026-11-25-incidence-coefficient-codex-prompt.md`).
+- [ ] Author: choose placement of post-trial incidence coefficient estimation in
+  the curated or full Supplementary Information and decide the Chapter 3 mirror.
+  The grid sweep and independent review are complete.
+  [Findings](findings/2026-11-25-incidence-coefficient-findings.md)
 - [ ] Submission blockers (IRB, map permission, coauthor approval, Dr. Simpson's answers on control
   colleges and the pilot): see the Dr. Simpson items further down; keep them on one list before
   submission.

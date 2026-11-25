@@ -5,6 +5,21 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-11-25 — Incidence coefficient sensitivity and post-trial estimation
+
+**Decision.** Andrew approved a five-value grid sweep of τ, the coefficient on X,
+and a check of how well the fitted spatial lag model estimates it. This reopens
+the 2026-11-15 decision to leave post-trial incidence estimation to future work.
+Use the completed study to inform the Supplementary Information. Placement in
+the curated or full version and the corresponding Chapter 3 treatment are open.
+
+**Outcome.** The full run reproduced the September 27 intervention metrics exactly
+at τ = 1. The spillover regime still determined the broad intervention MSE comparison.
+Incidence estimation was less precise under High Incidence Focus. See the
+[findings](docs/findings/2026-11-25-incidence-coefficient-findings.md).
+
+---
+
 ## 2026-11-15 — Chapter 3 review (round 5) and first CTJ revision
 
 **Decision.** From Andrew's answers in `docs/plans/2026-11-14-chapter3-review-session-plan.md`

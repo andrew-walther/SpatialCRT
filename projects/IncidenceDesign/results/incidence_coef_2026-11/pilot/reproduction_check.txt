@@ -1,0 +1,27 @@
+Production tag 20260927_000502 | profile pilot | incidence coefficient = 1
+scenarios: 1440 production rows, 1440 rerun rows
+  Mean_Estimate             exact
+  Bias                      exact
+  SD                        exact
+  MSE                       exact
+  Coverage                  exact
+  Fail_Rate                 exact
+  N_Valid_Est               exact
+  Power                     exact
+  SE_Bias                   exact
+  SE_MSE                    exact
+  SE_Coverage               exact
+  SE_Power                  exact
+  N_Surfaces                exact
+  Mean_Treated              exact
+  N_Aliased                 exact
+  N_Warn                    exact
+  Z_WZ_rank_deficient       exact
+surfaces: 14400 production rows, 14400 rerun rows
+  N_Valid                   exact
+  Bias                      exact
+  MSE                       exact
+  Coverage                  exact
+  Power                     exact
+  Mean_Treated              exact
+PASS: all production metrics match exactly.
