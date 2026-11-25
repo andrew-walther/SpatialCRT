@@ -70,10 +70,12 @@ phase start until they are started).**
   3. a revision report (PDF, from a short Markdown or LaTeX source) that walks through the
      changes: for each of his comments (FCL IDs, in manuscript order) what he asked, what changed
      and where (section and page in V7), with the audit's "partial" items explained; then the
-     committee-driven changes; then the length cuts, grouped by section, saying where each removed
+     additional revisions from further review (framed that way, not as committee questions,
+     which he has no context for); then the length cuts, grouped by section, saying where each removed
      passage now lives (SI section or `trimmed-material.md`); and the word count (3,498 → 3,853
-     → V7). Built from the audit, `cuts.py`, the HW list and the accepted decisions, never
-     retyped. Human-writer pass. **Stop for your read before anything is sent**; you send it.
+     → V7). Built only from what was approved and applied in V7 (the
+     accepted cut, HW and audit decisions, checked against the diff), never from proposals that
+     were rejected or edited, and never retyped. Human-writer pass. **Stop for your read before anything is sent**; you send it.
 
 ## Phase 2: SI curation (after Phase 1, because the cuts move text into the SI)
 
@@ -160,7 +162,8 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
 
 ## Phase 5: prelim presentation (after Phases 1 to 3)
 
-- [ ] 5a. Write the presentation prompt: Parts I to III, the script, backup slides, the Chapter 2
+- [ ] 5a. Write the presentation prompt (include Q&A prep on τ: what the coefficient means on
+  the X ∈ [0, 1], σ = 1 scale, that it is estimated in every grid fit, and the Phase 4 results): Parts I to III, the script, backup slides, the Chapter 2
   two-reviewer question review, rehearsal with Dr. Lin (2026-12-02 to 12-04) and Part III at the
   Rashid Lab meeting (2026-12-03).
 - [ ] 5b. Run it.
