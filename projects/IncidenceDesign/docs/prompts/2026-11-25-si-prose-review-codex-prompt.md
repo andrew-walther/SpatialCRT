@@ -48,8 +48,8 @@ spatial cluster randomized trials. Do only 2g. Items 2h (final rebuild and page 
 
 ## What to do
 
-Run stages 1 and 2 back to back without waiting for the author (he reviews both lists the next
-morning). Then stop. Stage 3 waits for his decisions. Never edit SI, CTJ or Chapter 3 text
+Run stages 1 and 2 back to back without waiting for the author (the author reviews both lists the next
+morning). Then stop. Stage 3 waits for the author's decisions. Never edit SI, CTJ or Chapter 3 text
 without sign-off on the exact wording, so stages 1 and 2 only write proposals; they change no
 manuscript file.
 
