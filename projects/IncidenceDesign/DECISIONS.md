@@ -5,6 +5,16 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-11-25 — Ratio decimals (Phase 2c, D1)
+
+**Decision.** Ratios to SRS keep two decimals in the CTJ, SI and Chapter 3 (as decided on
+2026-11-15); they are the one exception to the 3-decimal MSE rule. No printed number changes.
+
+**Reason.** Andrew, 2026-11-25: main Table 2 already uses two, and a ratio does not risk
+printing 0.000. Dr. Lin's guidance is no more than three decimals in the main manuscript.
+
+---
+
 ## 2026-11-25 — Incidence coefficient sensitivity and post-trial estimation
 
 **Decision.** Andrew approved a five-value grid sweep of τ, the coefficient on X,

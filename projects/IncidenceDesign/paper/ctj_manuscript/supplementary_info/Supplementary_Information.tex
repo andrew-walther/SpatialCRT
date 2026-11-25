@@ -230,9 +230,8 @@ and simple random sampling (SRS) at \(\beta = 1\), neither could be
 distinguished from its counterpart under either neighbor type by the
 Nemenyi and Holm-adjusted Wilcoxon signed-rank tests described in Section
 \ref{statistical-comparison-methods}. We kept one design from each pair
-for the detailed ranking. Both variants remain in the main-text
-nine-design benchmark and in the case study, and Section
-\ref{app:eight-design} reports the comparison of all eight designs at the
+for the detailed ranking. Both variants remain in the case study, and Section
+\ref{app:eight-design} reports the comparison of all eight designs and SRS at the
 primary scenario, \(\beta = 1\).
 
 Saturation Quadrants gives the quadrants their saturations in random
@@ -448,7 +447,7 @@ overstates the information about variation from surface to surface. We
 therefore also ran paired Wilcoxon signed-rank tests over 50 independent units, the 5
 configurations times 10 surfaces, with each unit's MSE averaged over
 that surface's blocks, and \(t_{49}\) intervals for the mean
-difference. These tests compared each pair of designs adjacent in the mean-MSE order, and each design with SRS within each spillover regime, with Holm's adjustment over the eight designs compared with SRS.
+difference. These tests compared each pair adjacent in the mean-MSE order, with SRS in its place in that order, and each design with SRS within each spillover regime, with Holm's adjustment over the eight designs compared with SRS.
 
 We report results separately for each neighbor type, with queen
 contiguity primary, and no number is averaged over the two. Unless
@@ -484,7 +483,7 @@ settings that were held fixed.
 \small
 \centering
 
-\caption{Parameter grid of the original eight-design simulation. The crossed parameters form $5 \times 5 \times 2 \times 4 \times 4 \times 2 \times 8 = 12{,}800$ scenarios, 9,600 of them for the six designs of the detailed comparison; the settings in the lower panel are the same in every scenario.}
+\caption{Parameter grid of the grid simulation. The crossed parameters form $5 \times 5 \times 2 \times 4 \times 4 \times 2 \times 8 = 12{,}800$ scenarios for the eight designs, 9,600 of them for the six designs of the detailed comparison. SRS, run afterward on the same grid, adds 1,600 scenarios (14,400 in all). The settings in the lower panel are the same in every scenario.}
 \label{tab:parameter-grid}
 
 \begin{tabular}{p{5.8cm}p{7.6cm}c}
@@ -1313,8 +1312,7 @@ with the Nemenyi and Wilcoxon results for each pair. Table
 \ref{tab:eight-design} reports all eight designs and SRS.
 Under both neighbor types, each excluded design is adjacent to its
 retained counterpart in mean MSE. The MSEs and coverages of the six
-retained designs are those of Table \ref{tab:performance}, given here to
-four and three decimal places.
+retained designs are those of Table \ref{tab:performance}.
 
 \begin{table}[!htb]
 
@@ -1394,18 +1392,20 @@ block once, so their wins under the both-arms regime offset their losses
 under the control-only regime; mean MSE weights those losses by their
 size.
 
-We also compared each pair of designs adjacent in the mean-MSE
-order over the 50 independent configuration-by-surface units. Every
-adjacent pair differed significantly. The mean paired differences in
-MSE, with \(t_{49}\) 95\% intervals, were \(-0.040\) (\(-0.043\),
-\(-0.037\)) for Incidence-Guided Saturation against Balanced
-Quartiles, \(-0.029\) (\(-0.033\), \(-0.026\)) for Balanced Quartiles
+We also compared each pair adjacent in the mean-MSE order, with SRS in
+its place, over the 50 independent configuration-by-surface units. Every
+adjacent pair differed significantly except SRS and Balanced Quartiles.
+The mean paired differences in MSE, with \(t_{49}\) 95\% intervals, were
+\(-0.038\) (\(-0.040\), \(-0.035\)) for Incidence-Guided Saturation
+against SRS, \(-0.002\) (\(-0.005\), \(0.001\)) for SRS against
+Balanced Quartiles (Wilcoxon \(p = 0.15\); SRS lower in 29 of the 50
+units), \(-0.029\) (\(-0.033\), \(-0.026\)) for Balanced Quartiles
 against Isolation Buffer, \(-0.085\) (\(-0.095\), \(-0.075\)) for
 Isolation Buffer against High Incidence Focus, \(-0.074\) (\(-0.086\),
 \(-0.062\)) for High Incidence Focus against \(2\times2\) Blocking, and
 \(-0.768\) (\(-0.789\), \(-0.746\)) for \(2\times2\) Blocking against
-Checkerboard, with Wilcoxon \(p \le 4.9\times10^{-9}\) in every case.
-The better design of each pair had the lower MSE in all 50 units, except
+Checkerboard, with Wilcoxon \(p \le 4.9\times10^{-9}\) in every other case.
+The better design of each of those pairs had the lower MSE in all 50 units, except
 High Incidence Focus against \(2\times2\) Blocking, where it did so in
 48 (96\%). Because this test follows the mean-MSE order, it separated High
 Incidence Focus from \(2\times2\) Blocking, which the Nemenyi comparison
@@ -1592,13 +1592,15 @@ tests separated every pair except \(2\times2\) Blocking against
 Isolation Buffer and Balanced Quartiles against SRS (both \(p = 0.21\)). In the surface-level comparison, Incidence-Guided
 Saturation had a lower MSE than Balanced Quartiles in 48 of
 the 50 units (mean difference \(-0.012\); \(-0.014\), \(-0.010\);
-Wilcoxon \(p = 9.9\times10^{-10}\)). \(2\times2\) Blocking and Isolation
+Wilcoxon \(p = 9.9\times10^{-10}\)). Balanced Quartiles and SRS were not
+separated. Balanced Quartiles had the lower MSE in 32 of the 50 units
+(mean difference \(-0.001\); \(-0.003\), \(0.000\); Wilcoxon \(p = 0.11\)). \(2\times2\) Blocking and Isolation
 Buffer were close: \(2\times2\) Blocking had the lower MSE in 36 of the
 50 units (72\%; mean difference \(-0.005\); \(-0.008\), \(-0.002\);
 Wilcoxon \(p = 0.0027\)), but Isolation Buffer had the slightly better
 average rank (4.21 against 4.33), and the two designs traded places in mean MSE at
 \(\beta = 3\) (see Section \ref{stability-across-treatment-effect-sizes}). Every
-other adjacent pair differed in all 50 units.
+other adjacent pair, including SRS against \(2\times2\) Blocking, differed in all 50 units.
 
 Checkerboard under rook contiguity is a different case: \(\beta\) is not
 identified, and the coefficient on \(\mathbf{Z}\) estimates \(\beta - \psi\)
@@ -1717,7 +1719,7 @@ Checkerboard (oracle 1.087, non-oracle 0.108) and \(2\times2\) Blocking
 (oracle 0.319, non-oracle 0.121). Under rook contiguity it was higher
 for every design except \(2\times2\) Blocking (0.128 under both models)
 and Checkerboard (identical). These results do not change the
-recommendation. Incidence-Guided Saturation also had the
+comparison of designs. Incidence-Guided Saturation also had the
 lowest non-oracle MSE under both neighbor types (0.087 under queen
 contiguity and 0.086 under rook contiguity), and where a design's
 non-oracle MSE was lower, the estimate was biased and its intervals
@@ -1771,7 +1773,7 @@ Checkerboard (flagged) & 0.480 & $-0.652$ & 0.162 & 0.480 & $-0.652$ & 0.162 \\
 
 
 
-\subsection{Robustness across blocks and the recommended design}\label{robustness-across-blocks-and-the-recommended-design}
+\subsection{Robustness across blocks}\label{robustness-across-blocks-and-the-recommended-design}
 
 
 Table \ref{tab:robustness} gives the distribution of MSE across the 160
@@ -1816,10 +1818,12 @@ Checkerboard & 0.051 & 0.063 & 0.899 & 2.093 & 2.843 \\
 
 \end{table}
 
-Among the six designs in the detailed comparison, Incidence-Guided
-Saturation combines low pooled MSE with comparatively favorable
-control-only performance. The SRS comparison in Section
-\ref{srs-benchmark-and-allocation-specific-risk} qualifies this. A
+No single design was best under both spillover regimes. Under
+control-only spillover, Incidence-Guided Saturation had the lowest MSE
+of the six designs, and it had the lowest worst-case block MSE (Table
+\ref{tab:robustness}). Under both-arms spillover, SRS and Balanced
+Quartiles were slightly more accurate (Section
+\ref{srs-benchmark-and-allocation-specific-risk}). A
 saturation design is a reasonable choice when control-only spillover is
 plausible, and SRS remains competitive under both-arms spillover. Saturation Quadrants performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy. The scenario-level worst cases in Table \ref{tab:robustness} summarize variation across
 parameter settings, which is different from the conditional risk across
@@ -1908,8 +1912,8 @@ Figure \ref{fig:nc-mse} compares the eight designs with SRS by year and regime. 
 Under control-only spillover, Saturation Quadrants has descriptive mean MSE
 0.223 against SRS 0.308, a 27.4\% reduction. Incidence-Guided Saturation
 reduces mean MSE by 21.1--29.9\% across the four observed years (Table
-\ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best. The two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share. High Incidence Focus is year-sensitive
-under control-only spillover and cannot be recommended uniformly.
+\ref{tab:nc-year}). Both saturation designs have lower mean MSE than SRS in every primary parameter setting, and approximate Monte Carlo intervals for each setting-specific difference excluded zero. Neither is uniquely best. The two performed similarly, so incidence guidance lets a trial direct its highest treatment saturations to the highest-incidence regions with little or no loss of estimation accuracy, and their advantage over SRS comes from the saturation structure both designs share. Under control-only spillover, the accuracy of High Incidence Focus
+depended on the planning year.
 
 Under both-arms spillover, SRS mean MSE is 0.076, Saturation Quadrants
 0.075, and Incidence-Guided Saturation ranges from 0.074 to 0.077 across
