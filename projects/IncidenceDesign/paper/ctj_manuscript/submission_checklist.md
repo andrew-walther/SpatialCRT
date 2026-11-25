@@ -36,8 +36,9 @@ Checked against the live [journal instructions](https://journals.sagepub.com/aut
   Carolina" (PI Ross J. Simpson, Jr., Department of Medicine). The determination type and
   consent wording remain a highlighted placeholder pending Simpson (the 2026-10-28 live check
   found no title-page requirement); confirm permission to publish 58-cluster aggregates.
-  2026-10-27: a short IRB sentence stays in the application Methods; the full statement and
-  placeholder moved to an "Ethical considerations" declaration.
+  2026-10-27: the full IRB statement and placeholder moved to an "Ethical considerations"
+  declaration. 2026-11-25 (round 6, T5): the case-study Methods keep only the pointer
+  "(see Ethical considerations)".
 - [x] Corresponding-author telephone (919) 966-9431 on the title page and cover letter
   (from Lin's UNC Gillings profile; the journal requires it).
 - [x] ORCIDs: Walther 0000-0002-1932-9653 and Lin (corresponding) 0000-0002-2638-1775 are on

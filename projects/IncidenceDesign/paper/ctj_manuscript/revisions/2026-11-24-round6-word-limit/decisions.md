@@ -154,3 +154,9 @@ Applied by `ch3_apply.py` to `paper/thesis_chapter/Thesis_Chapter.qmd` (the hook
 `bios-dissertation/prelim/` copy) and to `bios-dissertation/thesis/chapter3-project2-incidence/project2-incidence.qmd`.
 Lee (2004) added to `bios-dissertation/prelim/references.bib` and `thesis/references.bib`. The frozen
 `prelim-submitted-2026-11-15/` copy is unchanged.
+
+## 1f. Cover letter and checklist (decided 2026-11-25)
+
+CL-1, CL-2 (cover letter: "case study", 3,419 and 422 words, "draws", Incidence-Guided Saturation named
+for the 21–30%, Wald undercoverage) and CK-1 (checklist IRB note) accepted as proposed. The SI label
+`observed-incidence-application-full-methods-and-results` is internal and left unchanged.
