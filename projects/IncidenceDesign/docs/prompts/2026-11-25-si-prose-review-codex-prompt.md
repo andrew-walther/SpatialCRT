@@ -13,12 +13,13 @@ spatial cluster randomized trials. Do only 2g. Items 2h (final rebuild and page 
 ## Read first
 
 - `AGENTS.md` (standing rules; follow every one) and the 2026-11-25 entries in `DECISIONS.md`.
-- The hand-over from Phases 2a–2f:
+- The hand-over from Phases 2a–2f and 4e/3c:
   `paper/ctj_manuscript/revisions/2026-11-25-si-curation/` (every sign-off file, the decisions at
-  the end of each, `apply_2c.py`, `apply_2d.py`).
+  the end of each, `apply_2c.py`, `apply_2d.py`, `apply_4e_3c.py`). `4e-3c-signoff.md` holds the
+  wording the author approved for the three new SI sections and the two new CTJ sentences.
 - `docs/reviews/2026-11-24-si-review.md`, sections (c) and (d), and
   `docs/reviews/2026-11-24-si-claim-inventory.md` ("Cross-section duplications"). They predate
-  2a–2f, so their line and S-numbers are stale; find each passage by its text. Items already
+  2a–2f and 4e/3c, so their line and S-numbers are stale; find each passage by its text. Items already
   fixed in 2c–2e (recommended-design wording, SRS in the tests, "identifiable", stale statements,
   figure labels, Table S18's minus sign, the S7/S12 merge) need no second pass.
 - The human-writer skill: `~/.claude/skills/human-writer/SKILL.md`. Apply it to every sentence you
@@ -29,8 +30,8 @@ spatial cluster randomized trials. Do only 2g. Items 2h (final rebuild and page 
 ## How the SI is built
 
 - One source, two builds. `paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex`
-  builds the **curated** SI that is submitted (43 pages now). `Supplementary_Information_Full.tex`
-  sets `\SIFullVersion` and builds the **unabridged** SI (64 pages). Material that only the
+  builds the **curated** SI that is submitted (49 pages since 4e/3c; it was 43). `Supplementary_Information_Full.tex`
+  sets `\SIFullVersion` and builds the **unabridged** SI (70 pages). Material that only the
   unabridged build prints sits between `\iffullsi` and `\fi`; curated replacements use
   `\iffullsi <unabridged text>\else <curated text>\fi`.
 - Review the **curated** text (what prints in `Supplementary_Information.pdf`). Text shared by both
@@ -101,7 +102,8 @@ manuscript file.
 - `python3 paper/tools/verify_manuscripts.py` must PASS. It also fails on any undefined reference
   in either SI build. Its notice that `tab:adjacent-pairs` is pending is expected until 2i.
 - `Rscript code/tests/test_manuscript_exhibits.R` must pass.
-- `python3 paper/tools/ctj_wordcount.py` stays at 3,435 unless the CTJ changed.
+- `python3 paper/tools/ctj_wordcount.py` stays at 3,473 unless the CTJ changed (3,435 before the
+  two 4e/3c sentences).
 - `pdftotext` the curated PDF: no "??", and no "unabridged" in any case.
 - Report failures exactly as printed.
 
@@ -120,9 +122,29 @@ manuscript file.
   in the shared hand-over: add a section "2g changes for Chapter 3" to
   `paper/ctj_manuscript/revisions/2026-11-25-si-curation/2g-signoff.md`. The earlier 2i items
   (C3-1 to C3-6) are in `.../2c-signoff.md`, `2d-signoff.md` and the 2e files.
-- Leave the two new-content slots empty: 2.2 and a results section before the case study (Phase
-  3, Incidence-Guided Saturation sensitivity) and 3.2 (Phase 4e, estimating the incidence
-  coefficient τ). They are drafted elsewhere.
+- The two new-content slots are now filled (commit `e4eada6`, applied from `4e-3c-signoff.md`):
+  Section 2.2 "Variants of incidence guidance", Section 3.2 "Estimating the incidence coefficient
+  after a trial" (new Figure S1), and Section 13 "Sensitivity of incidence guidance to regions and
+  saturation spread" (new Figure S6), plus one pointer sentence in Section 1.1. The curated figure
+  numbers moved because of the two new figures, so find passages by their text, never by an old
+  S-number. Review these sections like the rest of the curated SI, but the author approved their
+  wording on 2026-11-25: propose a change there only for a real error, a rule violation or a clear
+  overlap with older text, and say in the item that it touches newly approved text. Where older
+  text now repeats what 2.2, 3.2 or 13 says (for example the spread-versus-gain paragraph in the case
+  study results, or the mention of τ = 1 in Section 1.1), propose cutting the older copy rather
+  than the new one, unless the older one is the better home.
+- The author's 4e/3c decisions also bind this review: ratios to SRS (and to the original design or
+  a twin) print with two decimals, as elsewhere in the SI; the observation that quadrants at 70/30
+  and ten regions at 80/20 lower control-only MSE without a detectable both-arms cost stays in the
+  SI only, never in the CTJ.
+- The CTJ gained two sentences (both read-only for you): one in Methods after "we set $\tau=1$ in
+  the grid simulation" pointing to SI 3.2, and one in the Discussion after "Saturation keeps both
+  arms in every region..." pointing to SI Section 13. Keep the SI consistent with them.
+- Do not run `paper/tools/copy_figures.sh`. Besides the two new figures, it refreshes two Chapter 3
+  figure copies (`real_sud/population_shares.pdf`, `real_sud/primary_yearly_mse.pdf`) that wait for
+  2i. If a figure must change, re-run its producing script and leave the copy step to the author.
+- If an earlier, paused run of this prompt left partial notes or drafts, discard them and start
+  stages 1 and 2 again on the current curated SI (after `e4eada6`).
 
 Done tonight means: both sign-off lists written and committed (`2g-signoff.md`,
 `2g-review-signoff.md`), no manuscript file changed, and the short report described in stage 2.
