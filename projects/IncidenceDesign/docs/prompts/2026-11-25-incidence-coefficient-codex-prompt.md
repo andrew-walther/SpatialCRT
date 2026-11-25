@@ -11,6 +11,10 @@ docs/plans/2026-11-25-incidence-coefficient-plan.md. Follow the plan.
 Notation: in the documents β is the intervention effect on Z and τ is the incidence coefficient on
 X. In the code they are `tau` (on Z) and `beta` (on X). This work is about the incidence
 coefficient (code `beta`).
+τ is a regression coefficient (X is on [0, 1], residual SD 1), not a correlation. Proposed values
+{0, 0.25, 0.5, 1, 2}; the plan lists expectations to check (β̂ nearly unchanged across τ, τ̂'s SE
+depending on the design), which you test rather than assume. Do not draft manuscript or SI text;
+the main session writes the SI subsection after the findings.
 
 Scope and rules:
 - Do not edit code/01 to code/05, results/sim_data/, the CTJ manuscript, the SI, Chapter 3 or any
