@@ -15,3 +15,10 @@ chapter-to-SI check is unaffected.
 | M4 | 6.1: "For reference, SRS had an average rank over the 160 blocks of 2.600 under queen contiguity and 2.450 under rook contiguity." | Omitted (the table now shows both ranks; code/32 reproduces them). |
 
 Expected effect: about half a page shorter (one table instead of two).
+
+## Decision (author, 2026-11-25)
+
+M1–M4 accepted as proposed. Applied: the curated Table S6 (was S7) reads its rows from
+`results/si_tables/performance_nine.tex` through `\InputRows` (primitive input, so the first row's
+`\multicolumn` works inside the tabular). The merged table carries `tab:performance`; the one curated
+pointer to `tab:eight-design` now points to it. Curated SI 43 pages; unabridged text unchanged.
