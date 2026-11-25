@@ -17,3 +17,4 @@ Paste-in prompts, review briefs and handoffs for starting a new session.
 | 2026-11-24 | [project2-post-prelim-prompt](2026-11-24-project2-post-prelim-prompt.md) | CTJ revision check, further revisions and word cut; SI curation and prose review; Incidence-Guided Saturation sensitivity write-up. Uses the overnight audit, SI review and sensitivity run | active |
 | 2026-11-25 | [incidence-coefficient-codex-prompt](2026-11-25-incidence-coefficient-codex-prompt.md) | Kickoff for Codex: Phase 4, the incidence coefficient τ | active |
 | 2026-11-25 | [project2-execution-kickoff](2026-11-25-project2-execution-kickoff.md) | Kickoff for a fresh session that carries out the phased plan | active |
+| 2026-11-25 | [si-prose-review-codex-prompt](2026-11-25-si-prose-review-codex-prompt.md) | Kickoff for Codex: Phase 2g, human-writer pass and two independent reads of the curated SI, by sign-off list | active |
