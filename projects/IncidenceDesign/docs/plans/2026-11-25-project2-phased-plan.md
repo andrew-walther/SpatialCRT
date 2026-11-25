@@ -107,7 +107,7 @@ SI that is submitted; `Supplementary_Information_Full.tex` turns everything on, 
 before or later is lost and anything can move between the two. Target for the curated SI: about
 30 pages, with room for new content (the DeSurv SI is 37 pages in all).
 
-- [ ] 2a. Add the switch and the full-version wrapper; both build.
+- [x] 2a. Add the switch and the full-version wrapper; both build.
 - [ ] 2b. Link the CTJ's 12 hard-coded SI numbers to SI labels (`xr-hyper`) before anything moves.
 - [ ] 2c. Correctness and rule fixes from the SI review: the "recommended design" heading and
   wording, SRS in every design test, stale statements, "identified" → "identifiable" (FCL-028),
@@ -238,3 +238,6 @@ Record each phase's completion here with the date and commit.
   sends it.
 - 2026-11-25. 4d decided (curated SI, Chapter 3 mirror; DECISIONS updated). 4e moves into the
   Phase 2 session.
+- 2026-11-25. 2a done (`2b47ab4`): curated/full switch; both versions build at 65 pages, text
+  identical to the previous SI. 2b (`3affdff`) checked: printed CTJ text unchanged, but the word
+  counter dropped the 12 `\ref{SI-...}` numbers (3,435 → 3,423); fix requested before ticking.
