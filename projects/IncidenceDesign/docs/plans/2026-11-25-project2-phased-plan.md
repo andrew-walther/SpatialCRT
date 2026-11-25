@@ -44,12 +44,17 @@ place.
 - [ ] Push the six unpushed SpatialCRT commits (overnight reviews, cut list, sensitivity study,
   this plan) and the `prelim-submitted-2026-11-15` tags. **Decision.**
 - [ ] Phase 4 runs on the side in Codex (table above); start it whenever convenient.
+- Context, no action: the Chapter 3 sync hook keeps writing to `bios-dissertation/prelim/` until
+  after the exam (2026-12-07); `thesis/` takes over later. Dissertation dates: BIOS abstract
+  2027-03-04, thesis 2027-03-18, final exam 2027-04-09 (backup 04-07), ETD 2027-04-14.
 
 ## Phase 1: CTJ round 6 (Dr. Lin's feedback, wording, then length)
 
 - [ ] 1a. Read the audit (`docs/reviews/2026-11-24-ctj-revision-audit.md`) and the word-growth
   map. Decide the open feedback items: a reference for the Wald interval (FCL-024), and anything
-  in the audit you want handled differently.
+  in the audit you want handled differently. Also decide what remains of
+  `docs/plans/2026-10-22-ctj-structure-and-prose-review-plan.md` (not started): fold its open
+  items into the 1c list, or drop it and say so in the plan's status.
 - [ ] 1b. Cut list (`revisions/2026-11-24-round6-word-limit/signoff.md`): accept, reject or edit
   each ID. Recommended set 3,385 words; about 115 words of slack. **Stop for decisions.**
 - [ ] 1c. Human-writer list (`human-writer-review.md`, HW-01 to HW-51): accept, reject or edit.
@@ -57,7 +62,9 @@ place.
 - [ ] 1d. Apply the accepted items (`cuts.py --apply`, then the HW edits), move cut text to the
   SI or `trimmed-material.md`, regenerate `Figure_Legends.md`, update the exhibit test if HW-28
   changes, rebuild both layouts, run `ctj_wordcount.py`, `test_manuscript_exhibits.R` and
-  `verify_manuscripts.py`. Body ≤ 3,500.
+  `verify_manuscripts.py`. Body ≤ 3,500. Also confirm the current Clinical Trials counting rule
+  (what counts toward the 3,500) and the abstract limit (the checklist says 425 words) and check
+  the abstract against it.
 - [ ] 1e. Chapter 3 carry-over as a second sign-off list. **Stop for decisions**, then apply and
   let the hook re-render the prelim copy.
 - [ ] 1f. Fix "application" in the cover letter and submission checklist (D-3).
@@ -102,6 +109,9 @@ before or later is lost and anything can move between the two. Target for the cu
 - [ ] 2g. Prose review: human-writer pass, then a statistician and a clinician reader on the
   curated SI.
 - [ ] 2h. Rebuild both versions, run the checkers, record the page counts.
+- [ ] 2i. Chapter 3 alignment: resolve `paper/ctj_manuscript/notes/si-ch3-alignment-log.md` (42
+  SI edits not yet in Chapter 3) plus this phase's SI changes, as one sign-off list. **Stop for
+  decisions**, then apply and let the hook re-render the prelim copy.
 
 ## Phase 3: Incidence-Guided Saturation sensitivity study
 
@@ -124,7 +134,8 @@ before or later is lost and anything can move between the two. Target for the cu
 - [ ] 3b. Figure: a plainer x-axis (the highest and lowest saturation, for example "60/40" to
   "90/10", instead of the spread s), and either explain the circles (they mark the original design
   and Saturation Quadrants) in a legend and caption or drop them.
-- [ ] 3c. SI section and figure (curated SI), Chapter 3 appendix mirror, and the optional CTJ
+- [ ] 3c. SI section and figure (curated SI; both the method and the findings, from the findings
+  report), Chapter 3 appendix mirror, and the optional CTJ
   sentence if the word count allows. **Stop for wording.**
 - [ ] 3d. Update the Q-16 answer in `presentation/prelim-qa-prep.md` and make the backup-slide
   figure.
@@ -171,6 +182,18 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
   the X ∈ [0, 1], σ = 1 scale, that it is estimated in every grid fit, and the Phase 4 results): Parts I to III, the script, backup slides, the Chapter 2
   two-reviewer question review, rehearsal with Dr. Lin (2026-12-02 to 12-04) and Part III at the
   Rashid Lab meeting (2026-12-03).
+  The prompt must also carry these author requirements:
+  - Exam: 2026-12-07, a 2-hour block with about 60 minutes of talk and about 90 minutes of exam
+    in all; Parts I to III, about 20 minutes each.
+  - The presentation script is the engine: slides carry only key details, and each backup slide
+    focuses on one result. The talk may use the current project state.
+  - Part I is also adapted as a standalone talk for Dr. Lin's conference, with a new title and
+    agenda. Part II starts from `presentation/sudden_talk_2026-10-29.qmd`, which stays as
+    presented; the prelim version is an updated copy. Part III is presented at the Rashid Lab
+    meeting on 2026-12-03.
+  - Before the slides use them, settle the case-identification counts in
+    `presentation/data/case_identification_counts.csv` (author: Gan's method, with Habib's counts
+    later corrected by reclassifying cardiac cases) and cite the right source (TODO item).
   The prompt must cover a Project 1 question bank as well: the prelim review produced
   anticipated questions only for Project 2 (the Chapter 3 committee-style review C-01 to C-31 and
   the Q-01 onward list in `presentation/prelim-qa-prep.md`), so Chapter 2 gets its own

@@ -1,5 +1,8 @@
 # Prompt: Project 2 work after the prelim submission (CTJ, SI, sensitivity study)
 
+> **Superseded where it differs (2026-11-25):** `docs/plans/2026-11-25-project2-phased-plan.md` is the master checklist. Settled since: SI as one source with a switch (curated about 30 pp); new IGS choices (s = 0.5, repeated levels, NC map); the τ study (Phase 4); the review package for Dr. Lin (1h).
+
+
 Author: Andrew Walther. Written 2026-11-24; replaces the Project 2 parts of
 `2026-11-19-post-prelim-planning-prompt.md`. The bios-dissertation organization has its own
 prompt (`bios-dissertation/thesis/notes/2026-11-24-thesis-organization-prompt.md`). The

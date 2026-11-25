@@ -1,5 +1,8 @@
 # Morning review guide (2026-11-25)
 
+> **Superseded where it differs (2026-11-25):** `docs/plans/2026-11-25-project2-phased-plan.md` is the master checklist. Settled since: SI as one source with a switch (curated about 30 pp); new IGS choices (s = 0.5, repeated levels, NC map); the τ study (Phase 4); the review package for Dr. Lin (1h).
+
+
 Author: Andrew Walther. Prepared overnight on 2026-11-24. Nothing in the CTJ manuscript, the SI or
 Chapter 3 was edited, and nothing was pushed. Every proposal waits for your decisions. Read in
 this order; the decisions are in bold.
