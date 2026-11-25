@@ -141,3 +141,16 @@ Abstract and counting (decided 2026-11-25)
 Final V7-draft counts: body 3,419, abstract 422 (limit 425). Deferred to the post-submission
 thesis: carry the prose revisions (not the cuts) into `bios-dissertation/thesis/` Chapter 3 and
 its appendix (`docs/TODO.md`).
+
+## 1e. Chapter 3 carry-over (`ch3-signoff.md`; decided 2026-11-25, done in this session at the author's request)
+
+| ID | Decision |
+|---|---|
+| CH-1 to CH-4 | Accept as proposed (Lee cite, TAU-1, N5, T6b rounding) |
+| TS-01 to TS-35 | Accept as proposed ("Therefore," at sentence start; TS-07 and TS-15 are covered by CH-3 and CH-4) |
+| TS-22 | Edit (softer wording): "(Table \ref{tab:downside}). Therefore, they are the designs to consider first in that setting. This guidance assumes that most colleges take part, …" |
+
+Applied by `ch3_apply.py` to `paper/thesis_chapter/Thesis_Chapter.qmd` (the hook regenerates the
+`bios-dissertation/prelim/` copy) and to `bios-dissertation/thesis/chapter3-project2-incidence/project2-incidence.qmd`.
+Lee (2004) added to `bios-dissertation/prelim/references.bib` and `thesis/references.bib`. The frozen
+`prelim-submitted-2026-11-15/` copy is unchanged.
