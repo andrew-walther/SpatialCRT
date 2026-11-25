@@ -730,7 +730,7 @@ On the NC map, $2\times2$ Blocking uses 14 irregular groups of nearby
 clusters rather than square blocks. The groups are formed once per year
 by \(k\)-means on standardized projected coordinates, incidence ranks and
 log(1+population), then held fixed, and contain one to eight clusters.
-Half of each group, rounded, is treated at random. Each year has one
+Half of each group, rounded to the nearest even whole number (1.5 to 2, 0.5 to 0), is treated at random, so a one-cluster group is never treated. Each year has one
 single-cluster group, which stays control because half of one cluster
 rounds to zero, so the yearly totals are 28, 31, 27 and 29.
 

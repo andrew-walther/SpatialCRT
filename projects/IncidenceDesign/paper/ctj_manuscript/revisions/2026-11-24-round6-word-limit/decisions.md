@@ -115,3 +115,16 @@ Batch 4, captions and Table 1 cells (decided 2026-11-25)
 Checks on the fully edited scratch text (2026-11-25): body 3,419 words; `repeated_openers.py` (bios-dissertation human-writer review) finds no runs of three or more sentences, or two or more paragraphs, opening the same way; eight sentences open with "Therefore," and one with "However,", none adjacent to another.
 
 All decisions are applied by `round6_apply.py --in-place` in 1d.
+
+## 1d. Applied (2026-11-25)
+
+`round6_apply.py --in-place` applied every accepted item; the Lee (2004) entry was added to
+`paper/SpatialCRT_IncidenceDesign.bib`; SI Section 5.2 got the T6b rounding sentence;
+`figures/Figure_Legends.md` was regenerated from the master captions; R2 was re-checked against
+`results/grid_tdf_2026-10/grid_tdf_scenarios.rds` (oracle, queen, β = 1): Incidence-Guided
+Saturation had the lowest control-only MSE in all five configurations (0.129 to 0.139). Removed
+text and its new home: `paper/ctj_manuscript/notes/trimmed-material.md`. Chapter 3 candidates:
+`ch3-carryover-candidates.md`.
+
+Counts after applying: body 3,419 (texcount text + headers, math excluded) or 3,536 with each
+math group counted as a word; abstract 433 (limit 425), pending an abstract decision.
