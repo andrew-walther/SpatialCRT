@@ -170,7 +170,9 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
   treatment is unrelated to incidence and about twice that for High Incidence Focus (its Z is
   X above the median, so X has little independent variation given Z). The extra τ values give a
   power curve for detecting τ.
-- [ ] 4d. Findings reviewed; you decide placement. This reopens the 2026-11-14 decision that
+- [x] 4d. Findings reviewed; you decide placement. Decided 2026-11-25: curated SI, mirrored in
+  the Chapter 3 appendix; drafted in the Phase 2 session after 2e, with a CTJ pointer sentence of
+  about 15 words if it fits (about 65 words of slack remain). This reopens the 2026-11-14 decision that
   estimating τ is future work; record the new decision in DECISIONS.md.
 - [ ] 4e. SI Methods subsection (author request, 2026-11-25), drafted by the main session after 4d,
   not by Codex: "Estimating the incidence coefficient after a trial". What τ is, that after a trial
@@ -224,3 +226,5 @@ Record each phase's completion here with the date and commit.
   `verify_manuscripts.py` still fails on SI-vs-Chapter 3 table drift (`tab:designs` now differs
   after the 1e carry-over), which Phase 2d resolves. The package waits on the author's read; he
   sends it.
+- 2026-11-25. 4d decided (curated SI, Chapter 3 mirror; DECISIONS updated). 4e moves into the
+  Phase 2 session.

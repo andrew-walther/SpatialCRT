@@ -10,8 +10,11 @@ one-line rule each decision implies.
 **Decision.** Andrew approved a five-value grid sweep of τ, the coefficient on X,
 and a check of how well the fitted spatial lag model estimates it. This reopens
 the 2026-11-15 decision to leave post-trial incidence estimation to future work.
-Use the completed study to inform the Supplementary Information. Placement in
-the curated or full version and the corresponding Chapter 3 treatment are open.
+Use the completed study to inform the Supplementary Information. Placement
+(author, 2026-11-25): a subsection in the curated SI, mirrored in the Chapter 3
+appendix (`Thesis_Chapter.qmd`); the CTJ gets at most one sentence pointing to it
+(about 15 words of the remaining slack are held for it). Drafted in Phase 2 after
+the curated outline.
 
 **Outcome.** The full run reproduced the September 27 intervention metrics exactly
 at τ = 1. The spillover regime still determined the broad intervention MSE comparison.
