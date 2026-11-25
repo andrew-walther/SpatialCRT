@@ -22,7 +22,7 @@ phase start until they are started).**
 
 | Prompt | Runs | Status |
 |---|---|---|
-| `docs/prompts/2026-11-25-incidence-coefficient-codex-prompt.md` | Phase 4 (τ grid and estimation), in a Codex session started in this folder | [ ] pasted |
+| `docs/prompts/2026-11-25-incidence-coefficient-codex-prompt.md` | Phase 4 (τ grid and estimation), in a Codex session started in this folder | [x] pasted 2026-11-25 |
 
 When Andrew says a Codex run has started or pastes its report or commit message, check the
 named commit and outputs, tick the matching items, and log them here, so the record stays in one
@@ -48,7 +48,7 @@ place.
 - [x] Push the SpatialCRT commits and the `prelim-submitted-2026-11-15` tags. Checked 2026-11-25:
   already done. SpatialCRT, bios-dissertation and multiomicsGEP were level with origin, and the
   tag was on the remote in all three.
-- [ ] Phase 4 runs on the side in Codex (table above); start it whenever convenient.
+- [x] Phase 4 runs on the side in Codex (table above); started 2026-11-25.
 - Context, no action: the Chapter 3 sync hook keeps writing to `bios-dissertation/prelim/` until
   after the exam (2026-12-07); `thesis/` takes over later. Dissertation dates: BIOS abstract
   2027-03-04, thesis 2027-03-18, final exam 2027-04-09 (backup 04-07), ETD 2027-04-14.
