@@ -61,3 +61,57 @@ Batch 4 (decided 2026-11-25)
 | C2, C9, T1 | Reject |
 | N4 | Reject (meeting item S-01: the North Carolina data enter only the case study) |
 | TAU-SI (pending) | One CTJ sentence pointing to the SI sensitivity analysis over a range of $\tau$ values, written in Phase 4e once that SI section and its values exist; keep about 15 words of slack for it |
+
+N5 final wording (author, 2026-11-25): "The investigator specifies $\tau$ according to whether incidence is expected to shift the outcome. It is not estimated at the design stage and we set $\tau=1$ on the grid simulation. Incidence ranges from 0 to 1, and this value raises the outcome by one noise standard deviation from the lowest to the highest incidence before spatial spread. That shift equals the primary intervention effect $\beta=1$. Treatment that follows incidence is then partly confounded with it, the harder case for designs that use incidence."
+
+## 1c. Human-writer list (`human-writer-review.md`; IDs as in that file)
+
+Settled by cut decisions (not applied): HW-04 (N8 rejected), HW-06 (= C9, rejected), HW-14 and HW-15 (N5), HW-18 (T11), HW-32 (T7), HW-35 (T3). HW-20 rebased on the kept N9 sentence (batch 2).
+
+Batch 1 (decided 2026-11-25)
+
+| ID | Decision |
+|---|---|
+| HW-01, HW-02, HW-07, HW-09, HW-10, HW-12, HW-13 | Accept as proposed |
+| HW-03 | Edit: "When spillover is expected mainly in control clusters, Incidence-Guided Saturation had the lowest or near-lowest estimation error and lower allocation risk than SRS. It also gave the highest-burden region the largest treated share." |
+| HW-05 | Edit: "…in the same arm.\cite{walther_spatialcrt_2026} We refer to this design here as Checkerboard." |
+| HW-08 | Edit: "A trial draws only one assignment. Therefore, we evaluated both…" |
+| HW-11 | Edit: "…shows an example assignment of each on the grid, and summarizes its adaptation to the case study. The supplementary information (SI) gives full specifications." |
+
+N5 comma (author, 2026-11-25): "It is not estimated at the design stage, and we set $\tau=1$ in the grid simulation."
+
+Batch 2 (decided 2026-11-25)
+
+| ID | Decision |
+|---|---|
+| HW-16, HW-17, HW-21, HW-22, HW-23, HW-25, HW-26, HW-27 | Accept as proposed |
+| HW-03b (new) | Accept: the Incidence-Guided Saturation description moves to its first abstract mention, in Results: "On the grid with treatment effect $\beta=1$, Incidence-Guided Saturation, which treats larger shares of clusters in higher-incidence regions, had a control-only mean MSE of 0.135…" (HW-03 keeps it out of Conclusions) |
+| HW-19 | Edit: "These are general simulation settings. The North Carolina data enter only the case study." |
+| HW-20 | Reject (N9 kept) |
+| HW-24 | Edit: "Therefore, treatment budgets differed between designs (Table~\ref{tab:allocation-rules}). Rather than equalizing budgets after the fact, we report each design's number of treated clusters…" |
+
+Batch 3 (decided 2026-11-25)
+
+| ID | Decision |
+|---|---|
+| HW-30, HW-31, HW-34, HW-37, HW-38, HW-39 | Accept as proposed |
+| HW-28 | Edit (keeps "nearly equal"; unrounded 0.1596 and 0.1604): "At $\beta=2$, Isolation Buffer and Incidence-Guided Saturation had nearly equal MSE (0.160 and 0.160). At $\beta=3$, Isolation Buffer was lower (0.160 versus 0.182), because it largely avoids the error in estimating $\rho$ that for most designs passes into $\hat\beta$ in proportion to $\beta$ (SI Section 6)." |
+| HW-29 | Edit: as proposed, with the last sentence "Therefore, a low MSE alone does not show that a design supports valid inference." |
+| HW-33 | Edit: "The two changes were made together. Therefore, their separate contributions cannot be distinguished." |
+| HW-36 | Edit: "…and investigators need to judge which is more plausible when planning." |
+| TH-1 (new) | Accept: "The noise $\boldsymbol{\varepsilon}$ is independent standard normal. Therefore, the intervention effect $\beta$ is in units of its standard deviation." |
+| TH-2 (new) | Accept: "Therefore, a design's ranking on the grid need not carry over unchanged to an irregular geography." |
+
+Batch 4, captions and Table 1 cells (decided 2026-11-25)
+
+| ID | Decision |
+|---|---|
+| HW-41 to HW-47, HW-49 to HW-51 | Accept as proposed |
+| HW-40 | Edit: "(blue = treated, white = control)" |
+| HW-48 | Edit: "Designs share surfaces and outcome noise. Therefore, Table~\ref{tab:grid-srs} gives…" |
+| TC-1 (new) | Accept: Checkerboard grid cell "…in a checkerboard pattern, in which no two clusters that share an edge are in the same arm (50 treated)." |
+| TC-2 (new) | Accept: Isolation Buffer grid cell "…until none remain. No two treated clusters are then neighbors (about 21 treated with queen neighbors)." |
+
+Checks on the fully edited scratch text (2026-11-25): body 3,419 words; `repeated_openers.py` (bios-dissertation human-writer review) finds no runs of three or more sentences, or two or more paragraphs, opening the same way; eight sentences open with "Therefore," and one with "However,", none adjacent to another.
+
+All decisions are applied by `round6_apply.py --in-place` in 1d.
