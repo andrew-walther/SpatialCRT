@@ -118,7 +118,7 @@ before or later is lost and anything can move between the two. Target for the cu
   verifier must pass.
 - [x] 2e. Build the curated outline (methods before results, one numbered list); everything else
   stays in the full version. **Stop to review the curated table of contents.**
-- [ ] 2f. Place the text moved out of the CTJ in Phase 1.
+- [x] 2f. Place the text moved out of the CTJ in Phase 1.
 - [ ] 2g. Prose review: human-writer pass, then a statistician and a clinician reader on the
   curated SI.
 - [ ] 2h. Rebuild both versions, run the checkers, record the page counts.
@@ -150,7 +150,7 @@ before or later is lost and anything can move between the two. Target for the cu
   does it with the rerun.) Figure: a plainer x-axis (the highest and lowest saturation, for example "60/40" to
   "90/10", instead of the spread s), and either explain the circles (they mark the original design
   and Saturation Quadrants) in a legend and caption or drop them.
-- [ ] 3c. SI section and figure (curated SI; both the method and the findings, from the findings
+- [x] 3c. SI section and figure (curated SI; both the method and the findings, from the findings
   report), Chapter 3 appendix mirror, and the optional CTJ
   sentence if the word count allows. **Stop for wording.**
 - [ ] 3d. Update the Q-16 answer in `presentation/prelim-qa-prep.md` and make the backup-slide
@@ -185,7 +185,7 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
   the Chapter 3 appendix; drafted in the Phase 2 session after 2e, with a CTJ pointer sentence of
   about 15 words if it fits (about 65 words of slack remain). This reopens the 2026-11-14 decision that
   estimating τ is future work; record the new decision in DECISIONS.md.
-- [ ] 4e. SI Methods subsection (author request, 2026-11-25), drafted by the main session after 4d,
+- [x] 4e. SI Methods subsection (author request, 2026-11-25), drafted by the main session after 4d,
   not by Codex: "Estimating the incidence coefficient after a trial". What τ is, that after a trial
   the investigator has both prior incidence and outcomes so τ can be estimated within the same
   model, what it tells them (the association between prior incidence and the later outcome,
@@ -254,3 +254,8 @@ Record each phase's completion here with the date and commit.
   Figure relabeled 60/40 … 100/0 with a legend for the circles. At 100/0 the two-region version
   turns worse under control-only spillover and about 8 times SRS under both-arms spillover.
   Next: 3c (SI section) after Phase 2.
+- 2026-11-25: 2f done (26ac8ba, moved CTJ text already in the curated SI, no edits). E8 merged
+  Tables S7 and S12 into one nine-strategy table (d594170, 8607cef). 4e and 3c done (e4eada6):
+  SI 3.2 on estimating τ with the rejection figure, SI 2.2 and Section 13 on the saturation
+  variants, two CTJ pointer sentences (body 3,473 words), curated SI 49 pages, unabridged 70;
+  checks pass. Next: Codex 2g review, then 2h and 2i.
