@@ -23,6 +23,7 @@ phase start until they are started).**
 | Prompt | Runs | Status |
 |---|---|---|
 | `docs/prompts/2026-11-25-incidence-coefficient-codex-prompt.md` | Phase 4 (τ grid and estimation), in a Codex session started in this folder | [x] pasted 2026-11-25 |
+| `docs/prompts/2026-11-25-igs-sensitivity-rerun-codex-prompt.md` | Phase 3a rerun and 3b figure, in a Codex session started in this folder | [ ] pasted |
 
 When Andrew says a Codex run has started or pastes its report or commit message, check the
 named commit and outputs, tick the matching items, and log them here, so the record stays in one
@@ -136,7 +137,10 @@ before or later is lost and anything can move between the two. Target for the cu
     instead of one level per region. Add?
   - Run the North Carolina map too?
   **Decisions; rerun if anything changes (about 80 minutes).**
-- [ ] 3b. Figure: a plainer x-axis (the highest and lowest saturation, for example "60/40" to
+  Decided 2026-11-25: add s = 0.5 (8 variants, IDs 131–138); no repeated-level variants; grid
+  only (NC later only if the findings call for it). The rerun goes to Codex (prompt in the table).
+- [ ] 3b. (Decided 2026-11-25: x-axis labels 60/40 … 100/0, keep the circles with a legend; Codex
+  does it with the rerun.) Figure: a plainer x-axis (the highest and lowest saturation, for example "60/40" to
   "90/10", instead of the spread s), and either explain the circles (they mark the original design
   and Saturation Quadrants) in a legend and caption or drop them.
 - [ ] 3c. SI section and figure (curated SI; both the method and the findings, from the findings
