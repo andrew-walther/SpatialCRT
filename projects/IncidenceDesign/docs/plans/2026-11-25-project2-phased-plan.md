@@ -17,6 +17,12 @@ effect on **Z** (swept over 0.8, 1, 1.5, 2, 3 on the grid) and τ for the incide
 addressed. Second, wording and clarity. Third, length. Keep the key message in the main text so
 readers do not have to look far; move to the SI only content that is not essential to it.
 
+**Model use in every session brief (author, 2026-11-25).** Opus 5.5 where reasoning matters most:
+drafting sign-off wording, structure and design decisions, statistical judgment, and the
+independent reviews of main deliverables. Sonnet 5.5 subagents (`model: "sonnet"`) for lower-reasoning
+work: reading and extracting text, targeted edits applied from an approved list, builds, text and
+PDF comparisons, searches, table syncs and checker runs. Check a Sonnet result before relying on it.
+
 **Codex prompts to paste (whenever convenient; the session running this plan reminds you at each
 phase start until they are started).**
 
