@@ -1,4 +1,11 @@
 % Condensed-out detail derived from the completed chapter/appendix, 2026-10-02.
+% One source, two builds (author decision 2026-11-25). This file builds the
+% curated SI that is submitted. Supplementary_Information_Full.tex defines
+% \SIFullVersion and inputs this file, which turns \fullsitrue on. Material kept
+% only in the full version sits between \iffullsi and \fi; edit it here, never
+% in a copy.
+\newif\iffullsi
+\ifdefined\SIFullVersion\fullsitrue\fi
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,booktabs,graphicx,array,placeins,natbib}
