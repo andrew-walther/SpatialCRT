@@ -23,6 +23,10 @@ phase start until they are started).**
 |---|---|---|
 | `docs/prompts/2026-11-25-incidence-coefficient-codex-prompt.md` | Phase 4 (τ grid and estimation), in a Codex session started in this folder | [ ] pasted |
 
+When Andrew says a Codex run has started or pastes its report or commit message, check the
+named commit and outputs, tick the matching items, and log them here, so the record stays in one
+place.
+
 ## Phase 0: setup and version record
 
 - [ ] Version record for the CTJ (tags, plus one clean PDF for the version Dr. Lin annotated):
@@ -158,7 +162,8 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
   model, what it tells them (the association between prior incidence and the later outcome,
   adjusted for treatment and spillover), how the design affects that precision (with the 4c
   results), and the limits. Curated SI if the findings are useful, full SI otherwise; Chapter 3
-  mirror. **Stop for wording.**
+  mirror. The SI holds the full discussion of τ (author, 2026-11-25); the CTJ gets at most a
+  sentence pointing to it, if any. **Stop for wording.**
 
 ## Phase 5: prelim presentation (after Phases 1 to 3)
 
@@ -166,6 +171,10 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
   the X ∈ [0, 1], σ = 1 scale, that it is estimated in every grid fit, and the Phase 4 results): Parts I to III, the script, backup slides, the Chapter 2
   two-reviewer question review, rehearsal with Dr. Lin (2026-12-02 to 12-04) and Part III at the
   Rashid Lab meeting (2026-12-03).
+  The prompt must cover a Project 1 question bank as well: the prelim review produced
+  anticipated questions only for Project 2 (the Chapter 3 committee-style review C-01 to C-31 and
+  the Q-01 onward list in `presentation/prelim-qa-prep.md`), so Chapter 2 gets its own
+  two-reviewer question review, answers and backup slides.
 - [ ] 5b. Run it.
 
 ## Log
