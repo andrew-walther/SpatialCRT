@@ -196,12 +196,12 @@ Every other design treats exactly 50.
 Design & Assignment rule & Clusters treated & Deterministic \\
 
 \midrule
-Incidence-Guided Saturation & The grid is divided into its four $5\times5$ coordinate quadrants. Quadrants are ranked by mean incidence and given saturations of 80\%, 60\%, 40\%, and 20\% from highest to lowest mean; within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
+Incidence-Guided Saturation & The grid is divided into its four $5\times5$ coordinate quadrants. Quadrants are ranked by mean incidence and given saturations of 80\%, 60\%, 40\%, and 20\% from highest to lowest mean. Within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
 Balanced Quartiles & Clusters are divided by incidence rank into four strata of 25. Twelve clusters are treated at random in each stratum, and one more in each of two randomly chosen strata & 50 & No \\
-Isolation Buffer & Clusters are treated one at a time, each chosen at random from those that are neither treated nor adjacent to a treated cluster, until none remain (a greedy random maximal independent set); no two treated clusters are neighbors & \raggedright 38 rook, 21 queen (mean) & No \\
+Isolation Buffer & Clusters are treated one at a time, each chosen at random from those that are neither treated nor adjacent to a treated cluster, until none remain. The result is a greedy random maximal independent set, in which no two treated clusters are neighbors & \raggedright 38 rook, 21 queen (mean) & No \\
 High Incidence Focus & The 50 clusters with the highest incidence rank are treated & 50 & No \\
-2$\times$2 Blocking & The grid is divided into 25 non-overlapping 2$\times$2 blocks; two of the four clusters in each block are treated at random & 50 & No \\
-Checkerboard & Clusters whose grid coordinates $(x, y)$ have an odd sum $x + y$ are treated, so treatment alternates from cluster to cluster; under rook contiguity every neighbor of a treated cluster is a control, and every neighbor of a control is treated & 50 & Yes \\
+2$\times$2 Blocking & The grid is divided into 25 non-overlapping 2$\times$2 blocks, and two of the four clusters in each block are treated at random & 50 & No \\
+Checkerboard & Clusters whose grid coordinates $(x, y)$ have an odd sum $x + y$ are treated, which makes treatment alternate from cluster to cluster. Under rook contiguity every neighbor of a treated cluster is a control, and every neighbor of a control is treated & 50 & Yes \\
 
 \bottomrule
 
@@ -278,8 +278,8 @@ against 3.569), so this choice does not rest on performance either.
 Design & Assignment rule & Clusters treated & Deterministic \\
 
 \midrule
-Saturation Quadrants & The grid is divided into its four $5\times5$ coordinate quadrants, which are given saturations of 20\%, 40\%, 60\%, and 80\% in an order drawn at random for each assignment, without reference to incidence; within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
-Balanced Halves & Clusters are divided by incidence rank into two strata of 50; 25 clusters are treated at random in each stratum & 50 & No \\
+Saturation Quadrants & The grid is divided into its four $5\times5$ coordinate quadrants, which are given saturations of 20\%, 40\%, 60\%, and 80\% in an order drawn at random for each assignment, without reference to incidence. Within each quadrant, that share of its 25 clusters is treated at random & 50 & No \\
+Balanced Halves & Clusters are divided by incidence rank into two strata of 50, and 25 clusters are treated at random in each stratum & 50 & No \\
 
 \bottomrule
 
@@ -494,7 +494,7 @@ Parameter & Values & Levels \\
 \midrule
 \multicolumn{3}{l}{\textit{Crossed}} \\
 Treatment effect $\beta$ & 0.8, 1.0 (primary), 1.5, 2.0, 3.0 & 5 \\
-Incidence configuration & iid; spatially autocorrelated, $\rho_X \in \{0.20, 0.50\}$; Poisson, $\rho_X \in \{0.20, 0.50\}$ & 5 \\
+Incidence configuration & iid, spatially autocorrelated with $\rho_X \in \{0.20, 0.50\}$, and Poisson with $\rho_X \in \{0.20, 0.50\}$ & 5 \\
 Neighbor type & Queen (primary), rook (sensitivity) & 2 \\
 Outcome spatial dependence $\rho$ & 0, 0.01, 0.20, 0.50 & 4 \\
 Spillover magnitude $\psi$ & 0.5, 0.6, 0.7, 0.8 & 4 \\
@@ -505,7 +505,7 @@ Design & The six designs of Table \ref{tab:designs} and the two of Table \ref{ta
 \multicolumn{3}{l}{\textit{Fixed}} \\
 Grid & Regular $10\times10$ grid, $N = 100$ clusters & \\
 Outcome model (Equation \ref{eq:outcome}) & $\tau = 1$, $\sigma = 1$ & \\
-Poisson mechanism & Base rate 35 per 100,000; $P = 100{,}000$ per cluster & \\
+Poisson mechanism & Base rate 35 per 100,000, and $P = 100{,}000$ per cluster & \\
 Incidence surfaces per configuration & $K = 10$ & \\
 Assignments per surface & $J = 25$ (Checkerboard: one assignment, used in every draw) & \\
 Fits per scenario and estimator & $KJ = 250$, each with its own noise vector & \\
@@ -1157,7 +1157,7 @@ than 0.02 (Table \ref{tab:rho}). Across
 \(\psi \in \{0.5, 0.6, 0.7, 0.8\}\), the MSE of every design except
 Checkerboard also varied by less than 0.02, and Checkerboard's varied
 between 1.052 and 1.108 with no trend in \(\psi\) (Table
-\ref{tab:gamma}). Under rook contiguity, \(\psi\) mattered for
+\ref{tab:psi}). Under rook contiguity, \(\psi\) mattered for
 Checkerboard alone, for the reason given in Section \ref{rook-contiguity}.
 
 \begin{table}[!htb]
@@ -1193,7 +1193,7 @@ Checkerboard & 1.095 & 1.077 & 1.084 & 1.092 \\
 \centering
 
 \caption{Mean squared error by design across the four levels of spillover magnitude $\psi$ at $\beta = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages 40 scenarios (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 2 spillover regimes). Rows follow Table \ref{tab:performance}. Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.}
-\label{tab:gamma}
+\label{tab:psi}
 
 \begin{tabular}{lcccc}
 
@@ -2007,10 +2007,10 @@ precision components, residual treatment information and warning and failure rec
 \cmidrule(lr){3-5}\cmidrule(lr){6-8}
 Design & Year & MSE & Bias & Coverage & MSE & Bias & Coverage \\
 \midrule
-Checkerboard & 2018 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
- & 2019 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
- & 2020 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
- & 2021 & 0.216 & -0.007 & 0.949 & 0.920 & 0.010 & 0.948 \\
+Checkerboard & 2018 & 0.216 & $-0.007$ & 0.949 & 0.920 & 0.010 & 0.948 \\
+ & 2019 & 0.216 & $-0.007$ & 0.949 & 0.920 & 0.010 & 0.948 \\
+ & 2020 & 0.216 & $-0.007$ & 0.949 & 0.920 & 0.010 & 0.948 \\
+ & 2021 & 0.216 & $-0.007$ & 0.949 & 0.920 & 0.010 & 0.948 \\
 \addlinespace
 High Incidence Focus & 2018 & 0.072 & 0.016 & 0.948 & 0.214 & 0.024 & 0.948 \\
  & 2019 & 0.072 & 0.006 & 0.951 & 0.430 & 0.023 & 0.945 \\
