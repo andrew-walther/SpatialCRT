@@ -44,6 +44,8 @@ map=(
   "results/methods_ext_figures/fig_power_vs_n.pdf|fig_power_vs_n.pdf|code/23"
   "results/methods_ext_figures/fig_colleges_needed.pdf|fig_colleges_needed.pdf|code/23"
   "results/methods_ext_figures/fig_spread_vs_gain.pdf|fig_spread_vs_gain.pdf|code/23"
+  "results/incidence_coef_2026-11/full/summary/incidence_rejection_queen.pdf|fig_incidence_rejection_queen.pdf|code/31_incidence_coefficient_summary.R"
+  "results/igs_sensitivity_2026-11/full/summary/fig_igs_re_vs_srs.pdf|fig_igs_re_vs_srs.pdf|code/30_igs_sensitivity_summary.R"
   "$EXH/population_shares_journal.pdf|real_sud/population_shares.pdf|application/code/real_sud_summary.R"
   "$EXH/primary_setting_ratios_journal.pdf|real_sud/primary_setting_ratios.pdf|application/code/real_sud_summary.R"
   "$EXH/primary_yearly_mse_journal.pdf|real_sud/primary_yearly_mse.pdf|application/code/real_sud_summary.R"

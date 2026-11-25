@@ -161,6 +161,16 @@ N1 with its figure, N4, N5 with its figure, and C1/C2 go into the Chapter 3 appe
 The chapter's figure copies must meet the thesis rule (8 pt, 6.5 in, embedded fonts): the IGS
 figure is already 6.5 × 5.5 in with 8 pt labels; the rejection figure needs checking.
 
-## Decisions (author)
+## Decisions (author, 2026-11-25)
 
-(pending)
+All accepted as recommended (D1, D2, D4, N1–N6, C1, C2). D3: two decimals, consistent with the
+ratios already printed in the SI (DECISIONS 2026-11-25); the one knock-on is N5's "0.59 to 0.59",
+printed as "0.59 at both spreads". D5: keep the 70/30 and ten-region observation in the SI only;
+C2 does not carry it into the CTJ.
+
+Applied with `apply_4e_3c.py` (reads N1, N4, N5 from the fences above). Both figures copied by
+`paper/tools/copy_figures.sh` (two new map lines). Rebuilt SI, CTJ (both layouts), SI, and the
+unabridged SI. Curated SI 49 pages (was 43), unabridged 70 (was 64); the new figures print as
+S1 and S6, so later curated figure numbers moved up (the CTJ cites them by label). CTJ body 3,473
+words (was 3,435). verify_manuscripts.py and test_manuscript_exhibits.R pass; no "??" in any PDF.
+The chapter copies of the two figures sit untracked in `paper/thesis_chapter/figures/` until 2i.
