@@ -1,2 +1,4 @@
 # Intermediate simulation checkpoints, including paired baseline estimates.
 */checkpoints/
+# Full-run surface table (~100 MB); regenerate with code/31_incidence_coefficient.R
+full/surfaces.rds

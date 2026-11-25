@@ -44,3 +44,7 @@ From the project root after the full profile, run `Rscript code/31_incidence_coe
 - **`summarize_incidence()`** averages the comparable scenario rows within each configuration and design. It uses a `dplyr` join to divide each design's mean MSE by the SRS mean from the same grid slice. The root mean square change in β̂ weights each scenario's squared change by its number of valid matched draws.
 - **`summarize_surface_mc()`** takes the surface rows and forms one mean per surface within each slice. It pairs each surface with its τ = 1 counterpart for changes in MSE or model SE. The Monte Carlo SE is the standard deviation between the ten surface means divided by √10. It measures simulation uncertainty within an incidence configuration.
 - **`write_incidence_summary()`** reads the verified RDS inputs and writes a CSV and eight vector PDFs. The `ggplot2` figures use the same axis scales across incidence configurations within each neighbor type. In the MSE plot, a ratio below one means lower MSE than SRS. In the rejection plot the 5% reference gives the nominal rejection rate at τ = 0.
+
+`full/surfaces.rds` (about 100 MB) is no longer tracked in git (2026-11-25); it stays on the
+author's machine and is rebuilt by `code/31_incidence_coefficient.R full` (about 146 minutes). The
+summary script needs it; the summary CSV, figures and `scenarios.rds` stay tracked.
