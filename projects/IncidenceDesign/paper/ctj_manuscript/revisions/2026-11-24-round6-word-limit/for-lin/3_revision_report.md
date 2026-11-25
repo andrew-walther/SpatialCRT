@@ -1,5 +1,5 @@
 ---
-title: "Revision report: Clinical Trials manuscript, version 7"
+title: "CTJ Manuscript - Revision Report"
 author: "Andrew Walther"
 date: "2026-11-25"
 geometry: margin=2.2cm
