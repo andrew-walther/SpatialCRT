@@ -88,6 +88,14 @@ def verify():
     reading = READING.read_text()
     legends = (MAIN.parents[1] / 'figures/Figure_Legends.md').read_text()
     si_numbers = si_label_numbers()
+    # Both SI builds must resolve every reference and citation: the curated SI is
+    # self-contained (author, 2026-11-25) and never points to unabridged-only material.
+    for log_name in ('Supplementary_Information.log', 'Supplementary_Information_Full.log'):
+        log = SUPPLEMENT.parent / '.build' / log_name
+        if not log.exists():
+            raise AssertionError(f'SI not built: {log} is missing')
+        undefined = re.findall(r"(?:Reference|Citation) `([^']+)' on page \d+ undefined", log.read_text(errors='replace'))
+        require_equal(sorted(set(undefined)), [], f'{log_name}: undefined references')
     figure_blocks = re.findall(r'\\begin\{figure\*\}.*?\\end\{figure\*\}',
                                shared_exhibits, re.S)
     require_equal(len(figure_blocks), 4, 'Four main figures')
@@ -302,8 +310,11 @@ def verify():
         labels = set(re.findall(r'\\label\{([^}]+)\}', source))
         labels.update(re.findall(r'\{#([^}]+)\}', source))
         labels.update(re.findall(r'\\applabel\{[^}]+\}\{([^}]+)\}', source))
-        # CTJ references into the SI (xr-hyper, 2b) resolve against the SI's labels.
-        labels.update('SI-' + label for label in re.findall(r'\\label\{([^}]+)\}', sources[SUPPLEMENT]))
+        # CTJ references into the SI (xr-hyper, 2b) must land on labels the CURATED SI build
+        # defines (its .aux), not on blocks that only the unabridged build prints (2e).
+        labels.update('SI-' + label for label in si_numbers)
+        # The SI cites the article's own exhibits (prefix M-, 2e X1): resolve against the CTJ.
+        labels.update('M-' + label for label in re.findall(r'\\label\{([^}]+)\}', master + shared_exhibits))
         require_equal(set(refs) - labels, set(), f'{path.name}: unresolved source references')
         cites = []
         for block in re.findall(r'\\cite\w*(?:\[[^]]*\])*\{([^}]+)\}', source):

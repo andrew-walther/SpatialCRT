@@ -384,8 +384,10 @@ Status and dated checkpoints: `ROADMAP.md` (Progress Log). Open items:
   new page, 2026-10-25) and no forced page breaks.
 - **CTJ → SI references (2026-11-25):** the CTJ prints SI section, table and figure numbers
   through `\ref{SI-<label>}` (`xr-hyper`, reading `supplementary_info/.build/Supplementary_Information.aux`).
-  Build the curated SI first, then the CTJ, or those numbers print "??". Never hard-code an SI
-  number in the CTJ. `verify_manuscripts.py` resolves them from the same `.aux`, and
+  The curated SI also cites the article's exhibits (`\ref{M-<label>}`, from
+  `manuscript_ctj/.build/CTJ_Manuscript.aux`). On a clean checkout build SI, CTJ, then SI again,
+  or those numbers print "??". Never hard-code an SI number in the CTJ. The curated SI is
+  self-contained: it never refers to the unabridged build (author, 2026-11-25). `verify_manuscripts.py` resolves them from the same `.aux`, and
   `ctj_wordcount.py` reports their count (texcount does not count them as words).
 - **CTJ manuscript/SI:** need TinyTeX on `PATH`; run `latexmk <file>.tex` inside
   `paper/ctj_manuscript/manuscript_ctj/` or `.../supplementary_info/`. Symlinks there (`sagej.cls`,

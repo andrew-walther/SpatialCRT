@@ -68,3 +68,14 @@ from Table S3, the paragraph on Figure S11's bands, the rook-figures paragraph, 
 29 floats themselves. Those carry no curated text, so they need no wording. The E3 move of the
 error-decomposition section and the E8 merges come with the implementation, the merges as their
 own sign-off list.
+
+## Decisions (author, 2026-11-25)
+
+- The curated SI and the CTJ are companions; the curated SI is self-contained and never refers to
+  the unabridged version, which is treated as if it did not exist (material is cut instead).
+- X1 accepted (the curated SI cites the article's exhibits with live numbers). X2 rejected (no
+  availability sentence). X3 accepted, worded as a collection of everything prepared for the study.
+- P1–P35 accepted. Two more pure pointer sentences found at build time are omitted from the curated
+  text under the same rule: P36 "Figure S13 corresponds to Figure S7." and P37 "Figure S14
+  corresponds to Figure S8." (rook section).
+- E8: Table S17 is a subset of S18, so it becomes unabridged-only and the CTJ's pointer moves to S18.
