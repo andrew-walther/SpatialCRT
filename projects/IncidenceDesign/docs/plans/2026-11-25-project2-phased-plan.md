@@ -109,13 +109,13 @@ before or later is lost and anything can move between the two. Target for the cu
 
 - [x] 2a. Add the switch and the full-version wrapper; both build.
 - [x] 2b. Link the CTJ's 12 hard-coded SI numbers to SI labels (`xr-hyper`) before anything moves.
-- [ ] 2c. Correctness and rule fixes from the SI review: the "recommended design" heading and
+- [x] 2c. Correctness and rule fixes from the SI review: the "recommended design" heading and
   wording, SRS in every design test, stale statements, "identified" → "identifiable" (FCL-028),
   figure-file issues (old labels, minus signs as hyphens), ratio decimals. **Decision on ratio
   decimals** (3 per the MSE rule, or 2 like main Table 2).
-- [ ] 2d. Bring the SI tables up to date with Chapter 3 (four changed tables, two missing). The
+- [x] 2d. Bring the SI tables up to date with Chapter 3 (four changed tables, two missing). The
   verifier must pass.
-- [ ] 2e. Build the curated outline (methods before results, one numbered list); everything else
+- [x] 2e. Build the curated outline (methods before results, one numbered list); everything else
   stays in the full version. **Stop to review the curated table of contents.**
 - [ ] 2f. Place the text moved out of the CTJ in Phase 1.
 - [ ] 2g. Prose review: human-writer pass, then a statistician and a clinician reader on the
@@ -127,7 +127,7 @@ before or later is lost and anything can move between the two. Target for the cu
 
 ## Phase 3: Incidence-Guided Saturation sensitivity study
 
-- [ ] 3a. Review the spec and findings (`docs/plans/2026-11-24-igs-sensitivity-spec.md`,
+- [x] 3a. Review the spec and findings (`docs/plans/2026-11-24-igs-sensitivity-spec.md`,
   `docs/findings/2026-11-24-igs-sensitivity-findings.md`). Open choices:
   - Saturation sets. Each region gets its own level, evenly spaced from 50% + s down to 50% − s,
     so four regions at s = 0.3 get 80/60/40/20 and four regions at s = 0.2 get 70/57/43/30. The
@@ -145,7 +145,7 @@ before or later is lost and anything can move between the two. Target for the cu
   **Decisions; rerun if anything changes (about 80 minutes).**
   Decided 2026-11-25: add s = 0.5 (8 variants, IDs 131–138); no repeated-level variants; grid
   only (NC later only if the findings call for it). The rerun goes to Codex (prompt in the table).
-- [ ] 3b. (Decided 2026-11-25: x-axis labels 60/40 … 100/0, keep the circles with a legend; Codex
+- [x] 3b. (Decided 2026-11-25: x-axis labels 60/40 … 100/0, keep the circles with a legend; Codex
   does it with the rerun.) Figure: a plainer x-axis (the highest and lowest saturation, for example "60/40" to
   "90/10", instead of the spread s), and either explain the circles (they mark the original design
   and Saturation Quadrants) in a legend and caption or drop them.
@@ -243,3 +243,13 @@ Record each phase's completion here with the date and commit.
   counter dropped the 12 `\ref{SI-...}` numbers (3,435 → 3,423); fix requested before ticking.
 - 2026-11-25. 2b done (`3affdff`, counter fix `18b81bf`): 13 SI references live; body back to
   3,435 words.
+- 2026-11-25. 2c–2e done (`e031057` to `77839ec`): SI fixes, tables match Chapter 3, curated SI
+  44 pages and unabridged SI 64 pages from one source (above the ~30-page target). CTJ still
+  3,435 words with no unresolved SI references; exhibit test and verifier pass. Case-study
+  production manifest re-recorded for the code/16 hash only (`93ffeb3`, DECISIONS); exhibits
+  reproduce byte for byte. Next: Phase 2 Part B (2f, 4e, 2g–2i).
+- 2026-11-25. 3a–3b done in Codex (`198f188`): s = 0.5 variants (IDs 131–138) added; variants
+  101–130 and Designs 3, 8, 9 reproduce the 11-24 run, and the 09-27 production run, exactly.
+  Figure relabeled 60/40 … 100/0 with a legend for the circles. At 100/0 the two-region version
+  turns worse under control-only spillover and about 8 times SRS under both-arms spillover.
+  Next: 3c (SI section) after Phase 2.
