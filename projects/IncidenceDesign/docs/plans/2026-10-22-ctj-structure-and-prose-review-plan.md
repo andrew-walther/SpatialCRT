@@ -1,5 +1,13 @@
 # CTJ manuscript: structure and prose review plan
 
+**Status: superseded 2026-11-25 (author decision, Phase 1a of
+`2026-11-25-project2-phased-plan.md`). Never started.** Part A's three structural questions
+are settled in the current CTJ: Methods opens with the model and estimation, Results have
+informative subheadings, and the Discussion is split. Part B's prose review is replaced by the
+round 6 human-writer list (`paper/ctj_manuscript/revisions/2026-11-24-round6-word-limit/human-writer-review.md`,
+HW-01 to HW-51). Its one leftover idea, a check for runs of sentences that open the same way,
+is run once on the post-HW text in Phase 1c. The text below is kept for the record.
+
 **Update 2026-10-30: Chapter 3's structure is settled.** Round 2 of the
 human-writer review (`bios-dissertation/prelim/full-draft/notes/human-writer-review/round2/`)
 applied SR1-SR4, SR6-SR13 (SR12 without step 5) and SO8 from
