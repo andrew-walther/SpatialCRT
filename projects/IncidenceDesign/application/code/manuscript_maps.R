@@ -19,6 +19,8 @@
 #   real_sud/observed_years.png, regions.png, design_examples.png   NC maps
 #   real_sud/{primary_yearly_mse,primary_setting_ratios,population_shares,
 #             refined_allocation_risk}.pdf        copies of the *_journal.pdf exports
+#   (primary_setting_ratios and refined_allocation_risk: CTJ folder only; code/28 builds
+#   the chapter's copies)
 #
 # Restricted data: the maps show only 58-cluster aggregate rates, as before.
 
@@ -61,11 +63,16 @@ cc_map <- generate_county_borders_map(get_nc_cc_data(), show_title = FALSE)
 save_all(cc_map, "community_college_service_area_clusters.png", 12, 8, dpi = 300)
 
 # Application summary figures: the summary step already writes title-free *_journal.pdf ----
+THESIS_BUILT <- c("primary_setting_ratios", "refined_allocation_risk")  # written by code/28
 for (stem in c("primary_yearly_mse", "primary_setting_ratios", "population_shares",
                "refined_allocation_risk")) {
   src <- file.path(ROOT, "exhibits", paste0(stem, "_journal.pdf"))
   stopifnot(file.exists(src))
-  ok <- file.copy(src, file.path(FOLDERS, "real_sud", paste0(stem, ".pdf")), overwrite = TRUE)
-  stopifnot(all(ok))
+  # The chapter's copies of these two are built by code/28_thesis_chapter_figures.R
+  # (6.5 in, 8 pt text), so they go to the CTJ folder only, as in copy_figures.sh's
+  # THESIS_BUILT list (fixed 2026-11-25: this loop had overwritten the chapter copies).
+  folders <- if (stem %in% THESIS_BUILT) FOLDERS[basename(dirname(FOLDERS)) != "thesis_chapter"] else FOLDERS
+  ok <- file.copy(src, file.path(folders, "real_sud", paste0(stem, ".pdf")), overwrite = TRUE)
+  stopifnot(length(folders) >= 1, all(ok))
 }
 cat("Clean manuscript maps and application figures written to", paste(FOLDERS, collapse = ", "), "\n")

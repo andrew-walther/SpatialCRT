@@ -115,3 +115,15 @@ tables, plus the new figures from slots 2.2/13 and 3.2.
   today's text apart from E3's move and E5's title.
 - Before a block goes full-only, confirm it exists in Chapter 3 Appendix B or in the full SI
   (the full SI keeps everything, so nothing is lost).
+
+## Decisions (author, 2026-11-25)
+
+- No hard page cap: the aim is a deliberate selection well under today's 65 pages (the ~30 was a
+  motivation, after the 37-page DeSurv SI). Variant B's 40 pages is already an improvement.
+- E1: B. E3: accepted. E4: accepted (no "??" in either build; the pointer sentences come as a
+  sign-off list). E6, E7, E8, E9: accepted.
+- E2: **rejected**. The List of Figures and List of Tables stay in both versions.
+- E5: title the full version "SI Appendix – Unabridged".
+- Organization: keep the "Supplementary Methods" and "Supplementary Results" part headings, as in
+  today's SI and the Chapter 3 appendix, with sections numbered straight through.
+- 2g: human-writer pass, then independent statistician and clinician reads (as for Chapter 3).
