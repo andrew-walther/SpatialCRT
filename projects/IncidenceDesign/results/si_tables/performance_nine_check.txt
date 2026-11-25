@@ -1,0 +1,144 @@
+Reproduction check of Tables S7 (tab:performance) and S12 (tab:eight-design)
+Source: results/sim_data oracle 20260927_000502 + grid_tdf_scenarios.rds (t + df)
+Cell format: panel | design | column | printed | computed | status
+
+S7 queen | Incidence-Guided Saturation | MSE | 0.091 | 0.091 | OK
+S7 queen | Incidence-Guided Saturation | SE100 | 0.082 | 0.082 | OK
+S7 queen | Incidence-Guided Saturation | Bias | 0.032 | 0.032 | OK
+S7 queen | Incidence-Guided Saturation | Coverage | 0.947 | 0.947 | OK
+S7 queen | Incidence-Guided Saturation | Power | 0.921 | 0.921 | OK
+S7 queen | Incidence-Guided Saturation | Rank7 | 1.775 | 1.775 | OK
+S7 queen | Incidence-Guided Saturation | Treated | 50 | 50 | OK
+S7 queen | Balanced Quartiles | MSE | 0.131 | 0.131 | OK
+S7 queen | Balanced Quartiles | SE100 | 0.115 | 0.115 | OK
+S7 queen | Balanced Quartiles | Bias | 0.017 | 0.017 | OK
+S7 queen | Balanced Quartiles | Coverage | 0.946 | 0.946 | OK
+S7 queen | Balanced Quartiles | Power | 0.814 | 0.814 | OK
+S7 queen | Balanced Quartiles | Rank7 | 2.688 | 2.688 | OK
+S7 queen | Balanced Quartiles | Treated | 50 | 50 | OK
+S7 queen | Isolation Buffer | MSE | 0.160 | 0.160 | OK
+S7 queen | Isolation Buffer | SE100 | 0.112 | 0.112 | OK
+S7 queen | Isolation Buffer | Bias | 0.003 | 0.003 | OK
+S7 queen | Isolation Buffer | Coverage | 0.949 | 0.949 | OK
+S7 queen | Isolation Buffer | Power | 0.706 | 0.706 | OK
+S7 queen | Isolation Buffer | Rank7 | 4.194 | 4.194 | OK
+S7 queen | Isolation Buffer | Treated | 21.4 | 21.4 | OK
+S7 queen | High Incidence Focus | MSE | 0.245 | 0.245 | OK
+S7 queen | High Incidence Focus | SE100 | 0.466 | 0.466 | OK
+S7 queen | High Incidence Focus | Bias | 0.031 | 0.031 | OK
+S7 queen | High Incidence Focus | Coverage | 0.948 | 0.948 | OK
+S7 queen | High Incidence Focus | Power | 0.582 | 0.582 | OK
+S7 queen | High Incidence Focus | Rank7 | 5.763 | 5.763 | OK
+S7 queen | High Incidence Focus | Treated | 50 | 50 | OK
+S7 queen | 2$\times$2 Blocking | MSE | 0.319 | 0.319 | OK
+S7 queen | 2$\times$2 Blocking | SE100 | 0.319 | 0.319 | OK
+S7 queen | 2$\times$2 Blocking | Bias | 0.010 | 0.010 | OK
+S7 queen | 2$\times$2 Blocking | Coverage | 0.948 | 0.948 | OK
+S7 queen | 2$\times$2 Blocking | Power | 0.629 | 0.629 | OK
+S7 queen | 2$\times$2 Blocking | Rank7 | 5.244 | 5.244 | OK
+S7 queen | 2$\times$2 Blocking | Treated | 50 | 50 | OK
+S7 queen | Checkerboard | MSE | 1.087 | 1.087 | OK
+S7 queen | Checkerboard | SE100 | 1.011 | 1.011 | OK
+S7 queen | Checkerboard | Bias | 0.001 | 0.001 | OK
+S7 queen | Checkerboard | Coverage | 0.950 | 0.950 | OK
+S7 queen | Checkerboard | Power | 0.538 | 0.538 | OK
+S7 queen | Checkerboard | Rank7 | 5.737 | 5.737 | OK
+S7 queen | Checkerboard | Treated | 50 | 50 | OK
+S7 rook | Incidence-Guided Saturation | MSE | 0.072 | 0.072 | OK
+S7 rook | Incidence-Guided Saturation | SE100 | 0.056 | 0.056 | OK
+S7 rook | Incidence-Guided Saturation | Bias | 0.018 | 0.018 | OK
+S7 rook | Incidence-Guided Saturation | Coverage | 0.952 | 0.952 | OK
+S7 rook | Incidence-Guided Saturation | Power | 0.956 | 0.956 | OK
+S7 rook | Incidence-Guided Saturation | Rank7 | 1.831 | 1.831 | OK
+S7 rook | Incidence-Guided Saturation | Treated | 50 | 50 | OK
+S7 rook | Balanced Quartiles | MSE | 0.084 | 0.084 | OK
+S7 rook | Balanced Quartiles | SE100 | 0.064 | 0.064 | OK
+S7 rook | Balanced Quartiles | Bias | 0.008 | 0.008 | OK
+S7 rook | Balanced Quartiles | Coverage | 0.948 | 0.948 | OK
+S7 rook | Balanced Quartiles | Power | 0.907 | 0.907 | OK
+S7 rook | Balanced Quartiles | Rank7 | 2.225 | 2.225 | OK
+S7 rook | Balanced Quartiles | Treated | 50 | 50 | OK
+S7 rook | Isolation Buffer | MSE | 0.133 | 0.133 | OK
+S7 rook | Isolation Buffer | SE100 | 0.091 | 0.091 | OK
+S7 rook | Isolation Buffer | Bias | 0.003 | 0.003 | OK
+S7 rook | Isolation Buffer | Coverage | 0.950 | 0.950 | OK
+S7 rook | Isolation Buffer | Power | 0.784 | 0.784 | OK
+S7 rook | Isolation Buffer | Rank7 | 4.206 | 4.206 | OK
+S7 rook | Isolation Buffer | Treated | 38.2 | 38.2 | OK
+S7 rook | High Incidence Focus | MSE | 0.206 | 0.206 | OK
+S7 rook | High Incidence Focus | SE100 | 0.301 | 0.301 | OK
+S7 rook | High Incidence Focus | Bias | 0.018 | 0.018 | OK
+S7 rook | High Incidence Focus | Coverage | 0.948 | 0.948 | OK
+S7 rook | High Incidence Focus | Power | 0.617 | 0.617 | OK
+S7 rook | High Incidence Focus | Rank7 | 5.969 | 5.969 | OK
+S7 rook | High Incidence Focus | Treated | 50 | 50 | OK
+S7 rook | 2$\times$2 Blocking | MSE | 0.128 | 0.128 | OK
+S7 rook | 2$\times$2 Blocking | SE100 | 0.124 | 0.124 | OK
+S7 rook | 2$\times$2 Blocking | Bias | 0.004 | 0.004 | OK
+S7 rook | 2$\times$2 Blocking | Coverage | 0.948 | 0.948 | OK
+S7 rook | 2$\times$2 Blocking | Power | 0.803 | 0.803 | OK
+S7 rook | 2$\times$2 Blocking | Rank7 | 4.331 | 4.331 | OK
+S7 rook | 2$\times$2 Blocking | Treated | 50 | 50 | OK
+S7 rook | Checkerboard (flagged) | MSE | 0.480 | 0.480 | OK
+S7 rook | Checkerboard (flagged) | SE100 | 0.145 | 0.145 | OK
+S7 rook | Checkerboard (flagged) | Bias | $-0.652$ | $-0.652$ | OK
+S7 rook | Checkerboard (flagged) | Coverage | 0.162 | 0.162 | OK
+S7 rook | Checkerboard (flagged) | Power | 0.390 | 0.390 | OK
+S7 rook | Checkerboard (flagged) | Rank7 | 6.987 | 6.987 | OK
+S7 rook | Checkerboard (flagged) | Treated | 50 | 50 | OK
+S12 queen | Saturation Quadrants | MSE | 0.090 | 0.090 | OK
+S12 queen | Saturation Quadrants | Coverage | 0.946 | 0.946 | OK
+S12 queen | Saturation Quadrants | Rank9 | 2.394 | 2.394 | OK
+S12 queen | Incidence-Guided Saturation | MSE | 0.091 | 0.091 | OK
+S12 queen | Incidence-Guided Saturation | Coverage | 0.947 | 0.947 | OK
+S12 queen | Incidence-Guided Saturation | Rank9 | 2.700 | 2.700 | OK
+S12 queen | Simple Random Sampling | MSE | 0.128 | 0.128 | OK
+S12 queen | Simple Random Sampling | Coverage | 0.948 | 0.948 | OK
+S12 queen | Simple Random Sampling | Rank9 | 3.788 | 3.788 | OK
+S12 queen | Balanced Halves | MSE | 0.130 | 0.130 | OK
+S12 queen | Balanced Halves | Coverage | 0.946 | 0.946 | OK
+S12 queen | Balanced Halves | Rank9 | 3.831 | 3.831 | OK
+S12 queen | Balanced Quartiles | MSE | 0.131 | 0.131 | OK
+S12 queen | Balanced Quartiles | Coverage | 0.946 | 0.946 | OK
+S12 queen | Balanced Quartiles | Rank9 | 3.906 | 3.906 | OK
+S12 queen | Isolation Buffer | MSE | 0.160 | 0.160 | OK
+S12 queen | Isolation Buffer | Coverage | 0.949 | 0.949 | OK
+S12 queen | Isolation Buffer | Rank9 | 5.638 | 5.638 | OK
+S12 queen | High Incidence Focus | MSE | 0.245 | 0.245 | OK
+S12 queen | High Incidence Focus | Coverage | 0.948 | 0.948 | OK
+S12 queen | High Incidence Focus | Rank9 | 7.763 | 7.763 | OK
+S12 queen | 2$\times$2 Blocking | MSE | 0.319 | 0.319 | OK
+S12 queen | 2$\times$2 Blocking | Coverage | 0.948 | 0.948 | OK
+S12 queen | 2$\times$2 Blocking | Rank9 | 7.244 | 7.244 | OK
+S12 queen | Checkerboard | MSE | 1.087 | 1.087 | OK
+S12 queen | Checkerboard | Coverage | 0.950 | 0.950 | OK
+S12 queen | Checkerboard | Rank9 | 7.737 | 7.737 | OK
+S12 rook | Saturation Quadrants | MSE | 0.071 | 0.071 | OK
+S12 rook | Saturation Quadrants | Coverage | 0.949 | 0.949 | OK
+S12 rook | Saturation Quadrants | Rank9 | 2.587 | 2.587 | OK
+S12 rook | Incidence-Guided Saturation | MSE | 0.072 | 0.072 | OK
+S12 rook | Incidence-Guided Saturation | Coverage | 0.952 | 0.952 | OK
+S12 rook | Incidence-Guided Saturation | Rank9 | 2.650 | 2.650 | OK
+S12 rook | Simple Random Sampling | MSE | 0.085 | 0.085 | OK
+S12 rook | Simple Random Sampling | Coverage | 0.947 | 0.947 | OK
+S12 rook | Simple Random Sampling | Rank9 | 3.612 | 3.612 | OK
+S12 rook | Balanced Halves | MSE | 0.084 | 0.084 | OK
+S12 rook | Balanced Halves | Coverage | 0.949 | 0.949 | OK
+S12 rook | Balanced Halves | Rank9 | 3.569 | 3.569 | OK
+S12 rook | Balanced Quartiles | MSE | 0.084 | 0.084 | OK
+S12 rook | Balanced Quartiles | Coverage | 0.948 | 0.948 | OK
+S12 rook | Balanced Quartiles | Rank9 | 3.369 | 3.369 | OK
+S12 rook | Isolation Buffer | MSE | 0.133 | 0.133 | OK
+S12 rook | Isolation Buffer | Coverage | 0.950 | 0.950 | OK
+S12 rook | Isolation Buffer | Rank9 | 6.050 | 6.050 | OK
+S12 rook | High Incidence Focus | MSE | 0.206 | 0.206 | OK
+S12 rook | High Incidence Focus | Coverage | 0.948 | 0.948 | OK
+S12 rook | High Incidence Focus | Rank9 | 7.969 | 7.969 | OK
+S12 rook | 2$\times$2 Blocking | MSE | 0.128 | 0.128 | OK
+S12 rook | 2$\times$2 Blocking | Coverage | 0.948 | 0.948 | OK
+S12 rook | 2$\times$2 Blocking | Rank9 | 6.206 | 6.206 | OK
+S12 rook | Checkerboard (flagged) | MSE | 0.480 | 0.480 | OK
+S12 rook | Checkerboard (flagged) | Coverage | 0.162 | 0.162 | OK
+S12 rook | Checkerboard (flagged) | Rank9 | 8.988 | 8.988 | OK
+
+Cells checked: S7 84, S12 54; mismatches: 0
