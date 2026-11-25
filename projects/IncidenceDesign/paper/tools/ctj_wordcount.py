@@ -75,6 +75,12 @@ def main():
         print(f"{title[:70]:<70} {a:>9} {b:>7}")
     print(f"{'TOTAL':<70} {tot_a:>9} {tot_b:>7}")
     print(f"Limit {LIMIT}: over by {tot_a - LIMIT} (text+headers) / {tot_b - LIMIT} (math as one word)")
+    # SI numbers are printed through \ref{SI-label} (xr-hyper, 2026-11-25), which texcount
+    # does not count as words; report how many there are in the body and exhibits.
+    exhibits = MAIN.with_name('CTJ_Exhibits.tex').read_text()
+    n_body = len(re.findall(r'\\ref\{SI-', body_text()))
+    n_exh = len(re.findall(r'\\ref\{SI-', exhibits))
+    print(f"SI cross-references (\\ref{{SI-...}}): {n_body} in the body, {n_exh} in exhibits")
 
 
 if __name__ == '__main__':

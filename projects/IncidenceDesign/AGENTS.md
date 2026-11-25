@@ -381,6 +381,11 @@ Status and dated checkpoints: `ROADMAP.md` (Progress Log). Open items:
   `figures/compact/` exports from `code/20_manuscript_figure_revision.R`. The reading layout
   uses the `flushend` package (balances only the last page; `balance` pushed References to a
   new page, 2026-10-25) and no forced page breaks.
+- **CTJ → SI references (2026-11-25):** the CTJ prints SI section, table and figure numbers
+  through `\ref{SI-<label>}` (`xr-hyper`, reading `supplementary_info/.build/Supplementary_Information.aux`).
+  Build the curated SI first, then the CTJ, or those numbers print "??". Never hard-code an SI
+  number in the CTJ. `verify_manuscripts.py` resolves them from the same `.aux`, and
+  `ctj_wordcount.py` reports their count (texcount does not count them as words).
 - **CTJ manuscript/SI:** need TinyTeX on `PATH`; run `latexmk <file>.tex` inside
   `paper/ctj_manuscript/manuscript_ctj/` or `.../supplementary_info/`. Symlinks there (`sagej.cls`,
   `SageV.bst`, `SpatialCRT_IncidenceDesign.bib`) replace the old `TEXINPUTS`/`BSTINPUTS` setup,

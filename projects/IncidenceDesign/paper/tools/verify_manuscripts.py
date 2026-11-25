@@ -58,6 +58,18 @@ def numerical_rows(body):
     return result
 
 
+def si_label_numbers():
+    """Map SI labels to printed numbers from the SI build's .aux (CTJ cites them via xr-hyper).
+
+    The CTJ prints SI numbers through \\ref{SI-label}; a missing SI build would make
+    those print "??", so fail loudly rather than compare against unresolved text.
+    """
+    aux = SUPPLEMENT.parent / '.build/Supplementary_Information.aux'
+    if not aux.exists():
+        raise AssertionError(f'SI not built: {aux} is missing (latexmk Supplementary_Information.tex)')
+    return dict(re.findall(r'\\newlabel\{([^}]+)\}\{\{([^}]*)\}', aux.read_text()))
+
+
 def require_equal(actual, expected, context):
     """Reject a wrong printed value or order with its source-table context."""
     if actual != expected:
@@ -72,6 +84,7 @@ def verify():
     shared_exhibits = MAIN_EXHIBITS.read_text()
     reading = READING.read_text()
     legends = (MAIN.parents[1] / 'figures/Figure_Legends.md').read_text()
+    si_numbers = si_label_numbers()
     figure_blocks = re.findall(r'\\begin\{figure\*\}.*?\\end\{figure\*\}',
                                shared_exhibits, re.S)
     require_equal(len(figure_blocks), 4, 'Four main figures')
@@ -80,6 +93,8 @@ def verify():
         caption = caption.replace('Table~\\ref{tab:grid-srs}', 'Table 2')
         caption = caption.replace('Figure~\\ref{fig:nc-mse}', 'Figure 4')
         caption = caption.replace('Figure~\\ref{fig:grid}', 'Figure 2')
+        caption = re.sub(r'~\\ref\{SI-([^}]+)\}',
+                         lambda m: ' ' + si_numbers[m.group(1)], caption)
         if f'Figure {index}. {caption}' not in legends:
             raise AssertionError(f'Figure {index}: separate legend differs from master')
     require_equal(re.search(r'\\newcommand\{\\CTJTitle\}\{([^}]+)\}', master).group(1),
