@@ -48,10 +48,12 @@ spatial cluster randomized trials. Do only 2g. Items 2h (final rebuild and page 
 
 ## What to do
 
-Work in three stages and stop for the author's sign-off after each. Never edit SI, CTJ or Chapter
-3 text without sign-off on the exact wording.
+Run stages 1 and 2 back to back without waiting for the author (he reviews both lists the next
+morning). Then stop. Stage 3 waits for his decisions. Never edit SI, CTJ or Chapter 3 text
+without sign-off on the exact wording, so stages 1 and 2 only write proposals; they change no
+manuscript file.
 
-1. **Human-writer pass on the curated SI.** The SI grew by accretion: caveats repeated in up to
+1. **Human-writer pass on the curated SI (proposals only).** The SI grew by accretion: caveats repeated in up to
    15 places, 400-word paragraphs, pipeline jargon ("stored fits", "manifest", "production
    allocations", "aggregate output tables", "Spill"), prose that describes a figure instead of
    letting the caption do it, and hedges stacked three deep. State each caveat once where it
@@ -65,19 +67,27 @@ Work in three stages and stop for the author's sign-off after each. Never edit S
    "Baseline / adjusted"; the SI 5.2 rounding sentence that now overlaps the sentence after it;
    one sentence that the case study's "2×2 Blocking" is the spatial-blocking adaptation the CTJ
    names. The curated overview keeps "the full methods" (author decision).
-2. **Two independent reads of the curated SI after stage 1 is applied**: one as a biostatistician
+2. **Two independent reads of the curated SI as it stands now (stage 1 is not applied yet)**:
+   one as a biostatistician
    (correctness of methods, inference, Monte Carlo precision, whether each claim follows from its
    table or figure) and one as a clinician or epidemiologist planning a trial (can they follow the
    case study and use the planning guidance). Do the two reads separately, so that neither sees
    the other's notes, and do not anchor on stage 1's reasoning. Each read lists findings; you then
-   turn the ones worth acting on into one sign-off list.
-3. **Apply** approved items by ID with a script (pattern: `apply_2c.py`; each edit must match
+   turn the ones worth acting on into one sign-off list. Where a finding touches a passage that a
+   stage 1 item already rewrites, write the proposal against the stage 1 version and name that ID
+   ("builds on HW-12"), or say that it conflicts with it, so the author can decide both together.
+   When both lists are written, stop and report: the two file paths, the number of items in
+   each, and the five items you most want the author to look at first.
+3. **Apply, after the author's decisions** (a later run of this session). Apply approved items by
+   ID with a script (pattern: `apply_2c.py`; each edit must match
    exactly the expected number of times, or the script stops), rebuild in the order above, and run
    the checks.
 
 ## Sign-off format (author rules)
 
-- Batches of about 8 to 12 IDs, with your recommendation first and a one-line reason.
+- Batches of about 8 to 12 IDs, with your recommendation first and a one-line reason. Use the
+  prefixes HW- (stage 1) and SR- (stage 2) so the author can reply by ID ("accept HW-1 to HW-12").
+- Committing the sign-off files themselves needs no approval (they change no manuscript text).
 - Every item shows the full current text and the full proposed text, not a description. Put the
   lists in `paper/ctj_manuscript/revisions/2026-11-25-si-curation/2g-signoff.md` (stage 1) and
   `2g-review-signoff.md` (stage 2), and record the author's decisions at the end of each file.
@@ -114,6 +124,8 @@ Work in three stages and stop for the author's sign-off after each. Never edit S
   3, Incidence-Guided Saturation sensitivity) and 3.2 (Phase 4e, estimating the incidence
   coefficient τ). They are drafted elsewhere.
 
-Done means: stage 1 and stage 2 sign-off lists decided and applied, both SI builds clean, all
-checks passing, the Chapter 3 list written, and a short report of commits, check results and the
-curated SI's page count.
+Done tonight means: both sign-off lists written and committed (`2g-signoff.md`,
+`2g-review-signoff.md`), no manuscript file changed, and the short report described in stage 2.
+Done overall (after the author's decisions): approved items applied, both SI builds clean, all
+checks passing, the Chapter 3 list written, and a report of commits, check results and the curated
+SI's page count.
