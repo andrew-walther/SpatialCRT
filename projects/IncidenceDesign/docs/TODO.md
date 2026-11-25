@@ -6,8 +6,8 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Next up
 
-Start from `docs/plans/2026-11-25-morning-review-guide.md` and the brief
-`docs/prompts/2026-11-24-project2-post-prelim-prompt.md`.
+Master checklist: `docs/plans/2026-11-25-project2-phased-plan.md` (phases 0 to 5). Detail:
+`docs/plans/2026-11-25-morning-review-guide.md`; brief: `docs/prompts/2026-11-24-project2-post-prelim-prompt.md`.
 
 - [x] ~~Andrew's markup of `CTJ_Reading_Markup_V6.pdf`~~: V6 is a frozen copy after Dr. Lin's
   feedback was applied, not a markup (author, 2026-11-24).

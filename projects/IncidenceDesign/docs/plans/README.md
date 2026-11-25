@@ -21,3 +21,5 @@ are in [`../findings/`](../findings/README.md).
 | 2026-11-14 | [chapter3-review-session-plan](2026-11-14-chapter3-review-session-plan.md) | Chapter 3 prelim review and the first CTJ revision from Dr. Lin's feedback: content map, feedback triage, sign-off lists | active: Phase 2 awaiting author decisions |
 | 2026-11-24 | [igs-sensitivity-spec](2026-11-24-igs-sensitivity-spec.md) | Provisional spec of the Incidence-Guided Saturation sensitivity study (run overnight) | active: awaits the author's review |
 | 2026-11-25 | [morning-review-guide](2026-11-25-morning-review-guide.md) | What to read and decide after the overnight CTJ, SI and sensitivity work | active |
+| 2026-11-25 | [project2-phased-plan](2026-11-25-project2-phased-plan.md) | Master checklist for Project 2 after the prelim: versions, CTJ round 6, SI curation, sensitivity study, incidence coefficient (Codex), prelim presentation | active |
+| 2026-11-25 | [incidence-coefficient-plan](2026-11-25-incidence-coefficient-plan.md) | Grid sensitivity at τ = 0 and 0.5 and estimation of τ by design (Phase 4, for Codex) | proposed |
