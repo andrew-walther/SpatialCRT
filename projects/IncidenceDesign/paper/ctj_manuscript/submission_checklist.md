@@ -3,12 +3,14 @@
 Checked against the live [journal instructions](https://journals.sagepub.com/author-instructions/ctj) on 2026-10-28 (the page loads in a browser; scripted fetches get HTTP 403). Findings: `docs/reviews/2026-10-27-ctj-v5-final-proofread.md`, "Live guideline check".
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,498 prose/heading words (recounted 2026-10-27 after the V5 revision, Introduction through
-  Discussion, texcount text + headers, math excluded); limit 3,500 applies to the body
+- [x] Body 3,419 prose/heading words (recounted 2026-11-25 after round 6, V7 draft; was 3,853 at V6
+  and 3,498 at V5; Introduction through Discussion, texcount text + headers, math excluded,
+  which the author confirmed on 2026-11-25 because the journal rule does not mention
+  equations); limit 3,500 applies to the body
   (author, 2026-10-14; end declarations, abstract, references and exhibits excluded).
   Declarations not recounted since "Ethical considerations" was added (2026-10-27).
   Placeholder text (ethics statement, coauthor-approval sentence) is highlighted yellow.
-  Structured abstract 404 words (recounted 2026-10-27; was 411 on 2026-10-26; limit 425); six keywords. Earlier count 394 on 2026-10-14
+  Structured abstract 422 words (recounted 2026-11-25 after AB-1 and AB-2; was 433 at V6; limit 425, rechecked against the journal instructions 2026-11-25); six keywords. Abstract 404 words on 2026-10-27. Earlier count 394 on 2026-10-14
   after the heading/abstract revision (informative subheadings, Discussion
   subsections, plainer abstract), using texcount on the body, declaration and
   abstract fragments.
@@ -85,7 +87,7 @@ proof. It selects a layout branch in `CTJ_Manuscript.tex`; both layouts load
   `url` where a DOI exists.
 - [ ] Figure 1 panel A prints "2018-2021" with a hyphen (R's pdf device cannot print an en
   dash); acceptable, or switch that export to a Unicode-capable device.
-- [ ] Body is at 3,498 of 3,500 words: any addition needs an equal cut.
+- [ ] Body is at 3,419 of 3,500 words (2026-11-25); about 15 words are held for the planned sentence pointing to the SI sensitivity analysis of the incidence coefficient (Phase 4e). Title page carries both counts; update them after any edit.
 - [ ] Funding confirmation with Habib and Simpson (the Funding comment); the guideline
   sentence stays unless they report funding (author, 2026-10-28). Funding and
   conflict wording now follow the guidelines' own sentences (2.4, 2.5; 2026-10-28).

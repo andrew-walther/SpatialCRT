@@ -128,3 +128,16 @@ text and its new home: `paper/ctj_manuscript/notes/trimmed-material.md`. Chapter
 
 Counts after applying: body 3,419 (texcount text + headers, math excluded) or 3,536 with each
 math group counted as a word; abstract 433 (limit 425), pending an abstract decision.
+
+Abstract and counting (decided 2026-11-25)
+
+| ID | Decision |
+|---|---|
+| AB-1 | Accept: "We then applied the designs in a case study for a statewide extension of a sudden unexpected death (SUD) prevention education pilot trial in North Carolina." |
+| AB-2 | Accept: "Sensitivity analyses used rook instead of queen contiguity, let incidence shift the outcome, and ordered regions by alternative incidence summaries." (the queen sentence is folded in) |
+| Counting | Math and equations are excluded from the 3,500 count (the journal rule excludes abstract, references, tables and figures and does not mention equations); `ctj_wordcount.py` text + headers is the reported number |
+| Title page | "Main-text word count: 3,419. Abstract word count: 422." |
+
+Final V7-draft counts: body 3,419, abstract 422 (limit 425). Deferred to the post-submission
+thesis: carry the prose revisions (not the cuts) into `bios-dissertation/thesis/` Chapter 3 and
+its appendix (`docs/TODO.md`).
