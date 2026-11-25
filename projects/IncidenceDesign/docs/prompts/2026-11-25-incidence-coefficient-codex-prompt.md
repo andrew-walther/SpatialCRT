@@ -27,6 +27,8 @@ Scope and rules:
 - The run at τ = 1 must reproduce the production run results/sim_data/*_20260927_000502* exactly for
   the β̂ metrics; stop if it does not.
 - Fail loud: report failed, aliased and warned fits; never drop rows silently.
+- Another session is committing CTJ edits in this same checkout. Stage only your own paths by
+  name (never `git add -A`, `git add .` or `git commit -a`), and leave others' uncommitted files alone.
 - Script header and roxygen as in the existing scripts; "Author: Andrew Walther"; never name an AI
   tool in code or documents.
 
