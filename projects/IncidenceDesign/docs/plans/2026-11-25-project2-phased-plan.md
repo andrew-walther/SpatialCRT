@@ -55,27 +55,27 @@ place.
 
 ## Phase 1: CTJ round 6 (Dr. Lin's feedback, wording, then length)
 
-- [ ] 1a. Read the audit (`docs/reviews/2026-11-24-ctj-revision-audit.md`) and the word-growth
+- [x] 1a. Read the audit (`docs/reviews/2026-11-24-ctj-revision-audit.md`) and the word-growth
   map. Decide the open feedback items: a reference for the Wald interval (FCL-024), and anything
   in the audit you want handled differently. Also decide what remains of
   `docs/plans/2026-10-22-ctj-structure-and-prose-review-plan.md` (not started): fold its open
   items into the 1c list, or drop it and say so in the plan's status.
-- [ ] 1b. Cut list (`revisions/2026-11-24-round6-word-limit/signoff.md`): accept, reject or edit
+- [x] 1b. Cut list (`revisions/2026-11-24-round6-word-limit/signoff.md`): accept, reject or edit
   each ID. Recommended set 3,385 words; about 115 words of slack. **Stop for decisions.**
-- [ ] 1c. Human-writer list (`human-writer-review.md`, HW-01 to HW-51): accept, reject or edit.
+- [x] 1c. Human-writer list (`human-writer-review.md`, HW-01 to HW-51): accept, reject or edit.
   Note HW-28 (β = 2 values are 0.1596 and 0.1604, so "nearly equal" stays). **Stop for decisions.**
-- [ ] 1d. Apply the accepted items (`cuts.py --apply`, then the HW edits), move cut text to the
+- [x] 1d. Apply the accepted items (`cuts.py --apply`, then the HW edits), move cut text to the
   SI or `trimmed-material.md`, regenerate `Figure_Legends.md`, update the exhibit test if HW-28
   changes, rebuild both layouts, run `ctj_wordcount.py`, `test_manuscript_exhibits.R` and
   `verify_manuscripts.py`. Body ≤ 3,500. Also confirm the current Clinical Trials counting rule
   (what counts toward the 3,500) and the abstract limit (the checklist says 425 words) and check
   the abstract against it.
-- [ ] 1e. Chapter 3 carry-over as a second sign-off list. **Stop for decisions**, then apply and
+- [x] 1e. Chapter 3 carry-over as a second sign-off list. **Stop for decisions**, then apply and
   let the hook re-render the prelim copy.
-- [ ] 1f. Fix "application" in the cover letter and submission checklist (D-3).
-- [ ] 1g. You read the rebuilt `CTJ_Reading.pdf`. When you approve it, copy it as
+- [x] 1f. Fix "application" in the cover letter and submission checklist (D-3).
+- [x] 1g. You read the rebuilt `CTJ_Reading.pdf`. When you approve it, copy it as
   `CTJ_Reading_Markup_V7.pdf` and commit.
-- [ ] 1h. Review package for Dr. Lin, so he can review V7 without rereading the whole paper
+- [x] 1h. Review package for Dr. Lin, so he can review V7 without rereading the whole paper
   (author request, 2026-11-25). In `revisions/2026-11-24-round6-word-limit/for-lin/`:
   1. the updated manuscript (`CTJ_Reading.pdf`, V7);
   2. a marked-up diff from the draft he annotated (`8e36959`, tag `ctj-pre-fcl`) to V7, made with `latexdiff`
@@ -218,3 +218,9 @@ Record each phase's completion here with the date and commit.
   0.25, 0.5, 1, 2} (145.8 min). τ = 1 reproduces every stored production β̂ metric exactly (28,800
   scenario and 288,000 surface rows). Coordinator spot-checked the High Incidence Focus vs SRS τ̂ SE
   and power against `performance.csv`. 4d (placement) waits on the author.
+- 2026-11-25. Phase 1 done (`568a565` to `ca20672`; V7 `e9fee02`, review package `ca20672`).
+  Body 3,498 → 3,853 → 3,435 words; abstract 422 of 425. V7 copy matches the current
+  `CTJ_Reading.pdf`; V1–V6 markups untouched; the diff base is `ctj-pre-fcl`. Exhibit test passes.
+  `verify_manuscripts.py` still fails on SI-vs-Chapter 3 table drift (`tab:designs` now differs
+  after the 1e carry-over), which Phase 2d resolves. The package waits on the author's read; he
+  sends it.
