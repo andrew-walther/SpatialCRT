@@ -6,13 +6,13 @@ geometry: margin=2.2cm
 fontsize: 10pt
 ---
 
-This package holds `1_CTJ_V7.pdf`, the new version in the reading layout, and `2_CTJ_V7_changes_since_annotated_draft.pdf`, which marks every change since the draft you annotated with deletions struck in red and additions underlined in blue. This report shows how we answered each comment and where to check it. The main text had 3,498 words in the annotated draft and 3,853 after your comments were applied (V6). Cuts bring V7 to 3,435 words, under the 3,500 limit, which excludes the abstract, references, tables and figures. Our count also excludes mathematical expressions. The abstract has 422 of 425 words.
+This package holds `1_CTJ_revised.pdf`, the new version in the reading layout, and `2_CTJ_changes_since_annotated_draft.pdf`, which marks every change since the draft you annotated with deletions struck in red and additions underlined in blue. This report shows how we answered each comment and where to check it. The main text had 3,498 words in the annotated draft and 3,853 after your comments were applied. Cuts bring the revised manuscript to 3,435 words, under the 3,500 limit, which excludes the abstract, references, tables and figures. Our count also excludes mathematical expressions. The abstract has 422 of 425 words.
 
-Following our meeting, the treatment effect is now $\beta$, the incidence coefficient $\tau$ and the spillover magnitude $\psi$. Where your notes used the old symbols, V7 uses the new ones. Page numbers refer to `1_CTJ_V7.pdf`.
+Following our meeting, the treatment effect is now $\beta$, the incidence coefficient $\tau$ and the spillover magnitude $\psi$. Where your notes used the old symbols, the revised manuscript uses the new ones. Page numbers refer to `1_CTJ_revised.pdf`.
 
 ## Your comments
 
-| ID | You asked | V7 | Where |
+| ID | You asked | Revised text | Where |
 |------|--------------|----------------------|----------|
 | FCL-001 | Citation at sentence end | Moved | Introduction, p. 1 |
 | FCL-002 | Who is "its"? | Sentence rewritten without it | Introduction, p. 1 |
@@ -87,12 +87,12 @@ Following our meeting, the treatment effect is now $\beta$, the incidence coeffi
 
 ## Further revisions
 
-These came from our own further review after V6.
+These came from our own further review after your comments were applied.
 
 - **Content.** The fuller definition of $\tau$ at first use now says what $\tau=0$ and $\tau>0$ mean (p. 2). Methods notes that our earlier study used binary spillover, unlike the proportional spillover here, and points to the supplement comparison of spillover forms (p. 2). Results now states that incidence configuration did not change which design had the lowest control-only MSE (p. 4). The Wald interval cites Lee (2004).
 - **Wording.** We removed semicolons, colons in running prose and ", so" joins, took results out of parentheses, and opened sentences with "Therefore," where the logic needed it.
 - **Abstract.** The case-study sentence was shortened, and the contiguity sentence was folded into the list of sensitivity analyses.
-- **Checks on V7.** Figure 3 now reads "Case study," two orphaned sentences were reconnected (pp. 2, 6), and a DOI in the references now prints correctly.
+- **Final checks.** Figure 3 now reads "Case study," two orphaned sentences were reconnected (pp. 2, 6), and a DOI in the references now prints correctly.
 
 ## Length cuts
 
