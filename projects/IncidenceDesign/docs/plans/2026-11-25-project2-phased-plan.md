@@ -108,7 +108,7 @@ before or later is lost and anything can move between the two. Target for the cu
 30 pages, with room for new content (the DeSurv SI is 37 pages in all).
 
 - [x] 2a. Add the switch and the full-version wrapper; both build.
-- [ ] 2b. Link the CTJ's 12 hard-coded SI numbers to SI labels (`xr-hyper`) before anything moves.
+- [x] 2b. Link the CTJ's 12 hard-coded SI numbers to SI labels (`xr-hyper`) before anything moves.
 - [ ] 2c. Correctness and rule fixes from the SI review: the "recommended design" heading and
   wording, SRS in every design test, stale statements, "identified" → "identifiable" (FCL-028),
   figure-file issues (old labels, minus signs as hyphens), ratio decimals. **Decision on ratio
@@ -241,3 +241,5 @@ Record each phase's completion here with the date and commit.
 - 2026-11-25. 2a done (`2b47ab4`): curated/full switch; both versions build at 65 pages, text
   identical to the previous SI. 2b (`3affdff`) checked: printed CTJ text unchanged, but the word
   counter dropped the 12 `\ref{SI-...}` numbers (3,435 → 3,423); fix requested before ticking.
+- 2026-11-25. 2b done (`3affdff`, counter fix `18b81bf`): 13 SI references live; body back to
+  3,435 words.
