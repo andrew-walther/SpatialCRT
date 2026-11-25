@@ -210,3 +210,7 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
 ## Log
 
 Record each phase's completion here with the date and commit.
+
+- 2026-11-25. Phase 0 done (`b0f7891`): tags `ctj-pre-fcl` (`8e36959`) and `ctj-v6`
+  (`4386bcb`) pushed; clean pre-FCL PDF saved; earlier pushes verified. Codex Phase 4 prompt
+  not yet pasted.
