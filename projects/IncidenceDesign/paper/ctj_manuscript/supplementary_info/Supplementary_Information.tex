@@ -318,9 +318,9 @@ roughly 1\% of the computing time; we also refit a 1\% sample of the
 full simulation with \texttt{lagsarlm} itself as a check. Confidence intervals are 95\% intervals with a $t$ reference distribution and a degrees-of-freedom-corrected standard error, $\hat\beta \pm t_{0.975,\,N-p}\,\widehat{\text{SE}}\sqrt{N/(N-p)}$, where $\widehat{\text{SE}}$ is the estimated standard error, $N = 100$ is the number of clusters and $p$ is the number of regression coefficients plus $\rho$ (5 for the oracle model; 4 for the non-oracle model and for rook Checkerboard, whose aliased spillover column is dropped). The case study uses the same interval. The 95\% Wald interval, $\hat\beta \pm 1.96\,\widehat{\text{SE}}$, covered about one percentage point less for every design.
 
 For Checkerboard, strict interspersion makes treatment and spillover hard or impossible to separate. Under rook contiguity on the rectangular grid, \(\mathbf{W}\mathbf{Z}=\mathbf{1}-\mathbf{Z}\), so
-treatment and spillover cannot be separately identified; the fitted
+treatment and spillover are not separately identifiable; the fitted
 coefficient on treatment estimates \(\beta-\psi\). Under queen
-contiguity, treatment is identified but control-only spillover is weakly
+contiguity, treatment is identifiable but control-only spillover is weakly
 separated from treatment. We retain Checkerboard in the main design
 comparison and flag aliased estimates. Exact matrix identities, boundary
 information and the rare Isolation Buffer aliases are detailed in
@@ -337,7 +337,7 @@ contiguity, Checkerboard gives \(\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}\
 neighbor of a treated cluster is a control and every neighbor of a
 control is treated. Both spillover covariates then equal
 \(\mathbf{1} - \mathbf{Z}\), a linear combination of the intercept and \(\mathbf{Z}\), so
-\(\beta\) is not identified: the fitting routine drops the aliased
+\(\beta\) is not identifiable: the fitting routine drops the aliased
 spillover column, and the coefficient on \(\mathbf{Z}\) estimates
 $\beta - \psi$, because $\psi(\mathbf{1} - \mathbf{Z}) = \psi - \psi\mathbf{Z}$. The earlier small-grid study noted the same
 consequence of exact collinearity between treatment and spillover
@@ -349,7 +349,7 @@ control-only regime the spillover covariate then equals
 \((1/2)(\mathbf{1} - \mathbf{Z})\) at those clusters, a linear combination of the
 intercept and \(\mathbf{Z}\), and only the 36 clusters on the grid boundary carry
 information that separates it from the intercept and \(\mathbf{Z}\); \(\beta\) is
-identified, but imprecisely. Under the both-arms regime it is the
+identifiable but imprecisely estimated. Under the both-arms regime it is the
 constant \(1/2\) at interior clusters, confounded with the
 intercept but not with \(\mathbf{Z}\). Isolation Buffer under rook contiguity can
 also, rarely, draw exactly the checkerboard pattern, a maximal
@@ -1031,7 +1031,7 @@ Each entry of Table \ref{tab:performance} averages the 160 scenarios of one desi
 \small
 \centering
 
-\caption{Performance of the six designs at $\beta = 1$, pooled over the five incidence configurations, under queen and rook contiguity. Each entry averages 160 scenarios of 250 oracle fits each. Rows follow queen-contiguity mean squared error (MSE); SE of MSE is its Monte Carlo standard error, multiplied by 100. Average rank is the within-block MSE rank among the six designs and SRS (1 = lowest); clusters treated is a mean per assignment. Under rook contiguity Checkerboard is not identified ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$), and its coefficient on $\mathbf{Z}$ estimates $\beta - \psi$.}
+\caption{Performance of the six designs at $\beta = 1$, pooled over the five incidence configurations, under queen and rook contiguity. Each entry averages 160 scenarios of 250 oracle fits each. Rows follow queen-contiguity mean squared error (MSE); SE of MSE is its Monte Carlo standard error, multiplied by 100. Average rank is the within-block MSE rank among the six designs and SRS (1 = lowest); clusters treated is a mean per assignment. Under rook contiguity, $\beta$ is not identifiable for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$), and its coefficient on $\mathbf{Z}$ estimates $\beta - \psi$.}
 \label{tab:performance}
 
 \begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}ccccccc}
@@ -1112,7 +1112,7 @@ than under the iid and spatial configurations.
 \centering
 \setlength{\tabcolsep}{4pt}
 
-\caption{Mean squared error by design within each of the five incidence configurations at $\beta = 1$, under queen and rook contiguity. Each entry averages the 32 scenarios of one design, neighbor type, and configuration (4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes), each from 250 oracle fits. Spatial and Poisson configurations are labeled by $\rho_X$. Rows follow Table \ref{tab:performance}. Under rook contiguity, $\beta$ is not identified for Checkerboard. Its estimates are kept and flagged.}
+\caption{Mean squared error by design within each of the five incidence configurations at $\beta = 1$, under queen and rook contiguity. Each entry averages the 32 scenarios of one design, neighbor type, and configuration (4 values of $\rho$ $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes), each from 250 oracle fits. Spatial and Poisson configurations are labeled by $\rho_X$. Rows follow Table \ref{tab:performance}. Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.}
 \label{tab:by-config}
 
 \begin{tabular}{lccccc}
@@ -1192,7 +1192,7 @@ Checkerboard & 1.095 & 1.077 & 1.084 & 1.092 \\
 \small
 \centering
 
-\caption{Mean squared error by design across the four levels of spillover magnitude $\psi$ at $\beta = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages 40 scenarios (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 2 spillover regimes). Rows follow Table \ref{tab:performance}. Under rook contiguity, $\beta$ is not identified for Checkerboard. Its estimates are kept and flagged.}
+\caption{Mean squared error by design across the four levels of spillover magnitude $\psi$ at $\beta = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages 40 scenarios (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 2 spillover regimes). Rows follow Table \ref{tab:performance}. Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.}
 \label{tab:gamma}
 
 \begin{tabular}{lcccc}
@@ -1250,7 +1250,7 @@ Among the six detailed designs, Incidence-Guided Saturation was first or second 
 \centering
 \setlength{\tabcolsep}{4pt}
 
-\caption{Mean squared error by design under each spillover regime at $\beta = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages 80 scenarios (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\psi$). Rows follow Table \ref{tab:performance}. Under rook contiguity, $\beta$ is not identified for Checkerboard. Its estimates are kept and flagged.}
+\caption{Mean squared error by design under each spillover regime at $\beta = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages 80 scenarios (5 incidence configurations $\times$ 4 values of $\rho$ $\times$ 4 values of $\psi$). Rows follow Table \ref{tab:performance}. Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.}
 \label{tab:regime}
 
 \begin{tabular}{lcccc}
@@ -1319,7 +1319,7 @@ retained designs are those of Table \ref{tab:performance}.
 \small
 \centering
 
-\caption{Performance of all eight designs and SRS at $\beta = 1$, pooled over the five incidence configurations, under queen and rook contiguity. Each entry averages the 160 scenarios of one design and neighbor type, each from 250 oracle fits. Rows follow queen-contiguity mean squared error (MSE), and Retained marks the six designs of the detailed comparison. Average rank is the mean within-block MSE rank among the eight designs and SRS (1 = lowest). Under rook contiguity, $\beta$ is not identified for Checkerboard. Its estimates are kept and flagged.}
+\caption{Performance of all eight designs and SRS at $\beta = 1$, pooled over the five incidence configurations, under queen and rook contiguity. Each entry averages the 160 scenarios of one design and neighbor type, each from 250 oracle fits. Rows follow queen-contiguity mean squared error (MSE), and Retained marks the six designs of the detailed comparison. Average rank is the mean within-block MSE rank among the eight designs and SRS (1 = lowest). Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.}
 \label{tab:eight-design}
 
 \begin{tabular}{lcccc}
@@ -1423,7 +1423,7 @@ neighbor type. The red arrow shows the critical difference, 0.712 at
 Checkerboard and High Incidence Focus. Under rook contiguity, they join
 Incidence-Guided Saturation, Balanced Quartiles and SRS, and
 Isolation Buffer with \(2\times2\) Blocking. Under
-rook contiguity, \(\beta\) is not identified for Checkerboard, and its
+rook contiguity, \(\beta\) is not identifiable for Checkerboard, and its
 estimates are kept and flagged.
 
 \begin{figure}[!htb]
@@ -1478,7 +1478,7 @@ queen contiguity, the order did not change across the five values of
 \centering
 \includegraphics[width=0.9\linewidth]{../figures/fig_tau_sensitivity_6design_combined.pdf}
 
-\caption{Mean squared error by design across $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ under (a) queen and (b) rook contiguity, pooled over the five incidence configurations. Each point averages the 160 scenarios of one design at one value of $\beta$. Shaded bands show $\pm 1$ times the average scenario-level Monte Carlo standard error of MSE. The legend follows queen-contiguity MSE at $\beta = 1$, vertical scales differ, and the gray dashed line marks SRS. Under rook contiguity, $\beta$ is not identified for Checkerboard. Its estimates are kept and flagged.}
+\caption{Mean squared error by design across $\beta \in \{0.8, 1.0, 1.5, 2.0, 3.0\}$ under (a) queen and (b) rook contiguity, pooled over the five incidence configurations. Each point averages the 160 scenarios of one design at one value of $\beta$. Shaded bands show $\pm 1$ times the average scenario-level Monte Carlo standard error of MSE. The legend follows queen-contiguity MSE at $\beta = 1$, vertical scales differ, and the gray dashed line marks SRS. Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged.}
 \label{fig:tau-mse}
 
 \end{figure}
@@ -1528,7 +1528,7 @@ against 0.174).
 Except for Checkerboard under rook contiguity, coverage stayed close to 0.95 at every value of \(\beta\). Pooled over the five incidence
 configurations, every design's coverage was between 0.946 and 0.950 at every value of \(\beta\) under queen contiguity, and every design except Checkerboard was between 0.947 and 0.952 at every value of \(\beta\)
 under rook contiguity. The coverage of rook Checkerboard, for which
-\(\beta\) is not identified, rose from 0.150 at \(\beta = 0.8\) to 0.162, 0.212, 0.286, and 0.464 at \(\beta = 1\), 1.5, 2, and 3 (Section
+\(\beta\) is not identifiable, rose from 0.150 at \(\beta = 0.8\) to 0.162, 0.212, 0.286, and 0.464 at \(\beta = 1\), 1.5, 2, and 3 (Section
 \ref{app:technical-notes}). Figure \ref{fig:tau-coverage} shows
 coverage across \(\beta\) for each design.
 
@@ -1539,7 +1539,7 @@ average. The legend lists the designs in order of pooled mean MSE at
 \(\beta = 1\) for the neighbor type of the panel (Table
 \ref{tab:performance}). The vertical axis runs from 0 to 1, so lines
 close to 0.95 overlap: all six under queen contiguity, between 0.946 and 0.950, and all but Checkerboard under rook contiguity, between 0.947 and 0.952. The lowest line under rook contiguity, which the legend does not
-mark, is Checkerboard, for which \(\beta\) is not identified, and its
+mark, is Checkerboard, for which \(\beta\) is not identifiable, and its
 estimates are kept and flagged. The five values of \(\beta\) share their
 assignments and noise.
 
@@ -1603,7 +1603,7 @@ average rank (4.21 against 4.33), and the two designs traded places in mean MSE 
 other adjacent pair, including SRS against \(2\times2\) Blocking, differed in all 50 units.
 
 Checkerboard under rook contiguity is a different case: \(\beta\) is not
-identified, and the coefficient on \(\mathbf{Z}\) estimates \(\beta - \psi\)
+identifiable, and the coefficient on \(\mathbf{Z}\) estimates \(\beta - \psi\)
 (Section \ref{identification-diagnostics}). The estimates behaved accordingly. At \(\beta = 1\),
 Checkerboard's mean bias was \(-0.502\), \(-0.600\), \(-0.704\), and
 \(-0.802\) at \(\psi = 0.5\), 0.6, 0.7, and 0.8, while its mean
@@ -1630,7 +1630,7 @@ ranking and flag them.
 \small
 \centering
 
-\caption{Checkerboard's 95\% confidence interval coverage across the four levels of outcome spatial dependence $\rho$ at $\beta = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages 40 scenarios (5 incidence configurations $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes). Under rook contiguity, $\beta$ is not identified for Checkerboard. Its estimates are kept and flagged. The nominal level is 0.95.}
+\caption{Checkerboard's 95\% confidence interval coverage across the four levels of outcome spatial dependence $\rho$ at $\beta = 1$, under queen contiguity (primary) and rook contiguity (sensitivity), pooled over the five incidence configurations. Each entry averages 40 scenarios (5 incidence configurations $\times$ 4 values of $\psi$ $\times$ 2 spillover regimes). Under rook contiguity, $\beta$ is not identifiable for Checkerboard. Its estimates are kept and flagged. The nominal level is 0.95.}
 \label{tab:checkerboard-coverage}
 
 \begin{tabular}{lcccc}
@@ -1651,7 +1651,7 @@ Rook & 0.171 & 0.168 & 0.161 & 0.146 \\
 Figures \ref{fig:mse-rook}, \ref{fig:coverage-rook} and \ref{fig:biasvar-rook} are the rook-contiguity
 versions of three queen-contiguity figures in Section \ref{detailed-grid-results-and-allocation-risk-pilot}. Each has the layout of its queen counterpart,
 with the designs reordered for rook contiguity. Under rook contiguity, \(\beta\) is not
-identified for Checkerboard (\(\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}\)), and its estimates are kept and
+identifiable for Checkerboard (\(\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}\)), and its estimates are kept and
 flagged. Figure \ref{fig:mse-rook} corresponds to Figure \ref{fig:mse}.
 
 \begin{figure}[!htb]
@@ -1659,7 +1659,7 @@ flagged. Figure \ref{fig:mse-rook} corresponds to Figure \ref{fig:mse}.
 \centering
 \includegraphics[width=0.75\linewidth]{../figures/fig_mse_by_design_ranked_6design_rook.pdf}
 
-\caption{Mean squared error of the oracle estimate of $\beta$ by design at $\beta = 1$, under rook contiguity; layout as in Figure \ref{fig:mse}. Checkerboard is flagged ($\beta$ not identified).}
+\caption{Mean squared error of the oracle estimate of $\beta$ by design at $\beta = 1$, under rook contiguity; layout as in Figure \ref{fig:mse}. Checkerboard is flagged ($\beta$ not identifiable).}
 \label{fig:mse-rook}
 
 \end{figure}
@@ -1674,7 +1674,7 @@ configurations (Table \ref{tab:performance}), is far below it.
 \centering
 \includegraphics[width=0.55\linewidth]{../figures/fig_coverage_by_design_6design_rook.pdf}
 
-\caption{Coverage of the 95\% confidence intervals by design at $\beta = 1$, under rook contiguity; layout as in Figure \ref{fig:coverage}. Checkerboard is flagged ($\beta$ not identified).}
+\caption{Coverage of the 95\% confidence intervals by design at $\beta = 1$, under rook contiguity; layout as in Figure \ref{fig:coverage}. Checkerboard is flagged ($\beta$ not identifiable).}
 \label{fig:coverage-rook}
 
 \end{figure}
@@ -1688,7 +1688,7 @@ coefficient on \(\mathbf{Z}\) estimates \(\beta - \psi\) (Section \ref{identific
 \centering
 \includegraphics[width=0.55\linewidth]{../figures/fig_biasvar_6design_rook.pdf}
 
-\caption{Squared bias and variance of $\hat\beta$ by design at $\beta = 1$ for the Poisson configuration with $\rho_X = 0.20$, under rook contiguity; layout as in Figure \ref{fig:biasvar}. Checkerboard is flagged ($\beta$ not identified).}
+\caption{Squared bias and variance of $\hat\beta$ by design at $\beta = 1$ for the Poisson configuration with $\rho_X = 0.20$, under rook contiguity; layout as in Figure \ref{fig:biasvar}. Checkerboard is flagged ($\beta$ not identifiable).}
 \label{fig:biasvar-rook}
 
 \end{figure}
@@ -1734,7 +1734,7 @@ non-oracle models for each of the six designs, as summarized above.
 \small
 \centering
 
-\caption{Oracle and non-oracle estimates of $\beta$ by design at $\beta = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type. The non-oracle model omits $\text{Spill}$. Rows follow oracle MSE under queen contiguity. Under rook contiguity, $\beta$ is not identified for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$). Its estimates are kept and flagged, and the two models coincide.}
+\caption{Oracle and non-oracle estimates of $\beta$ by design at $\beta = 1$, under queen and rook contiguity, pooled over the five incidence configurations. Each entry averages the 160 scenarios of one design and neighbor type. The non-oracle model omits $\text{Spill}$. Rows follow oracle MSE under queen contiguity. Under rook contiguity, $\beta$ is not identifiable for Checkerboard ($\mathbf{W}\mathbf{Z} = \mathbf{1} - \mathbf{Z}$). Its estimates are kept and flagged, and the two models coincide.}
 \label{tab:oracle-nonoracle}
 
 \begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}cccccc}
@@ -1923,7 +1923,7 @@ model, but its allocation is deterministic for these fixed rates. That
 is model-based accuracy conditional on one allocation, not evidence of
 randomization-based causal validity.
 
-Mean coverage of the 95\% intervals across the four years was between 94.1\% and 94.9\% for every design and regime, and between 94.1\% and 95.1\% in single years. The Wald interval covered only 92.6\% to 93.6\% (Table \ref{tab:interval-comparison}). Meeting the Monte Carlo precision targets did not repair that finite-sample undercoverage, but the corrected $t$ interval described in Section \ref{outcome-model-and-monte-carlo-evaluation} did (Section \ref{interval-calibration}). Table \ref{tab:nc-annual} gives bias and coverage for every design, year and regime. Checkerboard's treatment effect is identified on this irregular graph, but weak separation of treatment from spillover makes its estimates imprecise. This differs from the exact non-identification under rook contiguity on the rectangular grid.
+Mean coverage of the 95\% intervals across the four years was between 94.1\% and 94.9\% for every design and regime, and between 94.1\% and 95.1\% in single years. The Wald interval covered only 92.6\% to 93.6\% (Table \ref{tab:interval-comparison}). Meeting the Monte Carlo precision targets did not repair that finite-sample undercoverage, but the corrected $t$ interval described in Section \ref{outcome-model-and-monte-carlo-evaluation} did (Section \ref{interval-calibration}). Table \ref{tab:nc-annual} gives bias and coverage for every design, year and regime. Checkerboard's treatment effect is identifiable on this irregular graph, but weak separation of treatment from spillover makes its estimates imprecise. This differs from the exact non-identifiability under rook contiguity on the rectangular grid.
 
 Population shares put these results in context. High Incidence Focus treats
 29 clusters but only about 22--24\% of working-age population, while Isolation Buffer treats a mean of 15.89 clusters and about 27\%. These population
@@ -2294,7 +2294,7 @@ Colleges & Wald size & Corrected $t$ size & Wald coverage & Corrected $t$ covera
 \begin{table}[!htb]
 \small
 \centering
-\caption{Coverage of the 95\% Wald interval and the corrected $t$ interval ($t$ reference distribution with a degrees-of-freedom-corrected standard error) for the six designs and SRS. Grid: oracle model at $\beta = 1$, pooled over the five incidence configurations and both spillover regimes (160 scenarios per entry). Case study: queen weights, $\tau = 0$, averaged over the four planning years and the six $\rho/\psi$ pairs of each regime. \textsuperscript{a}Under rook contiguity on the grid, $\beta$ is not identified for Checkerboard.}
+\caption{Coverage of the 95\% Wald interval and the corrected $t$ interval ($t$ reference distribution with a degrees-of-freedom-corrected standard error) for the six designs and SRS. Grid: oracle model at $\beta = 1$, pooled over the five incidence configurations and both spillover regimes (160 scenarios per entry). Case study: queen weights, $\tau = 0$, averaged over the four planning years and the six $\rho/\psi$ pairs of each regime. \textsuperscript{a}Under rook contiguity on the grid, $\beta$ is not identifiable for Checkerboard.}
 \label{tab:interval-comparison}
 % SOURCE: results/grid_tdf_2026-10/interval_comparison.csv (code/27_interval_comparison.R)
 \begin{tabular}{>{\raggedright\arraybackslash}p{3.4cm}cccccccc}
@@ -2406,12 +2406,12 @@ Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
 \end{tabular}
 \end{table}
 
-\textbf{Spillover form.} Table \ref{tab:nc-forms} compares the three forms. Under the binary form, Isolation Buffer is never identified, because every control has a treated neighbor, and under control-only spillover no strategy was identified in every fit. The saturation designs were identified most often there (in 89.7\% and 91.7\% of fits) and, among identified fits, had MSE 0.70 to 0.71 times that of SRS. Under the count form, the saturation designs still had the lowest MSE under control-only spillover.
+\textbf{Spillover form.} Table \ref{tab:nc-forms} compares the three forms. Under the binary form, Isolation Buffer is never identifiable, because every control has a treated neighbor, and under control-only spillover no strategy was identifiable in every fit. The saturation designs were identifiable most often there (in 89.7\% and 91.7\% of fits) and, among identifiable fits, had MSE 0.70 to 0.71 times that of SRS. Under the count form, the saturation designs still had the lowest MSE under control-only spillover.
 
 \begin{table}[!htb]
 \small
 \centering
-\caption{Mean MSE relative to simple random sampling (SRS) under three spillover forms, 58 colleges, $\tau = 0$, mean over 16 blocks (year $\times$ $\rho$ $\times$ $\psi$). n.i.: not identified in every fit (the spillover covariate is aliased with the intercept and treatment in some or all allocations).}
+\caption{Mean MSE relative to simple random sampling (SRS) under three spillover forms, 58 colleges, $\tau = 0$, mean over 16 blocks (year $\times$ $\rho$ $\times$ $\psi$). n.i.: not identifiable in every fit (the spillover covariate is aliased with the intercept and treatment in some or all allocations).}
 \label{tab:nc-forms}
 % SOURCE: application/results/methods_ext_2026-10/sensitivity_summaries/a7_ratio_to_srs.csv, a7_identification.csv (code/24_methods_extension_tables.R)
 \begin{tabular}{lcccccc}

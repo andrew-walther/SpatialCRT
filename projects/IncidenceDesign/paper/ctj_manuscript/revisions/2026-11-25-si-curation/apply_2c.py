@@ -3,8 +3,10 @@
 
 Author: Andrew Walther. Created: 2026-11-25.
 Usage: python3 apply_2c.py <ID> [<ID> ...]   (run from anywhere)
-Each edit is an exact (old, new) replacement that must match exactly once.
+Each edit is an exact (old, new[, count[, 'regex']]) replacement that must match exactly
+count times (default once).
 """
+import re
 import sys
 from pathlib import Path
 
@@ -72,15 +74,49 @@ EDITS = {
             '(mean difference \\(-0.001\\); \\(-0.003\\), \\(0.000\\); Wilcoxon \\(p = 0.11\\)).'),
            ('Every\nother adjacent pair differed in all 50 units.',
             'Every\nother adjacent pair, including SRS against \\(2\\times2\\) Blocking, differed in all 50 units.')],
+    # Batch 2: "identified" -> "identifiable" in the identifiability sense only (FCL-028).
+    'I1': [('treatment and spillover cannot be separately identified;',
+            'treatment and spillover are not separately identifiable;')],
+    'I2': [('treatment is identified but control-only spillover',
+            'treatment is identifiable but control-only spillover')],
+    'I3': [('\\(\\beta\\) is not identified: the fitting routine',
+            '\\(\\beta\\) is not identifiable: the fitting routine')],
+    'I4': [('\\(\\beta\\) is\nidentified, but imprecisely.',
+            '\\(\\beta\\) is\nidentifiable but imprecisely estimated.')],
+    'I5': [('Under rook contiguity Checkerboard is not identified ($\\mathbf{W}',
+            'Under rook contiguity, $\\beta$ is not identifiable for Checkerboard ($\\mathbf{W}')],
+    # I6 (seven captions) and I8 (Table S14 caption) share one phrase: 8 matches in all.
+    'I6+I8': [('$\\beta$ is not identified for Checkerboard',
+               '$\\beta$ is not identifiable for Checkerboard', 8)],
+    'I7': [('($\\beta$ not identified)', '($\\beta$ not identifiable)', 3)],
+    # I9: five prose places, some broken across source lines (apply after I3).
+    'I9': [(r'(\\\(\\beta\\\) is not\s+)identified\b', r'\1identifiable', 5, 'regex')],
+    'I10': [('treatment effect is identified on this irregular graph',
+             'treatment effect is identifiable on this irregular graph'),
+            ('exact non-identification under rook', 'exact non-identifiability under rook')],
+    'I11': [('Isolation Buffer is never identified,', 'Isolation Buffer is never identifiable,'),
+            ('no strategy was identified in every fit', 'no strategy was identifiable in every fit'),
+            ('The saturation designs were identified most often',
+             'The saturation designs were identifiable most often'),
+            ('among identified fits', 'among identifiable fits')],
+    'I12': [('n.i.: not identified in every fit', 'n.i.: not identifiable in every fit')],
 }
 
 def main(ids):
     text = SI.read_text()
     for i in ids:
-        for old, new in EDITS[i]:
+        for edit in EDITS[i]:
+            old, new = edit[0], edit[1]
+            want = edit[2] if len(edit) > 2 else 1
+            if len(edit) > 3 and edit[3] == 'regex':
+                n = len(re.findall(old, text))
+                if n != want:
+                    raise SystemExit(f'{i}: expected {want} matches, found {n}: {old!r}')
+                text = re.sub(old, new, text)
+                continue
             n = text.count(old)
-            if n != 1:
-                raise SystemExit(f'{i}: expected 1 match, found {n}: {old[:70]!r}')
+            if n != want:
+                raise SystemExit(f'{i}: expected {want} matches, found {n}: {old[:70]!r}')
             text = text.replace(old, new)
     SI.write_text(text)
     print('applied', ' '.join(ids))

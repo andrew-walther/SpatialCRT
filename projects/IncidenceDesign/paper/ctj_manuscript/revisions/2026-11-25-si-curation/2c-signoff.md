@@ -127,3 +127,6 @@ print true hyphens; F1–F4 labels also appear in chapter copies of the same fil
 - Batch 1 (author, 2026-11-25): D1, R1–R4, S1–S3, T1–T3 accepted as proposed. D1 recorded in
   DECISIONS.md and the AGENTS.md MSE-precision rule (Dr. Lin: no more than three decimals in the
   main manuscript). Applied with `apply_2c.py R1 R2 R3 R4 S1 S2 S3 T1 T2 T3`.
+- Batch 2 (author, 2026-11-25): I1–I12 accepted as proposed. Applied with `apply_2c.py I1 I2 I3 I4
+  I5 I6+I8 I7 I9 I10 I11 I12`; the four remaining "identified" are the non-identifiability uses
+  (deaths identified from certificates; worst-decile assignments identified).
