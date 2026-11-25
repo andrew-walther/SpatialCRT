@@ -20,10 +20,10 @@ Your role:
   each phase happens in its own sub-session.
 - Start one sub-session per phase (fresh context, this folder, no worktree), in this order:
   Phase 1 (CTJ round 6, through the review package for Dr. Lin in 1h), then Phase 2 (SI), then
-  Phase 3c to 3d (sensitivity-study SI section, Q-16 answer), then Phase 5 (presentation). Phase 3a
-  to 3b (spec decisions, any rerun, figure) touch only code/29-30 and results/, so that sub-session
-  may run beside Phase 1 or 2. Never run two sub-sessions that edit the same files (the CTJ, the
-  SI or Chapter 3) at once. A large phase may be split (for example 1a to 1d, then 1e to 1h); say
+  Phase 3 (sensitivity study), then Phase 5 (presentation). Work sequentially: one sub-session at
+  a time, one item at a time, each checked off before the next. The only exception is long-running
+  code (a simulation rerun such as the Phase 3a rerun, about 80 minutes): start it in the
+  background and continue with the next item while it runs. A large phase may be split (for example 1a to 1d, then 1e to 1h); say
   so before splitting.
 - Each sub-session brief: the phase and item numbers, the files, the stops in that phase, the
   rules below, and what done looks like (items ticked, checks passing, committed, a short report
@@ -55,5 +55,5 @@ Rules for every session (copy into each brief):
 
 Start with Phase 0 yourself: the CTJ version tags and the clean pre-FCL PDF, and pushing the
 unpushed commits and the prelim-submitted tags. Give me those decisions together, then propose the
-Phase 1 sub-session (and, if I want it in parallel, Phase 3a to 3b).
+Phase 1 sub-session.
 ```

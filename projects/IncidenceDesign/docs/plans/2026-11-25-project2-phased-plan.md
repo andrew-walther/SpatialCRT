@@ -1,8 +1,9 @@
 # Project 2 after the prelim submission: phased plan
 
 Author: Andrew Walther. Written 2026-11-25. This is the master checklist for the Project 2 work
-before the oral prelim (2026-12-07) and the CTJ submission. Work one phase at a time, each in a
-fresh session started from this file, and check items off here as they finish. Detail for
+before the oral prelim (2026-12-07) and the CTJ submission. Work sequentially, one item at a time,
+checking each off before the next (author, 2026-11-25); only long-running code or simulations
+run in the background while the next item proceeds. Each phase runs in a fresh session started from this file, and check items off here as they finish. Detail for
 Phases 1 to 3 is in `docs/plans/2026-11-25-morning-review-guide.md`; the overall brief is
 `docs/prompts/2026-11-24-project2-post-prelim-prompt.md`.
 
@@ -187,10 +188,12 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
     in all; Parts I to III, about 20 minutes each.
   - The presentation script is the engine: slides carry only key details, and each backup slide
     focuses on one result. The talk may use the current project state.
-  - Part I is also adapted as a standalone talk for Dr. Lin's conference, with a new title and
-    agenda. Part II starts from `presentation/sudden_talk_2026-10-29.qmd`, which stays as
-    presented; the prelim version is an updated copy. Part III is presented at the Rashid Lab
-    meeting on 2026-12-03.
+  - Part I: update and refine the prelim slides first; then make a standalone copy of the
+    finished Part I for Dr. Lin's conference, with a new title and agenda.
+  - Part II: keep a frozen copy of the deck as presented at the SUDDEN meeting
+    (`presentation/sudden_talk_2026-10-29.qmd`); the prelim Part II is a separate copy that is
+    updated and refined further.
+  - Part III is presented at the Rashid Lab meeting on 2026-12-03.
   - Before the slides use them, settle the case-identification counts in
     `presentation/data/case_identification_counts.csv` (author: Gan's method, with Habib's counts
     later corrected by reclassifying cardiac cases) and cite the right source (TODO item).
