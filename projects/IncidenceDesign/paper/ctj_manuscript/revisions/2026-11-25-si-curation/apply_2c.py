@@ -100,6 +100,9 @@ EDITS = {
              'The saturation designs were identifiable most often'),
             ('among identified fits', 'among identifiable fits')],
     'I12': [('n.i.: not identified in every fit', 'n.i.: not identifiable in every fit')],
+    # Batch 3, F6: the band note moves from the figure's axis label into the caption.
+    'F6': [('The dashed red line marks the nominal 0.95 level, and the gray dashed line marks the mean coverage of simple random sampling.}',
+            'The dashed red line marks the nominal 0.95 level, and the gray dashed line marks the mean coverage of simple random sampling. Shaded bands show $\\pm 1$ times the average scenario-level Monte Carlo standard error of coverage.}')],
 }
 
 def main(ids):

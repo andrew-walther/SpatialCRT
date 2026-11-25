@@ -90,8 +90,9 @@ pc <- power_curve_data(settings, designs = c(9, 3, 8, 1), taus = c(1, 1.5))
 pc$Design <- factor(pc$Design, levels = c("Simple Random Sampling", "Saturation Quadrants",
                                           "Incidence-Guided Saturation", "Checkerboard"))
 pc$Regime <- factor(REGIME_LAB[pc$Regime], levels = REGIME_LAB)
-pc$TauLab <- factor(sprintf("Effect of %s college-level SD", pc$Tau),
-                    levels = sprintf("Effect of %s college-level SD", c(1, 1.5)))
+# hy(): true hyphen in "college-level" (Phase 2c F8, 2026-11-25)
+pc$TauLab <- factor(hy(sprintf("Effect of %s college-level SD", pc$Tau)),
+                    levels = hy(sprintf("Effect of %s college-level SD", c(1, 1.5))))
 
 pal4 <- c("Simple Random Sampling" = "grey25", "Saturation Quadrants" = "#009E73",
           "Incidence-Guided Saturation" = "#0072B2", "Checkerboard" = "#D55E00")

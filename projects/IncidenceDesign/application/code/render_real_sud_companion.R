@@ -44,9 +44,12 @@ rs_maps <- function(s) {
     shown <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
                "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
                "Incidence-Guided Saturation", "Simple Random Sampling")[id]
-    a$Design <- paste0(id, ". ", shown, " (", sum(z), "/58)")
+    # Names only, no numeric IDs (Phase 2c F4, 2026-11-25).
+    a$Design <- paste0(shown, " (", sum(z), "/58)")
     a$Treatment <- factor(z, levels = 0:1, labels = c("Control", "Treatment")); a
   }))
+  # Panels in design order (the names alone would sort alphabetically).
+  examples$Design <- factor(examples$Design, levels = unique(examples$Design))
   map <- ggplot2::ggplot(examples) + ggplot2::geom_sf(ggplot2::aes(fill = Treatment), color = "white", linewidth = 0.12) +
     ggplot2::scale_fill_manual(values = c(Control = "#e0e7ef", Treatment = "#167c80")) + ggplot2::facet_wrap(~Design, ncol = 3) +
     ggplot2::labs(title = "Reproducible example allocations on the NC geography", subtitle = "2018, queen graph, draw 1. These maps illustrate rules; they do not compare performance.") +

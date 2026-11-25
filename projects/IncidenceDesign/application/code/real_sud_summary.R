@@ -63,6 +63,85 @@ rs_primary_reference <- function(p) {
   out
 }
 
+#' Draw the case-study exhibit figures from the saved exhibit CSVs
+#'
+#' Reads only the aggregate CSVs that rs_exhibits() wrote from the verified production
+#' and tail-refinement runs, so figures can be redrawn (labels, layout) without loading
+#' the manifest-checked production checkpoint; no number is recomputed. Split out of
+#' rs_exhibits() on 2026-11-25 (Phase 2c figure-label fixes).
+#' @param dest Exhibit folder holding yearly_primary_design_means.csv,
+#'   primary_setting_srs_comparison.csv and, if present, refined_tail_comparison.csv.
+#' @return Invisibly, the paths of the figure files written.
+#' @family real_sud_summary
+#' @seealso rs_exhibits
+#' @examples
+#' # rs_exhibit_figures(file.path(.rs_app, "results", "real_sud_rev_20261002", "exhibits"))
+rs_exhibit_figures <- function(dest = file.path(.rs_app, "results", "real_sud_rev_20261002", "exhibits")) {
+  yearly <- read.csv(file.path(dest, "yearly_primary_design_means.csv"), stringsAsFactors = FALSE,
+                     colClasses = c(Year = "character"))
+  comparisons <- read.csv(file.path(dest, "primary_setting_srs_comparison.csv"), stringsAsFactors = FALSE,
+                          colClasses = c(Year = "character"))
+  tp <- file.path(dest, "refined_tail_comparison.csv")
+  tail <- if (file.exists(tp)) read.csv(tp, stringsAsFactors = FALSE, colClasses = c(Year = "character")) else NULL
+  # Plot labels match the manuscripts' design names (author 2026-10-12); CSVs keep their own names.
+  labels <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
+              "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
+              "Incidence\u00adGuided Saturation", "Simple Random Sampling")
+  yearly$Design_Label <- factor(yearly$Design_ID, levels = 9:1, labels = rev(labels))
+  yearly$Regime_Label <- ifelse(yearly$Regime == "both", "Both arms", "Control only")
+  comparisons$Design_Label <- factor(comparisons$Design_ID, levels = 1:9, labels = labels)
+  # Plot label in the documents' notation (rho, psi), as plotmath; the spillover
+  # coefficient is psi in the documents (code: Gamma). Phase 2c F1, 2026-11-25.
+  comparisons$Parameter_Label <- paste0("rho == ", comparisons$Rho, " * ',' ~ psi == ", comparisons$Gamma)
+  # "\u00ad" prints as a true hyphen; R's pdf() device draws "-" as a minus sign.
+  hy <- function(x) gsub("-", "\u00ad", x, fixed = TRUE)
+  comparisons$Regime_Label <- ifelse(comparisons$Regime == "both", "Both arms", "Control only")
+  ggplot2::theme_set(ggplot2::theme_minimal(base_size = 11))
+  g <- ggplot2::ggplot(yearly, ggplot2::aes(x = Mean_MSE, y = Design_Label)) +
+    ggplot2::geom_point(ggplot2::aes(color = Design_ID == 9), size = 2.5) + ggplot2::facet_grid(Year ~ Regime_Label) +
+    ggplot2::scale_x_log10() + ggplot2::scale_color_manual(values = c("FALSE" = "#167c80", "TRUE" = "#b77812"), guide = "none") +
+    ggplot2::labs(x = quote("Mean MSE across six " * rho * "/" * psi * " settings (log scale)"), y = NULL,
+      title = "Primary education-outcome performance by observed planning year", subtitle = "Equal-weight descriptive parameter averages; gold identifies simple random sampling. No pooled MC intervals.")
+  ggplot2::ggsave(file.path(dest, "primary_yearly_mse.pdf"), g, width = 11, height = 10)
+  ggplot2::ggsave(file.path(dest, "primary_yearly_mse_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 10)
+  ggplot2::ggsave(file.path(dest, "primary_yearly_mse.png"), g, width = 11, height = 10, dpi = 150)
+  g <- ggplot2::ggplot(comparisons, ggplot2::aes(x = Design_Label, y = Parameter_Label, fill = log10(MSE_Ratio_SRS))) +
+    ggplot2::geom_tile() + ggplot2::scale_y_discrete(labels = function(x) parse(text = x)) + ggplot2::facet_grid(Year ~ Regime_Label) +
+    ggplot2::scale_fill_gradient2(low = "#167c80", mid = "white", high = "#b95549", midpoint = 0,
+      breaks = log10(c(0.5, 1, 2, 4)), labels = c("0.5", "1", "2", "4"), name = "MSE relative to\nsimple random sampling") +
+    ggplot2::labs(x = NULL, y = NULL, title = "Every primary queen setting compared with simple random sampling", subtitle = "Teal: lower MSE; red: higher MSE. Setting-specific MC errors are in the source table.") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 65, hjust = 1, size = 8))
+  ggplot2::ggsave(file.path(dest, "primary_setting_ratios.pdf"), g, width = 13, height = 10)
+  ggplot2::ggsave(file.path(dest, "primary_setting_ratios_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 13, height = 10)
+  ggplot2::ggsave(file.path(dest, "primary_setting_ratios.png"), g, width = 13, height = 10, dpi = 150)
+  g <- ggplot2::ggplot(yearly[yearly$Regime == "both", ], ggplot2::aes(x = Mean_Population_Share, y = Design_Label)) +
+    ggplot2::geom_segment(ggplot2::aes(x = Min_Population_Share, xend = Max_Population_Share, yend = Design_Label), color = "#b9cdd1") +
+    ggplot2::geom_point(color = "#167c80") + ggplot2::facet_wrap(~Year, ncol = 2) +
+    ggplot2::geom_vline(xintercept = 0.5, linetype = 2, color = "#59718c") +
+    ggplot2::labs(x = hy("Treated working-age population share"), y = NULL, title = "Cluster budgets and population budgets differ",
+      subtitle = "Both-arms run budgets (support is regime-independent); points: mean; lines: sampled allocation range.")
+  ggplot2::ggsave(file.path(dest, "population_shares.pdf"), g, width = 11, height = 7)
+  ggplot2::ggsave(file.path(dest, "population_shares_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 7)
+  ggplot2::ggsave(file.path(dest, "population_shares.png"), g, width = 11, height = 7, dpi = 150)
+  if (!is.null(tail)) {
+    a <- tail[tail$Rho == 0.5, ]; a$Design_Label <- factor(a$Design_ID, levels = 9:1, labels = rev(labels))
+    a$Regime_Label <- ifelse(a$Regime == "both", "Both arms", "Control only")
+    g <- ggplot2::ggplot(a, ggplot2::aes(y = Design_Label)) +
+      ggplot2::geom_segment(ggplot2::aes(x = Mean_MSE, xend = Q90_Estimated, yend = Design_Label), color = "#b9cdd1") +
+      ggplot2::geom_point(ggplot2::aes(x = Mean_MSE, shape = "Mean"), color = "#167c80", size = 2) +
+      ggplot2::geom_point(ggplot2::aes(x = Q90_Estimated, shape = "Estimated 90th percentile"), color = "#b77812", size = 2) +
+      ggplot2::geom_point(ggplot2::aes(x = Worst10_Mean_Estimated, shape = hy("Estimated worst-decile mean")), color = "#9f5362", size = 2) +
+      ggplot2::facet_grid(Year ~ Regime_Label) + ggplot2::scale_x_log10() +
+      ggplot2::scale_shape_manual(values = stats::setNames(c(16, 17, 15), c("Mean", "Estimated 90th percentile", hy("Estimated worst-decile mean"))), name = NULL) +
+      ggplot2::labs(x = "Conditional allocation MSE (log scale)", y = NULL, title = "Average accuracy and allocation downside are different criteria",
+        subtitle = "rho=0.5, gamma=0.8; same sampled allocations, R >= 400. Finite-sample tails remain uncertain.")
+    ggplot2::ggsave(file.path(dest, "refined_allocation_risk.pdf"), g, width = 11, height = 10)
+    ggplot2::ggsave(file.path(dest, "refined_allocation_risk_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 10)
+    ggplot2::ggsave(file.path(dest, "refined_allocation_risk.png"), g, width = 11, height = 10, dpi = 150)
+  }
+  invisible(list.files(dest, pattern = "\\.(pdf|png)$", full.names = TRUE))
+}
+
 #' Save yearly descriptive tables, full setting comparisons and traced exhibits
 #' @param root Study root with independently verified production outputs.
 #' @return List of yearly, setting-level and optional refined-tail tables.
@@ -108,42 +187,6 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
       Primary_Source_IDs = paste(unique(x$Primary_Source_ID), collapse = " | "))
   }))
   write.csv(sensitivity, file.path(dest, "yearly_sensitivity_means.csv"), row.names = FALSE)
-  # Plot labels match the manuscripts' design names (author 2026-10-12); CSVs keep their own names.
-  labels <- c("Checkerboard", "High Incidence Focus", "Saturation Quadrants", "Isolation Buffer",
-              "2\u00d72 Blocking", "Balanced Quartiles", "Balanced Halves",
-              "Incidence\u00adGuided Saturation", "Simple Random Sampling")
-  yearly$Design_Label <- factor(yearly$Design_ID, levels = 9:1, labels = rev(labels))
-  yearly$Regime_Label <- ifelse(yearly$Regime == "both", "Both arms", "Control only")
-  comparisons$Design_Label <- factor(comparisons$Design_ID, levels = 1:9, labels = labels)
-  comparisons$Parameter <- paste0("rho=", comparisons$Rho, ", gamma=", comparisons$Gamma)
-  comparisons$Regime_Label <- ifelse(comparisons$Regime == "both", "Both arms", "Control only")
-  ggplot2::theme_set(ggplot2::theme_minimal(base_size = 11))
-  g <- ggplot2::ggplot(yearly, ggplot2::aes(x = Mean_MSE, y = Design_Label)) +
-    ggplot2::geom_point(ggplot2::aes(color = Design_ID == 9), size = 2.5) + ggplot2::facet_grid(Year ~ Regime_Label) +
-    ggplot2::scale_x_log10() + ggplot2::scale_color_manual(values = c("FALSE" = "#167c80", "TRUE" = "#b77812"), guide = "none") +
-    ggplot2::labs(x = "Mean MSE across six rho/gamma settings (log scale)", y = NULL,
-      title = "Primary education-outcome performance by observed planning year", subtitle = "Equal-weight descriptive parameter averages; gold identifies simple random sampling. No pooled MC intervals.")
-  ggplot2::ggsave(file.path(dest, "primary_yearly_mse.pdf"), g, width = 11, height = 10)
-  ggplot2::ggsave(file.path(dest, "primary_yearly_mse_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 10)
-  ggplot2::ggsave(file.path(dest, "primary_yearly_mse.png"), g, width = 11, height = 10, dpi = 150)
-  g <- ggplot2::ggplot(comparisons, ggplot2::aes(x = Design_Label, y = Parameter, fill = log10(MSE_Ratio_SRS))) +
-    ggplot2::geom_tile() + ggplot2::facet_grid(Year ~ Regime_Label) +
-    ggplot2::scale_fill_gradient2(low = "#167c80", mid = "white", high = "#b95549", midpoint = 0,
-      breaks = log10(c(0.5, 1, 2, 4)), labels = c("0.5", "1", "2", "4"), name = "MSE relative to\nsimple random sampling") +
-    ggplot2::labs(x = NULL, y = NULL, title = "Every primary queen setting compared with simple random sampling", subtitle = "Teal: lower MSE; red: higher MSE. Setting-specific MC errors are in the source table.") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 65, hjust = 1, size = 8))
-  ggplot2::ggsave(file.path(dest, "primary_setting_ratios.pdf"), g, width = 13, height = 10)
-  ggplot2::ggsave(file.path(dest, "primary_setting_ratios_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 13, height = 10)
-  ggplot2::ggsave(file.path(dest, "primary_setting_ratios.png"), g, width = 13, height = 10, dpi = 150)
-  g <- ggplot2::ggplot(yearly[yearly$Regime == "both", ], ggplot2::aes(x = Mean_Population_Share, y = Design_Label)) +
-    ggplot2::geom_segment(ggplot2::aes(x = Min_Population_Share, xend = Max_Population_Share, yend = Design_Label), color = "#b9cdd1") +
-    ggplot2::geom_point(color = "#167c80") + ggplot2::facet_wrap(~Year, ncol = 2) +
-    ggplot2::geom_vline(xintercept = 0.5, linetype = 2, color = "#59718c") +
-    ggplot2::labs(x = "Treated working-age population share", y = NULL, title = "Cluster budgets and population budgets differ",
-      subtitle = "Both-arms run budgets (support is regime-independent); points: mean; lines: sampled allocation range.")
-  ggplot2::ggsave(file.path(dest, "population_shares.pdf"), g, width = 11, height = 7)
-  ggplot2::ggsave(file.path(dest, "population_shares_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 7)
-  ggplot2::ggsave(file.path(dest, "population_shares.png"), g, width = 11, height = 7, dpi = 150)
   tail <- NULL
   tp <- file.path(root, "tail_confirmation", "performance.csv")
   if (file.exists(tp)) {
@@ -151,21 +194,8 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
     tail <- read.csv(tp, stringsAsFactors = FALSE, colClasses = c(Year = "character"))
     if (any(!tail$Complete)) stop("Incomplete tail comparisons")
     write.csv(tail, file.path(dest, "refined_tail_comparison.csv"), row.names = FALSE)
-    a <- tail[tail$Rho == 0.5, ]; a$Design_Label <- factor(a$Design_ID, levels = 9:1, labels = rev(labels))
-    a$Regime_Label <- ifelse(a$Regime == "both", "Both arms", "Control only")
-    g <- ggplot2::ggplot(a, ggplot2::aes(y = Design_Label)) +
-      ggplot2::geom_segment(ggplot2::aes(x = Mean_MSE, xend = Q90_Estimated, yend = Design_Label), color = "#b9cdd1") +
-      ggplot2::geom_point(ggplot2::aes(x = Mean_MSE, shape = "Mean"), color = "#167c80", size = 2) +
-      ggplot2::geom_point(ggplot2::aes(x = Q90_Estimated, shape = "Estimated q90"), color = "#b77812", size = 2) +
-      ggplot2::geom_point(ggplot2::aes(x = Worst10_Mean_Estimated, shape = "Estimated worst decile"), color = "#9f5362", size = 2) +
-      ggplot2::facet_grid(Year ~ Regime_Label) + ggplot2::scale_x_log10() +
-      ggplot2::scale_shape_manual(values = c(Mean = 16, "Estimated q90" = 17, "Estimated worst decile" = 15), name = NULL) +
-      ggplot2::labs(x = "Conditional allocation MSE (log scale)", y = NULL, title = "Average accuracy and allocation downside are different criteria",
-        subtitle = "rho=0.5, gamma=0.8; same sampled allocations, R >= 400. Finite-sample tails remain uncertain.")
-    ggplot2::ggsave(file.path(dest, "refined_allocation_risk.pdf"), g, width = 11, height = 10)
-    ggplot2::ggsave(file.path(dest, "refined_allocation_risk_journal.pdf"), g + ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL), width = 11, height = 10)
-    ggplot2::ggsave(file.path(dest, "refined_allocation_risk.png"), g, width = 11, height = 10, dpi = 150)
   }
+  rs_exhibit_figures(dest)
   physical <- p[!duplicated(p$Source_ID), ]
   # Authorized aggregate inputs can be inspected without restricted county files.
   input_cols <- c("Primary_College", "period", "deaths", "person_years", "rate_per_100k", "n_counties", "rank", "X")
@@ -200,4 +230,7 @@ rs_exhibits <- function(root = file.path(.rs_app, "results", "real_sud_rev_20261
   cat(paste(lines, collapse = "\n"), "\n")
   invisible(list(yearly = yearly, settings = comparisons, sensitivity = sensitivity, tail = tail))
 }
-if (!exists("real_sud_summary_define_only") || !isTRUE(real_sud_summary_define_only)) rs_exhibits()
+if (!exists("real_sud_summary_define_only") || !isTRUE(real_sud_summary_define_only)) {
+  # FIGURES_ONLY=1 redraws the figures from the saved exhibit CSVs (no checkpoint load).
+  if (identical(Sys.getenv("FIGURES_ONLY"), "1")) rs_exhibit_figures() else rs_exhibits()
+}

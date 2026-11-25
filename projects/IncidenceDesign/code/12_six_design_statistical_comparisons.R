@@ -269,7 +269,9 @@ for (nb in c("queen", "rook")) {
     # Manuscript figure (author, 2026-10-25): no title, subtitle or note, since the
     # caption carries them; true hyphens in the design labels
     scale_x_discrete(labels = function(x) gsub("-", "\u00ad", x, fixed = TRUE)) +
-    theme(plot.title = element_blank(), plot.subtitle = element_blank(), plot.caption = element_blank())
+    theme(plot.title = element_blank(), plot.subtitle = element_blank(), plot.caption = element_blank(),
+          # One-panel strip ("Queen Contiguity") reads as a title; the caption names it (Phase 2c F7)
+          strip.text = element_blank(), strip.background = element_blank())
   # Legibility only: coverage is tightly clustered, so the default black outlines
   # collapse the boxes into dark bars; thinner grey outlines let the fill show.
   p_coverage$layers[[1]] <- geom_boxplot(alpha = 0.5, outlier.alpha = 0.5, outlier.size = 1,
@@ -327,7 +329,8 @@ tau_panel <- function(nb, panel_title, y_lab) {
 # No in-figure note (author, 2026-10-25): the chapter caption explains the gray SRS
 # line and the rook Checkerboard flag; legend labels print true hyphens via hy().
 hy <- function(x) gsub("-", "\u00ad", x, fixed = TRUE)
-p_tau_combined <- (tau_panel("queen", "(a) Queen", "Mean MSE\n(band: ± average scenario-level\nMonte Carlo SE)") |
+# Axis label without an in-figure note; the caption explains the band (Phase 2c F5).
+p_tau_combined <- (tau_panel("queen", "(a) Queen", "MSE") |
                      tau_panel("rook", "(b) Rook", NULL)) +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom", legend.text = element_text(size = 8),

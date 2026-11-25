@@ -130,3 +130,12 @@ print true hyphens; F1–F4 labels also appear in chapter copies of the same fil
 - Batch 2 (author, 2026-11-25): I1–I12 accepted as proposed. Applied with `apply_2c.py I1 I2 I3 I4
   I5 I6+I8 I7 I9 I10 I11 I12`; the four remaining "identified" are the non-identifiability uses
   (deaths identified from certificates; worst-decile assignments identified).
+- Batch 3 (author, 2026-11-25): F1–F8 accepted as proposed; F6 caption applied with `apply_2c.py
+  F6`. Two changes of method, same outcome: (1) true hyphens come from the repo's established
+  soft-hyphen helper `hy()` (code 12, 20, 21, 23, 28), not a device switch; (2) the case-study
+  figures could not be redrawn by `rs_exhibits()`, whose production manifest still hashes
+  `code/16` from before its 2026-10-27 `surfaces10` profile (the function the case study uses is
+  unchanged). The author chose a figures-only function: `rs_exhibit_figures()` in
+  `real_sud_summary.R` redraws the four figures from the saved exhibit CSVs
+  (`FIGURES_ONLY=1 Rscript application/code/real_sud_summary.R`); no CSV or manifest changed.
+  Chapter 3 figure copies were left unchanged (2i).

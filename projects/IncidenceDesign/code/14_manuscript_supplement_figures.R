@@ -582,7 +582,8 @@ p_tau_cov <- plot_coverage_vs_tau(mle_full_6_leveled) +
   labs(caption = "Gray dashed: Simple Random Sampling benchmark (mean coverage)") +
   scale_color_manual(values = tau_palette, breaks = best_to_worst_6, labels = hy) +
   scale_fill_manual(values = tau_palette, breaks = best_to_worst_6, labels = hy) +
-  labs(x = expression("True " * beta)) +
+  # Axis without the band note; the SI caption explains the band (Phase 2c F6).
+  labs(x = expression("True " * beta), y = "Coverage") +
   MS_CLEAN
 
 ggsave(file.path(si_dir, "si_fig_tau_mse.pdf"), p_tau_mse, width = 8, height = 5)
