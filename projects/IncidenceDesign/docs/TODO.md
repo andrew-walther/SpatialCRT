@@ -6,17 +6,19 @@ execution to-dos are preserved in Git history; settled choices are not reopened.
 
 ## Next up
 
+- [ ] **After the prelim (2026-12-07): retarget or rethink the Chapter 3 sync hook** (author,
+  2026-11-25). The post-commit hook writes `Thesis_Chapter.qmd` to `bios-dissertation/prelim/`;
+  after the exam the live copy is `thesis/chapter3-project2-incidence/project2-incidence.qmd`
+  (bibliography paths differ: `../references.bib`). Decide whether the hook writes `thesis/`
+  instead, or how else to keep the SpatialCRT source and the thesis copy in step.
+
 Master checklist: `docs/plans/2026-11-25-project2-phased-plan.md` (phases 0 to 5). Detail:
 `docs/plans/2026-11-25-morning-review-guide.md`; brief: `docs/prompts/2026-11-24-project2-post-prelim-prompt.md`.
 
-- [ ] **Deferred (author, 2026-11-25): carry round 6 prose revisions into the post-submission
-  thesis.** After the prelim (2026-12-07), when `bios-dissertation/thesis/` takes over from the
-  frozen `prelim/`, revisit thesis Chapter 3 and its appendix for the CTJ round 6 revisions and
-  prose improvements (not the length cuts): the τ definition (TAU-1, N5), the Lee (2004) Wald
-  citation, R2, "Therefore,"/"However," at sentence start, and the semicolon, colon and ", so"
-  fixes on shared sentences. Source list: `paper/ctj_manuscript/revisions/2026-11-24-round6-word-limit/ch3-carryover-candidates.md`;
-  decisions: `decisions.md` beside it. Phase 1e handles the prelim copy through
-  `Thesis_Chapter.qmd`; this item makes sure the thesis copy gets the same changes.
+- [x] **Done 2026-11-25 (was deferred): carry round 6 prose revisions into the post-submission
+  thesis.** The approved list (`paper/ctj_manuscript/revisions/2026-11-24-round6-word-limit/ch3-signoff.md`)
+  was applied to `Thesis_Chapter.qmd` (SpatialCRT `8926344`; prelim sync `b3e00c6`) and to
+  `bios-dissertation/thesis/` Chapter 3 (`dac0f83`).
 
 - [x] ~~Andrew's markup of `CTJ_Reading_Markup_V6.pdf`~~: V6 is a frozen copy after Dr. Lin's
   feedback was applied, not a markup (author, 2026-11-24).
