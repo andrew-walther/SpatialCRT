@@ -159,13 +159,13 @@ in the NC case study). The grid fit always estimated it freely, because X is a c
 estimate was never reported. In the NC case study X enters the fitted model only in the τ = 1
 sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
 
-- [ ] 4a. Codex writes the spec; you approve it. Proposed τ values {0, 0.25, 0.5, 1, 2}, about
+- [x] 4a. Codex writes the spec; you approve it. Proposed τ values {0, 0.25, 0.5, 1, 2}, about
   15 to 20 minutes each.
-- [ ] 4b. Grid at each τ, with τ = 1 reproducing production exactly. Expected: β̂ barely changes
+- [x] 4b. Grid at each τ, with τ = 1 reproducing production exactly. Expected: β̂ barely changes
   with τ, because both fits include X, so τX is absorbed except through the estimate of ρ. A
   near-null result here is itself the answer (the τ = 1 choice did not drive the grid
   conclusions).
-- [ ] 4c. Estimating τ when both prior incidence and trial outcomes are known: bias, coverage and
+- [x] 4c. Estimating τ when both prior incidence and trial outcomes are known: bias, coverage and
   power by design. Rough expectation, to be checked: the SE of τ̂ is near 0.35 for designs whose
   treatment is unrelated to incidence and about twice that for High Incidence Focus (its Z is
   X above the median, so X has little independent variation given Z). The extra τ values give a
@@ -214,3 +214,7 @@ Record each phase's completion here with the date and commit.
 - 2026-11-25. Phase 0 done (`b0f7891`): tags `ctj-pre-fcl` (`8e36959`) and `ctj-v6`
   (`4386bcb`) pushed; clean pre-FCL PDF saved; earlier pushes verified. Codex Phase 4 prompt
   not yet pasted.
+- 2026-11-25. Phase 4a–4c done in Codex (`3f92ffe`): spec, smoke, pilot and full sweep at τ ∈ {0,
+  0.25, 0.5, 1, 2} (145.8 min). τ = 1 reproduces every stored production β̂ metric exactly (28,800
+  scenario and 288,000 surface rows). Coordinator spot-checked the High Incidence Focus vs SRS τ̂ SE
+  and power against `performance.csv`. 4d (placement) waits on the author.
