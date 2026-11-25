@@ -18,6 +18,10 @@ exhibits are excluded. Two counts are reported because the repo has used both:
                       count, 3,838, also dropped words texcount keeps, such as \ref
                       targets, so the two do not match exactly)
 
+Each \\ref{SI-label} (an SI number printed through xr-hyper, 2026-11-25) is added as
+one word to its section under both rules: texcount drops \\ref, but the number prints,
+so the journal counts it (it was counted while the numbers were hard-coded).
+
 Neither is confirmed as the journal's own rule; check Clinical Trials' instructions
 before submission. Usage (from anywhere):
     python3 paper/tools/ctj_wordcount.py            # table by section and totals
@@ -64,13 +68,24 @@ def texcount_sections(fragment):
     return rows
 
 
+def si_refs_by_section(fragment):
+    """Count \\ref{SI-...} per (sub)section, in the order texcount reports sections.
+
+    @param fragment LaTeX source of the body
+    @return list with one count per \\section or \\subsection, in source order
+    """
+    parts = re.split(r'\\(?:sub)?section\*?\{', fragment)[1:]
+    return [len(re.findall(r'\\ref\{SI-', part)) for part in parts]
+
+
 def main():
     """Print words by section under both rules and the distance to the limit."""
     rows = texcount_sections(body_text())
     print(f"{'Section':<70} {'text+hdr':>9} {'+math':>7}")
     tot_a = tot_b = 0
-    for title, text, headers, math in rows:
-        a, b = text + headers, text + headers + math
+    si_refs = si_refs_by_section(body_text())
+    for (title, text, headers, math), n_refs in zip(rows, si_refs):
+        a, b = text + headers + n_refs, text + headers + math + n_refs
         tot_a += a; tot_b += b
         print(f"{title[:70]:<70} {a:>9} {b:>7}")
     print(f"{'TOTAL':<70} {tot_a:>9} {tot_b:>7}")
@@ -80,7 +95,8 @@ def main():
     exhibits = MAIN.with_name('CTJ_Exhibits.tex').read_text()
     n_body = len(re.findall(r'\\ref\{SI-', body_text()))
     n_exh = len(re.findall(r'\\ref\{SI-', exhibits))
-    print(f"SI cross-references (\\ref{{SI-...}}): {n_body} in the body, {n_exh} in exhibits")
+    print(f"SI cross-references (\\ref{{SI-...}}, counted as one word each): {n_body} in the body, "
+          f"{n_exh} in exhibits (not counted)")
 
 
 if __name__ == '__main__':
