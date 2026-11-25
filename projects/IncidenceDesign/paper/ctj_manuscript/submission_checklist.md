@@ -3,7 +3,7 @@
 Checked against the live [journal instructions](https://journals.sagepub.com/author-instructions/ctj) on 2026-10-28 (the page loads in a browser; scripted fetches get HTTP 403). Findings: `docs/reviews/2026-10-27-ctj-v5-final-proofread.md`, "Live guideline check".
 
 - [x] Full original-research draft derived from the canonical thesis chapter.
-- [x] Body 3,419 prose/heading words (recounted 2026-11-25 after round 6, V7 draft; was 3,853 at V6
+- [x] Body 3,435 prose/heading words (recounted 2026-11-25 after round 6 and the V7 review fixes; was 3,853 at V6
   and 3,498 at V5; Introduction through Discussion, texcount text + headers, math excluded,
   which the author confirmed on 2026-11-25 because the journal rule does not mention
   equations); limit 3,500 applies to the body
@@ -88,7 +88,7 @@ proof. It selects a layout branch in `CTJ_Manuscript.tex`; both layouts load
   `url` where a DOI exists.
 - [ ] Figure 1 panel A prints "2018-2021" with a hyphen (R's pdf device cannot print an en
   dash); acceptable, or switch that export to a Unicode-capable device.
-- [ ] Body is at 3,419 of 3,500 words (2026-11-25); about 15 words are held for the planned sentence pointing to the SI sensitivity analysis of the incidence coefficient (Phase 4e). Title page carries both counts; update them after any edit.
+- [ ] Body is at 3,435 of 3,500 words (2026-11-25); about 15 words are held for the planned sentence pointing to the SI sensitivity analysis of the incidence coefficient (Phase 4e). Title page carries both counts; update them after any edit.
 - [ ] Funding confirmation with Habib and Simpson (the Funding comment); the guideline
   sentence stays unless they report funding (author, 2026-10-28). Funding and
   conflict wording now follow the guidelines' own sentences (2.4, 2.5; 2026-10-28).

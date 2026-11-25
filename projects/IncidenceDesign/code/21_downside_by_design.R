@@ -151,7 +151,7 @@ labels <- c("Incidence\u00adGuided Saturation", "Balanced Quartiles", "Isolation
             "High Incidence Focus", "2\u00d72 Blocking", "Checkerboard", "Simple Random Sampling")
 f <- dist[dist$Design_ID %in% ids, ]
 f$Label <- factor(f$Design_ID, levels = rev(ids), labels = rev(labels))
-f$Study <- factor(f$Source, c(grid_source, "nc_refined"), c("Simulation study", "Application study"))
+f$Study <- factor(f$Source, c(grid_source, "nc_refined"), c("Simulation study", "Case study"))
 f$Regime <- factor(f$Regime, c("both", "control_only"),
                    c("Spillover reaches both arms", "Spillover reaches controls only"))
 f$Benchmark <- f$Design_ID == 9

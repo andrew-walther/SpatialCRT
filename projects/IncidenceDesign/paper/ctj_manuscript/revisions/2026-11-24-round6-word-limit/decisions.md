@@ -160,3 +160,19 @@ Lee (2004) added to `bios-dissertation/prelim/references.bib` and `thesis/refere
 CL-1, CL-2 (cover letter: "case study", 3,419 and 422 words, "draws", Incidence-Guided Saturation named
 for the 21–30%, Wald undercoverage) and CK-1 (checklist IRB note) accepted as proposed. The SI label
 `observed-incidence-application-full-methods-and-results` is internal and left unchanged.
+
+## V7 review fixes (independent review 2026-11-25; decided the same day)
+
+| ID | Decision |
+|---|---|
+| VF-1 | Figure 3 strip label "Application study" → "Case study" (`code/21_downside_by_design.R`, `code/28_thesis_chapter_figures.R`); CTJ and chapter figures regenerated (numbers unchanged) |
+| VF-2 | Orphaned designs sentence moved into paragraph 1: "The designs differ in how they restrict treatment by incidence and geography, which changes how closely a cluster's treatment tracks its share of treated neighbors." |
+| VF-3 | Lead-in added: "Designs also differed in the share of the population they reached." |
+| VF-4 | "and this value raises" → "and $\tau=1$ raises" (CTJ and both Chapter 3 copies) |
+| VF-5 | "Therefore, treatment budgets differed between designs" → "These adaptations gave the designs different treatment budgets" |
+| VF-6 | "non-identified coefficients" → "unidentifiable coefficients" (M-08) |
+| VF-7 | Baird DOI printed "rest a 00716": fixed by setting URLs/DOIs in the T1 encoding in the CTJ preamble (a `\_` in the bib printed the backslash, so the bib is unchanged) |
+| Links | Submission layout uses `hidelinks` like the reading layout (no colored links) |
+| Kept | The two "In this paper, we" openers; the S17/S18 pointers; reading-layout hyphenation and float placement; submission paragraph gaps |
+
+Body 3,435 words after these fixes (title page, cover letter and checklist updated).
