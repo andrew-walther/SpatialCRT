@@ -5,6 +5,20 @@ one-line rule each decision implies.
 
 ---
 
+## 2026-11-25 — Case-study production manifest re-recorded
+
+**Decision.** At Andrew's request, the case-study production manifest
+(`application/results/real_sud_rev_20261002/production/manifest.rds`) was re-recorded by
+`application/code/resign_production_manifest.R`, which refuses unless the only difference is
+the source hash of `code/16_allocation_risk.R`. The original manifest stays in git history.
+
+**Reason.** The 2026-10-27 `surfaces10` profile (`c5d070f`) changed only comments and
+`allocation_parameters()` in code/16, which the case study never calls, yet the new hash made
+`rs_exhibits()` refuse every run. After re-recording, a full `rs_exhibits()` run reproduced every
+exhibit CSV, the extract text and the PNGs byte for byte, and the PDFs in text.
+
+---
+
 ## 2026-11-25 — Ratio decimals (Phase 2c, D1)
 
 **Decision.** Ratios to SRS keep two decimals in the CTJ, SI and Chapter 3 (as decided on

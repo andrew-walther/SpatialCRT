@@ -188,7 +188,8 @@ the reasoning behind this distinction.
 | `application/code/real_sud_simulation.R` | Nested allocation × outcome experiments with the SAR ML engine and MC precision rules | Sourced by `run_real_sud.R` |
 | `application/code/run_real_sud.R` | Manifest-checked observed-incidence profiles (smoke, pilot, production) | Writes `application/results/real_sud_rev_20261002/<profile>/` |
 | `application/code/refine_real_sud_tail.R` | Extends outcomes to R ≥ 400 at primary queen corners on the same allocations | Writes `.../real_sud_rev_20261002/tail_confirmation/` |
-| `application/code/real_sud_summary.R` | Traceable yearly comparisons and publication figures | Writes `.../real_sud_rev_20261002/exhibits/` |
+| `application/code/real_sud_summary.R` | Traceable yearly comparisons and publication figures; `rs_exhibit_figures()` redraws the figures from the saved exhibit CSVs (`FIGURES_ONLY=1`) | Writes `.../real_sud_rev_20261002/exhibits/` |
+| `application/code/resign_production_manifest.R` | Re-records the production manifest only if code/16's hash is the sole difference (2026-11-25) | Then rerun `real_sud_summary.R`; exhibit CSVs must stay byte-identical |
 | `application/code/render_real_sud_companion.R` | Offline HTML companion | Writes `application/report/real_sud_companion.html` |
 | `application/code/application_designs.R` | Irregular-map adaptations of the designs | Sourced by `real_sud_setup.R` |
 | `application/code/cc_mapping_data.R`, `nc_community_college_map.R` | County → college mapping (100 counties → 58 colleges) and the service-area map | Mapping CSVs in `application/data/` |
