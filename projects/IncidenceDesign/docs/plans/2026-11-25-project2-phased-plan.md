@@ -153,7 +153,7 @@ before or later is lost and anything can move between the two. Target for the cu
 - [x] 3c. SI section and figure (curated SI; both the method and the findings, from the findings
   report), Chapter 3 appendix mirror, and the optional CTJ
   sentence if the word count allows. **Stop for wording.**
-- [ ] 3d. Update the Q-16 answer in `presentation/prelim-qa-prep.md` and make the backup-slide
+- [ ] 3d. (Moved to the presentation plan, author 2026-11-25; it is Part II prep.) Update the Q-16 answer in `presentation/prelim-qa-prep.md` and make the backup-slide
   figure.
 
 ## Phase 4 (side, Codex): the incidence coefficient τ
@@ -195,6 +195,12 @@ sensitivity (`rs_model()` in `application/code/real_sud_simulation.R`).
   sentence pointing to it, if any. **Stop for wording.**
 
 ## Phase 5: prelim presentation (after Phases 1 to 3)
+
+**Author decision (2026-11-25):** Phase 5 becomes its own plan, written in a fresh session once
+Phases 0 to 4 are complete. It is a distinct task from the CTJ and SI work. The decks are built
+project by project, starting in each project's own repository (`presentation/` there), and copied
+to `bios-dissertation` after review. Item 3d moves into it. The requirements below (5a) are the
+input for that plan; this plan closes when Phases 0 to 4 are done.
 
 - [ ] 5a. Write the presentation prompt (include Q&A prep on τ: what the coefficient means on
   the X ∈ [0, 1], σ = 1 scale, that it is estimated in every grid fit, and the Phase 4 results): Parts I to III, the script, backup slides, the Chapter 2
