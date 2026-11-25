@@ -23,7 +23,7 @@ phase start until they are started).**
 | Prompt | Runs | Status |
 |---|---|---|
 | `docs/prompts/2026-11-25-incidence-coefficient-codex-prompt.md` | Phase 4 (τ grid and estimation), in a Codex session started in this folder | [x] pasted 2026-11-25 |
-| `docs/prompts/2026-11-25-igs-sensitivity-rerun-codex-prompt.md` | Phase 3a rerun and 3b figure, in a Codex session started in this folder | [ ] pasted |
+| `docs/prompts/2026-11-25-igs-sensitivity-rerun-codex-prompt.md` | Phase 3a rerun and 3b figure, in a Codex session started in this folder | [x] pasted 2026-11-25 |
 
 When Andrew says a Codex run has started or pastes its report or commit message, check the
 named commit and outputs, tick the matching items, and log them here, so the record stays in one
