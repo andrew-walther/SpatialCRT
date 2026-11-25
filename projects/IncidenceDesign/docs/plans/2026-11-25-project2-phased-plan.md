@@ -30,20 +30,24 @@ place.
 
 ## Phase 0: setup and version record
 
-- [ ] Version record for the CTJ (tags, plus one clean PDF for the version Dr. Lin annotated):
+- [x] Version record for the CTJ (tags, plus one clean PDF for the version Dr. Lin annotated):
 
   | Version | What it is | Body words | Where |
   |---|---|---|---|
   | V5 markup | Your markup of the 10-25 reading draft | — | `revision_markup/CTJ_Reading_Markup_V5.pdf` |
-  | Pre-FCL | The draft Dr. Lin annotated (after your V5 revisions) | 3,498 | commit `a685b4a` (2026-11-10); his annotated copy is `revisions/2026-11-10-paper-2-revisions/2026-11-11-Project-2-Manuscript-Feedback-FCL.pdf` |
-  | V6 | After Dr. Lin's feedback was applied (too long) | 3,853 | `revision_markup/CTJ_Reading_Markup_V6.pdf`, commit `4386bcb` |
+  | Pre-FCL | The draft Dr. Lin annotated (after your V5 revisions) | 3,498 | commit `8e36959` (2026-11-04), tag `ctj-pre-fcl`; his annotated copy is `revisions/2026-11-10-paper-2-revisions/2026-11-11-Project-2-Manuscript-Feedback-FCL.pdf` |
+  | V6 | After Dr. Lin's feedback was applied (too long) | 3,853 | `revision_markup/CTJ_Reading_Markup_V6.pdf`, commit `4386bcb`, tag `ctj-v6` |
   | V7 | After round 6 (cuts and wording) | ≤ 3,500 | made at the end of Phase 1 |
 
-  Proposed: local tags `ctj-pre-fcl` (`a685b4a`) and `ctj-v6` (`4386bcb`), and a clean rebuild of
-  the pre-FCL reading PDF saved as `revisions/2026-11-10-paper-2-revisions/CTJ_Reading_preFCL_clean.pdf`
-  (the markup folder stays for your annotated copies). **Decision: yes or no.**
-- [ ] Push the six unpushed SpatialCRT commits (overnight reviews, cut list, sensitivity study,
-  this plan) and the `prelim-submitted-2026-11-15` tags. **Decision.**
+  Done 2026-11-25. Dr. Lin's annotated PDF matches the `CTJ_Reading.pdf` committed at `8e36959`
+  word for word; `a685b4a` (2026-11-10, first proposed here) came after it and only rounds MSE to
+  three decimals and bolds matrices (same 3,498 words). Author decision: tag `8e36959` as
+  `ctj-pre-fcl` and use it as the 1h diff base; tag `4386bcb` as `ctj-v6`; both tags pushed. The
+  clean copy is that committed PDF, extracted unchanged (a rebuild would pick up today's
+  figures): `revisions/2026-11-10-paper-2-revisions/CTJ_Reading_preFCL_clean.pdf`.
+- [x] Push the SpatialCRT commits and the `prelim-submitted-2026-11-15` tags. Checked 2026-11-25:
+  already done. SpatialCRT, bios-dissertation and multiomicsGEP were level with origin, and the
+  tag was on the remote in all three.
 - [ ] Phase 4 runs on the side in Codex (table above); start it whenever convenient.
 - Context, no action: the Chapter 3 sync hook keeps writing to `bios-dissertation/prelim/` until
   after the exam (2026-12-07); `thesis/` takes over later. Dissertation dates: BIOS abstract
@@ -74,7 +78,7 @@ place.
 - [ ] 1h. Review package for Dr. Lin, so he can review V7 without rereading the whole paper
   (author request, 2026-11-25). In `revisions/2026-11-24-round6-word-limit/for-lin/`:
   1. the updated manuscript (`CTJ_Reading.pdf`, V7);
-  2. a marked-up diff from the draft he annotated (`a685b4a`) to V7, made with `latexdiff`
+  2. a marked-up diff from the draft he annotated (`8e36959`, tag `ctj-pre-fcl`) to V7, made with `latexdiff`
      (available in TinyTeX: `~/Library/TinyTeX/bin/universal-darwin/latexdiff`) on
      `CTJ_Manuscript.tex` and `CTJ_Exhibits.tex`, built in the reading layout; check that
      tables, captions and math survive the diff markup (fall back to `--math-markup=0` or a

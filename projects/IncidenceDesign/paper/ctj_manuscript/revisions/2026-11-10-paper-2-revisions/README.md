@@ -7,6 +7,7 @@ Author: Andrew Walther. Register prepared 11 November 2026.
 | [feedback.html](feedback.html) | Searchable feedback register, with page and section filters, marked passages, original passage images and author-note fields |
 | [feedback.json](feedback.json) | All 60 substantive annotations, verbatim comments, raw selected text, coordinates, context and source fingerprint |
 | [Annotated manuscript](2026-11-11-Project-2-Manuscript-Feedback-FCL.pdf) | Original reviewed PDF, moved here without changing its contents |
+| [CTJ_Reading_preFCL_clean.pdf](CTJ_Reading_preFCL_clean.pdf) | Clean copy of the draft Dr. Lin annotated: the reading PDF committed at `8e36959` (tag `ctj-pre-fcl`), extracted unchanged |
 
 Open `feedback.html` in a browser. It is self-contained and needs no server or
 build command. Links to the PDF and JSON expect those files to remain beside it.
