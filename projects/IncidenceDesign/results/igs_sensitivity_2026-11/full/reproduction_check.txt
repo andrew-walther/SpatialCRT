@@ -1,8 +1,3 @@
-Rows: production 9600, rerun 9600, matched 9600
-max |production - rerun|  Mean_Estimate  0
-max |production - rerun|  Bias           0
-max |production - rerun|  SD             0
-max |production - rerun|  MSE            0
-max |production - rerun|  Coverage       0
-max |production - rerun|  Power          0
-max |production - rerun|  N_Valid_Est    0
+November 24 manifest matches. Reused Designs 3, 8, 9 and variants 101-130.
+November 24 exact agreement: 105600 scenario rows, 1056000 surface rows, 0 warning rows.
+September 27 exact agreement: 9600 scenario rows across all 26 stored columns.

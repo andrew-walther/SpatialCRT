@@ -1,206 +1,187 @@
-# Incidence-Guided Saturation sensitivity study: method and findings
+# Incidence-Guided Saturation sensitivity study
 
-Author: Andrew Walther. Run and summarized 2026-11-24. Spec (provisional, awaiting the author's
-review): `docs/plans/2026-11-24-igs-sensitivity-spec.md`. Code: `code/29_igs_sensitivity.R`,
-`code/29_igs_variant_designs.R`, `code/30_igs_sensitivity_summary.R`. Outputs:
-`results/igs_sensitivity_2026-11/full/` (summary tables and figure in `summary/`). Independent
-review: `docs/reviews/2026-11-24-igs-sensitivity-review.md` (code correct; this version applies its
-corrections to the report).
-
-## Summary
-
-- Varying the number of regions and the spread of the saturation set changed Incidence-Guided
-  Saturation's standing against SRS a great deal. Under control-only spillover, two or four large
-  regions with a spread of at least 70/30 had 16% to 45% lower MSE than SRS (pooled over effect
-  sizes), while ten regions needed a spread of 80/20 or more and 25 small regions (2×2 blocks) were
-  never better than SRS.
-- The same settings pulled the other way under both-arms spillover. Wide spreads cost accuracy
-  there (two halves at 90/10 had almost twice SRS's MSE). Flat sets were close to SRS with two,
-  four or ten regions, but not with 25 blocks.
-- The original design (four 5×5 quadrants, 80/60/40/20%) sits between these: 33% lower MSE than
-  SRS under control-only spillover and 9% higher under both-arms spillover. Two halves at 70/30
-  behaved much like it (32% lower and 5% higher).
-- Incidence guidance itself changed accuracy little. Under queen contiguity each guided version
-  was within 10% of its unguided twin, the same regions and saturations in random order (up to 14%
-  in the rook and non-oracle checks), and every difference that survived Holm adjustment was
-  against guidance. The differences were all in variance, not bias. Accuracy depended mainly on
-  the regions and the saturation set. What guidance changed was where treatment went: guided
-  versions treated up to 58% of the total incidence, against 50% for their twins and for SRS.
-- With the oracle fit, coverage of the t + df interval was 94% to 95% for every version, under
-  queen and rook contiguity. The design ranking under control-only spillover was the same under
-  rook and for the fit without the spillover term (whose coverage was poor, as in the main study).
+Author: Andrew Walther. Initial run 2026-11-24. Boundary extension 2026-11-25.
+The [specification](../plans/2026-11-24-igs-sensitivity-spec.md) records the Phase 3a and 3b
+decisions. The [output folder](../../results/igs_sensitivity_2026-11/full/) contains the
+simulation summaries and identification checks. The independent review recomputed the
+contrasts and checked the figures and reproduction against the stored runs.
+[Independent review](../reviews/2026-11-25-igs-sensitivity-rerun-review.md)
 
 ## Method
 
-**Question.** The main study tested one version of incidence guidance. Do versions with other
-numbers of regions or other saturation sets perform similarly relative to SRS and to the original
-version? This is committee question Q-16 (`presentation/prelim-qa-prep.md`).
+The main study's Incidence-Guided Saturation design uses four 5×5 quadrants with target
+saturations of 80%, 60%, 40%, and 20%. We varied the number of regions and the distance
+between the highest and lowest target saturations to answer committee question Q-16.
+The four equal-size partitions have 2 halves, 4 quadrants, 10 rectangles, or 25 blocks.
+The target for rank r in R regions is sat_r = 0.5 + s(1 − 2(r − 1)/(R − 1)), with s
+from 0.1 to 0.5 in steps of 0.1. Guided designs assign these targets in order of mean
+regional incidence, from highest to lowest, with random tie-breaking. Unguided twins
+randomly permute the same targets. Largest-remainder rounding sets the total to 50 of
+the 100 grid clusters. When R = 25 and s = 0.1, every block has two treated clusters,
+so both versions are 2×2 Blocking and serve as a null control for the twin comparison.
 
-**Designs.** Every version treats exactly 50 of the 100 grid clusters.
+The s = 0.5 extension adds a guided and an unguided variant for each partition (IDs
+131–138). The four-quadrant targets are 100%, 67%, 33%, and 0% to the nearest percentage
+point, which gives treated counts of 25, 17, 8, and 0. With two halves, one half is
+fully treated and the other fully control. When the halves have distinct mean incidence,
+the guided assignment is fixed on that surface. Each draw within a block still has its own
+outcome noise vector. The extension brings the study to 38 variants plus
+Saturation Quadrants (Design 3), the original guided design (Design 8), and Simple Random
+Sampling (SRS, Design 9).
 
-| Factor | Levels |
-|---|---|
-| Number of regions R | 2 (5×10 halves), 4 (5×5 quadrants), 10 (2×5 rectangles), 25 (2×2 blocks). Equal-size partitions only, so exactly half can be treated. |
-| Spread s of the saturation set | 0.1, 0.2, 0.3, 0.4. Saturations run linearly with incidence rank r from 0.5 + s (highest-incidence region) to 0.5 − s (lowest): sat_r = 0.5 + s(1 − 2(r − 1)/(R − 1)). R = 4, s = 0.3 gives the original 80/60/40/20%. |
-| Guidance | Guided: saturations follow the rank of each region's mean incidence (ties at random, as in the original). Unguided twin: the same saturations in random order for each draw (as in Saturation Quadrants). |
+The full grid crosses five incidence configurations with ten surfaces each, queen and rook
+contiguity, ρ ∈ {0, 0.01, 0.2, 0.5}, ψ ∈ {0.5, 0.6, 0.7, 0.8}, both spillover regimes,
+and β ∈ {0.8, 1, 1.5, 2, 3}. The intervention effect β on Z is `tau` in code, and the
+incidence coefficient τ on X is `beta` and equals 1. Each scenario has 25 assignments
+per surface. Each dataset is fit with the oracle and non-oracle spatial lag models.
+New variants have their own
+assignment seed keys, and every design in a grid block shares the same outcome noise.
+The combined results have 131,200 scenario rows, 1,312,000 surface rows, and 32.8 million
+model fits across the two runs.
 
-Treated counts use largest-remainder rounding of region size × saturation so the total is exactly
-50, with equal remainders broken at random. With R = 25 and s = 0.4, a block's saturation of 0.9 or
-0.1 rounds to all or none of its four clusters. With R = 25 and s = 0.1 the rounding treats exactly
-two of four clusters in every block on every draw, so that version is 2×2 Blocking exactly, and its
-guided and unguided forms are the same design. It is kept as a null control for the twin
-comparisons. Because the saturations are linear in rank, their standard deviation at a fixed
-spread falls as R grows, s√((R + 1)/(3(R − 1))): s for two regions, 0.75s for four, 0.64s for ten
-and 0.60s for 25 (before rounding). The number of regions therefore also changes the saturation
-contrast and the region shape (the halves and the 2×5 rectangles are elongated). The (R = 4, s = 0.3) pair is the production
-Incidence-Guided Saturation design (Design 8) and Saturation Quadrants (Design 3). That gives 30 new
-versions plus Designs 3, 8 and 9 (SRS), 33 in all.
+We report ratios of mean squared error (MSE) with queen contiguity and the oracle fit, pooled over the
+five incidence configurations and the five intervention effect sizes within each spillover
+regime. Each test uses 50 paired configuration-by-surface differences in MSE. The figure scales the 95% t₄₉ interval for the mean paired difference by the
+comparator MSE and adds 1 to express it on the ratio scale. The two-sided Wilcoxon tests
+use Holm correction separately for each estimator, contiguity type, and spillover slice.
+The expanded families have 40 comparisons with SRS (was 32), 19 with the original guided
+design (was 15), and 20 guided-versus-twin comparisons (was 16). The summary also keeps
+labeled results pooled over spillover regimes.
 
-**Simulation.** The full grid benchmark was rerun unchanged except for the designs. That means five
-incidence configurations with ten surfaces each, queen and rook contiguity, ρ ∈ {0, 0.01, 0.2, 0.5},
-ψ ∈ {0.5, 0.6, 0.7, 0.8}, both spillover regimes and β ∈ {0.8, 1, 1.5, 2, 3}. Each scenario had 25
-draws per surface, 250 simulated datasets, each fit with the oracle and non-oracle spatial lag
-models. That is 105,600 scenario rows, 13.2 million datasets and 26.4 million fits. Production code was sourced, not edited. The new designs have
-their own seed keys, and every design in a block saw the same outcome noise, so comparisons are
-paired. Designs 3, 8 and 9 reused their production keys and reproduced the 2026-09-27 production run
-exactly (9,600 rows, zero difference in every metric). No fit failed, none was aliased, and none
-gave a warning. The run took 78.5 minutes on 10 cores.
+## Reproduction and identification
 
-**Contrasts** (named in advance). The primary contrast is each version's MSE relative to SRS, as
-in `code/15`. It is computed as the paired ratio 1 + D̄ / MSE_SRS, where D̄ is the mean of the
-differences over the 50 independent configuration-by-surface units, with a t49 interval and a
-Wilcoxon test Holm-adjusted across the 32 designs other than SRS (the spec said 30 variants; the
-family also holds Designs 3 and 8). The second contrast is each of the 15 other guided versions
-against the original design. The third is each of the 16 guided versions, the original included,
-against its unguided twin (Design 3 for the original). Each family is adjusted within a regime. Values
-are for queen contiguity and the oracle fit, pooled over the five effect sizes as in `code/15`,
-by spillover regime. Rook and the non-oracle fit are reported as checks. Burden share treated is
-Σ X_j z_j / Σ X_j (as `code/22`), from the actual allocations in one block per configuration.
+The full runner verified the November 24 checkpoint manifest and reused Designs 3, 8,
+and 9 and variants 101–130. All 105,600 original scenario rows and 1,056,000 original
+surface rows matched exactly. Designs 3, 8, and 9 also matched all 26 stored columns
+in the 9,600 September 27 production rows. The smoke run used ten forked workers.
+The full run also started with ten. Andrew approved resuming with four after the first
+20 of 40 units because memory pressure was slowing the machine. The same manifest
+validated the saved boundary checkpoints, and the last 20 units took 8.2 minutes.
+Both runs pinned BLAS to one thread per worker.
 
-## Findings
+The smoke run checked 960 assignment draws and 3,840 fits. In the full run, each new
+variant contributed 80,000 assignment draws and 800,000 fits across the two estimators.
+All 640,000 draws had rank 4 for [1, Z, WZ, X] and for the oracle design matrix with
+the spillover term used in that regime. The 6.4 million new fits had zero aliases,
+failures, or warnings. The identification table breaks the counts down by variant,
+contiguity, regime, and estimator. Draw counts are shared across estimators.
+[Identification table](../../results/igs_sensitivity_2026-11/full/igs_identification.csv)
 
-Figure: `results/igs_sensitivity_2026-11/full/summary/fig_igs_re_vs_srs.pdf` (MSE relative to SRS
-by spread, one line per number of regions, guided and unguided side by side, both regimes; the
-original design and Saturation Quadrants are circled). Full tables: `igs_summary.txt` and
-`igs_contrasts.csv` in the same folder.
+## MSE relative to SRS
 
-### MSE relative to SRS, queen, oracle fit (guided versions)
+Values below 1 indicate lower MSE. An asterisk marks Holm-adjusted p ≥ 0.05 against
+SRS. Bold marks the original guided design. SRS MSE was 0.227 under control-only
+spillover and 0.043 under both-arms spillover. The figure shows guided and unguided
+variants, the paired intervals, and the SRS reference at 1. The circles mark the
+original guided design and Saturation Quadrants. The two rows use different vertical scales.
+[PDF](../../results/igs_sensitivity_2026-11/full/summary/fig_igs_re_vs_srs.pdf)
+[PNG](../../results/igs_sensitivity_2026-11/full/summary/fig_igs_re_vs_srs.png)
 
-Ratios below 1 mean lower MSE than SRS. An asterisk marks a Holm-adjusted Wilcoxon p ≥ 0.05, a
-difference from SRS that the 50 units do not detect. The figure's bars are unadjusted t49
-intervals, so the two can disagree near the line (for example 10 regions at 70/30 under
-control-only spillover).
+### Guided designs, queen contiguity and oracle fit
 
-| Regions | Control only: 60/40 | 70/30 | 80/20 | 90/10 | Both arms: 60/40 | 70/30 | 80/20 | 90/10 |
-|---|---|---|---|---|---|---|---|---|
-| 2 | 0.899 | 0.676 | 0.555 | 0.551 | 0.977* | 1.051* | 1.276 | 1.940 |
-| 4 | 1.040* | 0.837 | **0.667** | 0.588 | 1.005* | 1.018* | **1.088** | 1.218 |
-| 10 | 1.267 | 1.041* | 0.887 | 0.767 | 1.037* | 1.003* | 1.020* | 1.077 |
-| 25 | 2.674 | 1.514 | 1.273 | 1.048* | 1.463 | 1.196 | 1.140 | 1.100 |
+| Regions | Control only 60/40 | 70/30 | 80/20 | 90/10 | 100/0 | Both arms 60/40 | 70/30 | 80/20 | 90/10 | 100/0 |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 2 | 0.899 | 0.676 | 0.555 | 0.551 | 0.876 | 0.977\* | 1.051\* | 1.276 | 1.940 | 8.126 |
+| 4 | 1.040\* | 0.837 | **0.667** | 0.588 | 0.594 | 1.005\* | 1.018\* | **1.088** | 1.218 | 1.632 |
+| 10 | 1.267 | 1.041\* | 0.887 | 0.767 | 0.678 | 1.037\* | 1.003\* | 1.020\* | 1.077 | 1.225 |
+| 25 | 2.674 | 1.514 | 1.273 | 1.048\* | 0.862 | 1.463 | 1.196 | 1.140 | 1.100 | 1.152 |
 
-SRS MSE pooled over the five effect sizes was 0.227 under control-only spillover and 0.043 under
-both-arms spillover. The original design is in bold. The unguided twins gave nearly the same
-table, for example 0.668 and 1.047 for Saturation Quadrants.
+### What changes from 90/10 to 100/0
 
-**Regions and spread under control-only spillover.** Fewer, larger regions and a wider spread both
-lowered MSE relative to SRS. Two halves reached 0.555 at 80/20 and 0.551 at 90/10, and four
-quadrants reached 0.588 at 90/10. With ten regions the advantage needed a spread of 80/20 or
-more. With 25 blocks of four clusters no spread beat SRS. At 60/40 that version is 2×2
-Blocking exactly, and its ratio (2.674) differs from the production 2×2 Blocking ratio (2.579, same
-slice) only by Monte Carlo error. Part of the effect of R is contrast: at a fixed spread more
-regions means less variation between saturations. But contrast is not the whole story. Twenty-five
-blocks at 90/10 have about the same saturation standard deviation as the original four quadrants
-(0.24 against 0.22) and still had 1.048 times SRS's MSE against 0.667. Small regions intersperse
-treatment locally, which the main study found costly when spillover reaches only controls.
+Under control-only spillover the direction depended on region count. MSE rose for the
+two halves and changed little for quadrants, as expected for the larger regions.
+MSE continued to fall with ten or 25 regions in both guidance settings. Those increases
+for two halves and decreases for ten and 25 regions occurred in all five incidence
+configurations. At 100/0, both 25-block variants had detectably lower MSE than SRS for
+the first time in the pooled queen/oracle comparison.
+For guided halves, MSE relative to SRS rose from 0.551 to 0.876, and bias in the
+estimated intervention effect rose from 0.086 to 0.161 in units of the outcome.
 
-**Under both-arms spillover the spread worked the other way.** Flat sets (60/40) were close to SRS
-for two, four and ten regions (25 blocks at 60/40, which is 2×2 Blocking, had 1.463). Wider spreads raised MSE, most for two halves (1.940 at 90/10).
-Twenty-five small blocks were worse than SRS at every spread.
+Under both-arms spillover, all eight MSE ratios rose in the pooled queen/oracle
+results. Guided halves rose from 1.940 to 8.126 times SRS's MSE. The unguided halves
+rose from 1.933 to 8.129. The smallest increase was for the 25-block unguided variant,
+from 1.009 to 1.013, with an increase in three of five incidence configurations. The
+other seven increases occurred in all five configurations. The comparisons between
+90/10 and 100/0 are descriptive.
 
-**The tradeoff.** No version was best under both regimes. Wider contrast between saturations helps
-when spillover reaches only controls and hurts when it reaches both arms. Among the versions tested,
-two halves at 70/30 and the original four quadrants at 80/20 gave similar results: 32% and 33% lower
-MSE than SRS under control-only spillover, and 5% and 9% higher under both-arms spillover. Steeper
-sets traded a larger control-only gain for a larger both-arms loss. This matches the main study's
-regime-based guidance and adds that the size of the gain depends on the saturation contrast. It
-does not single out one recommended version. The size of the gains depends on the effect size,
-because the results pool five values of β: the original design's ratio to SRS under control-only
-spillover ran from 0.618 at β = 0.8 to 0.718 at β = 3. The ranking of the 32 designs was stable
-across effect sizes.
+With one half fully treated, WZ and Z differ only for the 20 clusters along the split.
+The two columns have correlation 0.941 under queen weights and 0.972 under rook weights.
+This makes intervention and spillover effects harder to distinguish in the both-arms
+model even though the fitted matrix has full rank.
 
-**Against the original design.** Under control-only spillover only two halves at 80/20 or 90/10
-(0.833, 0.826) and four quadrants at 90/10 (0.882) had lower MSE than the original; two halves at
-70/30 was level with it (1.013), and every other guided version was worse. Under both-arms
-spillover every version with two to ten regions and a spread of 70/30 or less, and every ten-region
-version, had lower MSE than the original, which itself was 9% above SRS there.
+| Regions | Control only, unguided 90/10 → 100/0 | Both arms, unguided 90/10 → 100/0 |
+|---:|---:|---:|
+| 2 | 0.540 → 0.846 | 1.933 → 8.129 |
+| 4 | 0.570 → 0.562 | 1.210 → 1.579 |
+| 10 | 0.733 → 0.626 | 1.001 → 1.185 |
+| 25 | 0.974 → 0.786 | 1.009 → 1.013 |
 
-**Guidance against its unguided twin.** Under queen contiguity with the oracle fit, guided-to-twin
-MSE ratios ran from 0.98 to 1.08 under control-only spillover and from 0.96 to 1.10 under both-arms
-spillover. The null control, which is the same design twice, gave 1.036 [1.007, 1.065] (unadjusted
-p = 0.031), so differences of 3% to 4% are within Monte Carlo error. After Holm adjustment the
-differences that remained all went against guidance: under control-only spillover R = 25 at 90/10
-(1.076); under both-arms spillover R = 25 at 70/30 to 90/10 (about 1.09) and R = 10 at 90/10
-(1.076). Rook and the non-oracle fit showed more and larger penalties of the same kind, up to 1.111
-and 1.137. In every twin pair the MSE ratio equals the variance ratio to within 0.006, so the
-difference is precision, not bias. That is consistent with the grid's τ = 1: incidence shifts the
-outcome, and treatment that follows incidence is partly confounded with it, which costs precision
-when the regions are small.
+The original guided design remained a middle case, with ratios of 0.667 under
+control-only spillover and 1.088 under both-arms spillover. Two guided halves at 70/30
+gave 0.676 and 1.051. At 100/0, quadrants were the only new guided design with a
+detectable MSE reduction relative to the original under control-only spillover
+(ratio 0.892, Holm p < 0.001).
 
-**Where treatment went.** Guided versions treated a larger share of total incidence than their
-twins (0.500) and SRS (0.500). The share rose with the spread and, at wide spreads, with the number of regions, from 0.507 (two
-halves at 60/40) to 0.577 (25 blocks at 90/10). The exception is 25 blocks at 60/40 (0.500): with
-four clusters per block, rounding treats two in almost every block, so guidance has nothing to move. The original treated 0.527, between
-0.522 and 0.530 across the five configurations. For comparison, the stored North Carolina result
-(methods extension A1, frozen regions) is a rate share of 0.511 for Incidence-Guided Saturation
-against 0.504 for plain saturation (`results/grid_burden_share/grid_burden_share_log.txt`). This
-study did not run the North Carolina map.
+### Incidence guidance, targeting, and coverage
 
-**Inference.** With the oracle fit, t + df coverage was 0.940 to 0.953 for every version, regime
-and contiguity type. Bias stayed small but grew with the spread under control-only spillover,
-reaching 0.086 for two halves at 90/10 (0.087 for its unguided twin).
+At 100/0, the guided-to-twin MSE ratios were 1.035 to 1.097 under control-only
+spillover. All four differences survived Holm adjustment. Under both-arms spillover,
+the 25-block guided design had 1.137 times its twin's MSE (Holm p < 0.001). The other
+three guided designs were within 3.4% of their twins. The range through 90/10 had been
+0.955 to 1.095 across both regimes, so the boundary extends the upper end of that range.
+Every detectable queen/oracle twin difference favored the unguided design.
 
-**Checks.** Under rook contiguity the control-only ordering was the same, with smaller gains (the
-original 0.810 against SRS); under both-arms spillover the rook ordering agreed less closely with
-queen. With the non-oracle fit, which omits the spillover term, the pattern of ratios to SRS was the
-same under both regimes (for example, two halves at 90/10: 0.642 under control-only spillover,
-2.364 under both-arms spillover), but its coverage was poor, as in the main study.
+The guided 100/0 designs treated 53.6% to 60.1% of total incidence, averaged over
+configurations in the queen allocation block used for the burden check. Their twins
+treated about 50%. The 25-block design reached 60.1%, compared with 57.7% at 90/10.
+The original design treated 52.7%. [Burden-share table](../../results/igs_sensitivity_2026-11/full/summary/igs_burden_share.csv)
 
-## What this changes
+The rook oracle results showed the same directions from 90/10 to 100/0. The two halves
+had slightly higher MSE than SRS at 100/0 under rook control-only spillover. With the
+non-oracle fit, MSE fell for the four-region variants in that regime with both contiguity
+types. Under both-arms spillover, all eight MSE ratios rose in each of the four pooled
+estimator-by-contiguity comparisons.
 
-- The answer to Q-16 is no longer "future work". The 80/60/40/20% quadrant design is one point on
-  a range, and its advantage under control-only spillover depends on large regions and contrasting
-  saturations. A flatter set or many small regions loses it, and a steeper set increases it at a
-  cost under both-arms spillover. The number of regions, the saturation contrast and the region
-  shape move together in this design, so the study shows what combinations work, not which of the
-  three drives the result.
-- It supports the main text's framing that incidence guidance roughly matches the accuracy of
-  unguided saturation while targeting high-burden regions. On the grid, guidance changed MSE by up
-  to 10% under queen contiguity, always as a precision cost when it was detectable, and moved more
-  treatment to higher-incidence regions.
+Oracle t + df coverage at 100/0 ranged from 0.932 to 0.953 under queen contiguity
+and from 0.937 to 0.951 under rook contiguity. Coverage near 0.932 occurred for
+the two halves under control-only spillover. With rook weights, both-arms MSE also
+rose sharply for the 100/0 halves, to about 17.3 times SRS's MSE. The non-oracle
+fit also showed the large both-arms penalty for the halves, where coverage dropped
+as low as 0.607 under rook contiguity.
 
-## Limitations of this study
+## Holm adjustment for the original variants
 
-- Grid only. The North Carolina map, with irregular regions and the at-least-two-colleges rule, was
-  not run.
-- Equal-size partitions and saturation sets linear in rank only. Unequal regions (3×3, 4×4) and
-  non-linear sets (for example 90/70/30/10) were not tested.
-- Pooled over the five effect sizes, as `code/15` does. Larger effects raise every design's MSE
-  through the error in ρ̂ (SI Section 6), so pooling weights the larger effects more.
-- Ten surfaces per configuration; the paired tests detect only differences that are large
-  relative to surface-to-surface variation, and the null control shows that twin differences of
-  3% to 4% can arise by chance.
-- The number of regions is confounded with the saturation contrast and the region shape (see
-  Method). A follow-up could plot each version's ratio to SRS against its realized saturation
-  standard deviation, or against a measure of how clustered treatment is.
+The original MSE results are identical. The original unadjusted p-values and the
+Holm adjustment within the original families agree with November 24 at the precision
+of the archived CSV in Git revision `a7527fd`. Three of 756 original comparisons crossed 0.05, all in rook
+sensitivity slices. The original queen/oracle decisions stayed the same.
 
-## Proposed placement (for the author)
+| Fit | Spillover slice | Original comparison | Holm p before | Holm p after |
+|---|---|---|---:|---:|
+| Oracle | Control only | Unguided halves at 60/40 vs SRS (116 vs 9) | 0.04124 | 0.05499 |
+| Non-oracle | Control only | Guided quadrants at 90/10 vs twin (107 vs 122) | 0.04677 | 0.05067 |
+| Non-oracle | Regimes pooled | Guided 10 regions at 90/10 vs twin (111 vs 126) | 0.04398 | 0.05131 |
 
-- SI: a methods subsection on the variants (after the design specifications) and a results
-  section with the figure and the table above (the SI review's outline already reserves both).
-- CTJ: optional, one sentence in Results with an SI pointer, if the word budget allows (about 35
-  words; the recommended cut set leaves about 115). Draft: "In a sensitivity analysis that varied
-  the number of regions and the saturation set, the control-only advantage over SRS required large
-  regions and contrasting saturations, and incidence guidance changed MSE by at most 10% relative
-  to the same design without guidance (SI Section X)."
-- Chapter 3: an appendix subsection mirroring the SI.
-- Prelim backup slide for Q-16: the figure, with one line on the tradeoff.
+The [Holm comparison CSV](../../results/igs_sensitivity_2026-11/full/summary/igs_holm_comparison.csv)
+contains both adjusted p-values for every original comparison and marks threshold
+crossings. The 756 rows include the Design 3 and 8 tests wherever those designs were
+part of the original families, with one row per twin comparison. The
+[full contrasts](../../results/igs_sensitivity_2026-11/full/summary/igs_contrasts.csv)
+include the new variants and all reported slices.
+
+## Limits
+
+- The study covers equal-size partitions of the grid with targets spaced linearly in rank.
+  The North Carolina map and repeated target-level variants were outside the study.
+- Region count changes region size, shape, and the variation in target saturations.
+  At a fixed s, the population standard deviation of the target levels is
+  s√((R + 1)/(3(R − 1))) before rounding. The comparisons apply to each combination
+  of partition and saturation. The two-region partition uses one fixed orientation.
+- At 100/0 the extreme regions have a single treatment arm. Full matrix rank establishes
+  numerical identification for the simulated assignments. Accuracy and coverage can
+  still deteriorate, as they did for the halves.
+- Results pool over the five effect sizes and five incidence configurations. The paired
+  tests use ten surfaces per configuration, so detectability depends on the variability
+  across these surfaces. The null-control twin pair had an unadjusted p-value of 0.031
+  under queen/oracle control-only spillover on November 24. Its two designs have the
+  same assignment distribution.

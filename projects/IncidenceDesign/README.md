@@ -51,6 +51,33 @@ two-surface `pilot/`, `precision_R400/` and the top-level files in `summary/` ar
 superseded but kept. Behavior checks are in `code/tests/test_allocation_risk.R` and
 `code/tests/test_allocation_risk_summary.R`. Individual-fit caches are gitignored.
 
+### Incidence-Guided Saturation sensitivity (grid)
+
+The sensitivity study compares 38 guided and unguided variants with Saturation Quadrants,
+the original guided design, and Simple Random Sampling on the full grid. The November 25
+extension adds the 100/0 saturation boundary and reports rank and fit diagnostics and
+Holm-adjusted p-values before and after the extension.
+[Specification](docs/plans/2026-11-24-igs-sensitivity-spec.md)
+[Findings](docs/findings/2026-11-24-igs-sensitivity-findings.md)
+
+Run from the IncidenceDesign directory.
+
+```sh
+export VECLIB_MAXIMUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+Rscript code/29_igs_sensitivity.R smoke
+Rscript code/29_igs_sensitivity.R full
+Rscript code/30_igs_sensitivity_summary.R
+```
+
+The full fitting command needs the original November 24 checkpoints in
+`results/igs_sensitivity_2026-11/full/checkpoints/`. It validates their original
+manifest and fits only IDs 131–138. The default is ten forked workers. For this run,
+a temporary launcher changed only the worker count to four after the first 20 units
+were saved. The summary command uses the tracked full results and does not need
+the checkpoints. Fitting logs and rank checks are under
+`results/igs_sensitivity_2026-11/`. The contrast tables, Holm comparison CSV,
+and PDF and PNG are in its `full/summary/` folder.
+
 ## Overview
 
 This project evaluates which **treatment assignment design** produces the most accurate

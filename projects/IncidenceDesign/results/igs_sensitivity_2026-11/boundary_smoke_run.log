@@ -1,0 +1,42 @@
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Loading required package: sf
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+Loading required package: Matrix
+
+Attaching package: ‘spatialreg’
+
+The following objects are masked from ‘package:spdep’:
+
+    get.ClusterOption, get.coresOption, get.mcOption,
+    get.VerboseOption, get.ZeroPolicyOption, set.ClusterOption,
+    set.coresOption, set.mcOption, set.VerboseOption,
+    set.ZeroPolicyOption
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Boundary unit 06/10 complete
+Boundary unit 03/10 complete
+Boundary unit 08/10 complete
+Boundary unit 02/10 complete
+Boundary unit 04/10 complete
+Boundary unit 01/10 complete
+Boundary unit 07/10 complete
+Boundary unit 09/10 complete
+Boundary unit 05/10 complete
+Boundary unit 10/10 complete
+Boundary profile took 0.0 min (10 units, 8 designs)
+Assignment draws checked: 960. Rank deficiencies: WZ 0, oracle 0.
+Fit attempts: 3840. Failed: 0. Aliased: 0. Other warnings: 0.
+Saved to results/igs_sensitivity_2026-11/smoke

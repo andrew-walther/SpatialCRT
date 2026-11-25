@@ -216,6 +216,18 @@ are complete (see the status at the top: `paper/ctj_manuscript/`,
 
 ## Progress Log (moved from AGENTS.md 2026-10-01)
 
+### 2026-11-25 — Incidence-Guided Saturation boundary run and figure
+
+- Completed Phase 3a and 3b on the grid. Added eight 100/0 boundary variants (IDs 131–138),
+  checked identification on 640,000 draws, and found no aliases, failures, or warnings
+  in 6.4 million fits. The four-worker restart reused 20 completed work units.
+- Reused the manifest-checked November 24 fits with exact agreement for all 33 original
+  designs. Designs 3, 8, and 9 exactly matched the September production data.
+- Saved updated PDF and PNG files and the before-and-after Holm table. Three original
+  comparisons crossed 0.05, all in rook sensitivity slices.
+  [Findings](docs/findings/2026-11-24-igs-sensitivity-findings.md)
+  [Independent review](docs/reviews/2026-11-25-igs-sensitivity-rerun-review.md)
+
 ### 2026-11-25 — Incidence coefficient sensitivity completed
 
 - Completed the smoke test, pilot, and full τ sweep. The full sweep took 145.8

@@ -12,7 +12,7 @@
 # for 03's get_designs() that sends IDs >= 100 here and every other ID to 03 unchanged.
 
 # Variant table ----
-# ID 100 + index; the (R = 4, s = 0.3) pair is dropped because Designs 8 and 3 are it.
+# Preserve the original ID order and table for checking the November 24 manifest.
 VARIANTS <- expand.grid(s = c(0.1, 0.2, 0.3, 0.4), R = c(2, 4, 10, 25),
                         guided = c(TRUE, FALSE))
 VARIANTS <- VARIANTS[!(VARIANTS$R == 4 & VARIANTS$s == 0.3), ]
@@ -20,6 +20,13 @@ VARIANTS$id    <- 100 + seq_len(nrow(VARIANTS))
 VARIANTS$label <- sprintf("%s R=%d s=%.1f", ifelse(VARIANTS$guided, "Guided", "Unguided"),
                           VARIANTS$R, VARIANTS$s)
 rownames(VARIANTS) <- NULL
+ORIGINAL_VARIANTS <- VARIANTS
+
+boundary <- expand.grid(s = 0.5, R = c(2, 4, 10, 25), guided = c(TRUE, FALSE))
+boundary$id <- 130 + seq_len(nrow(boundary))
+boundary$label <- sprintf("%s R=%d s=%.1f", ifelse(boundary$guided, "Guided", "Unguided"),
+                          boundary$R, boundary$s)
+VARIANTS <- rbind(ORIGINAL_VARIANTS, boundary)
 
 #' Region index of each cluster for an equal-size partition of the 10x10 grid
 #'

@@ -1,0 +1,56 @@
+Resuming 20 completed boundary units and fitting 20 remaining units with 4 workers.
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Loading required package: sf
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE
+Loading required package: Matrix
+
+Attaching package: ‘spatialreg’
+
+The following objects are masked from ‘package:spdep’:
+
+    get.ClusterOption, get.coresOption, get.mcOption,
+    get.VerboseOption, get.ZeroPolicyOption, set.ClusterOption,
+    set.coresOption, set.mcOption, set.VerboseOption,
+    set.ZeroPolicyOption
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+November 24 manifest matches. Reused Designs 3, 8, 9 and variants 101-130.
+November 24 exact agreement: 105600 scenario rows, 1056000 surface rows, 0 warning rows.
+September 27 exact agreement: 9600 scenario rows across all 26 stored columns.
+Boundary unit 24/40 complete
+Boundary unit 21/40 complete
+Boundary unit 22/40 complete
+Boundary unit 23/40 complete
+Boundary unit 26/40 complete
+Boundary unit 27/40 complete
+Boundary unit 28/40 complete
+Boundary unit 25/40 complete
+Boundary unit 29/40 complete
+Boundary unit 30/40 complete
+Boundary unit 31/40 complete
+Boundary unit 32/40 complete
+Boundary unit 33/40 complete
+Boundary unit 34/40 complete
+Boundary unit 35/40 complete
+Boundary unit 36/40 complete
+Boundary unit 38/40 complete
+Boundary unit 37/40 complete
+Boundary unit 39/40 complete
+Boundary unit 40/40 complete
+Boundary profile took 8.2 min (40 units, 8 designs)
+Assignment draws checked: 640000. Rank deficiencies: WZ 0, oracle 0.
+Fit attempts: 6400000. Failed: 0. Aliased: 0. Other warnings: 0.
+Saved to results/igs_sensitivity_2026-11/full
