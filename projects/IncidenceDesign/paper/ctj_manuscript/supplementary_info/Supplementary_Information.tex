@@ -9,7 +9,8 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,booktabs,graphicx,array,placeins}
-\usepackage[round,numbers]{natbib}
+\usepackage[round,authoryear]{natbib}
+\setcitestyle{aysep={},citesep={;}}
 % Article labels (xr-hyper, prefix M-): the curated SI cites the article's own exhibits with live
 % numbers. Build order on a clean checkout: SI, CTJ (manuscript_ctj), then SI again.
 \usepackage{xr-hyper}
@@ -1148,7 +1149,7 @@ Balanced Quartiles led in 58 (36\%) and Isolation Buffer in 7 (4\%).
 \fi
 
 
-\subsection{Design rankings by incidence configuration}\label{design-rankings-by-incidence-configuration}
+\subsection{The incidence configuration did not change the design ranking}\label{design-rankings-by-incidence-configuration}
 
 
 \iffullsi Table \ref{tab:by-config} gives\else Figure~\ref{M-fig:grid} of the article shows\fi\ each design's MSE within each of the
@@ -1207,7 +1208,7 @@ Checkerboard (flagged) & 0.480 & 0.482 & 0.474 & 0.481 & 0.482 \\
 \fi
 
 
-\subsection{Spatial dependence, spillover magnitude and regime}\label{sensitivity-to-spatial-dependence-spillover-magnitude-and-spillover-regime}
+\subsection{Only the spillover regime changed the design ranking}\label{sensitivity-to-spatial-dependence-spillover-magnitude-and-spillover-regime}
 
 
 Under queen contiguity, neither the strength of spatial dependence in
@@ -1368,7 +1369,7 @@ a bias of 0.016 under the control-only regime.
 \end{figure}
 
 
-\subsection{The eight-design comparison}\label{app:eight-design}
+\subsection{Each related variant had nearly the same MSE as its counterpart}\label{app:eight-design}
 
 
 Section \ref{treatment-assignment-designs} gives the reasons for leaving
@@ -1425,7 +1426,7 @@ Checkerboard (flagged) & Yes & 0.480 & 0.162 & 8.988 \\
 \fi
 
 \FloatBarrier
-\section{Formal statistical comparisons}\label{formal-statistical-comparison}\label{app:supp-comparisons}
+\section{Formal tests separated most pairs of designs}\label{formal-statistical-comparison}\label{app:supp-comparisons}
 
 
 The Friedman test rejected equal MSE ranks across the six designs and SRS under
@@ -1555,7 +1556,7 @@ estimates are kept and flagged.
 \fi
 
 \FloatBarrier
-\section{Stability across treatment effect sizes}\label{stability-across-treatment-effect-sizes}
+\section{The design order changed little across treatment effect sizes}\label{stability-across-treatment-effect-sizes}
 
 
 Under queen contiguity, neither design order changed across the tested
@@ -1680,7 +1681,7 @@ assignments and noise.
 \fi
 
 \FloatBarrier
-\section{\texorpdfstring{Estimation error and its dependence on \(\beta\)}{Estimation error and its dependence on beta}}\label{app:technical}\label{app:technical-notes}\label{estimation-error-and-its-dependence-on-tau}
+\section{\texorpdfstring{Estimation error depends on \(\beta\)}{Estimation error depends on beta}}\label{app:technical}\label{app:technical-notes}\label{estimation-error-and-its-dependence-on-tau}
 
 
 Section \ref{stability-across-treatment-effect-sizes} reports that
@@ -1809,7 +1810,7 @@ was biased slightly downward, moving the mean bias from \(-0.650\) to
 
 
 \FloatBarrier
-\section{Rook contiguity}\label{rook-contiguity}\label{app:rook-figures}
+\section{Under rook contiguity, every design except Checkerboard kept nominal coverage}\label{rook-contiguity}\label{app:rook-figures}
 
 
 Under rook contiguity at \(\beta = 1\), pooled over the five incidence
@@ -1946,7 +1947,7 @@ coefficient on \(\mathbf{Z}\) estimates \(\beta - \psi\) (Section \ref{identific
 \fi
 
 \FloatBarrier
-\section{Non-oracle sensitivity analysis}\label{non-oracle-sensitivity-analysis}\label{app:oracle-nonoracle}
+\section{Omitting the spillover term biased the estimates of every design}\label{non-oracle-sensitivity-analysis}\label{app:oracle-nonoracle}
 
 
 The non-oracle model, which omits the spillover term, was biased for
@@ -2029,7 +2030,7 @@ Checkerboard (flagged) & 0.480 & $-0.652$ & 0.162 & 0.480 & $-0.652$ & 0.162 \\
 
 
 
-\subsection{Robustness across blocks}\label{robustness-across-blocks-and-the-recommended-design}
+\subsection{No single design was best under both spillover regimes}\label{robustness-across-blocks-and-the-recommended-design}
 
 
 \iffullsi Table \ref{tab:robustness} gives the\else We also examined the\fi\ distribution of MSE across the 160
@@ -2092,7 +2093,7 @@ Section \ref{allocation-risk-results} examines variation across
 assignments within a setting.
 
 
-\subsection{Comparison with SRS}\label{srs-benchmark-and-allocation-specific-risk}
+\subsection{The saturation designs had lower MSE than SRS only under control-only spillover}\label{srs-benchmark-and-allocation-specific-risk}
 
 
 At \(\beta=1\) under queen contiguity, pooled over the five incidence
@@ -2156,7 +2157,7 @@ Simple Random Sampling & 0.042 & 0.950 & 0.215 & 0.946 \\
 \fi
 
 
-\subsection{Allocation-specific risk}\label{allocation-risk-results}
+\subsection{The saturation designs' control-only advantage held for their worst allocations}\label{allocation-risk-results}
 
 
 Under control-only spillover, Incidence-Guided Saturation's mean MSE
@@ -2178,7 +2179,7 @@ estimated quantiles and worst-decile membership uncertain. Section
 on the North Carolina map.
 
 \FloatBarrier
-\section{Sensitivity of incidence guidance to regions and saturation spread}\label{igs-sensitivity-results}
+\section{Wider saturation spreads lowered control-only MSE but could raise both-arms MSE}\label{igs-sensitivity-results}
 
 Figure~\ref{fig:igs-sensitivity} shows the MSE of each variant relative to SRS (Section~\ref{igs-variants-methods}). Pooled over the five values of \(\beta\), SRS had MSE 0.227 under control-only spillover and 0.043 under both-arms spillover. These pooled ratios differ from those at \(\beta = 1\) in Section~\ref{srs-benchmark-and-allocation-specific-risk}. Under control-only spillover, widening the guided saturations from 60/40 to 90/10 lowered MSE for every number of regions, and at each of these spreads fewer, larger regions had lower MSE. At 90/10 the guided ratios to SRS were 0.55 for halves, 0.59 for quadrants, 0.77 for ten regions and 1.05 for 25 blocks, against 0.67 for the original design. Under both-arms spillover, wider spreads raised MSE for halves and quadrants. Guided quadrants rose from 1.00 times SRS at 60/40 to 1.22 at 90/10, and halves from 0.98 to 1.94. With ten regions or 25 blocks, MSE stayed between 1.00 and 1.22 times that of SRS from 70/30 to 100/0. Some variants traded less between the regimes than the original design. Quadrants at 70/30 and ten regions at 80/20 had ratios of 0.84 and 0.89 under control-only spillover and 1.02 under both-arms spillover, where neither differed detectably from SRS.
 
@@ -2196,7 +2197,7 @@ Rook contiguity gave the same directions from 90/10 to 100/0. Both versions of h
 \end{figure}
 
 \FloatBarrier
-\section{Accuracy, inference and reach in the case study}\label{completed-results-accuracy-inference-and-reach}
+\section{Both saturation designs had lower control-only MSE than SRS in every case-study year}\label{completed-results-accuracy-inference-and-reach}
 
 
 The main analysis used 7,598,000 distinct simulated outcomes. Every setting
@@ -2386,7 +2387,7 @@ Simple Random Sampling & 2018 & 0.076 & 0.013 & 0.947 & 0.308 & 0.038 & 0.945 \\
 
 
 \FloatBarrier
-\section{Allocation downside in the case study}\label{allocation-downside-and-sensitivity}
+\section{In the case study, the saturation designs also reduced worst-decile control-only MSE}\label{allocation-downside-and-sensitivity}
 
 
 At the two refined queen settings, $\rho=0$ and $\rho=0.5$ with
@@ -2532,7 +2533,7 @@ $\tau=0$, $\kappa=0.8$ and the corrected $t$ test, averaged over the
 four planning years.
 
 
-\subsection{Colleges needed and power}\label{planning-for-realistic-participation}
+\subsection{Under control-only spillover, the saturation designs needed the fewest colleges}\label{planning-for-realistic-participation}
 
 
 Under both-arms spillover, the design hardly affected the number of
@@ -2633,7 +2634,7 @@ $n_c$ & ICC & $\sigma_c$ & $d=0.2$ & $d=0.3$ & $d=0.2$ & $d=0.3$ & $d=0.2$ & $d=
 \fi
 
 
-\subsection{Interval calibration}\label{interval-calibration}
+\subsection{\texorpdfstring{Only the corrected \(t\) interval met the coverage target in the main case study}{Only the corrected t interval met the coverage target in the main case study}}\label{interval-calibration}
 
 
 We compared interval corrections against a coverage target of 94.0\%
@@ -2702,7 +2703,7 @@ Simple Random Sampling & 0.938 & 0.948 & 0.938 & 0.947 & 0.932 & 0.947 & 0.929 &
 \end{table}
 
 
-\subsection{Guidance under partial participation}\label{guidance-partial-participation}
+\subsection{The saturation designs' advantage shrank as fewer colleges participated}\label{guidance-partial-participation}
 
 
 Table \ref{tab:nc-guidance} reports mean MSE for each design relative to SRS at $\beta = 1$ for 20, 29, 40 and 58 participating colleges. The regime-specific guidance held with fewer participants, but the size of the saturation advantage depended on participation. Checkerboard and Isolation Buffer remained worse than SRS under both-arms spillover at every number of colleges, and the rank-based designs remained within 8\% of SRS. Under control-only spillover, the saturation designs' mean MSE was 22\% below that of SRS with 58 colleges, 9\% to 10\% below with 40, 4\% to 5\% below with 29 and about 1\% below with 20. With few participants, non-participating neighbors already create the exposure variation that saturation otherwise supplies. Isolation Buffer went from matching SRS under control-only spillover with 58 colleges to 2.3 times SRS's MSE with 29 colleges and 6.2 times with 15.
@@ -2735,7 +2736,7 @@ Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \
 \end{table}
 
 
-\subsection{Sensitivity analyses}\label{nc-sensitivity-results}
+\subsection{The design comparison held under most alternative models and spillover forms}\label{nc-sensitivity-results}
 
 
 The design comparison held when spillover depended on the number of
@@ -2867,6 +2868,6 @@ intervention effectiveness or a final trial protocol.
 \fi
 
 \FloatBarrier
-\bibliographystyle{unsrtnat}
+\bibliographystyle{plainnat}
 \bibliography{SpatialCRT_IncidenceDesign}
 \end{document}
