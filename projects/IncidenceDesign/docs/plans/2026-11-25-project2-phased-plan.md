@@ -121,7 +121,7 @@ before or later is lost and anything can move between the two. Target for the cu
 - [x] 2f. Place the text moved out of the CTJ in Phase 1.
 - [x] 2g. Prose review: human-writer pass, then a statistician and a clinician reader on the
   curated SI.
-- [ ] 2h. Rebuild both versions, run the checkers, record the page counts.
+- [x] 2h. Rebuild both versions, run the checkers, record the page counts.
 - [ ] 2i. Chapter 3 alignment: resolve `paper/ctj_manuscript/notes/si-ch3-alignment-log.md` (42
   SI edits not yet in Chapter 3) plus this phase's SI changes, as one sign-off list. **Stop for
   decisions**, then apply and let the hook re-render the prelim copy.
@@ -269,3 +269,7 @@ Record each phase's completion here with the date and commit.
   (22860cf); decisions by batch (2d52e7e to 5c7accf); 151 approved blocks applied (dcf5e28: 133
   SI, 18 CTJ, HC-7 to HC-10 declined). CTJ body 3,431 words; verifier and exhibit test pass. Next:
   2h (page-count cuts, independent review), then 2i.
+- 2026-11-26: 2h done. Sign-off with independent-review fixes (af12b9d), applied in 9bea05f: SI
+  rewrites, short list titles, nine light cuts moved to the unabridged build (SC-2 declined).
+  Curated SI 44 pages, unabridged 66; CTJ 23 pages, reading layout 9; body 3,428 words, abstract
+  421. Verifier, exhibit test and word count rerun here: pass. Next: 2i (84 items, in review).
