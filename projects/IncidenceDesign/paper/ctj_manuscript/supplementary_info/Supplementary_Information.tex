@@ -9,8 +9,9 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,booktabs,graphicx,array,placeins}
-\usepackage[round,authoryear]{natbib}
-\setcitestyle{aysep={},citesep={;}}
+\usepackage[style=apa,backend=biber,natbib]{biblatex}
+\DeclareLanguageMapping{american}{american-apa}
+\addbibresource{SpatialCRT_IncidenceDesign.bib}
 % Article labels (xr-hyper, prefix M-): the curated SI cites the article's own exhibits with live
 % numbers. Build order on a clean checkout: SI, CTJ (manuscript_ctj), then SI again.
 \usepackage{xr-hyper}
@@ -2868,6 +2869,5 @@ intervention effectiveness or a final trial protocol.
 \fi
 
 \FloatBarrier
-\bibliographystyle{plainnat}
-\bibliography{SpatialCRT_IncidenceDesign}
+\printbibliography[heading=bibliography,title={References}]
 \end{document}
