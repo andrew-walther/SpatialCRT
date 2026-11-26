@@ -119,7 +119,7 @@ before or later is lost and anything can move between the two. Target for the cu
 - [x] 2e. Build the curated outline (methods before results, one numbered list); everything else
   stays in the full version. **Stop to review the curated table of contents.**
 - [x] 2f. Place the text moved out of the CTJ in Phase 1.
-- [ ] 2g. Prose review: human-writer pass, then a statistician and a clinician reader on the
+- [x] 2g. Prose review: human-writer pass, then a statistician and a clinician reader on the
   curated SI.
 - [ ] 2h. Rebuild both versions, run the checkers, record the page counts.
 - [ ] 2i. Chapter 3 alignment: resolve `paper/ctj_manuscript/notes/si-ch3-alignment-log.md` (42
@@ -265,3 +265,7 @@ Record each phase's completion here with the date and commit.
   SI 3.2 on estimating τ with the rejection figure, SI 2.2 and Section 13 on the saturation
   variants, two CTJ pointer sentences (body 3,473 words), curated SI 49 pages, unabridged 70;
   checks pass. Next: Codex 2g review, then 2h and 2i.
+- 2026-11-25: 2g done. Codex review plus four independent reviews merged into 93 items
+  (22860cf); decisions by batch (2d52e7e to 5c7accf); 151 approved blocks applied (dcf5e28: 133
+  SI, 18 CTJ, HC-7 to HC-10 declined). CTJ body 3,431 words; verifier and exhibit test pass. Next:
+  2h (page-count cuts, independent review), then 2i.
