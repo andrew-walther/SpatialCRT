@@ -379,7 +379,7 @@ both-arms tail differences are too small to establish better downside
 protection.
 
 Checkerboard and High Incidence Focus each have one assignment for
-these inputs. Their 90th percentile and worst-decile mean therefore
+these inputs. Therefore, their 90th percentile and worst-decile mean
 equal their conditional mean MSE. That equality does not imply low
 error, and their conditional MSE is still estimated from simulated
 outcomes.
@@ -439,7 +439,7 @@ We compared the nine strategies with the Friedman, Nemenyi and Holm-adjusted Wil
 **Proposed (block 1 of 4)**
 
 ```latex
-We compared the eight designs and SRS with the Friedman, Nemenyi and Holm-adjusted Wilcoxon tests used on the grid, treating the 24 combinations of year, $\rho$ and $\psi$ as blocks, separately for each spillover regime and each value of $\tau$. The four years share one map, and some designs and SRS reuse their simulations across years (Section \ref{outcome-model-and-monte-carlo-evaluation}). These $p$-values therefore describe how consistently the designs ranked, not independent evidence.
+We compared the eight designs and SRS with the Friedman, Nemenyi and Holm-adjusted Wilcoxon tests used on the grid, treating the 24 combinations of year, $\rho$ and $\psi$ as blocks, separately for each spillover regime and each value of $\tau$. The four years share one map, and some designs and SRS reuse their simulations across years (Section \ref{outcome-model-and-monte-carlo-evaluation}). Therefore, these $p$-values describe how consistently the designs ranked, not independent evidence.
 ```
 
 **Current (block 2 of 4)**
@@ -565,8 +565,8 @@ $\log(1+\text{population})$ forms groups of one to eight clusters. We
 hold the groups fixed within each year. The rule randomly treats half
 of each group, rounded to the nearest whole number, with an exact half
 rounded to the even number (1.5 to 2 and 0.5 to 0). Each year has one
-single-cluster group, which therefore stays in control, and the yearly
-totals are 28, 31, 27 and 29.
+single-cluster group, and it stays in control because half of one
+cluster rounds to zero. The yearly totals are 28, 31, 27 and 29.
 ```
 
 **Current (block 2 of 2)**
@@ -1019,8 +1019,8 @@ within each regime.
 ```latex
 \textbf{Spillover form.} Table \ref{tab:nc-forms} compares the three
 forms. Under binary exposure, Isolation Buffer assigns every treated
-cluster zero exposure and every control cluster exposure one. The
-model therefore cannot separate $\beta$ from spillover in either regime. Under
+cluster zero exposure and every control cluster exposure one. Therefore, the
+model cannot separate $\beta$ from spillover in either regime. Under
 control-only spillover, $\beta$ was unidentified in some fits under
 every assignment rule, including SRS. The two saturation designs
 identified $\beta$ most often, in 89.7\% and 91.7\% of fits. Among
@@ -1098,7 +1098,7 @@ used for allocation. Both grid models include \(\mathbf{X}_k\)
 The oracle estimate describes the association of prior incidence
 with the outcome after adjustment for treatment and spillover. The
 non-oracle model adjusts for treatment and omits spillover.
-Incidence is not randomized. These coefficients therefore describe
+Incidence is not randomized. Therefore, these coefficients describe
 adjusted associations rather than effects of incidence.
 ```
 
@@ -1133,7 +1133,7 @@ The trial outcome is a score measured on each trained professional and averaged 
 **Proposed (block 2 of 4)**
 
 ```latex
-For planning, suppose the education outcome is a score measured on each trained professional and averaged within each college. We represent a professional's score as a college effect plus individual variation, with total variance 1, so that effects are in individual standard-deviation units. The intraclass correlation coefficient (ICC) is the share of that variance that lies between colleges, so the between-college variance is the ICC and the within-college variance is $1 - \text{ICC}$. Averaging the scores of $n_c$ professionals leaves the college part unchanged and divides the variance of the individual part by $n_c$, so the college mean has standard deviation $\sigma_c = \sqrt{\text{ICC} + (1 - \text{ICC})/n_c}$ \citep{donner_design_2000, hayes_cluster_2017}. A structural effect of $\beta$ college-level residual standard deviations, before spatial propagation, therefore corresponds to an individual-level standardized effect $d = \beta\sigma_c$. This treats the sampling error of each college mean as the residual $\boldsymbol{\varepsilon}$ in Equation~\ref{eq:nc-education}, which the spatial multiplier also propagates when $\rho > 0$. With $\tau = 0$, multiplying the effect and the noise by the same constant leaves $\hat\beta/\widehat{\mathrm{SE}}$ unchanged, so power for any $n_c$, ICC and $d$ follows from the simulated college-level results. Rerunning one setting with the effect and the noise both halved reproduced its estimates to within $6\times10^{-8}$. In a sensitivity analysis, the number of trained professionals grew with college population ($n_c$ averaging 25 over participants, ICC $= 0.05$), so the noise variance differed between colleges while the fitted model stayed unweighted, as an analyst unaware of the difference would fit it.
+For planning, suppose the education outcome is a score measured on each trained professional and averaged within each college. We represent a professional's score as a college effect plus individual variation, with total variance 1, so that effects are in individual standard-deviation units. The intraclass correlation coefficient (ICC) is the share of that variance that lies between colleges, so the between-college variance is the ICC and the within-college variance is $1 - \text{ICC}$. Averaging the scores of $n_c$ professionals leaves the college part unchanged and divides the variance of the individual part by $n_c$, so the college mean has standard deviation $\sigma_c = \sqrt{\text{ICC} + (1 - \text{ICC})/n_c}$ \citep{donner_design_2000, hayes_cluster_2017}. Therefore, a structural effect of $\beta$ college-level residual standard deviations, before spatial propagation, corresponds to an individual-level standardized effect $d = \beta\sigma_c$. This treats the sampling error of each college mean as the residual $\boldsymbol{\varepsilon}$ in Equation~\ref{eq:nc-education}, which the spatial multiplier also propagates when $\rho > 0$. With $\tau = 0$, multiplying the effect and the noise by the same constant leaves $\hat\beta/\widehat{\mathrm{SE}}$ unchanged, so power for any $n_c$, ICC and $d$ follows from the simulated college-level results. Rerunning one setting with the effect and the noise both halved reproduced its estimates to within $6\times10^{-8}$. In a sensitivity analysis, the number of trained professionals grew with college population ($n_c$ averaging 25 over participants, ICC $= 0.05$), so the noise variance differed between colleges while the fitted model stayed unweighted, as an analyst unaware of the difference would fit it.
 ```
 
 **Current (block 3 of 4)**
@@ -1480,8 +1480,8 @@ fixed seed.
 In the primary model, Checkerboard, Saturation Quadrants, Isolation
 Buffer and SRS share simulations across years because annual incidence
 affects neither their assignments nor their outcomes. We recalculate
-treatment counts and population shares for each year. Their results in
-different years are therefore not independent confirmations.
+treatment counts and population shares for each year. Therefore, their
+results in different years are not independent confirmations.
 ```
 
 ### HW-10. Partial participation methods
@@ -1831,7 +1831,7 @@ Codex: Accept · Biostat: CONFIRM · Planner: CONFIRM · Writer: CONFIRM
 **Proposed**
 
 ```latex
-\textbf{Spatial model.} Fitting a CAR model, generating the data from a CAR model, or both, left the saturation designs with 0.76 to 0.82 times SRS's MSE under control-only spillover, and Checkerboard and Isolation Buffer the worst designs under both-arms spillover. When the CAR model was fit to spatial lag data by maximum likelihood, its estimates were biased by 0.035 and 0.085 at $\rho = 0.2$ and by 0.110 and 0.205 at $\rho = 0.5$ under both-arms and control-only spillover. When it was fit to CAR data, its bias was at most 0.005. Under the spatial lag model the outcome mean includes the spatial multiplier, and the CAR coefficient on treatment therefore estimates a different quantity from $\beta$ \citep{wall_close_2004}.
+\textbf{Spatial model.} Fitting a CAR model, generating the data from a CAR model, or both, left the saturation designs with 0.76 to 0.82 times SRS's MSE under control-only spillover, and Checkerboard and Isolation Buffer the worst designs under both-arms spillover. When the CAR model was fit to spatial lag data by maximum likelihood, its estimates were biased by 0.035 and 0.085 at $\rho = 0.2$ and by 0.110 and 0.205 at $\rho = 0.5$ under both-arms and control-only spillover. When it was fit to CAR data, its bias was at most 0.005. Under the spatial lag model the outcome mean includes the spatial multiplier. Therefore, the CAR coefficient on treatment estimates a different quantity from $\beta$ \citep{wall_close_2004}.
 
 \textbf{Bayesian CAR model.} With the longer chains, 83.1\% of the Bayesian CAR chains at $\rho = 0.5$ converged, against 46.2\% for the shorter chains, but 12.5\% still had an absolute Geweke $z$ of at least 1.96, against about 5\% expected by chance. Among converged chains, the Bayesian CAR estimate was biased by $+0.138$ under both-arms spillover and $+0.219$ under control-only spillover, with credible-interval coverage of 90.4\% and 87.7\%. For maximum likelihood on the same data, the biases were $+0.023$ and $+0.028$ and the corrected $t$ coverage 95.0\% and 94.6\%. The Bayesian CAR model also did not reproduce the saturation designs' control-only advantage. Its bias has the same source as that of the maximum likelihood CAR fit to spatial lag data, and the Bayesian spatial lag model uses the same spatial multiplier as the simulated outcome.
 
@@ -1959,7 +1959,7 @@ The colleges-needed numbers above therefore come from a test with the nominal si
 **Proposed**
 
 ```latex
-The sample-size estimates therefore use a test whose rejection rate was close to the nominal 5\% level in these simulations.
+Therefore, the sample-size estimates use a test whose rejection rate was close to the nominal 5\% level in these simulations.
 ```
 
 ### SR-11. Scope of the grid wins and robustness results
@@ -2936,7 +2936,7 @@ Each entry averages the six $\rho/\psi$ pairs of one spillover regime with equal
 **Proposed**
 
 ```latex
-Each entry averages the six $\rho/\psi$ pairs of one spillover regime with equal weight, and coverage is that of the corrected $t$ interval. Checkerboard, Saturation Quadrants, Isolation Buffer and SRS use the same simulations in every year, because annual incidence enters neither their allocation nor the outcome model. Their rows therefore repeat and are not independent annual confirmations.}
+Each entry averages the six $\rho/\psi$ pairs of one spillover regime with equal weight, and coverage is that of the corrected $t$ interval. Checkerboard, Saturation Quadrants, Isolation Buffer and SRS use the same simulations in every year, because annual incidence enters neither their allocation nor the outcome model. Therefore, their rows repeat and are not independent annual confirmations.}
 ```
 
 ### SN-23. Semicolon in the regional-summary sensitivity
@@ -3501,5 +3501,7 @@ A Python script parsed this file and checked every item (93 items, 30 HW, 18 SR,
 Recorded as the author replies, batch by batch. Nothing is applied until every batch is decided.
 
 - **Style revision (2026-11-25, after the author's A2 reply):** every proposed sentence that newly opened with "Because" or joined two clauses with ", so" was rewritten: SR-7 block 2 (already accepted in A1), HW-24 block 1, SR-1 blocks 1 and 2 (block 1 also explains "count form" in plain words), SR-2 block 2, SR-10 block 2, HW-2 block 1, HW-10 (and the SR-16 current block that quotes it), SN-3, SN-8, HC-2 block 1 and HC-6. HC-7 to HC-10, which turned "Therefore" sentences into "Because" or ", so", are now recommended for decline. Such joins already in the current SI or article text are left alone.
+- **Style revision 2 (2026-11-25, after the author's A3 reply):** proposed sentences with a mid-sentence "therefore" now open with "Therefore," (HW-25, HW-11 and HW-6 in A1; SR-1, SR-2 and SR-6 in A2; HW-8; HW-29; SR-9; SN-22). HW-6's "which therefore stays in control" now gives the reason ("because half of one cluster rounds to zero"), as the current text does.
 - **Batch A1 (2026-11-25):** accepted as recommended, all ten: HW-17, HW-3 (blocks 1 to 3), HW-7, HW-23 (both blocks), HW-25, HW-13 (both blocks), HW-11, HW-30, HW-6 (prose accepted, table block rejected as recommended) and SR-7.
 - **Batch A2 (2026-11-25):** HW-9, HW-20, HW-22, HW-16, HW-14, HW-15 and SR-6 accepted as recommended. HW-24 accepted with block 1 revised to drop the sentence-initial "Because". SR-1 accepted with block 1 revised to explain "count form" in plain words (block 2's ", so" also removed). SR-2 accepted with its ", so" joins removed.
+- **Batch A3 (2026-11-25):** all nine accepted as recommended (SR-10, SR-8, HW-1, HW-2, HW-4, HW-8, HW-10, HW-18, HW-12). HW-8's mid-sentence "therefore" moved to the start of its sentence (style revision 2).
