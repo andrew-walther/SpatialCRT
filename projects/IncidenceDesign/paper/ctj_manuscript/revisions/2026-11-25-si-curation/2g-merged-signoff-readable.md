@@ -1057,11 +1057,11 @@ Builds on HW-22 and HW-28. Current blocks that come from those items quote their
 
 **Current**
 
-> ~~The colleges-needed numbers above therefore come from~~ a test ~~with~~ the nominal ~~size.~~
+> ~~The colleges-needed numbers above therefore come from~~ a test with the nominal ~~size.~~
 
 **Proposed**
 
-> **Therefore, the sample-size estimates use** a test **whose rejection rate was close to** the nominal **5% level in these simulations.**
+> **Therefore, the sample-size estimates use** a test with **a rejection rate close to** the nominal **5% level in these simulations.**
 
 ### SR-11. Scope of the grid wins and robustness results
 
@@ -2155,3 +2155,5 @@ Recorded as the author replies, batch by batch. Nothing is applied until every b
 - **Batch A1 (2026-11-25):** accepted as recommended, all ten: HW-17, HW-3 (blocks 1 to 3), HW-7, HW-23 (both blocks), HW-25, HW-13 (both blocks), HW-11, HW-30, HW-6 (prose accepted, table block rejected as recommended) and SR-7.
 - **Batch A2 (2026-11-25):** HW-9, HW-20, HW-22, HW-16, HW-14, HW-15 and SR-6 accepted as recommended. HW-24 accepted with block 1 revised to drop the sentence-initial "Because". SR-1 accepted with block 1 revised to explain "count form" in plain words (block 2's ", so" also removed). SR-2 accepted with its ", so" joins removed.
 - **Batch A3 (2026-11-25):** all nine accepted as recommended (SR-10, SR-8, HW-1, HW-2, HW-4, HW-8, HW-10, HW-18, HW-12). HW-8's mid-sentence "therefore" moved to the start of its sentence (style revision 2).
+- **Batch B (2026-11-25):** all seven accepted as recommended (HW-5, HW-19, HW-21, HW-26, HW-27, HW-28, HW-29). HW-29's bold run-in heads ("Spatial model." and the others) stay as they are: the SI uses this bold-with-period style for all 12 of its run-in paragraph heads.
+- **Batch C (2026-11-25):** all twelve accepted as recommended. SR-9 revised at the author's request to "a test with a rejection rate close to the nominal 5\% level".
