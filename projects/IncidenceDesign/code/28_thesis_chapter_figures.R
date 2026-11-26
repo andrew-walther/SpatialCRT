@@ -245,7 +245,7 @@ for (nb in c("queen", "rook")) {
     scale_fill_manual(values = tau_palette, breaks = tau_colour_order, labels = hy) +
     labs(title = c(queen = "(a) Queen", rook = "(b) Rook")[[nb]],
          x = expression("True " * beta),
-         y = if (nb == "queen") "Mean MSE\n(band: ± average scenario-level\nMonte Carlo SE)" else NULL,
+         y = if (nb == "queen") "MSE" else NULL,
          color = NULL, fill = NULL) +
     theme_bw(base_size = 10)
 }
@@ -323,8 +323,8 @@ pc$Design <- display_name(pc$Design)
 pc$Design <- factor(pc$Design, levels = c("Simple Random Sampling", "Saturation Quadrants",
                                           "Incidence-Guided Saturation", "Checkerboard"))
 pc$Regime <- factor(REGIME_LAB[pc$Regime], levels = REGIME_LAB)
-pc$TauLab <- factor(sprintf("Effect of %s college-level SD", pc$Tau),
-                    levels = sprintf("Effect of %s college-level SD", c(1, 1.5)))
+pc$TauLab <- factor(hy(sprintf("Effect of %s college-level SD", pc$Tau)),
+                    levels = hy(sprintf("Effect of %s college-level SD", c(1, 1.5))))
 pal4 <- c("Simple Random Sampling" = "grey25", "Saturation Quadrants" = "#009E73",
           "Incidence-Guided Saturation" = "#0072B2", "Checkerboard" = "#D55E00")
 p_power <- ggplot(pc, aes(N, Power, colour = Design, fill = Design, linetype = Design, shape = Design)) +
@@ -484,13 +484,14 @@ tail <- read.csv(file.path(ex_dir, "refined_tail_comparison.csv"), colClasses = 
 a <- tail[tail$Rho == 0.5, ]
 a$Design_Label <- factor(a$Design_ID, levels = 9:1, labels = rev(ex_labels))
 a$Regime_Label <- ifelse(a$Regime == "both", "Both arms", "Control only")
+WD_LAB <- hy("Estimated worst-decile mean")   # true hyphen
 p_tail <- ggplot(a, aes(y = Design_Label)) +
   geom_segment(aes(x = Mean_MSE, xend = Q90_Estimated, yend = Design_Label), color = "#b9cdd1") +
   geom_point(aes(x = Mean_MSE, shape = "Mean"), color = "#167c80", size = 2) +
-  geom_point(aes(x = Q90_Estimated, shape = "Estimated q90"), color = "#b77812", size = 2) +
-  geom_point(aes(x = Worst10_Mean_Estimated, shape = "Estimated worst decile"), color = "#9f5362", size = 2) +
+  geom_point(aes(x = Q90_Estimated, shape = "Estimated 90th percentile"), color = "#b77812", size = 2) +
+  geom_point(aes(x = Worst10_Mean_Estimated, shape = WD_LAB), color = "#9f5362", size = 2) +
   facet_grid(Year ~ Regime_Label) + scale_x_log10() +
-  scale_shape_manual(values = c(Mean = 16, "Estimated q90" = 17, "Estimated worst decile" = 15), name = NULL) +
+  scale_shape_manual(values = setNames(c(16, 17, 15), c("Mean", "Estimated 90th percentile", WD_LAB)), name = NULL) +
   labs(x = "Conditional allocation MSE (log scale)", y = NULL) +
   theme_minimal(base_size = 10) + theme(legend.position = "bottom") +
   thesis_text_sizes()
@@ -557,5 +558,54 @@ p_nc <- ggplot(shown, aes(factor(Year), Label, fill = Log_Ratio)) +
   theme(panel.grid = element_blank()) +
   thesis_text_sizes() + theme(strip.text = element_text(face = "bold"))
 save_fig(p_nc, "compact/nc_annual_accuracy.pdf", PRINT_W, 3.5)
+
+# Incidence-coefficient rejection rate: Figure (queen, oracle) ----
+# Same plot as the `incidence_rejection` panel of code/31_incidence_coefficient_summary.R
+# (two-sided rejection rate of the 95% t + df interval for tau, by incidence
+# coefficient tau; dashed line at the nominal 0.05), re-drawn at the printed width from
+# results/incidence_coef_2026-11/full/summary/performance.csv. Nothing is simulated.
+inc <- read.csv(file.path(results_dir, "incidence_coef_2026-11/full/summary/performance.csv"))
+source("00_design_names.R")   # DESIGN_FULL_NAMES
+inc_names <- DESIGN_FULL_NAMES
+inc_names["Design 1"] <- "Checkerboard"
+inc_names["Design 5"] <- "2\u00d72 Blocking"
+inc_lab <- hy(inc_names)
+stopifnot(setequal(unique(inc$Design), names(inc_names)))
+inc <- inc[inc$Intervention_Grid == "All_Beta" & inc$Estimator == "oracle" &
+             inc$Coefficient == "X" & inc$Neighbor_Type == "queen", ]
+inc$Design_Name <- factor(unname(inc_lab[inc$Design]), levels = unname(inc_lab))
+inc$Incidence <- factor(
+  ifelse(inc$Incidence_Mode == "iid", "Independent uniform",
+         sprintf("%s, rho_X = %.1f", ifelse(inc$Incidence_Mode == "spatial", "Spatial", "Poisson"),
+                 inc$Rho_Incidence)),
+  levels = c("Independent uniform", "Spatial, rho_X = 0.2", "Spatial, rho_X = 0.5",
+             "Poisson, rho_X = 0.2", "Poisson, rho_X = 0.5"))
+inc$Regime <- factor(inc$Spillover_Type, levels = c("control_only", "both"),
+                     labels = hy(c("Control-only spillover", "Both-arms spillover")))
+stopifnot(!anyNA(inc$Incidence), !anyNA(inc$Regime), nrow(inc) == 5 * 2 * 5 * 9,
+          all(is.finite(inc$Power_Tdf)))
+inc_colours <- setNames(c("#A3214B", "#AD4B00", "#127187", "#6F5AA1", "#55742A",
+                          "#AF7300", "#745348", "#0060A7", "#272727"), inc_lab)
+inc_shapes  <- setNames(c(0, 17, 15, 5, 8, 6, 3, 18, 1), inc_lab)
+inc_strips <- as_labeller(
+  setNames(c('"Independent uniform"', 'paste("Spatial, ", rho[X] == 0.2)',
+             'paste("Spatial, ", rho[X] == 0.5)', 'paste("Poisson, ", rho[X] == 0.2)',
+             'paste("Poisson, ", rho[X] == 0.5)'), levels(inc$Incidence)), label_parsed)
+p_inc <- ggplot(inc, aes(Incidence_Coef, Power_Tdf, colour = Design_Name, shape = Design_Name)) +
+  geom_hline(yintercept = 0.05, colour = "grey45", linetype = "dashed") +
+  geom_line(linewidth = 0.45) + geom_point(size = 1.5) +
+  facet_grid(Incidence ~ Regime, labeller = labeller(Incidence = inc_strips)) +
+  scale_colour_manual(values = inc_colours) + scale_shape_manual(values = inc_shapes) +
+  scale_y_continuous(breaks = seq(0, 1, 0.25), labels = function(p) paste0(100 * p, "%"),
+                     limits = c(0, 1)) +
+  scale_x_continuous(breaks = sort(unique(inc$Incidence_Coef)),
+                     labels = function(x) format(x, trim = TRUE, drop0trailing = TRUE)) +
+  labs(x = expression("Incidence coefficient (" * tau * ")"),
+       y = hy("Two-sided rejection rate"), colour = NULL, shape = NULL) +
+  theme_bw(base_size = 10) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank()) +
+  guides(colour = guide_legend(ncol = 3)) +
+  thesis_text_sizes()
+save_fig(p_inc, "fig_incidence_rejection_queen.pdf", PRINT_W, 8.2)
 
 cat("\nDone. Figures written to", fig_out, "\n")

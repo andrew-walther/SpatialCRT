@@ -23,9 +23,6 @@ READING = MAIN.with_name('CTJ_Reading.tex')
 SUPPLEMENT = ROOT / 'paper/ctj_manuscript/supplementary_info/Supplementary_Information.tex'
 EXHIBITS = ROOT / 'application/results/real_sud_rev_20261002/exhibits'
 PENDING_SI = set()  # chapter tables allowed to be absent from the SI (--pending-si)
-# Phase 2d D2 (author, 2026-11-25): the SI reports the queen adjacent-pair tests in prose with
-# SRS in the chain; the chapter table gains the SRS rows in Phase 2i, when this entry is removed.
-PENDING_SI.add('tab:adjacent-pairs')
 LABELS = ['Checkerboard', 'High Incidence Focus', 'Saturation Quadrants',
           'Isolation Buffer', '$2\\times2$ Blocking', 'Balanced Quartiles',
           'Balanced Halves', 'Incidence-Guided Saturation', 'Simple Random Sampling']

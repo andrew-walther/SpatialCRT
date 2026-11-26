@@ -60,6 +60,7 @@ THESIS_BUILT=(
   fig_coverage_by_design_6design_queen.pdf fig_coverage_by_design_6design_rook.pdf
   fig_tau_sensitivity_6design_combined.pdf fig_vs_srs_by_regime_queen.pdf
   fig_power_vs_n.pdf fig_colleges_needed.pdf fig_spread_vs_gain.pdf
+  fig_incidence_rejection_queen.pdf
   real_sud/primary_setting_ratios.pdf real_sud/refined_allocation_risk.pdf
 )
 

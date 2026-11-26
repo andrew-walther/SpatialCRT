@@ -17,6 +17,7 @@
 # Writes to paper/{thesis_chapter,ctj_manuscript}/figures/:
 #   community_college_service_area_clusters.png   county-to-college map
 #   real_sud/observed_years.png, regions.png, design_examples.png   NC maps
+#   (design_examples.png: CTJ folder only; thesis_design_examples.R writes the chapter's)
 #   real_sud/{primary_yearly_mse,primary_setting_ratios,population_shares,
 #             refined_allocation_risk}.pdf        copies of the *_journal.pdf exports
 #   (primary_setting_ratios and refined_allocation_risk: CTJ folder only; code/28 builds
@@ -53,7 +54,10 @@ no_title <- ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL)
 maps <- rs_maps(readRDS(file.path(ROOT, "setup.rds")))
 save_all(maps$observed + no_title, "real_sud/observed_years.png", 11, 7)
 save_all(maps$regions + no_title, "real_sud/regions.png", 10, 4)
-save_all(maps$examples + no_title, "real_sud/design_examples.png", 14, 8)
+# The chapter's design_examples.png is a thesis-width export from thesis_design_examples.R,
+# so this 14 x 8 in copy goes to the CTJ folder only.
+for (path in file.path("paper/ctj_manuscript/figures", "real_sud/design_examples.png"))
+  ggplot2::ggsave(path, maps$examples + no_title, width = 14, height = 8, dpi = 150, bg = "white")
 
 # County-to-college service-area map (12 x 8 in at 300 dpi, as the existing copy) ----
 # tigris reads the project's cached county boundaries rather than downloading

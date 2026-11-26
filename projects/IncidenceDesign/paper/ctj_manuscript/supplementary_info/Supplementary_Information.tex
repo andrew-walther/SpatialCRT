@@ -1479,6 +1479,36 @@ ranks did not. Each unit's MSE pools the two regimes, and in that pooled
 mean the control-only losses of \(2\times2\) Blocking outweigh its
 both-arms wins.
 
+% Phase 2i C3F-1 (option A): the chapter's adjacent-pair table, unabridged build only
+\iffullsi
+\begin{table}[!htb]
+
+\small
+\centering
+
+\caption[Paired differences in MSE between designs adjacent in the mean-MSE order]{Paired differences in MSE between designs adjacent in the mean-MSE order of the six designs and SRS under queen contiguity at $\beta = 1$, over the 50 independent configuration-by-surface units. A negative difference means the first design had the lower MSE. Intervals are $t_{49}$ 95\% intervals. Units won is the number of the 50 units in which the first design had the lower MSE.}
+\label{tab:adjacent-pairs}
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.6in}ccc}
+
+\toprule
+Pair (first against second) & Mean difference & 95\% interval & Units won \\
+
+\midrule
+Incidence-Guided Saturation against Simple Random Sampling & $-0.038$ & $(-0.040, -0.035)$ & 50 \\
+Simple Random Sampling against Balanced Quartiles & $-0.002$ & $(-0.005, 0.001)$ & 29 \\
+Balanced Quartiles against Isolation Buffer & $-0.029$ & $(-0.033, -0.026)$ & 50 \\
+Isolation Buffer against High Incidence Focus & $-0.085$ & $(-0.095, -0.075)$ & 50 \\
+High Incidence Focus against $2\times2$ Blocking & $-0.074$ & $(-0.086, -0.062)$ & 48 \\
+$2\times2$ Blocking against Checkerboard & $-0.768$ & $(-0.789, -0.746)$ & 50 \\
+
+\bottomrule
+
+\end{tabular}
+
+\end{table}
+\fi
+
 \iffullsi
 Figure \ref{fig:cd} gives the Nemenyi critical-difference diagrams for
 the comparison of the six designs and SRS at \(\beta = 1\), whose results are

@@ -1677,4 +1677,6 @@ A script parsed all 89 items and confirmed the following. Every one of the 120 C
 - **Batch 7, C3T-44 to C3T-53 (2026-11-26):** accepted as recommended.
 - **Batch 8, C3T-54 to C3T-61 and C3T-69 (2026-11-26):** accepted as recommended.
 - Batch 10 (C3T-72 to C3T-74) added after the review flagged three chapter-only contrasts.
-- Everything else pending.
+- **Batch 9, C3T-62 to C3T-66, and Batch 10, C3T-72 to C3T-74 (2026-11-26):** accepted as recommended. Every item is now decided.
+
+Applied 2026-11-26 with `apply_2i.py` (123 text edits from 85 items, then C3N-10). C3F-1: the adjacent-pair table is in the unabridged SI only and the verifier's `PENDING_SI` entry is gone. C3F-2 to C3F-7: `code/28_thesis_chapter_figures.R` (rejection figure at 6.5 in, "MSE" axis, true hyphens, legend labels), `copy_figures.sh` (`THESIS_BUILT`), `application/code/thesis_design_examples.R` (thesis-width example map, 6.5 × 4.2 in at 300 dpi) and `manuscript_maps.R` (its wide map now writes the CTJ folder only). Rebuilding code/28 changed only the three intended figures. The rejection figure's ρ_X strip subscripts print at about 5.6 pt, as in the chapter's other parsed ρ_X labels. Chapter renders to 95 pages with no "??". `verify_manuscripts.py` and `test_manuscript_exhibits.R` pass.
