@@ -183,6 +183,7 @@ the reasoning behind this distinction.
 | `application/code/sud_incidence.R` | Rate formulas; county → college aggregation | `compute_incidence()`, `aggregate_sud_to_clusters()` |
 | `application/code/sud_reconcile.R` | QC report vs Habib (2026) and the 23,523 counts | `reconcile_sud_counts()` |
 | `application/code/manuscript_maps.R` | Clean (title-free) manuscript copies of the NC maps, service-area map and application figures | Reuses `rs_maps()` (companion) and `generate_county_borders_map(show_title = FALSE)`; writes both paper figure folders |
+| `application/code/thesis_design_examples.R` | Thesis-width (6.5 in) case-study example map for Chapter 3, without numbered titles (C3F-7, 2026-11-26) | Writes `paper/thesis_chapter/figures/real_sud/design_examples.png`; `manuscript_maps.R` now writes its wide map to the CTJ folder only |
 | `application/code/build_cluster_weights.R` | Queen + rook contiguity (nb, binary A, row-standardized W) for the 58 clusters → tracked `application/data/nc_cluster_weights.rds` | Reuses `build_nc_application_clusters()`, `build_application_spatial_weights()` |
 | `application/tests/test_application_data.R` | 23 checks: rate formulas (fixture), bad input, real data vs Habib (2026), weights | Real-data part skips if the gitignored sources are absent |
 | `application/code/real_sud_setup.R` | Validates observed annual/pooled inputs, weights and geography; freezes regions and yearly blocks | Sources `application_designs.R`, `cc_mapping_data.R`, `code/16` |

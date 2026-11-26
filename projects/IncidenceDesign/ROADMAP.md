@@ -216,6 +216,19 @@ are complete (see the status at the top: `paper/ctj_manuscript/`,
 
 ## Progress Log (moved from AGENTS.md 2026-10-01)
 
+### 2026-11-26 — Phase 2 complete (SI prose, trim, Chapter 3 alignment) and Lin package
+
+- 2g applied (`dcf5e28`). 2h (`9bea05f`): "X, not Y" rewrites in the SI and CTJ, short list
+  titles, light trim. Curated SI 44 pages, unabridged 66.
+- 2i (`ac48a26`): Chapter 3 aligned with the revised SI and CTJ (`2i-signoff.md`, 123 edits).
+  New appendices A7 (variants of incidence guidance) and A12 (incidence coefficient); old A7–A12
+  are now A8–A11, A13, A14. `tab:adjacent-pairs` is in the unabridged SI. Chapter figures fixed
+  through `code/28` and `application/code/thesis_design_examples.R`.
+- CTJ SI pointers tightened (`debdcc3`); main text 3,433 words, abstract 421. Review package for
+  Dr. Lin rebuilt in `revisions/2026-11-24-round6-word-limit/for-lin/` (not yet sent); the
+  updated reading copy replaces `CTJ_Reading_Markup_V7.pdf` (author: V7 continued).
+- Verifier and exhibit test pass. Next: Phase 5 (prelim presentation) and 3d.
+
 ### 2026-11-25 — Incidence-Guided Saturation boundary run and figure
 
 - Completed Phase 3a and 3b on the grid. Added eight 100/0 boundary variants (IDs 131–138),
