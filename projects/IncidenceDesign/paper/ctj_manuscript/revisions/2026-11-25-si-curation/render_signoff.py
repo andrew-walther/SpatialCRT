@@ -23,6 +23,8 @@ Rendering rules
 - Pandoc renders the rest to plain text, with math as Unicode.
 - In each pair, words removed from the current block are ~~struck~~ and
   words added in the proposed block are **bold**.
+- ```qmd blocks (Chapter 3) are rendered from Quarto markdown; chapter
+  labels print as [label].
 - Table rows (lines with & and \\\\) are left as LaTeX, since a row
   fragment has no plain-text form.
 """
@@ -164,9 +166,9 @@ UNABRIDGED = "[unabridged only] "
 THOUSANDS = "\u01c2"  # placeholder character, restored to "," after pandoc
 
 
-def pandoc(tex):
+def pandoc(tex, fmt="latex"):
     res = subprocess.run(
-        ["pandoc", "-f", "latex", "-t", "plain", "--wrap=none"],
+        ["pandoc", "-f", fmt, "-t", "plain", "--wrap=none"],
         input=tex, capture_output=True, text=True)
     return res.stdout.strip() if res.returncode == 0 else ""
 
@@ -179,6 +181,12 @@ def render(tex, target):
     """
     if re.search(r"&.*\\\\", tex):
         return None
+    if target == "qmd":
+        # Chapter (Quarto) text: chapter labels print as [label], citations as (key)
+        tex = re.sub(r"\\(?:eq)?ref\{([^}]*)\}", r"[\1]", tex)
+        tex = re.sub(r"@sec-([\w-]+)", r"[sec-\1]", tex)
+        tex = re.sub(r"\[@([^\]]*)\]", lambda m: "(" + cite_text(m.group(1).replace("@", "").replace(";", ",")) + ")", tex)
+        return pandoc(tex, "markdown") or None
     text = pandoc(preprocess(tex, target)).replace(THOUSANDS, ",")
     if text:
         return text
@@ -258,13 +266,14 @@ def main(path):
             target = "ctj"
         elif lines[i].startswith("## ") and not lines[i].startswith("## Batch"):
             target = "si"
-        if lines[i].strip() == "```latex":
+        if lines[i].strip() in ("```latex", "```qmd"):
             j = i + 1
             while lines[j].strip() != "```":
                 j += 1
             label = next((lines[k].strip() for k in range(i - 1, -1, -1)
                           if lines[k].strip()), "")
-            blocks.append(dict(start=i, end=j, label=label, target=target,
+            blocks.append(dict(start=i, end=j, label=label,
+                               target="qmd" if lines[i].strip() == "```qmd" else target,
                                tex="\n".join(lines[i + 1:j])))
             i = j
         i += 1
