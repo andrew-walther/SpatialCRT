@@ -30,8 +30,9 @@ The chapter is the long form and follows the unabridged SI wording (the `\iffull
 | C3N-5 | Accept | Future work says $\tau$ "can be estimated" as if untested (4e) |
 | C3N-6 | Accept | Future work promises the study 3c has now done |
 | C3N-7 | Accept | Pointer from the reach appendix to 3c, with "North Carolina" (HW-23) |
-| C3N-8 | Accept | New Appendix A13 from SI Section 3.2 (N1, SR-2) |
-| C3N-9 | Accept | New Appendix A14 from SI Sections 2.2 and 13 (N4, N5, SR-18) |
+| C3N-8 | Accept | New Appendix A12 from SI Section 3.2 (N1, SR-2), after the non-oracle appendix |
+| C3N-9 | Accept | New Appendix A7 from SI Sections 2.2 and 13 (N4, N5, SR-18), after A6 |
+| C3N-10 | Accept | Renumber the appendix sections after A6 (headings and `\applabel` numbers) |
 | C3X-1 | Accept | Parameter-grid caption is stale about SRS (S3) |
 | C3X-2 | Accept | SRS rows in `tab:adjacent-pairs` and its text (T2, D2, C3-5) |
 | C3F-1 | Accept option A | Remove the verifier's `PENDING_SI` entry, which needs the table in the unabridged SI |
@@ -366,7 +367,7 @@ Item IDs follow the order of the batches. Within each batch, items run in chapte
 
 ## Batch 2 · New 4e and 3c material
 
-Placement decision inside this batch. The new material becomes two appendices at the end, A13 (incidence coefficient, from SI Section 3.2) and A14 (variants of incidence guidance, from SI Sections 2.2 and 13). Appending keeps A1–A12 and every existing `\ref` unchanged. The alternative is to insert A13 after A2 and A14 after A6 and renumber A3–A12 by hand. Say so if you prefer it. Every sentence below comes from the applied SI text (N1, N4, N5 as revised by SR-2 and SR-18), with these chapter adaptations. The math uses `$...$`, references and figure paths follow the chapter (no `../`), short captions follow the chapter's style, and the SI's ", so" joins become two sentences.
+Placement (author, 2026-11-26): by topic. Variants of incidence guidance become A7, right after A6 (comparison of all candidate designs), and estimating the incidence coefficient becomes A12, after the sensitivity analysis without the spillover term. C3N-10 renumbers the sections in between. Every sentence below comes from the applied SI text (N1, N4, N5 as revised by SR-2 and SR-18), with these chapter adaptations. The math uses `$...$`, references and figure paths follow the chapter (no `../`), short captions follow the chapter's style, and the SI's ", so" joins become two sentences.
 
 ### C3N-1. Pointer to the regions-and-spread study (line 101)
 
@@ -452,36 +453,22 @@ Placement decision inside this batch. The new material becomes two appendices at
 
 > and the **North Carolina** regions lie at the low end of that spread. **Appendix \[app:igs-sensitivity\] shows how the number of regions and the saturation targets affect targeting and MSE on the grid.**
 
-### C3N-8. New Appendix A13: estimating the incidence coefficient (after A12)
+### C3N-8. New Appendix A12: estimating the incidence coefficient (after the non-oracle appendix)
 
-**Recommendation:** Accept. SI Section 3.2 as applied (N1 with SR-2's definition of $\tau$). Four ", so" joins are split. The figure needs the rebuilt chapter copy (C3F-2) before the chapter renders to the thesis rule.
+**Recommendation:** Accept. SI Section 3.2 as applied (N1 with SR-2's definition of $\tau$). Four ", so" joins are split. The section follows the sensitivity analysis without the spillover term, with the other grid sensitivity analyses (author, 2026-11-26). The figure needs the rebuilt chapter copy (C3F-2) before the chapter renders to the thesis rule. C3N-10 renumbers the heading kept below it.
 
 **Current**
 
 ````qmd
-Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & n.i. \\
-\bottomrule
-\end{tabular}
-\end{table}
-```
+## A11. Additional Case Study Results {.unnumbered .unlisted}
 ````
 
 **Proposed**
 
 ````qmd
-Simple Random Sampling & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 & n.i. \\
-\bottomrule
-\end{tabular}
-\end{table}
-```
+## A12. Estimating the Incidence Coefficient After a Trial {.unnumbered .unlisted}
 
-```{=latex}
-\FloatBarrier
-```
-
-## A13. Estimating the Incidence Coefficient After a Trial {.unnumbered .unlisted}
-
-\applabel{A13}{app:incidence-coefficient}The incidence coefficient $\tau$ in Equation \ref{eq:outcome} gives the change in the outcome's linear predictor for a one-unit increase in scaled incidence $\mathbf{X}$, the full width of its 0-to-1 range, holding treatment and spillover fixed. The change is in residual standard deviations because $\sigma = 1$, and is measured before spatial propagation. At $\tau = 1$, a one-unit incidence contrast contributes as much to the linear predictor as the primary intervention effect $\beta = 1$. At $\tau = 0$ incidence makes no direct contribution to that predictor. The coefficient can exceed 1 or be negative.
+\applabel{A12}{app:incidence-coefficient}The incidence coefficient $\tau$ in Equation \ref{eq:outcome} gives the change in the outcome's linear predictor for a one-unit increase in scaled incidence $\mathbf{X}$, the full width of its 0-to-1 range, holding treatment and spillover fixed. The change is in residual standard deviations because $\sigma = 1$, and is measured before spatial propagation. At $\tau = 1$, a one-unit incidence contrast contributes as much to the linear predictor as the primary intervention effect $\beta = 1$. At $\tau = 0$ incidence makes no direct contribution to that predictor. The coefficient can exceed 1 or be negative.
 
 Before outcomes are observed, investigators specify $\tau$ for the planning model. After a trial, the same spatial lag model can estimate $\tau$ and $\beta$ from the observed outcomes and the incidence used for allocation. Both grid models include $\mathbf{X}_k$ (@sec-estimation), and every fit provides both estimates. The oracle estimate describes the association of prior incidence with the outcome after adjustment for treatment and spillover. The non-oracle model adjusts for treatment and omits spillover. Incidence is not randomized. Therefore, these coefficients describe adjusted associations between incidence and the outcome.
 
@@ -505,25 +492,26 @@ The oracle results assume the correct form of spillover, and the non-oracle bias
 
 \FloatBarrier
 ```
+
+## A11. Additional Case Study Results {.unnumbered .unlisted}
 ````
 
-### C3N-9. New Appendix A14: variants of incidence guidance (end of the appendix)
+### C3N-9. New Appendix A7: variants of incidence guidance (after the comparison of all candidate designs)
 
-**Recommendation:** Accept. SI Sections 2.2 (N4) and 13 (N5 with SR-18's rook numbers and D3's two-decimal ratios), as applied. Three ", so" joins in the methods are split. The SI's cross-reference to its own Section 2.2 becomes "described above".
+**Recommendation:** Accept. SI Sections 2.2 (N4) and 13 (N5 with SR-18's rook numbers and D3's two-decimal ratios), as applied. Three ", so" joins in the methods are split. The SI's cross-reference to its own Section 2.2 becomes "described above". The section follows A6, the comparison of all candidate designs, since both compare members of the saturation family (author, 2026-11-26). C3N-10 renumbers the heading kept below it.
 
 **Current**
 
 ````qmd
-```{=latex}
-% Restore the table-of-contents depth for the chapters that follow.
+## A7. Pairwise Tests and Critical-Difference Diagrams {.unnumbered .unlisted}
 ````
 
 **Proposed**
 
 ````qmd
-## A14. Variants of Incidence Guidance on the Grid {.unnumbered .unlisted}
+## A7. Variants of Incidence Guidance on the Grid {.unnumbered .unlisted}
 
-\applabel{A14}{app:igs-sensitivity}Incidence-Guided Saturation fixes two choices, four quadrants and saturations from 80\% down to 20\%. To see how much each matters, we varied the number of regions and the spread of the saturations on the grid. The grid was divided into 2 halves, 4 quadrants, 10 rectangles or 25 blocks of equal size. With $R$ regions and spread $s$, the region ranked $r$ by mean incidence received the target saturation $0.5 + s\{1 - 2(r-1)/(R-1)\}$. The highest-ranked region was then treated at $50\% + s$ and the lowest at $50\% - s$. We used $s = 0.1$, 0.2, 0.3, 0.4 and 0.5, which give highest and lowest saturations of 60/40, 70/30, 80/20, 90/10 and 100/0 percent. Four quadrants at 80/20 is the original design.
+\applabel{A7}{app:igs-sensitivity}Incidence-Guided Saturation fixes two choices, four quadrants and saturations from 80\% down to 20\%. To see how much each matters, we varied the number of regions and the spread of the saturations on the grid. The grid was divided into 2 halves, 4 quadrants, 10 rectangles or 25 blocks of equal size. With $R$ regions and spread $s$, the region ranked $r$ by mean incidence received the target saturation $0.5 + s\{1 - 2(r-1)/(R-1)\}$. The highest-ranked region was then treated at $50\% + s$ and the lowest at $50\% - s$. We used $s = 0.1$, 0.2, 0.3, 0.4 and 0.5, which give highest and lowest saturations of 60/40, 70/30, 80/20, 90/10 and 100/0 percent. Four quadrants at 80/20 is the original design.
 
 The 100/0 setting is a boundary case, included only to show whether going beyond 90/10 helps or hurts. It treats one region fully and leaves another untreated. For quadrants its targets are 100\%, 67\%, 33\% and 0\%, or 25, 17, 8 and 0 treated clusters. Targets were rounded by largest remainders so that every assignment treated exactly 50 of the 100 clusters, and ties in regional mean incidence were broken at random. Each guided variant has an unguided twin that gives the same targets to the regions in random order. The pair isolates the effect of incidence guidance. The unguided twin of the original design is Saturation Quadrants. With 25 blocks at 60/40, every block has two treated clusters. Both versions are then $2\times2$ Blocking, and the pair serves as a null control.
 
@@ -550,9 +538,25 @@ Rook contiguity gave the same directions from 90/10 to 100/0. Both versions of h
 \FloatBarrier
 ```
 
-```{=latex}
-% Restore the table-of-contents depth for the chapters that follow.
+## A7. Pairwise Tests and Critical-Difference Diagrams {.unnumbered .unlisted}
 ````
+
+### C3N-10. Renumber the appendix sections after A6
+
+**Recommendation:** Accept. Follows from the placement of C3N-8 and C3N-9. Every cross-reference uses `\ref`, so only the heading numbers and the `\applabel` numbers change. The apply script makes these replacements last, after every other item, and each heading and each `\applabel` must match exactly once.
+
+| Section | Label | Old | New |
+|---|---|---|---|
+| Pairwise Tests and Critical-Difference Diagrams | `app:supp-comparisons` | A7 | A8 |
+| Results by Incidence Configuration, Spatial Dependence and Spillover Magnitude | `app:sensitivity-tables` | A8 | A9 |
+| Rook Contiguity and the Bias--Variance Decomposition | `app:rook-figures` | A9 | A10 |
+| Sensitivity Analysis Without the Spillover Term | `app:oracle-nonoracle` | A10 | A11 |
+| Additional Case Study Results | `app:nc-results` | A11 | A13 |
+| Case Study Participation, Power and Sensitivity Results | `app:nc-ext-results` | A12 | A14 |
+
+New sections: A7 Variants of Incidence Guidance on the Grid (`app:igs-sensitivity`) and A12 Estimating the Incidence Coefficient After a Trial (`app:incidence-coefficient`).
+
+In the same commit, the places in `AGENTS.md`, `README.md` and `docs/TODO.md` that name a chapter appendix by number get the new numbers. These are project notes, so they are listed here for completeness.
 
 ## Batch 3 · Tables, figures and the verifier
 
@@ -1621,4 +1625,6 @@ A script parsed all 89 items and confirmed the following. Every one of the 120 C
 
 ## Author decisions
 
-Pending.
+- **Batch 1, C3T-1 to C3T-13 (2026-11-26):** accepted as recommended.
+- **Batch 2, C3N-1 to C3N-9 (2026-11-26):** accepted as recommended, with the new sections placed by topic: A7 (variants of incidence guidance, after A6) and A12 (incidence coefficient, after the non-oracle appendix). C3N-10 (renumbering) follows from that choice.
+- Everything else pending.
