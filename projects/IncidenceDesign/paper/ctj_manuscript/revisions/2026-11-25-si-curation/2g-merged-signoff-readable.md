@@ -2121,6 +2121,38 @@ Source: lead instruction (hw-ctj "Not proposed, but noticed")
 
 > Main-text word count: **3,428.**
 
+## Batch F · SI paragraph heads (author request)
+
+### SH-1. Paragraph heads on their own line
+
+Source: the author (2026-11-25), after reading HW-29.
+
+**Recommendation:** Accept (approved by the author before it was written up). The SI's bold run-in heads become bold headings on their own line, without the final period, and the paragraph starts on the next line. One preamble command sets the style for all of them, so it can be changed in one place.
+
+**Preamble addition** (after the `\InputRows` line of `Supplementary_Information.tex`):
+
+```tex
+% Bold paragraph head on its own line; the paragraph starts on the next line
+\newcommand{\sihead}[1]{\par\medskip\noindent\textbf{#1}\par\nopagebreak\noindent\ignorespaces}
+```
+
+**Rule.** Applied last, after every other approved item, by one pattern: each `\textbf{<Head>.}` that opens a paragraph becomes `\sihead{<Head>}` followed by a line break. Text, numbers and references are unchanged.
+
+**Heads affected** (as they read after the other approved items):
+
+| Curated and unabridged builds | Unabridged build only |
+|---|---|
+| Estimation models | Parameter grid |
+| Spillover form (methods) | Random-number streams |
+| Colleges needed and smallest detectable effect | Monte Carlo structure and checkpoints |
+| Spatial model | Scenario metrics |
+| Bayesian CAR model (added by HW-29) | Surface-level standard errors |
+| Bayesian spatial lag model (added by HW-29) | Standard errors pooled over configurations |
+| Spillover form (results) | |
+| Formal tests on the case study results (renamed by HW-30) | |
+
+The unabridged-only heads change too, so both builds share one style. Cost in the curated SI: about one line per head, roughly a third of a page.
+
 ## New items not carried forward
 
 - C-5 (Biostat), N6 (Planner) and HN-1 (Writer) became the third block of HW-3.
@@ -2130,6 +2162,8 @@ Source: lead instruction (hw-ctj "Not proposed, but noticed")
 - Biostat's minor point that Section 4.2 ("surface 1") and Section 12.3 ("median 63%") do not name what the median is taken over was not itemized by any reader.
 
 ## Chapter 3 follow-ups for 2i
+
+- SH-1: give the chapter appendix's matching bold run-in heads the same own-line style.
 
 - HW-6: Chapter 3 line 416 has the same misstated rounding rule ("nearest even whole number"). Fix it with the approved HW-6 prose.
 - HW-26 and SN-12 need no chapter change, because `tab:nc-summary-sens` is SI-only.
@@ -2158,3 +2192,4 @@ Recorded as the author replies, batch by batch. Nothing is applied until every b
 - **Batch B (2026-11-25):** all seven accepted as recommended (HW-5, HW-19, HW-21, HW-26, HW-27, HW-28, HW-29). HW-29's bold run-in heads ("Spatial model." and the others) stay as they are: the SI uses this bold-with-period style for all 12 of its run-in paragraph heads.
 - **Batch C (2026-11-25):** all twelve accepted as recommended. SR-9 revised at the author's request to "a test with a rejection rate close to the nominal 5\% level".
 - **Batches D1, D2 and D3 (2026-11-25):** all accepted as recommended (SN-1 to SN-25).
+- **SH-1 (2026-11-25):** the author asked for paragraph heads on their own line (approved). The "Formal tests on the NC results" head is already renamed by HW-30.
