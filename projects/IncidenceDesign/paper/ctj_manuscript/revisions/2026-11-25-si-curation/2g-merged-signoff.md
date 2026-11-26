@@ -3507,3 +3507,4 @@ Recorded as the author replies, batch by batch. Nothing is applied until every b
 - **Batch A3 (2026-11-25):** all nine accepted as recommended (SR-10, SR-8, HW-1, HW-2, HW-4, HW-8, HW-10, HW-18, HW-12). HW-8's mid-sentence "therefore" moved to the start of its sentence (style revision 2).
 - **Batch B (2026-11-25):** all seven accepted as recommended (HW-5, HW-19, HW-21, HW-26, HW-27, HW-28, HW-29). HW-29's bold run-in heads ("Spatial model." and the others) stay as they are: the SI uses this bold-with-period style for all 12 of its run-in paragraph heads.
 - **Batch C (2026-11-25):** all twelve accepted as recommended. SR-9 revised at the author's request to "a test with a rejection rate close to the nominal 5\% level".
+- **Batches D1, D2 and D3 (2026-11-25):** all accepted as recommended (SN-1 to SN-25).
