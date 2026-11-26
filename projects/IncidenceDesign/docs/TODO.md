@@ -22,26 +22,26 @@ Master checklist: `docs/plans/2026-11-25-project2-phased-plan.md` (phases 0 to 5
 
 - [x] ~~Andrew's markup of `CTJ_Reading_Markup_V6.pdf`~~: V6 is a frozen copy after Dr. Lin's
   feedback was applied, not a markup (author, 2026-11-24).
-- [ ] Author: decide the CTJ round 6 cuts (`paper/ctj_manuscript/revisions/2026-11-24-round6-word-limit/signoff.md`,
+- [x] Author: decide the CTJ round 6 cuts (`paper/ctj_manuscript/revisions/2026-11-24-round6-word-limit/signoff.md`,
   recommended set 3,385 words) and the human-writer edits (`human-writer-review.md` there), then
   apply, rebuild both layouts, check Chapter 3 carry-over. Choose a Wald-interval reference (FCL-024).
-- [ ] SI curation (phased plan Phase 2; decided 2026-11-25: one source with a switch, curated SI
+- [x] SI curation (phased plan Phase 2; decided 2026-11-25: one source with a switch, curated SI
   about 30 pp): ratio decimals, curated outline, prose review, Chapter 3 alignment.
-- [ ] Author: review the Incidence-Guided Saturation sensitivity spec and findings
+- [x] Author: review the Incidence-Guided Saturation sensitivity spec and findings
   (`docs/findings/2026-11-24-igs-sensitivity-findings.md`); then SI section, Chapter 3 mirror,
   optional CTJ sentence, Q-16 backup slide (phased plan Phase 3, with s = 0.5 and repeated-level
   choices).
-- [ ] Review package for Dr. Lin after V7 (phased plan 1h).
-- [ ] Author: choose placement of post-trial incidence coefficient estimation in
+- [x] Review package for Dr. Lin after V7 (phased plan 1h).
+- [x] Author: choose placement of post-trial incidence coefficient estimation in
   the curated or full Supplementary Information and decide the Chapter 3 mirror.
   The grid sweep and independent review are complete.
   [Findings](findings/2026-11-25-incidence-coefficient-findings.md)
 - [ ] Submission blockers (IRB, map permission, coauthor approval, Dr. Simpson's answers on control
   colleges and the pilot): see the Dr. Simpson items further down; keep them on one list before
   submission.
-- [ ] Fix "application" in the cover letter and submission checklist (D-3).
-- [ ] After the CTJ and SI work: a prompt for the prelim slides, script, Chapter 2 question review
-  and rehearsals (with Dr. Lin 2026-12-02 to 12-04).
+- [x] Fix "application" in the cover letter and submission checklist (D-3).
+- [ ] Prelim slides, script, question review and rehearsals: now in `bios-dissertation/slides/prelim/2026-11-26-presentation-plan.md` (author, 2026-11-26).
+
 
 ## Completed
 
