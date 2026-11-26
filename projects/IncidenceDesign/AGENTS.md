@@ -397,6 +397,11 @@ Status and dated checkpoints: `ROADMAP.md` (Progress Log). Open items:
   and each folder's `latexmkrc` sends intermediates to its gitignored `.build/`.
   A plain `pdflatex` build also works but leaves intermediates beside the sources;
   `git clean -fX -- paper/ctj_manuscript` removes them (it only touches gitignored files).
+- **SI citations (2026-11-26):** the SI uses APA 7 author-year, matching the prelim chapters, via
+  biblatex-apa with biber (`natbib` option keeps `\citep`); the CTJ stays numbered (SAGE). The
+  package is installed in user mode (`~/Library/texmf`). If citations show as undefined after the
+  switch, delete the stale `supplementary_info/.build/*.bbl` and rebuild. Publisher names with
+  "and" are double-braced in the bib so biblatex does not split them.
 - **Dissertation chapter bibliography:** reference it via the `shared-refs.bib` symlink in `paper/thesis_chapter/`, not `../SpatialCRT_IncidenceDesign.bib` directly — Quarto's pandoc→LaTeX conversion mishandles underscores in bib filenames referenced from YAML.
 - Dated progress logs moved to `ROADMAP.md` ("Progress log") on 2026-10-01; logs from
   2026-04-08 to 2026-09-04 are in `git log -p AGENTS.md`.
