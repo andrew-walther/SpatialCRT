@@ -122,7 +122,7 @@ before or later is lost and anything can move between the two. Target for the cu
 - [x] 2g. Prose review: human-writer pass, then a statistician and a clinician reader on the
   curated SI.
 - [x] 2h. Rebuild both versions, run the checkers, record the page counts.
-- [ ] 2i. Chapter 3 alignment: resolve `paper/ctj_manuscript/notes/si-ch3-alignment-log.md` (42
+- [x] 2i. Chapter 3 alignment: resolve `paper/ctj_manuscript/notes/si-ch3-alignment-log.md` (42
   SI edits not yet in Chapter 3) plus this phase's SI changes, as one sign-off list. **Stop for
   decisions**, then apply and let the hook re-render the prelim copy.
 
@@ -273,3 +273,8 @@ Record each phase's completion here with the date and commit.
   rewrites, short list titles, nine light cuts moved to the unabridged build (SC-2 declined).
   Curated SI 44 pages, unabridged 66; CTJ 23 pages, reading layout 9; body 3,428 words, abstract
   421. Verifier, exhibit test and word count rerun here: pass. Next: 2i (84 items, in review).
+- 2026-11-26: 2i done and Phase 2 complete. Chapter 3 sign-off (e9ff22d; decisions e4877d2,
+  e6b97af) applied in ac48a26: 123 edits, new appendices A7 (incidence-guidance variants) and A12
+  (estimating τ), old A7–A12 renumbered. Hook synced Chapter 3 to bios-dissertation prelim/
+  (5c530dd, 99 pages). Verifier and exhibit test rerun here: pass. **Phases 0 to 4 are complete;
+  this plan closes.** Phase 5 and item 3d continue in the new presentation plan.
