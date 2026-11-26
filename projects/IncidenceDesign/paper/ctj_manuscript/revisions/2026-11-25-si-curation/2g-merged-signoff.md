@@ -3029,8 +3029,8 @@ exclusive service commitments.
 **Proposed (block 4 of 4)**
 
 ```latex
-Roanoke-Chowan Community College. These are analysis conventions, not
-exclusive service commitments.
+Roanoke-Chowan Community College. We made these assignments for the
+analysis only, and they do not limit which counties a college serves.
 ```
 
 ## Batch E1 · Article (CTJ_Manuscript.tex)
@@ -3542,4 +3542,9 @@ Recorded as the author replies, batch by batch. Nothing is applied until every b
 - **Batch B (2026-11-25):** all seven accepted as recommended (HW-5, HW-19, HW-21, HW-26, HW-27, HW-28, HW-29). HW-29's bold run-in heads ("Spatial model." and the others) stay as they are: the SI uses this bold-with-period style for all 12 of its run-in paragraph heads.
 - **Batch C (2026-11-25):** all twelve accepted as recommended. SR-9 revised at the author's request to "a test with a rejection rate close to the nominal 5\% level".
 - **Batches D1, D2 and D3 (2026-11-25):** all accepted as recommended (SN-1 to SN-25).
+- **SN-25 block 4 (2026-11-25):** the author rejected the "analysis conventions, not exclusive service commitments" contrast. Revised to "We made these assignments for the analysis only, and they do not limit which counties a college serves."
 - **SH-1 (2026-11-25):** the author asked for paragraph heads on their own line (approved). The "Formal tests on the NC results" head is already renamed by HW-30.
+- **Batch E1 (2026-11-25):** HC-1 to HC-6 accepted. HC-7 to HC-10 declined as recommended (the article keeps its sentence-initial "Therefore").
+- **Batch E2 (2026-11-25):** HC-11 to HC-20 accepted, including the optional HC-13 and HC-15. HC-20's count is recomputed with `ctj_wordcount.py` after the other HC items are applied.
+
+All batches are decided. Apply with `apply_2g.py`.
