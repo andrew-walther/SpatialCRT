@@ -89,10 +89,10 @@ How to read an item. The verdict line gives each reader's call. Where any reader
 | HC-4 | Accept as proposed | Author rule: never a bare "NC" as a descriptor. "On the NC map" is the only body use of the abbreviation, so the definition in the case-study paragraph can go too (Table 1 caption defines NC on its own). |
 | HC-5 | Accept as proposed | Agentless passive with the verb repeated, and MSE is defined a second time (it was defined in the Introduction). |
 | HC-6 | Accept as proposed | Sentence of about 50 words (rank-scaling of Poisson counts). |
-| HC-7 | Accept as proposed | Same template ending three Results paragraphs and others ("... . |
-| HC-8 | Accept as proposed | Same "Therefore" template (see HC-7). |
-| HC-9 | Accept as proposed | Same "Therefore" template (see HC-7). |
-| HC-10 | Accept as proposed | Same "Therefore" template (see HC-7). |
+| HC-7 | Decline | Replaces a sentence-initial "Therefore" with "Because" or ", so", against the author's style. |
+| HC-8 | Decline | Replaces a sentence-initial "Therefore" with "Because" or ", so", against the author's style. |
+| HC-9 | Decline | Replaces a sentence-initial "Therefore" with "Because" or ", so", against the author's style. |
+| HC-10 | Decline | Replaces a sentence-initial "Therefore" with "Because" or ", so", against the author's style. |
 | HC-11 | Accept as proposed | "In this paper," opens two consecutive Introduction paragraphs. |
 | HC-12 | Accept as proposed | Two unrelated facts yoked by "while" (coverage across designs, then Checkerboard's rook bias), and "Checkerboard's was" leaves the noun implied. |
 | HC-13 | Accept as proposed (optional) | Repeated caveat. |
@@ -621,7 +621,7 @@ For a trial with $n_c = 25$ trained professionals per college and an ICC of 0.05
 **Proposed (block 2 of 2)**
 
 ```latex
-As an illustration, suppose $n_c = 25$ trained professionals per college and an ICC of 0.05, so that $\sigma_c = 0.30$ and an individual-level effect of $d = 0.3$ is close to one college-level residual standard deviation. With $\rho=0.5$, this effect gives power 0.71 to 0.72 with 29 colleges and 0.96 with 58 under both-arms spillover, for SRS and for both saturation designs. Under control-only spillover, the same effect gives power 0.49 with 29 colleges and 0.53 with 58 under SRS, and 0.51 and 0.64 under Incidence-Guided Saturation\iffullsi\ (Table \ref{tab:nc-translation})\fi.
+As an illustration, suppose $n_c = 25$ trained professionals per college and an ICC of 0.05. Then $\sigma_c = 0.30$, and an individual-level effect of $d = 0.3$ is close to one college-level residual standard deviation. With $\rho=0.5$, this effect gives power 0.71 to 0.72 with 29 colleges and 0.96 with 58 under both-arms spillover, for SRS and for both saturation designs. Under control-only spillover, the same effect gives power 0.49 with 29 colleges and 0.53 with 58 under SRS, and 0.51 and 0.64 under Incidence-Guided Saturation\iffullsi\ (Table \ref{tab:nc-translation})\fi.
 ```
 
 ## Batch A2 · Restored caveats and clarified scope
@@ -657,8 +657,8 @@ Under the study model, the saturation designs had a lower worst-decile
 mean of conditional MSE across the sampled assignments, as well as lower
 average MSE. These summaries describe the spread of conditional MSE
 across sampled assignments, not quantiles of realized estimation errors.
-Because the refinement reused the main run's assignments, they are not a
-fresh sample of assignments.
+The refinement reused the main run's assignments rather than drawing a
+fresh sample.
 ```
 
 **Current (block 2 of 2)**
@@ -997,12 +997,13 @@ The design comparison did not depend on the spatial model used to generate or fi
 **Proposed (block 1 of 4)**
 
 ```latex
-The design comparison under proportional spillover held under the count
-form and in most spatial-model comparisons. The exceptions were CAR
+The design comparison held when spillover depended on the number of
+treated neighbors rather than their share, and in most spatial-model
+comparisons. The exceptions were CAR
 models fit to spatial lag data. The maximum likelihood CAR fit was
 biased under strong spatial dependence, and the Bayesian CAR fit did not
-reproduce the saturation designs' control-only advantage. Under binary
-spillover, whether $\beta$ was identifiable depended on the assignment.
+reproduce the saturation designs' control-only advantage. When spillover depended only on whether any neighbor was treated,
+whether $\beta$ was identifiable depended on the assignment.
 Formal rank tests summarize the ordering of the eight designs and SRS
 within each regime.
 ```
@@ -1018,8 +1019,8 @@ within each regime.
 ```latex
 \textbf{Spillover form.} Table \ref{tab:nc-forms} compares the three
 forms. Under binary exposure, Isolation Buffer assigns every treated
-cluster zero exposure and every control cluster exposure one, so the
-model cannot separate $\beta$ from spillover in either regime. Under
+cluster zero exposure and every control cluster exposure one. The
+model therefore cannot separate $\beta$ from spillover in either regime. Under
 control-only spillover, $\beta$ was unidentified in some fits under
 every assignment rule, including SRS. The two saturation designs
 identified $\beta$ most often, in 89.7\% and 91.7\% of fits. Among
@@ -1093,12 +1094,12 @@ Before outcomes are observed, investigators specify \(\tau\) for the
 planning model. After a trial, the same spatial lag model can estimate
 \(\tau\) and \(\beta\) from the observed outcomes and the incidence
 used for allocation. Both grid models include \(\mathbf{X}_k\)
-(Section~\ref{estimation}), so every fit provides both estimates.
+(Section~\ref{estimation}), and every fit provides both estimates.
 The oracle estimate describes the association of prior incidence
 with the outcome after adjustment for treatment and spillover. The
 non-oracle model adjusts for treatment and omits spillover.
-Incidence is not randomized, so these coefficients describe adjusted
-associations rather than effects of incidence.
+Incidence is not randomized. These coefficients therefore describe
+adjusted associations rather than effects of incidence.
 ```
 
 ### SR-6. Hypothetical education endpoint and the power scale
@@ -1201,12 +1202,12 @@ effect. We tested four spillover magnitudes,
 ```latex
 \end{equation} where \(\circ\) multiplies the two vectors cluster by cluster. The share of treated neighbors \(\mathbf{W}\mathbf{Z}\) maps the full assignment to each cluster's exposure \citep{aronow_estimating_2017,forastiere_identification_2021}.
 Control-only spillover represents classical contamination. The exposure
-term enters the outcome equation only for untreated clusters, so a
-larger share of treated neighbors raises an untreated cluster's
-outcome. The spatial multiplier can still propagate that contribution
+term enters the outcome equation only for untreated clusters. An
+untreated cluster's outcome rises with the share of its neighbors that
+are treated. The spatial multiplier can still propagate that contribution
 to treated clusters. Under both-arms spillover, the exposure term
-enters the equation for treated and untreated clusters, so neighboring
-treatment adds to a treated cluster's own effect. We tested four spillover magnitudes,
+enters the equation for treated and untreated clusters. Neighboring
+treatment then adds to a treated cluster's own effect. We tested four spillover magnitudes,
 ```
 
 ### SR-8. How the number of colleges was interpolated
@@ -1347,7 +1348,7 @@ and every fit gets its own outcome noise. We drew every other design
 independently 25 times per incidence surface. Designs that rank clusters
 by incidence break ties at random for each draw. High Incidence Focus
 varies only through tie-breaking. Under the iid and spatial mechanisms,
-incidence values are distinct, so its assignment is fixed within each
+incidence values have no ties, and its assignment is fixed within each
 surface and varies across surfaces. Isolation Buffer uses the neighbor
 type of the scenario and treats an average of 38 clusters with rook
 contiguity and 21 with queen contiguity. Every other design treats exactly 50.
@@ -1505,7 +1506,7 @@ under the education outcome model with $\tau=0$. Under random
 volunteering, we drew 50 subsets for each $N$ and used those same
 subsets for all designs, SRS and planning years. At $N=20$ and $N=29$
 we also examined volunteering probabilities that increased linearly
-with incidence rank, so the highest-burden college was three times as
+with incidence rank. The highest-burden college was three times as
 likely to join as the lowest. We reapplied each assignment rule on the
 participants and required at least two colleges in each saturation region.
 
@@ -1513,8 +1514,8 @@ Spatial dependence links participating colleges only. A participant with
 no participating neighbors has a zero row in $\mathbf{W}_P$. Spillover
 exposure is the number of treated participating neighbors divided by the
 number of geographic neighbors,
-$e_j(\mathbf{Z})=\sum_{k\in\mathcal{N}(j)}Z_k/|\mathcal{N}(j)|$,
-so a neighbor that does not participate counts as untreated.
+$e_j(\mathbf{Z})=\sum_{k\in\mathcal{N}(j)}Z_k/|\mathcal{N}(j)|$.
+A neighbor that does not participate counts as untreated.
 
 We set $\psi=\kappa\beta$ with $\kappa \in \{0.5,0.8\}$ and used nine
 values of $\beta$ from 0 to 2 in units of the college-level outcome
@@ -1527,8 +1528,8 @@ assignment. With 58 colleges, each setting used 100 assignments and 100
 outcomes as in the main analysis and reproduced its MSE and coverage
 within Monte Carlo error.
 
-We used the same subsets, assignments and noise at all effect sizes, so
-the simulated power curves are smooth in $\beta$. For each setting we
+Every effect size used the same subsets, assignments and noise, which
+keeps the simulated power curves smooth in $\beta$. For each setting we
 estimated power with the corrected $t$ test. From the power curves we
 obtained the number of colleges needed for 80\% power and the minimum
 detectable effect (MDE), the smallest effect detectable with 80\% power
@@ -2161,8 +2162,8 @@ With 58 colleges, each setting used 100 assignments and 100
 outcomes as in the main analysis and reproduced its MSE and coverage
 within Monte Carlo error.
 
-We used the same subsets, assignments and noise at all effect sizes, so
-the simulated power curves are smooth in $\beta$.
+Every effect size used the same subsets, assignments and noise, which
+keeps the simulated power curves smooth in $\beta$.
 ```
 
 **Proposed (block 1 of 3)**
@@ -2386,7 +2387,7 @@ SRS had MSE 0.227 under control-only spillover and 0.043 under both-arms spillov
 **Proposed**
 
 ```latex
-Pooled over the five values of \(\beta\), SRS had MSE 0.227 under control-only spillover and 0.043 under both-arms spillover, so these ratios differ from those at \(\beta = 1\) in Section~\ref{srs-benchmark-and-allocation-specific-risk}.
+Pooled over the five values of \(\beta\), SRS had MSE 0.227 under control-only spillover and 0.043 under both-arms spillover. These pooled ratios differ from those at \(\beta = 1\) in Section~\ref{srs-benchmark-and-allocation-specific-risk}.
 ```
 
 ### SN-4. Orphan restatements at the end of the rook section
@@ -2510,7 +2511,7 @@ Under control-only spillover, Saturation Quadrants has descriptive mean MSE
 **Proposed**
 
 ```latex
-Because $\sigma=1$, MSE is in squared college-level residual standard deviations. Under control-only spillover, Saturation Quadrants has descriptive mean MSE
+With $\sigma=1$, MSE is in squared college-level residual standard deviations. Under control-only spillover, Saturation Quadrants has descriptive mean MSE
 ```
 
 ### SN-9. Bare "NC" as a descriptor
@@ -3083,7 +3084,7 @@ With rook contiguity, Checkerboard gives $\mathbf{W}\mathbf{Z}=\mathbf{1}-\mathb
 **Proposed (block 1 of 2)**
 
 ```latex
-When neighbors share an edge (rook contiguity), Checkerboard gives $\mathbf{W}\mathbf{Z}=\mathbf{1}-\mathbf{Z}$, so $\beta$ is not identifiable and the treatment coefficient estimates $\beta-\psi$. When neighbors share an edge or a corner (queen contiguity), $\beta$ is identifiable under Checkerboard but can be estimated imprecisely.
+When neighbors share an edge (rook contiguity), Checkerboard gives $\mathbf{W}\mathbf{Z}=\mathbf{1}-\mathbf{Z}$, which means $\beta$ is not identifiable and the treatment coefficient estimates $\beta-\psi$. When neighbors share an edge or a corner (queen contiguity), $\beta$ is identifiable under Checkerboard but can be estimated imprecisely.
 ```
 
 **Current (block 2 of 2)**
@@ -3176,7 +3177,7 @@ Source: Writer (article) HC-6 (-1 words)
 
 **Recommendation:** Accept as proposed.
 
-Sentence of about 50 words (rank-scaling of Poisson counts). Recommend: split after the definition of the rank, and "so that" becomes "so".
+Sentence of about 50 words (rank-scaling of Poisson counts). Recommend: split after the definition of the rank. Revised 2026-11-25 so the split does not leave a ", so" join.
 
 **Current**
 
@@ -3187,14 +3188,14 @@ where $r_i$ is cluster $i$'s rank with average ranks for ties, to put them on th
 **Proposed**
 
 ```latex
-where $r_i$ is cluster $i$'s rank with average ranks for ties. This put them on the same $(0,1)$ scale as the other configurations, so one value
+where $r_i$ is cluster $i$'s rank with average ranks for ties. This put them on the same $(0,1)$ scale as the other configurations. As a result, one value
 ```
 
 ### HC-7. Fold a "Therefore" sentence into "Because"
 
 Source: Writer (article) HC-7 (+0 words)
 
-**Recommendation:** Accept as proposed.
+**Recommendation:** Decline (revised 2026-11-25). The author keeps sentence-initial "Therefore" and avoids sentence-initial "Because" and ", so" joins, so the current sentence stays.
 
 Same template ending three Results paragraphs and others ("... . Therefore, X does not show / need not ..."). The body has seven sentence-initial "Therefore"s. Recommend: fold this one into a "Because" clause. HC-8 to HC-10 trim three more, leaving three (the Introduction, the low-MSE-and-valid-inference sentence and the grid-ranking sentence).
 
@@ -3214,7 +3215,7 @@ Because the two changes were made together, their separate contributions cannot 
 
 Source: Writer (article) HC-8 (+0 words)
 
-**Recommendation:** Accept as proposed.
+**Recommendation:** Decline (revised 2026-11-25). The author keeps sentence-initial "Therefore" and avoids sentence-initial "Because" and ", so" joins, so the current sentence stays.
 
 Same "Therefore" template (see HC-7). Recommend: join with ", so".
 
@@ -3234,7 +3235,7 @@ was Monte Carlo error (SI Section~\ref{SI-allocation-downside-and-sensitivity}),
 
 Source: Writer (article) HC-9 (+0 words)
 
-**Recommendation:** Accept as proposed.
+**Recommendation:** Decline (revised 2026-11-25). The author keeps sentence-initial "Therefore" and avoids sentence-initial "Because" and ", so" joins, so the current sentence stays.
 
 Same "Therefore" template (see HC-7). Recommend: join with ", so".
 
@@ -3254,7 +3255,7 @@ was sensitive to incidence adjustment, so it does not support a general recommen
 
 Source: Writer (article) HC-10 (+0 words)
 
-**Recommendation:** Accept as proposed.
+**Recommendation:** Decline (revised 2026-11-25). The author keeps sentence-initial "Therefore" and avoids sentence-initial "Because" and ", so" joins, so the current sentence stays.
 
 Same "Therefore" template (see HC-7). A two-sentence chain for a one-step inference. Recommend: join with ", so".
 
@@ -3499,4 +3500,6 @@ A Python script parsed this file and checked every item (93 items, 30 HW, 18 SR,
 
 Recorded as the author replies, batch by batch. Nothing is applied until every batch is decided.
 
+- **Style revision (2026-11-25, after the author's A2 reply):** every proposed sentence that newly opened with "Because" or joined two clauses with ", so" was rewritten: SR-7 block 2 (already accepted in A1), HW-24 block 1, SR-1 blocks 1 and 2 (block 1 also explains "count form" in plain words), SR-2 block 2, SR-10 block 2, HW-2 block 1, HW-10 (and the SR-16 current block that quotes it), SN-3, SN-8, HC-2 block 1 and HC-6. HC-7 to HC-10, which turned "Therefore" sentences into "Because" or ", so", are now recommended for decline. Such joins already in the current SI or article text are left alone.
 - **Batch A1 (2026-11-25):** accepted as recommended, all ten: HW-17, HW-3 (blocks 1 to 3), HW-7, HW-23 (both blocks), HW-25, HW-13 (both blocks), HW-11, HW-30, HW-6 (prose accepted, table block rejected as recommended) and SR-7.
+- **Batch A2 (2026-11-25):** HW-9, HW-20, HW-22, HW-16, HW-14, HW-15 and SR-6 accepted as recommended. HW-24 accepted with block 1 revised to drop the sentence-initial "Because". SR-1 accepted with block 1 revised to explain "count form" in plain words (block 2's ", so" also removed). SR-2 accepted with its ", so" joins removed.
