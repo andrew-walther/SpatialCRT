@@ -16,6 +16,8 @@ set -euo pipefail
 OUT=${1:?output directory}
 ROOT=$(pwd); M=$ROOT/paper/ctj_manuscript/manuscript_ctj; T=$(dirname "$0")
 mkdir -p "$OUT/manuscript_ctj"; ln -sfn "$ROOT/paper/ctj_manuscript/figures" "$OUT/figures"
+# The CTJ prints SI numbers through xr-hyper (../supplementary_info/.build/*.aux); build the SI first
+ln -sfn "$ROOT/paper/ctj_manuscript/supplementary_info" "$OUT/supplementary_info"
 for f in CTJ_Manuscript.tex CTJ_Exhibits.tex; do
   git show ctj-pre-fcl:projects/IncidenceDesign/paper/ctj_manuscript/manuscript_ctj/$f > "$OUT/old_$f"
 done
