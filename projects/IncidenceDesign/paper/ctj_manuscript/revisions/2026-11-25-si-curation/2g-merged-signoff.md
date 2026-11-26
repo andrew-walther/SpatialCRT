@@ -3497,4 +3497,6 @@ A Python script parsed this file and checked every item (93 items, 30 HW, 18 SR,
 
 ## Author decisions
 
-Pending. Record accepted, declined or revised IDs here before applying edits.
+Recorded as the author replies, batch by batch. Nothing is applied until every batch is decided.
+
+- **Batch A1 (2026-11-25):** accepted as recommended, all ten: HW-17, HW-3 (blocks 1 to 3), HW-7, HW-23 (both blocks), HW-25, HW-13 (both blocks), HW-11, HW-30, HW-6 (prose accepted, table block rejected as recommended) and SR-7.
