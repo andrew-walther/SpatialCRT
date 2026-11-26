@@ -100,6 +100,9 @@ The chapter is the long form and follows the unabridged SI wording (the `\iffull
 | C3T-64 | Accept | Interval calibration paragraph (HW-28) |
 | C3T-65 | Accept | Case-study Friedman tests (NY-25, HW-30) |
 | C3T-66 | Accept | Spatial-model results get their own heading and three paragraphs (HW-29, SR-17) |
+| C3T-72 | Accept | Checkerboard on the irregular map, without the "rather than" contrast |
+| C3T-73 | Accept | Grid base rate, without the "rather than" contrast |
+| C3T-74 | Accept | Case-study scope in the Limitations, with the NYC-6 and NY-3 wording |
 
 Item IDs follow the order of the batches. Within each batch, items run in chapter order. C3T-67 to C3T-71 were added by the independent review and sit in chapter order inside their batches.
 
@@ -1550,6 +1553,46 @@ Either option is an SI or tool edit outside the chapter and needs your choice. R
 >
 > **Of the Bayesian spatial lag chains, 94.9% met the diagnostics for β. The median effective sample size of β was 8,000 (minimum 5,897), and 5.1% of chains had an absolute Geweke z of at least 1.96. The model’s posterior means correlated 0.999 with the maximum likelihood estimates (mean absolute difference 0.017). Its bias was at most 0.039 in absolute value in every combination of ρ and regime, and its credible intervals covered 0.946 to 0.953 over all chains (0.945 to 0.953 over chains meeting the diagnostics). The Spearman correlation of its design ordering with that of maximum likelihood averaged 0.96 to 1.00 across the four combinations of ρ and regime (0.83 in the lowest single block), and the best design agreed in every block.**
 
+## Batch 10 · Chapter-only contrasts (added 2026-11-26)
+
+The independent review flagged three chapter sentences with "rather than" or "not X" contrasts that no approved SI or article item covers. These rewrites follow the same rule. The last one reuses wording you approved for the article and the SI.
+
+### C3T-72. Checkerboard on the irregular map (line 412)
+
+**Recommendation:** Accept. Rewrites a chapter-only "rather than" contrast that the independent review flagged. The sentence now says what the rule achieves.
+
+**Current**
+
+> gives each cluster the arm held by fewer of its already-assigned ~~neighbors, an approximation of~~ strict interspersion ~~rather than an exact~~ checkerboard.
+
+**Proposed**
+
+> gives each cluster the arm held by fewer of its already-assigned **neighbors. The result approximates the** strict interspersion **of the grid** checkerboard.
+
+### C3T-73. Base rate of the grid simulation (line 623)
+
+**Recommendation:** Accept. Rewrites a chapter-only "rather than" contrast that the independent review flagged. Splits the sentence. The sentence before it already says the base rate differs from the county data.
+
+**Current**
+
+> ~~It~~ is a general design ~~study rather than a calibration, and in~~ the Poisson mechanism the base rate matters only through the spatial pattern of the rank-scaled rates and the number of ties.
+
+**Proposed**
+
+> **The grid simulation** is a general design **study. In** the Poisson mechanism the base rate matters only through the spatial pattern of the rank-scaled rates and the number of ties.
+
+### C3T-74. Case-study scope in the Limitations (line 625)
+
+**Recommendation:** Accept. Rewrites two chapter-only contrasts that the independent review flagged, with the approved wording of NYC-6 (article Conclusions) and NY-3 (SI population denominators).
+
+**Current**
+
+> constant structural ~~effect, not an observed~~ education ~~intervention or demonstrated reduction in~~ SUD. Working-age population ~~is a~~ geographic ~~denominator rather than a sample of healthcare professionals.~~
+
+**Proposed**
+
+> constant structural **effect. The outcomes are simulated and give no evidence about whether** education **reduces** SUD. Working-age population **measures** geographic **reach only.**
+
 ## Checked, no change
 
 - Line 78, "$\beta$ is the direct treatment effect of interest": the same paragraph defines $\beta$ before propagation (C3T-16), and H1's wording adds nothing.
@@ -1627,4 +1670,11 @@ A script parsed all 89 items and confirmed the following. Every one of the 120 C
 
 - **Batch 1, C3T-1 to C3T-13 (2026-11-26):** accepted as recommended.
 - **Batch 2, C3N-1 to C3N-9 (2026-11-26):** accepted as recommended, with the new sections placed by topic: A7 (variants of incidence guidance, after A6) and A12 (incidence coefficient, after the non-oracle appendix). C3N-10 (renumbering) follows from that choice.
+- **Batch 3, C3X-1, C3X-2, C3F-1 to C3F-7 (2026-11-26):** accepted as recommended. C3F-1 takes option A (the table goes into the unabridged SI only, and the `PENDING_SI` entry is deleted). C3F-7 includes the thesis-width export of the example map (about 6.5 × 4 in, 8 pt text).
+- **Batch 4, C3T-14 to C3T-23 (2026-11-26):** accepted as recommended.
+- **Batch 5, C3T-24 to C3T-33, C3T-67, C3T-68, C3T-71 (2026-11-26):** accepted as recommended. C3T-68 keeps the chapter sentence on the extreme parameter settings.
+- **Batch 6, C3T-34 to C3T-43 and C3T-70 (2026-11-26):** accepted as recommended.
+- **Batch 7, C3T-44 to C3T-53 (2026-11-26):** accepted as recommended.
+- **Batch 8, C3T-54 to C3T-61 and C3T-69 (2026-11-26):** accepted as recommended.
+- Batch 10 (C3T-72 to C3T-74) added after the review flagged three chapter-only contrasts.
 - Everything else pending.
