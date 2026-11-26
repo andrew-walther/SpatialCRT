@@ -150,6 +150,9 @@ def preprocess(tex, target, full=False):
     tex = re.sub(r"\\caption\{", "{", tex)
     tex = re.sub(r"\\label\{[^}]*\}", "", tex)
     tex = balance(tex)
+    # A comma with no space between digits is a thousands separator. Pandoc
+    # spaces it inside math ("100, 000"), so hold it as THOUSANDS until render()
+    tex = re.sub(r"(\d),(\d{3})(?!\d)", "\\1" + THOUSANDS + "\\2", tex)
     tex = re.sub(r"\\(?:eq)?ref\{([^}]*)\}",
                  lambda m: resolve_ref(m.group(1), target, full), tex)
     tex = re.sub(r"\\cite[pt]?\{([^}]*)\}",
@@ -158,6 +161,7 @@ def preprocess(tex, target, full=False):
 
 
 UNABRIDGED = "[unabridged only] "
+THOUSANDS = "\u01c2"  # placeholder character, restored to "," after pandoc
 
 
 def pandoc(tex):
@@ -175,13 +179,11 @@ def render(tex, target):
     """
     if re.search(r"&.*\\\\", tex):
         return None
-    text = pandoc(preprocess(tex, target))
-    # Pandoc spaces a comma inside math ("100, 000"); restore thousands separators
-    text = re.sub(r"(\d), (\d{3})\b", r"\1,\2", text)
+    text = pandoc(preprocess(tex, target)).replace(THOUSANDS, ",")
     if text:
         return text
     if "\\iffullsi" in tex:
-        full = pandoc(preprocess(tex, target, full=True))
+        full = pandoc(preprocess(tex, target, full=True)).replace(THOUSANDS, ",")
         if full:
             return UNABRIDGED + full
     return None
