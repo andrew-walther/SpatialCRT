@@ -285,6 +285,9 @@ def verify():
         def normalized(body):
             """Ignore comments/whitespace, retaining every cell and table command."""
             body = body.replace('Chapter 2', 'the earlier small-grid study')
+            # The chapter is long form, so compare with the unabridged branch of each
+            # \iffullsi A\else B\fi (or \iffullsi A\fi) switch in an SI table (Phase 2h).
+            body = re.sub(r'\\iffullsi\s*(.*?)(?:\\else.*?)?\\fi(?:\{\})?', r'\1', body, flags=re.S)
             return re.sub(r'\s+', '', re.sub(r'(?<!\\)%[^\n]*', '', body))
         if label in PENDING_SI and '\\label{' + label + '}' not in supplement:
             print(f'PENDING SI: {label} is not yet in Supplementary_Information.tex '

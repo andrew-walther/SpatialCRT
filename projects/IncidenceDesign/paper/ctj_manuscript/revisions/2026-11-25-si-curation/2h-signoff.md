@@ -1005,5 +1005,9 @@ A fresh Opus reviewer checked every item against the sources. Its fixes are alre
 ## Author decisions
 
 - **PC-11 and PC-15 (2026-11-25):** the author asked to include both cuts.
+- **NY-1 to NY-29 (2026-11-26):** accepted as recommended.
+- **SC-1 (2026-11-26):** accepted as recommended.
+- **SC-2 (2026-11-26):** declined. The author wants the List of Figures and the List of Tables each to start on its own page, so the current `\clearpage` stays. Measured with every other 2h item applied: each list fits on one page, and the curated SI is 44 pages (43 with SC-2).
+- **PC-2, PC-4, PC-7, PC-8, PC-12, PC-13 and PC-14 (2026-11-26):** accepted as recommended.
 - Everything else pending.
 
